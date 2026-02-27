@@ -5,6 +5,7 @@ import { pipeline, env } from '@huggingface/transformers'
 env.allowLocalModels = false;
 
 function App() {
+  const [model, setModel] = useState('MongoDB/mdbr-leaf-ir')
   const [inputText, setInputText] = useState('This is a benchmark test document to evaluate WebGPU, WebGL, and WASM performance.')
   const [backend, setBackend] = useState('wasm')
   const [isComputing, setIsComputing] = useState(false)
@@ -32,13 +33,12 @@ function App() {
     try {
       const loadStart = performance.now();
 
-      const extractor = await pipeline('feature-extraction', 'MongoDB/mdbr-leaf-ir', {
-        device: backend as any,
+      const extractor = await pipeline('feature-extraction', model, {
+        device: backend === 'webgpu' ? 'webgpu' : 'wasm',
       });
 
       const loadEnd = performance.now();
 
-      // 2. Inference latency
       setProgressMsg('Running inference...');
       const inferStart = performance.now();
       const output = await extractor(inputText, { pooling: 'cls', normalize: true });
@@ -49,11 +49,10 @@ function App() {
         inferTime: inferEnd - inferStart
       });
 
-      // output.data should be Float32Array
       if (output && output.data) {
         setEmbeddings(new Float32Array(output.data as any));
       } else {
-        setEmbeddings(new Float32Array(output.tolist()[0])); // fallback if shape differs
+        setEmbeddings(new Float32Array(output.tolist()[0]));
       }
     } catch (err: any) {
       console.error(err);
@@ -67,7 +66,6 @@ function App() {
   return (
     <div className="min-h-screen w-full flex items-center justify-center p-4 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-slate-100 font-sans">
       <div className="max-w-5xl w-full bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-2xl shadow-2xl p-6 sm:p-10 flex flex-col gap-8 relative overflow-hidden">
-        {/* Glow effect */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-1/2 bg-blue-500/10 blur-[120px] pointer-events-none rounded-full" />
 
         <header className="z-10 border-b border-slate-700/50 pb-6 w-full text-center">
@@ -75,7 +73,7 @@ function App() {
             EmbeddingBench
           </h1>
           <p className="text-slate-400 text-base max-w-2xl mx-auto">
-            Client-side ONNX Runtime Web benchmarks for <code className="bg-slate-900/60 px-2 py-1 rounded-md text-blue-300 font-mono text-sm shadow-inner">mdbr-leaf-ir</code>. Complete privacy, zero server calls.
+            Client-side ONNX Runtime Web benchmarks for <code className="bg-slate-900/60 px-2 py-1 rounded-md text-blue-300 font-mono text-sm shadow-inner">{model}</code>.
           </p>
         </header>
 
@@ -111,6 +109,31 @@ function App() {
           />
         </div>
 
+        <div className="flex flex-col sm:flex-row gap-6 items-end z-10 w-full mb-4">
+          <div className="flex flex-col gap-4 flex-1 w-full">
+            <label htmlFor="model" className="text-sm font-semibold text-slate-300 uppercase tracking-widest pl-1">
+              Select Model
+            </label>
+            <div className="relative">
+              <select
+                id="model"
+                value={model}
+                onChange={(e) => setModel(e.target.value)}
+                disabled={isComputing}
+                className="w-full bg-slate-900/60 border border-slate-700/50 rounded-xl p-4 pr-10 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none appearance-none cursor-pointer shadow-inner font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              >
+                <option value="MongoDB/mdbr-leaf-ir">MongoDB/mdbr-leaf-ir (IR v10 - Modern)</option>
+                <option value="Xenova/all-MiniLM-L6-v2">Xenova/all-MiniLM-L6-v2 (IR v8 - Classic/Compatible)</option>
+              </select>
+              <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-slate-400">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="flex flex-col sm:flex-row gap-6 items-end z-10 w-full">
           <div className="flex flex-col gap-4 flex-1 w-full">
             <label htmlFor="backend" className="text-sm font-semibold text-slate-300 uppercase tracking-widest pl-1">
@@ -125,7 +148,6 @@ function App() {
                 className="w-full bg-slate-900/60 border border-slate-700/50 rounded-xl p-4 pr-10 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none appearance-none cursor-pointer shadow-inner font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-all"
               >
                 <option value="wasm">WASM (SIMD/Threads) - CPU</option>
-                <option value="webgl">WebGL - GPU</option>
                 <option value="webgpu">WebGPU - GPU (Modern)</option>
               </select>
               <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-slate-400">
@@ -158,7 +180,6 @@ function App() {
 
         {(metrics || embeddings) && !isComputing && (
           <div className="z-10 mt-6 grid grid-cols-1 md:grid-cols-2 gap-6 w-full pt-6 border-t border-slate-700/50">
-            {/* Metrics Panel */}
             <div className="flex flex-col gap-4">
               <h2 className="text-xl font-bold text-slate-200">Performance Metrics</h2>
               <div className="grid grid-cols-2 gap-4">
@@ -179,7 +200,6 @@ function App() {
               </div>
             </div>
 
-            {/* Vector Panel */}
             <div className="flex flex-col gap-4">
               <div className="flex justify-between items-center">
                 <h2 className="text-xl font-bold text-slate-200">Output Vector</h2>
