@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { AutoModel, AutoTokenizer, env } from '@huggingface/transformers'
+import { env, pipeline } from '@huggingface/transformers'
 
 env.allowLocalModels = true;
 env.allowRemoteModels = false;
@@ -11,10 +11,10 @@ const props = defineProps<{
   defaultBackend?: 'wasm' | 'webgpu';
 }>()
 
-const modelPath = 'MongoDB/mdbr-leaf-ir'
-const modelTitle = 'IR v10 - Modern (Local)'
+const modelPath = 'DMetaSoul/Dmeta-embedding-zh-small'
+const modelTitle = 'Dmeta Embedding zh-small (Local)'
 const backend = ref(props.defaultBackend || 'webgpu')
-const dtype = ref<'q8' | 'fp16' | 'fp32' | 'q4' | 'q4f16'>('q4')
+const dtype = ref<'q8' | 'fp32' | 'fp16'>('q8')
 const isComputing = ref(false)
 const progressMsg = ref('')
 
@@ -36,6 +36,14 @@ const embeddingPreview = () => {
 const handleCompute = async () => {
   if (!props.inputText.trim()) return
 
+  console.log(env.backends.onnx.wasm)
+  console.log(env.backends.onnx.webgpu)
+
+  if (env.backends.onnx.wasm) {
+    env.backends.onnx.wasm.numThreads = 4;
+    env.backends.onnx.wasm.wasmPaths = window.location.origin + '/wasm/'
+  }
+
   isComputing.value = true
   error.value = null
   metrics.value = null
@@ -45,8 +53,7 @@ const handleCompute = async () => {
   try {
     const loadStart = performance.now()
 
-    const tokenizer = await AutoTokenizer.from_pretrained(modelPath)
-    const model = await AutoModel.from_pretrained(modelPath, {
+    const extractor = await pipeline('feature-extraction', modelPath, {
       device: backend.value === 'webgpu' ? 'webgpu' : 'wasm',
       dtype: dtype.value,
     })
@@ -56,12 +63,8 @@ const handleCompute = async () => {
     progressMsg.value = 'Running inference...'
     const inferStart = performance.now()
     
-        const inputs = await tokenizer(
-        ["Represent this sentence for searching relevant passages: " + props.inputText],
-        { padding: true }
-        )
-    
-    const { sentence_embedding } = await model(inputs)
+    let sentence_embedding = await extractor(props.inputText)
+
     const inferEnd = performance.now()
 
     metrics.value = {
@@ -71,7 +74,7 @@ const handleCompute = async () => {
 
     if (sentence_embedding && sentence_embedding.data) {
       embeddings.value = new Float32Array(sentence_embedding.data as any)
-    } else {
+    } else if (sentence_embedding && sentence_embedding.tolist) {
       embeddings.value = new Float32Array(sentence_embedding.tolist()[0])
     }
   } catch (err: any) {
@@ -126,11 +129,9 @@ const handleCompute = async () => {
       <div class="flex flex-col gap-2 flex-1 relative">
         <label class="text-xs font-semibold text-slate-300 uppercase tracking-widest pl-1">Precision</label>
         <select v-model="dtype" :disabled="isComputing" class="w-full bg-slate-900/60 border border-slate-700/50 rounded-lg p-3 text-sm text-white focus:ring-2 focus:ring-blue-500 outline-none appearance-none cursor-pointer">
-          <option value="q4">INT4 (q4)</option>
-          <option value="q8">INT8 (q8)</option>
-          <option value="q4f16">INT4F16 (q4f16)</option>
-          <option value="fp16">FP16 (fp16)</option>
-          <option value="fp32">FP32 (fp32)</option>
+          <option value="q8">q8</option>
+          <option value="fp32">fp32</option>
+          <option value="fp16">fp16</option>
         </select>
         <div class="absolute inset-y-0 right-0 flex items-center px-3 pt-6 pointer-events-none text-slate-400">
            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>

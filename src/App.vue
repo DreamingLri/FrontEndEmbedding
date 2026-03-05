@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import ModelRunnerMongoDB from './components/ModelRunnerMongoDB.vue'
+import ModelRunnerDMeta from './components/ModelRunnerDMeta.vue'
+import ModelRunnerGTE from './components/ModelRunnerGTE.vue'
 
 const inputText = ref('This is a benchmark test document to evaluate WebGPU, WebGL, and WASM performance.')
 </script>
@@ -36,7 +38,12 @@ const inputText = ref('This is a benchmark test document to evaluate WebGPU, Web
 
     <!-- Dual Model Components -->
     <div class="flex flex-col md:flex-row gap-6 w-full max-w-6xl z-10 items-stretch pb-12">
-      <ModelRunnerMongoDB
+      <ModelRunnerDMeta
+        class="flex-1"
+        default-backend="webgpu"
+        :input-text="inputText"
+      />
+      <ModelRunnerGTE
         class="flex-1"
         default-backend="webgpu"
         :input-text="inputText"
