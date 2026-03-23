@@ -13,8 +13,8 @@ import {
 } from 'lucide-vue-next';
 
 // --- Vite 专属：内联导入 Worker ---
-import VectorWorker from '../worker/embedding.worker.ts?worker';
 import localforage from 'localforage';
+import VectorWorker from '../worker/embedding.worker.ts?worker';
 
 // --- Config / UI State ---
 const selectedModelId = ref<string>('dmeta_small');
@@ -160,23 +160,10 @@ const handleSearch = async () => {
         
         const tSearchEnd = performance.now();
 
-        // 【召回名额平衡化】：从粗排结果中提取前 15 个独特的文章 ID，扩大精排覆盖面
-        const seenOtids = new Set<string>();
-        const topIds: string[] = [];
-        const idTrace: string[] = [];
-        
-        for (const match of localMatches) {
-            const id = match.parent_otid || match.parent_pkid || match.id;
-            idTrace.push(`${id}(${match.type || '?'})`);
-            if (id && !seenOtids.has(id)) {
-                seenOtids.add(id);
-                topIds.push(id);
-            }
-            if (topIds.length >= 15) break; 
-        }
+        // searchAndRank 返回的已经是以 otid 聚合后的 { otid, score }[]，直接提取 Top 15
+        const topIds = localMatches.slice(0, 15).map((r: any) => r.otid);
 
-        logDiagnostic(`ID 链路分析: ${idTrace.slice(0, 5).join(', ')}...`);
-        logDiagnostic(`广域粗排去重后获得 ${topIds.length} 个候选 ID 对入精排`);
+        logDiagnostic(`粗排返回 ${localMatches.length} 篇，取 Top ${topIds.length} 进入精排`);
         console.log('[DEBUG] LocalMatches:', localMatches);
         console.log('[DEBUG] Final TopIds:', topIds);
 
