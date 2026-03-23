@@ -1,6 +1,6 @@
 export interface Metadata {
     id: string;
-    type: 'Q' | 'KP' | 'OT';
+    type: "Q" | "KP" | "OT";
     parent_otid: string;
     timestamp?: number;
     vector_index: number;
@@ -10,25 +10,26 @@ export interface Metadata {
 
 export interface SearchResult {
     otid: string;
+    best_kpid?: string; // 🌟 直接把立功的 KP ID 传出来，方便前端展示
     score: number;
     details?: {
         denseRRF: number;
         sparseRRF: number;
         lexicalBoost: number;
-    }
+    };
 }
 
 export interface BM25Stats {
     idfMap: Map<number, number>; // 词表 -> IDF 分数
-    docLengths: Int32Array;      // 每个文档的长度 (词总数)
-    avgdl: number;               // 库内平均文档长度
+    docLengths: Int32Array; // 每个文档的长度 (词总数)
+    avgdl: number; // 库内平均文档长度
 }
 
 // 核心融合权重配置 (语义分内部比例)
 export const DEFAULT_WEIGHTS = {
     Q: 0.33,
     KP: 0.33,
-    OT: 0.33
+    OT: 0.33,
 };
 
 // 时间衰减相关常量
@@ -40,14 +41,14 @@ export const RRF_K = 60;
 
 // BM25 经验常量
 const BM25_K1 = 1.2; // 控制 TF 的饱和度
-const BM25_B = 0.4;  // 控制文档长度的惩罚力度
+const BM25_B = 0.4; // 控制文档长度的惩罚力度
 
 // 校园黑话词典，用于词法扩展
 export const CAMPUS_SYNONYMS: Record<string, string[]> = {
-    "考研": ["研究生", "招生", "考试", "初试"],
-    "保研": ["免试", "推免", "推荐"],
-    "名额": ["计划", "人数"],
-    "退课": ["退选"]
+    考研: ["研究生", "招生", "考试", "初试"],
+    保研: ["免试", "推免", "推荐"],
+    名额: ["计划", "人数"],
+    退课: ["退选"],
 };
 
 // 在数据加载时调用此函数，将结果缓存到内存中
@@ -97,7 +98,7 @@ export function dotProduct(
     vecA: Float32Array,
     matrix: Int8Array | Float32Array,
     matrixIndex: number,
-    dimensions: number
+    dimensions: number,
 ): number {
     let sum = 0;
     const offset = matrixIndex * dimensions;
@@ -112,14 +113,16 @@ export function dotProduct(
  */
 export function getQuerySparse(
     words: string[],
-    vocabMap: Map<string, number> | Record<string, number>
+    vocabMap: Map<string, number> | Record<string, number>,
 ): Record<number, number> {
     const sparse: Record<number, number> = {};
     const isMap = vocabMap instanceof Map;
 
-    words.forEach(word => {
+    words.forEach((word) => {
         // 1. 基础词 ID 匹配
-        const index = isMap ? (vocabMap as Map<string, number>).get(word) : (vocabMap as Record<string, number>)[word];
+        const index = isMap
+            ? (vocabMap as Map<string, number>).get(word)
+            : (vocabMap as Record<string, number>)[word];
         if (index !== undefined) {
             sparse[index] = (sparse[index] || 0) + 1;
         }
@@ -127,8 +130,10 @@ export function getQuerySparse(
         // 2. 校园同义词扩展 (让"考研"也能匹配到"研究生招生")
         const synonyms = CAMPUS_SYNONYMS[word];
         if (synonyms) {
-            synonyms.forEach(syn => {
-                const sIndex = isMap ? (vocabMap as Map<string, number>).get(syn) : (vocabMap as Record<string, number>)[syn];
+            synonyms.forEach((syn) => {
+                const sIndex = isMap
+                    ? (vocabMap as Map<string, number>).get(syn)
+                    : (vocabMap as Record<string, number>)[syn];
                 if (sIndex !== undefined) {
                     sparse[sIndex] = (sparse[sIndex] || 0) + 1;
                 }
@@ -140,19 +145,26 @@ export function getQuerySparse(
 }
 
 export function searchAndRank(params: {
-    queryVector: Float32Array,
-    querySparse?: Record<number, number>,
-    queryYearWordIds?: number[], // 精确的年份词汇 ID 数组
-    metadata: Metadata[],
-    vectorMatrix: Int8Array | Float32Array,
-    dimensions: number,
-    currentTimestamp: number,
-    bm25Stats: BM25Stats,
-    weights?: typeof DEFAULT_WEIGHTS
+    queryVector: Float32Array;
+    querySparse?: Record<number, number>;
+    queryYearWordIds?: number[]; // 精确的年份词汇 ID 数组
+    metadata: Metadata[];
+    vectorMatrix: Int8Array | Float32Array;
+    dimensions: number;
+    currentTimestamp: number;
+    bm25Stats: BM25Stats;
+    weights?: typeof DEFAULT_WEIGHTS;
 }): SearchResult[] {
     const {
-        queryVector, querySparse, metadata, vectorMatrix, dimensions, currentTimestamp,
-        bm25Stats, weights = DEFAULT_WEIGHTS, queryYearWordIds
+        queryVector,
+        querySparse,
+        metadata,
+        vectorMatrix,
+        dimensions,
+        currentTimestamp,
+        bm25Stats,
+        weights = DEFAULT_WEIGHTS,
+        queryYearWordIds,
     } = params;
 
     const n = metadata.length;
@@ -172,8 +184,14 @@ export function searchAndRank(params: {
         const meta = metadata[i];
 
         // 1. Dense (语义匹配)
-        let dense = dotProduct(queryVector, vectorMatrix, meta.vector_index, dimensions);
-        if (meta.scale !== undefined && meta.scale !== null) dense *= meta.scale;
+        let dense = dotProduct(
+            queryVector,
+            vectorMatrix,
+            meta.vector_index,
+            dimensions,
+        );
+        if (meta.scale !== undefined && meta.scale !== null)
+            dense *= meta.scale;
         denseScores[i] = dense;
         denseIndices[i] = i;
 
@@ -191,7 +209,8 @@ export function searchAndRank(params: {
 
                 // 精确查杀：看这篇文章有没有命中特定的年份 ID
                 if (queryYearWordIds && queryYearWordIds.includes(wordId)) {
-                    const otid = meta.type === 'OT' ? meta.id : meta.parent_otid;
+                    const otid =
+                        meta.type === "OT" ? meta.id : meta.parent_otid;
                     yearHitMap.set(otid, true);
                 }
 
@@ -201,17 +220,20 @@ export function searchAndRank(params: {
 
                     const numerator = tf * (BM25_K1 + 1);
                     // 使用 safeDl 替代 dl
-                    const denominator = tf + BM25_K1 * (1 - BM25_B + BM25_B * (safeDl / bm25Stats.avgdl));
+                    const denominator =
+                        tf +
+                        BM25_K1 *
+                            (1 - BM25_B + BM25_B * (safeDl / bm25Stats.avgdl));
                     sparse += qWeight * idf * (numerator / denominator);
                 }
             }
 
             // 计算该文档对实体的词法增益 (用于阶段 5 重排)
             if (sparse > 0) {
-                const otid = meta.type === 'OT' ? meta.id : meta.parent_otid;
+                const otid = meta.type === "OT" ? meta.id : meta.parent_otid;
                 let currentBonus = lexicalBonusMap.get(otid) || 0;
-                if (meta.type === 'Q') currentBonus += sparse * 1.5;
-                else if (meta.type === 'KP') currentBonus += sparse * 1.2;
+                if (meta.type === "Q") currentBonus += sparse * 1.5;
+                else if (meta.type === "KP") currentBonus += sparse * 1.2;
                 else currentBonus += sparse;
                 lexicalBonusMap.set(otid, currentBonus);
             }
@@ -239,7 +261,7 @@ export function searchAndRank(params: {
             const meta = metadata[originalIndex];
             const current = rrfScores.get(meta) || 0;
             // Sparse 赋予 1.2 倍 RRF 权重，增强词法约束力
-            rrfScores.set(meta, current + ((1.2 / (rank + RRF_K)) * 100));
+            rrfScores.set(meta, current + (1.2 / (rank + RRF_K)) * 100);
         }
     }
 
@@ -248,38 +270,58 @@ export function searchAndRank(params: {
         .sort((a, b) => b[1] - a[1])
         .slice(0, 1000);
 
-    const otidMap: Record<string, {
-        max_q: number, max_kp: number, ot_score: number,
-        timestamp?: number
-    }> = {};
+    const otidMap: Record<
+        string,
+        {
+            max_q: number;
+            max_kp: number;
+            ot_score: number;
+            timestamp?: number;
+            best_kpid?: string; // 🌟 新增字段
+        }
+    > = {};
 
     for (const [meta, score] of topHybrid) {
-        const otid = meta.type === 'OT' ? meta.id : meta.parent_otid;
+        const otid = meta.type === "OT" ? meta.id : meta.parent_otid;
         if (!otidMap[otid]) {
-            otidMap[otid] = { max_q: 0, max_kp: 0, ot_score: 0, timestamp: meta.timestamp };
+            otidMap[otid] = {
+                max_q: 0,
+                max_kp: 0,
+                ot_score: 0,
+                timestamp: meta.timestamp,
+            };
         }
 
-        if (meta.type === 'Q') otidMap[otid].max_q = Math.max(otidMap[otid].max_q, score);
-        else if (meta.type === 'KP') otidMap[otid].max_kp = Math.max(otidMap[otid].max_kp, score);
-        else if (meta.type === 'OT') otidMap[otid].ot_score = Math.max(otidMap[otid].ot_score, score);
+        if (meta.type === "Q") {
+            otidMap[otid].max_q = Math.max(otidMap[otid].max_q, score);
+        } else if (meta.type === "KP") {
+            // 🌟 如果这个 KP 分数更高，不仅记录分数，还记录它的 kpid
+            if (score > otidMap[otid].max_kp) {
+                otidMap[otid].max_kp = score;
+                otidMap[otid].best_kpid = meta.id;
+            }
+        } else if (meta.type === "OT") {
+            otidMap[otid].ot_score = Math.max(otidMap[otid].ot_score, score);
+        }
     }
 
     // 阶段 4：分数合并逻辑
     const finalRanking: SearchResult[] = [];
     for (const [otid, scores] of Object.entries(otidMap)) {
-
         // 把 weights 真正用起来
         const weightedQ = scores.max_q * weights.Q;
         const weightedKP = scores.max_kp * weights.KP;
         const weightedOT = scores.ot_score * weights.OT;
 
         const maxComponent = Math.max(weightedQ, weightedKP, weightedOT);
-        const unionBonus = (weightedQ * 0.1) + (weightedKP * 0.1) + (weightedOT * 0.1);
+        const unionBonus =
+            weightedQ * 0.1 + weightedKP * 0.1 + weightedOT * 0.1;
 
         let finalScore = maxComponent + unionBonus;
 
         if (scores.timestamp) {
-            const daysDiff = (currentTimestamp - scores.timestamp) / SECONDS_IN_DAY;
+            const daysDiff =
+                (currentTimestamp - scores.timestamp) / SECONDS_IN_DAY;
             if (daysDiff > 0) finalScore *= Math.exp(-DECAY_LAMBDA * daysDiff);
         }
 
@@ -302,7 +344,11 @@ export function searchAndRank(params: {
             }
         }
 
-        finalRanking.push({ otid, score: finalScore * boost });
+        finalRanking.push({
+            otid,
+            score: finalScore * boost,
+            best_kpid: scores.best_kpid, // 🌟 把立功的 kpid 传出去
+        });
     }
 
     // 阶段 5：对聚合合并后的真实文章 (OT) 进行排名，并切出 Top 100

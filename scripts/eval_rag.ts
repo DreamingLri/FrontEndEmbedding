@@ -4,7 +4,7 @@ import { pipeline, env, type FeatureExtractionPipeline } from '@huggingface/tran
 import { performance } from 'perf_hooks';
 
 // We import the same vector_engine algorithms the frontend uses
-import { buildBM25Stats, searchAndRank, getQuerySparse, type BM25Stats, type Metadata } from '../src/utils/vector_engine.ts';
+import { buildBM25Stats, searchAndRank, getQuerySparse, type BM25Stats, type Metadata } from '../src/worker/vector_engine.ts';
 
 // --- 配置环境 ---
 const MODEL_NAME = 'DMetaSoul/Dmeta-embedding-zh-small';
@@ -18,6 +18,7 @@ env.localModelPath = path.resolve(process.cwd(), '../Backend/models');
 // --- 工具函数与核心算法预制 ---
 let vocabMap = new Map<string, number>();
 let globalBM25Stats: BM25Stats | null = null;
+const REJECTION_THRESHOLD = 0.4;
 
 function fmmTokenize(text: string): string[] {
     const tokens: string[] = [];
@@ -217,6 +218,12 @@ async function runEval() {
     let coarseHits5 = 0;
     let fineHits1 = 0;
     let fineHits5 = 0;
+    let rejectCount = 0;
+    let badRejectCount = 0;
+    let goodRejectCount = 0;
+    let acceptedCount = 0;
+    let acceptedHit1 = 0;
+    let acceptedHit5 = 0;
     
     interface BadCase {
         id: number;
@@ -224,6 +231,8 @@ async function runEval() {
         expected: string;
         cRank: number;
         fRank: number;
+        rejected?: boolean;
+        confidence?: number;
         error?: string;
         found?: string;
     }
@@ -269,12 +278,23 @@ async function runEval() {
             const originals = await runner.fetchOriginalDocuments(uniqueOtids);
             const fineMatches = await runner.rerank(item.query, originals);
             const fineRankIds = fineMatches.map(r => r.otid || r.pkid || r.id);
+            const topConfidence = fineMatches[0]?.confidenceScore ?? fineMatches[0]?.rerankScore ?? -999;
+            const rejected = fineMatches.length > 0 && topConfidence < REJECTION_THRESHOLD;
             
             let fRank = fineRankIds.indexOf(expected) + 1;
             if (fRank === 0) fRank = Infinity;
             
             if (fRank === 1) fineHits1++;
             if (fRank <= 5) fineHits5++;
+            if (rejected) {
+                rejectCount++;
+                if (fRank === 1) badRejectCount++;
+                else goodRejectCount++;
+            } else {
+                acceptedCount++;
+                if (fRank === 1) acceptedHit1++;
+                if (fRank <= 5) acceptedHit5++;
+            }
             
             if (fRank !== 1) {
                 badCases.push({
@@ -282,7 +302,9 @@ async function runEval() {
                     query: item.query,
                     expected,
                     cRank,
-                    fRank
+                    fRank,
+                    rejected,
+                    confidence: topConfidence
                 });
                 process.stdout.write('⚠️');
             } else {
@@ -315,6 +337,19 @@ async function runEval() {
 `;
 
     console.log(reportSummary);
+
+    const rejectSummary = `
+============= Reject Metrics =============
+Threshold: ${REJECTION_THRESHOLD}
+Reject Rate: ${((rejectCount / dataset.length) * 100).toFixed(1)}%
+Good Reject Rate: ${((goodRejectCount / dataset.length) * 100).toFixed(1)}%
+Bad Reject Rate: ${((badRejectCount / dataset.length) * 100).toFixed(1)}%
+Coverage: ${((acceptedCount / dataset.length) * 100).toFixed(1)}%
+Accepted Hit@1: ${acceptedCount > 0 ? ((acceptedHit1 / acceptedCount) * 100).toFixed(1) : '0.0'}%
+Accepted Hit@5: ${acceptedCount > 0 ? ((acceptedHit5 / acceptedCount) * 100).toFixed(1) : '0.0'}%
+`;
+
+    console.log(rejectSummary);
 
     let reportDetail = reportSummary + `\n\n--- 重点观察的 Bad Case (按严重程度排序) ---\n`;
 

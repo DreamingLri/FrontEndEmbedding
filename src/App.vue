@@ -2,9 +2,7 @@
 import { ref } from 'vue'
 import SearchRAG from './components/SearchRAG.vue'
 import RetrievalTrace from './components/RetrievalTrace.vue'
-import RAGEvaluator from './components/RAGEvaluator.vue'
 
-const inputText = ref('This is a benchmark test document to evaluate WebGPU, WebGL, and WASM performance.')
 const traceData = ref<any>(null)
 
 const handleTraceUpdate = (data: any) => {
@@ -38,31 +36,6 @@ const handleTraceUpdate = (data: any) => {
       <div class="flex-1 overflow-hidden">
         <RetrievalTrace :trace-data="traceData" />
       </div>
-    </div>
-
-    <!-- Frontend Benchmarking & Diagnostic Dashboard -->
-    <div class="flex w-full max-w-6xl z-10 mb-12">
-      <div class="w-full">
-         <RAGEvaluator />
-      </div>
-    </div>
-
-    <!-- Original Benchmark Input -->
-    <div class="flex flex-col gap-4 z-10 w-full max-w-6xl mb-8">
-      <div class="flex items-center gap-2 mb-2">
-        <div class="h-[1px] flex-1 bg-slate-700"></div>
-        <span class="text-xs font-bold uppercase tracking-widest text-slate-500">Benchmark Mode</span>
-        <div class="h-[1px] flex-1 bg-slate-700"></div>
-      </div>
-      <label for="inputText" class="text-sm font-semibold text-slate-300 uppercase tracking-widest pl-1">
-        Global Input Query
-      </label>
-      <textarea
-        id="inputText"
-        v-model="inputText"
-        class="w-full bg-slate-800/60 backdrop-blur-sm border border-slate-700/50 rounded-xl p-5 text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all resize-y min-h-[140px] shadow-lg"
-        placeholder="Type a sentence to encode (e.g., 'What is the capital of France?')"
-      />
     </div>
   </div>
 </template>

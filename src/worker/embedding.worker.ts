@@ -76,7 +76,7 @@ function splitIntoSemanticChunks(text: string, maxLen = 150): string[] {
     }
     if (currentChunk) chunks.push(currentChunk);
 
-    return chunks.slice(0, 4); // 每篇最多 4 个 chunk，防止算力爆炸
+    return chunks;
 }
 
 // ==========================================
@@ -229,7 +229,7 @@ async function handleSearch(query: string, taskId?: string) {
 }
 
 // ==========================================
-// 7. RERANK — 语义切片 + Batch Embedding 精排
+// 7. RERANK — 仅为 Top 3 萃取原文高亮
 // ==========================================
 async function handleRerank(payload: { query: string, documents: any[] }, taskId?: string) {
     if (!extractor) throw new Error('引擎未初始化');
@@ -243,37 +243,59 @@ async function handleRerank(payload: { query: string, documents: any[] }, taskId
     } as any);
     const queryVector = output.data as Float32Array;
 
-    // 2. 收集所有文档的语义切片
-    const BATCH_SIZE = 8;
-    const allChunks: { docIdx: number, text: string }[] = [];
+    self.postMessage({
+        taskId,
+        status: 'progress',
+        message: '🔍 正在为高亮结果萃取官方原话...'
+    });
 
-    for (let i = 0; i < documents.length; i++) {
-        const docChunks = splitIntoSemanticChunks(documents[i].ot_text || '', 150);
-        for (const chunk of docChunks) {
-            allChunks.push({ docIdx: i, text: chunk });
+    // 2. 先为所有文档设置默认摘要，保持粗排顺序不动
+    const results = documents.map((doc: any) => {
+        let defaultPoint = '暂无要点';
+        if (doc.best_kpid && Array.isArray(doc.kps)) {
+            const hitKp = doc.kps.find((kp: any) => kp.kpid === doc.best_kpid);
+            if (hitKp?.kp_text) defaultPoint = hitKp.kp_text;
         }
+
+        return {
+            ...doc,
+            coarseScore: doc.score,
+            displayScore: doc.score,
+            rerankScore: doc.score,
+            snippetScore: -999,
+            confidenceScore: doc.score,
+            bestPoint: defaultPoint,
+            bestSentence: ''
+        };
+    });
+
+    // 3. 仅对前 3 篇文章做切片匹配
+    const top3Docs = results.slice(0, 3);
+    const batchChunks: { text: string, docIdx: number }[] = [];
+
+    for (let j = 0; j < top3Docs.length; j++) {
+        const textChunks = splitIntoSemanticChunks(top3Docs[j].ot_text || '', 150).slice(0, 10);
+        textChunks.forEach((chunk) => {
+            const normalizedChunk = (chunk || '').trim();
+            if (normalizedChunk) {
+                batchChunks.push({ text: normalizedChunk, docIdx: j });
+            }
+        });
     }
 
-    const totalChunks = allChunks.length;
-    const documentScores = new Float32Array(documents.length).fill(-Infinity);
-    const documentBestSentence: string[] = new Array(documents.length).fill('');
-
-    // 3. 按 Batch 并行计算每个 chunk 的 embedding 与相似度
-    for (let i = 0; i < totalChunks; i += BATCH_SIZE) {
-        const batchChunks = allChunks.slice(i, i + BATCH_SIZE);
-        const batchTexts = batchChunks.map(c => (c.text || '').substring(0, 400));
-
+    // 4. 只为少量切片执行一次批量推理
+    if (batchChunks.length > 0) {
+        const batchTexts = batchChunks.map((c) => c.text);
         const batchOutputs = await extractor(batchTexts, {
             pooling: 'mean', normalize: true, truncation: true, max_length: 512
         } as any);
 
-        const validElements = batchChunks.length * DIMENSIONS;
-        const pureData = (batchOutputs.data as Float32Array).subarray(0, validElements);
+        const pureData = (batchOutputs.data as Float32Array).subarray(0, batchChunks.length * DIMENSIONS);
+        const documentScores = new Float32Array(top3Docs.length).fill(-999);
+        const documentBestSentence = new Array<string>(top3Docs.length).fill('');
 
         for (let k = 0; k < batchChunks.length; k++) {
             const chunkVec = pureData.subarray(k * DIMENSIONS, (k + 1) * DIMENSIONS);
-
-            // 点积 (因 normalize=true, 等价于余弦相似度)
             let score = 0;
             for (let d = 0; d < DIMENSIONS; d++) {
                 score += queryVector[d] * chunkVec[d];
@@ -286,24 +308,16 @@ async function handleRerank(payload: { query: string, documents: any[] }, taskId
             }
         }
 
-        self.postMessage({
-            taskId,
-            status: 'progress',
-            message: `深度重排进行中：语义切片 ${Math.min(i + BATCH_SIZE, totalChunks)}/${totalChunks}`
-        });
-    }
+        for (let j = 0; j < top3Docs.length; j++) {
+            top3Docs[j].snippetScore = documentScores[j];
+            top3Docs[j].confidenceScore = Math.max(top3Docs[j].coarseScore ?? -999, documentScores[j]);
+            top3Docs[j].rerankScore = top3Docs[j].confidenceScore;
 
-    // 4. 组装最终结果
-    const results = [];
-    for (let j = 0; j < documents.length; j++) {
-        results.push({
-            ...documents[j],
-            rerankScore: documentScores[j],
-            bestSentence: documentBestSentence[j]
-        });
+            if (documentScores[j] > 0.4 && documentBestSentence[j]) {
+                top3Docs[j].bestSentence = documentBestSentence[j];
+            }
+        }
     }
-
-    results.sort((a, b) => b.rerankScore - a.rerankScore);
 
     self.postMessage({
         taskId,

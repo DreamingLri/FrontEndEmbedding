@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { 
-  Activity, 
-  Layers, 
-  MapPin, 
+import {
+  Activity,
   Clock,
+  Cpu,
   ExternalLink,
-  Zap,
-  Cpu
+  FileText,
+  Layers,
+  ShieldAlert
 } from 'lucide-vue-next';
 
-defineProps<{
+const props = defineProps<{
   traceData: {
     query: string;
     results: any[];
@@ -18,100 +18,152 @@ defineProps<{
       searchMs: string;
       fetchMs: string;
       rerankMs: string;
+      rejectionThreshold?: number;
+      topConfidence?: number;
+      rejected?: boolean;
     };
   } | null;
 }>();
 
-const formatScore = (score: number) => (score * 100).toFixed(1) + '%';
+const formatPercent = (score: number) => ((score || 0) * 100).toFixed(1) + '%';
+const formatRetrievalScore = (score: number) => `Score ${Number(score || 0).toFixed(2)}`;
+const getDisplayScore = (res: any) => res.displayScore ?? res.coarseScore ?? res.confidenceScore ?? res.rerankScore ?? res.score ?? 0;
+const getPreviewText = (res: any) => res.bestSentence || res.bestPoint || '';
+const isOriginalSnippet = (res: any) => (res.snippetScore ?? -999) > 0.4 && !!res.bestSentence;
+const top3Results = () => props.traceData?.results?.slice(0, 3) ?? [];
+const compactResults = () => props.traceData?.results?.slice(3, 10) ?? [];
 </script>
 
 <template>
-  <div class="h-full flex flex-col bg-slate-900/10 backdrop-blur-md rounded-2xl border border-white/5 overflow-hidden shadow-xl">
-    <div class="px-6 py-4 border-b border-white/10 bg-white/5 flex items-center gap-2">
-        <Activity class="w-4 h-4 text-purple-400" />
-        <h3 class="text-xs font-bold uppercase tracking-widest text-slate-300">检索分析 Trace</h3>
+  <div class="flex h-full flex-col overflow-hidden rounded-2xl border border-white/5 bg-slate-900/10 shadow-xl backdrop-blur-md">
+    <div class="flex items-center gap-2 border-b border-white/10 bg-white/5 px-6 py-4">
+      <Activity class="h-4 w-4 text-slate-300" />
+      <h3 class="text-xs font-bold uppercase tracking-widest text-slate-300">检索 Trace</h3>
     </div>
 
-    <div v-if="!traceData" class="flex-1 flex flex-col items-center justify-center p-8 text-center opacity-40">
-        <Layers class="w-12 h-12 text-slate-600 mb-2" />
-        <p class="text-xs text-slate-500">发送消息后，这里将实时分析向量匹配链路</p>
+    <div v-if="!traceData" class="flex flex-1 flex-col items-center justify-center p-8 text-center opacity-40">
+      <Layers class="mb-2 h-12 w-12 text-slate-600" />
+      <p class="text-xs text-slate-500">执行检索后，这里会显示召回、原话提炼和拒识信息</p>
     </div>
 
-    <div v-else class="flex-1 overflow-y-auto p-5 space-y-4 custom-scrollbar">
-        <div class="p-3 rounded-xl bg-purple-500/10 border border-purple-500/20">
-            <h4 class="text-[10px] font-bold text-purple-300 uppercase mb-1">查询语义</h4>
-            <p class="text-xs text-slate-300 italic">"{{ traceData.query }}"</p>
+    <div v-else class="custom-scrollbar flex-1 overflow-y-auto p-5 space-y-4">
+      <div class="rounded-xl border border-white/6 bg-white/[0.04] p-3">
+        <div class="mb-1 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">查询</div>
+        <p class="text-sm italic text-slate-200">"{{ traceData.query }}"</p>
+      </div>
+
+      <div v-if="traceData.stats" class="grid grid-cols-4 gap-2">
+        <div class="rounded-lg border border-white/5 bg-black/20 p-2 text-center">
+          <div class="text-[8px] font-bold uppercase text-slate-500">Total</div>
+          <div class="text-xs font-mono font-bold text-white">{{ traceData.stats.totalMs }}ms</div>
+        </div>
+        <div class="rounded-lg border border-blue-500/20 bg-blue-500/10 p-2 text-center">
+          <div class="text-[8px] font-bold uppercase text-blue-400">Search</div>
+          <div class="text-xs font-mono font-bold text-blue-300">{{ traceData.stats.searchMs }}ms</div>
+        </div>
+        <div class="rounded-lg border border-emerald-500/20 bg-emerald-500/10 p-2 text-center">
+          <div class="text-[8px] font-bold uppercase text-emerald-400">Fetch</div>
+          <div class="text-xs font-mono font-bold text-emerald-300">{{ traceData.stats.fetchMs }}ms</div>
+        </div>
+        <div class="rounded-lg border border-purple-500/20 bg-purple-500/10 p-2 text-center">
+          <div class="flex items-center justify-center gap-1 text-[8px] font-bold uppercase text-purple-400">
+            <Cpu class="h-2.5 w-2.5" />
+            Rerank
+          </div>
+          <div class="text-xs font-mono font-bold text-purple-300">{{ traceData.stats.rerankMs }}ms</div>
+        </div>
+      </div>
+
+      <div
+        v-if="traceData.stats && typeof traceData.stats.rejected === 'boolean'"
+        class="rounded-xl border px-3 py-2 text-xs"
+        :class="traceData.stats.rejected ? 'border-amber-500/30 bg-amber-500/10 text-amber-200' : 'border-emerald-500/20 bg-emerald-500/10 text-emerald-200'"
+      >
+        <div class="flex items-center gap-2">
+          <ShieldAlert v-if="traceData.stats.rejected" class="h-4 w-4" />
+          <FileText v-else class="h-4 w-4" />
+          <span>{{ traceData.stats.rejected ? '本次查询被拒识' : '本次查询通过展示阈值' }}</span>
+        </div>
+        <div class="mt-1 text-[11px] opacity-80">
+          Top 1 原话匹配度: {{ formatPercent(traceData.stats.topConfidence || 0) }}
+          <span v-if="traceData.stats.rejectionThreshold !== undefined">
+            / 阈值: {{ formatPercent(traceData.stats.rejectionThreshold) }}
+          </span>
+        </div>
+      </div>
+
+      <section v-if="top3Results().length > 0" class="space-y-2">
+        <div class="flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
+          <span>Top 1-3</span>
+          <span>原话提炼</span>
         </div>
 
-        <div class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-6 mb-2 flex items-center gap-2">
-            <span>引擎运算时延分析 (Telemetry)</span>
-            <div class="h-[1px] flex-1 bg-white/5"></div>
-        </div>
-
-        <div v-if="traceData.stats" class="grid grid-cols-4 gap-2 mb-6">
-            <div class="bg-black/20 border border-white/5 rounded-lg p-2 flex flex-col items-center justify-center text-center">
-                <span class="text-[8px] text-slate-500 font-bold uppercase mb-1 drop-shadow-sm">Total</span>
-                <span class="text-xs font-mono font-bold text-white">{{ traceData.stats.totalMs }}ms</span>
+        <div
+          v-for="(res, i) in top3Results()"
+          :key="res.otid || res.id || i"
+          class="rounded-xl border border-white/6 bg-white/[0.04] p-3"
+        >
+          <div class="mb-2 flex items-start justify-between gap-3">
+            <div class="min-w-0">
+              <div class="mb-1 flex items-center gap-2">
+                <span class="text-[10px] font-semibold text-slate-500">#{{ i + 1 }}</span>
+                <span class="rounded-full border border-white/8 px-2 py-0.5 text-[10px] text-slate-400">
+                  {{ isOriginalSnippet(res) ? '官方原话' : '相关要点' }}
+                </span>
+              </div>
+              <div class="text-xs font-semibold text-slate-200">{{ res.ot_title || '未命名政策文档' }}</div>
             </div>
-            <div class="bg-blue-500/10 border border-blue-500/20 rounded-lg p-2 flex flex-col items-center justify-center text-center">
-                <span class="text-[8px] text-blue-400 font-bold uppercase mb-1 drop-shadow-sm">WASM 粗排</span>
-                <span class="text-xs font-mono font-bold text-blue-300">{{ traceData.stats.searchMs }}ms</span>
+            <div class="text-right">
+              <div v-if="isOriginalSnippet(res)" class="text-[10px] font-mono text-slate-300">
+                {{ formatPercent(res.snippetScore ?? 0) }}
+              </div>
+              <div v-else class="text-[10px] font-mono text-slate-400">
+                {{ formatRetrievalScore(getDisplayScore(res)) }}
+              </div>
             </div>
-            <div class="bg-emerald-500/10 border border-emerald-500/20 rounded-lg p-2 flex flex-col items-center justify-center text-center">
-                <span class="text-[8px] text-emerald-400 font-bold uppercase mb-1 drop-shadow-sm">SQLite 拉取</span>
-                <span class="text-xs font-mono font-bold text-emerald-300">{{ traceData.stats.fetchMs }}ms</span>
+          </div>
+
+          <div v-if="getPreviewText(res)" class="mb-2 text-[11px] leading-6 text-slate-300">
+            {{ getPreviewText(res) }}
+          </div>
+
+          <div class="flex items-center gap-3 text-[10px] text-slate-500">
+            <div v-if="res.publish_time" class="flex items-center gap-1">
+              <Clock class="h-3 w-3" />
+              {{ res.publish_time }}
             </div>
-            <div class="bg-purple-500/10 border border-purple-500/20 rounded-lg p-2 flex flex-col items-center justify-center text-center">
-                <span class="text-[8px] text-purple-400 font-bold uppercase mb-1 flex items-center gap-1 drop-shadow-sm"><Cpu class="w-2.5 h-2.5"/> GPU 精排</span>
-                <span class="text-xs font-mono font-bold text-purple-300">{{ traceData.stats.rerankMs }}ms</span>
-            </div>
-        </div>
-
-        <div class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-6 mb-2 flex items-center gap-2">
-            <span>命中 Top {{ traceData.results.length }} 份政策原文</span>
-            <div class="h-[1px] flex-1 bg-white/5"></div>
-        </div>
-
-        <div v-for="(res, i) in traceData.results" :key="res.otid || res.id || i" 
-             class="group p-4 rounded-xl bg-white/5 border border-white/5 hover:border-blue-500/30 transition-all">
-            <div class="flex items-start justify-between mb-3">
-                <div class="flex items-center gap-2">
-                    <span class="text-[10px] font-bold w-5 h-5 rounded-full bg-slate-800 text-slate-500 flex items-center justify-center">
-                        {{ i + 1 }}
-                    </span>
-                    <span class="text-[10px] font-mono text-blue-400">ID: {{ String(res.otid || res.pkid || res.id || 'unknown').slice(0, 8) }}...</span>
-                </div>
-                <div class="flex items-center gap-1 bg-blue-500/20 px-2 py-0.5 rounded text-blue-400">
-                    <Zap class="w-3 h-3" />
-                    <span class="text-[10px] font-bold">{{ formatScore(res.rerankScore || res.score || 0) }}</span>
-                </div>
-            </div>
-
-            <h5 class="text-xs font-bold text-slate-200 mb-2 group-hover:text-blue-400 transition-colors">
-                {{ res.ot_title || '未命名政策文档' }}
-            </h5>
-
-            <div class="flex flex-wrap gap-2 mb-3">
-                <div v-if="res.publish_time" class="flex items-center gap-1 text-[9px] text-slate-500 bg-slate-800 px-1.5 py-0.5 rounded">
-                    <Clock class="w-2.5 h-2.5" />
-                    {{ res.publish_time }}
-                </div>
-                <div v-if="res.source" class="flex items-center gap-1 text-[9px] text-slate-500 bg-slate-800 px-1.5 py-0.5 rounded">
-                    <MapPin class="w-2.5 h-2.5" />
-                    {{ res.source }}
-                </div>
-            </div>
-
-            <div class="text-[10px] text-slate-400 line-clamp-2 leading-relaxed mb-3">
-                {{ res.ot_text || res.content_json || res.text }}
-            </div>
-
-            <a v-if="res.metadata?.url" :href="res.metadata.url" target="_blank" 
-               class="flex items-center gap-1 text-[10px] font-bold text-blue-500 hover:text-blue-400">
-                查看政策原文
-                <ExternalLink class="w-2.5 h-2.5" />
+            <a v-if="res.link" :href="res.link" target="_blank" class="inline-flex items-center gap-1 text-slate-400 hover:text-slate-200">
+              原文
+              <ExternalLink class="h-3 w-3" />
             </a>
+          </div>
         </div>
+      </section>
+
+      <section v-if="compactResults().length > 0" class="space-y-2">
+        <div class="flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
+          <span>Top 4-10</span>
+          <span>知识点</span>
+        </div>
+
+        <div
+          v-for="(res, i) in compactResults()"
+          :key="res.otid || res.id || `compact-${i}`"
+          class="rounded-xl border border-white/6 bg-white/[0.03] p-3"
+        >
+          <div class="flex items-start justify-between gap-3">
+            <div class="min-w-0">
+              <div class="mb-1 text-[10px] font-semibold text-slate-500">#{{ i + 4 }}</div>
+              <div class="text-xs text-slate-200">{{ res.ot_title || '未命名政策文档' }}</div>
+            </div>
+            <div class="text-[10px] font-mono text-slate-500">{{ formatRetrievalScore(getDisplayScore(res)) }}</div>
+          </div>
+
+          <div v-if="res.bestPoint" class="mt-2 text-[11px] leading-6 text-slate-400">
+            {{ res.bestPoint }}
+          </div>
+        </div>
+      </section>
     </div>
   </div>
 </template>
@@ -120,13 +172,16 @@ const formatScore = (score: number) => (score * 100).toFixed(1) + '%';
 .custom-scrollbar::-webkit-scrollbar {
   width: 4px;
 }
+
 .custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;
 }
+
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 10px;
 }
+
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.1);
 }
