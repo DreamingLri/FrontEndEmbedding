@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import ModelRunnerMongoDB from './components/ModelRunnerMongoDB.vue'
-import ModelRunnerDMeta from './components/ModelRunnerDMeta.vue'
-import ModelRunnerGTE from './components/ModelRunnerGTE.vue'
+import SearchRAG from './components/SearchRAG.vue'
+import RetrievalTrace from './components/RetrievalTrace.vue'
+import RAGEvaluator from './components/RAGEvaluator.vue'
 
 const inputText = ref('This is a benchmark test document to evaluate WebGPU, WebGL, and WASM performance.')
+const traceData = ref<any>(null)
+
+const handleTraceUpdate = (data: any) => {
+  traceData.value = data
+}
 </script>
 
 <template>
@@ -16,15 +21,39 @@ const inputText = ref('This is a benchmark test document to evaluate WebGPU, Web
       <h1
         class="text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 inline-block mb-3"
       >
-        EmbeddingBench
+        SuAsk Search Engine
       </h1>
       <p class="text-slate-400 text-base max-w-2xl mx-auto">
-        Client-side ONNX Runtime Web benchmarks.
+        高性能本地语义检索与校园政策搜索底座
       </p>
     </header>
 
-    <!-- Global Input Query -->
+    <!-- Search Section (The New Addition) -->
+    <div class="flex flex-col md:flex-row gap-6 w-full max-w-6xl z-10 items-stretch mb-12 h-[75vh] min-h-[600px] max-h-[850px]">
+      <div class="flex-[2] overflow-hidden">
+        <SearchRAG 
+          @trace-updated="handleTraceUpdate"
+        />
+      </div>
+      <div class="flex-1 overflow-hidden">
+        <RetrievalTrace :trace-data="traceData" />
+      </div>
+    </div>
+
+    <!-- Frontend Benchmarking & Diagnostic Dashboard -->
+    <div class="flex w-full max-w-6xl z-10 mb-12">
+      <div class="w-full">
+         <RAGEvaluator />
+      </div>
+    </div>
+
+    <!-- Original Benchmark Input -->
     <div class="flex flex-col gap-4 z-10 w-full max-w-6xl mb-8">
+      <div class="flex items-center gap-2 mb-2">
+        <div class="h-[1px] flex-1 bg-slate-700"></div>
+        <span class="text-xs font-bold uppercase tracking-widest text-slate-500">Benchmark Mode</span>
+        <div class="h-[1px] flex-1 bg-slate-700"></div>
+      </div>
       <label for="inputText" class="text-sm font-semibold text-slate-300 uppercase tracking-widest pl-1">
         Global Input Query
       </label>
@@ -35,19 +64,12 @@ const inputText = ref('This is a benchmark test document to evaluate WebGPU, Web
         placeholder="Type a sentence to encode (e.g., 'What is the capital of France?')"
       />
     </div>
-
-    <!-- Dual Model Components -->
-    <div class="flex flex-col md:flex-row gap-6 w-full max-w-6xl z-10 items-stretch pb-12">
-      <ModelRunnerDMeta
-        class="flex-1"
-        default-backend="webgpu"
-        :input-text="inputText"
-      />
-      <ModelRunnerGTE
-        class="flex-1"
-        default-backend="webgpu"
-        :input-text="inputText"
-      />
-    </div>
   </div>
 </template>
+
+<style>
+/* Smooth transitions */
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+</style>
