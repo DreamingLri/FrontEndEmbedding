@@ -8,6 +8,8 @@ export interface Metadata {
     sparse?: number[];
     target_year?: number;
     intent_ids?: string[];
+    degree_levels?: string[];
+    event_types?: string[];
 }
 
 export interface SearchResult {
@@ -31,6 +33,8 @@ export interface ParsedQueryIntent {
     rawQuery: string;
     years: number[];
     intentIds: string[];
+    degreeLevels: string[];
+    eventTypes: string[];
     normalizedTerms: string[];
     confidence: number;
 }
@@ -41,6 +45,8 @@ export interface IntentVectorItem {
     aliases: string[];
     negative_intents: string[];
     related_intents: string[];
+    degree_levels: string[];
+    preferred_event_types: string[];
     weight: number;
 }
 
@@ -57,11 +63,40 @@ export const RRF_K = 60;
 const BM25_K1 = 1.2;
 const BM25_B = 0.4;
 
+export const DEGREE_LEVEL_TABLE = ["本科", "硕士", "博士"] as const;
+export const EVENT_TYPE_TABLE = [
+    "招生章程",
+    "报名通知",
+    "考试安排",
+    "复试通知",
+    "录取公示",
+    "资格要求",
+    "材料提交",
+    "推免资格公示",
+    "推免通知",
+    "推免实施办法",
+    "非招生通知",
+] as const;
+
 export const CAMPUS_SYNONYMS: Record<string, string[]> = {
-    考研: ["研究生", "招生", "考试", "初试"],
-    保研: ["推免", "推荐免试", "推免生"],
+    考研: ["研究生", "招生", "考试", "初试", "复试"],
+    保研: ["推免", "推荐免试", "推免生", "免试攻读研究生"],
     名额: ["计划", "人数"],
     退课: ["退选"],
+};
+
+const EVENT_TYPE_HINTS: Record<string, string[]> = {
+    招生章程: ["章程", "简章", "专业目录"],
+    报名通知: ["报名", "网报", "报考点", "报名通知"],
+    考试安排: ["考试", "考核安排", "面试", "笔试"],
+    复试通知: ["复试"],
+    录取公示: ["录取", "预录取", "公示", "名单"],
+    资格要求: ["资格", "条件", "要求"],
+    材料提交: ["材料", "提交", "寄送"],
+    推免资格公示: ["推荐资格公示", "推免资格公示", "免试攻读研究生推荐资格公示"],
+    推免通知: ["推免通知", "免试攻读研究生", "推荐免试"],
+    推免实施办法: ["推免实施办法", "推荐办法", "遴选细则", "实施办法"],
+    非招生通知: ["奖学金", "助学金", "评选", "资助", "学年", "工作通知"],
 };
 
 export const INTENT_VECTOR_TABLE: IntentVectorItem[] = [
@@ -74,6 +109,8 @@ export const INTENT_VECTOR_TABLE: IntentVectorItem[] = [
             "master_unified_exam",
         ],
         related_intents: [],
+        degree_levels: ["本科"],
+        preferred_event_types: ["报名通知", "考试安排", "录取公示"],
         weight: 1,
     },
     {
@@ -85,10 +122,20 @@ export const INTENT_VECTOR_TABLE: IntentVectorItem[] = [
             "推荐免试",
             "推免生",
             "免试研究生",
+            "免试攻读研究生",
+            "推荐资格",
             "预推免",
         ],
         negative_intents: ["ug_recommend_admission", "master_unified_exam"],
         related_intents: ["summer_camp", "pre_recommend"],
+        degree_levels: ["硕士", "博士"],
+        preferred_event_types: [
+            "推免资格公示",
+            "推免通知",
+            "推免实施办法",
+            "材料提交",
+            "录取公示",
+        ],
         weight: 1,
     },
     {
@@ -108,6 +155,14 @@ export const INTENT_VECTOR_TABLE: IntentVectorItem[] = [
             "master_recommend_exemption",
         ],
         related_intents: ["master_adjustment"],
+        degree_levels: ["硕士"],
+        preferred_event_types: [
+            "招生章程",
+            "报名通知",
+            "考试安排",
+            "复试通知",
+            "录取公示",
+        ],
         weight: 1,
     },
     {
@@ -116,6 +171,8 @@ export const INTENT_VECTOR_TABLE: IntentVectorItem[] = [
         aliases: ["调剂", "硕士调剂", "接受调剂", "调剂复试"],
         negative_intents: [],
         related_intents: ["master_unified_exam"],
+        degree_levels: ["硕士", "博士"],
+        preferred_event_types: ["复试通知", "录取公示", "报名通知"],
         weight: 1,
     },
     {
@@ -124,14 +181,18 @@ export const INTENT_VECTOR_TABLE: IntentVectorItem[] = [
         aliases: ["申请考核", "申请-考核", "博士申请考核"],
         negative_intents: ["phd_general_exam"],
         related_intents: [],
+        degree_levels: ["博士"],
+        preferred_event_types: ["报名通知", "材料提交", "考试安排", "录取公示"],
         weight: 1,
     },
     {
         intent_id: "phd_general_exam",
         intent_name: "博士普通招考",
-        aliases: ["博士招考", "博士报名", "博士考试", "公开招考博士"],
+        aliases: ["博士招考", "博士报名", "博士考试", "公开招考博士", "博士研究生招生"],
         negative_intents: ["phd_apply_assessment"],
         related_intents: [],
+        degree_levels: ["博士"],
+        preferred_event_types: ["招生章程", "报名通知", "考试安排", "录取公示"],
         weight: 1,
     },
     {
@@ -140,6 +201,8 @@ export const INTENT_VECTOR_TABLE: IntentVectorItem[] = [
         aliases: ["夏令营", "优秀大学生夏令营"],
         negative_intents: [],
         related_intents: ["master_recommend_exemption"],
+        degree_levels: ["硕士"],
+        preferred_event_types: ["报名通知", "录取公示"],
         weight: 1,
     },
     {
@@ -148,6 +211,8 @@ export const INTENT_VECTOR_TABLE: IntentVectorItem[] = [
         aliases: ["预推免", "预推免报名", "预推免考核"],
         negative_intents: ["master_unified_exam"],
         related_intents: ["master_recommend_exemption", "summer_camp"],
+        degree_levels: ["硕士"],
+        preferred_event_types: ["推免通知", "考试安排", "录取公示"],
         weight: 1,
     },
 ];
@@ -155,6 +220,14 @@ export const INTENT_VECTOR_TABLE: IntentVectorItem[] = [
 const INTENT_CONFLICTS: Record<string, string[]> = Object.fromEntries(
     INTENT_VECTOR_TABLE.map((item) => [item.intent_id, item.negative_intents]),
 );
+
+const INTENT_RULE_MAP = new Map(
+    INTENT_VECTOR_TABLE.map((item) => [item.intent_id, item] as const),
+);
+
+function dedupe<T>(items: T[]): T[] {
+    return Array.from(new Set(items));
+}
 
 export function buildBM25Stats(metadata: Metadata[]): BM25Stats {
     const N = metadata.length;
@@ -236,22 +309,48 @@ export function getQuerySparse(
     return sparse;
 }
 
+function collectMatchedEventTypes(text: string): string[] {
+    return dedupe(
+        Object.entries(EVENT_TYPE_HINTS)
+            .filter(([, hints]) => hints.some((hint) => text.includes(hint)))
+            .map(([eventType]) => eventType),
+    );
+}
+
 export function parseQueryIntent(query: string): ParsedQueryIntent {
-    const lowered = query.toLowerCase();
-    const years = Array.from(
-        new Set((query.match(/20\d{2}/g) || []).map((year) => Number(year))),
+    const years = dedupe(
+        (query.match(/20\d{2}/g) || []).map((year) => Number(year)),
     );
     const matchedRules = INTENT_VECTOR_TABLE.filter((rule) =>
-        rule.aliases.some((alias) => lowered.includes(alias.toLowerCase())),
+        rule.aliases.some((alias) => query.includes(alias)),
+    );
+    const explicitDegreeLevels = dedupe(
+        DEGREE_LEVEL_TABLE.filter((level) => query.includes(level)),
+    );
+    const inferredDegreeLevels = dedupe(
+        matchedRules.flatMap((rule) => rule.degree_levels),
+    );
+    const degreeLevels =
+        explicitDegreeLevels.length > 0 ? explicitDegreeLevels : inferredDegreeLevels;
+    const eventTypes = dedupe([
+        ...collectMatchedEventTypes(query),
+        ...matchedRules.flatMap((rule) => rule.preferred_event_types),
+    ]);
+    const normalizedTerms = dedupe(
+        matchedRules.flatMap((rule) => [
+            ...rule.aliases,
+            ...rule.degree_levels,
+            ...rule.preferred_event_types,
+        ]),
     );
 
     return {
         rawQuery: query,
         years,
         intentIds: matchedRules.map((rule) => rule.intent_id),
-        normalizedTerms: Array.from(
-            new Set(matchedRules.flatMap((rule) => rule.aliases)),
-        ),
+        degreeLevels,
+        eventTypes,
+        normalizedTerms,
         confidence: matchedRules.length > 0 ? 1 : 0,
     };
 }
@@ -271,6 +370,19 @@ function hasIntentConflict(
 function hasIntentMatch(queryIntentIds: string[], docIntentIds?: string[]): boolean {
     if (!docIntentIds || docIntentIds.length === 0) return false;
     return queryIntentIds.some((queryIntentId) => docIntentIds.includes(queryIntentId));
+}
+
+function hasAnyOverlap(a: string[], b?: string[]): boolean {
+    if (!b || b.length === 0) return false;
+    return a.some((item) => b.includes(item));
+}
+
+function getPreferredEventTypes(intentIds: string[]): string[] {
+    return dedupe(
+        intentIds.flatMap(
+            (intentId) => INTENT_RULE_MAP.get(intentId)?.preferred_event_types || [],
+        ),
+    );
 }
 
 export function searchAndRank(params: {
@@ -392,6 +504,8 @@ export function searchAndRank(params: {
             best_kpid?: string;
             target_year?: number;
             intent_ids?: string[];
+            degree_levels?: string[];
+            event_types?: string[];
         }
     > = {};
 
@@ -405,21 +519,22 @@ export function searchAndRank(params: {
                 timestamp: meta.timestamp,
                 target_year: meta.target_year,
                 intent_ids: meta.intent_ids,
+                degree_levels: meta.degree_levels,
+                event_types: meta.event_types,
             };
         }
 
-        if (
-            otidMap[otid].target_year === undefined &&
-            meta.target_year !== undefined
-        ) {
+        if (otidMap[otid].target_year === undefined && meta.target_year !== undefined) {
             otidMap[otid].target_year = meta.target_year;
         }
-        if (
-            (!otidMap[otid].intent_ids || otidMap[otid].intent_ids!.length === 0) &&
-            meta.intent_ids &&
-            meta.intent_ids.length > 0
-        ) {
+        if ((!otidMap[otid].intent_ids || otidMap[otid].intent_ids!.length === 0) && meta.intent_ids?.length) {
             otidMap[otid].intent_ids = meta.intent_ids;
+        }
+        if ((!otidMap[otid].degree_levels || otidMap[otid].degree_levels!.length === 0) && meta.degree_levels?.length) {
+            otidMap[otid].degree_levels = meta.degree_levels;
+        }
+        if ((!otidMap[otid].event_types || otidMap[otid].event_types!.length === 0) && meta.event_types?.length) {
+            otidMap[otid].event_types = meta.event_types;
         }
 
         if (meta.type === "Q") {
@@ -460,20 +575,58 @@ export function searchAndRank(params: {
 
         if (queryYearWordIds && queryYearWordIds.length > 0) {
             const hasStructuredYearMatch =
-                !!queryIntent?.years?.length &&
+                !!queryIntent?.years.length &&
                 scores.target_year !== undefined &&
                 queryIntent.years.includes(scores.target_year);
             const hasLexicalYearMatch = yearHitMap.get(otid) === true;
-            if (!hasStructuredYearMatch && !hasLexicalYearMatch) {
-                boost *= 0.35;
+
+            if (scores.target_year !== undefined && queryIntent?.years.length) {
+                if (!queryIntent.years.includes(scores.target_year)) {
+                    boost *= 0.08;
+                }
+            } else if (!hasStructuredYearMatch && !hasLexicalYearMatch) {
+                boost *= 0.3;
             }
         }
 
         if (queryIntent && queryIntent.intentIds.length > 0) {
             if (hasIntentMatch(queryIntent.intentIds, scores.intent_ids)) {
-                boost *= 1.2;
+                boost *= 1.25;
             } else if (hasIntentConflict(queryIntent.intentIds, scores.intent_ids)) {
-                boost *= 0.3;
+                boost *= 0.18;
+            }
+
+            if (
+                queryIntent.intentIds.includes("master_recommend_exemption") &&
+                scores.intent_ids?.includes("ug_recommend_admission")
+            ) {
+                boost *= 0.05;
+            }
+
+            const preferredEventTypes = getPreferredEventTypes(queryIntent.intentIds);
+            if (scores.event_types?.includes("非招生通知")) {
+                boost *= 0.12;
+            } else if (
+                preferredEventTypes.length > 0 &&
+                hasAnyOverlap(preferredEventTypes, scores.event_types)
+            ) {
+                boost *= 1.18;
+            }
+        }
+
+        if (queryIntent && queryIntent.degreeLevels.length > 0) {
+            if (hasAnyOverlap(queryIntent.degreeLevels, scores.degree_levels)) {
+                boost *= 1.1;
+            } else if ((scores.degree_levels?.length || 0) > 0) {
+                boost *= 0.45;
+            }
+        }
+
+        if (queryIntent && queryIntent.eventTypes.length > 0) {
+            if (hasAnyOverlap(queryIntent.eventTypes, scores.event_types)) {
+                boost *= 1.1;
+            } else if ((scores.event_types?.length || 0) > 0) {
+                boost *= 0.65;
             }
         }
 

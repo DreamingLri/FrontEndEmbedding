@@ -35,24 +35,24 @@ const compactResults = () => props.traceData?.results?.slice(3, 10) ?? [];
 </script>
 
 <template>
-  <div class="flex h-full flex-col overflow-hidden rounded-2xl border border-white/5 bg-slate-900/10 shadow-xl backdrop-blur-md">
-    <div class="flex items-center gap-2 border-b border-white/10 bg-white/5 px-6 py-4">
-      <Activity class="h-4 w-4 text-slate-300" />
-      <h3 class="text-xs font-bold uppercase tracking-widest text-slate-300">检索 Trace</h3>
+  <div class="flex h-full flex-col overflow-hidden rounded-[24px] border border-white/5 bg-white/[0.025] shadow-[0_20px_60px_rgba(0,0,0,0.18)] backdrop-blur-xl">
+    <div class="flex items-center gap-2 border-b border-white/8 bg-white/[0.025] px-5 py-3">
+      <Activity class="h-4 w-4 text-slate-400" />
+      <h3 class="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400">检索 Trace</h3>
     </div>
 
-    <div v-if="!traceData" class="flex flex-1 flex-col items-center justify-center p-8 text-center opacity-40">
-      <Layers class="mb-2 h-12 w-12 text-slate-600" />
-      <p class="text-xs text-slate-500">执行检索后，这里会显示召回、原话提炼和拒识信息</p>
+    <div v-if="!traceData" class="flex flex-1 flex-col items-center justify-center p-8 text-center opacity-35">
+      <Layers class="mb-2 h-10 w-10 text-slate-700" />
+      <p class="text-xs text-slate-500">这里会显示检索路径和关键状态</p>
     </div>
 
-    <div v-else class="custom-scrollbar flex-1 overflow-y-auto p-5 space-y-4">
-      <div class="rounded-xl border border-white/6 bg-white/[0.04] p-3">
+    <div v-else class="custom-scrollbar flex-1 overflow-y-auto p-4 space-y-3">
+      <div class="rounded-xl border border-white/5 bg-white/[0.03] p-3">
         <div class="mb-1 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">查询</div>
         <p class="text-sm italic text-slate-200">"{{ traceData.query }}"</p>
       </div>
 
-      <div v-if="traceData.stats" class="grid grid-cols-4 gap-2">
+      <div v-if="traceData.stats" class="grid grid-cols-3 gap-2">
         <div class="rounded-lg border border-white/5 bg-black/20 p-2 text-center">
           <div class="text-[8px] font-bold uppercase text-slate-500">Total</div>
           <div class="text-xs font-mono font-bold text-white">{{ traceData.stats.totalMs }}ms</div>
@@ -95,13 +95,13 @@ const compactResults = () => props.traceData?.results?.slice(3, 10) ?? [];
       <section v-if="top3Results().length > 0" class="space-y-2">
         <div class="flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
           <span>Top 1-3</span>
-          <span>原话提炼</span>
+          <span>摘要</span>
         </div>
 
         <div
           v-for="(res, i) in top3Results()"
           :key="res.otid || res.id || i"
-          class="rounded-xl border border-white/6 bg-white/[0.04] p-3"
+          class="rounded-xl border border-white/5 bg-white/[0.03] p-3"
         >
           <div class="mb-2 flex items-start justify-between gap-3">
             <div class="min-w-0">
@@ -123,7 +123,7 @@ const compactResults = () => props.traceData?.results?.slice(3, 10) ?? [];
             </div>
           </div>
 
-          <div v-if="getPreviewText(res)" class="mb-2 text-[11px] leading-6 text-slate-300">
+          <div v-if="getPreviewText(res)" class="mb-2 text-[11px] leading-6 text-slate-400">
             {{ getPreviewText(res) }}
           </div>
 
@@ -140,16 +140,16 @@ const compactResults = () => props.traceData?.results?.slice(3, 10) ?? [];
         </div>
       </section>
 
-      <section v-if="compactResults().length > 0" class="space-y-2">
+      <section v-if="compactResults().length > 0" class="space-y-1.5">
         <div class="flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
           <span>Top 4-10</span>
-          <span>知识点</span>
+          <span>列表</span>
         </div>
 
         <div
           v-for="(res, i) in compactResults()"
           :key="res.otid || res.id || `compact-${i}`"
-          class="rounded-xl border border-white/6 bg-white/[0.03] p-3"
+          class="rounded-xl border border-white/5 bg-white/[0.02] p-3"
         >
           <div class="flex items-start justify-between gap-3">
             <div class="min-w-0">
@@ -159,7 +159,7 @@ const compactResults = () => props.traceData?.results?.slice(3, 10) ?? [];
             <div class="text-[10px] font-mono text-slate-500">{{ formatRetrievalScore(getDisplayScore(res)) }}</div>
           </div>
 
-          <div v-if="res.bestPoint" class="mt-2 text-[11px] leading-6 text-slate-400">
+          <div v-if="res.bestPoint" class="mt-2 line-clamp-2 text-[11px] leading-6 text-slate-500">
             {{ res.bestPoint }}
           </div>
         </div>

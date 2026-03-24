@@ -12,28 +12,26 @@ const handleTraceUpdate = (data: any) => {
 
 <template>
   <div
-    class="min-h-screen w-full flex flex-col items-center p-4 sm:p-8 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-slate-100 font-sans"
+    class="min-h-screen w-full flex flex-col items-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-900 px-4 py-4 text-slate-100 font-sans sm:px-6 sm:py-6"
   >
-    <!-- Header -->
-    <header class="z-10 w-full text-center pb-8 pt-4">
+    <header class="z-10 w-full max-w-7xl text-center pb-5 pt-2">
       <h1
-        class="text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 inline-block mb-3"
+        class="mb-2 inline-block bg-gradient-to-r from-sky-300 via-blue-300 to-indigo-300 bg-clip-text text-[32px] font-extrabold tracking-tight text-transparent sm:text-[36px]"
       >
         SuAsk Search Engine
       </h1>
-      <p class="text-slate-400 text-base max-w-2xl mx-auto">
-        高性能本地语义检索与校园政策搜索底座
+      <p class="mx-auto max-w-xl text-sm text-slate-400 sm:text-[15px]">
+        优先返回官方原话，同时保留可展开的相关政策要点
       </p>
     </header>
 
-    <!-- Search Section (The New Addition) -->
-    <div class="flex flex-col md:flex-row gap-6 w-full max-w-6xl z-10 items-stretch mb-12 h-[75vh] min-h-[600px] max-h-[850px]">
-      <div class="flex-[2] overflow-hidden">
+    <div class="z-10 flex h-[78vh] min-h-[620px] max-h-[860px] w-full max-w-7xl flex-col items-stretch gap-4 lg:flex-row lg:gap-5">
+      <div class="overflow-hidden lg:min-w-0 lg:flex-[1.9]">
         <SearchRAG 
           @trace-updated="handleTraceUpdate"
         />
       </div>
-      <div class="flex-1 overflow-hidden">
+      <div class="overflow-hidden lg:min-w-[320px] lg:flex-[0.95]">
         <RetrievalTrace :trace-data="traceData" />
       </div>
     </div>

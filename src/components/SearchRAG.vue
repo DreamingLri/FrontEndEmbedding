@@ -161,8 +161,8 @@ const initWorkers = async () => {
   statusMsg.value = '加载核心数据中...';
 
   try {
-    const CACHE_KEY_MATRIX = 'rag_vector_matrix_dmeta_v1';
-    const CACHE_KEY_METADATA = 'rag_metadata_dmeta_v1';
+    const CACHE_KEY_MATRIX = 'rag_vector_matrix_dmeta_v2';
+    const CACHE_KEY_METADATA = 'rag_metadata_dmeta_v2';
 
     let matrixBuffer = await localforage.getItem<ArrayBuffer>(CACHE_KEY_MATRIX);
     let metadataJson = await localforage.getItem<any>(CACHE_KEY_METADATA);
@@ -292,10 +292,10 @@ const handleSearch = async () => {
 </script>
 
 <template>
-  <div class="flex h-full flex-col overflow-hidden rounded-2xl border border-white/5 bg-slate-900/10 shadow-2xl backdrop-blur-md">
-    <div class="flex items-center justify-between border-b border-white/10 bg-white/5 px-6 py-4">
+  <div class="flex h-full flex-col overflow-hidden rounded-[24px] border border-white/6 bg-white/[0.04] shadow-[0_24px_80px_rgba(0,0,0,0.28)] backdrop-blur-xl">
+    <div class="flex items-center justify-between border-b border-white/8 bg-white/[0.03] px-5 py-3">
       <div class="flex items-center gap-2">
-        <div class="mr-2 flex items-center gap-2 rounded-lg border border-white/5 bg-black/30 p-1">
+        <div class="mr-1 flex items-center gap-1 rounded-lg border border-white/6 bg-black/20 p-1">
           <button
             v-for="m in models"
             :key="m.id"
@@ -306,42 +306,42 @@ const handleSearch = async () => {
             {{ m.name }}
           </button>
         </div>
-        <select disabled class="cursor-not-allowed rounded-lg border border-white/5 bg-black/20 px-2 py-1.5 text-[9px] font-bold uppercase text-slate-400 outline-none">
+        <select disabled class="cursor-not-allowed rounded-lg border border-white/6 bg-black/20 px-2 py-1 text-[9px] font-bold uppercase text-slate-500 outline-none">
           <option value="wasm">WASM Worker</option>
         </select>
       </div>
 
-      <div class="flex items-center gap-2">
-        <div class="h-2 w-2 rounded-full" :class="isProcessing ? 'bg-amber-400 animate-pulse' : 'bg-emerald-400'" />
-        <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400">{{ statusMsg }}</span>
+      <div class="flex items-center gap-2 pl-4 text-right">
+        <div class="h-1.5 w-1.5 rounded-full" :class="isProcessing ? 'bg-amber-400 animate-pulse' : 'bg-emerald-400'" />
+        <span class="line-clamp-1 text-[10px] font-semibold tracking-[0.16em] text-slate-500">{{ statusMsg }}</span>
       </div>
     </div>
 
-    <div v-if="errorMsg" class="flex items-center gap-2 border-b border-red-500/20 bg-red-500/10 px-6 py-3 text-xs text-red-400">
+    <div v-if="errorMsg" class="flex items-center gap-2 border-b border-red-500/20 bg-red-500/10 px-5 py-3 text-xs text-red-400">
       <AlertCircle class="h-4 w-4" />
       {{ errorMsg }}
     </div>
 
-    <div class="border-b border-white/5 bg-white/5 p-6">
+    <div class="border-b border-white/6 bg-white/[0.03] p-5">
       <div class="relative group">
         <input
           v-model="searchQuery"
           @keydown.enter="handleSearch"
           placeholder="输入校园政策关键词或具体问题"
-          class="w-full rounded-xl border border-white/10 bg-slate-900/50 px-12 py-4 font-medium text-slate-100 outline-none transition-all placeholder:text-slate-500 focus:ring-2 focus:ring-blue-500/40"
+          class="w-full rounded-2xl border border-white/8 bg-slate-950/40 px-12 py-4 font-medium text-slate-100 outline-none transition-all placeholder:text-slate-500 focus:border-blue-400/30 focus:ring-2 focus:ring-blue-500/30"
         />
         <Search class="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500" />
         <button
           @click="handleSearch"
           :disabled="!searchQuery.trim() || isProcessing || !isWorkerReady"
-          class="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg bg-blue-600 px-4 py-2 text-xs font-bold transition-all active:scale-95 hover:bg-blue-500 disabled:opacity-50"
+          class="absolute right-2 top-1/2 -translate-y-1/2 rounded-xl bg-blue-600 px-4 py-2 text-xs font-bold transition-all active:scale-95 hover:bg-blue-500 disabled:opacity-50"
         >
           <span v-if="!isProcessing">搜索</span>
           <Loader2 v-else class="h-4 w-4 animate-spin" />
         </button>
       </div>
 
-      <div class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
+      <div class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2">
         <div v-for="(log, i) in diagnosticLogs" :key="i" class="flex items-center gap-1 font-mono text-[9px] text-slate-500">
           <Info v-if="i === 0" class="h-2.5 w-2.5 text-blue-400" />
           {{ log }}
@@ -349,7 +349,7 @@ const handleSearch = async () => {
       </div>
     </div>
 
-    <div class="custom-scrollbar flex-1 overflow-y-auto p-5">
+    <div class="custom-scrollbar flex-1 overflow-y-auto px-5 py-4">
       <div v-if="results.length === 0 && !isProcessing" class="flex h-full flex-col items-center justify-center text-center text-slate-500">
         <div class="mb-4 flex h-14 w-14 items-center justify-center rounded-full border border-dashed border-slate-700">
           <Search class="h-5 w-5" />
@@ -360,7 +360,7 @@ const handleSearch = async () => {
         </p>
       </div>
 
-      <div v-else class="space-y-6">
+      <div v-else class="space-y-5">
         <section v-if="heroResults.length > 0" class="space-y-3">
           <div class="flex items-center justify-between text-[11px] uppercase tracking-[0.2em] text-slate-500">
             <span>Top 1-3</span>
@@ -370,7 +370,7 @@ const handleSearch = async () => {
           <article
             v-for="(res, i) in heroResults"
             :key="res.otid || res.id || i"
-            class="rounded-2xl border border-white/6 bg-white/[0.04] p-4"
+            class="rounded-[20px] border border-white/6 bg-white/[0.045] px-4 py-3.5"
           >
             <div class="flex items-start justify-between gap-3">
               <div class="min-w-0">
@@ -380,7 +380,7 @@ const handleSearch = async () => {
                     {{ isOriginalSnippet(res) ? '官方原话' : '相关要点' }}
                   </span>
                 </div>
-                <h3 class="text-sm font-semibold leading-6 text-slate-100">
+                <h3 class="text-[15px] font-semibold leading-6 text-slate-100">
                   {{ res.ot_title || '未命名政策文档' }}
                 </h3>
               </div>
@@ -404,11 +404,7 @@ const handleSearch = async () => {
               </div>
             </div>
 
-            <div
-              v-if="getPreviewText(res)"
-              class="mt-3 text-sm leading-7 text-slate-200"
-              v-html="highlightSnippet(getPreviewText(res), searchQuery)"
-            />
+            <div v-if="getPreviewText(res)" class="mt-3 text-sm leading-7 text-slate-200" v-html="highlightSnippet(getPreviewText(res), searchQuery)" />
 
             <div class="mt-3 flex items-center gap-4 text-[11px] text-slate-500">
               <div v-if="res.publish_time" class="flex items-center gap-1.5">
@@ -428,21 +424,21 @@ const handleSearch = async () => {
           </article>
         </section>
 
-        <section v-if="compactResults.length > 0" class="space-y-2">
+        <section v-if="compactResults.length > 0" class="space-y-1.5">
           <div class="flex items-center justify-between text-[11px] uppercase tracking-[0.2em] text-slate-500">
             <span>Top 4-10</span>
-            <span>标题列表</span>
+            <span>轻列表</span>
           </div>
 
           <details
             v-for="(res, index) in compactResults"
             :key="res.otid || res.id || `compact-${index}`"
-            class="group rounded-xl border border-white/6 bg-white/[0.03] px-4 py-3"
+            class="group rounded-2xl border border-white/5 bg-white/[0.025] px-4 py-2.5"
           >
             <summary class="flex list-none cursor-pointer items-center justify-between gap-3">
               <div class="min-w-0 flex items-center gap-3">
                 <span class="text-[10px] font-semibold text-slate-500">#{{ index + 4 }}</span>
-                <span class="truncate text-sm text-slate-200">{{ res.ot_title || '未命名政策文档' }}</span>
+                <span class="truncate text-[13px] text-slate-200">{{ res.ot_title || '未命名政策文档' }}</span>
               </div>
               <div class="flex shrink-0 items-center gap-3">
                 <span class="font-mono text-[11px] text-slate-500">{{ formatRetrievalScore(getDisplayScore(res)) }}</span>
@@ -450,7 +446,7 @@ const handleSearch = async () => {
               </div>
             </summary>
 
-            <div v-if="res.bestPoint || getPreviewText(res)" class="mt-3 border-t border-white/6 pt-3 text-sm leading-6 text-slate-400">
+            <div v-if="res.bestPoint || getPreviewText(res)" class="mt-2 rounded-xl bg-white/[0.03] px-3 py-2.5 text-[13px] leading-6 text-slate-400">
               <div class="mb-1 text-[10px] uppercase tracking-[0.18em] text-slate-600">相关要点</div>
               <p>{{ res.bestPoint || getPreviewText(res) }}</p>
             </div>
@@ -459,13 +455,13 @@ const handleSearch = async () => {
       </div>
     </div>
 
-    <div class="flex items-center justify-between border-t border-white/5 bg-black/20 px-6 py-3 text-[9px] font-bold uppercase tracking-widest text-slate-600">
-      <span>本地政策检索引擎 v3.0</span>
+    <div class="flex items-center justify-between border-t border-white/5 bg-black/10 px-5 py-2.5 text-[9px] font-bold uppercase tracking-widest text-slate-600">
+      <span>本地政策检索引擎</span>
       <div class="flex items-center gap-3">
-        <span class="flex items-center gap-1" title="CPU 向量粗排"><Cpu class="h-2.5 w-2.5 text-slate-400" /> Vector Worker Q8</span>
+        <span class="flex items-center gap-1" title="CPU 向量粗排"><Cpu class="h-2.5 w-2.5 text-slate-500" /> Vector Worker</span>
         <span class="flex items-center gap-1" title="Top 3 原文高亮提炼">
           <svg class="h-3 w-3 text-red-500/70" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" /></svg>
-          Snippet Rerank
+          Snippet
         </span>
       </div>
     </div>
