@@ -6,11 +6,13 @@ export interface Metadata {
     vector_index: number;
     scale?: number;
     sparse?: number[];
+    target_year?: number;
+    intent_ids?: string[];
 }
 
 export interface SearchResult {
     otid: string;
-    best_kpid?: string; // 🌟 直接把立功的 KP ID 传出来，方便前端展示
+    best_kpid?: string;
     score: number;
     details?: {
         denseRRF: number;
@@ -20,41 +22,143 @@ export interface SearchResult {
 }
 
 export interface BM25Stats {
-    idfMap: Map<number, number>; // 词表 -> IDF 分数
-    docLengths: Int32Array; // 每个文档的长度 (词总数)
-    avgdl: number; // 库内平均文档长度
+    idfMap: Map<number, number>;
+    docLengths: Int32Array;
+    avgdl: number;
 }
 
-// 核心融合权重配置 (语义分内部比例)
+export interface ParsedQueryIntent {
+    rawQuery: string;
+    years: number[];
+    intentIds: string[];
+    normalizedTerms: string[];
+    confidence: number;
+}
+
+export interface IntentVectorItem {
+    intent_id: string;
+    intent_name: string;
+    aliases: string[];
+    negative_intents: string[];
+    related_intents: string[];
+    weight: number;
+}
+
 export const DEFAULT_WEIGHTS = {
     Q: 0.33,
     KP: 0.33,
     OT: 0.33,
 };
 
-// 时间衰减相关常量
 export const DECAY_LAMBDA = 0.001;
 export const SECONDS_IN_DAY = 86400;
-
-// RRF 融合常量
 export const RRF_K = 60;
 
-// BM25 经验常量
-const BM25_K1 = 1.2; // 控制 TF 的饱和度
-const BM25_B = 0.4; // 控制文档长度的惩罚力度
+const BM25_K1 = 1.2;
+const BM25_B = 0.4;
 
-// 校园黑话词典，用于词法扩展
 export const CAMPUS_SYNONYMS: Record<string, string[]> = {
     考研: ["研究生", "招生", "考试", "初试"],
-    保研: ["免试", "推免", "推荐"],
+    保研: ["推免", "推荐免试", "推免生"],
     名额: ["计划", "人数"],
     退课: ["退选"],
 };
 
-// 在数据加载时调用此函数，将结果缓存到内存中
+export const INTENT_VECTOR_TABLE: IntentVectorItem[] = [
+    {
+        intent_id: "ug_recommend_admission",
+        intent_name: "本科保送生",
+        aliases: ["保送生", "外语类保送生", "竞赛保送"],
+        negative_intents: [
+            "master_recommend_exemption",
+            "master_unified_exam",
+        ],
+        related_intents: [],
+        weight: 1,
+    },
+    {
+        intent_id: "master_recommend_exemption",
+        intent_name: "推免",
+        aliases: [
+            "保研",
+            "推免",
+            "推荐免试",
+            "推免生",
+            "免试研究生",
+            "预推免",
+        ],
+        negative_intents: ["ug_recommend_admission", "master_unified_exam"],
+        related_intents: ["summer_camp", "pre_recommend"],
+        weight: 1,
+    },
+    {
+        intent_id: "master_unified_exam",
+        intent_name: "统考硕士",
+        aliases: [
+            "考研",
+            "硕士研究生招生考试",
+            "全国硕士研究生招生考试",
+            "硕士统考",
+            "初试",
+            "复试",
+            "研招",
+        ],
+        negative_intents: [
+            "ug_recommend_admission",
+            "master_recommend_exemption",
+        ],
+        related_intents: ["master_adjustment"],
+        weight: 1,
+    },
+    {
+        intent_id: "master_adjustment",
+        intent_name: "调剂",
+        aliases: ["调剂", "硕士调剂", "接受调剂", "调剂复试"],
+        negative_intents: [],
+        related_intents: ["master_unified_exam"],
+        weight: 1,
+    },
+    {
+        intent_id: "phd_apply_assessment",
+        intent_name: "博士申请考核",
+        aliases: ["申请考核", "申请-考核", "博士申请考核"],
+        negative_intents: ["phd_general_exam"],
+        related_intents: [],
+        weight: 1,
+    },
+    {
+        intent_id: "phd_general_exam",
+        intent_name: "博士普通招考",
+        aliases: ["博士招考", "博士报名", "博士考试", "公开招考博士"],
+        negative_intents: ["phd_apply_assessment"],
+        related_intents: [],
+        weight: 1,
+    },
+    {
+        intent_id: "summer_camp",
+        intent_name: "夏令营",
+        aliases: ["夏令营", "优秀大学生夏令营"],
+        negative_intents: [],
+        related_intents: ["master_recommend_exemption"],
+        weight: 1,
+    },
+    {
+        intent_id: "pre_recommend",
+        intent_name: "预推免",
+        aliases: ["预推免", "预推免报名", "预推免考核"],
+        negative_intents: ["master_unified_exam"],
+        related_intents: ["master_recommend_exemption", "summer_camp"],
+        weight: 1,
+    },
+];
+
+const INTENT_CONFLICTS: Record<string, string[]> = Object.fromEntries(
+    INTENT_VECTOR_TABLE.map((item) => [item.intent_id, item.negative_intents]),
+);
+
 export function buildBM25Stats(metadata: Metadata[]): BM25Stats {
     const N = metadata.length;
-    const dfMap = new Map<number, number>(); // 记录包含某个词的文档数量 (Document Frequency)
+    const dfMap = new Map<number, number>();
     const docLengths = new Int32Array(N);
     let totalLength = 0;
 
@@ -66,12 +170,10 @@ export function buildBM25Stats(metadata: Metadata[]): BM25Stats {
         }
 
         let dl = 0;
-        // sparse 数组结构是 [wordId1, tf1, wordId2, tf2, ...]
         for (let j = 0; j < sparse.length; j += 2) {
             const wordId = sparse[j];
             const tf = sparse[j + 1];
             dl += tf;
-            // 统计 DF (每个词在这个文档出现过，文档频率+1)
             dfMap.set(wordId, (dfMap.get(wordId) || 0) + 1);
         }
         docLengths[i] = dl;
@@ -81,19 +183,14 @@ export function buildBM25Stats(metadata: Metadata[]): BM25Stats {
     const avgdl = totalLength / (N || 1);
     const idfMap = new Map<number, number>();
 
-    // 计算标准的 BM25 IDF: log(1 + (N - df + 0.5) / (df + 0.5))
     for (const [wordId, df] of dfMap.entries()) {
         const idf = Math.log(1 + (N - df + 0.5) / (df + 0.5));
-        // 如果数据极度倾斜，IDF 可能为负，做一个底线保护
         idfMap.set(wordId, Math.max(idf, 0.01));
     }
 
     return { idfMap, docLengths, avgdl };
 }
 
-/**
- * 计算两个向量的点积
- */
 export function dotProduct(
     vecA: Float32Array,
     matrix: Int8Array | Float32Array,
@@ -108,9 +205,6 @@ export function dotProduct(
     return sum;
 }
 
-/**
- * 将分词后的词列表转换为稀疏向量 (含校园同义词扩展)
- */
 export function getQuerySparse(
     words: string[],
     vocabMap: Map<string, number> | Record<string, number>,
@@ -119,7 +213,6 @@ export function getQuerySparse(
     const isMap = vocabMap instanceof Map;
 
     words.forEach((word) => {
-        // 1. 基础词 ID 匹配
         const index = isMap
             ? (vocabMap as Map<string, number>).get(word)
             : (vocabMap as Record<string, number>)[word];
@@ -127,7 +220,6 @@ export function getQuerySparse(
             sparse[index] = (sparse[index] || 0) + 1;
         }
 
-        // 2. 校园同义词扩展 (让"考研"也能匹配到"研究生招生")
         const synonyms = CAMPUS_SYNONYMS[word];
         if (synonyms) {
             synonyms.forEach((syn) => {
@@ -144,10 +236,48 @@ export function getQuerySparse(
     return sparse;
 }
 
+export function parseQueryIntent(query: string): ParsedQueryIntent {
+    const lowered = query.toLowerCase();
+    const years = Array.from(
+        new Set((query.match(/20\d{2}/g) || []).map((year) => Number(year))),
+    );
+    const matchedRules = INTENT_VECTOR_TABLE.filter((rule) =>
+        rule.aliases.some((alias) => lowered.includes(alias.toLowerCase())),
+    );
+
+    return {
+        rawQuery: query,
+        years,
+        intentIds: matchedRules.map((rule) => rule.intent_id),
+        normalizedTerms: Array.from(
+            new Set(matchedRules.flatMap((rule) => rule.aliases)),
+        ),
+        confidence: matchedRules.length > 0 ? 1 : 0,
+    };
+}
+
+function hasIntentConflict(
+    queryIntentIds: string[],
+    docIntentIds?: string[],
+): boolean {
+    if (!docIntentIds || docIntentIds.length === 0) return false;
+    return queryIntentIds.some((queryIntentId) =>
+        (INTENT_CONFLICTS[queryIntentId] || []).some((conflictId) =>
+            docIntentIds.includes(conflictId),
+        ),
+    );
+}
+
+function hasIntentMatch(queryIntentIds: string[], docIntentIds?: string[]): boolean {
+    if (!docIntentIds || docIntentIds.length === 0) return false;
+    return queryIntentIds.some((queryIntentId) => docIntentIds.includes(queryIntentId));
+}
+
 export function searchAndRank(params: {
     queryVector: Float32Array;
     querySparse?: Record<number, number>;
-    queryYearWordIds?: number[]; // 精确的年份词汇 ID 数组
+    queryYearWordIds?: number[];
+    queryIntent?: ParsedQueryIntent;
     metadata: Metadata[];
     vectorMatrix: Int8Array | Float32Array;
     dimensions: number;
@@ -165,61 +295,48 @@ export function searchAndRank(params: {
         bm25Stats,
         weights = DEFAULT_WEIGHTS,
         queryYearWordIds,
+        queryIntent,
     } = params;
 
     const n = metadata.length;
-
-    // 高性能 TypedArray 内存分配
     const denseScores = new Float32Array(n);
     const sparseScores = new Float32Array(n);
     const denseIndices = new Int32Array(n);
     const sparseIndices = new Int32Array(n);
     const lexicalBonusMap = new Map<string, number>();
-
-    // 记录哪篇具体文章真正命中了特定的年份词
     const yearHitMap = new Map<string, boolean>();
 
-    // 阶段 1：计算分数
     for (let i = 0; i < n; i++) {
         const meta = metadata[i];
 
-        // 1. Dense (语义匹配)
         let dense = dotProduct(
             queryVector,
             vectorMatrix,
             meta.vector_index,
             dimensions,
         );
-        if (meta.scale !== undefined && meta.scale !== null)
-            dense *= meta.scale;
+        if (meta.scale !== undefined && meta.scale !== null) dense *= meta.scale;
         denseScores[i] = dense;
         denseIndices[i] = i;
 
-        // 2. Sparse (BM25 词法匹配)
         let sparse = 0;
         if (querySparse && meta.sparse && meta.sparse.length > 0) {
             const dl = bm25Stats.docLengths[i];
-
-            // 设定最小安全长度，防止短 Q 霸凌长 OT
             const safeDl = Math.max(dl, bm25Stats.avgdl * 0.25);
 
             for (let j = 0; j < meta.sparse.length; j += 2) {
                 const wordId = meta.sparse[j];
                 const tf = meta.sparse[j + 1];
 
-                // 精确查杀：看这篇文章有没有命中特定的年份 ID
                 if (queryYearWordIds && queryYearWordIds.includes(wordId)) {
-                    const otid =
-                        meta.type === "OT" ? meta.id : meta.parent_otid;
+                    const otid = meta.type === "OT" ? meta.id : meta.parent_otid;
                     yearHitMap.set(otid, true);
                 }
 
                 if (querySparse[wordId]) {
                     const qWeight = querySparse[wordId] || 1;
                     const idf = bm25Stats.idfMap.get(wordId) || 0;
-
                     const numerator = tf * (BM25_K1 + 1);
-                    // 使用 safeDl 替代 dl
                     const denominator =
                         tf +
                         BM25_K1 *
@@ -228,7 +345,6 @@ export function searchAndRank(params: {
                 }
             }
 
-            // 计算该文档对实体的词法增益 (用于阶段 5 重排)
             if (sparse > 0) {
                 const otid = meta.type === "OT" ? meta.id : meta.parent_otid;
                 let currentBonus = lexicalBonusMap.get(otid) || 0;
@@ -242,11 +358,9 @@ export function searchAndRank(params: {
         sparseIndices[i] = i;
     }
 
-    // 阶段 2：RRF 融合 (依旧保持高性能的就地排序)
     denseIndices.sort((a, b) => denseScores[b] - denseScores[a]);
     const rrfScores = new Map<Metadata, number>();
 
-    // 扩大融合池到 4000，绝对不漏掉长尾文档
     for (let rank = 0; rank < Math.min(4000, n); rank++) {
         const meta = metadata[denseIndices[rank]];
         rrfScores.set(meta, (1 / (rank + RRF_K)) * 100);
@@ -260,12 +374,10 @@ export function searchAndRank(params: {
 
             const meta = metadata[originalIndex];
             const current = rrfScores.get(meta) || 0;
-            // Sparse 赋予 1.2 倍 RRF 权重，增强词法约束力
             rrfScores.set(meta, current + (1.2 / (rank + RRF_K)) * 100);
         }
     }
 
-    // 阶段 3：提取聚合
     const topHybrid = Array.from(rrfScores.entries())
         .sort((a, b) => b[1] - a[1])
         .slice(0, 1000);
@@ -277,7 +389,9 @@ export function searchAndRank(params: {
             max_kp: number;
             ot_score: number;
             timestamp?: number;
-            best_kpid?: string; // 🌟 新增字段
+            best_kpid?: string;
+            target_year?: number;
+            intent_ids?: string[];
         }
     > = {};
 
@@ -289,13 +403,28 @@ export function searchAndRank(params: {
                 max_kp: 0,
                 ot_score: 0,
                 timestamp: meta.timestamp,
+                target_year: meta.target_year,
+                intent_ids: meta.intent_ids,
             };
+        }
+
+        if (
+            otidMap[otid].target_year === undefined &&
+            meta.target_year !== undefined
+        ) {
+            otidMap[otid].target_year = meta.target_year;
+        }
+        if (
+            (!otidMap[otid].intent_ids || otidMap[otid].intent_ids!.length === 0) &&
+            meta.intent_ids &&
+            meta.intent_ids.length > 0
+        ) {
+            otidMap[otid].intent_ids = meta.intent_ids;
         }
 
         if (meta.type === "Q") {
             otidMap[otid].max_q = Math.max(otidMap[otid].max_q, score);
         } else if (meta.type === "KP") {
-            // 🌟 如果这个 KP 分数更高，不仅记录分数，还记录它的 kpid
             if (score > otidMap[otid].max_kp) {
                 otidMap[otid].max_kp = score;
                 otidMap[otid].best_kpid = meta.id;
@@ -305,10 +434,8 @@ export function searchAndRank(params: {
         }
     }
 
-    // 阶段 4：分数合并逻辑
     const finalRanking: SearchResult[] = [];
     for (const [otid, scores] of Object.entries(otidMap)) {
-        // 把 weights 真正用起来
         const weightedQ = scores.max_q * weights.Q;
         const weightedKP = scores.max_kp * weights.KP;
         const weightedOT = scores.ot_score * weights.OT;
@@ -326,31 +453,36 @@ export function searchAndRank(params: {
         }
 
         let boost = 1.0;
+        const lexicalBonus = lexicalBonusMap.get(otid) || 0;
+        if (lexicalBonus > 0) {
+            boost *= 1 + Math.log1p(lexicalBonus) / 4;
+        }
 
-        // 极其精确的年份硬过滤
         if (queryYearWordIds && queryYearWordIds.length > 0) {
-            if (!yearHitMap.get(otid)) {
-                // 绝杀降权：用户问了具体年份，但文章里没有该年份
-                boost = 0.01;
-            } else {
-                // 提权：年份完美命中
-                boost = 1.5;
+            const hasStructuredYearMatch =
+                !!queryIntent?.years?.length &&
+                scores.target_year !== undefined &&
+                queryIntent.years.includes(scores.target_year);
+            const hasLexicalYearMatch = yearHitMap.get(otid) === true;
+            if (!hasStructuredYearMatch && !hasLexicalYearMatch) {
+                boost *= 0.35;
             }
-        } else {
-            // 如果用户没有问特定年份，按常规词法奖励处理
-            const lexicalBonus = lexicalBonusMap.get(otid) || 0;
-            if (lexicalBonus > 0) {
-                boost = 1 + Math.log1p(lexicalBonus) / 4;
+        }
+
+        if (queryIntent && queryIntent.intentIds.length > 0) {
+            if (hasIntentMatch(queryIntent.intentIds, scores.intent_ids)) {
+                boost *= 1.2;
+            } else if (hasIntentConflict(queryIntent.intentIds, scores.intent_ids)) {
+                boost *= 0.3;
             }
         }
 
         finalRanking.push({
             otid,
             score: finalScore * boost,
-            best_kpid: scores.best_kpid, // 🌟 把立功的 kpid 传出去
+            best_kpid: scores.best_kpid,
         });
     }
 
-    // 阶段 5：对聚合合并后的真实文章 (OT) 进行排名，并切出 Top 100
     return finalRanking.sort((a, b) => b.score - a.score).slice(0, 100);
 }

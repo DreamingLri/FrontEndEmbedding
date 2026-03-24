@@ -1,11 +1,13 @@
 import { pipeline, env } from '@huggingface/transformers';
 import type { FeatureExtractionPipeline } from '@huggingface/transformers';
 import type { BM25Stats, Metadata } from './vector_engine';
-import { buildBM25Stats, getQuerySparse, searchAndRank } from './vector_engine';
+import {
+    buildBM25Stats,
+    getQuerySparse,
+    parseQueryIntent,
+    searchAndRank
+} from './vector_engine';
 
-// ==========================================
-// 0. 环境配置
-// ==========================================
 const MODEL_NAME = 'DMetaSoul/Dmeta-embedding-zh-small';
 let DIMENSIONS = 768;
 
@@ -23,20 +25,16 @@ try {
         onnx.wasm.numThreads = Math.min(navigator.hardwareConcurrency || 4, 8);
         onnx.wasm.proxy = false;
     }
-} catch (_) { /* ONNX 配置不可用时忽略 */ }
+} catch (_) {
+    // Ignore optional ONNX runtime configuration failures.
+}
 
-// ==========================================
-// 1. 全局状态
-// ==========================================
 let extractor: FeatureExtractionPipeline | null = null;
 let vocabMap = new Map<string, number>();
 let metadataList: Metadata[] = [];
 let vectorMatrix: Int8Array | null = null;
 let globalBM25Stats: BM25Stats | null = null;
 
-// ==========================================
-// 2. FMM 正向最大匹配分词器 (替代 nodejieba)
-// ==========================================
 function fmmTokenize(text: string): string[] {
     const tokens: string[] = [];
     let i = 0;
@@ -52,16 +50,11 @@ function fmmTokenize(text: string): string[] {
                 break;
             }
         }
-        if (!matched) {
-            i++; // 跳过未匹配的单字符
-        }
+        if (!matched) i++;
     }
     return tokens;
 }
 
-// ==========================================
-// 3. 语义切片器 (用于精排)
-// ==========================================
 function splitIntoSemanticChunks(text: string, maxLen = 150): string[] {
     const sentences = text.split(/([。！？\n]+)/g);
     const chunks: string[] = [];
@@ -79,9 +72,6 @@ function splitIntoSemanticChunks(text: string, maxLen = 150): string[] {
     return chunks;
 }
 
-// ==========================================
-// 4. 消息分发器
-// ==========================================
 self.onmessage = async (event: MessageEvent) => {
     const { type, payload, taskId } = event.data;
 
@@ -102,24 +92,16 @@ self.onmessage = async (event: MessageEvent) => {
     }
 };
 
-// ==========================================
-// 5. INIT — 加载数据 + 构建索引 + 加载模型
-// ==========================================
-// 支持两种初始化模式:
-//   模式 A (SearchRAG.vue): payload = { metadata: JSON, vectorMatrix: Int8Array }
-//   模式 B (RAGEvaluator.vue): payload = { metadataUrl: string, vectorsUrl: string }
 async function handleInit(payload: any, taskId?: string) {
     try {
         let rawMetadata: any;
 
         if (payload.metadata && payload.vectorMatrix) {
-            // 模式 A: 主线程已预加载数据，通过 Transferable 零拷贝传入
-            self.postMessage({ taskId, status: 'loading', message: '解析已传递的词典与零拷贝矩阵内存...' });
+            self.postMessage({ taskId, status: 'loading', message: '解析已传入的元数据与向量矩阵...' });
             rawMetadata = payload.metadata;
             vectorMatrix = payload.vectorMatrix;
         } else if (payload.metadataUrl && payload.vectorsUrl) {
-            // 模式 B: Worker 自行从网络拉取数据
-            self.postMessage({ taskId, status: 'loading', message: '从网络加载核心数据...' });
+            self.postMessage({ taskId, status: 'loading', message: '加载元数据与向量矩阵...' });
             const [metaRes, vecRes] = await Promise.all([
                 fetch(payload.metadataUrl),
                 fetch(payload.vectorsUrl)
@@ -129,33 +111,31 @@ async function handleInit(payload: any, taskId?: string) {
             const vecBuffer = await vecRes.arrayBuffer();
             vectorMatrix = new Int8Array(vecBuffer);
         } else {
-            throw new Error('INIT payload 格式错误：需要 {metadata, vectorMatrix} 或 {metadataUrl, vectorsUrl}');
+            throw new Error('INIT payload 格式错误');
         }
 
-        // 解析元数据与词典
         metadataList = Array.isArray(rawMetadata) ? rawMetadata : (rawMetadata.data || []);
         const vocabList: string[] = rawMetadata.vocab || [];
         vocabMap.clear();
         vocabList.forEach((word, index) => vocabMap.set(word, index));
 
-        // 构建 BM25 统计
-        self.postMessage({ taskId, status: 'loading', message: '构建 BM25 统计索引...' });
+        self.postMessage({ taskId, status: 'loading', message: '构建 BM25 统计...' });
         globalBM25Stats = buildBM25Stats(metadataList);
 
-        // 动态推断向量维度
         if (metadataList.length > 0 && vectorMatrix && vectorMatrix.length > 0) {
             DIMENSIONS = Math.round(vectorMatrix.length / metadataList.length);
         }
 
-        // 探测 WebGPU 支持
-        self.postMessage({ taskId, status: 'loading', message: `探测计算后端 (${DIMENSIONS}维向量)...` });
+        self.postMessage({ taskId, status: 'loading', message: `探测推理后端 (${DIMENSIONS}维)...` });
         let device = 'wasm';
         try {
             if ((navigator as any).gpu) {
                 const adapter = await (navigator as any).gpu.requestAdapter();
                 if (adapter) device = 'webgpu';
             }
-        } catch (_) { /* 降级到 WASM */ }
+        } catch (_) {
+            // Fall back to WASM.
+        }
 
         const dtype = device === 'webgpu' ? 'fp16' : 'q8';
         self.postMessage({ taskId, status: 'loading', message: `加载 Embedding 模型 (${device}/${dtype})...` });
@@ -168,48 +148,43 @@ async function handleInit(payload: any, taskId?: string) {
         self.postMessage({
             taskId,
             status: 'ready',
-            message: `AI 引擎就绪 [${device}/${dtype}, ${metadataList.length} 词条, ${DIMENSIONS}维]`
+            message: `AI 引擎就绪 [${device}/${dtype}, ${metadataList.length} 条, ${DIMENSIONS}维]`
         });
     } catch (err: any) {
         self.postMessage({ taskId, status: 'error', error: `初始化失败: ${err.message}` });
     }
 }
 
-// ==========================================
-// 6. SEARCH — FMM 分词 + 粗排
-// ==========================================
 async function handleSearch(query: string, taskId?: string) {
     if (!vectorMatrix || !globalBM25Stats || !extractor) {
-        throw new Error('引擎未初始化完毕');
+        throw new Error('引擎尚未初始化完成');
     }
 
     const t0 = performance.now();
 
-    // 1. 生成 Query Embedding
     const output = await extractor(query, {
         pooling: 'mean', normalize: true, truncation: true, max_length: 512
     } as any);
     const queryVector = output.data as Float32Array;
 
-    // 2. FMM 分词 → 构建稀疏向量
-    const queryWords = fmmTokenize(query);
+    const queryIntent = parseQueryIntent(query);
+    const queryWords = Array.from(new Set([
+        ...fmmTokenize(query),
+        ...queryIntent.normalizedTerms
+    ]));
     const querySparse = getQuerySparse(queryWords, vocabMap);
 
-    // 3. 提取年份 Word ID (用于年份精准匹配)
-    const queryYears = query.match(/20\d{2}/g);
     const queryYearWordIds: number[] = [];
-    if (queryYears) {
-        queryYears.forEach(y => {
-            const id = vocabMap.get(y);
-            if (id !== undefined) queryYearWordIds.push(id);
-        });
-    }
+    queryIntent.years.map(String).forEach((year) => {
+        const id = vocabMap.get(year);
+        if (id !== undefined) queryYearWordIds.push(id);
+    });
 
-    // 4. 执行粗排: Dense + BM25 RRF 融合
     const matches = searchAndRank({
         queryVector,
         querySparse,
         queryYearWordIds,
+        queryIntent,
         metadata: metadataList,
         vectorMatrix,
         dimensions: DIMENSIONS,
@@ -228,16 +203,12 @@ async function handleSearch(query: string, taskId?: string) {
     });
 }
 
-// ==========================================
-// 7. RERANK — 仅为 Top 3 萃取原文高亮
-// ==========================================
 async function handleRerank(payload: { query: string, documents: any[] }, taskId?: string) {
-    if (!extractor) throw new Error('引擎未初始化');
+    if (!extractor) throw new Error('引擎尚未初始化');
 
     const { query, documents } = payload;
     const t0 = performance.now();
 
-    // 1. 生成 Query Embedding
     const output = await extractor(query, {
         pooling: 'mean', normalize: true, truncation: true, max_length: 512
     } as any);
@@ -246,10 +217,9 @@ async function handleRerank(payload: { query: string, documents: any[] }, taskId
     self.postMessage({
         taskId,
         status: 'progress',
-        message: '🔍 正在为高亮结果萃取官方原话...'
+        message: '正在为高亮结果提取更相关的原文片段...'
     });
 
-    // 2. 先为所有文档设置默认摘要，保持粗排顺序不动
     const results = documents.map((doc: any) => {
         let defaultPoint = '暂无要点';
         if (doc.best_kpid && Array.isArray(doc.kps)) {
@@ -269,7 +239,6 @@ async function handleRerank(payload: { query: string, documents: any[] }, taskId
         };
     });
 
-    // 3. 仅对前 3 篇文章做切片匹配
     const top3Docs = results.slice(0, 3);
     const batchChunks: { text: string, docIdx: number }[] = [];
 
@@ -283,7 +252,6 @@ async function handleRerank(payload: { query: string, documents: any[] }, taskId
         });
     }
 
-    // 4. 只为少量切片执行一次批量推理
     if (batchChunks.length > 0) {
         const batchTexts = batchChunks.map((c) => c.text);
         const batchOutputs = await extractor(batchTexts, {
