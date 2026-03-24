@@ -1,14 +1,22 @@
 import { pipeline, env } from '@huggingface/transformers';
 import type { FeatureExtractionPipeline } from '@huggingface/transformers';
-import type { BM25Stats, Metadata } from './vector_engine';
+import type {
+    BM25Stats,
+    Metadata,
+    ParsedQueryIntent,
+    SearchRankOutput
+} from './vector_engine';
 import {
     buildBM25Stats,
     getQuerySparse,
     parseQueryIntent,
+    resolveMetadataTopicIds,
     searchAndRank
 } from './vector_engine';
 
 const MODEL_NAME = 'DMetaSoul/Dmeta-embedding-zh-small';
+const DEBUG_SEARCH = false;
+const WORKER_BUILD_TAG = 'intent-debug-20260324-1';
 let DIMENSIONS = 768;
 
 env.allowLocalModels = true;
@@ -34,6 +42,10 @@ let vocabMap = new Map<string, number>();
 let metadataList: Metadata[] = [];
 let vectorMatrix: Int8Array | null = null;
 let globalBM25Stats: BM25Stats | null = null;
+let topicCandidateIndex = new Map<string, number[]>();
+let unlabeledCandidateIndices: number[] = [];
+let lastEmbeddedQuery = '';
+let lastQueryVector: Float32Array | null = null;
 
 function fmmTokenize(text: string): string[] {
     const tokens: string[] = [];
@@ -56,7 +68,8 @@ function fmmTokenize(text: string): string[] {
 }
 
 function splitIntoSemanticChunks(text: string, maxLen = 150): string[] {
-    const sentences = text.split(/([。！？\n]+)/g);
+    const sentences =
+        text.match(/[^\u3002\uff01\uff1f\n]+[\u3002\uff01\uff1f\n]*/g) || [text];
     const chunks: string[] = [];
     let currentChunk = '';
 
@@ -70,6 +83,59 @@ function splitIntoSemanticChunks(text: string, maxLen = 150): string[] {
     if (currentChunk) chunks.push(currentChunk);
 
     return chunks;
+}
+
+async function embedQuery(query: string): Promise<Float32Array> {
+    if (!extractor) throw new Error('\u67e5\u8be2\u6a21\u578b\u672a\u521d\u59cb\u5316');
+
+    const output = await extractor(query, {
+        pooling: 'mean', normalize: true, truncation: true, max_length: 512
+    } as any);
+    const queryVector = new Float32Array(output.data as Float32Array);
+    lastEmbeddedQuery = query;
+    lastQueryVector = queryVector;
+    return queryVector;
+}
+
+function resetQueryCache() {
+    lastEmbeddedQuery = '';
+    lastQueryVector = null;
+}
+
+function buildTopicCandidateIndex(metadata: Metadata[]) {
+    topicCandidateIndex = new Map<string, number[]>();
+    unlabeledCandidateIndices = [];
+
+    metadata.forEach((meta, index) => {
+        const topicIds = resolveMetadataTopicIds(meta);
+        if (topicIds.length === 0) {
+            unlabeledCandidateIndices.push(index);
+            return;
+        }
+
+        topicIds.forEach((topicId) => {
+            const bucket = topicCandidateIndex.get(topicId);
+            if (bucket) bucket.push(index);
+            else topicCandidateIndex.set(topicId, [index]);
+        });
+    });
+}
+
+function getCandidateIndicesForQuery(queryIntent: ParsedQueryIntent): number[] | undefined {
+    if (queryIntent.topicIds.length === 0) return undefined;
+
+    const candidateSet = new Set<number>(unlabeledCandidateIndices);
+    queryIntent.topicIds.forEach((topicId) => {
+        const bucket = topicCandidateIndex.get(topicId);
+        if (!bucket) return;
+        bucket.forEach((index) => candidateSet.add(index));
+    });
+
+    if (candidateSet.size === 0 || candidateSet.size >= metadataList.length) {
+        return undefined;
+    }
+
+    return Array.from(candidateSet);
 }
 
 self.onmessage = async (event: MessageEvent) => {
@@ -118,6 +184,8 @@ async function handleInit(payload: any, taskId?: string) {
         const vocabList: string[] = rawMetadata.vocab || [];
         vocabMap.clear();
         vocabList.forEach((word, index) => vocabMap.set(word, index));
+        buildTopicCandidateIndex(metadataList);
+        resetQueryCache();
 
         self.postMessage({ taskId, status: 'loading', message: '构建 BM25 统计...' });
         globalBM25Stats = buildBM25Stats(metadataList);
@@ -148,7 +216,9 @@ async function handleInit(payload: any, taskId?: string) {
         self.postMessage({
             taskId,
             status: 'ready',
-            message: `AI 引擎就绪 [${device}/${dtype}, ${metadataList.length} 条, ${DIMENSIONS}维]`
+            message: DEBUG_SEARCH
+                ? `AI 引擎就绪 [${WORKER_BUILD_TAG}, ${device}/${dtype}, ${metadataList.length} 条, ${DIMENSIONS}维]`
+                : `AI 引擎就绪 [${device}/${dtype}, ${metadataList.length} 条, ${DIMENSIONS}维]`
         });
     } catch (err: any) {
         self.postMessage({ taskId, status: 'error', error: `初始化失败: ${err.message}` });
@@ -162,12 +232,9 @@ async function handleSearch(query: string, taskId?: string) {
 
     const t0 = performance.now();
 
-    const output = await extractor(query, {
-        pooling: 'mean', normalize: true, truncation: true, max_length: 512
-    } as any);
-    const queryVector = output.data as Float32Array;
-
+    const queryVector = await embedQuery(query);
     const queryIntent = parseQueryIntent(query);
+    const candidateIndices = getCandidateIndicesForQuery(queryIntent);
     const queryWords = Array.from(new Set([
         ...fmmTokenize(query),
         ...queryIntent.normalizedTerms
@@ -180,7 +247,7 @@ async function handleSearch(query: string, taskId?: string) {
         if (id !== undefined) queryYearWordIds.push(id);
     });
 
-    const matches = searchAndRank({
+    const searchResult: SearchRankOutput = searchAndRank({
         queryVector,
         querySparse,
         queryYearWordIds,
@@ -188,17 +255,27 @@ async function handleSearch(query: string, taskId?: string) {
         metadata: metadataList,
         vectorMatrix,
         dimensions: DIMENSIONS,
-        currentTimestamp: 0,
-        bm25Stats: globalBM25Stats
+        currentTimestamp: Date.now() / 1000,
+        bm25Stats: globalBM25Stats,
+        candidateIndices
     });
 
     self.postMessage({
         taskId,
         status: 'search_complete',
-        result: matches,
+        result: searchResult,
         stats: {
             elapsedMs: (performance.now() - t0).toFixed(1),
-            itemsScanned: metadataList.length
+            itemsScanned: candidateIndices?.length ?? metadataList.length,
+            workerBuildTag: DEBUG_SEARCH ? WORKER_BUILD_TAG : undefined,
+            queryIntent: DEBUG_SEARCH ? queryIntent : undefined,
+            topMatches: DEBUG_SEARCH
+                ? searchResult.matches.slice(0, 5).map((match) => ({
+                    otid: match.otid,
+                    score: Number(match.score.toFixed(4)),
+                    best_kpid: match.best_kpid,
+                }))
+                : undefined,
         }
     });
 }
@@ -209,10 +286,10 @@ async function handleRerank(payload: { query: string, documents: any[] }, taskId
     const { query, documents } = payload;
     const t0 = performance.now();
 
-    const output = await extractor(query, {
-        pooling: 'mean', normalize: true, truncation: true, max_length: 512
-    } as any);
-    const queryVector = output.data as Float32Array;
+    const queryVector =
+        lastEmbeddedQuery === query && lastQueryVector
+            ? lastQueryVector
+            : await embedQuery(query);
 
     self.postMessage({
         taskId,

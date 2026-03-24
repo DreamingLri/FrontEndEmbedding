@@ -43,7 +43,8 @@ function fmmTokenize(text: string): string[] {
 }
 
 function splitIntoSemanticChunks(text: string, maxLen = 150): string[] {
-    const sentences = text.split(/([。！？\n]+)/g); 
+    const sentences =
+        text.match(/[^\u3002\uff01\uff1f\n]+[\u3002\uff01\uff1f\n]*/g) || [text];
     const chunks: string[] = [];
     let currentChunk = "";
 
