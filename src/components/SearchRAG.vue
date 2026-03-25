@@ -42,10 +42,7 @@ type WorkerSearchResult = {
   rejection?: SearchRejection;
 };
 
-const selectedModelId = ref<string>('dmeta_small');
-const models = [
-  { id: 'dmeta_small', name: 'DMeta Soul', path: 'DMetaSoul/Dmeta-embedding-zh-small' }
-];
+
 
 const emit = defineEmits(['trace-updated']);
 
@@ -61,7 +58,6 @@ const diagnosticLogs = ref<string[]>([]);
 const isWorkerReady = ref(false);
 
 const REJECTION_THRESHOLD = 0.4;
-const DEBUG_SEARCH = false;
 const INDEX_CACHE_VERSION = '20260324-v3';
 
 const heroResults = computed(() => results.value.slice(0, 3));
@@ -174,8 +170,40 @@ const logDiagnostic = (msg: string) => {
   const time = new Date().toLocaleTimeString();
   const formatted = `[${time}] ${msg}`;
   diagnosticLogs.value.unshift(formatted);
-  if (DEBUG_SEARCH) console.info(formatted);
   if (diagnosticLogs.value.length > 5) diagnosticLogs.value.pop();
+};
+
+const emitTrace = (
+  query: string,
+  traceResults: SearchResultDoc[],
+  opts: {
+    totalMs: string;
+    searchMs: string;
+    fetchMs?: string;
+    rerankMs?: string;
+    topConfidence?: number | null;
+    rejected?: boolean;
+    rejection?: SearchRejection | null;
+    weakResultsCount?: number;
+  }
+) => {
+  emit('trace-updated', {
+    query,
+    results: traceResults,
+    stats: {
+      totalMs: opts.totalMs,
+      searchMs: opts.searchMs,
+      fetchMs: opts.fetchMs ?? '0.0',
+      rerankMs: opts.rerankMs ?? '0.0',
+      rejectionThreshold: REJECTION_THRESHOLD,
+      topConfidence: opts.topConfidence ?? null,
+      rejected: opts.rejected ?? false,
+      rejection: opts.rejection ?? null,
+      weakResultsCount: opts.weakResultsCount ?? 0,
+    },
+    rejection: opts.rejection ?? null,
+    weakResultsCount: opts.weakResultsCount ?? 0,
+  });
 };
 
 const pendingTasks = new Map<
@@ -231,27 +259,7 @@ myWorker.onmessage = (event: MessageEvent) => {
   if (status === 'search_complete') {
     logDiagnostic(`粗排结束，扫描 ${stats.itemsScanned} 条，耗时 ${stats.elapsedMs}ms`);
     if (stats?.partitionUsed) {
-      logDiagnostic(
-        `[Partition] candidate=${stats.partitionCandidateCount ?? '-'} fallback=${stats.partitionFallbackTriggered ? 'yes' : 'no'}`
-      );
-    }
-    if (stats?.partitionFallbackTriggered && stats?.partitionFallbackReason) {
-      logDiagnostic(`[PartitionFallback] ${stats.partitionFallbackReason}`);
-    }
-    if (DEBUG_SEARCH && stats?.workerBuildTag) {
-      logDiagnostic(`[Worker] ${stats.workerBuildTag}`);
-    }
-    if (DEBUG_SEARCH && stats?.queryIntent) {
-      const intent = stats.queryIntent;
-      logDiagnostic(
-        `[Intent] years=${(intent.years || []).join('|') || '-'} intents=${(intent.intentIds || []).join('|') || '-'} degrees=${(intent.degreeLevels || []).join('|') || '-'} events=${(intent.eventTypes || []).join('|') || '-'}`
-      );
-    }
-    if (DEBUG_SEARCH && Array.isArray(stats?.topMatches) && stats.topMatches.length > 0) {
-      const topSummary = stats.topMatches
-        .map((item: any, index: number) => `#${index + 1}:${item.otid}:${Number(item.score || 0).toFixed(2)}`)
-        .join(' ; ');
-      logDiagnostic(`[TopMatches] ${topSummary}`);
+      logDiagnostic(`[Partition] candidate=${stats.partitionCandidateCount ?? '-'}`);
     }
     if (taskId && pendingTasks.has(taskId)) {
       pendingTasks.get(taskId)?.resolve(result);
@@ -355,22 +363,11 @@ const handleSearch = async () => {
       weakResults.value = [];
       rejectionInfo.value = rejection;
 
-      emit('trace-updated', {
-        query,
-        results: [],
-        stats: {
-          totalMs: (tSearchEnd - tStart).toFixed(1),
-          searchMs: (tSearchEnd - tStart).toFixed(1),
-          fetchMs: '0.0',
-          rerankMs: '0.0',
-          rejectionThreshold: REJECTION_THRESHOLD,
-          topConfidence: null,
-          rejected: true,
-          rejection,
-          weakResultsCount: 0
-        },
+      emitTrace(query, [], {
+        totalMs: (tSearchEnd - tStart).toFixed(1),
+        searchMs: (tSearchEnd - tStart).toFixed(1),
+        rejected: true,
         rejection,
-        weakResultsCount: 0
       });
 
       statusMsg.value = '当前查询未能形成稳定的主题结果，系统已拒答。';
@@ -387,22 +384,9 @@ const handleSearch = async () => {
     if (fetchIds.length === 0) {
       statusMsg.value = '未找到匹配答案';
       logDiagnostic('本地检索未命中结果');
-      emit('trace-updated', {
-        query,
-        results: [],
-        stats: {
-          totalMs: (performance.now() - tStart).toFixed(1),
-          searchMs: (tSearchEnd - tStart).toFixed(1),
-          fetchMs: '0.0',
-          rerankMs: '0.0',
-          rejectionThreshold: REJECTION_THRESHOLD,
-          topConfidence: null,
-          rejected: false,
-          rejection: null,
-          weakResultsCount: 0
-        },
-        rejection: null,
-        weakResultsCount: 0
+      emitTrace(query, [], {
+        totalMs: (performance.now() - tStart).toFixed(1),
+        searchMs: (tSearchEnd - tStart).toFixed(1),
       });
       return;
     }
@@ -434,24 +418,13 @@ const handleSearch = async () => {
       weakResults.value = weakDocsForRender;
       rejectionInfo.value = rejection;
 
-      const stats = {
+      emitTrace(query, [], {
         totalMs: (tFetchEnd - tStart).toFixed(1),
         searchMs: (tSearchEnd - tStart).toFixed(1),
         fetchMs: (tFetchEnd - tSearchEnd).toFixed(1),
-        rerankMs: '0.0',
-        rejectionThreshold: REJECTION_THRESHOLD,
-        topConfidence: null,
         rejected: true,
         rejection,
-        weakResultsCount: weakDocsForRender.length
-      };
-
-      emit('trace-updated', {
-        query,
-        results: [],
-        stats,
-        rejection,
-        weakResultsCount: weakDocsForRender.length
+        weakResultsCount: weakDocsForRender.length,
       });
 
       statusMsg.value = '当前知识库暂无该主题的直接内容，暂不展示弱相关结果。';
@@ -471,31 +444,20 @@ const handleSearch = async () => {
 
     results.value = shouldReject ? [] : finalRender;
 
-    const stats = {
+    emitTrace(query, finalRender, {
       totalMs: (tRerankEnd - tStart).toFixed(1),
       searchMs: (tSearchEnd - tStart).toFixed(1),
       fetchMs: (tFetchEnd - tSearchEnd).toFixed(1),
       rerankMs: (tRerankEnd - tFetchEnd).toFixed(1),
-      rejectionThreshold: REJECTION_THRESHOLD,
       topConfidence,
       rejected: shouldReject,
-      rejection: null,
-      weakResultsCount: 0
-    };
-
-    emit('trace-updated', {
-      query,
-      results: finalRender,
-      stats,
-      rejection: null,
-      weakResultsCount: 0
     });
 
     if (shouldReject) {
       statusMsg.value = `未达到展示阈值 ${(REJECTION_THRESHOLD * 100).toFixed(0)}%，已拒答`;
       logDiagnostic(`拒答：Top 1 原话匹配度 ${formatPercent(topConfidence)}`);
     } else {
-      statusMsg.value = `找到 ${finalRender.length} 篇相关结果（总耗时 ${stats.totalMs}ms）`;
+      statusMsg.value = `找到 ${finalRender.length} 篇相关结果（总耗时 ${(tRerankEnd - tStart).toFixed(1)}ms）`;
       logDiagnostic('结果已完成展示');
     }
   } catch (e: any) {
@@ -512,23 +474,7 @@ const handleSearch = async () => {
   <div class="flex h-full flex-col overflow-hidden rounded-[24px] border border-white/6 bg-white/[0.04] shadow-[0_24px_80px_rgba(0,0,0,0.28)] backdrop-blur-xl">
     <div class="flex items-center justify-between border-b border-white/8 bg-white/[0.03] px-5 py-3">
       <div class="flex items-center gap-2">
-        <div class="mr-1 flex items-center gap-1 rounded-lg border border-white/6 bg-black/20 p-1">
-          <button
-            v-for="m in models"
-            :key="m.id"
-            @click="selectedModelId = m.id as any"
-            class="rounded px-2 py-1 text-[9px] font-bold uppercase transition-all"
-            :class="selectedModelId === m.id ? 'bg-blue-600 text-white' : 'text-slate-500 hover:text-slate-300'"
-          >
-            {{ m.name }}
-          </button>
-        </div>
-        <select
-          disabled
-          class="cursor-not-allowed rounded-lg border border-white/6 bg-black/20 px-2 py-1 text-[9px] font-bold uppercase text-slate-500 outline-none"
-        >
-          <option value="wasm">WASM Worker</option>
-        </select>
+        <span class="rounded-lg border border-white/6 bg-black/20 px-2.5 py-1 text-[9px] font-bold uppercase text-slate-400">DMeta Soul · WASM</span>
       </div>
 
       <div class="flex items-center gap-2 pl-4 text-right">

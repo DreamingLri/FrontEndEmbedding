@@ -3,7 +3,6 @@ import type { FeatureExtractionPipeline } from '@huggingface/transformers';
 import type {
     BM25Stats,
     Metadata,
-    ParsedQueryIntent,
     SearchRankOutput
 } from './vector_engine';
 import {
@@ -24,12 +23,7 @@ import {
 } from './rerank_helpers';
 
 const MODEL_NAME = 'DMetaSoul/Dmeta-embedding-zh-small';
-const DEBUG_SEARCH = false;
-const WORKER_BUILD_TAG = 'intent-debug-20260324-4';
-const PARTITION_FALLBACK_ENABLED = false;
-const PARTITION_FALLBACK_SCORE_THRESHOLD = 1.05;
-const PARTITION_FALLBACK_GAP_THRESHOLD = 0.03;
-const PARTITION_FALLBACK_SCAN_RATIO_THRESHOLD = 0.85;
+
 const BASE_RERANK_DOC_COUNT = 5;
 const EXPANDED_RERANK_DOC_COUNT = 10;
 const ADAPTIVE_RERANK_TOP5_GAP_THRESHOLD = 0.8;
@@ -124,45 +118,7 @@ function resetQueryCache() {
     lastQueryVector = null;
 }
 
-function getPartitionFallbackReason(
-    queryIntent: ParsedQueryIntent,
-    candidateIndices: readonly number[] | undefined,
-    searchResult: SearchRankOutput
-): string | undefined {
-    if (!PARTITION_FALLBACK_ENABLED) {
-        return undefined;
-    }
 
-    if (!candidateIndices || candidateIndices.length === 0 || metadataList.length === 0) {
-        return undefined;
-    }
-
-    const scanRatio = candidateIndices.length / metadataList.length;
-    if (scanRatio >= PARTITION_FALLBACK_SCAN_RATIO_THRESHOLD) {
-        return undefined;
-    }
-
-    if (queryIntent.confidence >= 1) {
-        return undefined;
-    }
-
-    if (searchResult.matches.length < 2) {
-        return undefined;
-    }
-
-    const top1 = searchResult.matches[0]?.score ?? Number.NEGATIVE_INFINITY;
-    const top2 = searchResult.matches[1]?.score ?? Number.NEGATIVE_INFINITY;
-    const scoreGap = top1 - top2;
-
-    if (
-        top1 < PARTITION_FALLBACK_SCORE_THRESHOLD &&
-        scoreGap < PARTITION_FALLBACK_GAP_THRESHOLD
-    ) {
-        return 'partition_ambiguous_top1';
-    }
-
-    return undefined;
-}
 
 self.onmessage = async (event: MessageEvent) => {
     const { type, payload, taskId } = event.data;
@@ -188,23 +144,12 @@ async function handleInit(payload: any, taskId?: string) {
     try {
         let rawMetadata: any;
 
-        if (payload.metadata && payload.vectorMatrix) {
-            self.postMessage({ taskId, status: 'loading', message: '解析已传入的元数据与向量矩阵...' });
-            rawMetadata = payload.metadata;
-            vectorMatrix = payload.vectorMatrix;
-        } else if (payload.metadataUrl && payload.vectorsUrl) {
-            self.postMessage({ taskId, status: 'loading', message: '加载元数据与向量矩阵...' });
-            const [metaRes, vecRes] = await Promise.all([
-                fetch(payload.metadataUrl),
-                fetch(payload.vectorsUrl)
-            ]);
-            if (!metaRes.ok || !vecRes.ok) throw new Error('网络请求资源失败');
-            rawMetadata = await metaRes.json();
-            const vecBuffer = await vecRes.arrayBuffer();
-            vectorMatrix = new Int8Array(vecBuffer);
-        } else {
-            throw new Error('INIT payload 格式错误');
+        if (!payload.metadata || !payload.vectorMatrix) {
+            throw new Error('INIT payload 格式错误：缺少 metadata 或 vectorMatrix');
         }
+        self.postMessage({ taskId, status: 'loading', message: '解析已传入的元数据与向量矩阵...' });
+        rawMetadata = payload.metadata;
+        vectorMatrix = payload.vectorMatrix;
 
         metadataList = Array.isArray(rawMetadata) ? rawMetadata : (rawMetadata.data || []);
         const vocabList: string[] = rawMetadata.vocab || [];
@@ -242,9 +187,7 @@ async function handleInit(payload: any, taskId?: string) {
         self.postMessage({
             taskId,
             status: 'ready',
-            message: DEBUG_SEARCH
-                ? `AI 引擎就绪 [${WORKER_BUILD_TAG}, ${device}/${dtype}, ${metadataList.length} 条, ${DIMENSIONS}维]`
-                : `AI 引擎就绪 [${device}/${dtype}, ${metadataList.length} 条, ${DIMENSIONS}维]`
+            message: `AI 引擎就绪 [${device}/${dtype}, ${metadataList.length} 条, ${DIMENSIONS}维]`
         });
     } catch (err: any) {
         self.postMessage({ taskId, status: 'error', error: `初始化失败: ${err.message}` });
@@ -273,7 +216,7 @@ async function handleSearch(query: string, taskId?: string) {
         if (id !== undefined) queryYearWordIds.push(id);
     });
 
-    const partialSearchResult: SearchRankOutput = searchAndRank({
+    const searchResult: SearchRankOutput = searchAndRank({
         queryVector,
         querySparse,
         queryYearWordIds,
@@ -286,65 +229,15 @@ async function handleSearch(query: string, taskId?: string) {
         candidateIndices
     });
 
-    const initialItemsScanned = candidateIndices?.length ?? metadataList.length;
-    const fallbackReason = getPartitionFallbackReason(
-        queryIntent,
-        candidateIndices,
-        partialSearchResult
-    );
-    const partitionFallbackTriggered = Boolean(fallbackReason);
-
-    if (partitionFallbackTriggered) {
-        self.postMessage({
-            taskId,
-            status: 'info',
-            message: `涓婚鍒嗗尯鍙洖淇″績涓嶈冻锛屽洖閫€鍏ㄩ噺鎵弿 (${fallbackReason})`
-        });
-    }
-
-    const searchResult: SearchRankOutput = partitionFallbackTriggered
-        ? searchAndRank({
-            queryVector,
-            querySparse,
-            queryYearWordIds,
-            queryIntent,
-            metadata: metadataList,
-            vectorMatrix,
-            dimensions: DIMENSIONS,
-            currentTimestamp: Date.now() / 1000,
-            bm25Stats: globalBM25Stats
-        })
-        : partialSearchResult;
-
-    const finalItemsScanned = partitionFallbackTriggered
-        ? metadataList.length
-        : initialItemsScanned;
-    const totalItemsScanned = partitionFallbackTriggered
-        ? initialItemsScanned + finalItemsScanned
-        : initialItemsScanned;
-
     self.postMessage({
         taskId,
         status: 'search_complete',
         result: searchResult,
         stats: {
             elapsedMs: (performance.now() - t0).toFixed(1),
-            itemsScanned: totalItemsScanned,
+            itemsScanned: candidateIndices?.length ?? metadataList.length,
             partitionUsed: Boolean(candidateIndices),
             partitionCandidateCount: candidateIndices?.length,
-            partitionFallbackTriggered,
-            partitionFallbackReason: fallbackReason,
-            initialItemsScanned,
-            finalItemsScanned,
-            workerBuildTag: DEBUG_SEARCH ? WORKER_BUILD_TAG : undefined,
-            queryIntent: DEBUG_SEARCH ? queryIntent : undefined,
-            topMatches: DEBUG_SEARCH
-                ? searchResult.matches.slice(0, 5).map((match) => ({
-                    otid: match.otid,
-                    score: Number(match.score.toFixed(4)),
-                    best_kpid: match.best_kpid,
-                }))
-                : undefined,
         }
     });
 }
