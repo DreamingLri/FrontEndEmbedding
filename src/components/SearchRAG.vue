@@ -230,6 +230,14 @@ myWorker.onmessage = (event: MessageEvent) => {
 
   if (status === 'search_complete') {
     logDiagnostic(`粗排结束，扫描 ${stats.itemsScanned} 条，耗时 ${stats.elapsedMs}ms`);
+    if (stats?.partitionUsed) {
+      logDiagnostic(
+        `[Partition] candidate=${stats.partitionCandidateCount ?? '-'} fallback=${stats.partitionFallbackTriggered ? 'yes' : 'no'}`
+      );
+    }
+    if (stats?.partitionFallbackTriggered && stats?.partitionFallbackReason) {
+      logDiagnostic(`[PartitionFallback] ${stats.partitionFallbackReason}`);
+    }
     if (DEBUG_SEARCH && stats?.workerBuildTag) {
       logDiagnostic(`[Worker] ${stats.workerBuildTag}`);
     }
@@ -253,7 +261,7 @@ myWorker.onmessage = (event: MessageEvent) => {
   }
 
   if (status === 'rerank_complete') {
-    logDiagnostic(`原话提炼完成，耗时 ${stats.elapsedMs}ms`);
+    logDiagnostic(`重排与原话提炼完成，耗时 ${stats.elapsedMs}ms`);
     if (taskId && pendingTasks.has(taskId)) {
       pendingTasks.get(taskId)?.resolve(result);
       pendingTasks.delete(taskId);
@@ -451,7 +459,7 @@ const handleSearch = async () => {
       return;
     }
 
-    statusMsg.value = '正在提炼可信原话...';
+    statusMsg.value = '正在重排并提炼可信原话...';
     const finalRender = (await dispatchToWorker('RERANK', {
       query,
       documents: docsForRender
@@ -725,7 +733,7 @@ const handleSearch = async () => {
           <Cpu class="h-2.5 w-2.5 text-slate-500" />
           Vector Worker
         </span>
-        <span class="flex items-center gap-1" title="Top 3 原文高亮提炼">
+        <span class="flex items-center gap-1" title="Top 5/10 自适应原文重排与高亮提炼">
           <svg class="h-3 w-3 text-red-500/70" fill="currentColor" viewBox="0 0 24 24">
             <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
           </svg>

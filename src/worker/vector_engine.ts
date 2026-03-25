@@ -8,6 +8,12 @@ import {
     SUBTOPIC_TOPIC_MAP as CONFIG_SUBTOPIC_TOPIC_MAP,
     TOPIC_CONFIGS as CONFIG_TOPIC_CONFIGS,
 } from "./search_topic_config";
+import {
+    applyScoreToAggregatedDocScores,
+    createAggregatedDocScores,
+    mergeAggregatedDocMetadata,
+    type AggregatedDocScores,
+} from "./aggregated_doc_scores";
 
 export interface Metadata {
     id: string;
@@ -90,13 +96,12 @@ export const DEFAULT_WEIGHTS = {
 };
 
 export const DECAY_LAMBDA = 0.001;
-export const SECONDS_IN_DAY = 86400;
 export const RRF_K = 60;
 
 const BM25_K1 = 1.2;
 const BM25_B = 0.4;
-const LATEST_YEAR_BOOST_BASE = 0.82;
-const LATEST_TIMESTAMP_DECAY = 0.0012;
+const EVENT_TYPE_MISMATCH_PENALTY = 0.8;
+const LATEST_YEAR_BOOST_BASE = 0.98;
 
 export const DEGREE_LEVEL_TABLE = CONFIG_DEGREE_LEVEL_TABLE;
 export const EVENT_TYPE_TABLE = Object.keys(CONFIG_EVENT_TYPE_HINTS);
@@ -106,7 +111,7 @@ export const EVENT_TYPE_HINTS = CONFIG_EVENT_TYPE_HINTS;
 export const POLICY_LATEST_HINTS = CONFIG_POLICY_LATEST_HINTS;
 export const HISTORICAL_QUERY_HINTS = CONFIG_HISTORICAL_QUERY_HINTS;
 export const INTENT_VECTOR_TABLE: readonly IntentVectorItem[] =
-    CONFIG_INTENT_VECTOR_TABLE as unknown as readonly IntentVectorItem[];
+    CONFIG_INTENT_VECTOR_TABLE;
 
 const LEGACY_EVENT_TYPE_HINTS: Record<string, string[]> = {
     招生章程: ["章程", "简章", "专业目录"],
@@ -370,9 +375,22 @@ export function dotProduct(
     matrixIndex: number,
     dimensions: number,
 ): number {
-    let sum = 0;
     const offset = matrixIndex * dimensions;
-    for (let i = 0; i < dimensions; i++) {
+    const unrolledLimit = dimensions - (dimensions % 4);
+    let s0 = 0;
+    let s1 = 0;
+    let s2 = 0;
+    let s3 = 0;
+
+    for (let i = 0; i < unrolledLimit; i += 4) {
+        s0 += vecA[i] * matrix[offset + i];
+        s1 += vecA[i + 1] * matrix[offset + i + 1];
+        s2 += vecA[i + 2] * matrix[offset + i + 2];
+        s3 += vecA[i + 3] * matrix[offset + i + 3];
+    }
+
+    let sum = s0 + s1 + s2 + s3;
+    for (let i = unrolledLimit; i < dimensions; i++) {
         sum += vecA[i] * matrix[offset + i];
     }
     return sum;
@@ -586,7 +604,7 @@ export function searchAndRank(params: {
         metadata,
         vectorMatrix,
         dimensions,
-        currentTimestamp,
+        currentTimestamp: _currentTimestamp,
         bm25Stats,
         weights = DEFAULT_WEIGHTS,
         queryYearWordIds,
@@ -694,118 +712,17 @@ export function searchAndRank(params: {
         .sort((a, b) => b[1] - a[1])
         .slice(0, 1000);
 
-    const otidMap: Record<
-        string,
-        {
-            max_q: number;
-            max_kp: number;
-            ot_score: number;
-            timestamp?: number;
-            best_kpid?: string;
-            target_year?: number;
-            topic_ids?: string[];
-            subtopic_ids?: string[];
-            primary_topic_ids?: string[];
-            secondary_topic_ids?: string[];
-            weak_topic_ids?: string[];
-            intent_ids?: string[];
-            degree_levels?: string[];
-            event_types?: string[];
-        }
-    > = {};
+    const otidMap: Record<string, AggregatedDocScores> = {};
 
     for (const [meta, score] of topHybrid) {
         const otid = meta.type === "OT" ? meta.id : meta.parent_otid;
+        const topicIds = resolveMetadataTopicIds(meta);
         if (!otidMap[otid]) {
-            otidMap[otid] = {
-                max_q: 0,
-                max_kp: 0,
-                ot_score: 0,
-                timestamp: meta.timestamp,
-                target_year: meta.target_year,
-                topic_ids: resolveMetadataTopicIds(meta),
-                primary_topic_ids: meta.primary_topic_ids,
-                secondary_topic_ids: meta.secondary_topic_ids,
-                weak_topic_ids: meta.weak_topic_ids,
-                subtopic_ids: meta.subtopic_ids || meta.intent_ids,
-                intent_ids: meta.intent_ids,
-                degree_levels: meta.degree_levels,
-                event_types: meta.event_types,
-            };
+            otidMap[otid] = createAggregatedDocScores(meta, topicIds);
         }
 
-        if (
-            otidMap[otid].target_year === undefined &&
-            meta.target_year !== undefined
-        ) {
-            otidMap[otid].target_year = meta.target_year;
-        }
-        if (
-            (!otidMap[otid].topic_ids || otidMap[otid].topic_ids!.length === 0) &&
-            (meta.topic_ids?.length || meta.subtopic_ids?.length || meta.intent_ids?.length)
-        ) {
-            otidMap[otid].topic_ids = resolveMetadataTopicIds(meta);
-        }
-        if (
-            (!otidMap[otid].subtopic_ids ||
-                otidMap[otid].subtopic_ids!.length === 0) &&
-            (meta.subtopic_ids?.length || meta.intent_ids?.length)
-        ) {
-            otidMap[otid].subtopic_ids = meta.subtopic_ids || meta.intent_ids;
-        }
-        if (
-            (!otidMap[otid].primary_topic_ids ||
-                otidMap[otid].primary_topic_ids!.length === 0) &&
-            meta.primary_topic_ids?.length
-        ) {
-            otidMap[otid].primary_topic_ids = meta.primary_topic_ids;
-        }
-        if (
-            (!otidMap[otid].secondary_topic_ids ||
-                otidMap[otid].secondary_topic_ids!.length === 0) &&
-            meta.secondary_topic_ids?.length
-        ) {
-            otidMap[otid].secondary_topic_ids = meta.secondary_topic_ids;
-        }
-        if (
-            (!otidMap[otid].weak_topic_ids ||
-                otidMap[otid].weak_topic_ids!.length === 0) &&
-            meta.weak_topic_ids?.length
-        ) {
-            otidMap[otid].weak_topic_ids = meta.weak_topic_ids;
-        }
-        if (
-            (!otidMap[otid].intent_ids ||
-                otidMap[otid].intent_ids!.length === 0) &&
-            meta.intent_ids?.length
-        ) {
-            otidMap[otid].intent_ids = meta.intent_ids;
-        }
-        if (
-            (!otidMap[otid].degree_levels ||
-                otidMap[otid].degree_levels!.length === 0) &&
-            meta.degree_levels?.length
-        ) {
-            otidMap[otid].degree_levels = meta.degree_levels;
-        }
-        if (
-            (!otidMap[otid].event_types ||
-                otidMap[otid].event_types!.length === 0) &&
-            meta.event_types?.length
-        ) {
-            otidMap[otid].event_types = meta.event_types;
-        }
-
-        if (meta.type === "Q") {
-            otidMap[otid].max_q = Math.max(otidMap[otid].max_q, score);
-        } else if (meta.type === "KP") {
-            if (score > otidMap[otid].max_kp) {
-                otidMap[otid].max_kp = score;
-                otidMap[otid].best_kpid = meta.id;
-            }
-        } else if (meta.type === "OT") {
-            otidMap[otid].ot_score = Math.max(otidMap[otid].ot_score, score);
-        }
+        mergeAggregatedDocMetadata(otidMap[otid], meta, topicIds);
+        applyScoreToAggregatedDocScores(otidMap[otid], meta, score);
     }
 
     const finalRanking: SearchResult[] = [];
@@ -896,17 +813,6 @@ export function searchAndRank(params: {
 
         let finalScore = maxComponent + unionBonus;
 
-        if (
-            queryIntent?.preferLatest &&
-            scores.timestamp &&
-            currentTimestamp > 0
-        ) {
-            const daysDiff =
-                (currentTimestamp - scores.timestamp) / SECONDS_IN_DAY;
-            if (daysDiff > 0)
-                finalScore *= Math.exp(-LATEST_TIMESTAMP_DECAY * daysDiff);
-        }
-
         let boost = 1.0;
         const lexicalBonus = lexicalBonusMap.get(otid) || 0;
         if (lexicalBonus > 0) {
@@ -980,7 +886,7 @@ export function searchAndRank(params: {
             if (hasAnyOverlap(queryIntent.eventTypes, scores.event_types)) {
                 boost *= 1.1;
             } else if ((scores.event_types?.length || 0) > 0) {
-                boost *= 0.65;
+                boost *= EVENT_TYPE_MISMATCH_PENALTY;
             }
         }
 

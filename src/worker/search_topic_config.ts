@@ -66,6 +66,17 @@ export const HISTORICAL_QUERY_HINTS = [
     "旧版",
 ] as const;
 
+type IntentVectorTableItem = {
+    intent_id: string;
+    intent_name: string;
+    aliases: readonly string[];
+    negative_intents: readonly string[];
+    related_intents: readonly string[];
+    degree_levels: readonly string[];
+    preferred_event_types: readonly string[];
+    weight: number;
+};
+
 export const INTENT_VECTOR_TABLE = [
     {
         intent_id: "ug_recommend_admission",
@@ -176,7 +187,7 @@ export const INTENT_VECTOR_TABLE = [
         preferred_event_types: ["推免通知", "考试安排", "录取公示"],
         weight: 1,
     },
-] as const;
+] as const satisfies readonly IntentVectorTableItem[];
 
 export const SUBTOPIC_TOPIC_MAP: Record<string, string> = {
     ug_recommend_admission: "undergraduate_admission",
