@@ -1,11 +1,9 @@
 import {
-    CAMPUS_SYNONYMS as CONFIG_CAMPUS_SYNONYMS,
     DEGREE_LEVEL_TABLE as CONFIG_DEGREE_LEVEL_TABLE,
-    EVENT_TYPE_HINTS as CONFIG_EVENT_TYPE_HINTS,
+    EVENT_TYPE_TABLE as CONFIG_EVENT_TYPE_TABLE,
     HISTORICAL_QUERY_HINTS as CONFIG_HISTORICAL_QUERY_HINTS,
     INTENT_VECTOR_TABLE as CONFIG_INTENT_VECTOR_TABLE,
-    POLICY_LATEST_HINTS as CONFIG_POLICY_LATEST_HINTS,
-    SUBTOPIC_TOPIC_MAP as CONFIG_SUBTOPIC_TOPIC_MAP,
+    LATEST_QUERY_HINTS as CONFIG_LATEST_QUERY_HINTS,
     TOPIC_CONFIGS as CONFIG_TOPIC_CONFIGS,
 } from "./search_topic_config";
 import {
@@ -80,13 +78,11 @@ export interface ParsedQueryIntent {
 
 export interface IntentVectorItem {
     intent_id: string;
+    topic_id: string;
     intent_name: string;
     aliases: readonly string[];
     negative_intents: readonly string[];
     related_intents: readonly string[];
-    degree_levels: readonly string[];
-    preferred_event_types: readonly string[];
-    weight: number;
 }
 
 export const DEFAULT_WEIGHTS = {
@@ -95,12 +91,11 @@ export const DEFAULT_WEIGHTS = {
     OT: 0.33,
 };
 
-export const DECAY_LAMBDA = 0.001;
 export const RRF_K = 60;
 
 const BM25_K1 = 1.2;
 const BM25_B = 0.4;
-const EVENT_TYPE_MISMATCH_PENALTY = 0.8;
+const EVENT_TYPE_MISMATCH_PENALTY = 0.95;
 const LATEST_YEAR_BOOST_BASE = 0.98;
 
 
@@ -116,10 +111,10 @@ const INTENT_RULE_MAP: Map<string, IntentVectorItem> = new Map(
 const TOPIC_RULE_MAP: Map<string, (typeof CONFIG_TOPIC_CONFIGS)[number]> =
     new Map(CONFIG_TOPIC_CONFIGS.map((item) => [item.topic_id, item] as const));
 
-function deriveTopicIdsFromSubtopics(subtopicIds: string[]): string[] {
+function deriveTopicIdsFromIntents(intentIds: string[]): string[] {
     return dedupe(
-        subtopicIds
-            .map((subtopicId) => CONFIG_SUBTOPIC_TOPIC_MAP[subtopicId])
+        intentIds
+            .map((intentId) => INTENT_RULE_MAP.get(intentId)?.topic_id)
             .filter((topicId): topicId is string => Boolean(topicId)),
     );
 }
@@ -130,7 +125,7 @@ export function resolveMetadataTopicIds(
     if (meta.topic_ids && meta.topic_ids.length > 0) {
         return meta.topic_ids;
     }
-    return deriveTopicIdsFromSubtopics(meta.subtopic_ids || meta.intent_ids || []);
+    return deriveTopicIdsFromIntents(meta.subtopic_ids || meta.intent_ids || []);
 }
 
 function matchTopicIds(query: string): string[] {
@@ -138,12 +133,6 @@ function matchTopicIds(query: string): string[] {
         CONFIG_TOPIC_CONFIGS.filter((topic) =>
             topic.aliases.some((alias) => query.includes(alias)),
         ).map((topic) => topic.topic_id),
-    );
-}
-
-function getCoverageRejectedTopicIds(topicIds: string[]): string[] {
-    return topicIds.filter(
-        (topicId) => TOPIC_RULE_MAP.get(topicId)?.reject_when_coverage_low,
     );
 }
 
@@ -227,29 +216,9 @@ export function getQuerySparse(
         if (index !== undefined) {
             sparse[index] = (sparse[index] || 0) + 1;
         }
-
-        const synonyms = CONFIG_CAMPUS_SYNONYMS[word];
-        if (synonyms) {
-            synonyms.forEach((syn) => {
-                const sIndex = isMap
-                    ? (vocabMap as Map<string, number>).get(syn)
-                    : (vocabMap as Record<string, number>)[syn];
-                if (sIndex !== undefined) {
-                    sparse[sIndex] = (sparse[sIndex] || 0) + 1;
-                }
-            });
-        }
     });
 
     return sparse;
-}
-
-function collectMatchedEventTypesFromConfig(text: string): string[] {
-    return dedupe(
-        Object.entries(CONFIG_EVENT_TYPE_HINTS)
-            .filter(([, hints]) => hints.some((hint) => text.includes(hint)))
-            .map(([eventType]) => eventType),
-    );
 }
 
 export function parseQueryIntent(query: string): ParsedQueryIntent {
@@ -259,58 +228,40 @@ export function parseQueryIntent(query: string): ParsedQueryIntent {
     const matchedRules = CONFIG_INTENT_VECTOR_TABLE.filter((rule) =>
         rule.aliases.some((alias) => query.includes(alias)),
     );
-    const subtopicIds = matchedRules.map((rule) => rule.intent_id);
+    const intentIds = dedupe(matchedRules.map((rule) => rule.intent_id));
     const matchedTopicIds = matchTopicIds(query);
     const topicIds = dedupe([
-        ...deriveTopicIdsFromSubtopics(subtopicIds),
+        ...deriveTopicIdsFromIntents(intentIds),
         ...matchedTopicIds,
     ]);
-    const hasExplicitPhdHint = query.includes("博士") || query.includes("直博");
-    const explicitDegreeLevels = dedupe(
-        CONFIG_DEGREE_LEVEL_TABLE.filter((level) => query.includes(level)),
-    );
-    const inferredDegreeLevels = dedupe(
-        matchedRules.flatMap((rule) => {
-            if (rule.intent_id === "master_recommend_exemption") {
-                return hasExplicitPhdHint ? ["硕士", "博士"] : ["硕士"];
-            }
-            return rule.degree_levels;
-        }),
-    );
-    const degreeLevels =
-        explicitDegreeLevels.length > 0
-            ? explicitDegreeLevels
-            : inferredDegreeLevels;
-    const eventTypes = dedupe([
-        ...collectMatchedEventTypesFromConfig(query),
-        ...matchedRules.flatMap((rule) => rule.preferred_event_types),
+    const degreeLevels = dedupe([
+        ...CONFIG_DEGREE_LEVEL_TABLE.filter((level) => query.includes(level)),
+        ...(query.includes("直博") ? ["博士"] : []),
     ]);
-    const normalizedTerms = dedupe([
-        ...matchedRules.flatMap((rule) => rule.aliases),
-        ...degreeLevels,
-        ...matchedRules.flatMap((rule) => rule.preferred_event_types),
-    ]);
+    const eventTypes = dedupe(
+        CONFIG_EVENT_TYPE_TABLE.filter((eventType) => query.includes(eventType)),
+    );
+    const normalizedTerms = dedupe(
+        matchedRules.map((rule) => rule.intent_name),
+    );
     const preferLatest =
         years.length === 0 &&
         !CONFIG_HISTORICAL_QUERY_HINTS.some((hint) => query.includes(hint)) &&
-        (matchedRules.length > 0 ||
-            topicIds.some(
-                (topicId) =>
-                    CONFIG_TOPIC_CONFIGS.find((topic) => topic.topic_id === topicId)
-                        ?.prefer_latest,
-            ) ||
-            CONFIG_POLICY_LATEST_HINTS.some((hint) => query.includes(hint)));
+        (topicIds.some(
+            (topicId) => TOPIC_RULE_MAP.get(topicId)?.prefer_latest,
+        ) ||
+            CONFIG_LATEST_QUERY_HINTS.some((hint) => query.includes(hint)));
 
     return {
         rawQuery: query,
         years,
         topicIds,
-        subtopicIds,
-        intentIds: subtopicIds,
+        subtopicIds: intentIds,
+        intentIds,
         degreeLevels,
         eventTypes,
         normalizedTerms,
-        confidence: matchedRules.length > 0 ? 1 : 0,
+        confidence: intentIds.length > 0 ? 1 : 0,
         preferLatest,
     };
 }
@@ -342,35 +293,6 @@ function hasAnyOverlap(a: string[], b?: string[]): boolean {
     return a.some((item) => b.includes(item));
 }
 
-function classifyTopicCoverage(
-    queryTopicIds: string[],
-    doc: {
-        topic_ids?: string[];
-        primary_topic_ids?: string[];
-        secondary_topic_ids?: string[];
-        weak_topic_ids?: string[];
-    },
-): "primary" | "secondary" | "weak" | "none" {
-    if (hasAnyOverlap(queryTopicIds, doc.primary_topic_ids)) {
-        return "primary";
-    }
-    if (hasAnyOverlap(queryTopicIds, doc.secondary_topic_ids)) {
-        return "secondary";
-    }
-    if (hasAnyOverlap(queryTopicIds, doc.weak_topic_ids)) {
-        return "weak";
-    }
-    if (
-        hasAnyOverlap(queryTopicIds, doc.topic_ids) &&
-        (!doc.primary_topic_ids || doc.primary_topic_ids.length === 0) &&
-        (!doc.secondary_topic_ids || doc.secondary_topic_ids.length === 0) &&
-        (!doc.weak_topic_ids || doc.weak_topic_ids.length === 0)
-    ) {
-        return "secondary";
-    }
-    return "none";
-}
-
 function getCoverageComparableTopicIds(doc: {
     primary_topic_ids?: string[];
     secondary_topic_ids?: string[];
@@ -385,21 +307,296 @@ function getCoverageComparableTopicIds(doc: {
     return doc.topic_ids || [];
 }
 
-function getPreferredEventTypes(intentIds: string[]): string[] {
-    return dedupe(
-        intentIds.flatMap(
-            (intentId) =>
-                INTENT_RULE_MAP.get(intentId)?.preferred_event_types || [],
-        ),
-    );
-}
-
 function getRelatedIntentTypes(intentIds: string[]): string[] {
     return dedupe(
         intentIds.flatMap(
             (intentId) => INTENT_RULE_MAP.get(intentId)?.related_intents || [],
         ),
     );
+}
+
+type QueryIntentContext = {
+    years: number[];
+    hasExplicitYear: boolean;
+    intentIds: string[];
+    relatedIntentIds: string[];
+    degreeLevels: string[];
+    eventTypes: string[];
+    preferLatest: boolean;
+};
+
+type DocQuerySignals = {
+    hasStructuredYearMatch: boolean;
+    hasLexicalYearMatch: boolean;
+};
+
+function createQueryIntentContext(
+    queryIntent?: ParsedQueryIntent,
+): QueryIntentContext {
+    const years = queryIntent?.years || [];
+    const intentIds = queryIntent?.intentIds || [];
+
+    return {
+        years,
+        hasExplicitYear: years.length > 0,
+        intentIds,
+        relatedIntentIds: getRelatedIntentTypes(intentIds),
+        degreeLevels: queryIntent?.degreeLevels || [],
+        eventTypes: queryIntent?.eventTypes || [],
+        preferLatest: Boolean(queryIntent?.preferLatest),
+    };
+}
+
+function getDocQuerySignals(
+    otid: string,
+    scores: AggregatedDocScores,
+    intentContext: QueryIntentContext,
+    yearHitMap: Map<string, boolean>,
+): DocQuerySignals {
+    return {
+        hasStructuredYearMatch:
+            intentContext.hasExplicitYear &&
+            scores.target_year !== undefined &&
+            intentContext.years.includes(scores.target_year),
+        hasLexicalYearMatch: yearHitMap.get(otid) === true,
+    };
+}
+
+function shouldSkipForExplicitYear(
+    scores: AggregatedDocScores,
+    intentContext: QueryIntentContext,
+    signals: DocQuerySignals,
+): boolean {
+    if (!intentContext.hasExplicitYear) {
+        return false;
+    }
+
+    if (scores.target_year !== undefined && !signals.hasStructuredYearMatch) {
+        return true;
+    }
+
+    return scores.target_year === undefined && !signals.hasLexicalYearMatch;
+}
+
+function computeBaseScore(
+    scores: AggregatedDocScores,
+    weights: typeof DEFAULT_WEIGHTS,
+): number {
+    const weightedQ = scores.max_q * weights.Q;
+    const weightedKP = scores.max_kp * weights.KP;
+    const weightedOT = scores.ot_score * weights.OT;
+
+    const maxComponent = Math.max(weightedQ, weightedKP, weightedOT);
+    const unionBonus =
+        weightedQ * 0.1 + weightedKP * 0.1 + weightedOT * 0.1;
+
+    return maxComponent + unionBonus;
+}
+
+function applyLexicalBonusBoost(boost: number, lexicalBonus: number): number {
+    if (lexicalBonus <= 0) {
+        return boost;
+    }
+
+    return boost * (1 + Math.log1p(lexicalBonus) / 4);
+}
+
+function applyYearConstraintBoost(
+    boost: number,
+    queryYearWordIds: number[] | undefined,
+    intentContext: QueryIntentContext,
+    scores: AggregatedDocScores,
+    signals: DocQuerySignals,
+): number {
+    if (!queryYearWordIds || queryYearWordIds.length === 0) {
+        return boost;
+    }
+
+    if (scores.target_year !== undefined && intentContext.years.length > 0) {
+        if (!intentContext.years.includes(scores.target_year)) {
+            return boost * 0.01;
+        }
+        return boost;
+    }
+
+    if (!signals.hasStructuredYearMatch && !signals.hasLexicalYearMatch) {
+        return boost * 0.12;
+    }
+
+    return boost;
+}
+
+function applyIntentBoost(
+    boost: number,
+    intentContext: QueryIntentContext,
+    scores: AggregatedDocScores,
+): number {
+    if (intentContext.intentIds.length === 0) {
+        return boost;
+    }
+
+    let nextBoost = boost;
+
+    if (hasIntentMatch(intentContext.intentIds, scores.intent_ids)) {
+        nextBoost *= 1.12;
+    } else if (hasIntentConflict(intentContext.intentIds, scores.intent_ids)) {
+        nextBoost *= 0.85;
+    } else if (
+        intentContext.relatedIntentIds.length > 0 &&
+        hasAnyOverlap(intentContext.relatedIntentIds, scores.intent_ids)
+    ) {
+        nextBoost *= 1.04;
+    }
+
+    return nextBoost;
+}
+
+function applyDegreeBoost(
+    boost: number,
+    intentContext: QueryIntentContext,
+    scores: AggregatedDocScores,
+): number {
+    if (intentContext.degreeLevels.length === 0) {
+        return boost;
+    }
+
+    if (hasAnyOverlap(intentContext.degreeLevels, scores.degree_levels)) {
+        return boost * 1.05;
+    }
+
+    if ((scores.degree_levels?.length || 0) > 0) {
+        return boost * 0.93;
+    }
+
+    return boost;
+}
+
+function applyEventBoost(
+    boost: number,
+    intentContext: QueryIntentContext,
+    scores: AggregatedDocScores,
+): number {
+    if (intentContext.eventTypes.length === 0) {
+        return boost;
+    }
+
+    if (hasAnyOverlap(intentContext.eventTypes, scores.event_types)) {
+        return boost * 1.05;
+    }
+
+    if ((scores.event_types?.length || 0) > 0) {
+        return boost * EVENT_TYPE_MISMATCH_PENALTY;
+    }
+
+    return boost;
+}
+
+function applyLatestYearBoost(
+    boost: number,
+    intentContext: QueryIntentContext,
+    scores: AggregatedDocScores,
+    latestTargetYear?: number,
+): number {
+    if (
+        !intentContext.preferLatest ||
+        latestTargetYear === undefined ||
+        scores.target_year === undefined
+    ) {
+        return boost;
+    }
+
+    const yearGap = Math.max(0, latestTargetYear - scores.target_year);
+    return boost * Math.pow(LATEST_YEAR_BOOST_BASE, yearGap);
+}
+
+function computeBoostMultiplier(params: {
+    otid: string;
+    scores: AggregatedDocScores;
+    lexicalBonusMap: Map<string, number>;
+    yearHitMap: Map<string, boolean>;
+    queryYearWordIds?: number[];
+    intentContext: QueryIntentContext;
+    latestTargetYear?: number;
+}): number {
+    const {
+        otid,
+        scores,
+        lexicalBonusMap,
+        yearHitMap,
+        queryYearWordIds,
+        intentContext,
+        latestTargetYear,
+    } = params;
+    const signals = getDocQuerySignals(otid, scores, intentContext, yearHitMap);
+    const lexicalBonus = lexicalBonusMap.get(otid) || 0;
+
+    let boost = 1.0;
+    boost = applyLexicalBonusBoost(boost, lexicalBonus);
+    boost = applyYearConstraintBoost(
+        boost,
+        queryYearWordIds,
+        intentContext,
+        scores,
+        signals,
+    );
+    boost = applyIntentBoost(boost, intentContext, scores);
+    boost = applyDegreeBoost(boost, intentContext, scores);
+    boost = applyEventBoost(boost, intentContext, scores);
+    boost = applyLatestYearBoost(
+        boost,
+        intentContext,
+        scores,
+        latestTargetYear,
+    );
+
+    return boost;
+}
+
+function shouldRejectForLowConsistency(
+    queryIntent: ParsedQueryIntent | undefined,
+    querySparse: Record<number, number> | undefined,
+    sortedRanking: SearchResult[],
+    otidMap: Record<string, AggregatedDocScores>,
+): boolean {
+    const querySparseTermCount = querySparse
+        ? Object.keys(querySparse).length
+        : 0;
+
+    if (
+        !queryIntent ||
+        queryIntent.topicIds.length > 0 ||
+        queryIntent.intentIds.length > 0 ||
+        querySparseTermCount > 0
+    ) {
+        return false;
+    }
+
+    const consistencyWindow = sortedRanking.slice(0, 10);
+    if (consistencyWindow.length === 0) {
+        return true;
+    }
+
+    const topicHistogram = new Map<string, number>();
+    let labeledCount = 0;
+
+    for (const item of consistencyWindow) {
+        const scores = otidMap[item.otid];
+        const topicIds = dedupe(getCoverageComparableTopicIds(scores));
+        if (topicIds.length === 0) continue;
+
+        labeledCount += 1;
+        topicIds.forEach((topicId) => {
+            topicHistogram.set(topicId, (topicHistogram.get(topicId) || 0) + 1);
+        });
+    }
+
+    if (labeledCount === 0) {
+        return true;
+    }
+
+    const dominantCount = Math.max(...topicHistogram.values());
+    const dominantRatio = dominantCount / consistencyWindow.length;
+    return dominantCount < 3 || dominantRatio < 0.45;
 }
 
 export function searchAndRank(params: {
@@ -550,171 +747,30 @@ export function searchAndRank(params: {
         candidateTargetYears.length > 0
             ? Math.max(...candidateTargetYears)
             : undefined;
-    const coverageRejectedTopicIds = queryIntent
-        ? getCoverageRejectedTopicIds(queryIntent.topicIds)
-        : [];
-    const coveredRejectedTopicEntries =
-        coverageRejectedTopicIds.length === 0
-            ? []
-            : Object.entries(otidMap).filter(([, scores]) => {
-                  const coverage = classifyTopicCoverage(
-                      coverageRejectedTopicIds,
-                      scores,
-                  );
-                  return coverage === "primary" || coverage === "secondary";
-              });
-    const hasCoveredRejectedTopic =
-        coverageRejectedTopicIds.length === 0 ||
-        coveredRejectedTopicEntries.length > 0;
+    const intentContext = createQueryIntentContext(queryIntent);
 
     for (const [otid, scores] of Object.entries(otidMap)) {
-        const explicitYears = queryIntent?.years || [];
-        const hasExplicitYear = explicitYears.length > 0;
-        const hasStructuredYearMatch =
-            hasExplicitYear &&
-            scores.target_year !== undefined &&
-            explicitYears.includes(scores.target_year);
-        const hasLexicalYearMatch = yearHitMap.get(otid) === true;
-        const isHighConfidenceSingleIntent =
-            !!queryIntent &&
-            queryIntent.confidence >= 1 &&
-            queryIntent.intentIds.length === 1;
-        const primaryIntentId = isHighConfidenceSingleIntent
-            ? queryIntent!.intentIds[0]
-            : undefined;
-        const allowedIntentIds = primaryIntentId
-            ? dedupe([
-                  primaryIntentId,
-                  ...getRelatedIntentTypes([primaryIntentId]),
-              ])
-            : [];
-        const preferredEventTypes = queryIntent
-            ? getPreferredEventTypes(queryIntent.intentIds)
-            : [];
+        const signals = getDocQuerySignals(
+            otid,
+            scores,
+            intentContext,
+            yearHitMap,
+        );
 
-        if (hasExplicitYear) {
-            if (scores.target_year !== undefined && !hasStructuredYearMatch) {
-                continue;
-            }
-            if (scores.target_year === undefined && !hasLexicalYearMatch) {
-                continue;
-            }
+        if (shouldSkipForExplicitYear(scores, intentContext, signals)) {
+            continue;
         }
 
-        if (isHighConfidenceSingleIntent && primaryIntentId) {
-            const docIntentIds = scores.intent_ids || [];
-            const docHasIntentLabels = docIntentIds.length > 0;
-            const docMatchesAllowedIntent = allowedIntentIds.some((intentId) =>
-                docIntentIds.includes(intentId),
-            );
-            const docHasPreferredEventType =
-                preferredEventTypes.length > 0 &&
-                hasAnyOverlap(preferredEventTypes, scores.event_types);
-
-            if (docHasIntentLabels && !docMatchesAllowedIntent) {
-                continue;
-            }
-
-            if (!docHasIntentLabels && !docHasPreferredEventType) {
-                continue;
-            }
-        }
-
-        const weightedQ = scores.max_q * weights.Q;
-        const weightedKP = scores.max_kp * weights.KP;
-        const weightedOT = scores.ot_score * weights.OT;
-
-        const maxComponent = Math.max(weightedQ, weightedKP, weightedOT);
-        const unionBonus =
-            weightedQ * 0.1 + weightedKP * 0.1 + weightedOT * 0.1;
-
-        let finalScore = maxComponent + unionBonus;
-
-        let boost = 1.0;
-        const lexicalBonus = lexicalBonusMap.get(otid) || 0;
-        if (lexicalBonus > 0) {
-            boost *= 1 + Math.log1p(lexicalBonus) / 4;
-        }
-
-        if (queryYearWordIds && queryYearWordIds.length > 0) {
-            if (scores.target_year !== undefined && queryIntent?.years.length) {
-                if (!queryIntent.years.includes(scores.target_year)) {
-                    boost *= 0.01;
-                }
-            } else if (!hasStructuredYearMatch && !hasLexicalYearMatch) {
-                boost *= 0.12;
-            }
-        }
-
-        if (queryIntent && queryIntent.intentIds.length > 0) {
-            if (hasIntentMatch(queryIntent.intentIds, scores.intent_ids)) {
-                boost *= 1.25;
-            } else if (
-                hasIntentConflict(queryIntent.intentIds, scores.intent_ids)
-            ) {
-                boost *= 0.18;
-            }
-
-            if (
-                queryIntent.intentIds.includes("master_recommend_exemption") &&
-                scores.intent_ids?.includes("ug_recommend_admission")
-            ) {
-                boost *= 0.05;
-            }
-
-            if (
-                isHighConfidenceSingleIntent &&
-                queryIntent.intentIds[0] === "master_recommend_exemption"
-            ) {
-                if (scores.intent_ids?.includes("master_unified_exam")) {
-                    boost *= 0.06;
-                }
-                if (scores.intent_ids?.includes("master_adjustment")) {
-                    boost *= 0.08;
-                }
-                if (
-                    !queryIntent.degreeLevels.includes("博士") &&
-                    (scores.intent_ids?.includes("phd_apply_assessment") ||
-                        scores.intent_ids?.includes("phd_general_exam"))
-                ) {
-                    boost *= 0.04;
-                }
-            }
-
-            if (scores.event_types?.includes("非招生通知")) {
-                boost *= 0.12;
-            } else if (
-                preferredEventTypes.length > 0 &&
-                hasAnyOverlap(preferredEventTypes, scores.event_types)
-            ) {
-                boost *= 1.24;
-            }
-        }
-
-        if (queryIntent && queryIntent.degreeLevels.length > 0) {
-            if (hasAnyOverlap(queryIntent.degreeLevels, scores.degree_levels)) {
-                boost *= 1.1;
-            } else if ((scores.degree_levels?.length || 0) > 0) {
-                boost *= 0.45;
-            }
-        }
-
-        if (queryIntent && queryIntent.eventTypes.length > 0) {
-            if (hasAnyOverlap(queryIntent.eventTypes, scores.event_types)) {
-                boost *= 1.1;
-            } else if ((scores.event_types?.length || 0) > 0) {
-                boost *= EVENT_TYPE_MISMATCH_PENALTY;
-            }
-        }
-
-        if (
-            queryIntent?.preferLatest &&
-            latestTargetYear !== undefined &&
-            scores.target_year !== undefined
-        ) {
-            const yearGap = Math.max(0, latestTargetYear - scores.target_year);
-            boost *= Math.pow(LATEST_YEAR_BOOST_BASE, yearGap);
-        }
+        const finalScore = computeBaseScore(scores, weights);
+        const boost = computeBoostMultiplier({
+            otid,
+            scores,
+            lexicalBonusMap,
+            yearHitMap,
+            queryYearWordIds,
+            intentContext,
+            latestTargetYear,
+        });
 
         finalRanking.push({
             otid,
@@ -724,39 +780,14 @@ export function searchAndRank(params: {
     }
 
     const sortedRanking = finalRanking.sort((a, b) => b.score - a.score);
-    const querySparseTermCount = querySparse
-        ? Object.keys(querySparse).length
-        : 0;
-    const shouldRejectForLowConsistency =
-        !!queryIntent &&
-        queryIntent.topicIds.length === 0 &&
-        queryIntent.intentIds.length === 0 &&
-        querySparseTermCount === 0 &&
-        (() => {
-            const consistencyWindow = sortedRanking.slice(0, 10);
-            if (consistencyWindow.length === 0) return true;
-
-            const topicHistogram = new Map<string, number>();
-            let labeledCount = 0;
-
-            for (const item of consistencyWindow) {
-                const scores = otidMap[item.otid];
-                const topicIds = dedupe(getCoverageComparableTopicIds(scores));
-                if (topicIds.length === 0) continue;
-                labeledCount += 1;
-                topicIds.forEach((topicId) => {
-                    topicHistogram.set(topicId, (topicHistogram.get(topicId) || 0) + 1);
-                });
-            }
-
-            if (labeledCount === 0) return true;
-
-            const dominantCount = Math.max(...topicHistogram.values());
-            const dominantRatio = dominantCount / consistencyWindow.length;
-            return dominantCount < 3 || dominantRatio < 0.45;
-        })();
-
-    if (shouldRejectForLowConsistency) {
+    if (
+        shouldRejectForLowConsistency(
+            queryIntent,
+            querySparse,
+            sortedRanking,
+            otidMap,
+        )
+    ) {
         return {
             matches: [],
             weakMatches: [],
@@ -767,39 +798,8 @@ export function searchAndRank(params: {
         };
     }
 
-    if (!hasCoveredRejectedTopic && coverageRejectedTopicIds.length > 0) {
-        const weakRelatedMatches = sortedRanking.filter((item) => {
-            const scores = otidMap[item.otid];
-            return (
-                classifyTopicCoverage(coverageRejectedTopicIds, scores) === "weak"
-            );
-        });
-        return {
-            matches: [],
-            weakMatches: weakRelatedMatches.slice(0, 15),
-            rejection: {
-                reason: "low_topic_coverage",
-                topicIds: coverageRejectedTopicIds,
-            },
-        };
-    }
-
-    const matches =
-        coverageRejectedTopicIds.length > 0
-            ? sortedRanking
-                  .filter((item) => {
-                      const scores = otidMap[item.otid];
-                      const coverage = classifyTopicCoverage(
-                          coverageRejectedTopicIds,
-                          scores,
-                      );
-                      return coverage === "primary" || coverage === "secondary";
-                  })
-                  .slice(0, 100)
-            : sortedRanking.slice(0, 100);
-
     return {
-        matches,
+        matches: sortedRanking.slice(0, 100),
         weakMatches: [],
     };
 }

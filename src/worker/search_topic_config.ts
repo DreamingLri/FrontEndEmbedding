@@ -1,239 +1,39 @@
-export const DEGREE_LEVEL_TABLE = ["本科", "硕士", "博士"] as const;
+import searchDomainConfig from "./search_domain_config.json";
 
-export const EVENT_TYPE_TABLE = [
-    "招生章程",
-    "报名通知",
-    "考试安排",
-    "复试通知",
-    "录取公示",
-    "资格要求",
-    "材料提交",
-    "推免资格公示",
-    "推免通知",
-    "推免实施办法",
-    "非招生通知",
-] as const;
-
-export const CAMPUS_SYNONYMS: Record<string, string[]> = {
-    考研: ["研究生", "招生", "考试", "初试", "复试"],
-    保研: ["推免", "推荐免试", "推免生", "免试攻读研究生"],
-    名额: ["计划", "人数"],
-    退课: ["退选"],
-};
-
-export const EVENT_TYPE_HINTS: Record<string, string[]> = {
-    招生章程: ["章程", "简章", "专业目录"],
-    报名通知: ["报名", "网报", "报考点", "报名通知"],
-    考试安排: ["考试", "考核安排", "面试", "笔试"],
-    复试通知: ["复试"],
-    录取公示: ["录取", "预录取", "公示", "名单"],
-    资格要求: ["资格", "条件", "要求"],
-    材料提交: ["材料", "提交", "寄送"],
-    推免资格公示: ["推荐资格公示", "推免资格公示", "免试攻读研究生推荐资格公示"],
-    推免通知: ["推免通知", "免试攻读研究生", "推荐免试"],
-    推免实施办法: ["推免实施办法", "推荐办法", "遴选细则", "实施办法"],
-    非招生通知: ["奖学金", "助学金", "评优", "资助", "学年", "工作通知"],
-};
-
-export const POLICY_LATEST_HINTS = [
-    "保研",
-    "推免",
-    "推荐免试",
-    "考研",
-    "研招",
-    "奖学金",
-    "助学金",
-    "资助",
-    "补助",
-    "评奖",
-    "招生",
-    "报名",
-    "报考点",
-    "复试",
-    "录取",
-    "选课",
-    "转专业",
-] as const;
-
-export const HISTORICAL_QUERY_HINTS = [
-    "往年",
-    "历年",
-    "历史",
-    "以前",
-    "去年",
-    "前年",
-    "往届",
-    "旧版",
-] as const;
-
-type IntentVectorTableItem = {
+export type IntentVectorTableItem = {
     intent_id: string;
+    topic_id: string;
     intent_name: string;
     aliases: readonly string[];
     negative_intents: readonly string[];
     related_intents: readonly string[];
+};
+
+export type TopicConfigItem = {
+    topic_id: string;
+    aliases: readonly string[];
+    prefer_latest: boolean;
+};
+
+type SearchDomainConfig = {
     degree_levels: readonly string[];
-    preferred_event_types: readonly string[];
-    weight: number;
+    event_type_table: readonly string[];
+    latest_query_hints: readonly string[];
+    historical_query_hints: readonly string[];
+    intent_vector_table: readonly IntentVectorTableItem[];
+    topic_configs: readonly TopicConfigItem[];
 };
 
-export const INTENT_VECTOR_TABLE = [
-    {
-        intent_id: "ug_recommend_admission",
-        intent_name: "本科保送生",
-        aliases: ["保送生", "外语类保送生", "竞赛保送"],
-        negative_intents: ["master_recommend_exemption", "master_unified_exam"],
-        related_intents: [],
-        degree_levels: ["本科"],
-        preferred_event_types: ["报名通知", "考试安排", "录取公示"],
-        weight: 1,
-    },
-    {
-        intent_id: "master_recommend_exemption",
-        intent_name: "推免",
-        aliases: [
-            "保研",
-            "推免",
-            "推荐免试",
-            "推免生",
-            "免试研究生",
-            "免试攻读研究生",
-            "推荐资格",
-            "预推免",
-        ],
-        negative_intents: ["ug_recommend_admission", "master_unified_exam"],
-        related_intents: ["summer_camp", "pre_recommend"],
-        degree_levels: ["硕士", "博士"],
-        preferred_event_types: [
-            "推免资格公示",
-            "推免通知",
-            "推免实施办法",
-            "材料提交",
-            "录取公示",
-        ],
-        weight: 1,
-    },
-    {
-        intent_id: "master_unified_exam",
-        intent_name: "统考硕士",
-        aliases: [
-            "考研",
-            "硕士研究生招生考试",
-            "全国硕士研究生招生考试",
-            "硕士统考",
-            "初试",
-            "复试",
-            "研招",
-        ],
-        negative_intents: ["ug_recommend_admission", "master_recommend_exemption"],
-        related_intents: ["master_adjustment"],
-        degree_levels: ["硕士"],
-        preferred_event_types: [
-            "招生章程",
-            "报名通知",
-            "考试安排",
-            "复试通知",
-            "录取公示",
-        ],
-        weight: 1,
-    },
-    {
-        intent_id: "master_adjustment",
-        intent_name: "调剂",
-        aliases: ["调剂", "硕士调剂", "接受调剂", "调剂复试"],
-        negative_intents: [],
-        related_intents: ["master_unified_exam"],
-        degree_levels: ["硕士", "博士"],
-        preferred_event_types: ["复试通知", "录取公示", "报名通知"],
-        weight: 1,
-    },
-    {
-        intent_id: "phd_apply_assessment",
-        intent_name: "博士申请考核",
-        aliases: ["申请考核", "申请-考核", "博士申请考核"],
-        negative_intents: ["phd_general_exam"],
-        related_intents: [],
-        degree_levels: ["博士"],
-        preferred_event_types: ["报名通知", "材料提交", "考试安排", "录取公示"],
-        weight: 1,
-    },
-    {
-        intent_id: "phd_general_exam",
-        intent_name: "博士普通招考",
-        aliases: ["博士招考", "博士报名", "博士考试", "公开招考博士", "博士研究生招生"],
-        negative_intents: ["phd_apply_assessment"],
-        related_intents: [],
-        degree_levels: ["博士"],
-        preferred_event_types: ["招生章程", "报名通知", "考试安排", "录取公示"],
-        weight: 1,
-    },
-    {
-        intent_id: "summer_camp",
-        intent_name: "夏令营",
-        aliases: ["夏令营", "优秀大学生夏令营"],
-        negative_intents: [],
-        related_intents: ["master_recommend_exemption"],
-        degree_levels: ["硕士"],
-        preferred_event_types: ["报名通知", "录取公示"],
-        weight: 1,
-    },
-    {
-        intent_id: "pre_recommend",
-        intent_name: "预推免",
-        aliases: ["预推免", "预推免报名", "预推免考核"],
-        negative_intents: ["master_unified_exam"],
-        related_intents: ["master_recommend_exemption", "summer_camp"],
-        degree_levels: ["硕士"],
-        preferred_event_types: ["推免通知", "考试安排", "录取公示"],
-        weight: 1,
-    },
-] as const satisfies readonly IntentVectorTableItem[];
+const DOMAIN_CONFIG = searchDomainConfig as SearchDomainConfig;
 
-export const SUBTOPIC_TOPIC_MAP: Record<string, string> = {
-    ug_recommend_admission: "undergraduate_admission",
-    master_recommend_exemption: "graduate_admission",
-    master_unified_exam: "graduate_admission",
-    master_adjustment: "graduate_admission",
-    phd_apply_assessment: "graduate_admission",
-    phd_general_exam: "graduate_admission",
-    summer_camp: "graduate_admission",
-    pre_recommend: "graduate_admission",
-};
+export const DEGREE_LEVEL_TABLE = DOMAIN_CONFIG.degree_levels;
 
-export const TOPIC_CONFIGS = [
-    {
-        topic_id: "graduate_admission",
-        aliases: ["保研", "推免", "推荐免试", "考研", "研招", "研究生招生", "调剂", "夏令营"],
-        prefer_latest: true,
-        year_sensitive: true,
-        reject_when_coverage_low: false,
-    },
-    {
-        topic_id: "undergraduate_admission",
-        aliases: ["保送生", "外语类保送生", "强基计划", "综合评价", "本科招生"],
-        prefer_latest: true,
-        year_sensitive: true,
-        reject_when_coverage_low: false,
-    },
-    {
-        topic_id: "student_funding",
-        aliases: ["奖学金", "助学金", "资助", "补助", "评奖"],
-        prefer_latest: true,
-        year_sensitive: true,
-        reject_when_coverage_low: false,
-    },
-    {
-        topic_id: "academic_affairs",
-        aliases: ["选课", "转专业", "培养方案", "课程"],
-        prefer_latest: true,
-        year_sensitive: false,
-        reject_when_coverage_low: false,
-    },
-    {
-        topic_id: "dining_services",
-        aliases: ["吃饭", "食堂", "饭堂", "餐厅", "用餐", "喝水", "饮水", "饮用水"],
-        prefer_latest: false,
-        year_sensitive: false,
-        reject_when_coverage_low: true,
-    },
-] as const;
+export const EVENT_TYPE_TABLE = DOMAIN_CONFIG.event_type_table;
+
+export const LATEST_QUERY_HINTS = DOMAIN_CONFIG.latest_query_hints;
+
+export const HISTORICAL_QUERY_HINTS = DOMAIN_CONFIG.historical_query_hints;
+
+export const INTENT_VECTOR_TABLE = DOMAIN_CONFIG.intent_vector_table;
+
+export const TOPIC_CONFIGS = DOMAIN_CONFIG.topic_configs;

@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { performance } from 'perf_hooks';
-import { env, pipeline, type FeatureExtractionPipeline } from '@huggingface/transformers';
+import type { FeatureExtractionPipeline } from '@huggingface/transformers';
 
 import {
     buildBM25Stats,
@@ -18,13 +18,18 @@ import {
     getCandidateIndicesForQuery,
     type TopicPartitionIndex,
 } from '../src/worker/topic_partition.ts';
+import { fmmTokenize } from '../src/worker/fmm_tokenize.ts';
+import {
+    DEFAULT_QUERY_EMBED_BATCH_SIZE,
+    loadDataset,
+    type EvalDatasetCase,
+} from './eval_shared.ts';
+import {
+    embedQueries as embedFrontendQueries,
+    loadFrontendEvalEngine,
+} from './frontend_eval_engine.ts';
 
-type DatasetCase = {
-    query: string;
-    expected_otid: string;
-    query_type?: string;
-    dataset: string;
-};
+type DatasetCase = EvalDatasetCase;
 
 type SearchCache = {
     testCase: DatasetCase;
@@ -64,9 +69,6 @@ type EvalMetrics = {
 
 type EvalMode = 'full_scan' | 'partition_only' | 'threshold';
 
-const MODEL_NAME = 'DMetaSoul/Dmeta-embedding-zh-small';
-const VECTOR_FILE = 'public/data/frontend_vectors_dmeta_small.bin';
-const METADATA_FILE = 'public/data/frontend_metadata_dmeta_small.json';
 const TUNE_DATASETS = [
     '../Backend/test/test_dataset_v2/test_dataset_standard.json',
     '../Backend/test/test_dataset_v2/test_dataset_short_keyword.json',
@@ -74,7 +76,8 @@ const TUNE_DATASETS = [
 const HOLDOUT_DATASETS = [
     '../Backend/test/test_dataset_v2/test_dataset_situational.json',
 ] as const;
-const PARTITION_FALLBACK_ENABLED = false;
+const ENABLE_PARTITION_FALLBACK =
+    process.env.SUASK_ENABLE_PARTITION_FALLBACK === '1';
 const CURRENT_CONFIG: ThresholdConfig = {
     scoreThreshold: 1.05,
     gapThreshold: 0.03,
@@ -83,11 +86,6 @@ const CURRENT_CONFIG: ThresholdConfig = {
 const SCORE_THRESHOLDS = [1.05, 1.15, 1.25, 1.35, 1.45, 1.55];
 const GAP_THRESHOLDS = [0.03, 0.05, 0.08, 0.11, 0.14];
 const SCAN_RATIO_THRESHOLDS = [0.85, 0.92, 0.98];
-const EMBED_BATCH_SIZE = 16;
-
-env.allowLocalModels = true;
-env.allowRemoteModels = false;
-env.localModelPath = path.resolve(process.cwd(), '../Backend/models');
 
 let extractor: FeatureExtractionPipeline | null = null;
 let vocabMap = new Map<string, number>();
@@ -101,36 +99,6 @@ let topicPartitionIndex: TopicPartitionIndex = {
     metadataCount: 0,
 };
 
-function fmmTokenize(text: string): string[] {
-    const tokens: string[] = [];
-    let i = 0;
-    while (i < text.length) {
-        let matched = false;
-        const maxLen = Math.min(10, text.length - i);
-        for (let len = maxLen; len > 0; len--) {
-            const word = text.substring(i, i + len);
-            if (vocabMap.has(word)) {
-                tokens.push(word);
-                i += len;
-                matched = true;
-                break;
-            }
-        }
-        if (!matched) i++;
-    }
-    return tokens;
-}
-
-function loadDataset(datasetPath: string): DatasetCase[] {
-    const absolutePath = path.resolve(process.cwd(), datasetPath);
-    const raw = JSON.parse(fs.readFileSync(absolutePath, 'utf-8'));
-    const datasetName = path.basename(datasetPath, '.json');
-    return raw.map((item: Omit<DatasetCase, 'dataset'>) => ({
-        ...item,
-        dataset: datasetName,
-    }));
-}
-
 function getRank(result: SearchRankOutput, expectedOtid: string): number {
     const rankIndex = result.matches.findIndex((item) => item.otid === expectedOtid);
     return rankIndex === -1 ? Number.POSITIVE_INFINITY : rankIndex + 1;
@@ -140,7 +108,7 @@ function shouldFallbackToFullScan(
     cache: SearchCache,
     config: ThresholdConfig,
 ): boolean {
-    if (!PARTITION_FALLBACK_ENABLED) return false;
+    if (!ENABLE_PARTITION_FALLBACK) return false;
     if (!cache.partitionUsed) return false;
     if (cache.scanRatio >= config.scanRatioThreshold) return false;
 
@@ -265,66 +233,28 @@ function summarizeScoreDistribution(cases: SearchCache[]) {
 
 async function loadEngine() {
     console.log('Loading metadata and vectors...');
-    const metadataPath = path.resolve(process.cwd(), METADATA_FILE);
-    const vectorPath = path.resolve(process.cwd(), VECTOR_FILE);
-    const metadataPayload = JSON.parse(fs.readFileSync(metadataPath, 'utf-8'));
-
-    metadataList = Array.isArray(metadataPayload.data)
-        ? metadataPayload.data
-        : metadataPayload;
-    const vocabList: string[] = metadataPayload.vocab || [];
-    vocabMap.clear();
-    vocabList.forEach((word, index) => vocabMap.set(word, index));
-
-    const vectorBuffer = fs.readFileSync(vectorPath);
-    vectorMatrix = new Int8Array(
-        vectorBuffer.buffer,
-        vectorBuffer.byteOffset,
-        vectorBuffer.byteLength,
-    );
-
-    globalBM25Stats = buildBM25Stats(metadataList);
-    topicPartitionIndex = buildTopicPartitionIndex(metadataList);
-
-    if (metadataList.length > 0 && vectorMatrix.length > 0) {
-        dimensions = Math.round(vectorMatrix.length / metadataList.length);
-    }
+    const engine = await loadFrontendEvalEngine();
+    extractor = engine.extractor;
+    vocabMap = engine.vocabMap;
+    metadataList = engine.metadataList;
+    vectorMatrix = engine.vectorMatrix;
+    globalBM25Stats = engine.bm25Stats;
+    topicPartitionIndex = engine.topicPartitionIndex;
+    dimensions = engine.dimensions;
 
     console.log(
         `Loaded ${metadataList.length} vectors, dimensions=${dimensions}, unlabeled=${topicPartitionIndex.unlabeledCandidateIndices.length}`,
     );
-
-    extractor = await pipeline('feature-extraction', MODEL_NAME, {
-        dtype: 'q8',
-        device: 'cpu',
-    });
 }
 
 async function embedQueries(queries: string[]): Promise<Float32Array[]> {
     if (!extractor) throw new Error('Extractor not initialized');
-
-    const vectors: Float32Array[] = [];
-    for (let start = 0; start < queries.length; start += EMBED_BATCH_SIZE) {
-        const batch = queries.slice(start, start + EMBED_BATCH_SIZE);
-        const output = await extractor(batch, {
-            pooling: 'mean',
-            normalize: true,
-            truncation: true,
-            max_length: 512,
-        } as any);
-
-        const data = output.data as Float32Array;
-        for (let i = 0; i < batch.length; i++) {
-            const begin = i * dimensions;
-            const end = begin + dimensions;
-            vectors.push(new Float32Array(data.slice(begin, end)));
-        }
-
-        const done = Math.min(start + batch.length, queries.length);
-        console.log(`Embedded ${done} / ${queries.length} queries`);
-    }
-
-    return vectors;
+    return embedFrontendQueries(extractor, queries, dimensions, {
+        batchSize: DEFAULT_QUERY_EMBED_BATCH_SIZE,
+        onProgress: (done, total) => {
+            console.log(`Embedded ${done} / ${total} queries`);
+        },
+    });
 }
 
 async function buildSearchCache(testCases: DatasetCase[]): Promise<SearchCache[]> {
@@ -341,7 +271,7 @@ async function buildSearchCache(testCases: DatasetCase[]): Promise<SearchCache[]
         const queryIntent = parseQueryIntent(testCase.query);
         const candidateIndices = getCandidateIndicesForQuery(queryIntent, topicPartitionIndex);
         const queryWords = Array.from(
-            new Set([...fmmTokenize(testCase.query), ...queryIntent.normalizedTerms]),
+            new Set(fmmTokenize(testCase.query, vocabMap)),
         );
         const querySparse = getQuerySparse(queryWords, vocabMap);
         const queryYearWordIds: number[] = [];
@@ -431,7 +361,7 @@ async function main() {
         console.log('Low-confidence partition top1 score distribution:', scoreDistribution);
     }
 
-    const currentMode: EvalMode = PARTITION_FALLBACK_ENABLED
+    const currentMode: EvalMode = ENABLE_PARTITION_FALLBACK
         ? 'threshold'
         : 'partition_only';
 

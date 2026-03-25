@@ -21,6 +21,7 @@ import {
     normalizeSnippetScore,
     splitIntoSemanticChunks,
 } from './rerank_helpers';
+import { fmmTokenize } from './fmm_tokenize';
 
 const MODEL_NAME = 'DMetaSoul/Dmeta-embedding-zh-small';
 
@@ -62,26 +63,6 @@ let topicPartitionIndex: TopicPartitionIndex = {
 };
 let lastEmbeddedQuery = '';
 let lastQueryVector: Float32Array | null = null;
-
-function fmmTokenize(text: string): string[] {
-    const tokens: string[] = [];
-    let i = 0;
-    while (i < text.length) {
-        let matched = false;
-        const maxLen = Math.min(10, text.length - i);
-        for (let len = maxLen; len > 0; len--) {
-            const word = text.substring(i, i + len);
-            if (vocabMap.has(word)) {
-                tokens.push(word);
-                i += len;
-                matched = true;
-                break;
-            }
-        }
-        if (!matched) i++;
-    }
-    return tokens;
-}
 
 function getAdaptiveRerankDocCount(
     results: Array<{ coarseScore?: number }>,
@@ -204,10 +185,7 @@ async function handleSearch(query: string, taskId?: string) {
     const queryVector = await embedQuery(query);
     const queryIntent = parseQueryIntent(query);
     const candidateIndices = getCandidateIndicesForQuery(queryIntent, topicPartitionIndex);
-    const queryWords = Array.from(new Set([
-        ...fmmTokenize(query),
-        ...queryIntent.normalizedTerms
-    ]));
+    const queryWords = Array.from(new Set(fmmTokenize(query, vocabMap)));
     const querySparse = getQuerySparse(queryWords, vocabMap);
 
     const queryYearWordIds: number[] = [];

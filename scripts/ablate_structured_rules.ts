@@ -1,10 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import {
-    env,
-    pipeline,
-    type FeatureExtractionPipeline,
-} from "@huggingface/transformers";
+import type { FeatureExtractionPipeline } from "@huggingface/transformers";
 
 import {
     DEFAULT_WEIGHTS,
@@ -14,25 +10,30 @@ import {
     getQuerySparse,
     parseQueryIntent,
     resolveMetadataTopicIds,
-    INTENT_VECTOR_TABLE,
     type BM25Stats,
     type IntentVectorItem,
     type Metadata,
     type ParsedQueryIntent,
 } from "../src/worker/vector_engine.ts";
+import { INTENT_VECTOR_TABLE } from "../src/worker/search_topic_config.ts";
 import {
     applyScoreToAggregatedDocScores,
     createAggregatedDocScores,
     mergeAggregatedDocMetadata,
     type AggregatedDocScores,
 } from "../src/worker/aggregated_doc_scores.ts";
+import { fmmTokenize } from "../src/worker/fmm_tokenize.ts";
+import {
+    DEFAULT_QUERY_EMBED_BATCH_SIZE,
+    loadDataset,
+    type EvalDatasetCase,
+} from "./eval_shared.ts";
+import {
+    embedQueries as embedFrontendQueries,
+    loadFrontendEvalEngine,
+} from "./frontend_eval_engine.ts";
 
-type DatasetCase = {
-    query: string;
-    expected_otid: string;
-    query_type?: string;
-    dataset: string;
-};
+type DatasetCase = EvalDatasetCase;
 
 type QueryCacheItem = {
     testCase: DatasetCase;
@@ -94,15 +95,11 @@ type Report = {
     modes: ModeResult[];
 };
 
-const MODEL_NAME = "DMetaSoul/Dmeta-embedding-zh-small";
-const METADATA_FILE = "public/data/frontend_metadata_dmeta_small.json";
-const VECTOR_FILE = "public/data/frontend_vectors_dmeta_small.bin";
 const DATASETS = [
     "../Backend/test/test_dataset_v3/test_dataset_standard.json",
     "../Backend/test/test_dataset_v3/test_dataset_short_keyword.json",
     "../Backend/test/test_dataset_v3/test_dataset_situational.json",
 ] as const;
-const QUERY_EMBED_BATCH_SIZE = 16;
 const BM25_K1 = 1.2;
 const BM25_B = 0.4;
 const SECONDS_IN_DAY = 86400;
@@ -205,10 +202,6 @@ const MODE_DEFINITIONS: ModeDefinition[] = [
     }),
 ] as const;
 
-env.allowLocalModels = true;
-env.allowRemoteModels = false;
-env.localModelPath = path.resolve(process.cwd(), "../Backend/models");
-
 let extractor: FeatureExtractionPipeline | null = null;
 let vocabMap = new Map<string, number>();
 let metadataList: Metadata[] = [];
@@ -223,38 +216,8 @@ const INTENT_RULE_MAP = new Map<string, IntentVectorItem>(
     INTENT_VECTOR_TABLE.map((item) => [item.intent_id, item]),
 );
 
-function loadDataset(datasetPath: string): DatasetCase[] {
-    const absolutePath = path.resolve(process.cwd(), datasetPath);
-    const raw = JSON.parse(fs.readFileSync(absolutePath, "utf-8"));
-    const dataset = path.basename(datasetPath, ".json");
-    return raw.map((item: Omit<DatasetCase, "dataset">) => ({
-        ...item,
-        dataset,
-    }));
-}
-
 function dedupe<T>(items: T[]): T[] {
     return Array.from(new Set(items));
-}
-
-function fmmTokenize(text: string): string[] {
-    const tokens: string[] = [];
-    let index = 0;
-    while (index < text.length) {
-        let matched = false;
-        const maxLen = Math.min(10, text.length - index);
-        for (let len = maxLen; len > 0; len--) {
-            const word = text.substring(index, index + len);
-            if (vocabMap.has(word)) {
-                tokens.push(word);
-                index += len;
-                matched = true;
-                break;
-            }
-        }
-        if (!matched) index += 1;
-    }
-    return tokens;
 }
 
 function hasAnyOverlap(a: string[], b?: string[]): boolean {
@@ -285,12 +248,8 @@ function hasIntentConflict(
 }
 
 function getPreferredEventTypes(intentIds: string[]): string[] {
-    return dedupe(
-        intentIds.flatMap(
-            (intentId) =>
-                INTENT_RULE_MAP.get(intentId)?.preferred_event_types || [],
-        ),
-    );
+    void intentIds;
+    return [];
 }
 
 function getRelatedIntentTypes(intentIds: string[]): string[] {
@@ -311,34 +270,13 @@ function rankOf(
 
 async function loadEngine() {
     console.log("Loading metadata, vectors, and model...");
-    const metadataPath = path.resolve(process.cwd(), METADATA_FILE);
-    const vectorPath = path.resolve(process.cwd(), VECTOR_FILE);
-    const metadataPayload = JSON.parse(fs.readFileSync(metadataPath, "utf-8"));
-
-    metadataList = Array.isArray(metadataPayload.data)
-        ? metadataPayload.data
-        : metadataPayload;
-
-    const vocabList: string[] = metadataPayload.vocab || [];
-    vocabMap.clear();
-    vocabList.forEach((word, index) => vocabMap.set(word, index));
-
-    const vectorBuffer = fs.readFileSync(vectorPath);
-    vectorMatrix = new Int8Array(
-        vectorBuffer.buffer,
-        vectorBuffer.byteOffset,
-        vectorBuffer.byteLength,
-    );
-
-    if (metadataList.length > 0 && vectorMatrix.length > 0) {
-        dimensions = Math.round(vectorMatrix.length / metadataList.length);
-    }
-
-    bm25Stats = buildBM25Stats(metadataList);
-    extractor = await pipeline("feature-extraction", MODEL_NAME, {
-        dtype: "q8",
-        device: "cpu",
-    });
+    const engine = await loadFrontendEvalEngine();
+    extractor = engine.extractor;
+    vocabMap = engine.vocabMap;
+    metadataList = engine.metadataList;
+    vectorMatrix = engine.vectorMatrix;
+    bm25Stats = engine.bm25Stats;
+    dimensions = engine.dimensions;
 
     console.log(
         `Loaded ${metadataList.length} vectors, dimensions=${dimensions}`,
@@ -347,33 +285,12 @@ async function loadEngine() {
 
 async function embedQueries(queries: string[]): Promise<Float32Array[]> {
     if (!extractor) throw new Error("Extractor not initialized");
-
-    const vectors: Float32Array[] = [];
-    for (
-        let start = 0;
-        start < queries.length;
-        start += QUERY_EMBED_BATCH_SIZE
-    ) {
-        const batch = queries.slice(start, start + QUERY_EMBED_BATCH_SIZE);
-        const output = await extractor(batch, {
-            pooling: "mean",
-            normalize: true,
-            truncation: true,
-            max_length: 512,
-        } as any);
-
-        const data = output.data as Float32Array;
-        for (let index = 0; index < batch.length; index++) {
-            const begin = index * dimensions;
-            const end = begin + dimensions;
-            vectors.push(new Float32Array(data.slice(begin, end)));
-        }
-
-        const done = Math.min(start + batch.length, queries.length);
-        console.log(`Embedded ${done} / ${queries.length} queries`);
-    }
-
-    return vectors;
+    return embedFrontendQueries(extractor, queries, dimensions, {
+        batchSize: DEFAULT_QUERY_EMBED_BATCH_SIZE,
+        onProgress: (done, total) => {
+            console.log(`Embedded ${done} / ${total} queries`);
+        },
+    });
 }
 
 async function buildQueryCache(
@@ -385,10 +302,7 @@ async function buildQueryCache(
     );
     return testCases.map((testCase, index) => {
         const queryIntent = parseQueryIntent(testCase.query);
-        const queryWords = dedupe([
-            ...fmmTokenize(testCase.query),
-            ...queryIntent.normalizedTerms,
-        ]);
+        const queryWords = dedupe(fmmTokenize(testCase.query, vocabMap));
         const queryYearWordIds = queryIntent.years
             .map(String)
             .map((year) => vocabMap.get(year))

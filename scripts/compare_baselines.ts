@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { createRequire } from 'module';
 import { pathToFileURL } from 'url';
-import { env, pipeline, type FeatureExtractionPipeline } from '@huggingface/transformers';
+import type { FeatureExtractionPipeline } from '@huggingface/transformers';
 
 import {
     buildBM25Stats as buildCurrentBM25Stats,
@@ -19,18 +19,23 @@ import {
     getCandidateIndicesForQuery,
     type TopicPartitionIndex,
 } from '../src/worker/topic_partition.ts';
+import { fmmTokenize } from '../src/worker/fmm_tokenize.ts';
+import {
+    DEFAULT_QUERY_EMBED_BATCH_SIZE,
+    loadDataset,
+    type EvalDatasetCase,
+} from './eval_shared.ts';
+import {
+    embedQueries as embedFrontendQueries,
+    loadFrontendEvalEngine,
+} from './frontend_eval_engine.ts';
 import type {
     BM25Stats as LegacyBM25Stats,
     Metadata as LegacyMetadata,
     SearchResult as LegacySearchResult,
 } from '../../Backend/test/vector_engine.ts';
 
-type DatasetCase = {
-    query: string;
-    expected_otid: string;
-    query_type?: string;
-    dataset: string;
-};
+type DatasetCase = EvalDatasetCase;
 
 type QueryCacheItem = {
     testCase: DatasetCase;
@@ -73,9 +78,6 @@ type ModeDefinition = {
     };
 };
 
-const MODEL_NAME = 'DMetaSoul/Dmeta-embedding-zh-small';
-const METADATA_FILE = 'public/data/frontend_metadata_dmeta_small.json';
-const VECTOR_FILE = 'public/data/frontend_vectors_dmeta_small.bin';
 const DATASET_VERSION = process.env.SUASK_EVAL_DATASET_VERSION || 'v2';
 const DATASET_DIR = `../Backend/test/test_dataset_${DATASET_VERSION}`;
 const DATASETS = [
@@ -83,12 +85,7 @@ const DATASETS = [
     `${DATASET_DIR}/test_dataset_short_keyword.json`,
     `${DATASET_DIR}/test_dataset_situational.json`,
 ] as const;
-const QUERY_EMBED_BATCH_SIZE = 16;
 const CURRENT_TIMESTAMP = 0;
-
-env.allowLocalModels = true;
-env.allowRemoteModels = false;
-env.localModelPath = path.resolve(process.cwd(), '../Backend/models');
 
 const require = createRequire(import.meta.url);
 const nodejieba = require(path.resolve(process.cwd(), '../Backend/test/node_modules/nodejieba'));
@@ -107,36 +104,6 @@ let topicPartitionIndex: TopicPartitionIndex = {
     unlabeledCandidateIndices: [],
     metadataCount: 0,
 };
-
-function loadDataset(datasetPath: string): DatasetCase[] {
-    const absolutePath = path.resolve(process.cwd(), datasetPath);
-    const raw = JSON.parse(fs.readFileSync(absolutePath, 'utf-8'));
-    const dataset = path.basename(datasetPath, '.json');
-    return raw.map((item: Omit<DatasetCase, 'dataset'>) => ({
-        ...item,
-        dataset,
-    }));
-}
-
-function fmmTokenize(text: string): string[] {
-    const tokens: string[] = [];
-    let i = 0;
-    while (i < text.length) {
-        let matched = false;
-        const maxLen = Math.min(10, text.length - i);
-        for (let len = maxLen; len > 0; len--) {
-            const word = text.substring(i, i + len);
-            if (vocabMap.has(word)) {
-                tokens.push(word);
-                i += len;
-                matched = true;
-                break;
-            }
-        }
-        if (!matched) i += 1;
-    }
-    return tokens;
-}
 
 function initializeJieba() {
     const dictPath = path.resolve(process.cwd(), '../Backend/data/campus_dict.txt');
@@ -160,70 +127,31 @@ async function loadEngine() {
         pathToFileURL(path.resolve(process.cwd(), '../Backend/test/vector_engine.ts')).href
     );
 
-    const metadataPath = path.resolve(process.cwd(), METADATA_FILE);
-    const vectorPath = path.resolve(process.cwd(), VECTOR_FILE);
-    const metadataPayload = JSON.parse(fs.readFileSync(metadataPath, 'utf-8'));
-
-    currentMetadataList = Array.isArray(metadataPayload.data)
-        ? metadataPayload.data
-        : metadataPayload;
-    legacyMetadataList = currentMetadataList as LegacyMetadata[];
-
-    const vocabList: string[] = metadataPayload.vocab || [];
-    vocabMap.clear();
-    vocabList.forEach((word, index) => vocabMap.set(word, index));
-
-    const vectorBuffer = fs.readFileSync(vectorPath);
-    vectorMatrix = new Int8Array(
-        vectorBuffer.buffer,
-        vectorBuffer.byteOffset,
-        vectorBuffer.byteLength,
-    );
-
-    if (currentMetadataList.length > 0 && vectorMatrix.length > 0) {
-        dimensions = Math.round(vectorMatrix.length / currentMetadataList.length);
-    }
-
-    currentBM25Stats = buildCurrentBM25Stats(currentMetadataList);
+    const engine = await loadFrontendEvalEngine();
+    extractor = engine.extractor;
+    vocabMap = engine.vocabMap;
+    currentMetadataList = engine.metadataList;
+    legacyMetadataList = engine.metadataList as LegacyMetadata[];
+    vectorMatrix = engine.vectorMatrix;
+    dimensions = engine.dimensions;
+    currentBM25Stats = engine.bm25Stats;
+    topicPartitionIndex = engine.topicPartitionIndex;
     legacyBM25Stats = legacyEngine.buildBM25Stats(legacyMetadataList);
-    topicPartitionIndex = buildTopicPartitionIndex(currentMetadataList);
     initializeJieba();
-
-    extractor = await pipeline('feature-extraction', MODEL_NAME, {
-        dtype: 'q8',
-        device: 'cpu',
-    });
 }
 
 async function embedQueries(queries: string[]): Promise<Float32Array[]> {
     if (!extractor) throw new Error('Extractor not initialized');
-
-    const vectors: Float32Array[] = [];
-    for (let start = 0; start < queries.length; start += QUERY_EMBED_BATCH_SIZE) {
-        const batch = queries.slice(start, start + QUERY_EMBED_BATCH_SIZE);
-        const output = await extractor(batch, {
-            pooling: 'mean',
-            normalize: true,
-            truncation: true,
-            max_length: 512,
-        } as any);
-
-        const data = output.data as Float32Array;
-        for (let index = 0; index < batch.length; index++) {
-            const begin = index * dimensions;
-            const end = begin + dimensions;
-            vectors.push(new Float32Array(data.slice(begin, end)));
-        }
-    }
-
-    return vectors;
+    return embedFrontendQueries(extractor, queries, dimensions, {
+        batchSize: DEFAULT_QUERY_EMBED_BATCH_SIZE,
+    });
 }
 
 async function buildQueryCache(testCases: DatasetCase[]): Promise<QueryCacheItem[]> {
     const queryVectors = await embedQueries(testCases.map((item) => item.query));
     return testCases.map((testCase, index) => {
         const queryIntent = parseQueryIntent(testCase.query);
-        const fmmTokens = fmmTokenize(testCase.query);
+        const fmmTokens = fmmTokenize(testCase.query, vocabMap);
         const jiebaTokens = nodejieba.cut(testCase.query) as string[];
         const yearWordIds = queryIntent.years
             .map(String)
@@ -449,7 +377,7 @@ async function main() {
             run: (item) =>
                 searchCurrentMode(
                     item,
-                    dedupe([...item.fmmTokens, ...item.queryIntent.normalizedTerms]),
+                    item.fmmTokens,
                     undefined,
                 ),
         },
@@ -458,7 +386,7 @@ async function main() {
             run: (item) =>
                 searchCurrentMode(
                     item,
-                    dedupe([...item.fmmTokens, ...item.queryIntent.normalizedTerms]),
+                    item.fmmTokens,
                     getCandidateIndicesForQuery(item.queryIntent, topicPartitionIndex),
                 ),
         },
@@ -473,7 +401,7 @@ async function main() {
     const report: Report = {
         generatedAt: new Date().toISOString(),
         datasetSizes,
-        queryEmbeddingBatchSize: QUERY_EMBED_BATCH_SIZE,
+        queryEmbeddingBatchSize: DEFAULT_QUERY_EMBED_BATCH_SIZE,
         modes: modeResults,
     };
 
