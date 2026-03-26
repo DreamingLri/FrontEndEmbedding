@@ -5,6 +5,7 @@ export type EvalDatasetCase = {
     query: string;
     expected_otid: string;
     expected_kpid?: string;
+    support_kpids?: string[];
     query_type?: string;
     query_scope?: string;
     preferred_granularity?: string;

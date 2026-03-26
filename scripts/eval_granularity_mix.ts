@@ -8,6 +8,7 @@ import {
     searchAndRank,
     type BM25Stats,
     type KPAggregationMode,
+    type KPRoleRerankMode,
     type LexicalBonusMode,
     type Metadata,
     type ParsedQueryIntent,
@@ -27,7 +28,8 @@ import {
 
 type DatasetCase = EvalDatasetCase;
 type GranularityType = "Q" | "KP" | "OT";
-type KPCandidateRerankMode = "none" | "heuristic";
+type KPCandidateRerankMode = "none" | "heuristic" | "feature_heuristic";
+type DocPostRerankMode = "none" | "kp_heuristic_delta";
 type WeightConfig = {
     Q: number;
     KP: number;
@@ -90,6 +92,42 @@ type GroupMetricsReport = {
     kpidTunedCombined: KpidMetrics;
 };
 
+type CaseDetail = {
+    query: string;
+    expected_otid: string;
+    expected_kpid?: string;
+    dataset: string;
+    query_type?: string;
+    query_scope?: string;
+    preferred_granularity?: string;
+    support_pattern?: string;
+    granularity_sensitive?: boolean;
+    theme_family?: string;
+    source_dataset?: string;
+    source_seed_id?: string;
+    challenge_tags?: string[];
+    notes?: string;
+    docRank: number | null;
+    kpidRank: number | null;
+    docHitAt1: boolean;
+    docHitAt5: boolean;
+    kpidHitAt1: boolean;
+    kpidHitAt5: boolean;
+    failure_risk: string;
+    failure_reasons: string[];
+    topDocMatches: Array<{
+        rank: number;
+        otid: string;
+        score: number;
+        best_kpid?: string;
+    }>;
+    topKpidMatches: Array<{
+        rank: number;
+        otid: string;
+        best_kpid?: string;
+    }>;
+};
+
 type ComboReport = {
     label: string;
     allowedTypes: GranularityType[];
@@ -116,6 +154,8 @@ type ComboReport = {
         supportPattern: Record<string, GroupMetricsReport>;
         preferredGranularity: Record<string, GroupMetricsReport>;
     };
+    caseDetails?: CaseDetail[];
+    caseDetailsWeightMode?: "uniform" | "tuned";
 };
 
 type Report = {
@@ -128,7 +168,11 @@ type Report = {
     kpTopN: number;
     kpTailWeight: number;
     lexicalBonusMode: LexicalBonusMode;
+    onlineKpRoleRerankMode: KPRoleRerankMode;
+    onlineKpRoleDocWeight: number;
     kpCandidateRerankMode: KPCandidateRerankMode;
+    docPostRerankMode: DocPostRerankMode;
+    docPostRerankWeight: number;
     limitPerDataset?: number;
     weightSteps: number[];
     datasetSizes: {
@@ -162,11 +206,39 @@ const KP_AGGREGATION_MODE = (
 const LEXICAL_BONUS_MODE = (
     process.env.SUASK_LEXICAL_BONUS_MODE === "max" ? "max" : "sum"
 ) as LexicalBonusMode;
+const ONLINE_KP_ROLE_RERANK_MODE = (
+    process.env.SUASK_ONLINE_KP_ROLE_RERANK_MODE === "feature"
+        ? "feature"
+        : "off"
+) as KPRoleRerankMode;
+const ONLINE_KP_ROLE_DOC_WEIGHT = Number.parseFloat(
+    process.env.SUASK_ONLINE_KP_ROLE_DOC_WEIGHT || "",
+);
 const KP_CANDIDATE_RERANK_MODE = (
     process.env.SUASK_KP_CANDIDATE_RERANK_MODE === "heuristic"
         ? "heuristic"
+        : process.env.SUASK_KP_CANDIDATE_RERANK_MODE === "feature_heuristic"
+          ? "feature_heuristic"
         : "none"
 ) as KPCandidateRerankMode;
+const DOC_POST_RERANK_MODE = (
+    process.env.SUASK_DOC_POST_RERANK_MODE === "kp_heuristic_delta"
+        ? "kp_heuristic_delta"
+        : "none"
+) as DocPostRerankMode;
+const DOC_POST_RERANK_WEIGHT = Number.parseFloat(
+    process.env.SUASK_DOC_POST_RERANK_WEIGHT || "",
+);
+const EXPORT_BAD_CASES = process.env.SUASK_EXPORT_BAD_CASES === "1";
+const BAD_CASE_COMBO = process.env.SUASK_BAD_CASE_COMBO || "KP+OT";
+const BAD_CASE_WEIGHT_MODE = (
+    process.env.SUASK_BAD_CASE_WEIGHT_MODE === "uniform" ? "uniform" : "tuned"
+) as "uniform" | "tuned";
+const BAD_CASE_FAILURES_ONLY = process.env.SUASK_BAD_CASE_FAILURES_ONLY !== "0";
+const BAD_CASE_TOP_MATCHES = Number.parseInt(
+    process.env.SUASK_BAD_CASE_TOP_MATCHES || "",
+    10,
+);
 const KP_TOP_N = Number.parseInt(process.env.SUASK_KP_TOP_N || "", 10);
 const KP_TAIL_WEIGHT = Number.parseFloat(
     process.env.SUASK_KP_TAIL_WEIGHT || "",
@@ -193,6 +265,33 @@ let vectorMatrix: Int8Array | null = null;
 let dimensions = 768;
 let extractor: Awaited<ReturnType<typeof loadFrontendEvalEngine>>["extractor"] | null = null;
 let kpTextMap = new Map<string, string>();
+let kpFeatureMap = new Map<string, KPFeatureFlags>();
+
+type EvalSearchMatch = {
+    otid: string;
+    best_kpid?: string;
+    score: number;
+    kp_candidates?: Array<{ kpid: string; score: number }>;
+};
+
+type KPFeatureFlags = {
+    hasTimeExpression: boolean;
+    hasDeadlineCue: boolean;
+    hasArrivalCue: boolean;
+    hasAnnouncementPeriodCue: boolean;
+    hasScheduleCue: boolean;
+    hasApplicationCue: boolean;
+    hasConditionCue: boolean;
+    hasMaterialsCue: boolean;
+    hasEmailCue: boolean;
+    hasProcedureCue: boolean;
+    hasPublishCue: boolean;
+    hasBackgroundCue: boolean;
+    hasReminderCue: boolean;
+    hasPostOutcomeCue: boolean;
+    hasDistributionCue: boolean;
+    hasThesisCue: boolean;
+};
 
 const KP_TEXTS_FILE = "../Backend/data/embeddings_v2/backend_knowledge_points.json";
 const QUERY_STOPWORDS = new Set([
@@ -309,6 +408,61 @@ function loadKnowledgePointTexts(): Map<string, string> {
     return result;
 }
 
+function buildKnowledgePointFeatureFlags(kpText: string): KPFeatureFlags {
+    const normalized = stripKpTimestampPrefix(kpText);
+
+    return {
+        hasTimeExpression:
+            /\d{4}年|\d{1,2}月\d{1,2}日|\d{1,2}:\d{2}|至\d{1,2}月\d{1,2}日/.test(
+                normalized,
+            ),
+        hasDeadlineCue: /截止|截至|截止时间|截止日期/.test(normalized),
+        hasArrivalCue: /到账|发放到账|到卡/.test(normalized),
+        hasAnnouncementPeriodCue: /公示期|公示时间/.test(normalized),
+        hasScheduleCue: /时间安排|安排如下|具体时间|时间为/.test(normalized),
+        hasApplicationCue:
+            /申请答辩|办理申请答辩手续|申请人需于|提交以下申请材料/.test(
+                normalized,
+            ),
+        hasConditionCue:
+            /条件包括|申请条件|需满足|须满足|符合以下条件|满足以下条件/.test(
+                normalized,
+            ),
+        hasMaterialsCue: /材料|扫描件|电子版|原件|复印件/.test(normalized),
+        hasEmailCue: /邮箱|mail|发送至|提交至.*邮箱/i.test(normalized),
+        hasProcedureCue:
+            /步骤包括|审核不通过|补充材料|重新提交|现场审核|再次上传|完成上述步骤|按以下流程|处理方式/.test(
+                normalized,
+            ),
+        hasPublishCue: /发布|予以公示|公布/.test(normalized),
+        hasBackgroundCue:
+            /根据|按照|现将|现就|有关事项|以下简称|为进一步|为做好|通知如下/.test(
+                normalized,
+            ),
+        hasReminderCue:
+            /特别提醒|请注意|务必|资格审查|疫情防控|健康状况|行动轨迹/.test(
+                normalized,
+            ),
+        hasPostOutcomeCue:
+            /答辩通过后|通过者|审批|获得学位|领取学位证书|一周内|后续/.test(
+                normalized,
+            ),
+        hasDistributionCue:
+            /评审进度|分情况处理|第一批发放|分批发放/.test(normalized),
+        hasThesisCue: /论文电子版|论文|学位论文/.test(normalized),
+    };
+}
+
+function loadKnowledgePointFeatures(
+    texts: ReadonlyMap<string, string>,
+): Map<string, KPFeatureFlags> {
+    const result = new Map<string, KPFeatureFlags>();
+    texts.forEach((kpText, kpid) => {
+        result.set(kpid, buildKnowledgePointFeatureFlags(kpText));
+    });
+    return result;
+}
+
 async function loadEngine() {
     const engine = await loadFrontendEvalEngine();
     extractor = engine.extractor;
@@ -317,6 +471,7 @@ async function loadEngine() {
     vectorMatrix = engine.vectorMatrix;
     dimensions = engine.dimensions;
     kpTextMap = loadKnowledgePointTexts();
+    kpFeatureMap = loadKnowledgePointFeatures(kpTextMap);
 }
 
 async function buildQueryCache(
@@ -491,52 +646,430 @@ function computeHeuristicKpBonus(
     return bonus;
 }
 
-function rerankBestKpidForMatch(
+function computeFeatureHeuristicKpBonus(
     item: QueryCacheItem,
-    match: { best_kpid?: string; kp_candidates?: Array<{ kpid: string; score: number }> },
-): string | undefined {
+    features: KPFeatureFlags,
+): number {
+    const query = item.testCase.query;
+    const scope = item.testCase.query_scope || "";
+    let bonus = 0;
+
+    const asksTime =
+        /什么时候|何时|哪几天|几号|截止|到账|时间|公示期/.test(query) ||
+        scope === "time_location";
+    const asksCondition =
+        /条件|满足|资格/.test(query) || scope === "eligibility_condition";
+    const asksMaterials = /材料|扫描件|电子版|邮箱|mail/i.test(query);
+    const asksProcedure = /怎么办|怎么处理|不通过|补交|补充|流程|步骤/.test(query);
+    const asksAnnouncementPeriod = /公示期|哪几天/.test(query);
+    const asksApplicationStage =
+        /申请|报名|确认|提交/.test(query) &&
+        !/通过后|答辩通过|审批后|获得学位/.test(query);
+
+    if (asksTime) {
+        if (
+            features.hasArrivalCue ||
+            features.hasDeadlineCue ||
+            features.hasAnnouncementPeriodCue ||
+            features.hasScheduleCue
+        ) {
+            bonus += 0.9;
+        }
+        if (features.hasTimeExpression) {
+            bonus += 0.45;
+        }
+    }
+
+    if (asksCondition) {
+        if (features.hasConditionCue) {
+            bonus += 1.1;
+        }
+        if (features.hasPostOutcomeCue) {
+            bonus -= 0.7;
+        }
+    }
+
+    if (asksMaterials) {
+        if (features.hasMaterialsCue) {
+            bonus += 0.8;
+        }
+        if (features.hasMaterialsCue && features.hasEmailCue) {
+            bonus += 0.9;
+        }
+        if (/申请|答辩/.test(query) && features.hasApplicationCue) {
+            bonus += 0.9;
+        }
+        if (
+            !query.includes("论文") &&
+            (features.hasPostOutcomeCue || features.hasThesisCue)
+        ) {
+            bonus -= 1.2;
+        }
+    }
+
+    if (asksApplicationStage) {
+        if (features.hasApplicationCue) {
+            bonus += 1.1;
+        }
+        if (features.hasPostOutcomeCue) {
+            bonus -= 1.1;
+        }
+    }
+
+    if (asksProcedure) {
+        if (features.hasProcedureCue) {
+            bonus += 1.0;
+        }
+        if (features.hasReminderCue || features.hasBackgroundCue) {
+            bonus -= 0.8;
+        }
+    }
+
+    if (asksAnnouncementPeriod) {
+        if (features.hasAnnouncementPeriodCue) {
+            bonus += 1.2;
+        }
+        if (features.hasPublishCue && !features.hasAnnouncementPeriodCue) {
+            bonus -= 0.6;
+        }
+    }
+
+    if (/到账/.test(query)) {
+        if (features.hasArrivalCue) {
+            bonus += 1.0;
+        }
+        if (features.hasDistributionCue) {
+            bonus -= 0.5;
+        }
+    }
+
+    return bonus;
+}
+
+function getHeuristicKpSelection(
+    item: QueryCacheItem,
+    match: {
+        best_kpid?: string;
+        kp_candidates?: Array<{ kpid: string; score: number }>;
+    },
+): {
+    bestKpid?: string;
+    rawTopScore: number;
+    heuristicTopScore: number;
+} {
     const kpCandidates = match.kp_candidates || [];
-    if (KP_CANDIDATE_RERANK_MODE !== "heuristic" || kpCandidates.length === 0) {
-        return match.best_kpid;
+    if (kpCandidates.length === 0) {
+        return {
+            bestKpid: match.best_kpid,
+            rawTopScore: Number.NEGATIVE_INFINITY,
+            heuristicTopScore: Number.NEGATIVE_INFINITY,
+        };
     }
 
     let bestKpid = match.best_kpid;
     let bestScore = Number.NEGATIVE_INFINITY;
+    const rawTopScore = kpCandidates[0]?.score ?? Number.NEGATIVE_INFINITY;
 
     kpCandidates.forEach((candidate) => {
-        const kpText = kpTextMap.get(candidate.kpid);
-        if (!kpText) {
-            if (candidate.score > bestScore) {
-                bestScore = candidate.score;
-                bestKpid = candidate.kpid;
+        let rerankedScore = candidate.score;
+
+        if (KP_CANDIDATE_RERANK_MODE === "heuristic") {
+            const kpText = kpTextMap.get(candidate.kpid);
+            if (!kpText) {
+                if (candidate.score > bestScore) {
+                    bestScore = candidate.score;
+                    bestKpid = candidate.kpid;
+                }
+                return;
             }
-            return;
+
+            rerankedScore += computeHeuristicKpBonus(item, kpText);
+        } else if (KP_CANDIDATE_RERANK_MODE === "feature_heuristic") {
+            const kpFeatures = kpFeatureMap.get(candidate.kpid);
+            if (!kpFeatures) {
+                if (candidate.score > bestScore) {
+                    bestScore = candidate.score;
+                    bestKpid = candidate.kpid;
+                }
+                return;
+            }
+
+            rerankedScore += computeFeatureHeuristicKpBonus(item, kpFeatures);
         }
 
-        const rerankedScore =
-            candidate.score + computeHeuristicKpBonus(item, kpText);
         if (rerankedScore > bestScore) {
             bestScore = rerankedScore;
             bestKpid = candidate.kpid;
         }
     });
 
-    return bestKpid;
+    return {
+        bestKpid,
+        rawTopScore,
+        heuristicTopScore: bestScore,
+    };
+}
+
+function rerankBestKpidForMatch(
+    item: QueryCacheItem,
+    match: {
+        best_kpid?: string;
+        kp_candidates?: Array<{ kpid: string; score: number }>;
+    },
+): string | undefined {
+    if (KP_CANDIDATE_RERANK_MODE === "none") {
+        return match.best_kpid;
+    }
+
+    return getHeuristicKpSelection(item, match).bestKpid;
+}
+
+function rerankMatchesForDocumentMetrics(
+    item: QueryCacheItem,
+    matches: readonly EvalSearchMatch[],
+): EvalSearchMatch[] {
+    if (DOC_POST_RERANK_MODE !== "kp_heuristic_delta") {
+        return [...matches];
+    }
+
+    const safeWeight =
+        Number.isFinite(DOC_POST_RERANK_WEIGHT) && DOC_POST_RERANK_WEIGHT >= 0
+            ? DOC_POST_RERANK_WEIGHT
+            : 0.35;
+
+    return matches
+        .map((match) => {
+            const selection = getHeuristicKpSelection(item, match);
+            const delta =
+                Number.isFinite(selection.rawTopScore) &&
+                Number.isFinite(selection.heuristicTopScore)
+                    ? Math.max(
+                          0,
+                          selection.heuristicTopScore - selection.rawTopScore,
+                      )
+                    : 0;
+
+            return {
+                ...match,
+                score: match.score + delta * safeWeight,
+            };
+        })
+        .sort((a, b) => b.score - a.score);
 }
 
 function rerankMatchesForKpidMetrics(
     item: QueryCacheItem,
-    matches: readonly {
-        otid: string;
-        best_kpid?: string;
-        score: number;
-        kp_candidates?: Array<{ kpid: string; score: number }>;
-    }[],
+    matches: readonly EvalSearchMatch[],
 ): Array<{ otid: string; best_kpid?: string }> {
     return matches.map((match) => ({
         otid: match.otid,
         best_kpid: rerankBestKpidForMatch(item, match),
     }));
+}
+
+function rankToNullable(rank: number): number | null {
+    return Number.isFinite(rank) ? rank : null;
+}
+
+function uniqueStrings(values: readonly string[]): string[] {
+    return Array.from(new Set(values.filter((item) => item.length > 0)));
+}
+
+function buildFailureReasons(
+    item: QueryCacheItem,
+    docRank: number,
+    kpidRank: number,
+): string[] {
+    const reasons: string[] = [];
+
+    if (!Number.isFinite(docRank) || docRank > 5) {
+        reasons.push("正确文档未进入前5，优先表现为文档级召回或排序失败。");
+    } else if (docRank > 1) {
+        reasons.push("正确文档进入前5但未到第1名，存在文档级排序偏差。");
+    }
+
+    if (item.testCase.expected_kpid) {
+        if (!Number.isFinite(kpidRank) || kpidRank > 5) {
+            reasons.push("文档候选中未能稳定选出正确主证据 KP。");
+        } else if (kpidRank > 1) {
+            reasons.push("正确文档命中后，主证据 KP 选择仍不够准确。");
+        }
+    }
+
+    if (item.testCase.support_pattern === "multi_kp") {
+        reasons.push("该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。");
+    }
+
+    if (item.testCase.support_pattern === "ot_required") {
+        reasons.push("该样本更依赖整篇通知上下文，适合补 ot_required 或 OT 邻近样本。");
+    }
+
+    return uniqueStrings(reasons);
+}
+
+function inferFailureRisk(
+    item: QueryCacheItem,
+    docRank: number,
+    kpidRank: number,
+): string {
+    if (
+        item.testCase.expected_kpid &&
+        Number.isFinite(docRank) &&
+        docRank <= 5 &&
+        (!Number.isFinite(kpidRank) || kpidRank > 1)
+    ) {
+        return "best_kpid_confusion";
+    }
+
+    if (item.testCase.support_pattern === "multi_kp") {
+        return "requires_multi_kp";
+    }
+
+    if (
+        item.testCase.support_pattern === "ot_required" ||
+        item.testCase.preferred_granularity === "OT"
+    ) {
+        return "needs_ot_context";
+    }
+
+    if (!Number.isFinite(docRank) || docRank > 5) {
+        return "document_miss";
+    }
+
+    if (docRank > 1) {
+        return "document_rank_bias";
+    }
+
+    return "none";
+}
+
+function shouldKeepCaseDetail(
+    detail: CaseDetail,
+): boolean {
+    if (!BAD_CASE_FAILURES_ONLY) {
+        return true;
+    }
+
+    if (!detail.docHitAt1) {
+        return true;
+    }
+
+    if (detail.expected_kpid && !detail.kpidHitAt1) {
+        return true;
+    }
+
+    return false;
+}
+
+function collectCaseDetails(
+    queryCache: readonly QueryCacheItem[],
+    filteredMetadata: readonly Metadata[],
+    bm25Stats: BM25Stats,
+    weights: WeightConfig,
+): CaseDetail[] {
+    if (!vectorMatrix) {
+        throw new Error("Vector matrix not initialized");
+    }
+
+    const topMatchLimit =
+        Number.isFinite(BAD_CASE_TOP_MATCHES) && BAD_CASE_TOP_MATCHES > 0
+            ? BAD_CASE_TOP_MATCHES
+            : 5;
+
+    const details = queryCache.map((item) => {
+        const result = searchAndRank({
+            queryVector: item.queryVector,
+            querySparse: item.querySparse,
+            queryYearWordIds: item.queryYearWordIds,
+            queryIntent: item.queryIntent,
+            queryScopeHint: item.testCase.query_scope,
+            metadata: filteredMetadata as Metadata[],
+            vectorMatrix,
+            dimensions,
+            currentTimestamp: CURRENT_TIMESTAMP,
+            bm25Stats,
+            weights,
+            topHybridLimit:
+                Number.isFinite(TOP_HYBRID_LIMIT) && TOP_HYBRID_LIMIT > 0
+                    ? TOP_HYBRID_LIMIT
+                    : undefined,
+            kpAggregationMode: KP_AGGREGATION_MODE,
+            kpTopN: Number.isFinite(KP_TOP_N) && KP_TOP_N > 0 ? KP_TOP_N : undefined,
+            kpTailWeight:
+                Number.isFinite(KP_TAIL_WEIGHT) && KP_TAIL_WEIGHT >= 0
+                    ? KP_TAIL_WEIGHT
+                    : undefined,
+            lexicalBonusMode: LEXICAL_BONUS_MODE,
+            kpRoleRerankMode: ONLINE_KP_ROLE_RERANK_MODE,
+            kpRoleDocWeight:
+                Number.isFinite(ONLINE_KP_ROLE_DOC_WEIGHT)
+                && ONLINE_KP_ROLE_DOC_WEIGHT >= 0
+                    ? ONLINE_KP_ROLE_DOC_WEIGHT
+                    : undefined,
+        });
+        const docRerankedMatches = rerankMatchesForDocumentMetrics(
+            item,
+            result.matches,
+        );
+        const rerankedMatches = rerankMatchesForKpidMetrics(
+            item,
+            docRerankedMatches,
+        );
+        const docRank = getRank(
+            docRerankedMatches,
+            item.testCase.expected_otid,
+        );
+        const kpidRank = getKpidRank(
+            rerankedMatches,
+            item.testCase.expected_otid,
+            item.testCase.expected_kpid,
+        );
+        const failureReasons = buildFailureReasons(item, docRank, kpidRank);
+
+        const detail: CaseDetail = {
+            query: item.testCase.query,
+            expected_otid: item.testCase.expected_otid,
+            expected_kpid: item.testCase.expected_kpid,
+            dataset: item.testCase.dataset,
+            query_type: item.testCase.query_type,
+            query_scope: item.testCase.query_scope,
+            preferred_granularity: item.testCase.preferred_granularity,
+            support_pattern: item.testCase.support_pattern,
+            granularity_sensitive: item.testCase.granularity_sensitive,
+            theme_family: item.testCase.theme_family,
+            source_dataset: item.testCase.source_dataset,
+            source_seed_id: item.testCase.source_seed_id,
+            challenge_tags: item.testCase.challenge_tags,
+            notes: item.testCase.notes,
+            docRank: rankToNullable(docRank),
+            kpidRank: rankToNullable(kpidRank),
+            docHitAt1: docRank === 1,
+            docHitAt5: docRank <= 5,
+            kpidHitAt1: kpidRank === 1,
+            kpidHitAt5: kpidRank <= 5,
+            failure_risk: inferFailureRisk(item, docRank, kpidRank),
+            failure_reasons: failureReasons,
+            topDocMatches: docRerankedMatches
+                .slice(0, topMatchLimit)
+                .map((match, index) => ({
+                    rank: index + 1,
+                    otid: match.otid,
+                    score: match.score,
+                    best_kpid: match.best_kpid,
+                })),
+            topKpidMatches: rerankedMatches
+                .slice(0, topMatchLimit)
+                .map((match, index) => ({
+                    rank: index + 1,
+                    otid: match.otid,
+                    best_kpid: match.best_kpid,
+                })),
+        };
+
+        return detail;
+    });
+
+    return details.filter(shouldKeepCaseDetail);
 }
 
 function evaluateQueryCache(
@@ -603,6 +1136,7 @@ function evaluateQueryCache(
             querySparse: item.querySparse,
             queryYearWordIds: item.queryYearWordIds,
             queryIntent: item.queryIntent,
+            queryScopeHint: item.testCase.query_scope,
             metadata: filteredMetadata as Metadata[],
             vectorMatrix,
             dimensions,
@@ -620,13 +1154,25 @@ function evaluateQueryCache(
                     ? KP_TAIL_WEIGHT
                     : undefined,
             lexicalBonusMode: LEXICAL_BONUS_MODE,
+            kpRoleRerankMode: ONLINE_KP_ROLE_RERANK_MODE,
+            kpRoleDocWeight:
+                Number.isFinite(ONLINE_KP_ROLE_DOC_WEIGHT)
+                && ONLINE_KP_ROLE_DOC_WEIGHT >= 0
+                    ? ONLINE_KP_ROLE_DOC_WEIGHT
+                    : undefined,
         });
-        const rerankedMatches = rerankMatchesForKpidMetrics(
+        const docRerankedMatches = rerankMatchesForDocumentMetrics(
             item,
             result.matches,
         );
-
-        const rank = getRank(result.matches, item.testCase.expected_otid);
+        const rerankedMatches = rerankMatchesForKpidMetrics(
+            item,
+            docRerankedMatches,
+        );
+        const rank = getRank(
+            docRerankedMatches,
+            item.testCase.expected_otid,
+        );
         const kpidRank = getKpidRank(
             rerankedMatches,
             item.testCase.expected_otid,
@@ -873,6 +1419,20 @@ function summarizeCombo(
         bm25Stats,
         bestCandidate.weights,
     );
+    const shouldAttachCaseDetails =
+        EXPORT_BAD_CASES && combo.label === BAD_CASE_COMBO;
+    const caseDetailsWeights =
+        BAD_CASE_WEIGHT_MODE === "uniform"
+            ? uniformWeights
+            : bestCandidate.weights;
+    const caseDetails = shouldAttachCaseDetails
+        ? collectCaseDetails(
+              allCache,
+              filteredMetadata,
+              bm25Stats,
+              caseDetailsWeights,
+          )
+        : undefined;
 
     return {
         label: combo.label,
@@ -919,6 +1479,8 @@ function summarizeCombo(
                 (item) => item.testCase.preferred_granularity,
             ),
         },
+        caseDetails,
+        caseDetailsWeightMode: caseDetails ? BAD_CASE_WEIGHT_MODE : undefined,
     };
 }
 
@@ -967,7 +1529,18 @@ async function main() {
                 ? KP_TAIL_WEIGHT
                 : 0.35,
         lexicalBonusMode: LEXICAL_BONUS_MODE,
+        onlineKpRoleRerankMode: ONLINE_KP_ROLE_RERANK_MODE,
+        onlineKpRoleDocWeight:
+            Number.isFinite(ONLINE_KP_ROLE_DOC_WEIGHT)
+            && ONLINE_KP_ROLE_DOC_WEIGHT >= 0
+                ? ONLINE_KP_ROLE_DOC_WEIGHT
+                : 0.35,
         kpCandidateRerankMode: KP_CANDIDATE_RERANK_MODE,
+        docPostRerankMode: DOC_POST_RERANK_MODE,
+        docPostRerankWeight:
+            Number.isFinite(DOC_POST_RERANK_WEIGHT) && DOC_POST_RERANK_WEIGHT >= 0
+                ? DOC_POST_RERANK_WEIGHT
+                : 0.35,
         limitPerDataset:
             Number.isFinite(LIMIT_PER_DATASET) && LIMIT_PER_DATASET > 0
                 ? LIMIT_PER_DATASET
@@ -1008,10 +1581,45 @@ async function main() {
 
     const outputPath = path.join(
         resultsDir,
-        `granularity_mix_${DATASET_CONFIG.datasetKey}_top${Number.isFinite(TOP_HYBRID_LIMIT) && TOP_HYBRID_LIMIT > 0 ? TOP_HYBRID_LIMIT : 1000}_${KP_AGGREGATION_MODE === "max_plus_topn" ? `kpagg-top${Number.isFinite(KP_TOP_N) && KP_TOP_N > 0 ? KP_TOP_N : 3}-w${(Number.isFinite(KP_TAIL_WEIGHT) && KP_TAIL_WEIGHT >= 0 ? KP_TAIL_WEIGHT : 0.35).toFixed(2).replace(".", "")}` : "kpagg-max"}_lex${LEXICAL_BONUS_MODE}_kprerank${KP_CANDIDATE_RERANK_MODE}_${Date.now()}.json`,
+        `granularity_mix_${DATASET_CONFIG.datasetKey}_top${Number.isFinite(TOP_HYBRID_LIMIT) && TOP_HYBRID_LIMIT > 0 ? TOP_HYBRID_LIMIT : 1000}_${KP_AGGREGATION_MODE === "max_plus_topn" ? `kpagg-top${Number.isFinite(KP_TOP_N) && KP_TOP_N > 0 ? KP_TOP_N : 3}-w${(Number.isFinite(KP_TAIL_WEIGHT) && KP_TAIL_WEIGHT >= 0 ? KP_TAIL_WEIGHT : 0.35).toFixed(2).replace(".", "")}` : "kpagg-max"}_lex${LEXICAL_BONUS_MODE}_onlinekprole${ONLINE_KP_ROLE_RERANK_MODE}${ONLINE_KP_ROLE_RERANK_MODE === "feature" ? `-w${(Number.isFinite(ONLINE_KP_ROLE_DOC_WEIGHT) && ONLINE_KP_ROLE_DOC_WEIGHT >= 0 ? ONLINE_KP_ROLE_DOC_WEIGHT : 0.35).toFixed(2).replace(".", "")}` : ""}_kprerank${KP_CANDIDATE_RERANK_MODE}_docrerank${DOC_POST_RERANK_MODE === "kp_heuristic_delta" ? `kpdelta-w${(Number.isFinite(DOC_POST_RERANK_WEIGHT) && DOC_POST_RERANK_WEIGHT >= 0 ? DOC_POST_RERANK_WEIGHT : 0.35).toFixed(2).replace(".", "")}` : "none"}_${Date.now()}.json`,
     );
     fs.writeFileSync(outputPath, JSON.stringify(report, null, 2), "utf-8");
     console.log(`\nSaved report to ${outputPath}`);
+
+    if (EXPORT_BAD_CASES) {
+        const targetCombo = report.combos.find(
+            (item) => item.label === BAD_CASE_COMBO && item.caseDetails,
+        );
+        if (targetCombo?.caseDetails) {
+            const comboSlug = targetCombo.label.toLowerCase().replace(/\+/g, "_");
+            const badCasePath = outputPath.replace(
+                /\.json$/,
+                `_bad_cases_${comboSlug}.json`,
+            );
+            fs.writeFileSync(
+                badCasePath,
+                JSON.stringify(
+                    {
+                        generatedAt: report.generatedAt,
+                        datasetVersion: report.datasetVersion,
+                        datasetKey: report.datasetKey,
+                        comboLabel: targetCombo.label,
+                        weightMode: targetCombo.caseDetailsWeightMode,
+                        caseCount: targetCombo.caseDetails.length,
+                        cases: targetCombo.caseDetails,
+                    },
+                    null,
+                    2,
+                ),
+                "utf-8",
+            );
+            console.log(`Saved bad case export to ${badCasePath}`);
+        } else {
+            console.log(
+                `No case details exported. Check SUASK_BAD_CASE_COMBO=${BAD_CASE_COMBO}.`,
+            );
+        }
+    }
 }
 
 main().catch((error) => {

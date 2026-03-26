@@ -34,6 +34,7 @@ export interface Metadata {
     intent_ids?: string[];
     degree_levels?: string[];
     event_types?: string[];
+    kp_role_tags?: string[];
 }
 
 export interface SearchResult {
@@ -80,6 +81,7 @@ export interface ParsedQueryIntent {
 
 export type KPAggregationMode = "max" | "max_plus_topn";
 export type LexicalBonusMode = "sum" | "max";
+export type KPRoleRerankMode = "off" | "feature";
 
 export interface IntentVectorItem {
     intent_id: string;
@@ -102,6 +104,8 @@ const BM25_K1 = 1.2;
 const BM25_B = 0.4;
 const EVENT_TYPE_MISMATCH_PENALTY = 0.95;
 const LATEST_YEAR_BOOST_BASE = 0.98;
+const DEFAULT_KP_ROLE_DOC_WEIGHT = 0.35;
+const DEFAULT_KP_ROLE_CANDIDATE_LIMIT = 5;
 
 
 
@@ -419,6 +423,200 @@ function computeBaseScore(
     return maxComponent + unionBonus;
 }
 
+type QueryRoleSignals = {
+    asksTime: boolean;
+    asksCondition: boolean;
+    asksMaterials: boolean;
+    asksProcedure: boolean;
+    asksAnnouncementPeriod: boolean;
+    asksApplicationStage: boolean;
+    mentionsThesis: boolean;
+};
+
+function hasKpRoleTag(
+    candidate: Pick<KPCandidate, "kp_role_tags"> | undefined,
+    tag: string,
+): boolean {
+    return candidate?.kp_role_tags?.includes(tag) === true;
+}
+
+function deriveQueryRoleSignals(
+    rawQuery: string,
+    queryScopeHint?: string,
+): QueryRoleSignals {
+    return {
+        asksTime:
+            /什么时候|何时|哪几天|几号|截止|到账|时间|公示期/.test(
+                rawQuery,
+            ) || queryScopeHint === "time_location",
+        asksCondition:
+            /条件|满足|资格/.test(rawQuery) ||
+            queryScopeHint === "eligibility_condition",
+        asksMaterials: /材料|扫描件|电子版|邮箱|mail/i.test(rawQuery),
+        asksProcedure: /怎么办|怎么处理|不通过|补交|补充|流程|步骤/.test(
+            rawQuery,
+        ),
+        asksAnnouncementPeriod: /公示期|哪几天/.test(rawQuery),
+        asksApplicationStage:
+            /申请|报名|确认|提交/.test(rawQuery) &&
+            !/通过后|答辩通过|审批后|获得学位/.test(rawQuery),
+        mentionsThesis: /论文/.test(rawQuery),
+    };
+}
+
+function computeKpRoleBonus(
+    candidate: KPCandidate,
+    signals: QueryRoleSignals,
+    rawQuery: string,
+): number {
+    let bonus = 0;
+
+    if (signals.asksTime) {
+        if (
+            hasKpRoleTag(candidate, "arrival")
+            || hasKpRoleTag(candidate, "deadline")
+            || hasKpRoleTag(candidate, "announcement_period")
+            || hasKpRoleTag(candidate, "schedule")
+        ) {
+            bonus += 0.9;
+        }
+        if (hasKpRoleTag(candidate, "time_expression")) {
+            bonus += 0.45;
+        }
+    }
+
+    if (signals.asksCondition) {
+        if (hasKpRoleTag(candidate, "condition")) {
+            bonus += 1.1;
+        }
+        if (hasKpRoleTag(candidate, "post_outcome")) {
+            bonus -= 0.7;
+        }
+    }
+
+    if (signals.asksMaterials) {
+        if (hasKpRoleTag(candidate, "materials")) {
+            bonus += 0.8;
+        }
+        if (
+            hasKpRoleTag(candidate, "materials")
+            && hasKpRoleTag(candidate, "email")
+        ) {
+            bonus += 0.9;
+        }
+        if (/申请|答辩/.test(rawQuery) && hasKpRoleTag(candidate, "application_stage")) {
+            bonus += 0.9;
+        }
+        if (
+            !signals.mentionsThesis
+            && (hasKpRoleTag(candidate, "post_outcome")
+                || hasKpRoleTag(candidate, "thesis"))
+        ) {
+            bonus -= 1.2;
+        }
+    }
+
+    if (signals.asksApplicationStage) {
+        if (hasKpRoleTag(candidate, "application_stage")) {
+            bonus += 1.1;
+        }
+        if (hasKpRoleTag(candidate, "post_outcome")) {
+            bonus -= 1.1;
+        }
+    }
+
+    if (signals.asksProcedure) {
+        if (hasKpRoleTag(candidate, "procedure")) {
+            bonus += 1.0;
+        }
+        if (
+            hasKpRoleTag(candidate, "reminder")
+            || hasKpRoleTag(candidate, "background")
+        ) {
+            bonus -= 0.8;
+        }
+    }
+
+    if (signals.asksAnnouncementPeriod) {
+        if (hasKpRoleTag(candidate, "announcement_period")) {
+            bonus += 1.2;
+        }
+        if (
+            hasKpRoleTag(candidate, "publish")
+            && !hasKpRoleTag(candidate, "announcement_period")
+        ) {
+            bonus -= 0.6;
+        }
+    }
+
+    if (/到账/.test(rawQuery)) {
+        if (hasKpRoleTag(candidate, "arrival")) {
+            bonus += 1.0;
+        }
+        if (hasKpRoleTag(candidate, "distribution")) {
+            bonus -= 0.5;
+        }
+    }
+
+    return bonus;
+}
+
+function rerankKpCandidatesByRole(params: {
+    kpCandidates: readonly KPCandidate[];
+    bestKpid?: string;
+    rawQuery: string;
+    queryScopeHint?: string;
+    mode?: KPRoleRerankMode;
+}): {
+    bestKpid?: string;
+    orderedCandidates: KPCandidate[];
+    docScoreDelta: number;
+} {
+    const {
+        kpCandidates,
+        bestKpid,
+        rawQuery,
+        queryScopeHint,
+        mode = "off",
+    } = params;
+
+    const orderedCandidates = [...kpCandidates];
+    if (mode !== "feature" || orderedCandidates.length === 0) {
+        return {
+            bestKpid,
+            orderedCandidates,
+            docScoreDelta: 0,
+        };
+    }
+
+    const rerankWindow = orderedCandidates.slice(
+        0,
+        DEFAULT_KP_ROLE_CANDIDATE_LIMIT,
+    );
+    const rawTopScore = rerankWindow[0]?.score ?? Number.NEGATIVE_INFINITY;
+    const signals = deriveQueryRoleSignals(rawQuery, queryScopeHint);
+    const reranked = rerankWindow
+        .map((candidate) => ({
+            candidate,
+            rerankedScore:
+                candidate.score + computeKpRoleBonus(candidate, signals, rawQuery),
+        }))
+        .sort((a, b) => b.rerankedScore - a.rerankedScore);
+
+    const topCandidate = reranked[0];
+    return {
+        bestKpid: topCandidate?.candidate.kpid || bestKpid,
+        orderedCandidates: [
+            ...reranked.map((item) => item.candidate),
+            ...orderedCandidates.slice(rerankWindow.length),
+        ],
+        docScoreDelta:
+            Number.isFinite(rawTopScore) && Number.isFinite(topCandidate?.rerankedScore)
+                ? Math.max(0, topCandidate.rerankedScore - rawTopScore)
+                : 0,
+    };
+}
+
 function applyLexicalBonusBoost(boost: number, lexicalBonus: number): number {
     if (lexicalBonus <= 0) {
         return boost;
@@ -630,6 +828,7 @@ export function searchAndRank(params: {
     querySparse?: Record<number, number>;
     queryYearWordIds?: number[];
     queryIntent?: ParsedQueryIntent;
+    queryScopeHint?: string;
     metadata: Metadata[];
     vectorMatrix: Int8Array | Float32Array;
     dimensions: number;
@@ -642,6 +841,8 @@ export function searchAndRank(params: {
     kpTopN?: number;
     kpTailWeight?: number;
     lexicalBonusMode?: LexicalBonusMode;
+    kpRoleRerankMode?: KPRoleRerankMode;
+    kpRoleDocWeight?: number;
 }): SearchRankOutput {
     const {
         queryVector,
@@ -654,12 +855,15 @@ export function searchAndRank(params: {
         weights = DEFAULT_WEIGHTS,
         queryYearWordIds,
         queryIntent,
+        queryScopeHint,
         candidateIndices,
         topHybridLimit = 1000,
         kpAggregationMode = "max",
         kpTopN = 3,
         kpTailWeight = 0.35,
         lexicalBonusMode = "sum",
+        kpRoleRerankMode = "off",
+        kpRoleDocWeight = DEFAULT_KP_ROLE_DOC_WEIGHT,
     } = params;
 
     const n = metadata.length;
@@ -809,6 +1013,13 @@ export function searchAndRank(params: {
             kpTopN,
             kpTailWeight,
         });
+        const kpRoleSelection = rerankKpCandidatesByRole({
+            kpCandidates: scores.kp_candidates,
+            bestKpid: scores.best_kpid,
+            rawQuery: queryIntent?.rawQuery || "",
+            queryScopeHint,
+            mode: kpRoleRerankMode,
+        });
         const boost = computeBoostMultiplier({
             otid,
             scores,
@@ -821,9 +1032,9 @@ export function searchAndRank(params: {
 
         finalRanking.push({
             otid,
-            score: finalScore * boost,
-            best_kpid: scores.best_kpid,
-            kp_candidates: scores.kp_candidates.slice(0, 5),
+            score: finalScore * boost + kpRoleSelection.docScoreDelta * kpRoleDocWeight,
+            best_kpid: kpRoleSelection.bestKpid,
+            kp_candidates: kpRoleSelection.orderedCandidates.slice(0, 5),
         });
     }
 

@@ -1,0 +1,111 @@
+{
+  "degree_levels": ["本科", "硕士", "博士"],
+  "event_type_table": [
+    "招生章程",
+    "报名通知",
+    "考试安排",
+    "复试通知",
+    "录取公示",
+    "资格要求",
+    "材料提交",
+    "推免资格公示",
+    "推免通知",
+    "推免实施办法",
+    "非招生通知"
+  ],
+  "latest_query_hints": ["最新", "最近", "当前", "今年", "本年"],
+  "historical_query_hints": ["往年", "历年", "历史", "以前", "去年", "前年", "往届", "旧版"],
+  "intent_vector_table": [
+    {
+      "intent_id": "ug_recommend_admission",
+      "topic_id": "undergraduate_admission",
+      "intent_name": "本科保送生",
+      "aliases": ["保送生", "外语类保送生", "竞赛保送"],
+      "negative_intents": ["master_recommend_exemption", "master_unified_exam"],
+      "related_intents": []
+    },
+    {
+      "intent_id": "master_recommend_exemption",
+      "topic_id": "graduate_admission",
+      "intent_name": "推免",
+      "aliases": ["保研", "推免", "推荐免试", "推免生", "免试研究生", "免试攻读研究生", "推荐资格", "预推免"],
+      "negative_intents": ["ug_recommend_admission", "master_unified_exam"],
+      "related_intents": ["summer_camp", "pre_recommend"]
+    },
+    {
+      "intent_id": "master_unified_exam",
+      "topic_id": "graduate_admission",
+      "intent_name": "统考硕士",
+      "aliases": ["考研", "硕士研究生招生考试", "全国硕士研究生招生考试", "硕士统考", "初试", "复试", "研招"],
+      "negative_intents": ["ug_recommend_admission", "master_recommend_exemption"],
+      "related_intents": ["master_adjustment"]
+    },
+    {
+      "intent_id": "master_adjustment",
+      "topic_id": "graduate_admission",
+      "intent_name": "调剂",
+      "aliases": ["调剂", "硕士调剂", "接受调剂", "调剂复试"],
+      "negative_intents": [],
+      "related_intents": ["master_unified_exam"]
+    },
+    {
+      "intent_id": "phd_apply_assessment",
+      "topic_id": "graduate_admission",
+      "intent_name": "博士申请考核",
+      "aliases": ["申请考核", "申请-考核", "博士申请考核"],
+      "negative_intents": ["phd_general_exam"],
+      "related_intents": []
+    },
+    {
+      "intent_id": "phd_general_exam",
+      "topic_id": "graduate_admission",
+      "intent_name": "博士普通招考",
+      "aliases": ["博士招考", "博士报名", "博士考试", "公开招考博士", "博士研究生招生"],
+      "negative_intents": ["phd_apply_assessment"],
+      "related_intents": []
+    },
+    {
+      "intent_id": "summer_camp",
+      "topic_id": "graduate_admission",
+      "intent_name": "夏令营",
+      "aliases": ["夏令营", "优秀大学生夏令营"],
+      "negative_intents": [],
+      "related_intents": ["master_recommend_exemption"]
+    },
+    {
+      "intent_id": "pre_recommend",
+      "topic_id": "graduate_admission",
+      "intent_name": "预推免",
+      "aliases": ["预推免", "预推免报名", "预推免考核"],
+      "negative_intents": ["master_unified_exam"],
+      "related_intents": ["master_recommend_exemption", "summer_camp"]
+    }
+  ],
+  "topic_configs": [
+    {
+      "topic_id": "graduate_admission",
+      "aliases": ["保研", "推免", "推荐免试", "考研", "研招", "研究生招生", "调剂", "夏令营"],
+      "prefer_latest": true
+    },
+    {
+      "topic_id": "undergraduate_admission",
+      "aliases": ["保送生", "外语类保送生", "强基计划", "综合评价", "本科招生"],
+      "prefer_latest": true
+    },
+    {
+      "topic_id": "student_funding",
+      "aliases": ["奖学金", "助学金", "资助", "补助", "评奖"],
+      "prefer_latest": true
+    },
+    {
+      "topic_id": "academic_affairs",
+      "aliases": ["选课", "转专业", "培养方案", "课程"],
+      "prefer_latest": true
+    },
+    {
+      "topic_id": "dining_services",
+      "aliases": ["吃饭", "食堂", "饭堂", "餐厅", "用餐", "喝水", "饮水", "饮用水"],
+      "prefer_latest": false
+    }
+  ]
+}

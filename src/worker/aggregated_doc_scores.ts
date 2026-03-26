@@ -11,11 +11,13 @@ type AggregatableMetadata = {
     intent_ids?: string[];
     degree_levels?: string[];
     event_types?: string[];
+    kp_role_tags?: string[];
 };
 
 export interface KPCandidate {
     kpid: string;
     score: number;
+    kp_role_tags?: string[];
 }
 
 export interface AggregatedDocScores {
@@ -103,7 +105,7 @@ export function mergeAggregatedDocMetadata(
 
 export function applyScoreToAggregatedDocScores(
     target: AggregatedDocScores,
-    meta: Pick<AggregatableMetadata, "id" | "type">,
+    meta: Pick<AggregatableMetadata, "id" | "type" | "kp_role_tags">,
     score: number,
 ) {
     if (meta.type === "Q") {
@@ -117,7 +119,11 @@ export function applyScoreToAggregatedDocScores(
         if (target.kp_scores.length > MAX_TRACKED_KP_SCORES) {
             target.kp_scores.length = MAX_TRACKED_KP_SCORES;
         }
-        target.kp_candidates.push({ kpid: meta.id, score });
+        target.kp_candidates.push({
+            kpid: meta.id,
+            score,
+            kp_role_tags: meta.kp_role_tags,
+        });
         target.kp_candidates.sort((a, b) => b.score - a.score);
         if (target.kp_candidates.length > MAX_TRACKED_KP_SCORES) {
             target.kp_candidates.length = MAX_TRACKED_KP_SCORES;
