@@ -26,7 +26,8 @@ import {
 import { fmmTokenize } from '../src/worker/fmm_tokenize.ts';
 import {
     DEFAULT_QUERY_EMBED_BATCH_SIZE,
-    loadDataset,
+    loadDatasetSources,
+    resolveEvalDatasetConfig,
     type EvalDatasetCase,
 } from './eval_shared.ts';
 import {
@@ -196,14 +197,11 @@ type SplitReport = {
 
 const ARTICLE_SOURCE_FILE = '../Backend/data/embeddings_v2/flattened_json.json';
 const DATASET_VERSION = process.env.SUASK_EVAL_DATASET_VERSION || 'v2';
-const DATASET_DIR = `../Backend/test/test_dataset_${DATASET_VERSION}`;
-const TUNE_DATASETS = [
-    `${DATASET_DIR}/test_dataset_standard.json`,
-    `${DATASET_DIR}/test_dataset_short_keyword.json`,
-] as const;
-const HOLDOUT_DATASETS = [
-    `${DATASET_DIR}/test_dataset_situational.json`,
-] as const;
+const DATASET_FILE = process.env.SUASK_EVAL_DATASET_FILE;
+const DATASET_CONFIG = resolveEvalDatasetConfig({
+    datasetVersion: DATASET_VERSION,
+    datasetFile: DATASET_FILE,
+});
 
 const FETCH_DOC_LIMIT = 15;
 const CHUNK_EMBED_BATCH_SIZE = 24;
@@ -1021,8 +1019,8 @@ async function main() {
     const start = performance.now();
     await loadEngine();
 
-    const tuneCases = TUNE_DATASETS.flatMap(loadDataset);
-    const holdoutCases = HOLDOUT_DATASETS.flatMap(loadDataset);
+    const tuneCases = loadDatasetSources(DATASET_CONFIG.tuneSources);
+    const holdoutCases = loadDatasetSources(DATASET_CONFIG.holdoutSources);
     const allCases = [...tuneCases, ...holdoutCases];
 
     const searchCache = await buildSearchCache(allCases);
@@ -1045,6 +1043,9 @@ async function main() {
 
     const report = {
         generatedAt: new Date().toISOString(),
+        datasetVersion: DATASET_CONFIG.datasetVersion,
+        datasetMode: DATASET_CONFIG.datasetMode,
+        datasetKey: DATASET_CONFIG.datasetKey,
         runtimeMs: performance.now() - start,
         datasets: {
             tune: tuneCases.map((item) => item.dataset),
@@ -1062,7 +1063,7 @@ async function main() {
     fs.mkdirSync(resultDir, { recursive: true });
     const outputPath = path.join(
         resultDir,
-        `rerank_calibration_${DATASET_VERSION}_${Date.now()}.json`,
+        `rerank_calibration_${DATASET_CONFIG.datasetKey}_${Date.now()}.json`,
     );
     fs.writeFileSync(outputPath, JSON.stringify(report, null, 2), 'utf-8');
 

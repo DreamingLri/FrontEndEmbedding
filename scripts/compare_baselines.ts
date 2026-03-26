@@ -22,7 +22,8 @@ import {
 import { fmmTokenize } from '../src/worker/fmm_tokenize.ts';
 import {
     DEFAULT_QUERY_EMBED_BATCH_SIZE,
-    loadDataset,
+    loadDatasetSources,
+    resolveEvalDatasetConfig,
     type EvalDatasetCase,
 } from './eval_shared.ts';
 import {
@@ -64,6 +65,9 @@ type ModeResult = {
 
 type Report = {
     generatedAt: string;
+    datasetVersion: string;
+    datasetMode: 'split' | 'single_file';
+    datasetKey: string;
     datasetSizes: Record<string, number>;
     queryEmbeddingBatchSize: number;
     modes: ModeResult[];
@@ -79,12 +83,11 @@ type ModeDefinition = {
 };
 
 const DATASET_VERSION = process.env.SUASK_EVAL_DATASET_VERSION || 'v2';
-const DATASET_DIR = `../Backend/test/test_dataset_${DATASET_VERSION}`;
-const DATASETS = [
-    `${DATASET_DIR}/test_dataset_standard.json`,
-    `${DATASET_DIR}/test_dataset_short_keyword.json`,
-    `${DATASET_DIR}/test_dataset_situational.json`,
-] as const;
+const DATASET_FILE = process.env.SUASK_EVAL_DATASET_FILE;
+const DATASET_CONFIG = resolveEvalDatasetConfig({
+    datasetVersion: DATASET_VERSION,
+    datasetFile: DATASET_FILE,
+});
 const CURRENT_TIMESTAMP = 0;
 
 const require = createRequire(import.meta.url);
@@ -347,7 +350,7 @@ function printModeSummary(result: ModeResult) {
 }
 
 async function main() {
-    const testCases = DATASETS.flatMap(loadDataset);
+    const testCases = loadDatasetSources(DATASET_CONFIG.allSources);
     const datasetSizes = testCases.reduce<Record<string, number>>((acc, item) => {
         acc[item.dataset] = (acc[item.dataset] || 0) + 1;
         return acc;
@@ -400,6 +403,9 @@ async function main() {
 
     const report: Report = {
         generatedAt: new Date().toISOString(),
+        datasetVersion: DATASET_CONFIG.datasetVersion,
+        datasetMode: DATASET_CONFIG.datasetMode,
+        datasetKey: DATASET_CONFIG.datasetKey,
         datasetSizes,
         queryEmbeddingBatchSize: DEFAULT_QUERY_EMBED_BATCH_SIZE,
         modes: modeResults,
@@ -412,7 +418,7 @@ async function main() {
 
     const outputPath = path.resolve(
         resultsDir,
-        `baseline_compare_${DATASET_VERSION}_${Date.now()}.json`,
+        `baseline_compare_${DATASET_CONFIG.datasetKey}_${Date.now()}.json`,
     );
     fs.writeFileSync(outputPath, JSON.stringify(report, null, 2), 'utf-8');
     console.log(`Report saved to ${outputPath}`);
