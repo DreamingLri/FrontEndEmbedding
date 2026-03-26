@@ -11,6 +11,7 @@ import {
     createAggregatedDocScores,
     mergeAggregatedDocMetadata,
     type AggregatedDocScores,
+    type KPCandidate,
 } from "./aggregated_doc_scores";
 
 export interface Metadata {
@@ -38,6 +39,7 @@ export interface Metadata {
 export interface SearchResult {
     otid: string;
     best_kpid?: string;
+    kp_candidates?: KPCandidate[];
     score: number;
     details?: {
         denseRRF: number;
@@ -75,6 +77,9 @@ export interface ParsedQueryIntent {
     confidence: number;
     preferLatest: boolean;
 }
+
+export type KPAggregationMode = "max" | "max_plus_topn";
+export type LexicalBonusMode = "sum" | "max";
 
 export interface IntentVectorItem {
     intent_id: string;
@@ -381,9 +386,30 @@ function shouldSkipForExplicitYear(
 function computeBaseScore(
     scores: AggregatedDocScores,
     weights: typeof DEFAULT_WEIGHTS,
+    options?: {
+        kpAggregationMode?: KPAggregationMode;
+        kpTopN?: number;
+        kpTailWeight?: number;
+    },
 ): number {
+    const kpAggregationMode = options?.kpAggregationMode || "max";
+    const kpTopN = Math.max(1, options?.kpTopN || 3);
+    const kpTailWeight = options?.kpTailWeight ?? 0.35;
+    const topKpScores =
+        scores.kp_scores && scores.kp_scores.length > 0
+            ? scores.kp_scores.slice(0, kpTopN)
+            : scores.max_kp > 0
+              ? [scores.max_kp]
+              : [];
+    const aggregatedKpScore =
+        kpAggregationMode === "max_plus_topn" && topKpScores.length > 1
+            ? topKpScores[0] +
+              topKpScores.slice(1).reduce((sum, item) => sum + item, 0) *
+                  kpTailWeight
+            : topKpScores[0] || 0;
+
     const weightedQ = scores.max_q * weights.Q;
-    const weightedKP = scores.max_kp * weights.KP;
+    const weightedKP = aggregatedKpScore * weights.KP;
     const weightedOT = scores.ot_score * weights.OT;
 
     const maxComponent = Math.max(weightedQ, weightedKP, weightedOT);
@@ -611,6 +637,11 @@ export function searchAndRank(params: {
     bm25Stats: BM25Stats;
     weights?: typeof DEFAULT_WEIGHTS;
     candidateIndices?: readonly number[];
+    topHybridLimit?: number;
+    kpAggregationMode?: KPAggregationMode;
+    kpTopN?: number;
+    kpTailWeight?: number;
+    lexicalBonusMode?: LexicalBonusMode;
 }): SearchRankOutput {
     const {
         queryVector,
@@ -624,6 +655,11 @@ export function searchAndRank(params: {
         queryYearWordIds,
         queryIntent,
         candidateIndices,
+        topHybridLimit = 1000,
+        kpAggregationMode = "max",
+        kpTopN = 3,
+        kpTailWeight = 0.35,
+        lexicalBonusMode = "sum",
     } = params;
 
     const n = metadata.length;
@@ -685,11 +721,18 @@ export function searchAndRank(params: {
 
             if (sparse > 0) {
                 const otid = meta.type === "OT" ? meta.id : meta.parent_otid;
-                let currentBonus = lexicalBonusMap.get(otid) || 0;
-                if (meta.type === "Q") currentBonus += sparse * 1.5;
-                else if (meta.type === "KP") currentBonus += sparse * 1.2;
-                else currentBonus += sparse;
-                lexicalBonusMap.set(otid, currentBonus);
+                const weightedBonus =
+                    meta.type === "Q"
+                        ? sparse * 1.5
+                        : meta.type === "KP"
+                          ? sparse * 1.2
+                          : sparse;
+                const currentBonus = lexicalBonusMap.get(otid) || 0;
+                const nextBonus =
+                    lexicalBonusMode === "max"
+                        ? Math.max(currentBonus, weightedBonus)
+                        : currentBonus + weightedBonus;
+                lexicalBonusMap.set(otid, nextBonus);
             }
         }
         sparseScores[localIndex] = sparse;
@@ -724,7 +767,7 @@ export function searchAndRank(params: {
 
     const topHybrid = Array.from(rrfScores.entries())
         .sort((a, b) => b[1] - a[1])
-        .slice(0, 1000);
+        .slice(0, Math.max(1, topHybridLimit));
 
     const otidMap: Record<string, AggregatedDocScores> = {};
 
@@ -761,7 +804,11 @@ export function searchAndRank(params: {
             continue;
         }
 
-        const finalScore = computeBaseScore(scores, weights);
+        const finalScore = computeBaseScore(scores, weights, {
+            kpAggregationMode,
+            kpTopN,
+            kpTailWeight,
+        });
         const boost = computeBoostMultiplier({
             otid,
             scores,
@@ -776,6 +823,7 @@ export function searchAndRank(params: {
             otid,
             score: finalScore * boost,
             best_kpid: scores.best_kpid,
+            kp_candidates: scores.kp_candidates.slice(0, 5),
         });
     }
 

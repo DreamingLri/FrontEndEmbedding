@@ -13,9 +13,16 @@ type AggregatableMetadata = {
     event_types?: string[];
 };
 
+export interface KPCandidate {
+    kpid: string;
+    score: number;
+}
+
 export interface AggregatedDocScores {
     max_q: number;
     max_kp: number;
+    kp_scores: number[];
+    kp_candidates: KPCandidate[];
     ot_score: number;
     timestamp?: number;
     best_kpid?: string;
@@ -40,6 +47,8 @@ type ArrayFieldKey =
     | "degree_levels"
     | "event_types";
 
+const MAX_TRACKED_KP_SCORES = 8;
+
 function assignArrayIfMissing(
     target: AggregatedDocScores,
     key: ArrayFieldKey,
@@ -57,6 +66,8 @@ export function createAggregatedDocScores(
     return {
         max_q: 0,
         max_kp: 0,
+        kp_scores: [],
+        kp_candidates: [],
         ot_score: 0,
         timestamp: meta.timestamp,
         target_year: meta.target_year,
@@ -101,6 +112,16 @@ export function applyScoreToAggregatedDocScores(
     }
 
     if (meta.type === "KP") {
+        target.kp_scores.push(score);
+        target.kp_scores.sort((a, b) => b - a);
+        if (target.kp_scores.length > MAX_TRACKED_KP_SCORES) {
+            target.kp_scores.length = MAX_TRACKED_KP_SCORES;
+        }
+        target.kp_candidates.push({ kpid: meta.id, score });
+        target.kp_candidates.sort((a, b) => b.score - a.score);
+        if (target.kp_candidates.length > MAX_TRACKED_KP_SCORES) {
+            target.kp_candidates.length = MAX_TRACKED_KP_SCORES;
+        }
         if (score > target.max_kp) {
             target.max_kp = score;
             target.best_kpid = meta.id;
