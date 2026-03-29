@@ -29,7 +29,7 @@ import {
 type DatasetCase = EvalDatasetCase;
 type GranularityType = "Q" | "KP" | "OT";
 type KPCandidateRerankMode = "none" | "heuristic" | "feature_heuristic";
-type DocPostRerankMode = "none" | "kp_heuristic_delta";
+type DocPostRerankMode = "none" | "kp_heuristic_delta" | "time_anchor";
 type WeightConfig = {
     Q: number;
     KP: number;
@@ -40,6 +40,7 @@ type QueryCacheItem = {
     testCase: DatasetCase;
     queryVector: Float32Array;
     queryIntent: ParsedQueryIntent;
+    queryMonths: number[];
     queryWords: string[];
     querySparse: Record<number, number>;
     queryYearWordIds: number[];
@@ -186,9 +187,11 @@ type Report = {
 
 const DATASET_VERSION = process.env.SUASK_EVAL_DATASET_VERSION || "v2";
 const DATASET_FILE = process.env.SUASK_EVAL_DATASET_FILE;
+const SINGLE_FILE_AS_ALL = process.env.SUASK_EVAL_SINGLE_FILE_AS_ALL === "1";
 const DATASET_CONFIG = resolveEvalDatasetConfig({
     datasetVersion: DATASET_VERSION,
     datasetFile: DATASET_FILE,
+    singleFileAsAll: SINGLE_FILE_AS_ALL,
 });
 const LIMIT_PER_DATASET = Number.parseInt(
     process.env.SUASK_EVAL_LIMIT_PER_DATASET || "",
@@ -224,6 +227,8 @@ const KP_CANDIDATE_RERANK_MODE = (
 const DOC_POST_RERANK_MODE = (
     process.env.SUASK_DOC_POST_RERANK_MODE === "kp_heuristic_delta"
         ? "kp_heuristic_delta"
+        : process.env.SUASK_DOC_POST_RERANK_MODE === "time_anchor"
+          ? "time_anchor"
         : "none"
 ) as DocPostRerankMode;
 const DOC_POST_RERANK_WEIGHT = Number.parseFloat(
@@ -246,6 +251,9 @@ const KP_TAIL_WEIGHT = Number.parseFloat(
 const WEIGHT_STEPS = parseWeightSteps(
     process.env.SUASK_WEIGHT_STEPS || "0.2,0.5,0.8",
 );
+const FIXED_COMBO_WEIGHTS = parseFixedComboWeights(
+    process.env.SUASK_FIXED_COMBO_WEIGHTS || "",
+);
 const TOP_TUNE_CANDIDATE_LIMIT = 5;
 const CURRENT_TIMESTAMP = 0;
 
@@ -266,6 +274,7 @@ let dimensions = 768;
 let extractor: Awaited<ReturnType<typeof loadFrontendEvalEngine>>["extractor"] | null = null;
 let kpTextMap = new Map<string, string>();
 let kpFeatureMap = new Map<string, KPFeatureFlags>();
+let articleTimeAnchorMap = new Map<string, ArticleTimeAnchor>();
 
 type EvalSearchMatch = {
     otid: string;
@@ -293,7 +302,15 @@ type KPFeatureFlags = {
     hasThesisCue: boolean;
 };
 
+type ArticleTimeAnchor = {
+    year?: number;
+    month?: number;
+    title: string;
+    publishTime: string;
+};
+
 const KP_TEXTS_FILE = "../Backend/data/embeddings_v2/backend_knowledge_points.json";
+const ARTICLE_TEXTS_FILE = "../Backend/data/embeddings_v2/backend_articles.json";
 const QUERY_STOPWORDS = new Set([
     "什么",
     "什么时候",
@@ -325,6 +342,34 @@ function parseWeightSteps(raw: string): number[] {
     return Array.from(new Set(values)).sort((a, b) => a - b);
 }
 
+function parseFixedComboWeights(raw: string): Record<string, WeightConfig> {
+    if (!raw.trim()) {
+        return {};
+    }
+
+    try {
+        const parsed = JSON.parse(raw) as Record<
+            string,
+            Partial<Record<GranularityType, number>>
+        >;
+        const result: Record<string, WeightConfig> = {};
+        Object.entries(parsed).forEach(([comboLabel, weights]) => {
+            result[comboLabel] = {
+                Q: Number.isFinite(weights.Q) ? Number(weights.Q) : 0,
+                KP: Number.isFinite(weights.KP) ? Number(weights.KP) : 0,
+                OT: Number.isFinite(weights.OT) ? Number(weights.OT) : 0,
+            };
+        });
+        return result;
+    } catch (error) {
+        throw new Error(
+            `Invalid SUASK_FIXED_COMBO_WEIGHTS JSON: ${
+                error instanceof Error ? error.message : String(error)
+            }`,
+        );
+    }
+}
+
 function createZeroWeights(): WeightConfig {
     return { Q: 0, KP: 0, OT: 0 };
 }
@@ -342,6 +387,20 @@ function normalizeWeights(
     });
 
     return result;
+}
+
+function normalizeProvidedWeights(
+    allowedTypes: readonly GranularityType[],
+    weights: WeightConfig,
+): WeightConfig {
+    return normalizeWeights(
+        allowedTypes,
+        allowedTypes.map((type) => {
+            if (type === "Q") return weights.Q;
+            if (type === "KP") return weights.KP;
+            return weights.OT;
+        }),
+    );
 }
 
 function formatWeightKey(weights: WeightConfig): string {
@@ -405,6 +464,74 @@ function loadKnowledgePointTexts(): Map<string, string> {
             result.set(item.pkid, item.kp_text);
         }
     });
+    return result;
+}
+
+function uniqueNumbers(values: readonly number[]): number[] {
+    return Array.from(new Set(values.filter((item) => Number.isFinite(item))));
+}
+
+function extractYears(text: string): number[] {
+    return uniqueNumbers((text.match(/20\d{2}/g) || []).map(Number));
+}
+
+function extractMonths(text: string): number[] {
+    return uniqueNumbers(
+        Array.from(text.matchAll(/(^|[^\d])(\d{1,2})月/g))
+            .map((match) => Number(match[2]))
+            .filter((month) => month >= 1 && month <= 12),
+    );
+}
+
+function parsePublishTimeParts(publishTime: string): {
+    year?: number;
+    month?: number;
+} {
+    const match = publishTime.match(/(20\d{2})-(\d{1,2})-(\d{1,2})/);
+    if (!match) {
+        return {};
+    }
+
+    return {
+        year: Number(match[1]),
+        month: Number(match[2]),
+    };
+}
+
+function loadArticleTimeAnchors(): Map<string, ArticleTimeAnchor> {
+    const absolutePath = path.resolve(process.cwd(), ARTICLE_TEXTS_FILE);
+    if (!fs.existsSync(absolutePath)) {
+        return new Map<string, ArticleTimeAnchor>();
+    }
+
+    const raw = JSON.parse(
+        fs.readFileSync(absolutePath, "utf-8"),
+    ) as Array<{
+        otid?: string;
+        ot_title?: string;
+        publish_time?: string;
+    }>;
+
+    const result = new Map<string, ArticleTimeAnchor>();
+    raw.forEach((item) => {
+        if (!item.otid) {
+            return;
+        }
+
+        const title = item.ot_title || "";
+        const publishTime = item.publish_time || "";
+        const titleYears = extractYears(title);
+        const titleMonths = extractMonths(title);
+        const publishParts = parsePublishTimeParts(publishTime);
+
+        result.set(item.otid, {
+            year: titleYears[0] ?? publishParts.year,
+            month: titleMonths[0] ?? publishParts.month,
+            title,
+            publishTime,
+        });
+    });
+
     return result;
 }
 
@@ -472,6 +599,7 @@ async function loadEngine() {
     dimensions = engine.dimensions;
     kpTextMap = loadKnowledgePointTexts();
     kpFeatureMap = loadKnowledgePointFeatures(kpTextMap);
+    articleTimeAnchorMap = loadArticleTimeAnchors();
 }
 
 async function buildQueryCache(
@@ -495,6 +623,7 @@ async function buildQueryCache(
 
     return testCases.map((testCase, index) => {
         const queryIntent = parseQueryIntent(testCase.query);
+        const queryMonths = extractMonths(testCase.query);
         const queryWords = Array.from(
             new Set(fmmTokenize(testCase.query, vocabMap)),
         );
@@ -508,6 +637,7 @@ async function buildQueryCache(
             testCase,
             queryVector: queryVectors[index],
             queryIntent,
+            queryMonths,
             queryWords,
             querySparse,
             queryYearWordIds,
@@ -828,7 +958,7 @@ function rerankMatchesForDocumentMetrics(
     item: QueryCacheItem,
     matches: readonly EvalSearchMatch[],
 ): EvalSearchMatch[] {
-    if (DOC_POST_RERANK_MODE !== "kp_heuristic_delta") {
+    if (DOC_POST_RERANK_MODE === "none") {
         return [...matches];
     }
 
@@ -839,15 +969,21 @@ function rerankMatchesForDocumentMetrics(
 
     return matches
         .map((match) => {
-            const selection = getHeuristicKpSelection(item, match);
-            const delta =
-                Number.isFinite(selection.rawTopScore) &&
-                Number.isFinite(selection.heuristicTopScore)
-                    ? Math.max(
-                          0,
-                          selection.heuristicTopScore - selection.rawTopScore,
-                      )
-                    : 0;
+            let delta = 0;
+
+            if (DOC_POST_RERANK_MODE === "kp_heuristic_delta") {
+                const selection = getHeuristicKpSelection(item, match);
+                delta =
+                    Number.isFinite(selection.rawTopScore) &&
+                    Number.isFinite(selection.heuristicTopScore)
+                        ? Math.max(
+                              0,
+                              selection.heuristicTopScore - selection.rawTopScore,
+                          )
+                        : 0;
+            } else if (DOC_POST_RERANK_MODE === "time_anchor") {
+                delta = computeTimeAnchorDocDelta(item, match);
+            }
 
             return {
                 ...match,
@@ -855,6 +991,66 @@ function rerankMatchesForDocumentMetrics(
             };
         })
         .sort((a, b) => b.score - a.score);
+}
+
+function computeTimeAnchorDocDelta(
+    item: QueryCacheItem,
+    match: EvalSearchMatch,
+): number {
+    const queryYears = item.queryIntent.years;
+    const queryMonths = item.queryMonths;
+    if (queryYears.length === 0 && queryMonths.length === 0) {
+        return 0;
+    }
+
+    const articleAnchor = articleTimeAnchorMap.get(match.otid);
+    if (!articleAnchor) {
+        return queryYears.length > 0 ? -0.2 : 0;
+    }
+
+    let delta = 0;
+
+    if (queryYears.length > 0) {
+        if (articleAnchor.year === undefined) {
+            delta -= 0.2;
+        } else if (queryYears.includes(articleAnchor.year)) {
+            delta += 1.0;
+        } else {
+            delta -= 1.0;
+        }
+    }
+
+    if (queryMonths.length > 0) {
+        if (articleAnchor.month !== undefined) {
+            if (queryMonths.includes(articleAnchor.month)) {
+                delta += 0.6;
+            } else {
+                delta -= 0.6;
+            }
+        }
+    }
+
+    return delta;
+}
+
+function formatDocPostRerankSlug(): string {
+    if (DOC_POST_RERANK_MODE === "kp_heuristic_delta") {
+        const safeWeight =
+            Number.isFinite(DOC_POST_RERANK_WEIGHT) && DOC_POST_RERANK_WEIGHT >= 0
+                ? DOC_POST_RERANK_WEIGHT
+                : 0.35;
+        return `kpdelta-w${safeWeight.toFixed(2).replace(".", "")}`;
+    }
+
+    if (DOC_POST_RERANK_MODE === "time_anchor") {
+        const safeWeight =
+            Number.isFinite(DOC_POST_RERANK_WEIGHT) && DOC_POST_RERANK_WEIGHT >= 0
+                ? DOC_POST_RERANK_WEIGHT
+                : 0.35;
+        return `timeanchor-w${safeWeight.toFixed(2).replace(".", "")}`;
+    }
+
+    return "none";
 }
 
 function rerankMatchesForKpidMetrics(
@@ -1400,7 +1596,11 @@ function summarizeCombo(
         uniformWeights,
     );
 
-    const candidates = generateWeightConfigs(combo.allowedTypes).map((weights) => ({
+    const fixedWeights = FIXED_COMBO_WEIGHTS[combo.label];
+    const candidateWeights = fixedWeights
+        ? [normalizeProvidedWeights(combo.allowedTypes, fixedWeights)]
+        : generateWeightConfigs(combo.allowedTypes);
+    const candidates = candidateWeights.map((weights) => ({
         weights,
         result: evaluateQueryCache(tuneCache, filteredMetadata, bm25Stats, weights),
     }));
@@ -1581,7 +1781,7 @@ async function main() {
 
     const outputPath = path.join(
         resultsDir,
-        `granularity_mix_${DATASET_CONFIG.datasetKey}_top${Number.isFinite(TOP_HYBRID_LIMIT) && TOP_HYBRID_LIMIT > 0 ? TOP_HYBRID_LIMIT : 1000}_${KP_AGGREGATION_MODE === "max_plus_topn" ? `kpagg-top${Number.isFinite(KP_TOP_N) && KP_TOP_N > 0 ? KP_TOP_N : 3}-w${(Number.isFinite(KP_TAIL_WEIGHT) && KP_TAIL_WEIGHT >= 0 ? KP_TAIL_WEIGHT : 0.35).toFixed(2).replace(".", "")}` : "kpagg-max"}_lex${LEXICAL_BONUS_MODE}_onlinekprole${ONLINE_KP_ROLE_RERANK_MODE}${ONLINE_KP_ROLE_RERANK_MODE === "feature" ? `-w${(Number.isFinite(ONLINE_KP_ROLE_DOC_WEIGHT) && ONLINE_KP_ROLE_DOC_WEIGHT >= 0 ? ONLINE_KP_ROLE_DOC_WEIGHT : 0.35).toFixed(2).replace(".", "")}` : ""}_kprerank${KP_CANDIDATE_RERANK_MODE}_docrerank${DOC_POST_RERANK_MODE === "kp_heuristic_delta" ? `kpdelta-w${(Number.isFinite(DOC_POST_RERANK_WEIGHT) && DOC_POST_RERANK_WEIGHT >= 0 ? DOC_POST_RERANK_WEIGHT : 0.35).toFixed(2).replace(".", "")}` : "none"}_${Date.now()}.json`,
+        `granularity_mix_${DATASET_CONFIG.datasetKey}_top${Number.isFinite(TOP_HYBRID_LIMIT) && TOP_HYBRID_LIMIT > 0 ? TOP_HYBRID_LIMIT : 1000}_${KP_AGGREGATION_MODE === "max_plus_topn" ? `kpagg-top${Number.isFinite(KP_TOP_N) && KP_TOP_N > 0 ? KP_TOP_N : 3}-w${(Number.isFinite(KP_TAIL_WEIGHT) && KP_TAIL_WEIGHT >= 0 ? KP_TAIL_WEIGHT : 0.35).toFixed(2).replace(".", "")}` : "kpagg-max"}_lex${LEXICAL_BONUS_MODE}_onlinekprole${ONLINE_KP_ROLE_RERANK_MODE}${ONLINE_KP_ROLE_RERANK_MODE === "feature" ? `-w${(Number.isFinite(ONLINE_KP_ROLE_DOC_WEIGHT) && ONLINE_KP_ROLE_DOC_WEIGHT >= 0 ? ONLINE_KP_ROLE_DOC_WEIGHT : 0.35).toFixed(2).replace(".", "")}` : ""}_kprerank${KP_CANDIDATE_RERANK_MODE}_docrerank${formatDocPostRerankSlug()}_${Date.now()}.json`,
     );
     fs.writeFileSync(outputPath, JSON.stringify(report, null, 2), "utf-8");
     console.log(`\nSaved report to ${outputPath}`);

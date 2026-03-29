@@ -13,7 +13,7 @@ import localforage from 'localforage';
 import VectorWorker from '../worker/embedding.worker.ts?worker';
 
 type SearchRejection = {
-  reason: 'low_topic_coverage' | 'low_consistency';
+  reason: 'low_topic_coverage' | 'low_consistency' | 'weak_anchor_needs_clarification';
   topicIds: string[];
 };
 
@@ -42,6 +42,17 @@ type WorkerSearchResult = {
   rejection?: SearchRejection;
 };
 
+type RerankStats = {
+  elapsedMs: string;
+  rerankedDocCount?: number;
+  chunksScored?: number;
+  windowReason?: string;
+  maxChunksPerDoc?: number;
+  chunkPlanReason?: string;
+  top1Top2Gap?: number | null;
+  clusterTopGap?: number | null;
+};
+
 
 
 const emit = defineEmits(['trace-updated']);
@@ -56,6 +67,7 @@ const statusMsg = ref('正在唤起 Web Worker...');
 const errorMsg = ref<string | null>(null);
 const diagnosticLogs = ref<string[]>([]);
 const isWorkerReady = ref(false);
+let lastRerankStats: RerankStats | null = null;
 
 const REJECTION_THRESHOLD = 0.4;
 const INDEX_CACHE_VERSION = '20260324-v3';
@@ -68,8 +80,14 @@ const hasCoverageRejection = computed(
 const hasConsistencyRejection = computed(
   () => rejectionInfo.value?.reason === 'low_consistency'
 );
+const hasClarificationRejection = computed(
+  () => rejectionInfo.value?.reason === 'weak_anchor_needs_clarification'
+);
 const weakToggleLabel = computed(() =>
   showWeakResults.value ? '收起弱相关结果' : '查看弱相关结果'
+);
+const weakResultsTitle = computed(() =>
+  hasClarificationRejection.value ? '可能相关入口' : '弱相关结果'
 );
 const emptyTitle = computed(() => {
   if (hasCoverageRejection.value) {
@@ -77,6 +95,9 @@ const emptyTitle = computed(() => {
   }
   if (hasConsistencyRejection.value) {
     return '当前查询未能形成稳定的主题结果，暂不展示不可靠答案。';
+  }
+  if (hasClarificationRejection.value) {
+    return '当前问题缺少具体事项，系统先不给出单一答案。';
   }
   return searchQuery.value.trim() ? '当前问题未达到可信展示阈值' : '输入关键词开始检索';
 });
@@ -86,6 +107,9 @@ const emptySubtitle = computed(() => {
   }
   if (hasConsistencyRejection.value) {
     return '当前结果主题分散或仅靠弱语义相似命中，因此系统选择拒答。';
+  }
+  if (hasClarificationRejection.value) {
+    return '请补充你想问的具体环节，例如录取通知书、报到手续、党团关系、宿舍或奖助金；也可展开查看可能相关入口。';
   }
   return searchQuery.value.trim()
     ? `Top 1 原话匹配度需不低于 ${(REJECTION_THRESHOLD * 100).toFixed(0)}%`
@@ -181,6 +205,11 @@ const emitTrace = (
     searchMs: string;
     fetchMs?: string;
     rerankMs?: string;
+    rerankedDocCount?: number;
+    chunksScored?: number;
+    rerankWindowReason?: string;
+    maxChunksPerDoc?: number;
+    chunkPlanReason?: string;
     topConfidence?: number | null;
     rejected?: boolean;
     rejection?: SearchRejection | null;
@@ -195,6 +224,11 @@ const emitTrace = (
       searchMs: opts.searchMs,
       fetchMs: opts.fetchMs ?? '0.0',
       rerankMs: opts.rerankMs ?? '0.0',
+      rerankedDocCount: opts.rerankedDocCount ?? 0,
+      chunksScored: opts.chunksScored ?? 0,
+      rerankWindowReason: opts.rerankWindowReason ?? '',
+      maxChunksPerDoc: opts.maxChunksPerDoc ?? 0,
+      chunkPlanReason: opts.chunkPlanReason ?? '',
       rejectionThreshold: REJECTION_THRESHOLD,
       topConfidence: opts.topConfidence ?? null,
       rejected: opts.rejected ?? false,
@@ -269,7 +303,10 @@ myWorker.onmessage = (event: MessageEvent) => {
   }
 
   if (status === 'rerank_complete') {
-    logDiagnostic(`重排与原话提炼完成，耗时 ${stats.elapsedMs}ms`);
+    lastRerankStats = stats as RerankStats;
+    logDiagnostic(
+      `重排与原话提炼完成，耗时 ${stats.elapsedMs}ms，实际重排 ${stats.rerankedDocCount ?? 0} 篇 / ${stats.chunksScored ?? 0} chunks，每篇上限 ${stats.maxChunksPerDoc ?? 0}`
+    );
     if (taskId && pendingTasks.has(taskId)) {
       pendingTasks.get(taskId)?.resolve(result);
       pendingTasks.delete(taskId);
@@ -338,6 +375,7 @@ const handleSearch = async () => {
 
   errorMsg.value = null;
   isProcessing.value = true;
+  lastRerankStats = null;
   results.value = [];
   weakResults.value = [];
   rejectionInfo.value = null;
@@ -413,7 +451,10 @@ const handleSearch = async () => {
     const docsForRender = mergeCoarseMatchesIntoDocuments(result.data, localMatches.slice(0, 15));
     const weakDocsForRender = mergeCoarseMatchesIntoDocuments(result.data, localWeakMatches.slice(0, 10));
 
-    if (rejection?.reason === 'low_topic_coverage') {
+    if (
+      rejection?.reason === 'low_topic_coverage' ||
+      rejection?.reason === 'weak_anchor_needs_clarification'
+    ) {
       results.value = [];
       weakResults.value = weakDocsForRender;
       rejectionInfo.value = rejection;
@@ -427,8 +468,13 @@ const handleSearch = async () => {
         weakResultsCount: weakDocsForRender.length,
       });
 
-      statusMsg.value = '当前知识库暂无该主题的直接内容，暂不展示弱相关结果。';
-      logDiagnostic('主题覆盖不足，已提供弱相关结果入口');
+      if (rejection?.reason === 'weak_anchor_needs_clarification') {
+        statusMsg.value = '当前问题缺少具体事项，已切换到澄清模式。';
+        logDiagnostic('命中弱锚点空提问，已拒绝直接回答并提供相关入口');
+      } else {
+        statusMsg.value = '当前知识库暂无该主题的直接内容，暂不展示弱相关结果。';
+        logDiagnostic('主题覆盖不足，已提供弱相关结果入口');
+      }
       return;
     }
 
@@ -439,6 +485,12 @@ const handleSearch = async () => {
     })) as SearchResultDoc[];
 
     const tRerankEnd = performance.now();
+    const rerankStats = lastRerankStats as RerankStats | null;
+    const rerankedDocCount = rerankStats ? rerankStats.rerankedDocCount : undefined;
+    const chunksScored = rerankStats ? rerankStats.chunksScored : undefined;
+    const rerankWindowReason = rerankStats ? rerankStats.windowReason : undefined;
+    const maxChunksPerDoc = rerankStats ? rerankStats.maxChunksPerDoc : undefined;
+    const chunkPlanReason = rerankStats ? rerankStats.chunkPlanReason : undefined;
     const topConfidence = finalRender[0]?.confidenceScore ?? finalRender[0]?.rerankScore ?? -999;
     const shouldReject = finalRender.length > 0 && topConfidence < REJECTION_THRESHOLD;
 
@@ -449,6 +501,11 @@ const handleSearch = async () => {
       searchMs: (tSearchEnd - tStart).toFixed(1),
       fetchMs: (tFetchEnd - tSearchEnd).toFixed(1),
       rerankMs: (tRerankEnd - tFetchEnd).toFixed(1),
+      rerankedDocCount,
+      chunksScored,
+      rerankWindowReason,
+      maxChunksPerDoc,
+      chunkPlanReason,
       topConfidence,
       rejected: shouldReject,
     });
@@ -535,11 +592,11 @@ const handleSearch = async () => {
       </div>
 
       <section
-        v-if="results.length === 0 && !isProcessing && hasCoverageRejection && weakResults.length > 0"
+        v-if="results.length === 0 && !isProcessing && (hasCoverageRejection || hasClarificationRejection) && weakResults.length > 0"
         class="mt-6 space-y-3"
       >
         <div class="flex items-center justify-between text-[11px] uppercase tracking-[0.2em] text-slate-500">
-          <span>Weak Results</span>
+          <span>{{ weakResultsTitle }}</span>
           <button
             @click="showWeakResults = !showWeakResults"
             class="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[10px] font-semibold tracking-normal text-slate-300 transition-all hover:border-white/20 hover:bg-white/[0.08]"

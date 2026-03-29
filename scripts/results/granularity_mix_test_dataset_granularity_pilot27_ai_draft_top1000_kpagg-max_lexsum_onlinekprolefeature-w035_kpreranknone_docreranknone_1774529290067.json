@@ -1,0 +1,3141 @@
+{
+  "generatedAt": "2026-03-26T12:47:01.271Z",
+  "datasetVersion": "granularity",
+  "datasetMode": "single_file",
+  "datasetKey": "test_dataset_granularity_pilot27_ai_draft",
+  "topHybridLimit": 1000,
+  "kpAggregationMode": "max",
+  "kpTopN": 3,
+  "kpTailWeight": 0.35,
+  "lexicalBonusMode": "sum",
+  "onlineKpRoleRerankMode": "feature",
+  "onlineKpRoleDocWeight": 0.35,
+  "kpCandidateRerankMode": "none",
+  "docPostRerankMode": "none",
+  "docPostRerankWeight": 0.35,
+  "weightSteps": [
+    0.2,
+    0.5,
+    0.8
+  ],
+  "datasetSizes": {
+    "tune": {
+      "test_dataset_granularity_pilot27_ai_draft_standard": 12,
+      "test_dataset_granularity_pilot27_ai_draft_short_keyword": 5
+    },
+    "holdout": {
+      "test_dataset_granularity_pilot27_ai_draft_situational": 10
+    },
+    "combined": {
+      "test_dataset_granularity_pilot27_ai_draft_standard": 12,
+      "test_dataset_granularity_pilot27_ai_draft_short_keyword": 5,
+      "test_dataset_granularity_pilot27_ai_draft_situational": 10
+    }
+  },
+  "globalMetadataTypeCounts": {
+    "Q": 12819,
+    "KP": 2877,
+    "OT": 516
+  },
+  "combos": [
+    {
+      "label": "Q",
+      "allowedTypes": [
+        "Q"
+      ],
+      "metadataCount": 12819,
+      "metadataTypeCounts": {
+        "Q": 12819,
+        "KP": 0,
+        "OT": 0
+      },
+      "uniform": {
+        "weights": {
+          "Q": 1,
+          "KP": 0,
+          "OT": 0
+        },
+        "combined": {
+          "total": 27,
+          "hitAt1": 48.148148148148145,
+          "hitAt3": 74.07407407407408,
+          "hitAt5": 74.07407407407408,
+          "mrr": 0.6150624067290734
+        },
+        "kpidCombined": {
+          "applicable": 20,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 11,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 11,
+          "docHitAt5Total": 15,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 15
+        },
+        "metricsByDataset": {
+          "test_dataset_granularity_pilot27_ai_draft_standard": {
+            "total": 12,
+            "hitAt1": 50,
+            "hitAt3": 83.33333333333334,
+            "hitAt5": 83.33333333333334,
+            "mrr": 0.6691468253968255
+          },
+          "test_dataset_granularity_pilot27_ai_draft_short_keyword": {
+            "total": 5,
+            "hitAt1": 40,
+            "hitAt3": 40,
+            "hitAt5": 40,
+            "mrr": 0.4333333333333334
+          },
+          "test_dataset_granularity_pilot27_ai_draft_situational": {
+            "total": 10,
+            "hitAt1": 50,
+            "hitAt3": 80,
+            "hitAt5": 80,
+            "mrr": 0.641025641025641
+          }
+        }
+      },
+      "tuned": {
+        "candidateCount": 1,
+        "bestWeights": {
+          "Q": 1,
+          "KP": 0,
+          "OT": 0
+        },
+        "tuneCombined": {
+          "total": 17,
+          "hitAt1": 47.05882352941176,
+          "hitAt3": 70.58823529411765,
+          "hitAt5": 70.58823529411765,
+          "mrr": 0.5997899159663865
+        },
+        "kpidTuneCombined": {
+          "applicable": 12,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 7,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 7,
+          "docHitAt5Total": 8,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 8
+        },
+        "holdoutCombined": {
+          "total": 10,
+          "hitAt1": 50,
+          "hitAt3": 80,
+          "hitAt5": 80,
+          "mrr": 0.641025641025641
+        },
+        "kpidHoldoutCombined": {
+          "applicable": 8,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 4,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 4,
+          "docHitAt5Total": 7,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 7
+        },
+        "combinedCombined": {
+          "total": 27,
+          "hitAt1": 48.148148148148145,
+          "hitAt3": 74.07407407407408,
+          "hitAt5": 74.07407407407408,
+          "mrr": 0.6150624067290734
+        },
+        "kpidCombinedCombined": {
+          "applicable": 20,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 11,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 11,
+          "docHitAt5Total": 15,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 15
+        },
+        "topTuneCandidates": [
+          {
+            "weights": {
+              "Q": 1,
+              "KP": 0,
+              "OT": 0
+            },
+            "combined": {
+              "total": 17,
+              "hitAt1": 47.05882352941176,
+              "hitAt3": 70.58823529411765,
+              "hitAt5": 70.58823529411765,
+              "mrr": 0.5997899159663865
+            }
+          }
+        ]
+      },
+      "groupBreakdowns": {
+        "supportPattern": {
+          "multi_kp": {
+            "total": 6,
+            "uniform": {
+              "total": 6,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 83.33333333333334,
+              "hitAt5": 83.33333333333334,
+              "mrr": 0.5683760683760684
+            },
+            "tunedCombined": {
+              "total": 6,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 83.33333333333334,
+              "hitAt5": 83.33333333333334,
+              "mrr": 0.5683760683760684
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 2
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 2
+            }
+          },
+          "ot_required": {
+            "total": 5,
+            "uniform": {
+              "total": 5,
+              "hitAt1": 40,
+              "hitAt3": 60,
+              "hitAt5": 60,
+              "mrr": 0.4916666666666667
+            },
+            "tunedCombined": {
+              "total": 5,
+              "hitAt1": 40,
+              "hitAt3": 60,
+              "hitAt5": 60,
+              "mrr": 0.4916666666666667
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 1
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 1
+            }
+          },
+          "single_kp": {
+            "total": 16,
+            "uniform": {
+              "total": 16,
+              "hitAt1": 56.25,
+              "hitAt3": 75,
+              "hitAt5": 75,
+              "mrr": 0.6711309523809523
+            },
+            "tunedCombined": {
+              "total": 16,
+              "hitAt1": 56.25,
+              "hitAt3": 75,
+              "hitAt5": 75,
+              "mrr": 0.6711309523809523
+            },
+            "kpidUniform": {
+              "applicable": 16,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 9,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 9,
+              "docHitAt5Total": 12,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 12
+            },
+            "kpidTunedCombined": {
+              "applicable": 16,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 9,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 9,
+              "docHitAt5Total": 12,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 12
+            }
+          }
+        },
+        "preferredGranularity": {
+          "KP": {
+            "total": 17,
+            "uniform": {
+              "total": 17,
+              "hitAt1": 58.82352941176471,
+              "hitAt3": 76.47058823529412,
+              "hitAt5": 76.47058823529412,
+              "mrr": 0.6904761904761905
+            },
+            "tunedCombined": {
+              "total": 17,
+              "hitAt1": 58.82352941176471,
+              "hitAt3": 76.47058823529412,
+              "hitAt5": 76.47058823529412,
+              "mrr": 0.6904761904761905
+            },
+            "kpidUniform": {
+              "applicable": 17,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 10,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 10,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 13
+            },
+            "kpidTunedCombined": {
+              "applicable": 17,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 10,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 10,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 13
+            }
+          },
+          "KP+OT": {
+            "total": 5,
+            "uniform": {
+              "total": 5,
+              "hitAt1": 20,
+              "hitAt3": 80,
+              "hitAt5": 80,
+              "mrr": 0.482051282051282
+            },
+            "tunedCombined": {
+              "total": 5,
+              "hitAt1": 20,
+              "hitAt3": 80,
+              "hitAt5": 80,
+              "mrr": 0.482051282051282
+            },
+            "kpidUniform": {
+              "applicable": 1,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 1
+            },
+            "kpidTunedCombined": {
+              "applicable": 1,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 1
+            }
+          },
+          "OT": {
+            "total": 5,
+            "uniform": {
+              "total": 5,
+              "hitAt1": 40,
+              "hitAt3": 60,
+              "hitAt5": 60,
+              "mrr": 0.4916666666666667
+            },
+            "tunedCombined": {
+              "total": 5,
+              "hitAt1": 40,
+              "hitAt3": 60,
+              "hitAt5": 60,
+              "mrr": 0.4916666666666667
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 1
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 1
+            }
+          }
+        }
+      }
+    },
+    {
+      "label": "KP",
+      "allowedTypes": [
+        "KP"
+      ],
+      "metadataCount": 2877,
+      "metadataTypeCounts": {
+        "Q": 0,
+        "KP": 2877,
+        "OT": 0
+      },
+      "uniform": {
+        "weights": {
+          "Q": 0,
+          "KP": 1,
+          "OT": 0
+        },
+        "combined": {
+          "total": 27,
+          "hitAt1": 44.44444444444444,
+          "hitAt3": 55.55555555555556,
+          "hitAt5": 66.66666666666666,
+          "mrr": 0.546413874191652
+        },
+        "kpidCombined": {
+          "applicable": 20,
+          "hitAt1": 30,
+          "hitAt3": 45,
+          "hitAt5": 50,
+          "mrr": 0.39492063492063495,
+          "docHitAt1Total": 9,
+          "docHitAt1CorrectKpid": 6,
+          "docHitAt1WrongKpid": 3,
+          "docHitAt5Total": 13,
+          "docHitAt5CorrectKpid": 10,
+          "docHitAt5WrongKpid": 3
+        },
+        "metricsByDataset": {
+          "test_dataset_granularity_pilot27_ai_draft_standard": {
+            "total": 12,
+            "hitAt1": 50,
+            "hitAt3": 66.66666666666666,
+            "hitAt5": 83.33333333333334,
+            "mrr": 0.625462962962963
+          },
+          "test_dataset_granularity_pilot27_ai_draft_short_keyword": {
+            "total": 5,
+            "hitAt1": 40,
+            "hitAt3": 40,
+            "hitAt5": 40,
+            "mrr": 0.4333333333333334
+          },
+          "test_dataset_granularity_pilot27_ai_draft_situational": {
+            "total": 10,
+            "hitAt1": 40,
+            "hitAt3": 50,
+            "hitAt5": 60,
+            "mrr": 0.508095238095238
+          }
+        }
+      },
+      "tuned": {
+        "candidateCount": 1,
+        "bestWeights": {
+          "Q": 0,
+          "KP": 1,
+          "OT": 0
+        },
+        "tuneCombined": {
+          "total": 17,
+          "hitAt1": 47.05882352941176,
+          "hitAt3": 58.82352941176471,
+          "hitAt5": 70.58823529411765,
+          "mrr": 0.5689542483660132
+        },
+        "kpidTuneCombined": {
+          "applicable": 12,
+          "hitAt1": 33.33333333333333,
+          "hitAt3": 50,
+          "hitAt5": 50,
+          "mrr": 0.4212962962962963,
+          "docHitAt1Total": 6,
+          "docHitAt1CorrectKpid": 4,
+          "docHitAt1WrongKpid": 2,
+          "docHitAt5Total": 8,
+          "docHitAt5CorrectKpid": 6,
+          "docHitAt5WrongKpid": 2
+        },
+        "holdoutCombined": {
+          "total": 10,
+          "hitAt1": 40,
+          "hitAt3": 50,
+          "hitAt5": 60,
+          "mrr": 0.508095238095238
+        },
+        "kpidHoldoutCombined": {
+          "applicable": 8,
+          "hitAt1": 25,
+          "hitAt3": 37.5,
+          "hitAt5": 50,
+          "mrr": 0.3553571428571428,
+          "docHitAt1Total": 3,
+          "docHitAt1CorrectKpid": 2,
+          "docHitAt1WrongKpid": 1,
+          "docHitAt5Total": 5,
+          "docHitAt5CorrectKpid": 4,
+          "docHitAt5WrongKpid": 1
+        },
+        "combinedCombined": {
+          "total": 27,
+          "hitAt1": 44.44444444444444,
+          "hitAt3": 55.55555555555556,
+          "hitAt5": 66.66666666666666,
+          "mrr": 0.546413874191652
+        },
+        "kpidCombinedCombined": {
+          "applicable": 20,
+          "hitAt1": 30,
+          "hitAt3": 45,
+          "hitAt5": 50,
+          "mrr": 0.39492063492063495,
+          "docHitAt1Total": 9,
+          "docHitAt1CorrectKpid": 6,
+          "docHitAt1WrongKpid": 3,
+          "docHitAt5Total": 13,
+          "docHitAt5CorrectKpid": 10,
+          "docHitAt5WrongKpid": 3
+        },
+        "topTuneCandidates": [
+          {
+            "weights": {
+              "Q": 0,
+              "KP": 1,
+              "OT": 0
+            },
+            "combined": {
+              "total": 17,
+              "hitAt1": 47.05882352941176,
+              "hitAt3": 58.82352941176471,
+              "hitAt5": 70.58823529411765,
+              "mrr": 0.5689542483660132
+            }
+          }
+        ]
+      },
+      "groupBreakdowns": {
+        "supportPattern": {
+          "multi_kp": {
+            "total": 6,
+            "uniform": {
+              "total": 6,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 66.66666666666666,
+              "mrr": 0.5813492063492064
+            },
+            "tunedCombined": {
+              "total": 6,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 66.66666666666666,
+              "mrr": 0.5813492063492064
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 1
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 1
+            }
+          },
+          "ot_required": {
+            "total": 5,
+            "uniform": {
+              "total": 5,
+              "hitAt1": 40,
+              "hitAt3": 40,
+              "hitAt5": 60,
+              "mrr": 0.47333333333333344
+            },
+            "tunedCombined": {
+              "total": 5,
+              "hitAt1": 40,
+              "hitAt3": 40,
+              "hitAt5": 60,
+              "mrr": 0.47333333333333344
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 0
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 0
+            }
+          },
+          "single_kp": {
+            "total": 16,
+            "uniform": {
+              "total": 16,
+              "hitAt1": 43.75,
+              "hitAt3": 62.5,
+              "hitAt5": 68.75,
+              "mrr": 0.5561507936507937
+            },
+            "tunedCombined": {
+              "total": 16,
+              "hitAt1": 43.75,
+              "hitAt3": 62.5,
+              "hitAt5": 68.75,
+              "mrr": 0.5561507936507937
+            },
+            "kpidUniform": {
+              "applicable": 16,
+              "hitAt1": 31.25,
+              "hitAt3": 50,
+              "hitAt5": 56.25,
+              "mrr": 0.4311507936507937,
+              "docHitAt1Total": 7,
+              "docHitAt1CorrectKpid": 5,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 11,
+              "docHitAt5CorrectKpid": 9,
+              "docHitAt5WrongKpid": 2
+            },
+            "kpidTunedCombined": {
+              "applicable": 16,
+              "hitAt1": 31.25,
+              "hitAt3": 50,
+              "hitAt5": 56.25,
+              "mrr": 0.4311507936507937,
+              "docHitAt1Total": 7,
+              "docHitAt1CorrectKpid": 5,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 11,
+              "docHitAt5CorrectKpid": 9,
+              "docHitAt5WrongKpid": 2
+            }
+          }
+        },
+        "preferredGranularity": {
+          "KP": {
+            "total": 17,
+            "uniform": {
+              "total": 17,
+              "hitAt1": 47.05882352941176,
+              "hitAt3": 64.70588235294117,
+              "hitAt5": 70.58823529411765,
+              "mrr": 0.5822595704948647
+            },
+            "tunedCombined": {
+              "total": 17,
+              "hitAt1": 47.05882352941176,
+              "hitAt3": 64.70588235294117,
+              "hitAt5": 70.58823529411765,
+              "mrr": 0.5822595704948647
+            },
+            "kpidUniform": {
+              "applicable": 17,
+              "hitAt1": 29.411764705882355,
+              "hitAt3": 47.05882352941176,
+              "hitAt5": 52.94117647058824,
+              "mrr": 0.4057889822595705,
+              "docHitAt1Total": 8,
+              "docHitAt1CorrectKpid": 5,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 12,
+              "docHitAt5CorrectKpid": 9,
+              "docHitAt5WrongKpid": 3
+            },
+            "kpidTunedCombined": {
+              "applicable": 17,
+              "hitAt1": 29.411764705882355,
+              "hitAt3": 47.05882352941176,
+              "hitAt5": 52.94117647058824,
+              "mrr": 0.4057889822595705,
+              "docHitAt1Total": 8,
+              "docHitAt1CorrectKpid": 5,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 12,
+              "docHitAt5CorrectKpid": 9,
+              "docHitAt5WrongKpid": 3
+            }
+          },
+          "KP+OT": {
+            "total": 5,
+            "uniform": {
+              "total": 5,
+              "hitAt1": 40,
+              "hitAt3": 40,
+              "hitAt5": 60,
+              "mrr": 0.49761904761904774
+            },
+            "tunedCombined": {
+              "total": 5,
+              "hitAt1": 40,
+              "hitAt3": 40,
+              "hitAt5": 60,
+              "mrr": 0.49761904761904774
+            },
+            "kpidUniform": {
+              "applicable": 1,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 0,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 0
+            },
+            "kpidTunedCombined": {
+              "applicable": 1,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 0,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 0
+            }
+          },
+          "OT": {
+            "total": 5,
+            "uniform": {
+              "total": 5,
+              "hitAt1": 40,
+              "hitAt3": 40,
+              "hitAt5": 60,
+              "mrr": 0.47333333333333344
+            },
+            "tunedCombined": {
+              "total": 5,
+              "hitAt1": 40,
+              "hitAt3": 40,
+              "hitAt5": 60,
+              "mrr": 0.47333333333333344
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 0
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "label": "OT",
+      "allowedTypes": [
+        "OT"
+      ],
+      "metadataCount": 516,
+      "metadataTypeCounts": {
+        "Q": 0,
+        "KP": 0,
+        "OT": 516
+      },
+      "uniform": {
+        "weights": {
+          "Q": 0,
+          "KP": 0,
+          "OT": 1
+        },
+        "combined": {
+          "total": 27,
+          "hitAt1": 62.96296296296296,
+          "hitAt3": 81.48148148148148,
+          "hitAt5": 85.18518518518519,
+          "mrr": 0.7228395061728397
+        },
+        "kpidCombined": {
+          "applicable": 20,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 12,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 12,
+          "docHitAt5Total": 17,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 17
+        },
+        "metricsByDataset": {
+          "test_dataset_granularity_pilot27_ai_draft_standard": {
+            "total": 12,
+            "hitAt1": 83.33333333333334,
+            "hitAt3": 100,
+            "hitAt5": 100,
+            "mrr": 0.9166666666666666
+          },
+          "test_dataset_granularity_pilot27_ai_draft_short_keyword": {
+            "total": 5,
+            "hitAt1": 40,
+            "hitAt3": 60,
+            "hitAt5": 60,
+            "mrr": 0.4666666666666666
+          },
+          "test_dataset_granularity_pilot27_ai_draft_situational": {
+            "total": 10,
+            "hitAt1": 50,
+            "hitAt3": 70,
+            "hitAt5": 80,
+            "mrr": 0.6183333333333334
+          }
+        }
+      },
+      "tuned": {
+        "candidateCount": 1,
+        "bestWeights": {
+          "Q": 0,
+          "KP": 0,
+          "OT": 1
+        },
+        "tuneCombined": {
+          "total": 17,
+          "hitAt1": 70.58823529411765,
+          "hitAt3": 88.23529411764706,
+          "hitAt5": 88.23529411764706,
+          "mrr": 0.7843137254901961
+        },
+        "kpidTuneCombined": {
+          "applicable": 12,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 8,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 8,
+          "docHitAt5Total": 10,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 10
+        },
+        "holdoutCombined": {
+          "total": 10,
+          "hitAt1": 50,
+          "hitAt3": 70,
+          "hitAt5": 80,
+          "mrr": 0.6183333333333334
+        },
+        "kpidHoldoutCombined": {
+          "applicable": 8,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 4,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 4,
+          "docHitAt5Total": 7,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 7
+        },
+        "combinedCombined": {
+          "total": 27,
+          "hitAt1": 62.96296296296296,
+          "hitAt3": 81.48148148148148,
+          "hitAt5": 85.18518518518519,
+          "mrr": 0.7228395061728397
+        },
+        "kpidCombinedCombined": {
+          "applicable": 20,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 12,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 12,
+          "docHitAt5Total": 17,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 17
+        },
+        "topTuneCandidates": [
+          {
+            "weights": {
+              "Q": 0,
+              "KP": 0,
+              "OT": 1
+            },
+            "combined": {
+              "total": 17,
+              "hitAt1": 70.58823529411765,
+              "hitAt3": 88.23529411764706,
+              "hitAt5": 88.23529411764706,
+              "mrr": 0.7843137254901961
+            }
+          }
+        ]
+      },
+      "groupBreakdowns": {
+        "supportPattern": {
+          "multi_kp": {
+            "total": 6,
+            "uniform": {
+              "total": 6,
+              "hitAt1": 66.66666666666666,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 83.33333333333334,
+              "mrr": 0.725
+            },
+            "tunedCombined": {
+              "total": 6,
+              "hitAt1": 66.66666666666666,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 83.33333333333334,
+              "mrr": 0.725
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 2
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 2
+            }
+          },
+          "ot_required": {
+            "total": 5,
+            "uniform": {
+              "total": 5,
+              "hitAt1": 60,
+              "hitAt3": 80,
+              "hitAt5": 80,
+              "mrr": 0.7
+            },
+            "tunedCombined": {
+              "total": 5,
+              "hitAt1": 60,
+              "hitAt3": 80,
+              "hitAt5": 80,
+              "mrr": 0.7
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 1
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 1
+            }
+          },
+          "single_kp": {
+            "total": 16,
+            "uniform": {
+              "total": 16,
+              "hitAt1": 62.5,
+              "hitAt3": 87.5,
+              "hitAt5": 87.5,
+              "mrr": 0.7291666666666666
+            },
+            "tunedCombined": {
+              "total": 16,
+              "hitAt1": 62.5,
+              "hitAt3": 87.5,
+              "hitAt5": 87.5,
+              "mrr": 0.7291666666666666
+            },
+            "kpidUniform": {
+              "applicable": 16,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 10,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 10,
+              "docHitAt5Total": 14,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 14
+            },
+            "kpidTunedCombined": {
+              "applicable": 16,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 10,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 10,
+              "docHitAt5Total": 14,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 14
+            }
+          }
+        },
+        "preferredGranularity": {
+          "KP": {
+            "total": 17,
+            "uniform": {
+              "total": 17,
+              "hitAt1": 64.70588235294117,
+              "hitAt3": 88.23529411764706,
+              "hitAt5": 88.23529411764706,
+              "mrr": 0.7450980392156863
+            },
+            "tunedCombined": {
+              "total": 17,
+              "hitAt1": 64.70588235294117,
+              "hitAt3": 88.23529411764706,
+              "hitAt5": 88.23529411764706,
+              "mrr": 0.7450980392156863
+            },
+            "kpidUniform": {
+              "applicable": 17,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 11,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 11,
+              "docHitAt5Total": 15,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 15
+            },
+            "kpidTunedCombined": {
+              "applicable": 17,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 11,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 11,
+              "docHitAt5Total": 15,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 15
+            }
+          },
+          "KP+OT": {
+            "total": 5,
+            "uniform": {
+              "total": 5,
+              "hitAt1": 60,
+              "hitAt3": 60,
+              "hitAt5": 80,
+              "mrr": 0.67
+            },
+            "tunedCombined": {
+              "total": 5,
+              "hitAt1": 60,
+              "hitAt3": 60,
+              "hitAt5": 80,
+              "mrr": 0.67
+            },
+            "kpidUniform": {
+              "applicable": 1,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 1
+            },
+            "kpidTunedCombined": {
+              "applicable": 1,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 1
+            }
+          },
+          "OT": {
+            "total": 5,
+            "uniform": {
+              "total": 5,
+              "hitAt1": 60,
+              "hitAt3": 80,
+              "hitAt5": 80,
+              "mrr": 0.7
+            },
+            "tunedCombined": {
+              "total": 5,
+              "hitAt1": 60,
+              "hitAt3": 80,
+              "hitAt5": 80,
+              "mrr": 0.7
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 1
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 1
+            }
+          }
+        }
+      }
+    },
+    {
+      "label": "Q+KP",
+      "allowedTypes": [
+        "Q",
+        "KP"
+      ],
+      "metadataCount": 15696,
+      "metadataTypeCounts": {
+        "Q": 12819,
+        "KP": 2877,
+        "OT": 0
+      },
+      "uniform": {
+        "weights": {
+          "Q": 0.5,
+          "KP": 0.5,
+          "OT": 0
+        },
+        "combined": {
+          "total": 27,
+          "hitAt1": 48.148148148148145,
+          "hitAt3": 74.07407407407408,
+          "hitAt5": 77.77777777777779,
+          "mrr": 0.6063211479878147
+        },
+        "kpidCombined": {
+          "applicable": 20,
+          "hitAt1": 45,
+          "hitAt3": 65,
+          "hitAt5": 70,
+          "mrr": 0.5327380952380952,
+          "docHitAt1Total": 11,
+          "docHitAt1CorrectKpid": 9,
+          "docHitAt1WrongKpid": 2,
+          "docHitAt5Total": 16,
+          "docHitAt5CorrectKpid": 14,
+          "docHitAt5WrongKpid": 2
+        },
+        "metricsByDataset": {
+          "test_dataset_granularity_pilot27_ai_draft_standard": {
+            "total": 12,
+            "hitAt1": 50,
+            "hitAt3": 83.33333333333334,
+            "hitAt5": 83.33333333333334,
+            "mrr": 0.6691468253968255
+          },
+          "test_dataset_granularity_pilot27_ai_draft_short_keyword": {
+            "total": 5,
+            "hitAt1": 40,
+            "hitAt3": 40,
+            "hitAt5": 60,
+            "mrr": 0.45
+          },
+          "test_dataset_granularity_pilot27_ai_draft_situational": {
+            "total": 10,
+            "hitAt1": 50,
+            "hitAt3": 80,
+            "hitAt5": 80,
+            "mrr": 0.6090909090909091
+          }
+        }
+      },
+      "tuned": {
+        "candidateCount": 7,
+        "bestWeights": {
+          "Q": 0.3846153846153846,
+          "KP": 0.6153846153846154,
+          "OT": 0
+        },
+        "tuneCombined": {
+          "total": 17,
+          "hitAt1": 58.82352941176471,
+          "hitAt3": 70.58823529411765,
+          "hitAt5": 82.35294117647058,
+          "mrr": 0.6747899159663865
+        },
+        "kpidTuneCombined": {
+          "applicable": 12,
+          "hitAt1": 50,
+          "hitAt3": 50,
+          "hitAt5": 58.333333333333336,
+          "mrr": 0.5226190476190476,
+          "docHitAt1Total": 8,
+          "docHitAt1CorrectKpid": 6,
+          "docHitAt1WrongKpid": 2,
+          "docHitAt5Total": 9,
+          "docHitAt5CorrectKpid": 7,
+          "docHitAt5WrongKpid": 2
+        },
+        "holdoutCombined": {
+          "total": 10,
+          "hitAt1": 40,
+          "hitAt3": 70,
+          "hitAt5": 80,
+          "mrr": 0.5333333333333333
+        },
+        "kpidHoldoutCombined": {
+          "applicable": 8,
+          "hitAt1": 37.5,
+          "hitAt3": 75,
+          "hitAt5": 87.5,
+          "mrr": 0.53125,
+          "docHitAt1Total": 3,
+          "docHitAt1CorrectKpid": 3,
+          "docHitAt1WrongKpid": 0,
+          "docHitAt5Total": 7,
+          "docHitAt5CorrectKpid": 7,
+          "docHitAt5WrongKpid": 0
+        },
+        "combinedCombined": {
+          "total": 27,
+          "hitAt1": 51.85185185185185,
+          "hitAt3": 70.37037037037037,
+          "hitAt5": 81.48148148148148,
+          "mrr": 0.6223985890652557
+        },
+        "kpidCombinedCombined": {
+          "applicable": 20,
+          "hitAt1": 45,
+          "hitAt3": 60,
+          "hitAt5": 70,
+          "mrr": 0.5260714285714285,
+          "docHitAt1Total": 11,
+          "docHitAt1CorrectKpid": 9,
+          "docHitAt1WrongKpid": 2,
+          "docHitAt5Total": 16,
+          "docHitAt5CorrectKpid": 14,
+          "docHitAt5WrongKpid": 2
+        },
+        "topTuneCandidates": [
+          {
+            "weights": {
+              "Q": 0.3846153846153846,
+              "KP": 0.6153846153846154,
+              "OT": 0
+            },
+            "combined": {
+              "total": 17,
+              "hitAt1": 58.82352941176471,
+              "hitAt3": 70.58823529411765,
+              "hitAt5": 82.35294117647058,
+              "mrr": 0.6747899159663865
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.28571428571428575,
+              "KP": 0.7142857142857143,
+              "OT": 0
+            },
+            "combined": {
+              "total": 17,
+              "hitAt1": 52.94117647058824,
+              "hitAt3": 64.70588235294117,
+              "hitAt5": 82.35294117647058,
+              "mrr": 0.6107843137254901
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.2,
+              "KP": 0.8,
+              "OT": 0
+            },
+            "combined": {
+              "total": 17,
+              "hitAt1": 52.94117647058824,
+              "hitAt3": 64.70588235294117,
+              "hitAt5": 76.47058823529412,
+              "mrr": 0.6075757575757575
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.5,
+              "KP": 0.5,
+              "OT": 0
+            },
+            "combined": {
+              "total": 17,
+              "hitAt1": 47.05882352941176,
+              "hitAt3": 70.58823529411765,
+              "hitAt5": 76.47058823529412,
+              "mrr": 0.6046918767507004
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.6153846153846154,
+              "KP": 0.3846153846153846,
+              "OT": 0
+            },
+            "combined": {
+              "total": 17,
+              "hitAt1": 47.05882352941176,
+              "hitAt3": 70.58823529411765,
+              "hitAt5": 76.47058823529412,
+              "mrr": 0.6046918767507004
+            }
+          }
+        ]
+      },
+      "groupBreakdowns": {
+        "supportPattern": {
+          "multi_kp": {
+            "total": 6,
+            "uniform": {
+              "total": 6,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 83.33333333333334,
+              "hitAt5": 83.33333333333334,
+              "mrr": 0.5707070707070706
+            },
+            "tunedCombined": {
+              "total": 6,
+              "hitAt1": 50,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 83.33333333333334,
+              "mrr": 0.638888888888889
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 50,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 0.6666666666666666,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 2,
+              "docHitAt5WrongKpid": 0
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 100,
+              "mrr": 0.625,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 2,
+              "docHitAt5WrongKpid": 0
+            }
+          },
+          "ot_required": {
+            "total": 5,
+            "uniform": {
+              "total": 5,
+              "hitAt1": 40,
+              "hitAt3": 60,
+              "hitAt5": 60,
+              "mrr": 0.525
+            },
+            "tunedCombined": {
+              "total": 5,
+              "hitAt1": 40,
+              "hitAt3": 60,
+              "hitAt5": 80,
+              "mrr": 0.54
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 0
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 0
+            }
+          },
+          "single_kp": {
+            "total": 16,
+            "uniform": {
+              "total": 16,
+              "hitAt1": 56.25,
+              "hitAt3": 75,
+              "hitAt5": 81.25,
+              "mrr": 0.6450892857142857
+            },
+            "tunedCombined": {
+              "total": 16,
+              "hitAt1": 56.25,
+              "hitAt3": 75,
+              "hitAt5": 81.25,
+              "mrr": 0.6419642857142858
+            },
+            "kpidUniform": {
+              "applicable": 16,
+              "hitAt1": 43.75,
+              "hitAt3": 62.5,
+              "hitAt5": 68.75,
+              "mrr": 0.5200892857142857,
+              "docHitAt1Total": 9,
+              "docHitAt1CorrectKpid": 7,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 11,
+              "docHitAt5WrongKpid": 2
+            },
+            "kpidTunedCombined": {
+              "applicable": 16,
+              "hitAt1": 43.75,
+              "hitAt3": 62.5,
+              "hitAt5": 68.75,
+              "mrr": 0.5169642857142857,
+              "docHitAt1Total": 9,
+              "docHitAt1CorrectKpid": 7,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 11,
+              "docHitAt5WrongKpid": 2
+            }
+          }
+        },
+        "preferredGranularity": {
+          "KP": {
+            "total": 17,
+            "uniform": {
+              "total": 17,
+              "hitAt1": 58.82352941176471,
+              "hitAt3": 76.47058823529412,
+              "hitAt5": 82.35294117647058,
+              "mrr": 0.6659663865546218
+            },
+            "tunedCombined": {
+              "total": 17,
+              "hitAt1": 58.82352941176471,
+              "hitAt3": 76.47058823529412,
+              "hitAt5": 82.35294117647058,
+              "mrr": 0.6630252100840337
+            },
+            "kpidUniform": {
+              "applicable": 17,
+              "hitAt1": 47.05882352941176,
+              "hitAt3": 64.70588235294117,
+              "hitAt5": 70.58823529411765,
+              "mrr": 0.5483193277310924,
+              "docHitAt1Total": 10,
+              "docHitAt1CorrectKpid": 8,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 14,
+              "docHitAt5CorrectKpid": 12,
+              "docHitAt5WrongKpid": 2
+            },
+            "kpidTunedCombined": {
+              "applicable": 17,
+              "hitAt1": 47.05882352941176,
+              "hitAt3": 64.70588235294117,
+              "hitAt5": 70.58823529411765,
+              "mrr": 0.5453781512605042,
+              "docHitAt1Total": 10,
+              "docHitAt1CorrectKpid": 8,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 14,
+              "docHitAt5CorrectKpid": 12,
+              "docHitAt5WrongKpid": 2
+            }
+          },
+          "KP+OT": {
+            "total": 5,
+            "uniform": {
+              "total": 5,
+              "hitAt1": 20,
+              "hitAt3": 80,
+              "hitAt5": 80,
+              "mrr": 0.48484848484848475
+            },
+            "tunedCombined": {
+              "total": 5,
+              "hitAt1": 40,
+              "hitAt3": 60,
+              "hitAt5": 80,
+              "mrr": 0.5666666666666667
+            },
+            "kpidUniform": {
+              "applicable": 1,
+              "hitAt1": 0,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 0.3333333333333333,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 0
+            },
+            "kpidTunedCombined": {
+              "applicable": 1,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 100,
+              "mrr": 0.25,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 0
+            }
+          },
+          "OT": {
+            "total": 5,
+            "uniform": {
+              "total": 5,
+              "hitAt1": 40,
+              "hitAt3": 60,
+              "hitAt5": 60,
+              "mrr": 0.525
+            },
+            "tunedCombined": {
+              "total": 5,
+              "hitAt1": 40,
+              "hitAt3": 60,
+              "hitAt5": 80,
+              "mrr": 0.54
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 0
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "label": "Q+OT",
+      "allowedTypes": [
+        "Q",
+        "OT"
+      ],
+      "metadataCount": 13335,
+      "metadataTypeCounts": {
+        "Q": 12819,
+        "KP": 0,
+        "OT": 516
+      },
+      "uniform": {
+        "weights": {
+          "Q": 0.5,
+          "KP": 0,
+          "OT": 0.5
+        },
+        "combined": {
+          "total": 27,
+          "hitAt1": 44.44444444444444,
+          "hitAt3": 74.07407407407408,
+          "hitAt5": 77.77777777777779,
+          "mrr": 0.5856701940035274
+        },
+        "kpidCombined": {
+          "applicable": 20,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 10,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 10,
+          "docHitAt5Total": 16,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 16
+        },
+        "metricsByDataset": {
+          "test_dataset_granularity_pilot27_ai_draft_standard": {
+            "total": 12,
+            "hitAt1": 50,
+            "hitAt3": 83.33333333333334,
+            "hitAt5": 83.33333333333334,
+            "mrr": 0.6552579365079364
+          },
+          "test_dataset_granularity_pilot27_ai_draft_short_keyword": {
+            "total": 5,
+            "hitAt1": 40,
+            "hitAt3": 40,
+            "hitAt5": 60,
+            "mrr": 0.44000000000000006
+          },
+          "test_dataset_granularity_pilot27_ai_draft_situational": {
+            "total": 10,
+            "hitAt1": 40,
+            "hitAt3": 80,
+            "hitAt5": 80,
+            "mrr": 0.575
+          }
+        }
+      },
+      "tuned": {
+        "candidateCount": 7,
+        "bestWeights": {
+          "Q": 0.2,
+          "KP": 0,
+          "OT": 0.8
+        },
+        "tuneCombined": {
+          "total": 17,
+          "hitAt1": 70.58823529411765,
+          "hitAt3": 76.47058823529412,
+          "hitAt5": 76.47058823529412,
+          "mrr": 0.7524509803921569
+        },
+        "kpidTuneCombined": {
+          "applicable": 12,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 7,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 7,
+          "docHitAt5Total": 8,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 8
+        },
+        "holdoutCombined": {
+          "total": 10,
+          "hitAt1": 50,
+          "hitAt3": 70,
+          "hitAt5": 80,
+          "mrr": 0.6208333333333333
+        },
+        "kpidHoldoutCombined": {
+          "applicable": 8,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 4,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 4,
+          "docHitAt5Total": 7,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 7
+        },
+        "combinedCombined": {
+          "total": 27,
+          "hitAt1": 62.96296296296296,
+          "hitAt3": 74.07407407407408,
+          "hitAt5": 77.77777777777779,
+          "mrr": 0.7037037037037036
+        },
+        "kpidCombinedCombined": {
+          "applicable": 20,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 11,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 11,
+          "docHitAt5Total": 15,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 15
+        },
+        "topTuneCandidates": [
+          {
+            "weights": {
+              "Q": 0.2,
+              "KP": 0,
+              "OT": 0.8
+            },
+            "combined": {
+              "total": 17,
+              "hitAt1": 70.58823529411765,
+              "hitAt3": 76.47058823529412,
+              "hitAt5": 76.47058823529412,
+              "mrr": 0.7524509803921569
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.28571428571428575,
+              "KP": 0,
+              "OT": 0.7142857142857143
+            },
+            "combined": {
+              "total": 17,
+              "hitAt1": 70.58823529411765,
+              "hitAt3": 76.47058823529412,
+              "hitAt5": 76.47058823529412,
+              "mrr": 0.7492997198879552
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.3846153846153846,
+              "KP": 0,
+              "OT": 0.6153846153846154
+            },
+            "combined": {
+              "total": 17,
+              "hitAt1": 58.82352941176471,
+              "hitAt3": 76.47058823529412,
+              "hitAt5": 82.35294117647058,
+              "mrr": 0.6728291316526611
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.5,
+              "KP": 0,
+              "OT": 0.5
+            },
+            "combined": {
+              "total": 17,
+              "hitAt1": 47.05882352941176,
+              "hitAt3": 70.58823529411765,
+              "hitAt5": 76.47058823529412,
+              "mrr": 0.5919467787114845
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.7142857142857143,
+              "KP": 0,
+              "OT": 0.28571428571428575
+            },
+            "combined": {
+              "total": 17,
+              "hitAt1": 47.05882352941176,
+              "hitAt3": 70.58823529411765,
+              "hitAt5": 76.47058823529412,
+              "mrr": 0.5919467787114845
+            }
+          }
+        ]
+      },
+      "groupBreakdowns": {
+        "supportPattern": {
+          "multi_kp": {
+            "total": 6,
+            "uniform": {
+              "total": 6,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 83.33333333333334,
+              "hitAt5": 83.33333333333334,
+              "mrr": 0.5694444444444444
+            },
+            "tunedCombined": {
+              "total": 6,
+              "hitAt1": 66.66666666666666,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 83.33333333333334,
+              "mrr": 0.7291666666666666
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 2
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 2
+            }
+          },
+          "ot_required": {
+            "total": 5,
+            "uniform": {
+              "total": 5,
+              "hitAt1": 40,
+              "hitAt3": 60,
+              "hitAt5": 60,
+              "mrr": 0.4916666666666667
+            },
+            "tunedCombined": {
+              "total": 5,
+              "hitAt1": 80,
+              "hitAt3": 80,
+              "hitAt5": 80,
+              "mrr": 0.8
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 1
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 1
+            }
+          },
+          "single_kp": {
+            "total": 16,
+            "uniform": {
+              "total": 16,
+              "hitAt1": 50,
+              "hitAt3": 75,
+              "hitAt5": 81.25,
+              "mrr": 0.6211309523809523
+            },
+            "tunedCombined": {
+              "total": 16,
+              "hitAt1": 56.25,
+              "hitAt3": 75,
+              "hitAt5": 75,
+              "mrr": 0.6640625000000001
+            },
+            "kpidUniform": {
+              "applicable": 16,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 8,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 8,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 13
+            },
+            "kpidTunedCombined": {
+              "applicable": 16,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 9,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 9,
+              "docHitAt5Total": 12,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 12
+            }
+          }
+        },
+        "preferredGranularity": {
+          "KP": {
+            "total": 17,
+            "uniform": {
+              "total": 17,
+              "hitAt1": 52.94117647058824,
+              "hitAt3": 76.47058823529412,
+              "hitAt5": 82.35294117647058,
+              "mrr": 0.6434173669467786
+            },
+            "tunedCombined": {
+              "total": 17,
+              "hitAt1": 58.82352941176471,
+              "hitAt3": 76.47058823529412,
+              "hitAt5": 76.47058823529412,
+              "mrr": 0.6838235294117648
+            },
+            "kpidUniform": {
+              "applicable": 17,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 9,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 9,
+              "docHitAt5Total": 14,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 14
+            },
+            "kpidTunedCombined": {
+              "applicable": 17,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 10,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 10,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 13
+            }
+          },
+          "KP+OT": {
+            "total": 5,
+            "uniform": {
+              "total": 5,
+              "hitAt1": 20,
+              "hitAt3": 80,
+              "hitAt5": 80,
+              "mrr": 0.4833333333333333
+            },
+            "tunedCombined": {
+              "total": 5,
+              "hitAt1": 60,
+              "hitAt3": 60,
+              "hitAt5": 80,
+              "mrr": 0.675
+            },
+            "kpidUniform": {
+              "applicable": 1,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 1
+            },
+            "kpidTunedCombined": {
+              "applicable": 1,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 1
+            }
+          },
+          "OT": {
+            "total": 5,
+            "uniform": {
+              "total": 5,
+              "hitAt1": 40,
+              "hitAt3": 60,
+              "hitAt5": 60,
+              "mrr": 0.4916666666666667
+            },
+            "tunedCombined": {
+              "total": 5,
+              "hitAt1": 80,
+              "hitAt3": 80,
+              "hitAt5": 80,
+              "mrr": 0.8
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 1
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 1
+            }
+          }
+        }
+      }
+    },
+    {
+      "label": "KP+OT",
+      "allowedTypes": [
+        "KP",
+        "OT"
+      ],
+      "metadataCount": 3393,
+      "metadataTypeCounts": {
+        "Q": 0,
+        "KP": 2877,
+        "OT": 516
+      },
+      "uniform": {
+        "weights": {
+          "Q": 0,
+          "KP": 0.5,
+          "OT": 0.5
+        },
+        "combined": {
+          "total": 27,
+          "hitAt1": 59.25925925925925,
+          "hitAt3": 70.37037037037037,
+          "hitAt5": 81.48148148148148,
+          "mrr": 0.674354657687991
+        },
+        "kpidCombined": {
+          "applicable": 20,
+          "hitAt1": 45,
+          "hitAt3": 55.00000000000001,
+          "hitAt5": 65,
+          "mrr": 0.5187121212121212,
+          "docHitAt1Total": 11,
+          "docHitAt1CorrectKpid": 9,
+          "docHitAt1WrongKpid": 2,
+          "docHitAt5Total": 16,
+          "docHitAt5CorrectKpid": 13,
+          "docHitAt5WrongKpid": 3
+        },
+        "metricsByDataset": {
+          "test_dataset_granularity_pilot27_ai_draft_standard": {
+            "total": 12,
+            "hitAt1": 75,
+            "hitAt3": 91.66666666666666,
+            "hitAt5": 91.66666666666666,
+            "mrr": 0.8409090909090908
+          },
+          "test_dataset_granularity_pilot27_ai_draft_short_keyword": {
+            "total": 5,
+            "hitAt1": 40,
+            "hitAt3": 60,
+            "hitAt5": 60,
+            "mrr": 0.4666666666666666
+          },
+          "test_dataset_granularity_pilot27_ai_draft_situational": {
+            "total": 10,
+            "hitAt1": 50,
+            "hitAt3": 50,
+            "hitAt5": 80,
+            "mrr": 0.5783333333333334
+          }
+        }
+      },
+      "tuned": {
+        "candidateCount": 7,
+        "bestWeights": {
+          "Q": 0,
+          "KP": 0.28571428571428575,
+          "OT": 0.7142857142857143
+        },
+        "tuneCombined": {
+          "total": 17,
+          "hitAt1": 82.35294117647058,
+          "hitAt3": 88.23529411764706,
+          "hitAt5": 88.23529411764706,
+          "mrr": 0.8431372549019608
+        },
+        "kpidTuneCombined": {
+          "applicable": 12,
+          "hitAt1": 66.66666666666666,
+          "hitAt3": 75,
+          "hitAt5": 75,
+          "mrr": 0.6944444444444443,
+          "docHitAt1Total": 9,
+          "docHitAt1CorrectKpid": 8,
+          "docHitAt1WrongKpid": 1,
+          "docHitAt5Total": 10,
+          "docHitAt5CorrectKpid": 9,
+          "docHitAt5WrongKpid": 1
+        },
+        "holdoutCombined": {
+          "total": 10,
+          "hitAt1": 50,
+          "hitAt3": 80,
+          "hitAt5": 80,
+          "mrr": 0.6277777777777778
+        },
+        "kpidHoldoutCombined": {
+          "applicable": 8,
+          "hitAt1": 37.5,
+          "hitAt3": 62.5,
+          "hitAt5": 62.5,
+          "mrr": 0.4791666666666667,
+          "docHitAt1Total": 4,
+          "docHitAt1CorrectKpid": 3,
+          "docHitAt1WrongKpid": 1,
+          "docHitAt5Total": 7,
+          "docHitAt5CorrectKpid": 5,
+          "docHitAt5WrongKpid": 2
+        },
+        "combinedCombined": {
+          "total": 27,
+          "hitAt1": 70.37037037037037,
+          "hitAt3": 85.18518518518519,
+          "hitAt5": 85.18518518518519,
+          "mrr": 0.7633744855967078
+        },
+        "kpidCombinedCombined": {
+          "applicable": 20,
+          "hitAt1": 55.00000000000001,
+          "hitAt3": 70,
+          "hitAt5": 70,
+          "mrr": 0.6083333333333333,
+          "docHitAt1Total": 13,
+          "docHitAt1CorrectKpid": 11,
+          "docHitAt1WrongKpid": 2,
+          "docHitAt5Total": 17,
+          "docHitAt5CorrectKpid": 14,
+          "docHitAt5WrongKpid": 3
+        },
+        "topTuneCandidates": [
+          {
+            "weights": {
+              "Q": 0,
+              "KP": 0.28571428571428575,
+              "OT": 0.7142857142857143
+            },
+            "combined": {
+              "total": 17,
+              "hitAt1": 82.35294117647058,
+              "hitAt3": 88.23529411764706,
+              "hitAt5": 88.23529411764706,
+              "mrr": 0.8431372549019608
+            }
+          },
+          {
+            "weights": {
+              "Q": 0,
+              "KP": 0.2,
+              "OT": 0.8
+            },
+            "combined": {
+              "total": 17,
+              "hitAt1": 82.35294117647058,
+              "hitAt3": 88.23529411764706,
+              "hitAt5": 88.23529411764706,
+              "mrr": 0.8431372549019608
+            }
+          },
+          {
+            "weights": {
+              "Q": 0,
+              "KP": 0.3846153846153846,
+              "OT": 0.6153846153846154
+            },
+            "combined": {
+              "total": 17,
+              "hitAt1": 82.35294117647058,
+              "hitAt3": 88.23529411764706,
+              "hitAt5": 88.23529411764706,
+              "mrr": 0.8431372549019608
+            }
+          },
+          {
+            "weights": {
+              "Q": 0,
+              "KP": 0.5,
+              "OT": 0.5
+            },
+            "combined": {
+              "total": 17,
+              "hitAt1": 64.70588235294117,
+              "hitAt3": 82.35294117647058,
+              "hitAt5": 82.35294117647058,
+              "mrr": 0.7308377896613191
+            }
+          },
+          {
+            "weights": {
+              "Q": 0,
+              "KP": 0.6153846153846154,
+              "OT": 0.3846153846153846
+            },
+            "combined": {
+              "total": 17,
+              "hitAt1": 47.05882352941176,
+              "hitAt3": 64.70588235294117,
+              "hitAt5": 76.47058823529412,
+              "mrr": 0.588970588235294
+            }
+          }
+        ]
+      },
+      "groupBreakdowns": {
+        "supportPattern": {
+          "multi_kp": {
+            "total": 6,
+            "uniform": {
+              "total": 6,
+              "hitAt1": 66.66666666666666,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 83.33333333333334,
+              "mrr": 0.7222222222222222
+            },
+            "tunedCombined": {
+              "total": 6,
+              "hitAt1": 66.66666666666666,
+              "hitAt3": 83.33333333333334,
+              "hitAt5": 83.33333333333334,
+              "mrr": 0.7407407407407408
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 2
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 2
+            }
+          },
+          "ot_required": {
+            "total": 5,
+            "uniform": {
+              "total": 5,
+              "hitAt1": 60,
+              "hitAt3": 80,
+              "hitAt5": 80,
+              "mrr": 0.7
+            },
+            "tunedCombined": {
+              "total": 5,
+              "hitAt1": 80,
+              "hitAt3": 80,
+              "hitAt5": 80,
+              "mrr": 0.8
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 0
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 0
+            }
+          },
+          "single_kp": {
+            "total": 16,
+            "uniform": {
+              "total": 16,
+              "hitAt1": 56.25,
+              "hitAt3": 68.75,
+              "hitAt5": 81.25,
+              "mrr": 0.6483901515151514
+            },
+            "tunedCombined": {
+              "total": 16,
+              "hitAt1": 68.75,
+              "hitAt3": 87.5,
+              "hitAt5": 87.5,
+              "mrr": 0.7604166666666666
+            },
+            "kpidUniform": {
+              "applicable": 16,
+              "hitAt1": 50,
+              "hitAt3": 62.5,
+              "hitAt5": 75,
+              "mrr": 0.5858901515151516,
+              "docHitAt1Total": 9,
+              "docHitAt1CorrectKpid": 8,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 12,
+              "docHitAt5WrongKpid": 1
+            },
+            "kpidTunedCombined": {
+              "applicable": 16,
+              "hitAt1": 62.5,
+              "hitAt3": 81.25,
+              "hitAt5": 81.25,
+              "mrr": 0.6979166666666666,
+              "docHitAt1Total": 11,
+              "docHitAt1CorrectKpid": 10,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 14,
+              "docHitAt5CorrectKpid": 13,
+              "docHitAt5WrongKpid": 1
+            }
+          }
+        },
+        "preferredGranularity": {
+          "KP": {
+            "total": 17,
+            "uniform": {
+              "total": 17,
+              "hitAt1": 58.82352941176471,
+              "hitAt3": 70.58823529411765,
+              "hitAt5": 82.35294117647058,
+              "mrr": 0.669073083778966
+            },
+            "tunedCombined": {
+              "total": 17,
+              "hitAt1": 70.58823529411765,
+              "hitAt3": 88.23529411764706,
+              "hitAt5": 88.23529411764706,
+              "mrr": 0.7745098039215685
+            },
+            "kpidUniform": {
+              "applicable": 17,
+              "hitAt1": 47.05882352941176,
+              "hitAt3": 58.82352941176471,
+              "hitAt5": 70.58823529411765,
+              "mrr": 0.5514260249554368,
+              "docHitAt1Total": 10,
+              "docHitAt1CorrectKpid": 8,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 14,
+              "docHitAt5CorrectKpid": 12,
+              "docHitAt5WrongKpid": 2
+            },
+            "kpidTunedCombined": {
+              "applicable": 17,
+              "hitAt1": 58.82352941176471,
+              "hitAt3": 76.47058823529412,
+              "hitAt5": 76.47058823529412,
+              "mrr": 0.6568627450980392,
+              "docHitAt1Total": 12,
+              "docHitAt1CorrectKpid": 10,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 15,
+              "docHitAt5CorrectKpid": 13,
+              "docHitAt5WrongKpid": 2
+            }
+          },
+          "KP+OT": {
+            "total": 5,
+            "uniform": {
+              "total": 5,
+              "hitAt1": 60,
+              "hitAt3": 60,
+              "hitAt5": 80,
+              "mrr": 0.6666666666666667
+            },
+            "tunedCombined": {
+              "total": 5,
+              "hitAt1": 60,
+              "hitAt3": 80,
+              "hitAt5": 80,
+              "mrr": 0.6888888888888889
+            },
+            "kpidUniform": {
+              "applicable": 1,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 1
+            },
+            "kpidTunedCombined": {
+              "applicable": 1,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 1
+            }
+          },
+          "OT": {
+            "total": 5,
+            "uniform": {
+              "total": 5,
+              "hitAt1": 60,
+              "hitAt3": 80,
+              "hitAt5": 80,
+              "mrr": 0.7
+            },
+            "tunedCombined": {
+              "total": 5,
+              "hitAt1": 80,
+              "hitAt3": 80,
+              "hitAt5": 80,
+              "mrr": 0.8
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 0
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "label": "Q+KP+OT",
+      "allowedTypes": [
+        "Q",
+        "KP",
+        "OT"
+      ],
+      "metadataCount": 16212,
+      "metadataTypeCounts": {
+        "Q": 12819,
+        "KP": 2877,
+        "OT": 516
+      },
+      "uniform": {
+        "weights": {
+          "Q": 0.3333333333333333,
+          "KP": 0.3333333333333333,
+          "OT": 0.3333333333333333
+        },
+        "combined": {
+          "total": 27,
+          "hitAt1": 51.85185185185185,
+          "hitAt3": 70.37037037037037,
+          "hitAt5": 77.77777777777779,
+          "mrr": 0.6278659611992945
+        },
+        "kpidCombined": {
+          "applicable": 20,
+          "hitAt1": 40,
+          "hitAt3": 55.00000000000001,
+          "hitAt5": 65,
+          "mrr": 0.48690476190476184,
+          "docHitAt1Total": 11,
+          "docHitAt1CorrectKpid": 8,
+          "docHitAt1WrongKpid": 3,
+          "docHitAt5Total": 16,
+          "docHitAt5CorrectKpid": 13,
+          "docHitAt5WrongKpid": 3
+        },
+        "metricsByDataset": {
+          "test_dataset_granularity_pilot27_ai_draft_standard": {
+            "total": 12,
+            "hitAt1": 58.333333333333336,
+            "hitAt3": 83.33333333333334,
+            "hitAt5": 83.33333333333334,
+            "mrr": 0.7123015873015873
+          },
+          "test_dataset_granularity_pilot27_ai_draft_short_keyword": {
+            "total": 5,
+            "hitAt1": 40,
+            "hitAt3": 40,
+            "hitAt5": 60,
+            "mrr": 0.45
+          },
+          "test_dataset_granularity_pilot27_ai_draft_situational": {
+            "total": 10,
+            "hitAt1": 50,
+            "hitAt3": 70,
+            "hitAt5": 80,
+            "mrr": 0.6154761904761904
+          }
+        }
+      },
+      "tuned": {
+        "candidateCount": 25,
+        "bestWeights": {
+          "Q": 0.13333333333333333,
+          "KP": 0.3333333333333333,
+          "OT": 0.5333333333333333
+        },
+        "tuneCombined": {
+          "total": 17,
+          "hitAt1": 70.58823529411765,
+          "hitAt3": 82.35294117647058,
+          "hitAt5": 82.35294117647058,
+          "mrr": 0.7598039215686275
+        },
+        "kpidTuneCombined": {
+          "applicable": 12,
+          "hitAt1": 33.33333333333333,
+          "hitAt3": 50,
+          "hitAt5": 50,
+          "mrr": 0.40972222222222227,
+          "docHitAt1Total": 7,
+          "docHitAt1CorrectKpid": 4,
+          "docHitAt1WrongKpid": 3,
+          "docHitAt5Total": 9,
+          "docHitAt5CorrectKpid": 6,
+          "docHitAt5WrongKpid": 3
+        },
+        "holdoutCombined": {
+          "total": 10,
+          "hitAt1": 40,
+          "hitAt3": 70,
+          "hitAt5": 80,
+          "mrr": 0.5541666666666666
+        },
+        "kpidHoldoutCombined": {
+          "applicable": 8,
+          "hitAt1": 37.5,
+          "hitAt3": 75,
+          "hitAt5": 87.5,
+          "mrr": 0.5520833333333333,
+          "docHitAt1Total": 3,
+          "docHitAt1CorrectKpid": 3,
+          "docHitAt1WrongKpid": 0,
+          "docHitAt5Total": 7,
+          "docHitAt5CorrectKpid": 7,
+          "docHitAt5WrongKpid": 0
+        },
+        "combinedCombined": {
+          "total": 27,
+          "hitAt1": 59.25925925925925,
+          "hitAt3": 77.77777777777779,
+          "hitAt5": 81.48148148148148,
+          "mrr": 0.683641975308642
+        },
+        "kpidCombinedCombined": {
+          "applicable": 20,
+          "hitAt1": 35,
+          "hitAt3": 60,
+          "hitAt5": 65,
+          "mrr": 0.4666666666666666,
+          "docHitAt1Total": 10,
+          "docHitAt1CorrectKpid": 7,
+          "docHitAt1WrongKpid": 3,
+          "docHitAt5Total": 16,
+          "docHitAt5CorrectKpid": 13,
+          "docHitAt5WrongKpid": 3
+        },
+        "topTuneCandidates": [
+          {
+            "weights": {
+              "Q": 0.13333333333333333,
+              "KP": 0.3333333333333333,
+              "OT": 0.5333333333333333
+            },
+            "combined": {
+              "total": 17,
+              "hitAt1": 70.58823529411765,
+              "hitAt3": 82.35294117647058,
+              "hitAt5": 82.35294117647058,
+              "mrr": 0.7598039215686275
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.16666666666666666,
+              "KP": 0.16666666666666666,
+              "OT": 0.6666666666666666
+            },
+            "combined": {
+              "total": 17,
+              "hitAt1": 70.58823529411765,
+              "hitAt3": 76.47058823529412,
+              "hitAt5": 82.35294117647058,
+              "mrr": 0.7558823529411764
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.22222222222222224,
+              "KP": 0.22222222222222224,
+              "OT": 0.5555555555555556
+            },
+            "combined": {
+              "total": 17,
+              "hitAt1": 70.58823529411765,
+              "hitAt3": 76.47058823529412,
+              "hitAt5": 82.35294117647058,
+              "mrr": 0.754524886877828
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.3333333333333333,
+              "KP": 0.13333333333333333,
+              "OT": 0.5333333333333333
+            },
+            "combined": {
+              "total": 17,
+              "hitAt1": 64.70588235294117,
+              "hitAt3": 76.47058823529412,
+              "hitAt5": 82.35294117647058,
+              "mrr": 0.7153092006033183
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.2777777777777778,
+              "KP": 0.2777777777777778,
+              "OT": 0.4444444444444445
+            },
+            "combined": {
+              "total": 17,
+              "hitAt1": 58.82352941176471,
+              "hitAt3": 76.47058823529412,
+              "hitAt5": 82.35294117647058,
+              "mrr": 0.6858974358974359
+            }
+          }
+        ]
+      },
+      "groupBreakdowns": {
+        "supportPattern": {
+          "multi_kp": {
+            "total": 6,
+            "uniform": {
+              "total": 6,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 83.33333333333334,
+              "mrr": 0.5535714285714286
+            },
+            "tunedCombined": {
+              "total": 6,
+              "hitAt1": 66.66666666666666,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 83.33333333333334,
+              "mrr": 0.7291666666666666
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 100,
+              "mrr": 0.625,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 2,
+              "docHitAt5WrongKpid": 0
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 100,
+              "mrr": 0.625,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 2,
+              "docHitAt5WrongKpid": 0
+            }
+          },
+          "ot_required": {
+            "total": 5,
+            "uniform": {
+              "total": 5,
+              "hitAt1": 60,
+              "hitAt3": 60,
+              "hitAt5": 60,
+              "mrr": 0.6285714285714286
+            },
+            "tunedCombined": {
+              "total": 5,
+              "hitAt1": 80,
+              "hitAt3": 80,
+              "hitAt5": 80,
+              "mrr": 0.8
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 0
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 0
+            }
+          },
+          "single_kp": {
+            "total": 16,
+            "uniform": {
+              "total": 16,
+              "hitAt1": 56.25,
+              "hitAt3": 75,
+              "hitAt5": 81.25,
+              "mrr": 0.6555059523809523
+            },
+            "tunedCombined": {
+              "total": 16,
+              "hitAt1": 50,
+              "hitAt3": 81.25,
+              "hitAt5": 81.25,
+              "mrr": 0.6302083333333334
+            },
+            "kpidUniform": {
+              "applicable": 16,
+              "hitAt1": 37.5,
+              "hitAt3": 56.25,
+              "hitAt5": 62.5,
+              "mrr": 0.46800595238095244,
+              "docHitAt1Total": 9,
+              "docHitAt1CorrectKpid": 6,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 10,
+              "docHitAt5WrongKpid": 3
+            },
+            "kpidTunedCombined": {
+              "applicable": 16,
+              "hitAt1": 31.25,
+              "hitAt3": 62.5,
+              "hitAt5": 62.5,
+              "mrr": 0.4427083333333333,
+              "docHitAt1Total": 8,
+              "docHitAt1CorrectKpid": 5,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 10,
+              "docHitAt5WrongKpid": 3
+            }
+          }
+        },
+        "preferredGranularity": {
+          "KP": {
+            "total": 17,
+            "uniform": {
+              "total": 17,
+              "hitAt1": 58.82352941176471,
+              "hitAt3": 76.47058823529412,
+              "hitAt5": 82.35294117647058,
+              "mrr": 0.6757703081232492
+            },
+            "tunedCombined": {
+              "total": 17,
+              "hitAt1": 52.94117647058824,
+              "hitAt3": 82.35294117647058,
+              "hitAt5": 82.35294117647058,
+              "mrr": 0.6519607843137255
+            },
+            "kpidUniform": {
+              "applicable": 17,
+              "hitAt1": 41.17647058823529,
+              "hitAt3": 58.82352941176471,
+              "hitAt5": 64.70588235294117,
+              "mrr": 0.49929971988795524,
+              "docHitAt1Total": 10,
+              "docHitAt1CorrectKpid": 7,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 14,
+              "docHitAt5CorrectKpid": 11,
+              "docHitAt5WrongKpid": 3
+            },
+            "kpidTunedCombined": {
+              "applicable": 17,
+              "hitAt1": 35.294117647058826,
+              "hitAt3": 64.70588235294117,
+              "hitAt5": 64.70588235294117,
+              "mrr": 0.4754901960784313,
+              "docHitAt1Total": 9,
+              "docHitAt1CorrectKpid": 6,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 14,
+              "docHitAt5CorrectKpid": 11,
+              "docHitAt5WrongKpid": 3
+            }
+          },
+          "KP+OT": {
+            "total": 5,
+            "uniform": {
+              "total": 5,
+              "hitAt1": 20,
+              "hitAt3": 60,
+              "hitAt5": 80,
+              "mrr": 0.4642857142857143
+            },
+            "tunedCombined": {
+              "total": 5,
+              "hitAt1": 60,
+              "hitAt3": 60,
+              "hitAt5": 80,
+              "mrr": 0.675
+            },
+            "kpidUniform": {
+              "applicable": 1,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 100,
+              "mrr": 0.25,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 0
+            },
+            "kpidTunedCombined": {
+              "applicable": 1,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 100,
+              "mrr": 0.25,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 0
+            }
+          },
+          "OT": {
+            "total": 5,
+            "uniform": {
+              "total": 5,
+              "hitAt1": 60,
+              "hitAt3": 60,
+              "hitAt5": 60,
+              "mrr": 0.6285714285714286
+            },
+            "tunedCombined": {
+              "total": 5,
+              "hitAt1": 80,
+              "hitAt3": 80,
+              "hitAt5": 80,
+              "mrr": 0.8
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 0
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 0
+            }
+          }
+        }
+      }
+    }
+  ]
+}

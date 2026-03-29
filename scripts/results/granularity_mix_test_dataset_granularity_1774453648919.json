@@ -1,0 +1,919 @@
+{
+  "generatedAt": "2026-03-25T15:47:07.761Z",
+  "datasetVersion": "granularity",
+  "datasetMode": "single_file",
+  "datasetKey": "test_dataset_granularity",
+  "weightSteps": [
+    0.2,
+    0.5,
+    0.8
+  ],
+  "datasetSizes": {
+    "tune": {
+      "test_dataset_granularity_standard": 4,
+      "test_dataset_granularity_short_keyword": 4
+    },
+    "holdout": {
+      "test_dataset_granularity_situational": 7
+    },
+    "combined": {
+      "test_dataset_granularity_standard": 4,
+      "test_dataset_granularity_short_keyword": 4,
+      "test_dataset_granularity_situational": 7
+    }
+  },
+  "globalMetadataTypeCounts": {
+    "Q": 12819,
+    "KP": 2877,
+    "OT": 516
+  },
+  "combos": [
+    {
+      "label": "Q",
+      "allowedTypes": [
+        "Q"
+      ],
+      "metadataCount": 12819,
+      "metadataTypeCounts": {
+        "Q": 12819,
+        "KP": 0,
+        "OT": 0
+      },
+      "uniform": {
+        "weights": {
+          "Q": 1,
+          "KP": 0,
+          "OT": 0
+        },
+        "combined": {
+          "total": 15,
+          "hitAt1": 40,
+          "hitAt3": 66.66666666666666,
+          "hitAt5": 66.66666666666666,
+          "mrr": 0.5380952380952381
+        },
+        "metricsByDataset": {
+          "test_dataset_granularity_standard": {
+            "total": 4,
+            "hitAt1": 75,
+            "hitAt3": 75,
+            "hitAt5": 75,
+            "mrr": 0.7678571428571429
+          },
+          "test_dataset_granularity_short_keyword": {
+            "total": 4,
+            "hitAt1": 25,
+            "hitAt3": 25,
+            "hitAt5": 25,
+            "mrr": 0.2916666666666667
+          },
+          "test_dataset_granularity_situational": {
+            "total": 7,
+            "hitAt1": 28.57142857142857,
+            "hitAt3": 85.71428571428571,
+            "hitAt5": 85.71428571428571,
+            "mrr": 0.5476190476190477
+          }
+        }
+      },
+      "tuned": {
+        "candidateCount": 1,
+        "bestWeights": {
+          "Q": 1,
+          "KP": 0,
+          "OT": 0
+        },
+        "tuneCombined": {
+          "total": 8,
+          "hitAt1": 50,
+          "hitAt3": 50,
+          "hitAt5": 50,
+          "mrr": 0.5297619047619048
+        },
+        "holdoutCombined": {
+          "total": 7,
+          "hitAt1": 28.57142857142857,
+          "hitAt3": 85.71428571428571,
+          "hitAt5": 85.71428571428571,
+          "mrr": 0.5476190476190477
+        },
+        "combinedCombined": {
+          "total": 15,
+          "hitAt1": 40,
+          "hitAt3": 66.66666666666666,
+          "hitAt5": 66.66666666666666,
+          "mrr": 0.5380952380952381
+        },
+        "topTuneCandidates": [
+          {
+            "weights": {
+              "Q": 1,
+              "KP": 0,
+              "OT": 0
+            },
+            "combined": {
+              "total": 8,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5297619047619048
+            }
+          }
+        ]
+      }
+    },
+    {
+      "label": "KP",
+      "allowedTypes": [
+        "KP"
+      ],
+      "metadataCount": 2877,
+      "metadataTypeCounts": {
+        "Q": 0,
+        "KP": 2877,
+        "OT": 0
+      },
+      "uniform": {
+        "weights": {
+          "Q": 0,
+          "KP": 1,
+          "OT": 0
+        },
+        "combined": {
+          "total": 15,
+          "hitAt1": 33.33333333333333,
+          "hitAt3": 40,
+          "hitAt5": 60,
+          "mrr": 0.4322222222222222
+        },
+        "metricsByDataset": {
+          "test_dataset_granularity_standard": {
+            "total": 4,
+            "hitAt1": 50,
+            "hitAt3": 50,
+            "hitAt5": 75,
+            "mrr": 0.5638888888888889
+          },
+          "test_dataset_granularity_short_keyword": {
+            "total": 4,
+            "hitAt1": 25,
+            "hitAt3": 25,
+            "hitAt5": 25,
+            "mrr": 0.2916666666666667
+          },
+          "test_dataset_granularity_situational": {
+            "total": 7,
+            "hitAt1": 28.57142857142857,
+            "hitAt3": 42.857142857142854,
+            "hitAt5": 71.42857142857143,
+            "mrr": 0.43730158730158736
+          }
+        }
+      },
+      "tuned": {
+        "candidateCount": 1,
+        "bestWeights": {
+          "Q": 0,
+          "KP": 1,
+          "OT": 0
+        },
+        "tuneCombined": {
+          "total": 8,
+          "hitAt1": 37.5,
+          "hitAt3": 37.5,
+          "hitAt5": 50,
+          "mrr": 0.42777777777777776
+        },
+        "holdoutCombined": {
+          "total": 7,
+          "hitAt1": 28.57142857142857,
+          "hitAt3": 42.857142857142854,
+          "hitAt5": 71.42857142857143,
+          "mrr": 0.43730158730158736
+        },
+        "combinedCombined": {
+          "total": 15,
+          "hitAt1": 33.33333333333333,
+          "hitAt3": 40,
+          "hitAt5": 60,
+          "mrr": 0.4322222222222222
+        },
+        "topTuneCandidates": [
+          {
+            "weights": {
+              "Q": 0,
+              "KP": 1,
+              "OT": 0
+            },
+            "combined": {
+              "total": 8,
+              "hitAt1": 37.5,
+              "hitAt3": 37.5,
+              "hitAt5": 50,
+              "mrr": 0.42777777777777776
+            }
+          }
+        ]
+      }
+    },
+    {
+      "label": "OT",
+      "allowedTypes": [
+        "OT"
+      ],
+      "metadataCount": 516,
+      "metadataTypeCounts": {
+        "Q": 0,
+        "KP": 0,
+        "OT": 516
+      },
+      "uniform": {
+        "weights": {
+          "Q": 0,
+          "KP": 0,
+          "OT": 1
+        },
+        "combined": {
+          "total": 15,
+          "hitAt1": 46.666666666666664,
+          "hitAt3": 80,
+          "hitAt5": 80,
+          "mrr": 0.6000000000000001
+        },
+        "metricsByDataset": {
+          "test_dataset_granularity_standard": {
+            "total": 4,
+            "hitAt1": 75,
+            "hitAt3": 100,
+            "hitAt5": 100,
+            "mrr": 0.875
+          },
+          "test_dataset_granularity_short_keyword": {
+            "total": 4,
+            "hitAt1": 25,
+            "hitAt3": 50,
+            "hitAt5": 50,
+            "mrr": 0.3333333333333333
+          },
+          "test_dataset_granularity_situational": {
+            "total": 7,
+            "hitAt1": 42.857142857142854,
+            "hitAt3": 85.71428571428571,
+            "hitAt5": 85.71428571428571,
+            "mrr": 0.5952380952380952
+          }
+        }
+      },
+      "tuned": {
+        "candidateCount": 1,
+        "bestWeights": {
+          "Q": 0,
+          "KP": 0,
+          "OT": 1
+        },
+        "tuneCombined": {
+          "total": 8,
+          "hitAt1": 50,
+          "hitAt3": 75,
+          "hitAt5": 75,
+          "mrr": 0.6041666666666667
+        },
+        "holdoutCombined": {
+          "total": 7,
+          "hitAt1": 42.857142857142854,
+          "hitAt3": 85.71428571428571,
+          "hitAt5": 85.71428571428571,
+          "mrr": 0.5952380952380952
+        },
+        "combinedCombined": {
+          "total": 15,
+          "hitAt1": 46.666666666666664,
+          "hitAt3": 80,
+          "hitAt5": 80,
+          "mrr": 0.6000000000000001
+        },
+        "topTuneCandidates": [
+          {
+            "weights": {
+              "Q": 0,
+              "KP": 0,
+              "OT": 1
+            },
+            "combined": {
+              "total": 8,
+              "hitAt1": 50,
+              "hitAt3": 75,
+              "hitAt5": 75,
+              "mrr": 0.6041666666666667
+            }
+          }
+        ]
+      }
+    },
+    {
+      "label": "Q+KP",
+      "allowedTypes": [
+        "Q",
+        "KP"
+      ],
+      "metadataCount": 15696,
+      "metadataTypeCounts": {
+        "Q": 12819,
+        "KP": 2877,
+        "OT": 0
+      },
+      "uniform": {
+        "weights": {
+          "Q": 0.5,
+          "KP": 0.5,
+          "OT": 0
+        },
+        "combined": {
+          "total": 15,
+          "hitAt1": 46.666666666666664,
+          "hitAt3": 66.66666666666666,
+          "hitAt5": 66.66666666666666,
+          "mrr": 0.5603174603174603
+        },
+        "metricsByDataset": {
+          "test_dataset_granularity_standard": {
+            "total": 4,
+            "hitAt1": 75,
+            "hitAt3": 75,
+            "hitAt5": 75,
+            "mrr": 0.7678571428571429
+          },
+          "test_dataset_granularity_short_keyword": {
+            "total": 4,
+            "hitAt1": 25,
+            "hitAt3": 25,
+            "hitAt5": 25,
+            "mrr": 0.2916666666666667
+          },
+          "test_dataset_granularity_situational": {
+            "total": 7,
+            "hitAt1": 42.857142857142854,
+            "hitAt3": 85.71428571428571,
+            "hitAt5": 85.71428571428571,
+            "mrr": 0.5952380952380951
+          }
+        }
+      },
+      "tuned": {
+        "candidateCount": 7,
+        "bestWeights": {
+          "Q": 0.5,
+          "KP": 0.5,
+          "OT": 0
+        },
+        "tuneCombined": {
+          "total": 8,
+          "hitAt1": 50,
+          "hitAt3": 50,
+          "hitAt5": 50,
+          "mrr": 0.5297619047619048
+        },
+        "holdoutCombined": {
+          "total": 7,
+          "hitAt1": 42.857142857142854,
+          "hitAt3": 85.71428571428571,
+          "hitAt5": 85.71428571428571,
+          "mrr": 0.5952380952380951
+        },
+        "combinedCombined": {
+          "total": 15,
+          "hitAt1": 46.666666666666664,
+          "hitAt3": 66.66666666666666,
+          "hitAt5": 66.66666666666666,
+          "mrr": 0.5603174603174603
+        },
+        "topTuneCandidates": [
+          {
+            "weights": {
+              "Q": 0.5,
+              "KP": 0.5,
+              "OT": 0
+            },
+            "combined": {
+              "total": 8,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5297619047619048
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.7142857142857143,
+              "KP": 0.28571428571428575,
+              "OT": 0
+            },
+            "combined": {
+              "total": 8,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5297619047619048
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.8,
+              "KP": 0.2,
+              "OT": 0
+            },
+            "combined": {
+              "total": 8,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5297619047619048
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.6153846153846154,
+              "KP": 0.3846153846153846,
+              "OT": 0
+            },
+            "combined": {
+              "total": 8,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5297619047619048
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.3846153846153846,
+              "KP": 0.6153846153846154,
+              "OT": 0
+            },
+            "combined": {
+              "total": 8,
+              "hitAt1": 37.5,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.4672619047619047
+            }
+          }
+        ]
+      }
+    },
+    {
+      "label": "Q+OT",
+      "allowedTypes": [
+        "Q",
+        "OT"
+      ],
+      "metadataCount": 13335,
+      "metadataTypeCounts": {
+        "Q": 12819,
+        "KP": 0,
+        "OT": 516
+      },
+      "uniform": {
+        "weights": {
+          "Q": 0.5,
+          "KP": 0,
+          "OT": 0.5
+        },
+        "combined": {
+          "total": 15,
+          "hitAt1": 40,
+          "hitAt3": 66.66666666666666,
+          "hitAt5": 66.66666666666666,
+          "mrr": 0.526984126984127
+        },
+        "metricsByDataset": {
+          "test_dataset_granularity_standard": {
+            "total": 4,
+            "hitAt1": 75,
+            "hitAt3": 75,
+            "hitAt5": 75,
+            "mrr": 0.7678571428571429
+          },
+          "test_dataset_granularity_short_keyword": {
+            "total": 4,
+            "hitAt1": 25,
+            "hitAt3": 25,
+            "hitAt5": 25,
+            "mrr": 0.2916666666666667
+          },
+          "test_dataset_granularity_situational": {
+            "total": 7,
+            "hitAt1": 28.57142857142857,
+            "hitAt3": 85.71428571428571,
+            "hitAt5": 85.71428571428571,
+            "mrr": 0.5238095238095238
+          }
+        }
+      },
+      "tuned": {
+        "candidateCount": 7,
+        "bestWeights": {
+          "Q": 0.5,
+          "KP": 0,
+          "OT": 0.5
+        },
+        "tuneCombined": {
+          "total": 8,
+          "hitAt1": 50,
+          "hitAt3": 50,
+          "hitAt5": 50,
+          "mrr": 0.5297619047619048
+        },
+        "holdoutCombined": {
+          "total": 7,
+          "hitAt1": 28.57142857142857,
+          "hitAt3": 85.71428571428571,
+          "hitAt5": 85.71428571428571,
+          "mrr": 0.5238095238095238
+        },
+        "combinedCombined": {
+          "total": 15,
+          "hitAt1": 40,
+          "hitAt3": 66.66666666666666,
+          "hitAt5": 66.66666666666666,
+          "mrr": 0.526984126984127
+        },
+        "topTuneCandidates": [
+          {
+            "weights": {
+              "Q": 0.5,
+              "KP": 0,
+              "OT": 0.5
+            },
+            "combined": {
+              "total": 8,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5297619047619048
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.7142857142857143,
+              "KP": 0,
+              "OT": 0.28571428571428575
+            },
+            "combined": {
+              "total": 8,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5297619047619048
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.8,
+              "KP": 0,
+              "OT": 0.2
+            },
+            "combined": {
+              "total": 8,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5297619047619048
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.6153846153846154,
+              "KP": 0,
+              "OT": 0.3846153846153846
+            },
+            "combined": {
+              "total": 8,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5297619047619048
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.2,
+              "KP": 0,
+              "OT": 0.8
+            },
+            "combined": {
+              "total": 8,
+              "hitAt1": 37.5,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.4732142857142857
+            }
+          }
+        ]
+      }
+    },
+    {
+      "label": "KP+OT",
+      "allowedTypes": [
+        "KP",
+        "OT"
+      ],
+      "metadataCount": 3393,
+      "metadataTypeCounts": {
+        "Q": 0,
+        "KP": 2877,
+        "OT": 516
+      },
+      "uniform": {
+        "weights": {
+          "Q": 0,
+          "KP": 0.5,
+          "OT": 0.5
+        },
+        "combined": {
+          "total": 15,
+          "hitAt1": 40,
+          "hitAt3": 46.666666666666664,
+          "hitAt5": 66.66666666666666,
+          "mrr": 0.4933333333333333
+        },
+        "metricsByDataset": {
+          "test_dataset_granularity_standard": {
+            "total": 4,
+            "hitAt1": 50,
+            "hitAt3": 75,
+            "hitAt5": 75,
+            "mrr": 0.6458333333333333
+          },
+          "test_dataset_granularity_short_keyword": {
+            "total": 4,
+            "hitAt1": 25,
+            "hitAt3": 25,
+            "hitAt5": 25,
+            "mrr": 0.2916666666666667
+          },
+          "test_dataset_granularity_situational": {
+            "total": 7,
+            "hitAt1": 42.857142857142854,
+            "hitAt3": 42.857142857142854,
+            "hitAt5": 85.71428571428571,
+            "mrr": 0.5214285714285715
+          }
+        }
+      },
+      "tuned": {
+        "candidateCount": 7,
+        "bestWeights": {
+          "Q": 0,
+          "KP": 0.28571428571428575,
+          "OT": 0.7142857142857143
+        },
+        "tuneCombined": {
+          "total": 8,
+          "hitAt1": 50,
+          "hitAt3": 62.5,
+          "hitAt5": 75,
+          "mrr": 0.5875
+        },
+        "holdoutCombined": {
+          "total": 7,
+          "hitAt1": 42.857142857142854,
+          "hitAt3": 71.42857142857143,
+          "hitAt5": 85.71428571428571,
+          "mrr": 0.5761904761904761
+        },
+        "combinedCombined": {
+          "total": 15,
+          "hitAt1": 46.666666666666664,
+          "hitAt3": 66.66666666666666,
+          "hitAt5": 80,
+          "mrr": 0.5822222222222222
+        },
+        "topTuneCandidates": [
+          {
+            "weights": {
+              "Q": 0,
+              "KP": 0.28571428571428575,
+              "OT": 0.7142857142857143
+            },
+            "combined": {
+              "total": 8,
+              "hitAt1": 50,
+              "hitAt3": 62.5,
+              "hitAt5": 75,
+              "mrr": 0.5875
+            }
+          },
+          {
+            "weights": {
+              "Q": 0,
+              "KP": 0.2,
+              "OT": 0.8
+            },
+            "combined": {
+              "total": 8,
+              "hitAt1": 50,
+              "hitAt3": 62.5,
+              "hitAt5": 62.5,
+              "mrr": 0.5833333333333333
+            }
+          },
+          {
+            "weights": {
+              "Q": 0,
+              "KP": 0.3846153846153846,
+              "OT": 0.6153846153846154
+            },
+            "combined": {
+              "total": 8,
+              "hitAt1": 50,
+              "hitAt3": 62.5,
+              "hitAt5": 62.5,
+              "mrr": 0.5803571428571428
+            }
+          },
+          {
+            "weights": {
+              "Q": 0,
+              "KP": 0.5,
+              "OT": 0.5
+            },
+            "combined": {
+              "total": 8,
+              "hitAt1": 37.5,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.46874999999999994
+            }
+          },
+          {
+            "weights": {
+              "Q": 0,
+              "KP": 0.6153846153846154,
+              "OT": 0.3846153846153846
+            },
+            "combined": {
+              "total": 8,
+              "hitAt1": 37.5,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.4645833333333333
+            }
+          }
+        ]
+      }
+    },
+    {
+      "label": "Q+KP+OT",
+      "allowedTypes": [
+        "Q",
+        "KP",
+        "OT"
+      ],
+      "metadataCount": 16212,
+      "metadataTypeCounts": {
+        "Q": 12819,
+        "KP": 2877,
+        "OT": 516
+      },
+      "uniform": {
+        "weights": {
+          "Q": 0.3333333333333333,
+          "KP": 0.3333333333333333,
+          "OT": 0.3333333333333333
+        },
+        "combined": {
+          "total": 15,
+          "hitAt1": 40,
+          "hitAt3": 66.66666666666666,
+          "hitAt5": 66.66666666666666,
+          "mrr": 0.526984126984127
+        },
+        "metricsByDataset": {
+          "test_dataset_granularity_standard": {
+            "total": 4,
+            "hitAt1": 75,
+            "hitAt3": 75,
+            "hitAt5": 75,
+            "mrr": 0.7678571428571429
+          },
+          "test_dataset_granularity_short_keyword": {
+            "total": 4,
+            "hitAt1": 25,
+            "hitAt3": 25,
+            "hitAt5": 25,
+            "mrr": 0.2916666666666667
+          },
+          "test_dataset_granularity_situational": {
+            "total": 7,
+            "hitAt1": 28.57142857142857,
+            "hitAt3": 85.71428571428571,
+            "hitAt5": 85.71428571428571,
+            "mrr": 0.5238095238095238
+          }
+        }
+      },
+      "tuned": {
+        "candidateCount": 25,
+        "bestWeights": {
+          "Q": 0.3333333333333333,
+          "KP": 0.3333333333333333,
+          "OT": 0.3333333333333333
+        },
+        "tuneCombined": {
+          "total": 8,
+          "hitAt1": 50,
+          "hitAt3": 50,
+          "hitAt5": 50,
+          "mrr": 0.5297619047619048
+        },
+        "holdoutCombined": {
+          "total": 7,
+          "hitAt1": 28.57142857142857,
+          "hitAt3": 85.71428571428571,
+          "hitAt5": 85.71428571428571,
+          "mrr": 0.5238095238095238
+        },
+        "combinedCombined": {
+          "total": 15,
+          "hitAt1": 40,
+          "hitAt3": 66.66666666666666,
+          "hitAt5": 66.66666666666666,
+          "mrr": 0.526984126984127
+        },
+        "topTuneCandidates": [
+          {
+            "weights": {
+              "Q": 0.3333333333333333,
+              "KP": 0.3333333333333333,
+              "OT": 0.3333333333333333
+            },
+            "combined": {
+              "total": 8,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5297619047619048
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.5555555555555556,
+              "KP": 0.22222222222222227,
+              "OT": 0.22222222222222227
+            },
+            "combined": {
+              "total": 8,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5297619047619048
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.4166666666666667,
+              "KP": 0.16666666666666669,
+              "OT": 0.4166666666666667
+            },
+            "combined": {
+              "total": 8,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5297619047619048
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.4166666666666667,
+              "KP": 0.4166666666666667,
+              "OT": 0.16666666666666669
+            },
+            "combined": {
+              "total": 8,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5297619047619048
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.6666666666666667,
+              "KP": 0.16666666666666669,
+              "OT": 0.16666666666666669
+            },
+            "combined": {
+              "total": 8,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5297619047619048
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -18,6 +18,11 @@ const props = defineProps<{
       searchMs: string;
       fetchMs: string;
       rerankMs: string;
+      rerankedDocCount?: number;
+      chunksScored?: number;
+      rerankWindowReason?: string;
+      maxChunksPerDoc?: number;
+      chunkPlanReason?: string;
       rejectionThreshold?: number;
       topConfidence?: number;
       rejected?: boolean;
@@ -71,6 +76,15 @@ const compactResults = () => props.traceData?.results?.slice(3, 10) ?? [];
             Rerank
           </div>
           <div class="text-xs font-mono font-bold text-purple-300">{{ traceData.stats.rerankMs }}ms</div>
+          <div class="mt-1 text-[9px] text-purple-200/80">
+            {{ traceData.stats.rerankedDocCount ?? 0 }} 篇 / {{ traceData.stats.chunksScored ?? 0 }} chunks
+          </div>
+          <div class="mt-1 text-[9px] text-purple-200/70">
+            每篇上限 {{ traceData.stats.maxChunksPerDoc ?? 0 }} chunks
+          </div>
+          <div v-if="traceData.stats.rerankWindowReason" class="mt-1 text-[8px] uppercase tracking-[0.12em] text-purple-200/60">
+            {{ traceData.stats.rerankWindowReason }}
+          </div>
         </div>
       </div>
 

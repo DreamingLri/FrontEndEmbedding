@@ -1,0 +1,1104 @@
+{
+  "generatedAt": "2026-03-27T09:01:51.581Z",
+  "datasetFile": "../Backend/test/test_dataset_granularity/test_dataset_granularity_holdout_v1_reviewed.json",
+  "datasetLabel": "holdout_v1_reviewed",
+  "evaluationMode": "fixed_kp_ot_holdout_smoke",
+  "weights": {
+    "Q": 0,
+    "KP": 0.2857142857,
+    "OT": 0.7142857143
+  },
+  "searchConfig": {
+    "topHybridLimit": 1000,
+    "kpAggregationMode": "max",
+    "lexicalBonusMode": "sum",
+    "kpRoleRerankMode": "feature",
+    "kpRoleDocWeight": 0.35
+  },
+  "docMetrics": {
+    "total": 21,
+    "hitAt1": 76.19047619047619,
+    "hitAt3": 85.71428571428571,
+    "hitAt5": 85.71428571428571,
+    "mrr": 0.8055555555555555
+  },
+  "kpidMetrics": {
+    "applicable": 15,
+    "hitAt1": 20,
+    "hitAt3": 20,
+    "hitAt5": 20,
+    "mrr": 0.2
+  },
+  "groupBreakdown": {
+    "support_pattern": {
+      "multi_kp": {
+        "total": 14,
+        "hitAt1": 85.71428571428571,
+        "hitAt3": 92.85714285714286,
+        "hitAt5": 92.85714285714286,
+        "mrr": 0.8928571428571429
+      },
+      "ot_required": {
+        "total": 7,
+        "hitAt1": 57.14285714285714,
+        "hitAt3": 71.42857142857143,
+        "hitAt5": 71.42857142857143,
+        "mrr": 0.6309523809523808
+      }
+    },
+    "preferred_granularity": {
+      "KP+OT": {
+        "total": 14,
+        "hitAt1": 85.71428571428571,
+        "hitAt3": 92.85714285714286,
+        "hitAt5": 92.85714285714286,
+        "mrr": 0.8928571428571429
+      },
+      "OT": {
+        "total": 7,
+        "hitAt1": 57.14285714285714,
+        "hitAt3": 71.42857142857143,
+        "hitAt5": 71.42857142857143,
+        "mrr": 0.6309523809523808
+      }
+    },
+    "query_type": {
+      "situational": {
+        "total": 3,
+        "hitAt1": 100,
+        "hitAt3": 100,
+        "hitAt5": 100,
+        "mrr": 1
+      },
+      "standard": {
+        "total": 13,
+        "hitAt1": 61.53846153846154,
+        "hitAt3": 76.92307692307693,
+        "hitAt5": 76.92307692307693,
+        "mrr": 0.685897435897436
+      },
+      "short_keyword": {
+        "total": 5,
+        "hitAt1": 100,
+        "hitAt3": 100,
+        "hitAt5": 100,
+        "mrr": 1
+      }
+    }
+  },
+  "caseDetails": [
+    {
+      "id": "ai_hold1_0010",
+      "query": "我通过了中山大学2024年综评审核，想报计算机专业，怎么知道我的志愿填报会不会被算作有效？",
+      "expected_otid": "otid_2d77227bd2fa473c",
+      "expected_kpid": "kpid_24b87d7b333e4c47",
+      "query_type": "situational",
+      "query_scope": "eligibility_condition",
+      "preferred_granularity": "KP+OT",
+      "support_pattern": "multi_kp",
+      "theme_family": "专业报考条件",
+      "docRank": 1,
+      "kpidRank": null,
+      "docHitAt1": true,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "topMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_2d77227bd2fa473c",
+          "best_kpid": "kpid_8d7ec8f821ae4834",
+          "score": 6.501524823055186
+        },
+        {
+          "rank": 2,
+          "otid": "otid_395fb889a17b49fa",
+          "best_kpid": "kpid_5c6c9e2e47964343",
+          "score": 4.329320220494211
+        },
+        {
+          "rank": 3,
+          "otid": "otid_994ec6fdfc174122",
+          "best_kpid": "kpid_4288f11cbf8a466f",
+          "score": 3.2127065559461987
+        },
+        {
+          "rank": 4,
+          "otid": "otid_44984069cc2b4f1f",
+          "best_kpid": "kpid_ab2dba3359e545a6",
+          "score": 3.158928210988584
+        },
+        {
+          "rank": 5,
+          "otid": "otid_94fa33f7d6e34c81",
+          "best_kpid": "kpid_24bde13d089e4622",
+          "score": 3.127615042507774
+        }
+      ],
+      "rejection": null
+    },
+    {
+      "id": "ai_hold1_0019",
+      "query": "2018年中山大学博士研究生入学考试复试的完整流程和所有要求是什么？包括分数线、时间安排、资格审查材料等。",
+      "expected_otid": "otid_aaec7e56e7794b4b",
+      "expected_kpid": "kpid_aa1b3a8d44a74227",
+      "query_type": "standard",
+      "query_scope": "policy_overview",
+      "preferred_granularity": "OT",
+      "support_pattern": "ot_required",
+      "theme_family": "中山大学2018博士复试",
+      "docRank": 1,
+      "kpidRank": null,
+      "docHitAt1": true,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "topMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_aaec7e56e7794b4b",
+          "best_kpid": "kpid_fae69f5173db44a3",
+          "score": 6.863024886671304
+        },
+        {
+          "rank": 2,
+          "otid": "otid_0dde92ec30874fbf",
+          "best_kpid": "kpid_fe0a78aecdab4eb8",
+          "score": 5.589785191757578
+        },
+        {
+          "rank": 3,
+          "otid": "otid_d2ae42cd17dc4842",
+          "best_kpid": "kpid_b1b2397328c8467c",
+          "score": 4.941363802304182
+        },
+        {
+          "rank": 4,
+          "otid": "otid_1feed42486084f17",
+          "best_kpid": "kpid_2bf6c50daba84108",
+          "score": 4.924816738310457
+        },
+        {
+          "rank": 5,
+          "otid": "otid_994207bb2a0740a1",
+          "best_kpid": "kpid_a293fe4d1c134f26",
+          "score": 4.79063452103703
+        }
+      ],
+      "rejection": null
+    },
+    {
+      "id": "ai_hold1_0016",
+      "query": "2018年中山大学博士研究生入学考试，少数民族高层次骨干人才计划和对口支援西部地区高校定向培养博士研究生计划的复试基本分数线分别是多少？请比较外语、业务课和总分要求。",
+      "expected_otid": "otid_aaec7e56e7794b4b",
+      "expected_kpid": "kpid_bbd511f8668345b8",
+      "query_type": "standard",
+      "query_scope": "fact_detail",
+      "preferred_granularity": "KP+OT",
+      "support_pattern": "multi_kp",
+      "theme_family": "中山大学2018博士复试",
+      "docRank": 1,
+      "kpidRank": null,
+      "docHitAt1": true,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "topMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_aaec7e56e7794b4b",
+          "best_kpid": "kpid_7862a3ac5eb84b13",
+          "score": 8.839110602935813
+        },
+        {
+          "rank": 2,
+          "otid": "otid_e57385680e4d4c1d",
+          "best_kpid": "kpid_7c4153c384d542a7",
+          "score": 5.740246942023478
+        },
+        {
+          "rank": 3,
+          "otid": "otid_ef0971eca86e428c",
+          "best_kpid": "kpid_b00a72771ba54914",
+          "score": 5.656301021097727
+        },
+        {
+          "rank": 4,
+          "otid": "otid_947b7d428a0745db",
+          "best_kpid": "kpid_852be272dddc4e27",
+          "score": 5.623832613032724
+        },
+        {
+          "rank": 5,
+          "otid": "otid_0dde92ec30874fbf",
+          "best_kpid": "kpid_d24120ab291b4a42",
+          "score": 4.596044405083275
+        }
+      ],
+      "rejection": null
+    },
+    {
+      "id": "ai_hold1_0017",
+      "query": "如果我是报考少数民族高层次骨干人才计划的考生，在2018年中山大学博士复试前，除了知道分数线，还需要准备哪些特定文件和参加资格审查的常规材料？",
+      "expected_otid": "otid_aaec7e56e7794b4b",
+      "expected_kpid": "kpid_f5409a6892344620",
+      "query_type": "situational",
+      "query_scope": "fact_detail",
+      "preferred_granularity": "KP+OT",
+      "support_pattern": "multi_kp",
+      "theme_family": "中山大学2018博士复试",
+      "docRank": 1,
+      "kpidRank": null,
+      "docHitAt1": true,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "topMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_aaec7e56e7794b4b",
+          "best_kpid": "kpid_bbd511f8668345b8",
+          "score": 7.019780869524147
+        },
+        {
+          "rank": 2,
+          "otid": "otid_e57385680e4d4c1d",
+          "best_kpid": "kpid_f3c1b5ffbd234d0c",
+          "score": 4.446451055529451
+        },
+        {
+          "rank": 3,
+          "otid": "otid_994207bb2a0740a1",
+          "best_kpid": "kpid_7d2b34390f074ee6",
+          "score": 3.556934351056721
+        },
+        {
+          "rank": 4,
+          "otid": "otid_ef0971eca86e428c",
+          "best_kpid": "kpid_17f79aa6c1f44610",
+          "score": 3.252180077321294
+        },
+        {
+          "rank": 5,
+          "otid": "otid_7438d6279c2145b4",
+          "best_kpid": "kpid_8727375b172844a4",
+          "score": 3.2347674032527656
+        }
+      ],
+      "rejection": null
+    },
+    {
+      "id": "ai_hold1_0001",
+      "query": "中山大学2024年广东省综合评价录取面试考核的报到和面试详细流程是怎样的？",
+      "expected_otid": "otid_9e0e777293cc4d35",
+      "expected_kpid": "kpid_ca041d2c11844a2f",
+      "query_type": "standard",
+      "query_scope": "procedure",
+      "preferred_granularity": "KP+OT",
+      "support_pattern": "multi_kp",
+      "theme_family": "中山大学2024年广东省综合评价录取面试考核安排",
+      "docRank": 2,
+      "kpidRank": null,
+      "docHitAt1": false,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "topMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_395fb889a17b49fa",
+          "best_kpid": "kpid_0fa411d575284ede",
+          "score": 6.866383859042294
+        },
+        {
+          "rank": 2,
+          "otid": "otid_9e0e777293cc4d35",
+          "best_kpid": "kpid_597d5ce77d9d4038",
+          "score": 6.537033190447386
+        },
+        {
+          "rank": 3,
+          "otid": "otid_5d70ffdc13ea473c",
+          "best_kpid": "kpid_81d3696b0e904586",
+          "score": 6.318727587086181
+        },
+        {
+          "rank": 4,
+          "otid": "otid_2d77227bd2fa473c",
+          "best_kpid": "kpid_1effe8285e1e4377",
+          "score": 5.666837416680206
+        },
+        {
+          "rank": 5,
+          "otid": "otid_25f8c20ce2194082",
+          "best_kpid": "kpid_026dd946da8d43e7",
+          "score": 4.146142292823224
+        }
+      ],
+      "rejection": null
+    },
+    {
+      "id": "ai_hold1_0002",
+      "query": "中山大学2024年广东省综合评价录取面试考核的整体安排包括哪些方面？",
+      "expected_otid": "otid_9e0e777293cc4d35",
+      "query_type": "standard",
+      "query_scope": "policy_overview",
+      "preferred_granularity": "OT",
+      "support_pattern": "ot_required",
+      "theme_family": "中山大学2024年广东省综合评价录取面试考核安排",
+      "docRank": 3,
+      "kpidRank": null,
+      "docHitAt1": false,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "topMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_395fb889a17b49fa",
+          "best_kpid": "kpid_0fa411d575284ede",
+          "score": 7.060301405772209
+        },
+        {
+          "rank": 2,
+          "otid": "otid_5d70ffdc13ea473c",
+          "best_kpid": "kpid_9c6d2088725640ab",
+          "score": 6.536850994894814
+        },
+        {
+          "rank": 3,
+          "otid": "otid_9e0e777293cc4d35",
+          "best_kpid": "kpid_597d5ce77d9d4038",
+          "score": 6.199827601607586
+        },
+        {
+          "rank": 4,
+          "otid": "otid_2d77227bd2fa473c",
+          "best_kpid": "kpid_1effe8285e1e4377",
+          "score": 5.453008805096017
+        },
+        {
+          "rank": 5,
+          "otid": "otid_25f8c20ce2194082",
+          "best_kpid": "kpid_026dd946da8d43e7",
+          "score": 4.3419850915126466
+        }
+      ],
+      "rejection": null
+    },
+    {
+      "id": "ai_hold1_0022",
+      "query": "中山大学与慕尼黑大学研究生交换学习项目的完整申请流程和时间安排是什么？",
+      "expected_otid": "otid_b30b6bf7f8ac4e26",
+      "expected_kpid": "kpid_74e62930d77d4958",
+      "query_type": "standard",
+      "query_scope": "procedure",
+      "preferred_granularity": "KP+OT",
+      "support_pattern": "multi_kp",
+      "theme_family": "交换项目申请流程",
+      "docRank": 1,
+      "kpidRank": null,
+      "docHitAt1": true,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "topMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_b30b6bf7f8ac4e26",
+          "best_kpid": "kpid_48d8d4e624aa4c28",
+          "score": 6.908831092406995
+        },
+        {
+          "rank": 2,
+          "otid": "otid_d23cd8bd933e4d4b",
+          "best_kpid": "kpid_2625cf2162a94445",
+          "score": 5.811387673443061
+        },
+        {
+          "rank": 3,
+          "otid": "otid_972694a013b841ec",
+          "best_kpid": "kpid_6e5b3eab6844437f",
+          "score": 4.453095525187936
+        },
+        {
+          "rank": 4,
+          "otid": "otid_afd67d4b1e9e427e",
+          "best_kpid": "kpid_25cd22436fae4b0c",
+          "score": 3.8212977961906636
+        },
+        {
+          "rank": 5,
+          "otid": "otid_dd1bdc2782194207",
+          "best_kpid": "kpid_b24fab2bb7174984",
+          "score": 3.5569129819981047
+        }
+      ],
+      "rejection": null
+    },
+    {
+      "id": "ai_hold1_0021",
+      "query": "在职临床医师申请临床医学博士专业学位外语考试的报名流程是什么？",
+      "expected_otid": "otid_f2cf26f97dc24a0c",
+      "query_type": "standard",
+      "query_scope": "procedure",
+      "preferred_granularity": "OT",
+      "support_pattern": "ot_required",
+      "theme_family": "在职临床医师博士考试报名",
+      "docRank": 12,
+      "kpidRank": null,
+      "docHitAt1": false,
+      "docHitAt5": false,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "topMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_4f011b71905d4b3f",
+          "best_kpid": "kpid_6e9ab8e8f0424c7c",
+          "score": 6.087975097999808
+        },
+        {
+          "rank": 2,
+          "otid": "otid_79fde873cbd54280",
+          "best_kpid": "kpid_8ca9592349954c12",
+          "score": 6.048030817615309
+        },
+        {
+          "rank": 3,
+          "otid": "otid_e2bcfb99b4af4c46",
+          "best_kpid": "kpid_9c921b95adf24e9c",
+          "score": 6.005354090679248
+        },
+        {
+          "rank": 4,
+          "otid": "otid_ffd4fbd63cc34a41",
+          "best_kpid": "kpid_caedc9b58db449b5",
+          "score": 5.841954579028279
+        },
+        {
+          "rank": 5,
+          "otid": "otid_b57a49e0f30144fb",
+          "best_kpid": "kpid_2efdec685376496c",
+          "score": 5.585458883274158
+        }
+      ],
+      "rejection": null
+    },
+    {
+      "id": "ai_hold1_0020",
+      "query": "报名2023年全国医学博士外语统一考试的中山大学在职临床医师需要满足什么条件和提交哪些材料？",
+      "expected_otid": "otid_f2cf26f97dc24a0c",
+      "expected_kpid": "kpid_5261ac5fb51440a3",
+      "query_type": "standard",
+      "query_scope": "policy_overview",
+      "preferred_granularity": "KP+OT",
+      "support_pattern": "multi_kp",
+      "theme_family": "在职临床医师博士考试报名",
+      "docRank": null,
+      "kpidRank": null,
+      "docHitAt1": false,
+      "docHitAt5": false,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "topMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_529165c30e3a4d41",
+          "best_kpid": "kpid_b626dd23a00e49cf",
+          "score": 7.488209914324985
+        },
+        {
+          "rank": 2,
+          "otid": "otid_467c753a650543da",
+          "best_kpid": "kpid_487cd34570de430e",
+          "score": 3.3075763951636583
+        },
+        {
+          "rank": 3,
+          "otid": "otid_d2b18bcf0b2b453b",
+          "best_kpid": "kpid_39edcc67c246444b",
+          "score": 2.850321355666776
+        },
+        {
+          "rank": 4,
+          "otid": "otid_f77c101d05104a9e",
+          "best_kpid": "kpid_6fb4c9f46dec472b",
+          "score": 2.55903626552762
+        },
+        {
+          "rank": 5,
+          "otid": "otid_aa024784667d4f5a",
+          "best_kpid": "kpid_13aa965b4422479e",
+          "score": 2.484706361214902
+        }
+      ],
+      "rejection": null
+    },
+    {
+      "id": "ai_hold1_0007",
+      "query": "中山大学2024年强基计划考核的完整流程包括哪些步骤？",
+      "expected_otid": "otid_1d0896a191814c1e",
+      "expected_kpid": "kpid_2a1a41879f9a45d7",
+      "query_type": "standard",
+      "query_scope": "procedure",
+      "preferred_granularity": "KP+OT",
+      "support_pattern": "multi_kp",
+      "theme_family": "强基计划考核流程",
+      "docRank": 1,
+      "kpidRank": null,
+      "docHitAt1": true,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "topMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_1d0896a191814c1e",
+          "best_kpid": "kpid_0534f93bfff44138",
+          "score": 5.285434377308481
+        },
+        {
+          "rank": 2,
+          "otid": "otid_a206a52bfb3f46aa",
+          "best_kpid": "kpid_1a31ac9d007e4f66",
+          "score": 3.5593666556670676
+        },
+        {
+          "rank": 3,
+          "otid": "otid_1637de59ecdf419c",
+          "best_kpid": "kpid_5d5bf453fe4544b2",
+          "score": 3.2188920872814295
+        },
+        {
+          "rank": 4,
+          "otid": "otid_9e0e777293cc4d35",
+          "best_kpid": "kpid_597d5ce77d9d4038",
+          "score": 3.040198440517056
+        },
+        {
+          "rank": 5,
+          "otid": "otid_5d70ffdc13ea473c",
+          "best_kpid": "kpid_20505a9aa9ab4a45",
+          "score": 2.554069235094876
+        }
+      ],
+      "rejection": null
+    },
+    {
+      "id": "ai_hold1_0003",
+      "query": "中山大学2024年强基计划中，汉语言文学和历史学专业在广东省的录取标准分别是多少？",
+      "expected_otid": "otid_1637de59ecdf419c",
+      "expected_kpid": "kpid_760242d52a5b4f5a",
+      "query_type": "standard",
+      "query_scope": "fact_detail",
+      "preferred_granularity": "KP+OT",
+      "support_pattern": "multi_kp",
+      "theme_family": "录取标准比较",
+      "docRank": 1,
+      "kpidRank": 1,
+      "docHitAt1": true,
+      "docHitAt5": true,
+      "kpidHitAt1": true,
+      "kpidHitAt5": true,
+      "topMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_1637de59ecdf419c",
+          "best_kpid": "kpid_760242d52a5b4f5a",
+          "score": 4.782587346953701
+        },
+        {
+          "rank": 2,
+          "otid": "otid_25f8c20ce2194082",
+          "best_kpid": "kpid_026dd946da8d43e7",
+          "score": 4.653835968784942
+        },
+        {
+          "rank": 3,
+          "otid": "otid_395fb889a17b49fa",
+          "best_kpid": "kpid_5c6c9e2e47964343",
+          "score": 4.333659187054377
+        },
+        {
+          "rank": 4,
+          "otid": "otid_1d0896a191814c1e",
+          "best_kpid": "kpid_459140a466f24dd0",
+          "score": 4.284655191792898
+        },
+        {
+          "rank": 5,
+          "otid": "otid_5d70ffdc13ea473c",
+          "best_kpid": "kpid_81d3696b0e904586",
+          "score": 3.5844325526690555
+        }
+      ],
+      "rejection": null
+    },
+    {
+      "id": "ai_hold1_0004",
+      "query": "我申请了中山大学2024年强基计划，如何查询结果以及录取后有哪些手续？",
+      "expected_otid": "otid_1637de59ecdf419c",
+      "expected_kpid": "kpid_5d5bf453fe4544b2",
+      "query_type": "situational",
+      "query_scope": "procedure",
+      "preferred_granularity": "KP+OT",
+      "support_pattern": "multi_kp",
+      "theme_family": "录取流程",
+      "docRank": 1,
+      "kpidRank": 1,
+      "docHitAt1": true,
+      "docHitAt5": true,
+      "kpidHitAt1": true,
+      "kpidHitAt5": true,
+      "topMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_1637de59ecdf419c",
+          "best_kpid": "kpid_5d5bf453fe4544b2",
+          "score": 5.531833931577273
+        },
+        {
+          "rank": 2,
+          "otid": "otid_1d0896a191814c1e",
+          "best_kpid": "kpid_9a171a0e14fd45d8",
+          "score": 4.501893365644803
+        },
+        {
+          "rank": 3,
+          "otid": "otid_25f8c20ce2194082",
+          "best_kpid": "kpid_28e9a2096372442c",
+          "score": 3.3824261815609744
+        },
+        {
+          "rank": 4,
+          "otid": "otid_a206a52bfb3f46aa",
+          "best_kpid": "kpid_88470e67dcae4080",
+          "score": 2.6053955757901854
+        },
+        {
+          "rank": 5,
+          "otid": "otid_f69c96f748d44216",
+          "best_kpid": "kpid_894fa299cd9f4fa0",
+          "score": 2.5897436061184047
+        }
+      ],
+      "rejection": null
+    },
+    {
+      "id": "ai_hold1_0012",
+      "query": "中山大学2024年综合评价从材料审核到最终考核的整体时间线和关键要求是什么？",
+      "expected_otid": "otid_2d77227bd2fa473c",
+      "query_type": "standard",
+      "query_scope": "policy_overview",
+      "preferred_granularity": "OT",
+      "support_pattern": "ot_required",
+      "theme_family": "时间线与要求",
+      "docRank": 1,
+      "kpidRank": null,
+      "docHitAt1": true,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "topMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_2d77227bd2fa473c",
+          "best_kpid": "kpid_9225412eac904c8b",
+          "score": 6.314586182749706
+        },
+        {
+          "rank": 2,
+          "otid": "otid_9e0e777293cc4d35",
+          "best_kpid": "kpid_597d5ce77d9d4038",
+          "score": 5.7889229523656365
+        },
+        {
+          "rank": 3,
+          "otid": "otid_5d70ffdc13ea473c",
+          "best_kpid": "kpid_9c6d2088725640ab",
+          "score": 5.503452621382347
+        },
+        {
+          "rank": 4,
+          "otid": "otid_395fb889a17b49fa",
+          "best_kpid": "kpid_0fa411d575284ede",
+          "score": 5.059365034004874
+        },
+        {
+          "rank": 5,
+          "otid": "otid_b5b5d513960a454f",
+          "best_kpid": "kpid_179523770a79427f",
+          "score": 3.6570175496807336
+        }
+      ],
+      "rejection": null
+    },
+    {
+      "id": "ai_hold1_0014",
+      "query": "2022中山大学运动队测试入校防疫",
+      "expected_otid": "otid_cb15bb6977d54dca",
+      "expected_kpid": "kpid_8b9287832dd34e1e",
+      "query_type": "short_keyword",
+      "query_scope": "policy_overview",
+      "preferred_granularity": "KP+OT",
+      "support_pattern": "multi_kp",
+      "theme_family": "测试入校与防疫",
+      "docRank": 1,
+      "kpidRank": 1,
+      "docHitAt1": true,
+      "docHitAt5": true,
+      "kpidHitAt1": true,
+      "kpidHitAt5": true,
+      "topMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_cb15bb6977d54dca",
+          "best_kpid": "kpid_8b9287832dd34e1e",
+          "score": 5.1270584315894325
+        },
+        {
+          "rank": 2,
+          "otid": "otid_dbbe1e9a5c084cfa",
+          "best_kpid": "kpid_36a20e2b9db44286",
+          "score": 2.7417627789565078
+        },
+        {
+          "rank": 3,
+          "otid": "otid_9b3db69e0fa2476a",
+          "best_kpid": "kpid_123f155878fa4a48",
+          "score": 2.3521741660340965
+        },
+        {
+          "rank": 4,
+          "otid": "otid_ccb3b891b8f64953",
+          "best_kpid": "kpid_629e221957874e86",
+          "score": 2.303798717847751
+        },
+        {
+          "rank": 5,
+          "otid": "otid_681df4bddf9c4ecb",
+          "best_kpid": "kpid_27a7f84e33244c36",
+          "score": 2.2899246904744373
+        }
+      ],
+      "rejection": null
+    },
+    {
+      "id": "ai_hold1_0015",
+      "query": "中山大学2022年高水平运动队测试安排是否会因疫情调整？",
+      "expected_otid": "otid_cb15bb6977d54dca",
+      "query_type": "standard",
+      "query_scope": "policy_overview",
+      "preferred_granularity": "OT",
+      "support_pattern": "ot_required",
+      "theme_family": "测试安排调整政策",
+      "docRank": null,
+      "kpidRank": null,
+      "docHitAt1": false,
+      "docHitAt5": false,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "topMatches": [],
+      "rejection": "low_consistency"
+    },
+    {
+      "id": "ai_hold1_0009",
+      "query": "中山大学2024年广东省综合评价材料审核通过后，考生需要完成哪些具体步骤来确保有效参与后续考核？",
+      "expected_otid": "otid_2d77227bd2fa473c",
+      "expected_kpid": "kpid_2a3a74c241ae4a2d",
+      "query_type": "standard",
+      "query_scope": "procedure",
+      "preferred_granularity": "KP+OT",
+      "support_pattern": "multi_kp",
+      "theme_family": "综合评价流程",
+      "docRank": 1,
+      "kpidRank": null,
+      "docHitAt1": true,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "topMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_2d77227bd2fa473c",
+          "best_kpid": "kpid_9225412eac904c8b",
+          "score": 6.974522400273868
+        },
+        {
+          "rank": 2,
+          "otid": "otid_395fb889a17b49fa",
+          "best_kpid": "kpid_0fa411d575284ede",
+          "score": 6.102439459764466
+        },
+        {
+          "rank": 3,
+          "otid": "otid_9e0e777293cc4d35",
+          "best_kpid": "kpid_597d5ce77d9d4038",
+          "score": 5.450776629578064
+        },
+        {
+          "rank": 4,
+          "otid": "otid_5d70ffdc13ea473c",
+          "best_kpid": "kpid_9c6d2088725640ab",
+          "score": 5.234824307797016
+        },
+        {
+          "rank": 5,
+          "otid": "otid_25f8c20ce2194082",
+          "best_kpid": "kpid_026dd946da8d43e7",
+          "score": 4.255030266832242
+        }
+      ],
+      "rejection": null
+    },
+    {
+      "id": "ai_hold1_0008",
+      "query": "2024中山强基考核流程",
+      "expected_otid": "otid_1d0896a191814c1e",
+      "expected_kpid": "kpid_2a1a41879f9a45d7",
+      "query_type": "short_keyword",
+      "query_scope": "procedure",
+      "preferred_granularity": "KP+OT",
+      "support_pattern": "multi_kp",
+      "theme_family": "考核流程",
+      "docRank": 1,
+      "kpidRank": null,
+      "docHitAt1": true,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "topMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_1d0896a191814c1e",
+          "best_kpid": "kpid_0534f93bfff44138",
+          "score": 4.544143554607905
+        },
+        {
+          "rank": 2,
+          "otid": "otid_9e0e777293cc4d35",
+          "best_kpid": "kpid_597d5ce77d9d4038",
+          "score": 3.865251304144276
+        },
+        {
+          "rank": 3,
+          "otid": "otid_5d70ffdc13ea473c",
+          "best_kpid": "kpid_20505a9aa9ab4a45",
+          "score": 3.6175867167103473
+        },
+        {
+          "rank": 4,
+          "otid": "otid_9660dcbd700e4367",
+          "best_kpid": "kpid_c9d74c96da194113",
+          "score": 3.3952617705996904
+        },
+        {
+          "rank": 5,
+          "otid": "otid_0cf1cfb3d7bc4735",
+          "best_kpid": "kpid_ba3a95e53a9f49dd",
+          "score": 3.1970877883136386
+        }
+      ],
+      "rejection": null
+    },
+    {
+      "id": "ai_hold1_0013",
+      "query": "中山大学2022年高水平运动队招生测试的报到和测试整体流程是怎样的？",
+      "expected_otid": "otid_cb15bb6977d54dca",
+      "expected_kpid": "kpid_c4a48ec9b0b548b3",
+      "query_type": "standard",
+      "query_scope": "procedure",
+      "preferred_granularity": "KP+OT",
+      "support_pattern": "multi_kp",
+      "theme_family": "高水平运动队测试流程",
+      "docRank": 1,
+      "kpidRank": null,
+      "docHitAt1": true,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "topMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_cb15bb6977d54dca",
+          "best_kpid": "kpid_d5b57a1bb0614515",
+          "score": 5.9196803145056345
+        },
+        {
+          "rank": 2,
+          "otid": "otid_83b704957347492c",
+          "best_kpid": "kpid_a344b24ecd8e4b86",
+          "score": 3.095540142423804
+        },
+        {
+          "rank": 3,
+          "otid": "otid_aee414fba6a44060",
+          "best_kpid": "kpid_ddb41afbe5524297",
+          "score": 2.4443774289395765
+        },
+        {
+          "rank": 4,
+          "otid": "otid_ccb3b891b8f64953",
+          "best_kpid": "kpid_ae1357d2e0a14449",
+          "score": 2.2795933019242125
+        },
+        {
+          "rank": 5,
+          "otid": "otid_752547880f7e4c3a",
+          "best_kpid": "kpid_2f975a2aad4d4ad7",
+          "score": 2.279115422094673
+        }
+      ],
+      "rejection": null
+    },
+    {
+      "id": "ai_hold1_0018",
+      "query": "中山大学2018博士复试 时间 材料 资格审查",
+      "expected_otid": "otid_aaec7e56e7794b4b",
+      "expected_kpid": "kpid_f5409a6892344620",
+      "query_type": "short_keyword",
+      "query_scope": "policy_overview",
+      "preferred_granularity": "KP+OT",
+      "support_pattern": "multi_kp",
+      "theme_family": "中山大学2018博士复试",
+      "docRank": 1,
+      "kpidRank": null,
+      "docHitAt1": true,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "topMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_aaec7e56e7794b4b",
+          "best_kpid": "kpid_fae69f5173db44a3",
+          "score": 5.471070129322305
+        },
+        {
+          "rank": 2,
+          "otid": "otid_7438d6279c2145b4",
+          "best_kpid": "kpid_2321e52899fa453f",
+          "score": 4.446790432836887
+        },
+        {
+          "rank": 3,
+          "otid": "otid_b2a1cc3ccb21453c",
+          "best_kpid": "kpid_c222d1edf1cd478c",
+          "score": 4.1576919669702
+        },
+        {
+          "rank": 4,
+          "otid": "otid_1265e1509ddb454f",
+          "best_kpid": "kpid_37adb8f3fce84cd8",
+          "score": 3.794459222363793
+        },
+        {
+          "rank": 5,
+          "otid": "otid_994207bb2a0740a1",
+          "best_kpid": "kpid_e88466dd22404f77",
+          "score": 3.7938358538004504
+        }
+      ],
+      "rejection": null
+    },
+    {
+      "id": "ai_hold1_0005",
+      "query": "2024强基广东各专业录取分数",
+      "expected_otid": "otid_1637de59ecdf419c",
+      "query_type": "short_keyword",
+      "query_scope": "fact_detail",
+      "preferred_granularity": "OT",
+      "support_pattern": "ot_required",
+      "theme_family": "多专业标准",
+      "docRank": 1,
+      "kpidRank": null,
+      "docHitAt1": true,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "topMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_1637de59ecdf419c",
+          "best_kpid": "kpid_55d00234efc94ad1",
+          "score": 3.8636670345383535
+        },
+        {
+          "rank": 2,
+          "otid": "otid_395fb889a17b49fa",
+          "best_kpid": "kpid_5c6c9e2e47964343",
+          "score": 3.6024474093208148
+        },
+        {
+          "rank": 3,
+          "otid": "otid_1d0896a191814c1e",
+          "best_kpid": "kpid_459140a466f24dd0",
+          "score": 3.5162188791968614
+        },
+        {
+          "rank": 4,
+          "otid": "otid_e527444dadac4adf",
+          "best_kpid": "kpid_78875d7893094d75",
+          "score": 3.2470020106547
+        },
+        {
+          "rank": 5,
+          "otid": "otid_d6de32b425e34dce",
+          "best_kpid": "kpid_fab6dd3861174e89",
+          "score": 3.2177754990833773
+        }
+      ],
+      "rejection": null
+    },
+    {
+      "id": "ai_hold1_0011",
+      "query": "2024中山大学综评材料审核通过后如何确定面试入围",
+      "expected_otid": "otid_2d77227bd2fa473c",
+      "query_type": "short_keyword",
+      "query_scope": "policy_overview",
+      "preferred_granularity": "OT",
+      "support_pattern": "ot_required",
+      "theme_family": "考核录取规则",
+      "docRank": 1,
+      "kpidRank": null,
+      "docHitAt1": true,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "topMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_2d77227bd2fa473c",
+          "best_kpid": "kpid_9225412eac904c8b",
+          "score": 5.87315739494073
+        },
+        {
+          "rank": 2,
+          "otid": "otid_5d70ffdc13ea473c",
+          "best_kpid": "kpid_9c6d2088725640ab",
+          "score": 5.865954037842602
+        },
+        {
+          "rank": 3,
+          "otid": "otid_9e0e777293cc4d35",
+          "best_kpid": "kpid_597d5ce77d9d4038",
+          "score": 5.018233010566498
+        },
+        {
+          "rank": 4,
+          "otid": "otid_1d0896a191814c1e",
+          "best_kpid": "kpid_9a171a0e14fd45d8",
+          "score": 3.681401573856258
+        },
+        {
+          "rank": 5,
+          "otid": "otid_395fb889a17b49fa",
+          "best_kpid": "kpid_0fa411d575284ede",
+          "score": 3.150414162028228
+        }
+      ],
+      "rejection": null
+    }
+  ]
+}

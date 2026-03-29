@@ -50,14 +50,57 @@ export interface SearchResult {
 }
 
 export interface SearchRejection {
-    reason: "low_topic_coverage" | "low_consistency";
+    reason:
+        | "low_topic_coverage"
+        | "low_consistency"
+        | "weak_anchor_needs_clarification";
     topicIds: string[];
 }
+
+export type ResponseMode =
+    | "direct_answer"
+    | "clarify_or_route"
+    | "reject";
+
+export interface QuerySignals {
+    hasExplicitTopicOrIntent: boolean;
+    hasExplicitYear: boolean;
+    hasHistoricalHint: boolean;
+    hasStrongDetailAnchor: boolean;
+    hasEntryLikeAnchor: boolean;
+    hasResultState: boolean;
+    hasLatestPolicyState: boolean;
+    hasGenericNextStep: boolean;
+    queryLength: number;
+    tokenCount?: number;
+}
+
+export interface RetrievalSignals {
+    candidateCount: number;
+    top1Score: number;
+    top1Top2Gap: number;
+    top1Top5Gap: number;
+    distinctTopicCount: number;
+    dominantTopicCount: number;
+    dominantTopicRatio: number;
+    labeledTopicCount: number;
+}
+
+export interface ResponseDecision {
+    mode: ResponseMode;
+    confidence: number;
+    reason: string;
+    preferLatestWithinTopic: boolean;
+    useWeakMatches: boolean;
+}
+
+type ResponseModeScores = Record<ResponseMode, number>;
 
 export interface SearchRankOutput {
     matches: SearchResult[];
     weakMatches: SearchResult[];
     rejection?: SearchRejection;
+    responseDecision?: ResponseDecision;
 }
 
 export interface BM25Stats {
@@ -69,6 +112,7 @@ export interface BM25Stats {
 export interface ParsedQueryIntent {
     rawQuery: string;
     years: number[];
+    months: number[];
     topicIds: string[];
     subtopicIds: string[];
     intentIds: string[];
@@ -77,6 +121,8 @@ export interface ParsedQueryIntent {
     normalizedTerms: string[];
     confidence: number;
     preferLatest: boolean;
+    preferLatestStrong: boolean;
+    signals: QuerySignals;
 }
 
 export type KPAggregationMode = "max" | "max_plus_topn";
@@ -103,9 +149,53 @@ export const RRF_K = 60;
 const BM25_K1 = 1.2;
 const BM25_B = 0.4;
 const EVENT_TYPE_MISMATCH_PENALTY = 0.95;
-const LATEST_YEAR_BOOST_BASE = 0.98;
+const LATEST_YEAR_BOOST_BASE = 0.82;
+const LATEST_POLICY_TIMESTAMP_BOOST_BASE = 0.97;
 const DEFAULT_KP_ROLE_DOC_WEIGHT = 0.35;
 const DEFAULT_KP_ROLE_CANDIDATE_LIMIT = 5;
+export const QUERY_SCOPE_SPECIFICITY_TERMS = [
+    "港澳台",
+    "海外",
+    "直博",
+    "单独",
+    "士兵",
+    "改报",
+    "报考点",
+    "联合培养",
+    "专项",
+    "调剂",
+    "夏令营",
+    "推免",
+    "保研",
+] as const;
+const QUERY_SCOPE_SPECIFICITY_TERM_SET = new Set(
+    QUERY_SCOPE_SPECIFICITY_TERMS,
+);
+export const DIRECT_ANSWER_EVIDENCE_TERMS = [
+    "夏令营",
+    "调剂",
+    "港澳台",
+    "报名",
+    "申请",
+    "招生简章",
+    "简章",
+    "招生章程",
+    "章程",
+    "外语类",
+    "保送生",
+    "综合评价",
+    "免修",
+    "选课",
+    "补退选",
+    "退选",
+    "转专业",
+    "优惠",
+    "优秀营员",
+    "缺额",
+    "缺额专业",
+] as const;
+const BROAD_LATEST_SCOPE_CUE_PATTERN =
+    /完整流程|完整|通用|一般|总流程|怎么报名|如何报名|条件.*报名|条件.*流程|条件.*操作/;
 
 
 
@@ -119,6 +209,17 @@ const INTENT_RULE_MAP: Map<string, IntentVectorItem> = new Map(
 
 const TOPIC_RULE_MAP: Map<string, (typeof CONFIG_TOPIC_CONFIGS)[number]> =
     new Map(CONFIG_TOPIC_CONFIGS.map((item) => [item.topic_id, item] as const));
+
+function isOutOfScopeTopic(topicId: string): boolean {
+    return TOPIC_RULE_MAP.get(topicId)?.scope === "out_of_scope";
+}
+
+function hasOnlyOutOfScopeTopics(topicIds: string[]): boolean {
+    return (
+        topicIds.length > 0 &&
+        topicIds.every((topicId) => isOutOfScopeTopic(topicId))
+    );
+}
 
 function deriveTopicIdsFromIntents(intentIds: string[]): string[] {
     return dedupe(
@@ -147,6 +248,89 @@ function matchTopicIds(query: string): string[] {
 
 function dedupe<T>(items: T[]): T[] {
     return Array.from(new Set(items));
+}
+
+function hasGenericNextStepCue(query: string): boolean {
+    return /怎么办|怎么做|怎么处理|怎么操作|如何办理|如何操作|接下来|下一步|要做什么|需要做什么|还要做什么|还需要做什么|还需要再操作什么|后面该怎么处理|后面怎么办|后续怎么办|应该怎么办|应该怎么|要办哪些事|下一步是什么|怎么弄|怎么搞|怎么整|处理什么|该做什么|准备什么|干什么/.test(
+        query,
+    );
+}
+
+function hasClarificationStateCue(query: string): boolean {
+    return /考上|录取|录取结果|拟录取|收到通知书|拿到通知书|审核通过|审核没通过|审核未通过|审核不通过|通过初审|初审通过|学校通知我通过|通知我通过|通过了|过审|没过审|未过审|获批|评上|提交完材料|提交完申请|提交材料后|补交完材料|补交完|成了新生|已经是新生|新生以后|录取后|拟录取后|考上后|收到通知书后|拿到通知书后|审核通过后|通过初审后|获批后/.test(
+        query,
+    );
+}
+
+function hasLatestPolicyStateCue(query: string): boolean {
+    return /考上|录取|录取结果|拟录取|收到通知书|拿到通知书|成了新生|已经是新生|新生以后|录取后|拟录取后|考上后|收到通知书后|拿到通知书后/.test(
+        query,
+    );
+}
+
+function hasPostOutcomeConditionCue(query: string): boolean {
+    return /最终有效|最终有效性|最终录取|录取.*有效|拟录取.*有效|审核.*为准|审批.*为准/.test(
+        query,
+    );
+}
+
+function hasStrongDetailAnchorCue(query: string): boolean {
+    return /录取通知书|通知书|报到|宿舍|党团关系|奖助金|档案|调档|政审|网上确认|答辩|报名|考试|缴费|申请书|复试|面试|邮寄|地址|银行卡|学费/.test(
+        query,
+    );
+}
+
+function hasEntryLikeAnchorCue(query: string): boolean {
+    return /新生|入学|录取|拟录取|审核|初审|资格审核|申请|材料/.test(
+        query,
+    );
+}
+
+function hasLatestPolicyFallbackCue(querySignals: QuerySignals): boolean {
+    return querySignals.hasGenericNextStep && querySignals.hasLatestPolicyState;
+}
+
+function buildQuerySignals(params: {
+    query: string;
+    years: number[];
+    topicIds: string[];
+    intentIds: string[];
+    hasHistoricalHint: boolean;
+}): QuerySignals {
+    const { query, years, topicIds, intentIds, hasHistoricalHint } = params;
+    return {
+        hasExplicitTopicOrIntent: topicIds.length > 0 || intentIds.length > 0,
+        hasExplicitYear: years.length > 0,
+        hasHistoricalHint,
+        hasStrongDetailAnchor: hasStrongDetailAnchorCue(query),
+        hasEntryLikeAnchor: hasEntryLikeAnchorCue(query),
+        hasResultState: hasClarificationStateCue(query),
+        hasLatestPolicyState: hasLatestPolicyStateCue(query),
+        hasGenericNextStep: hasGenericNextStepCue(query),
+        queryLength: query.length,
+    };
+}
+
+function withQueryTokenCount(
+    signals: QuerySignals,
+    querySparse?: Record<number, number>,
+): QuerySignals {
+    return {
+        ...signals,
+        tokenCount: querySparse ? Object.keys(querySparse).length : 0,
+    };
+}
+
+function extractQueryMonths(query: string): number[] {
+    const months = new Set<number>();
+    const matches = query.matchAll(/(?:^|[^\d])(1[0-2]|0?[1-9])月(?:份)?/g);
+    for (const match of matches) {
+        const value = Number.parseInt(match[1] || "", 10);
+        if (Number.isFinite(value) && value >= 1 && value <= 12) {
+            months.add(value);
+        }
+    }
+    return Array.from(months);
 }
 
 export function buildBM25Stats(metadata: Metadata[]): BM25Stats {
@@ -234,6 +418,7 @@ export function parseQueryIntent(query: string): ParsedQueryIntent {
     const years = dedupe(
         (query.match(/20\d{2}/g) || []).map((year) => Number(year)),
     );
+    const months = extractQueryMonths(query);
     const matchedRules = CONFIG_INTENT_VECTOR_TABLE.filter((rule) =>
         rule.aliases.some((alias) => query.includes(alias)),
     );
@@ -253,17 +438,36 @@ export function parseQueryIntent(query: string): ParsedQueryIntent {
     const normalizedTerms = dedupe(
         matchedRules.map((rule) => rule.intent_name),
     );
+    const hasHistoricalHint = CONFIG_HISTORICAL_QUERY_HINTS.some((hint) =>
+        query.includes(hint),
+    );
+    const hasLatestHint = CONFIG_LATEST_QUERY_HINTS.some((hint) =>
+        query.includes(hint),
+    );
+    const signals = buildQuerySignals({
+        query,
+        years,
+        topicIds,
+        intentIds,
+        hasHistoricalHint,
+    });
+    const preferLatestStrong =
+        years.length === 0 &&
+        !hasHistoricalHint &&
+        (hasLatestHint || hasLatestPolicyFallbackCue(signals));
     const preferLatest =
         years.length === 0 &&
-        !CONFIG_HISTORICAL_QUERY_HINTS.some((hint) => query.includes(hint)) &&
+        !hasHistoricalHint &&
         (topicIds.some(
             (topicId) => TOPIC_RULE_MAP.get(topicId)?.prefer_latest,
         ) ||
-            CONFIG_LATEST_QUERY_HINTS.some((hint) => query.includes(hint)));
+            hasLatestHint ||
+            preferLatestStrong);
 
     return {
         rawQuery: query,
         years,
+        months,
         topicIds,
         subtopicIds: intentIds,
         intentIds,
@@ -272,6 +476,8 @@ export function parseQueryIntent(query: string): ParsedQueryIntent {
         normalizedTerms,
         confidence: intentIds.length > 0 ? 1 : 0,
         preferLatest,
+        preferLatestStrong,
+        signals,
     };
 }
 
@@ -325,35 +531,292 @@ function getRelatedIntentTypes(intentIds: string[]): string[] {
 }
 
 type QueryIntentContext = {
+    rawQuery: string;
     years: number[];
+    months: number[];
     hasExplicitYear: boolean;
+    hasExplicitMonth: boolean;
+    topicIds: string[];
     intentIds: string[];
     relatedIntentIds: string[];
     degreeLevels: string[];
     eventTypes: string[];
+    hasPostOutcomeCondition: boolean;
     preferLatest: boolean;
+    preferLatestStrong: boolean;
+    querySpecificityTerms: string[];
+    discourageUnexpectedSpecificity: boolean;
 };
 
 type DocQuerySignals = {
     hasStructuredYearMatch: boolean;
     hasLexicalYearMatch: boolean;
+    hasPublishYearMatch: boolean;
+    hasSuspiciousStructuredYear: boolean;
+    docPublishYear?: number;
+    hasStructuredMonthMatch: boolean;
+    docMonth?: number;
 };
+
+type ScopeSpecificityStats = {
+    termTf: Record<string, number>;
+    totalTf: number;
+};
+
+type EvidenceCoverageRequirement = {
+    label: string;
+    requiredGroups: readonly (readonly string[])[];
+    requireIntentAlignment?: boolean;
+};
+
+function getMatchedSpecificityTf(
+    querySpecificityTerms: string[],
+    scopeSpecificityStats?: ScopeSpecificityStats,
+): number {
+    if (!scopeSpecificityStats || querySpecificityTerms.length === 0) {
+        return 0;
+    }
+    return querySpecificityTerms.reduce(
+        (sum, term) => sum + (scopeSpecificityStats.termTf[term] || 0),
+        0,
+    );
+}
+
+function extractQuerySpecificityTerms(queryWords: string[]): string[] {
+    return dedupe(
+        queryWords.filter((word) => QUERY_SCOPE_SPECIFICITY_TERM_SET.has(word)),
+    );
+}
+
+function buildEvidenceCoverageRequirement(
+    rawQuery: string,
+): EvidenceCoverageRequirement | undefined {
+    if (
+        /夏令营/.test(rawQuery) &&
+        /(录取优惠|优惠|优秀营员)/.test(rawQuery)
+    ) {
+        return {
+            label: "summer_camp_benefit",
+            requiredGroups: [["夏令营"], ["优惠", "优秀营员"]],
+            requireIntentAlignment: true,
+        };
+    }
+
+    if (
+        /夏令营/.test(rawQuery) &&
+        /(报名|申请|流程|步骤|怎么办|如何)/.test(rawQuery)
+    ) {
+        return {
+            label: "summer_camp_apply",
+            requiredGroups: [["夏令营"], ["报名", "申请"]],
+            requireIntentAlignment: true,
+        };
+    }
+
+    if (/港澳台/.test(rawQuery) && /调剂/.test(rawQuery)) {
+        return {
+            label: "hongkong_macau_taiwan_adjustment",
+            requiredGroups: [["港澳台"], ["调剂"]],
+            requireIntentAlignment: true,
+        };
+    }
+
+    if (/调剂/.test(rawQuery) && /缺额专业/.test(rawQuery)) {
+        return {
+            label: "adjustment_vacancy",
+            requiredGroups: [["调剂"], ["缺额", "缺额专业"]],
+            requireIntentAlignment: true,
+        };
+    }
+
+    if (
+        /调剂/.test(rawQuery) &&
+        /(报名|申请|流程|步骤|怎么办|如何)/.test(rawQuery)
+    ) {
+        return {
+            label: "adjustment_apply",
+            requiredGroups: [["调剂"], ["报名", "申请"]],
+            requireIntentAlignment: true,
+        };
+    }
+
+    if (
+        /外语类保送生/.test(rawQuery) &&
+        /(招生简章|简章|招生章程|章程)/.test(rawQuery)
+    ) {
+        return {
+            label: "foreign_language_recommend_brochure",
+            requiredGroups: [
+                ["外语类", "保送生"],
+                ["招生简章", "简章", "招生章程", "章程"],
+            ],
+        };
+    }
+
+    if (
+        /综合评价/.test(rawQuery) &&
+        /(招生简章|简章|招生章程|章程)/.test(rawQuery)
+    ) {
+        return {
+            label: "comprehensive_evaluation_brochure",
+            requiredGroups: [["综合评价"], ["招生简章", "简章", "招生章程", "章程"]],
+        };
+    }
+
+    if (
+        /选课/.test(rawQuery) &&
+        /补退选/.test(rawQuery) &&
+        /(时间|什么时候|何时|截止|流程|步骤)/.test(rawQuery)
+    ) {
+        return {
+            label: "course_add_drop",
+            requiredGroups: [["选课"], ["补退选", "退选"]],
+        };
+    }
+
+    if (
+        /转专业/.test(rawQuery) &&
+        /(报名|申请|流程|步骤|怎么办|如何)/.test(rawQuery)
+    ) {
+        return {
+            label: "major_transfer",
+            requiredGroups: [["转专业"], ["报名", "申请"]],
+        };
+    }
+
+    if (
+        /免修/.test(rawQuery) &&
+        /(报名|申请|流程|步骤|怎么办|如何)/.test(rawQuery)
+    ) {
+        return {
+            label: "course_exemption",
+            requiredGroups: [["免修"], ["报名", "申请"]],
+        };
+    }
+
+    return undefined;
+}
+
+function topDocumentSatisfiesEvidenceRequirement(
+    sortedRanking: SearchResult[],
+    docEvidenceStatsMap: Map<string, ScopeSpecificityStats>,
+    requirement: EvidenceCoverageRequirement,
+): boolean {
+    const topDoc = sortedRanking[0];
+    if (!topDoc) {
+        return false;
+    }
+
+    const stats = docEvidenceStatsMap.get(topDoc.otid);
+    if (!stats) {
+        return false;
+    }
+
+    return requirement.requiredGroups.every((group) =>
+        group.some((term) => (stats.termTf[term] || 0) > 0),
+    );
+}
+
+function shouldRejectForMissingInDomainEvidence(params: {
+    rawQuery: string;
+    queryIntent?: ParsedQueryIntent;
+    sortedRanking: SearchResult[];
+    docEvidenceStatsMap: Map<string, ScopeSpecificityStats>;
+    otidMap: Record<string, AggregatedDocScores>;
+}): { shouldReject: boolean; label?: string } {
+    const requirement = buildEvidenceCoverageRequirement(params.rawQuery);
+    if (!requirement) {
+        return { shouldReject: false };
+    }
+
+    const topDoc = params.sortedRanking[0];
+    if (
+        requirement.requireIntentAlignment &&
+        topDoc &&
+        (params.queryIntent?.intentIds.length || 0) > 0
+    ) {
+        const topDocIntentIds =
+            params.otidMap[topDoc.otid]?.intent_ids ||
+            params.otidMap[topDoc.otid]?.subtopic_ids ||
+            [];
+        if (!hasAnyOverlap(params.queryIntent?.intentIds || [], topDocIntentIds)) {
+            return {
+                shouldReject: true,
+                label: `${requirement.label}_intent_mismatch`,
+            };
+        }
+    }
+
+    if (
+        topDocumentSatisfiesEvidenceRequirement(
+            params.sortedRanking,
+            params.docEvidenceStatsMap,
+            requirement,
+        )
+    ) {
+        return { shouldReject: false };
+    }
+
+    return {
+        shouldReject: true,
+        label: requirement.label,
+    };
+}
 
 function createQueryIntentContext(
     queryIntent?: ParsedQueryIntent,
+    queryWords: string[] = [],
 ): QueryIntentContext {
     const years = queryIntent?.years || [];
     const intentIds = queryIntent?.intentIds || [];
+    const rawQuery = queryIntent?.rawQuery || "";
+    const querySpecificityTerms = extractQuerySpecificityTerms(queryWords);
+    const discourageUnexpectedSpecificity =
+        querySpecificityTerms.length === 0 &&
+        Boolean(queryIntent?.preferLatestStrong) &&
+        BROAD_LATEST_SCOPE_CUE_PATTERN.test(rawQuery);
 
     return {
+        rawQuery,
         years,
+        months: queryIntent?.months || [],
         hasExplicitYear: years.length > 0,
+        hasExplicitMonth: (queryIntent?.months || []).length > 0,
+        topicIds: queryIntent?.topicIds || [],
         intentIds,
         relatedIntentIds: getRelatedIntentTypes(intentIds),
         degreeLevels: queryIntent?.degreeLevels || [],
         eventTypes: queryIntent?.eventTypes || [],
+        hasPostOutcomeCondition: hasPostOutcomeConditionCue(
+            rawQuery,
+        ),
         preferLatest: Boolean(queryIntent?.preferLatest),
+        preferLatestStrong: Boolean(queryIntent?.preferLatestStrong),
+        querySpecificityTerms,
+        discourageUnexpectedSpecificity,
     };
+}
+
+function getTimestampMonth(timestamp?: number): number | undefined {
+    if (typeof timestamp !== "number" || !Number.isFinite(timestamp)) {
+        return undefined;
+    }
+    const date = new Date(timestamp * 1000);
+    if (Number.isNaN(date.getTime())) {
+        return undefined;
+    }
+    return date.getUTCMonth() + 1;
+}
+
+function getTimestampYear(timestamp?: number): number | undefined {
+    if (typeof timestamp !== "number" || !Number.isFinite(timestamp)) {
+        return undefined;
+    }
+    const date = new Date(timestamp * 1000);
+    if (Number.isNaN(date.getTime())) {
+        return undefined;
+    }
+    return date.getUTCFullYear();
 }
 
 function getDocQuerySignals(
@@ -362,12 +825,30 @@ function getDocQuerySignals(
     intentContext: QueryIntentContext,
     yearHitMap: Map<string, boolean>,
 ): DocQuerySignals {
+    const docMonth = getTimestampMonth(scores.timestamp);
+    const docPublishYear = getTimestampYear(scores.timestamp);
+    const hasSuspiciousStructuredYear =
+        scores.target_year !== undefined &&
+        docPublishYear !== undefined &&
+        Math.abs(scores.target_year - docPublishYear) >= 2;
     return {
         hasStructuredYearMatch:
             intentContext.hasExplicitYear &&
             scores.target_year !== undefined &&
             intentContext.years.includes(scores.target_year),
         hasLexicalYearMatch: yearHitMap.get(otid) === true,
+        hasPublishYearMatch:
+            intentContext.hasExplicitYear &&
+            docPublishYear !== undefined &&
+            intentContext.years.includes(docPublishYear),
+        hasSuspiciousStructuredYear,
+        docPublishYear,
+        hasStructuredMonthMatch:
+            intentContext.hasExplicitYear &&
+            intentContext.hasExplicitMonth &&
+            docMonth !== undefined &&
+            intentContext.months.includes(docMonth),
+        docMonth,
     };
 }
 
@@ -380,11 +861,19 @@ function shouldSkipForExplicitYear(
         return false;
     }
 
-    if (scores.target_year !== undefined && !signals.hasStructuredYearMatch) {
+    if (
+        scores.target_year !== undefined &&
+        !signals.hasStructuredYearMatch &&
+        !(signals.hasLexicalYearMatch && signals.hasSuspiciousStructuredYear)
+    ) {
         return true;
     }
 
-    return scores.target_year === undefined && !signals.hasLexicalYearMatch;
+    return (
+        scores.target_year === undefined &&
+        !signals.hasLexicalYearMatch &&
+        !signals.hasPublishYearMatch
+    );
 }
 
 function computeBaseScore(
@@ -426,11 +915,15 @@ function computeBaseScore(
 type QueryRoleSignals = {
     asksTime: boolean;
     asksCondition: boolean;
+    asksPostOutcomeCondition: boolean;
     asksMaterials: boolean;
     asksProcedure: boolean;
     asksAnnouncementPeriod: boolean;
     asksApplicationStage: boolean;
     mentionsThesis: boolean;
+    mentionsPrintedDocument: boolean;
+    mentionsCollectionOrArchive: boolean;
+    mentionsReviewOrReissue: boolean;
 };
 
 function hasKpRoleTag(
@@ -452,6 +945,7 @@ function deriveQueryRoleSignals(
         asksCondition:
             /条件|满足|资格/.test(rawQuery) ||
             queryScopeHint === "eligibility_condition",
+        asksPostOutcomeCondition: hasPostOutcomeConditionCue(rawQuery),
         asksMaterials: /材料|扫描件|电子版|邮箱|mail/i.test(rawQuery),
         asksProcedure: /怎么办|怎么处理|不通过|补交|补充|流程|步骤/.test(
             rawQuery,
@@ -461,6 +955,9 @@ function deriveQueryRoleSignals(
             /申请|报名|确认|提交/.test(rawQuery) &&
             !/通过后|答辩通过|审批后|获得学位/.test(rawQuery),
         mentionsThesis: /论文/.test(rawQuery),
+        mentionsPrintedDocument: /准考证|打印|纸质/.test(rawQuery),
+        mentionsCollectionOrArchive: /领取|证书|档案/.test(rawQuery),
+        mentionsReviewOrReissue: /资格|评审|补发/.test(rawQuery),
     };
 }
 
@@ -489,8 +986,12 @@ function computeKpRoleBonus(
         if (hasKpRoleTag(candidate, "condition")) {
             bonus += 1.1;
         }
+        // Some eligibility constraints are encoded as cutoff deadlines.
+        if (hasKpRoleTag(candidate, "deadline")) {
+            bonus += 0.55;
+        }
         if (hasKpRoleTag(candidate, "post_outcome")) {
-            bonus -= 0.7;
+            bonus += signals.asksPostOutcomeCondition ? 1.0 : -0.7;
         }
     }
 
@@ -516,12 +1017,34 @@ function computeKpRoleBonus(
         }
     }
 
+    if (signals.mentionsPrintedDocument) {
+        if (hasKpRoleTag(candidate, "materials")) {
+            bonus += 0.55;
+        }
+        if (hasKpRoleTag(candidate, "background")) {
+            bonus -= 0.35;
+        }
+    }
+
     if (signals.asksApplicationStage) {
         if (hasKpRoleTag(candidate, "application_stage")) {
             bonus += 1.1;
         }
         if (hasKpRoleTag(candidate, "post_outcome")) {
             bonus -= 1.1;
+        }
+    }
+
+    if (
+        signals.mentionsThesis &&
+        signals.asksApplicationStage &&
+        !signals.asksCondition
+    ) {
+        if (hasKpRoleTag(candidate, "condition")) {
+            bonus -= 0.55;
+        }
+        if (hasKpRoleTag(candidate, "application_stage")) {
+            bonus += 0.3;
         }
     }
 
@@ -556,6 +1079,60 @@ function computeKpRoleBonus(
         if (hasKpRoleTag(candidate, "distribution")) {
             bonus -= 0.5;
         }
+    }
+
+    if (signals.mentionsCollectionOrArchive) {
+        if (hasKpRoleTag(candidate, "reminder")) {
+            bonus += 0.7;
+        }
+        if (hasKpRoleTag(candidate, "post_outcome")) {
+            bonus += 0.35;
+        }
+        if (hasKpRoleTag(candidate, "materials")) {
+            bonus -= 0.35;
+        }
+        if (hasKpRoleTag(candidate, "background")) {
+            bonus -= 0.35;
+        }
+    }
+
+    if (signals.mentionsReviewOrReissue) {
+        if (hasKpRoleTag(candidate, "deadline")) {
+            bonus += 0.7;
+        }
+        if (hasKpRoleTag(candidate, "distribution")) {
+            bonus -= 0.45;
+        }
+        if (hasKpRoleTag(candidate, "publish")) {
+            bonus -= 0.25;
+        }
+    }
+
+    if (!signals.asksCondition && hasKpRoleTag(candidate, "condition")) {
+        bonus -= 0.25;
+    }
+
+    if (!signals.asksMaterials && hasKpRoleTag(candidate, "materials")) {
+        bonus -= 0.35;
+    }
+
+    if (
+        !signals.asksAnnouncementPeriod &&
+        !signals.asksPostOutcomeCondition &&
+        hasKpRoleTag(candidate, "publish")
+    ) {
+        bonus -= 0.2;
+    }
+
+    if (
+        !/到账|发放|补发/.test(rawQuery) &&
+        hasKpRoleTag(candidate, "distribution")
+    ) {
+        bonus -= 0.35;
+    }
+
+    if (hasKpRoleTag(candidate, "background")) {
+        bonus -= 0.15;
     }
 
     return bonus;
@@ -636,18 +1213,58 @@ function applyYearConstraintBoost(
         return boost;
     }
 
-    if (scores.target_year !== undefined && intentContext.years.length > 0) {
-        if (!intentContext.years.includes(scores.target_year)) {
+    if (intentContext.years.length > 0) {
+        if (signals.hasStructuredYearMatch) {
+            if (!signals.hasSuspiciousStructuredYear) {
+                return boost * 1.04;
+            }
+            if (signals.hasPublishYearMatch) {
+                return boost * 0.96;
+            }
+            return boost * 0.78;
+        }
+
+        if (signals.hasLexicalYearMatch && signals.hasSuspiciousStructuredYear) {
+            if (signals.hasPublishYearMatch) {
+                return boost * 1.03;
+            }
+            return boost * 0.9;
+        }
+
+        if (scores.target_year !== undefined) {
             return boost * 0.01;
         }
-        return boost;
     }
 
-    if (!signals.hasStructuredYearMatch && !signals.hasLexicalYearMatch) {
+    if (
+        !signals.hasStructuredYearMatch &&
+        !signals.hasLexicalYearMatch &&
+        !signals.hasPublishYearMatch
+    ) {
         return boost * 0.12;
     }
 
     return boost;
+}
+
+function applyMonthConstraintBoost(
+    boost: number,
+    intentContext: QueryIntentContext,
+    signals: DocQuerySignals,
+): number {
+    if (!intentContext.hasExplicitYear || !intentContext.hasExplicitMonth) {
+        return boost;
+    }
+
+    if (signals.docMonth === undefined) {
+        return boost * 0.94;
+    }
+
+    if (signals.hasStructuredMonthMatch) {
+        return boost * 1.12;
+    }
+
+    return boost * 0.82;
 }
 
 function applyIntentBoost(
@@ -675,6 +1292,33 @@ function applyIntentBoost(
     return nextBoost;
 }
 
+function applyTopicCoverageBoost(
+    boost: number,
+    intentContext: QueryIntentContext,
+    scores: AggregatedDocScores,
+): number {
+    if (intentContext.topicIds.length === 0) {
+        return boost;
+    }
+
+    const docTopicIds = dedupe(getCoverageComparableTopicIds(scores));
+    if (docTopicIds.length > 0) {
+        if (hasAnyOverlap(intentContext.topicIds, docTopicIds)) {
+            return boost * 1.08;
+        }
+        return boost * 0.9;
+    }
+
+    if (
+        scores.weak_topic_ids &&
+        hasAnyOverlap(intentContext.topicIds, scores.weak_topic_ids)
+    ) {
+        return boost * 1.02;
+    }
+
+    return boost * 0.84;
+}
+
 function applyDegreeBoost(
     boost: number,
     intentContext: QueryIntentContext,
@@ -700,16 +1344,39 @@ function applyEventBoost(
     intentContext: QueryIntentContext,
     scores: AggregatedDocScores,
 ): number {
-    if (intentContext.eventTypes.length === 0) {
-        return boost;
-    }
-
     if (hasAnyOverlap(intentContext.eventTypes, scores.event_types)) {
-        return boost * 1.05;
+        boost *= 1.05;
+    } else if (
+        intentContext.eventTypes.length > 0 &&
+        (scores.event_types?.length || 0) > 0
+    ) {
+        boost *= EVENT_TYPE_MISMATCH_PENALTY;
     }
 
-    if ((scores.event_types?.length || 0) > 0) {
-        return boost * EVENT_TYPE_MISMATCH_PENALTY;
+    if (
+        intentContext.hasPostOutcomeCondition &&
+        (scores.event_types?.length || 0) > 0
+    ) {
+        if (hasAnyOverlap(["录取公示"], scores.event_types)) {
+            boost *= 1.1;
+        }
+        if (hasAnyOverlap(["复试通知"], scores.event_types)) {
+            boost *= 0.78;
+        }
+        if (hasAnyOverlap(["招生章程", "报名通知"], scores.event_types)) {
+            boost *= 0.82;
+        }
+    }
+
+    const asksConditionOnly =
+        /条件|满足|资格/.test(intentContext.rawQuery) &&
+        !/怎么|流程|报名|操作|步骤/.test(intentContext.rawQuery) &&
+        !/初试|复试|成绩|分数/.test(intentContext.rawQuery);
+    if (
+        asksConditionOnly &&
+        hasAnyOverlap(["复试通知"], scores.event_types)
+    ) {
+        boost *= 0.35;
     }
 
     return boost;
@@ -733,6 +1400,118 @@ function applyLatestYearBoost(
     return boost * Math.pow(LATEST_YEAR_BOOST_BASE, yearGap);
 }
 
+function applyLatestTimestampBoost(
+    boost: number,
+    intentContext: QueryIntentContext,
+    scores: AggregatedDocScores,
+    latestTimestamp?: number,
+): number {
+    if (!intentContext.preferLatestStrong || latestTimestamp === undefined) {
+        return boost;
+    }
+
+    if (scores.timestamp === undefined) {
+        return boost * 0.82;
+    }
+
+    const gapSeconds = Math.max(0, latestTimestamp - scores.timestamp);
+    if (gapSeconds <= 0) {
+        return boost;
+    }
+
+    const gapMonths = gapSeconds / (60 * 60 * 24 * 30);
+    return boost * Math.pow(LATEST_POLICY_TIMESTAMP_BOOST_BASE, gapMonths);
+}
+
+function applyScopeSpecificityBoost(
+    boost: number,
+    intentContext: QueryIntentContext,
+    scopeSpecificityStats?: ScopeSpecificityStats,
+): number {
+    if (!scopeSpecificityStats) {
+        return boost;
+    }
+
+    const querySpecificityTerms = intentContext.querySpecificityTerms;
+    if (querySpecificityTerms.length > 0) {
+        const matchedTf = getMatchedSpecificityTf(
+            querySpecificityTerms,
+            scopeSpecificityStats,
+        );
+        const matchedTerms = querySpecificityTerms.filter(
+            (term) => (scopeSpecificityStats.termTf[term] || 0) > 0,
+        ).length;
+
+        if (matchedTerms === 0 || matchedTf === 0) {
+            return boost * 0.45;
+        }
+
+        const coverageRatio = matchedTerms / querySpecificityTerms.length;
+        const focusRatio =
+            matchedTf / Math.max(matchedTf, scopeSpecificityStats.totalTf, 1);
+
+        let nextBoost = boost;
+        nextBoost *= 0.88 + coverageRatio * 0.24;
+        nextBoost *= 0.55 + focusRatio * 0.95;
+        return nextBoost;
+    }
+
+    if (!intentContext.discourageUnexpectedSpecificity) {
+        return boost;
+    }
+
+    const unexpectedTf = Object.entries(scopeSpecificityStats.termTf).reduce(
+        (sum, [term, tf]) =>
+            intentContext.querySpecificityTerms.includes(term) ? sum : sum + tf,
+        0,
+    );
+    if (unexpectedTf <= 0) {
+        return boost;
+    }
+
+    return boost * Math.max(0.72, 1 - Math.log1p(unexpectedTf) / 10);
+}
+
+function applySpecificityLocalFreshnessBoost(
+    boost: number,
+    intentContext: QueryIntentContext,
+    scores: AggregatedDocScores,
+    scopeSpecificityStats?: ScopeSpecificityStats,
+    latestFocusedSpecificityTimestamp?: number,
+): number {
+    if (
+        !intentContext.preferLatestStrong ||
+        intentContext.querySpecificityTerms.length === 0 ||
+        latestFocusedSpecificityTimestamp === undefined ||
+        scores.timestamp === undefined
+    ) {
+        return boost;
+    }
+
+    if (!/怎么|流程|报名|操作|步骤/.test(intentContext.rawQuery)) {
+        return boost;
+    }
+
+    const matchedTf = getMatchedSpecificityTf(
+        intentContext.querySpecificityTerms,
+        scopeSpecificityStats,
+    );
+    if (matchedTf < 10) {
+        return boost;
+    }
+
+    const gapSeconds = Math.max(
+        0,
+        latestFocusedSpecificityTimestamp - scores.timestamp,
+    );
+    if (gapSeconds <= 0) {
+        return boost;
+    }
+
+    const gapMonths = gapSeconds / (60 * 60 * 24 * 30);
+    return boost * Math.pow(0.75, gapMonths);
+}
+
 function computeBoostMultiplier(params: {
     otid: string;
     scores: AggregatedDocScores;
@@ -741,6 +1520,9 @@ function computeBoostMultiplier(params: {
     queryYearWordIds?: number[];
     intentContext: QueryIntentContext;
     latestTargetYear?: number;
+    latestTimestamp?: number;
+    scopeSpecificityStats?: ScopeSpecificityStats;
+    latestFocusedSpecificityTimestamp?: number;
 }): number {
     const {
         otid,
@@ -750,6 +1532,9 @@ function computeBoostMultiplier(params: {
         queryYearWordIds,
         intentContext,
         latestTargetYear,
+        latestTimestamp,
+        scopeSpecificityStats,
+        latestFocusedSpecificityTimestamp,
     } = params;
     const signals = getDocQuerySignals(otid, scores, intentContext, yearHitMap);
     const lexicalBonus = lexicalBonusMap.get(otid) || 0;
@@ -763,7 +1548,13 @@ function computeBoostMultiplier(params: {
         scores,
         signals,
     );
+    boost = applyMonthConstraintBoost(
+        boost,
+        intentContext,
+        signals,
+    );
     boost = applyIntentBoost(boost, intentContext, scores);
+    boost = applyTopicCoverageBoost(boost, intentContext, scores);
     boost = applyDegreeBoost(boost, intentContext, scores);
     boost = applyEventBoost(boost, intentContext, scores);
     boost = applyLatestYearBoost(
@@ -772,34 +1563,33 @@ function computeBoostMultiplier(params: {
         scores,
         latestTargetYear,
     );
+    boost = applyLatestTimestampBoost(
+        boost,
+        intentContext,
+        scores,
+        latestTimestamp,
+    );
+    boost = applyScopeSpecificityBoost(
+        boost,
+        intentContext,
+        scopeSpecificityStats,
+    );
+    boost = applySpecificityLocalFreshnessBoost(
+        boost,
+        intentContext,
+        scores,
+        scopeSpecificityStats,
+        latestFocusedSpecificityTimestamp,
+    );
 
     return boost;
 }
 
-function shouldRejectForLowConsistency(
-    queryIntent: ParsedQueryIntent | undefined,
-    querySparse: Record<number, number> | undefined,
+export function extractRetrievalSignals(
     sortedRanking: SearchResult[],
     otidMap: Record<string, AggregatedDocScores>,
-): boolean {
-    const querySparseTermCount = querySparse
-        ? Object.keys(querySparse).length
-        : 0;
-
-    if (
-        !queryIntent ||
-        queryIntent.topicIds.length > 0 ||
-        queryIntent.intentIds.length > 0 ||
-        querySparseTermCount > 0
-    ) {
-        return false;
-    }
-
+): RetrievalSignals {
     const consistencyWindow = sortedRanking.slice(0, 10);
-    if (consistencyWindow.length === 0) {
-        return true;
-    }
-
     const topicHistogram = new Map<string, number>();
     let labeledCount = 0;
 
@@ -814,18 +1604,191 @@ function shouldRejectForLowConsistency(
         });
     }
 
-    if (labeledCount === 0) {
-        return true;
+    const top1Score = sortedRanking[0]?.score || 0;
+    const top2Score = sortedRanking[1]?.score ?? top1Score;
+    const top5Score = sortedRanking[4]?.score ?? sortedRanking.at(-1)?.score ?? top1Score;
+    const dominantCount =
+        topicHistogram.size > 0 ? Math.max(...topicHistogram.values()) : 0;
+    const dominantRatio =
+        consistencyWindow.length > 0 ? dominantCount / consistencyWindow.length : 0;
+
+    return {
+        candidateCount: sortedRanking.length,
+        top1Score,
+        top1Top2Gap: top1Score - top2Score,
+        top1Top5Gap: top1Score - top5Score,
+        distinctTopicCount: topicHistogram.size,
+        dominantTopicCount: dominantCount,
+        dominantTopicRatio: dominantRatio,
+        labeledTopicCount: labeledCount,
+    };
+}
+
+export function classifyResponseMode(
+    querySignals: QuerySignals,
+    retrievalSignals: RetrievalSignals,
+): ResponseDecision {
+    const scores: ResponseModeScores = {
+        direct_answer: 0.5,
+        clarify_or_route: 0,
+        reject: 0,
+    };
+    const reasons = new Set<string>();
+
+    if (querySignals.hasExplicitTopicOrIntent) {
+        scores.direct_answer += 2.6;
+        scores.clarify_or_route -= 1.1;
+        scores.reject -= 1.3;
+        reasons.add("explicit_topic_or_intent");
     }
 
-    const dominantCount = Math.max(...topicHistogram.values());
-    const dominantRatio = dominantCount / consistencyWindow.length;
-    return dominantCount < 3 || dominantRatio < 0.45;
+    if (querySignals.hasStrongDetailAnchor) {
+        scores.direct_answer += 3.0;
+        scores.clarify_or_route -= 2.0;
+        scores.reject -= 1.1;
+        reasons.add("strong_detail_anchor");
+    }
+
+    if (querySignals.hasExplicitYear) {
+        scores.direct_answer += 0.8;
+        reasons.add("explicit_year");
+    }
+
+    if (querySignals.hasResultState) {
+        scores.clarify_or_route += 0.55;
+        scores.reject -= 0.9;
+        reasons.add("result_state");
+    }
+
+    if (querySignals.hasGenericNextStep) {
+        scores.clarify_or_route += 1.35;
+        scores.reject += 1.1;
+        scores.direct_answer -= 0.75;
+        reasons.add("generic_next_step");
+    }
+
+    if (querySignals.hasEntryLikeAnchor) {
+        scores.clarify_or_route += 0.5;
+        scores.reject -= 0.25;
+        reasons.add("entry_like_anchor");
+    }
+
+    if (
+        querySignals.hasGenericNextStep &&
+        !querySignals.hasResultState &&
+        !querySignals.hasEntryLikeAnchor &&
+        !querySignals.hasStrongDetailAnchor
+    ) {
+        scores.reject += 1.6;
+        scores.clarify_or_route -= 0.45;
+        reasons.add("empty_next_step_without_state");
+    }
+
+    if (
+        querySignals.hasResultState &&
+        querySignals.hasGenericNextStep &&
+        !querySignals.hasStrongDetailAnchor
+    ) {
+        scores.clarify_or_route += 1.35;
+        scores.direct_answer -= 0.3;
+        reasons.add("result_state_needs_clarification");
+    }
+
+    if (
+        querySignals.hasResultState &&
+        querySignals.hasGenericNextStep &&
+        querySignals.hasStrongDetailAnchor
+    ) {
+        scores.direct_answer += 1.0;
+        reasons.add("detail_anchor_overrides_generic_state");
+    }
+
+    if (
+        querySignals.hasExplicitYear &&
+        !querySignals.hasGenericNextStep &&
+        (querySignals.hasEntryLikeAnchor || querySignals.hasResultState)
+    ) {
+        scores.direct_answer += 0.8;
+        scores.clarify_or_route -= 0.25;
+        reasons.add("time_anchor_supports_direct_answer");
+    }
+
+    if (
+        !querySignals.hasExplicitTopicOrIntent &&
+        !querySignals.hasStrongDetailAnchor &&
+        !querySignals.hasEntryLikeAnchor
+    ) {
+        scores.reject += 0.45;
+        reasons.add("anchorless_query");
+    }
+
+    if ((querySignals.tokenCount || 0) === 0) {
+        scores.reject += 0.45;
+        scores.direct_answer -= 0.15;
+        reasons.add("zero_sparse_token");
+    }
+
+    if (retrievalSignals.candidateCount === 0) {
+        scores.reject += 1.4;
+        scores.direct_answer -= 0.7;
+        reasons.add("no_candidates");
+    }
+
+    if (retrievalSignals.labeledTopicCount === 0) {
+        scores.reject += 1.1;
+        scores.direct_answer -= 0.4;
+        reasons.add("no_labeled_topics");
+    }
+
+    if (
+        retrievalSignals.distinctTopicCount >= 3 &&
+        retrievalSignals.dominantTopicRatio < 0.45
+    ) {
+        scores.reject += 1.15;
+        scores.direct_answer -= 0.35;
+        reasons.add("low_topic_consistency");
+    }
+
+    if (retrievalSignals.top1Top2Gap >= 0.12) {
+        scores.direct_answer += 0.35;
+        reasons.add("stable_top1_gap");
+    }
+
+    if (
+        retrievalSignals.labeledTopicCount >= 3 &&
+        retrievalSignals.distinctTopicCount <= 2 &&
+        retrievalSignals.dominantTopicRatio >= 0.5
+    ) {
+        scores.direct_answer += 0.35;
+        reasons.add("stable_topic_cluster");
+    }
+
+    const rankedModes = Object.entries(scores)
+        .map(([mode, score]) => [mode as ResponseMode, score] as const)
+        .sort((a, b) => b[1] - a[1]);
+    const [mode, topScore] = rankedModes[0];
+    const secondScore = rankedModes[1]?.[1] ?? topScore;
+    const confidence = Math.max(
+        0.55,
+        Math.min(0.98, 0.62 + (topScore - secondScore) * 0.14),
+    );
+
+    return {
+        mode,
+        confidence,
+        reason:
+            Array.from(reasons).slice(0, 3).join("+") ||
+            "scored_response_mode",
+        preferLatestWithinTopic:
+            querySignals.hasLatestPolicyState && !querySignals.hasExplicitYear,
+        useWeakMatches: mode === "clarify_or_route",
+    };
 }
 
 export function searchAndRank(params: {
     queryVector: Float32Array;
     querySparse?: Record<number, number>;
+    queryWords?: string[];
     queryYearWordIds?: number[];
     queryIntent?: ParsedQueryIntent;
     queryScopeHint?: string;
@@ -836,6 +1799,8 @@ export function searchAndRank(params: {
     bm25Stats: BM25Stats;
     weights?: typeof DEFAULT_WEIGHTS;
     candidateIndices?: readonly number[];
+    scopeSpecificityWordIdToTerm?: Map<number, string>;
+    directAnswerEvidenceWordIdToTerm?: Map<number, string>;
     topHybridLimit?: number;
     kpAggregationMode?: KPAggregationMode;
     kpTopN?: number;
@@ -847,6 +1812,7 @@ export function searchAndRank(params: {
     const {
         queryVector,
         querySparse,
+        queryWords = [],
         metadata,
         vectorMatrix,
         dimensions,
@@ -857,6 +1823,8 @@ export function searchAndRank(params: {
         queryIntent,
         queryScopeHint,
         candidateIndices,
+        scopeSpecificityWordIdToTerm,
+        directAnswerEvidenceWordIdToTerm,
         topHybridLimit = 1000,
         kpAggregationMode = "max",
         kpTopN = 3,
@@ -878,6 +1846,8 @@ export function searchAndRank(params: {
     const sparseOrder = new Int32Array(candidateCount);
     const lexicalBonusMap = new Map<string, number>();
     const yearHitMap = new Map<string, boolean>();
+    const docScopeSpecificityStatsMap = new Map<string, ScopeSpecificityStats>();
+    const docDirectAnswerEvidenceStatsMap = new Map<string, ScopeSpecificityStats>();
 
     for (let localIndex = 0; localIndex < candidateCount; localIndex++) {
         const metaIndex = activeCandidateIndices
@@ -900,14 +1870,40 @@ export function searchAndRank(params: {
         if (querySparse && meta.sparse && meta.sparse.length > 0) {
             const dl = bm25Stats.docLengths[metaIndex];
             const safeDl = Math.max(dl, bm25Stats.avgdl * 0.25);
+            const otid = meta.type === "OT" ? meta.id : meta.parent_otid;
 
             for (let j = 0; j < meta.sparse.length; j += 2) {
                 const wordId = meta.sparse[j];
                 const tf = meta.sparse[j + 1];
+                const specificityTerm = scopeSpecificityWordIdToTerm?.get(wordId);
+
+                if (specificityTerm) {
+                    const existing =
+                        docScopeSpecificityStatsMap.get(otid) || {
+                            termTf: {},
+                            totalTf: 0,
+                        };
+                    existing.termTf[specificityTerm] =
+                        (existing.termTf[specificityTerm] || 0) + tf;
+                    existing.totalTf += tf;
+                    docScopeSpecificityStatsMap.set(otid, existing);
+                }
+
+                const directAnswerEvidenceTerm =
+                    directAnswerEvidenceWordIdToTerm?.get(wordId);
+                if (directAnswerEvidenceTerm) {
+                    const existing =
+                        docDirectAnswerEvidenceStatsMap.get(otid) || {
+                            termTf: {},
+                            totalTf: 0,
+                        };
+                    existing.termTf[directAnswerEvidenceTerm] =
+                        (existing.termTf[directAnswerEvidenceTerm] || 0) + tf;
+                    existing.totalTf += tf;
+                    docDirectAnswerEvidenceStatsMap.set(otid, existing);
+                }
 
                 if (queryYearWordIds && queryYearWordIds.includes(wordId)) {
-                    const otid =
-                        meta.type === "OT" ? meta.id : meta.parent_otid;
                     yearHitMap.set(otid, true);
                 }
 
@@ -990,11 +1986,42 @@ export function searchAndRank(params: {
     const candidateTargetYears = Object.values(otidMap)
         .map((scores) => scores.target_year)
         .filter((year): year is number => typeof year === "number");
+    const candidateTimestamps = Object.values(otidMap)
+        .map((scores) => scores.timestamp)
+        .filter(
+            (timestamp): timestamp is number => typeof timestamp === "number",
+        );
     const latestTargetYear =
         candidateTargetYears.length > 0
             ? Math.max(...candidateTargetYears)
             : undefined;
-    const intentContext = createQueryIntentContext(queryIntent);
+    const latestTimestamp =
+        candidateTimestamps.length > 0
+            ? Math.max(...candidateTimestamps)
+            : undefined;
+    const intentContext = createQueryIntentContext(queryIntent, queryWords);
+    const latestFocusedSpecificityTimestamp =
+        intentContext.querySpecificityTerms.length > 0
+            ? Object.entries(otidMap)
+                  .map(([otid, scores]) => {
+                      const matchedTf = getMatchedSpecificityTf(
+                          intentContext.querySpecificityTerms,
+                          docScopeSpecificityStatsMap.get(otid),
+                      );
+                      return matchedTf >= 10 ? scores.timestamp : undefined;
+                  })
+                  .filter(
+                      (timestamp): timestamp is number =>
+                          typeof timestamp === "number",
+                  )
+                  .reduce<number | undefined>(
+                      (latest, timestamp) =>
+                          latest === undefined || timestamp > latest
+                              ? timestamp
+                              : latest,
+                      undefined,
+                  )
+            : undefined;
 
     for (const [otid, scores] of Object.entries(otidMap)) {
         const signals = getDocQuerySignals(
@@ -1028,6 +2055,9 @@ export function searchAndRank(params: {
             queryYearWordIds,
             intentContext,
             latestTargetYear,
+            latestTimestamp,
+            scopeSpecificityStats: docScopeSpecificityStatsMap.get(otid),
+            latestFocusedSpecificityTimestamp,
         });
 
         finalRanking.push({
@@ -1039,14 +2069,82 @@ export function searchAndRank(params: {
     }
 
     const sortedRanking = finalRanking.sort((a, b) => b.score - a.score);
+    const defaultQuerySignals: QuerySignals = {
+        hasExplicitTopicOrIntent: false,
+        hasExplicitYear: false,
+        hasHistoricalHint: false,
+        hasStrongDetailAnchor: false,
+        hasEntryLikeAnchor: false,
+        hasResultState: false,
+        hasLatestPolicyState: false,
+        hasGenericNextStep: false,
+        queryLength: queryIntent?.rawQuery.length || 0,
+        tokenCount: 0,
+    };
+    const querySignals = withQueryTokenCount(
+        queryIntent?.signals || defaultQuerySignals,
+        querySparse,
+    );
+    const retrievalSignals = extractRetrievalSignals(sortedRanking, otidMap);
+    const responseDecision = classifyResponseMode(
+        querySignals,
+        retrievalSignals,
+    );
+
+    const explicitOutOfScopeOnly =
+        (queryIntent?.intentIds.length || 0) === 0 &&
+        hasOnlyOutOfScopeTopics(queryIntent?.topicIds || []);
+
+    if (explicitOutOfScopeOnly) {
+        return {
+            matches: [],
+            weakMatches: sortedRanking.slice(0, 5),
+            rejection: {
+                reason: "low_topic_coverage",
+                topicIds: queryIntent?.topicIds || [],
+            },
+            responseDecision: {
+                ...responseDecision,
+                mode: "reject",
+                confidence: Math.max(responseDecision.confidence, 0.92),
+                reason: "explicit_out_of_scope_topic",
+                preferLatestWithinTopic: false,
+                useWeakMatches: true,
+            },
+        };
+    }
+
+    const inDomainEvidenceReject = shouldRejectForMissingInDomainEvidence({
+        rawQuery: queryIntent?.rawQuery || "",
+        queryIntent,
+        sortedRanking,
+        docEvidenceStatsMap: docDirectAnswerEvidenceStatsMap,
+        otidMap,
+    });
+
     if (
-        shouldRejectForLowConsistency(
-            queryIntent,
-            querySparse,
-            sortedRanking,
-            otidMap,
-        )
+        responseDecision.mode === "direct_answer" &&
+        inDomainEvidenceReject.shouldReject
     ) {
+        return {
+            matches: [],
+            weakMatches: sortedRanking.slice(0, 5),
+            rejection: {
+                reason: "low_consistency",
+                topicIds: queryIntent?.topicIds || [],
+            },
+            responseDecision: {
+                ...responseDecision,
+                mode: "reject",
+                confidence: Math.max(responseDecision.confidence, 0.9),
+                reason: `missing_in_domain_evidence:${inDomainEvidenceReject.label || "unknown"}`,
+                preferLatestWithinTopic: false,
+                useWeakMatches: true,
+            },
+        };
+    }
+
+    if (responseDecision.mode === "reject") {
         return {
             matches: [],
             weakMatches: [],
@@ -1054,11 +2152,27 @@ export function searchAndRank(params: {
                 reason: "low_consistency",
                 topicIds: [],
             },
+            responseDecision,
+        };
+    }
+
+    if (responseDecision.mode === "clarify_or_route") {
+        return {
+            matches: [],
+            weakMatches: responseDecision.useWeakMatches
+                ? sortedRanking.slice(0, 5)
+                : [],
+            rejection: {
+                reason: "weak_anchor_needs_clarification",
+                topicIds: [],
+            },
+            responseDecision,
         };
     }
 
     return {
         matches: sortedRanking.slice(0, 100),
         weakMatches: [],
+        responseDecision,
     };
 }

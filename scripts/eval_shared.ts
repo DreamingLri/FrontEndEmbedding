@@ -144,11 +144,30 @@ function buildSingleFileSources(
 export function resolveEvalDatasetConfig(options?: {
     datasetVersion?: string;
     datasetFile?: string;
+    singleFileAsAll?: boolean;
 }): EvalDatasetConfig {
     const datasetVersion = options?.datasetVersion || 'v2';
     const explicitDatasetFile = options?.datasetFile;
+    const singleFileAsAll = options?.singleFileAsAll || false;
 
     if (explicitDatasetFile) {
+        if (singleFileAsAll) {
+            const datasetKey = path.basename(explicitDatasetFile, '.json');
+            const tuneSources: EvalDatasetSource[] = [
+                {
+                    path: explicitDatasetFile,
+                    datasetLabel: datasetKey,
+                },
+            ];
+            return {
+                datasetVersion,
+                datasetMode: 'single_file',
+                datasetKey,
+                tuneSources,
+                holdoutSources: [],
+                allSources: [...tuneSources],
+            };
+        }
         return buildSingleFileSources(datasetVersion, explicitDatasetFile);
     }
 

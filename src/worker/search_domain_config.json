@@ -13,7 +13,7 @@
     "推免实施办法",
     "非招生通知"
   ],
-  "latest_query_hints": ["最新", "最近", "当前", "今年", "本年"],
+  "latest_query_hints": ["最新", "最近", "当前", "今年", "本年", "现在", "目前", "现行"],
   "historical_query_hints": ["往年", "历年", "历史", "以前", "去年", "前年", "往届", "旧版"],
   "intent_vector_table": [
     {
@@ -36,7 +36,7 @@
       "intent_id": "master_unified_exam",
       "topic_id": "graduate_admission",
       "intent_name": "统考硕士",
-      "aliases": ["考研", "硕士研究生招生考试", "全国硕士研究生招生考试", "硕士统考", "初试", "复试", "研招"],
+      "aliases": ["考研", "硕士研究生招生考试", "全国硕士研究生招生考试", "硕士统考", "初试", "复试", "研招", "网上确认", "报考点", "单独考试", "退役大学生士兵", "士兵计划"],
       "negative_intents": ["ug_recommend_admission", "master_recommend_exemption"],
       "related_intents": ["master_adjustment"]
     },
@@ -52,7 +52,7 @@
       "intent_id": "phd_apply_assessment",
       "topic_id": "graduate_admission",
       "intent_name": "博士申请考核",
-      "aliases": ["申请考核", "申请-考核", "博士申请考核"],
+      "aliases": ["申请考核", "申请-考核", "博士申请考核", "改报志愿", "博士改报志愿"],
       "negative_intents": ["phd_general_exam"],
       "related_intents": []
     },
@@ -84,7 +84,7 @@
   "topic_configs": [
     {
       "topic_id": "graduate_admission",
-      "aliases": ["保研", "推免", "推荐免试", "考研", "研招", "研究生招生", "调剂", "夏令营"],
+      "aliases": ["保研", "推免", "推荐免试", "考研", "研招", "研究生招生", "研究生拟录取", "研究生录取", "港澳台研究生", "港澳台", "港澳台考生", "调剂", "夏令营", "网上确认", "报考点", "单独考试", "退役大学生士兵", "士兵计划", "改报志愿", "博士改报志愿"],
       "prefer_latest": true
     },
     {
@@ -94,7 +94,7 @@
     },
     {
       "topic_id": "student_funding",
-      "aliases": ["奖学金", "助学金", "资助", "补助", "评奖"],
+      "aliases": ["奖学金", "助学金", "资助", "补助", "评奖", "奖助金", "优青", "海外优青"],
       "prefer_latest": true
     },
     {
@@ -105,7 +105,14 @@
     {
       "topic_id": "dining_services",
       "aliases": ["吃饭", "食堂", "饭堂", "餐厅", "用餐", "喝水", "饮水", "饮用水"],
-      "prefer_latest": false
+      "prefer_latest": false,
+      "scope": "out_of_scope"
+    },
+    {
+      "topic_id": "library_services",
+      "aliases": ["图书馆", "借书", "还书", "馆藏", "阅览室", "开馆", "闭馆"],
+      "prefer_latest": false,
+      "scope": "out_of_scope"
     }
   ]
 }

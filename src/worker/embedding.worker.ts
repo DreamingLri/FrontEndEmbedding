@@ -7,8 +7,10 @@ import type {
 } from './vector_engine';
 import {
     buildBM25Stats,
+    DIRECT_ANSWER_EVIDENCE_TERMS,
     getQuerySparse,
     parseQueryIntent,
+    QUERY_SCOPE_SPECIFICITY_TERMS,
     searchAndRank
 } from './vector_engine';
 import {
@@ -17,6 +19,8 @@ import {
     type TopicPartitionIndex,
 } from './topic_partition';
 import {
+    getAdaptiveChunkPlan,
+    getAdaptiveRerankPlan,
     normalizeMinMax,
     normalizeSnippetScore,
     splitIntoSemanticChunks,
@@ -25,10 +29,6 @@ import { fmmTokenize } from './fmm_tokenize';
 
 const MODEL_NAME = 'DMetaSoul/Dmeta-embedding-zh-small';
 
-const BASE_RERANK_DOC_COUNT = 5;
-const EXPANDED_RERANK_DOC_COUNT = 10;
-const ADAPTIVE_RERANK_TOP5_GAP_THRESHOLD = 0.8;
-const RERANK_MAX_CHUNKS_PER_DOC = 14;
 const RERANK_BLEND_ALPHA = 0.15;
 const RERANK_BEST_SENTENCE_THRESHOLD = 0.4;
 let DIMENSIONS = 768;
@@ -56,6 +56,8 @@ let vocabMap = new Map<string, number>();
 let metadataList: Metadata[] = [];
 let vectorMatrix: Int8Array | null = null;
 let globalBM25Stats: BM25Stats | null = null;
+let scopeSpecificityWordIdToTerm = new Map<number, string>();
+let directAnswerEvidenceWordIdToTerm = new Map<number, string>();
 let topicPartitionIndex: TopicPartitionIndex = {
     topicCandidateIndex: new Map<string, number[]>(),
     unlabeledCandidateIndices: [],
@@ -63,24 +65,6 @@ let topicPartitionIndex: TopicPartitionIndex = {
 };
 let lastEmbeddedQuery = '';
 let lastQueryVector: Float32Array | null = null;
-
-function getAdaptiveRerankDocCount(
-    results: Array<{ coarseScore?: number }>,
-): number {
-    if (results.length <= BASE_RERANK_DOC_COUNT) {
-        return results.length;
-    }
-
-    const top1 = results[0]?.coarseScore ?? 0;
-    const top5Index = Math.min(BASE_RERANK_DOC_COUNT - 1, results.length - 1);
-    const top5 = results[top5Index]?.coarseScore ?? top1;
-    const shouldExpand = top1 - top5 <= ADAPTIVE_RERANK_TOP5_GAP_THRESHOLD;
-
-    return Math.min(
-        shouldExpand ? EXPANDED_RERANK_DOC_COUNT : BASE_RERANK_DOC_COUNT,
-        results.length
-    );
-}
 
 async function embedQuery(query: string): Promise<Float32Array> {
     if (!extractor) throw new Error('\u67e5\u8be2\u6a21\u578b\u672a\u521d\u59cb\u5316');
@@ -136,6 +120,20 @@ async function handleInit(payload: any, taskId?: string) {
         const vocabList: string[] = rawMetadata.vocab || [];
         vocabMap.clear();
         vocabList.forEach((word, index) => vocabMap.set(word, index));
+        scopeSpecificityWordIdToTerm = new Map<number, string>();
+        QUERY_SCOPE_SPECIFICITY_TERMS.forEach((term) => {
+            const wordId = vocabMap.get(term);
+            if (wordId !== undefined) {
+                scopeSpecificityWordIdToTerm.set(wordId, term);
+            }
+        });
+        directAnswerEvidenceWordIdToTerm = new Map<number, string>();
+        DIRECT_ANSWER_EVIDENCE_TERMS.forEach((term) => {
+            const wordId = vocabMap.get(term);
+            if (wordId !== undefined) {
+                directAnswerEvidenceWordIdToTerm.set(wordId, term);
+            }
+        });
         topicPartitionIndex = buildTopicPartitionIndex(metadataList);
         resetQueryCache();
 
@@ -197,6 +195,7 @@ async function handleSearch(query: string, taskId?: string) {
     const searchResult: SearchRankOutput = searchAndRank({
         queryVector,
         querySparse,
+        queryWords,
         queryYearWordIds,
         queryIntent,
         metadata: metadataList,
@@ -204,7 +203,9 @@ async function handleSearch(query: string, taskId?: string) {
         dimensions: DIMENSIONS,
         currentTimestamp: Date.now() / 1000,
         bm25Stats: globalBM25Stats,
-        candidateIndices
+        candidateIndices,
+        scopeSpecificityWordIdToTerm,
+        directAnswerEvidenceWordIdToTerm,
     });
 
     self.postMessage({
@@ -256,15 +257,18 @@ async function handleRerank(payload: { query: string, documents: any[] }, taskId
         };
     });
 
-    const rerankDocCount = getAdaptiveRerankDocCount(results);
+    const rerankPlan = getAdaptiveRerankPlan(results);
+    const rerankDocCount = rerankPlan.rerankDocCount;
+    const chunkPlan = getAdaptiveChunkPlan(query, rerankDocCount);
     const rerankDocs = results.slice(0, rerankDocCount);
     const batchChunks: { text: string, docIdx: number }[] = [];
 
     for (let j = 0; j < rerankDocs.length; j++) {
         const textChunks = splitIntoSemanticChunks(
             rerankDocs[j].ot_text || '',
-            150
-        ).slice(0, RERANK_MAX_CHUNKS_PER_DOC);
+            150,
+            chunkPlan.maxChunksPerDoc
+        );
         textChunks.forEach((chunk) => {
             const normalizedChunk = (chunk || '').trim();
             if (normalizedChunk) {
@@ -340,6 +344,15 @@ async function handleRerank(payload: { query: string, documents: any[] }, taskId
         taskId,
         status: 'rerank_complete',
         result: rerankedResults,
-        stats: { elapsedMs: (performance.now() - t0).toFixed(1) }
+        stats: {
+            elapsedMs: (performance.now() - t0).toFixed(1),
+            rerankedDocCount: rerankDocCount,
+            chunksScored: batchChunks.length,
+            windowReason: rerankPlan.reason,
+            maxChunksPerDoc: chunkPlan.maxChunksPerDoc,
+            chunkPlanReason: chunkPlan.reason,
+            top1Top2Gap: rerankPlan.top1Top2Gap,
+            clusterTopGap: rerankPlan.clusterTopGap,
+        }
     });
 }

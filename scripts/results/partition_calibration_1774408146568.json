@@ -1,0 +1,165 @@
+{
+  "currentConfig": {
+    "scoreThreshold": 1.05,
+    "gapThreshold": 0.03,
+    "scanRatioThreshold": 0.85
+  },
+  "bestConfig": {
+    "scoreThreshold": 1.05,
+    "gapThreshold": 0.03,
+    "scanRatioThreshold": 0.85
+  },
+  "tuneBestMetrics": {
+    "label": "score=1.05,gap=0.03,scan=0.85",
+    "hitAt1": 54.25,
+    "hitAt5": 78.25,
+    "mrr": 0.6532620825215474,
+    "avgItemsScanned": 12880.2975,
+    "avgScanRatio": 0.7944915803108809,
+    "partitionUsedRate": 0.355,
+    "fallbackRate": 0,
+    "rescuedHitAt1": 0,
+    "rescuedAnyRank": 0,
+    "badFallbacks": 0,
+    "totalCases": 400
+  },
+  "tuneBaselines": [
+    {
+      "label": "tune/full_scan",
+      "hitAt1": 54,
+      "hitAt5": 78.25,
+      "mrr": 0.6523498594399695,
+      "avgItemsScanned": 16212,
+      "avgScanRatio": 1,
+      "partitionUsedRate": 0.355,
+      "fallbackRate": 0,
+      "rescuedHitAt1": 0,
+      "rescuedAnyRank": 0,
+      "badFallbacks": 0,
+      "totalCases": 400
+    },
+    {
+      "label": "tune/partition_only",
+      "hitAt1": 54.25,
+      "hitAt5": 78.25,
+      "mrr": 0.6532620825215474,
+      "avgItemsScanned": 12880.2975,
+      "avgScanRatio": 0.7944915803108809,
+      "partitionUsedRate": 0.355,
+      "fallbackRate": 0,
+      "rescuedHitAt1": 0,
+      "rescuedAnyRank": 0,
+      "badFallbacks": 0,
+      "totalCases": 400
+    },
+    {
+      "label": "tune/current_config",
+      "hitAt1": 54.25,
+      "hitAt5": 78.25,
+      "mrr": 0.6532620825215474,
+      "avgItemsScanned": 12880.2975,
+      "avgScanRatio": 0.7944915803108809,
+      "partitionUsedRate": 0.355,
+      "fallbackRate": 0,
+      "rescuedHitAt1": 0,
+      "rescuedAnyRank": 0,
+      "badFallbacks": 0,
+      "totalCases": 400
+    }
+  ],
+  "holdoutBaselines": [
+    {
+      "label": "holdout/full_scan",
+      "hitAt1": 49,
+      "hitAt5": 79,
+      "mrr": 0.6183815980068,
+      "avgItemsScanned": 16212,
+      "avgScanRatio": 1,
+      "partitionUsedRate": 0.295,
+      "fallbackRate": 0,
+      "rescuedHitAt1": 0,
+      "rescuedAnyRank": 0,
+      "badFallbacks": 0,
+      "totalCases": 200
+    },
+    {
+      "label": "holdout/partition_only",
+      "hitAt1": 49.5,
+      "hitAt5": 79,
+      "mrr": 0.6211371535623555,
+      "avgItemsScanned": 13396.23,
+      "avgScanRatio": 0.8263156920799408,
+      "partitionUsedRate": 0.295,
+      "fallbackRate": 0,
+      "rescuedHitAt1": 0,
+      "rescuedAnyRank": 0,
+      "badFallbacks": 0,
+      "totalCases": 200
+    },
+    {
+      "label": "holdout/current_config",
+      "hitAt1": 49.5,
+      "hitAt5": 79,
+      "mrr": 0.6211371535623555,
+      "avgItemsScanned": 13396.23,
+      "avgScanRatio": 0.8263156920799408,
+      "partitionUsedRate": 0.295,
+      "fallbackRate": 0,
+      "rescuedHitAt1": 0,
+      "rescuedAnyRank": 0,
+      "badFallbacks": 0,
+      "totalCases": 200
+    },
+    {
+      "label": "holdout/best_config",
+      "hitAt1": 49.5,
+      "hitAt5": 79,
+      "mrr": 0.6211371535623555,
+      "avgItemsScanned": 13396.23,
+      "avgScanRatio": 0.8263156920799408,
+      "partitionUsedRate": 0.295,
+      "fallbackRate": 0,
+      "rescuedHitAt1": 0,
+      "rescuedAnyRank": 0,
+      "badFallbacks": 0,
+      "totalCases": 200
+    }
+  ],
+  "combinedCurrent": {
+    "label": "combined/current_config",
+    "hitAt1": 52.666666666666664,
+    "hitAt5": 78.5,
+    "mrr": 0.6425537728684828,
+    "avgItemsScanned": 13052.275,
+    "avgScanRatio": 0.8050996175672341,
+    "partitionUsedRate": 0.335,
+    "fallbackRate": 0,
+    "rescuedHitAt1": 0,
+    "rescuedAnyRank": 0,
+    "badFallbacks": 0,
+    "totalCases": 600
+  },
+  "combinedBest": {
+    "label": "combined/best_config",
+    "hitAt1": 52.666666666666664,
+    "hitAt5": 78.5,
+    "mrr": 0.6425537728684828,
+    "avgItemsScanned": 13052.275,
+    "avgScanRatio": 0.8050996175672341,
+    "partitionUsedRate": 0.335,
+    "fallbackRate": 0,
+    "rescuedHitAt1": 0,
+    "rescuedAnyRank": 0,
+    "badFallbacks": 0,
+    "totalCases": 600
+  },
+  "scoreDistribution": {
+    "count": 90,
+    "p25": 3.348629600564949,
+    "p50": 3.7833439571760725,
+    "p75": 4.012571563261698,
+    "p90": 4.217027232596938,
+    "max": 4.428394882717401
+  },
+  "elapsedMs": 65680.9038
+}

@@ -47,6 +47,8 @@ export type ReviewBundleItem = {
   ai: {
     priority: string
     uniquenessRisk: string
+    reviewLane: string
+    reviewGuidance: string
     generationMode: string
     seedFailureRisks: string[]
     seedBadCaseQueries: string[]

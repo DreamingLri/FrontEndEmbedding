@@ -45,6 +45,7 @@ const serverActionError = ref('')
 
 const searchText = ref('')
 const priorityFilter = ref('all')
+const reviewLaneFilter = ref('all')
 const completionFilter = ref('pending')
 const riskFilter = ref('all')
 const p0Only = ref(true)
@@ -426,6 +427,30 @@ function hasConflictOrRisk(item: ReviewBundleItem) {
   return hasDecisionConflict(item) || hasAiRisk(item)
 }
 
+function getReviewLaneLabel(reviewLane: string) {
+  if (reviewLane === 'fast_check') return '快审'
+  if (reviewLane === 'normal_review') return '正常复核'
+  if (reviewLane === 'focus_review') return '重点复核'
+  if (reviewLane === 'drop_first') return '先搁置'
+  return reviewLane || '未设置'
+}
+
+function getReviewLaneBadgeClass(reviewLane: string) {
+  if (reviewLane === 'fast_check') {
+    return 'bg-emerald-500/15 text-emerald-200'
+  }
+  if (reviewLane === 'normal_review') {
+    return 'bg-amber-500/15 text-amber-200'
+  }
+  if (reviewLane === 'focus_review') {
+    return 'bg-rose-500/15 text-rose-200'
+  }
+  if (reviewLane === 'drop_first') {
+    return 'bg-slate-700/70 text-slate-200'
+  }
+  return 'bg-slate-700/70 text-slate-200'
+}
+
 const currentReviewSheetPath = computed(() =>
   normalizeSourcePath(bundle.value?.source.reviewSheetFile),
 )
@@ -439,6 +464,9 @@ const filteredItems = computed(() => {
   return items.filter(item => {
     if (p0Only.value && !item.p0.included) return false
     if (priorityFilter.value !== 'all' && item.ai.priority !== priorityFilter.value) {
+      return false
+    }
+    if (reviewLaneFilter.value !== 'all' && item.ai.reviewLane !== reviewLaneFilter.value) {
       return false
     }
 
@@ -462,6 +490,7 @@ const filteredItems = computed(() => {
       item.themeFamily,
       item.article.otid,
       item.ai.priority,
+      item.ai.reviewLane,
       item.ai.uniquenessRisk,
     ]
       .join(' ')
@@ -513,6 +542,83 @@ watch(
 function currentDecision(): ReviewDecision | null {
   if (!currentItem.value) return null
   return decisions.value[currentItem.value.id] ?? null
+}
+
+function buildSuggestedDecision(item: ReviewBundleItem): ReviewDecision {
+  const suggestedSupportKpids = item.suggested.expectedKpid
+    ? Array.from(new Set([item.suggested.expectedKpid, ...item.suggested.supportKpids]))
+    : [...item.suggested.supportKpids]
+
+  return {
+    ...buildDefaultDecision(item),
+    finalExpectedOtid: item.suggested.expectedOtid || item.decisionDraft.finalExpectedOtid,
+    finalExpectedKpid: item.suggested.expectedKpid || '',
+    finalSupportKpids: orderKpids(item, suggestedSupportKpids),
+    finalQueryScope: item.suggested.queryScope || '',
+    finalPreferredGranularity: item.suggested.preferredGranularity || '',
+    finalSupportPattern: item.suggested.supportPattern || '',
+    finalGranularitySensitive: item.suggested.granularitySensitive,
+    reviewer: reviewerDefault.value || item.decisionDraft.reviewer,
+  }
+}
+
+function fillMissingSuggestedFields(item: ReviewBundleItem, base: ReviewDecision): ReviewDecision {
+  const suggestedSupportKpids = item.suggested.expectedKpid
+    ? Array.from(new Set([item.suggested.expectedKpid, ...item.suggested.supportKpids]))
+    : [...item.suggested.supportKpids]
+
+  return {
+    ...base,
+    finalExpectedOtid: base.finalExpectedOtid || item.suggested.expectedOtid || '',
+    finalExpectedKpid: base.finalExpectedKpid || item.suggested.expectedKpid || '',
+    finalSupportKpids: base.finalSupportKpids.length
+      ? base.finalSupportKpids
+      : orderKpids(item, suggestedSupportKpids),
+    finalQueryScope: base.finalQueryScope || item.suggested.queryScope || '',
+    finalPreferredGranularity:
+      base.finalPreferredGranularity || item.suggested.preferredGranularity || '',
+    finalSupportPattern: base.finalSupportPattern || item.suggested.supportPattern || '',
+    finalGranularitySensitive:
+      base.finalGranularitySensitive ?? item.suggested.granularitySensitive,
+    reviewer: base.reviewer || reviewerDefault.value || item.decisionDraft.reviewer,
+  }
+}
+
+function buildConfirmedDecision(item: ReviewBundleItem, base: ReviewDecision): ReviewDecision {
+  return {
+    ...base,
+    otidStatus: '已确认',
+    kpidStatus: base.finalSupportPattern === 'ot_required' ? '待复核' : '已确认',
+    includeInFormalSet:
+      !base.includeInFormalSet || base.includeInFormalSet === '待定'
+        ? '是'
+        : base.includeInFormalSet,
+    reviewer: base.reviewer || reviewerDefault.value || item.decisionDraft.reviewer,
+  }
+}
+
+function isSameDecision(left: ReviewDecision, right: ReviewDecision) {
+  return (
+    left.finalExpectedOtid === right.finalExpectedOtid
+    && left.finalExpectedKpid === right.finalExpectedKpid
+    && left.finalSupportKpids.join('|') === right.finalSupportKpids.join('|')
+    && left.otidStatus === right.otidStatus
+    && left.kpidStatus === right.kpidStatus
+    && left.finalQueryScope === right.finalQueryScope
+    && left.finalPreferredGranularity === right.finalPreferredGranularity
+    && left.finalSupportPattern === right.finalSupportPattern
+    && left.finalGranularitySensitive === right.finalGranularitySensitive
+    && left.includeInFormalSet === right.includeInFormalSet
+    && left.reviewRound === right.reviewRound
+    && left.reviewer === right.reviewer
+    && left.notes === right.notes
+  )
+}
+
+function isUntouchedDecision(item: ReviewBundleItem) {
+  const current = decisions.value[item.id]
+  if (!current) return false
+  return isSameDecision(current, buildDefaultDecision(item))
 }
 
 function updateDecision<K extends keyof ReviewDecision>(key: K, value: ReviewDecision[K]) {
@@ -593,23 +699,13 @@ function handleSupportPatternChange(value: string) {
 function useSuggestedDraft() {
   const item = currentItem.value
   if (!item) return
-  decisions.value[item.id] = {
-    ...buildDefaultDecision(item),
-    reviewer: reviewerDefault.value || item.decisionDraft.reviewer,
-  }
+  decisions.value[item.id] = buildSuggestedDecision(item)
 }
 
 function markConfirmed() {
   const item = currentItem.value
   if (!item) return
-  const base = decisions.value[item.id]
-  decisions.value[item.id] = {
-    ...base,
-    otidStatus: '已确认',
-    kpidStatus: base.finalSupportPattern === 'ot_required' ? '待复核' : '已确认',
-    includeInFormalSet: base.includeInFormalSet === '待定' ? '是' : base.includeInFormalSet,
-    reviewer: base.reviewer || reviewerDefault.value,
-  }
+  decisions.value[item.id] = buildConfirmedDecision(item, decisions.value[item.id])
 }
 
 const progress = computed(() => {
@@ -623,6 +719,65 @@ const progress = computed(() => {
     flagged,
   }
 })
+
+const bulkFastCheckTargets = computed(() =>
+  filteredItems.value.filter(item =>
+    item.ai.reviewLane === 'fast_check'
+    && !isCompleted(item.id)
+    && isUntouchedDecision(item),
+  ),
+)
+
+function applyFastCheckBatch() {
+  const targets = bulkFastCheckTargets.value
+  if (!targets.length) {
+    serverActionMessage.value = '当前筛选里没有可批量快审的未完成 fast_check 条目。'
+    serverActionError.value = ''
+    return
+  }
+
+  const nextDecisions = { ...decisions.value }
+  for (const item of targets) {
+    nextDecisions[item.id] = buildConfirmedDecision(item, buildSuggestedDecision(item))
+  }
+  decisions.value = nextDecisions
+  serverActionMessage.value = `已批量快审 ${targets.length} 条 fast_check 样本，记得保存到当前草稿或直接回写复核表。`
+  serverActionError.value = ''
+}
+
+function hasMissingSuggestedLabels(item: ReviewBundleItem) {
+  const decision = decisions.value[item.id]
+  if (!decision) return false
+  return (
+    !decision.finalExpectedOtid
+    || !decision.finalQueryScope
+    || !decision.finalPreferredGranularity
+    || !decision.finalSupportPattern
+    || decision.finalGranularitySensitive === null
+    || !decision.finalSupportKpids.length
+  )
+}
+
+const batchLabelRepairTargets = computed(() =>
+  filteredItems.value.filter(item => hasMissingSuggestedLabels(item)),
+)
+
+function repairSuggestedLabelsBatch() {
+  const targets = batchLabelRepairTargets.value
+  if (!targets.length) {
+    serverActionMessage.value = '当前筛选里没有需要补全建议标签的条目。'
+    serverActionError.value = ''
+    return
+  }
+
+  const nextDecisions = { ...decisions.value }
+  for (const item of targets) {
+    nextDecisions[item.id] = fillMissingSuggestedFields(item, nextDecisions[item.id])
+  }
+  decisions.value = nextDecisions
+  serverActionMessage.value = `已为 ${targets.length} 条样本补全空白建议标签；已有人工填写的值不会被覆盖。`
+  serverActionError.value = ''
+}
 
 const currentConflictMessages = computed(() => {
   const item = currentItem.value
@@ -829,6 +984,16 @@ const currentRiskMessages = computed(() => {
   return getAiRiskMessages(item)
 })
 
+const currentReviewLaneGuidance = computed(() => {
+  const item = currentItem.value
+  if (!item?.ai.reviewLane) return ''
+  const baseLabel = getReviewLaneLabel(item.ai.reviewLane)
+  if (item.ai.reviewGuidance) {
+    return `${baseLabel}：${item.ai.reviewGuidance}`
+  }
+  return `当前复核通道：${baseLabel}`
+})
+
 const warningMessages = computed(() => [
   ...currentRiskMessages.value,
   ...currentConflictMessages.value,
@@ -982,6 +1147,20 @@ onBeforeUnmount(() => {
           </label>
 
           <label class="flex flex-col gap-2">
+            <span class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">复核通道</span>
+            <select
+              v-model="reviewLaneFilter"
+              class="rounded-2xl border border-slate-700 bg-slate-900 px-4 py-2.5 text-sm text-white outline-none focus:border-cyan-400/70"
+            >
+              <option value="all">全部</option>
+              <option value="fast_check">fast_check</option>
+              <option value="normal_review">normal_review</option>
+              <option value="focus_review">focus_review</option>
+              <option value="drop_first">drop_first</option>
+            </select>
+          </label>
+
+          <label class="flex flex-col gap-2">
             <span class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">完成状态</span>
             <select
               v-model="completionFilter"
@@ -1020,6 +1199,30 @@ onBeforeUnmount(() => {
               type="text"
             />
           </label>
+        </div>
+
+        <div class="mt-3 flex flex-wrap items-center gap-3">
+          <button
+            class="inline-flex items-center gap-2 rounded-full border border-emerald-500/45 bg-emerald-500/10 px-4 py-2 text-sm font-semibold text-emerald-100 hover:bg-emerald-500/18 disabled:cursor-not-allowed disabled:border-slate-700 disabled:bg-slate-900/70 disabled:text-slate-500"
+            type="button"
+            :disabled="!bulkFastCheckTargets.length"
+            @click="applyFastCheckBatch"
+          >
+            <CheckCircle2 class="h-4 w-4" />
+            <span>批量快审未编辑项（{{ bulkFastCheckTargets.length }}）</span>
+          </button>
+          <button
+            class="inline-flex items-center gap-2 rounded-full border border-cyan-500/45 bg-cyan-500/10 px-4 py-2 text-sm font-semibold text-cyan-100 hover:bg-cyan-500/18 disabled:cursor-not-allowed disabled:border-slate-700 disabled:bg-slate-900/70 disabled:text-slate-500"
+            type="button"
+            :disabled="!batchLabelRepairTargets.length"
+            @click="repairSuggestedLabelsBatch"
+          >
+            <RefreshCcw class="h-4 w-4" />
+            <span>批量补全空标签（{{ batchLabelRepairTargets.length }}）</span>
+          </button>
+          <p class="text-xs leading-6 text-slate-500">
+            只处理当前筛选里 `fast_check`、未完成且尚未手动改过的条目，避免覆盖你已经开始修的样本。
+          </p>
         </div>
 
         <div class="grid gap-3 text-sm text-slate-200 sm:grid-cols-2 xl:grid-cols-4">
@@ -1151,6 +1354,13 @@ onBeforeUnmount(() => {
               >
                 P0
               </span>
+              <span
+                v-if="item.ai.reviewLane"
+                class="rounded-full px-2 py-1"
+                :class="getReviewLaneBadgeClass(item.ai.reviewLane)"
+              >
+                {{ getReviewLaneLabel(item.ai.reviewLane) }}
+              </span>
               <span class="rounded-full bg-slate-800 px-2 py-1 text-slate-300">
                 {{ item.themeFamily || '未分类' }}
               </span>
@@ -1218,12 +1428,31 @@ onBeforeUnmount(() => {
           <span class="rounded-full bg-slate-800 px-3 py-1.5 text-slate-200">
             uniqueness_risk: {{ currentItem.ai.uniquenessRisk || 'unknown' }}
           </span>
+          <span
+            v-if="currentItem.ai.reviewLane"
+            class="rounded-full px-3 py-1.5"
+            :class="getReviewLaneBadgeClass(currentItem.ai.reviewLane)"
+          >
+            {{ getReviewLaneLabel(currentItem.ai.reviewLane) }}
+          </span>
           <span class="rounded-full bg-slate-800 px-3 py-1.5 text-slate-200">
             P0: {{ currentItem.p0.included ? '是' : '否' }}
           </span>
           <span class="rounded-full bg-slate-800 px-3 py-1.5 text-slate-200">
             publish_time: {{ currentItem.article.publishTime || '未知' }}
           </span>
+        </div>
+
+        <div
+          v-if="currentReviewLaneGuidance"
+          class="mt-5 rounded-[24px] border border-cyan-400/20 bg-cyan-500/8 p-4"
+        >
+          <div class="text-xs font-semibold uppercase tracking-[0.16em] text-cyan-200/75">
+            复核通道建议
+          </div>
+          <div class="mt-2 text-sm leading-6 text-cyan-50/90">
+            {{ currentReviewLaneGuidance }}
+          </div>
         </div>
 
         <div

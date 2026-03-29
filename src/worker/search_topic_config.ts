@@ -13,6 +13,7 @@ export type TopicConfigItem = {
     topic_id: string;
     aliases: readonly string[];
     prefer_latest: boolean;
+    scope?: "in_scope" | "out_of_scope";
 };
 
 type SearchDomainConfig = {
