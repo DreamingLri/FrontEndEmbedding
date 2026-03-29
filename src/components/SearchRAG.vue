@@ -3,7 +3,6 @@ import { computed, onMounted, onUnmounted, ref } from 'vue';
 import {
   AlertCircle,
   Clock,
-  Cpu,
   ExternalLink,
   Info,
   Loader2,
@@ -11,11 +10,14 @@ import {
 } from 'lucide-vue-next';
 import localforage from 'localforage';
 import VectorWorker from '../worker/embedding.worker.ts?worker';
+import { CANONICAL_PIPELINE_PRESET } from '../worker/search_pipeline';
 
 type SearchRejection = {
   reason: 'low_topic_coverage' | 'low_consistency' | 'weak_anchor_needs_clarification';
   topicIds: string[];
 };
+
+type PipelineBehavior = 'direct_answer' | 'clarify' | 'route_to_entry' | 'reject';
 
 type SearchResultDoc = {
   id?: string;
@@ -36,21 +38,44 @@ type SearchResultDoc = {
   snippetScore?: number;
 };
 
-type WorkerSearchResult = {
-  matches: Array<{ otid: string; score: number; best_kpid?: string }>;
-  weakMatches?: Array<{ otid: string; score: number; best_kpid?: string }>;
-  rejection?: SearchRejection;
+type WorkerDecision = {
+  behavior: PipelineBehavior;
+  reason: string;
+  confidence: number;
+  entryTopic?: string;
+  preferLatestWithinTopic: boolean;
+  useWeakMatches: boolean;
+  rejectionReason: SearchRejection['reason'] | 'display_threshold' | null;
+  displayRejected: boolean;
 };
 
-type RerankStats = {
-  elapsedMs: string;
-  rerankedDocCount?: number;
-  chunksScored?: number;
-  windowReason?: string;
+type WorkerTrace = {
+  totalMs: number;
+  searchMs: number;
+  fetchMs: number;
+  rerankMs: number;
+  candidateCount: number;
+  partitionUsed: boolean;
+  partitionCandidateCount?: number;
+  matchCount: number;
+  weakMatchCount: number;
+  fetchedDocumentCount: number;
+  rerankedDocCount: number;
+  chunksScored: number;
+  rerankWindowReason?: string;
   maxChunksPerDoc?: number;
   chunkPlanReason?: string;
-  top1Top2Gap?: number | null;
-  clusterTopGap?: number | null;
+  topConfidence?: number | null;
+  rejectionThreshold: number;
+};
+
+type WorkerSearchResult = {
+  results: SearchResultDoc[];
+  weakResults: SearchResultDoc[];
+  rejection?: SearchRejection | null;
+  retrievalDecision: WorkerDecision;
+  finalDecision: WorkerDecision;
+  trace: WorkerTrace;
 };
 
 
@@ -61,33 +86,51 @@ const searchQuery = ref('');
 const results = ref<SearchResultDoc[]>([]);
 const weakResults = ref<SearchResultDoc[]>([]);
 const rejectionInfo = ref<SearchRejection | null>(null);
+const decisionInfo = ref<WorkerDecision | null>(null);
 const showWeakResults = ref(false);
 const isProcessing = ref(false);
 const statusMsg = ref('正在唤起 Web Worker...');
 const errorMsg = ref<string | null>(null);
 const diagnosticLogs = ref<string[]>([]);
 const isWorkerReady = ref(false);
-let lastRerankStats: RerankStats | null = null;
 
-const REJECTION_THRESHOLD = 0.4;
+const REJECTION_THRESHOLD = CANONICAL_PIPELINE_PRESET.display.rejectThreshold;
+const ORIGINAL_SNIPPET_THRESHOLD =
+  CANONICAL_PIPELINE_PRESET.display.bestSentenceThreshold;
 const INDEX_CACHE_VERSION = '20260324-v3';
 
 const heroResults = computed(() => results.value.slice(0, 3));
 const compactResults = computed(() => results.value.slice(3, 10));
+const currentBehavior = computed<PipelineBehavior | null>(
+  () => decisionInfo.value?.behavior ?? null
+);
 const hasCoverageRejection = computed(
   () => rejectionInfo.value?.reason === 'low_topic_coverage'
 );
 const hasConsistencyRejection = computed(
   () => rejectionInfo.value?.reason === 'low_consistency'
 );
-const hasClarificationRejection = computed(
-  () => rejectionInfo.value?.reason === 'weak_anchor_needs_clarification'
+const hasClarificationBehavior = computed(
+  () => currentBehavior.value === 'clarify'
+);
+const hasRouteBehavior = computed(
+  () => currentBehavior.value === 'route_to_entry'
+);
+const hasDisplayThresholdReject = computed(
+  () => decisionInfo.value?.rejectionReason === 'display_threshold'
+);
+const entryTopicLabel = computed(
+  () => decisionInfo.value?.entryTopic ?? ''
 );
 const weakToggleLabel = computed(() =>
   showWeakResults.value ? '收起弱相关结果' : '查看弱相关结果'
 );
 const weakResultsTitle = computed(() =>
-  hasClarificationRejection.value ? '可能相关入口' : '弱相关结果'
+  hasRouteBehavior.value
+    ? '建议入口'
+    : hasClarificationBehavior.value
+      ? '可能相关入口'
+      : '弱相关结果'
 );
 const emptyTitle = computed(() => {
   if (hasCoverageRejection.value) {
@@ -96,8 +139,14 @@ const emptyTitle = computed(() => {
   if (hasConsistencyRejection.value) {
     return '当前查询未能形成稳定的主题结果，暂不展示不可靠答案。';
   }
-  if (hasClarificationRejection.value) {
+  if (hasRouteBehavior.value) {
+    return '这是一个总入口型问题，系统先不给出单篇答案。';
+  }
+  if (hasClarificationBehavior.value) {
     return '当前问题缺少具体事项，系统先不给出单一答案。';
+  }
+  if (hasDisplayThresholdReject.value) {
+    return '当前问题未达到可信展示阈值。';
   }
   return searchQuery.value.trim() ? '当前问题未达到可信展示阈值' : '输入关键词开始检索';
 });
@@ -108,8 +157,16 @@ const emptySubtitle = computed(() => {
   if (hasConsistencyRejection.value) {
     return '当前结果主题分散或仅靠弱语义相似命中，因此系统选择拒答。';
   }
-  if (hasClarificationRejection.value) {
+  if (hasRouteBehavior.value) {
+    return entryTopicLabel.value
+      ? `建议先从“${entryTopicLabel.value}”开始，再进入具体事项。`
+      : '这类问题更适合先进入总入口，再继续查看具体事项。';
+  }
+  if (hasClarificationBehavior.value) {
     return '请补充你想问的具体环节，例如录取通知书、报到手续、党团关系、宿舍或奖助金；也可展开查看可能相关入口。';
+  }
+  if (hasDisplayThresholdReject.value) {
+    return `Top 1 原话匹配度需不低于 ${(REJECTION_THRESHOLD * 100).toFixed(0)}%`;
   }
   return searchQuery.value.trim()
     ? `Top 1 原话匹配度需不低于 ${(REJECTION_THRESHOLD * 100).toFixed(0)}%`
@@ -160,35 +217,12 @@ const getPreviewText = (res: SearchResultDoc) => {
   return '';
 };
 
-const isOriginalSnippet = (res: SearchResultDoc) => (res.snippetScore ?? -999) > REJECTION_THRESHOLD;
+const isOriginalSnippet = (res: SearchResultDoc) =>
+  (res.snippetScore ?? -999) > ORIGINAL_SNIPPET_THRESHOLD;
 const getDisplayScore = (res: SearchResultDoc) =>
   res.displayScore ?? res.coarseScore ?? res.confidenceScore ?? res.rerankScore ?? 0;
 const formatRetrievalScore = (score: number) => `Score ${Number(score || 0).toFixed(2)}`;
 const formatPercent = (score: number) => `${((score || 0) * 100).toFixed(1)}%`;
-
-const mergeCoarseMatchesIntoDocuments = (
-  documents: SearchResultDoc[],
-  coarseMatches: Array<{ otid: string; score: number; best_kpid?: string }>
-) => {
-  const documentMap = new Map(
-    documents.map((doc) => [doc.otid || doc.id || '', doc])
-  );
-
-  return coarseMatches
-    .map((match) => {
-      const doc = documentMap.get(match.otid);
-      if (!doc) return null;
-
-      return {
-        ...doc,
-        score: match.score ?? doc.score,
-        coarseScore: match.score ?? doc.coarseScore ?? doc.score,
-        displayScore: match.score ?? doc.displayScore ?? doc.score,
-        best_kpid: match.best_kpid ?? doc.best_kpid
-      };
-    })
-    .filter(Boolean) as SearchResultDoc[];
-};
 
 const logDiagnostic = (msg: string) => {
   const time = new Date().toLocaleTimeString();
@@ -214,6 +248,7 @@ const emitTrace = (
     rejected?: boolean;
     rejection?: SearchRejection | null;
     weakResultsCount?: number;
+    decision?: WorkerDecision | null;
   }
 ) => {
   emit('trace-updated', {
@@ -235,6 +270,7 @@ const emitTrace = (
       rejection: opts.rejection ?? null,
       weakResultsCount: opts.weakResultsCount ?? 0,
     },
+    decision: opts.decision ?? null,
     rejection: opts.rejection ?? null,
     weakResultsCount: opts.weakResultsCount ?? 0,
   });
@@ -291,7 +327,7 @@ myWorker.onmessage = (event: MessageEvent) => {
   }
 
   if (status === 'search_complete') {
-    logDiagnostic(`粗排结束，扫描 ${stats.itemsScanned} 条，耗时 ${stats.elapsedMs}ms`);
+    logDiagnostic(`统一链路完成主搜索阶段，扫描 ${stats.itemsScanned} 条，耗时 ${stats.elapsedMs}ms`);
     if (stats?.partitionUsed) {
       logDiagnostic(`[Partition] candidate=${stats.partitionCandidateCount ?? '-'}`);
     }
@@ -300,17 +336,6 @@ myWorker.onmessage = (event: MessageEvent) => {
       pendingTasks.delete(taskId);
     }
     return;
-  }
-
-  if (status === 'rerank_complete') {
-    lastRerankStats = stats as RerankStats;
-    logDiagnostic(
-      `重排与原话提炼完成，耗时 ${stats.elapsedMs}ms，实际重排 ${stats.rerankedDocCount ?? 0} 篇 / ${stats.chunksScored ?? 0} chunks，每篇上限 ${stats.maxChunksPerDoc ?? 0}`
-    );
-    if (taskId && pendingTasks.has(taskId)) {
-      pendingTasks.get(taskId)?.resolve(result);
-      pendingTasks.delete(taskId);
-    }
   }
 };
 
@@ -375,148 +400,81 @@ const handleSearch = async () => {
 
   errorMsg.value = null;
   isProcessing.value = true;
-  lastRerankStats = null;
   results.value = [];
   weakResults.value = [];
   rejectionInfo.value = null;
+  decisionInfo.value = null;
   showWeakResults.value = false;
   statusMsg.value = '正在分词与向量化...';
 
   try {
-    const tStart = performance.now();
     logDiagnostic('开始提交检索请求...');
 
     const searchResult = (await dispatchToWorker('SEARCH', query)) as WorkerSearchResult;
-    const localMatches = searchResult?.matches || [];
-    const localWeakMatches = searchResult?.weakMatches || [];
+    const finalRender = searchResult?.results || [];
+    const localWeakResults = searchResult?.weakResults || [];
     const rejection = searchResult?.rejection || null;
-    const tSearchEnd = performance.now();
+    const finalDecision = searchResult?.finalDecision || null;
+    const trace = searchResult?.trace;
 
-    if (
-      rejection?.reason === 'low_consistency' &&
-      localMatches.length === 0 &&
-      localWeakMatches.length === 0
-    ) {
-      results.value = [];
-      weakResults.value = [];
-      rejectionInfo.value = rejection;
+    results.value = finalRender;
+    weakResults.value = localWeakResults;
+    rejectionInfo.value = rejection;
+    decisionInfo.value = finalDecision;
 
-      emitTrace(query, [], {
-        totalMs: (tSearchEnd - tStart).toFixed(1),
-        searchMs: (tSearchEnd - tStart).toFixed(1),
-        rejected: true,
-        rejection,
-      });
-
-      statusMsg.value = '当前查询未能形成稳定的主题结果，系统已拒答。';
-      logDiagnostic('结果主题分散或仅靠弱语义相似命中，已拒答');
-      return;
-    }
-
-    const topIds = localMatches.slice(0, 15).map((r) => r.otid);
-    const weakTopIds = localWeakMatches.slice(0, 10).map((r) => r.otid);
-    const fetchIds = Array.from(new Set([...topIds, ...weakTopIds]));
-
-    logDiagnostic(`粗排返回 ${localMatches.length} 篇，取 Top ${Math.min(fetchIds.length, 15)} 进入后续处理`);
-
-    if (fetchIds.length === 0) {
-      statusMsg.value = '未找到匹配答案';
-      logDiagnostic('本地检索未命中结果');
-      emitTrace(query, [], {
-        totalMs: (performance.now() - tStart).toFixed(1),
-        searchMs: (tSearchEnd - tStart).toFixed(1),
-      });
-      return;
-    }
-
-    statusMsg.value = '正在请求原文数据...';
-    const response = await fetch('/api/get_answers', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ otids: fetchIds })
+    emitTrace(query, finalRender, {
+      totalMs: Number(trace?.totalMs ?? 0).toFixed(1),
+      searchMs: Number(trace?.searchMs ?? 0).toFixed(1),
+      fetchMs: Number(trace?.fetchMs ?? 0).toFixed(1),
+      rerankMs: Number(trace?.rerankMs ?? 0).toFixed(1),
+      rerankedDocCount: trace?.rerankedDocCount,
+      chunksScored: trace?.chunksScored,
+      rerankWindowReason: trace?.rerankWindowReason,
+      maxChunksPerDoc: trace?.maxChunksPerDoc,
+      chunkPlanReason: trace?.chunkPlanReason,
+      topConfidence: trace?.topConfidence ?? null,
+      rejected: finalDecision?.behavior === 'reject',
+      rejection,
+      weakResultsCount: localWeakResults.length,
+      decision: finalDecision,
     });
 
-    if (!response.ok) {
-      throw new Error(`后端响应异常: ${response.status}`);
-    }
-
-    const result = await response.json();
-    const tFetchEnd = performance.now();
-
-    if (!result.data) {
-      statusMsg.value = '未找到匹配答案';
+    if (!finalDecision) {
+      statusMsg.value = '未能解析当前查询结果';
+      logDiagnostic('未收到统一链路的最终决策');
       return;
     }
 
-    const docsForRender = mergeCoarseMatchesIntoDocuments(result.data, localMatches.slice(0, 15));
-    const weakDocsForRender = mergeCoarseMatchesIntoDocuments(result.data, localWeakMatches.slice(0, 10));
+    if (finalDecision.behavior === 'route_to_entry') {
+      statusMsg.value = finalDecision.entryTopic
+        ? `已切换到入口模式：${finalDecision.entryTopic}`
+        : '已切换到入口模式';
+      logDiagnostic('系统判定为总入口型问题，已提供入口候选');
+      return;
+    }
 
-    if (
-      rejection?.reason === 'low_topic_coverage' ||
-      rejection?.reason === 'weak_anchor_needs_clarification'
-    ) {
-      results.value = [];
-      weakResults.value = weakDocsForRender;
-      rejectionInfo.value = rejection;
+    if (finalDecision.behavior === 'clarify') {
+      statusMsg.value = '当前问题缺少具体事项，已切换到澄清模式。';
+      logDiagnostic('系统判定需要先澄清具体事项');
+      return;
+    }
 
-      emitTrace(query, [], {
-        totalMs: (tFetchEnd - tStart).toFixed(1),
-        searchMs: (tSearchEnd - tStart).toFixed(1),
-        fetchMs: (tFetchEnd - tSearchEnd).toFixed(1),
-        rejected: true,
-        rejection,
-        weakResultsCount: weakDocsForRender.length,
-      });
-
-      if (rejection?.reason === 'weak_anchor_needs_clarification') {
-        statusMsg.value = '当前问题缺少具体事项，已切换到澄清模式。';
-        logDiagnostic('命中弱锚点空提问，已拒绝直接回答并提供相关入口');
+    if (finalDecision.behavior === 'reject') {
+      if (finalDecision.rejectionReason === 'display_threshold') {
+        statusMsg.value = `未达到展示阈值 ${(REJECTION_THRESHOLD * 100).toFixed(0)}%，已拒答`;
+        logDiagnostic(`展示阶段拒答：Top 1 原话匹配度 ${formatPercent(trace?.topConfidence ?? 0)}`);
+      } else if (rejection?.reason === 'low_topic_coverage') {
+        statusMsg.value = '当前知识库暂无该主题的直接内容，已给出弱相关入口。';
+        logDiagnostic('主题覆盖不足，已拒绝直接回答并保留弱相关入口');
       } else {
-        statusMsg.value = '当前知识库暂无该主题的直接内容，暂不展示弱相关结果。';
-        logDiagnostic('主题覆盖不足，已提供弱相关结果入口');
+        statusMsg.value = '当前查询未能形成稳定的可信结果，系统已拒答。';
+        logDiagnostic('系统判定当前查询应拒答');
       }
       return;
     }
 
-    statusMsg.value = '正在重排并提炼可信原话...';
-    const finalRender = (await dispatchToWorker('RERANK', {
-      query,
-      documents: docsForRender
-    })) as SearchResultDoc[];
-
-    const tRerankEnd = performance.now();
-    const rerankStats = lastRerankStats as RerankStats | null;
-    const rerankedDocCount = rerankStats ? rerankStats.rerankedDocCount : undefined;
-    const chunksScored = rerankStats ? rerankStats.chunksScored : undefined;
-    const rerankWindowReason = rerankStats ? rerankStats.windowReason : undefined;
-    const maxChunksPerDoc = rerankStats ? rerankStats.maxChunksPerDoc : undefined;
-    const chunkPlanReason = rerankStats ? rerankStats.chunkPlanReason : undefined;
-    const topConfidence = finalRender[0]?.confidenceScore ?? finalRender[0]?.rerankScore ?? -999;
-    const shouldReject = finalRender.length > 0 && topConfidence < REJECTION_THRESHOLD;
-
-    results.value = shouldReject ? [] : finalRender;
-
-    emitTrace(query, finalRender, {
-      totalMs: (tRerankEnd - tStart).toFixed(1),
-      searchMs: (tSearchEnd - tStart).toFixed(1),
-      fetchMs: (tFetchEnd - tSearchEnd).toFixed(1),
-      rerankMs: (tRerankEnd - tFetchEnd).toFixed(1),
-      rerankedDocCount,
-      chunksScored,
-      rerankWindowReason,
-      maxChunksPerDoc,
-      chunkPlanReason,
-      topConfidence,
-      rejected: shouldReject,
-    });
-
-    if (shouldReject) {
-      statusMsg.value = `未达到展示阈值 ${(REJECTION_THRESHOLD * 100).toFixed(0)}%，已拒答`;
-      logDiagnostic(`拒答：Top 1 原话匹配度 ${formatPercent(topConfidence)}`);
-    } else {
-      statusMsg.value = `找到 ${finalRender.length} 篇相关结果（总耗时 ${(tRerankEnd - tStart).toFixed(1)}ms）`;
-      logDiagnostic('结果已完成展示');
-    }
+    statusMsg.value = `找到 ${finalRender.length} 篇相关结果（总耗时 ${Number(trace?.totalMs ?? 0).toFixed(1)}ms）`;
+    logDiagnostic('统一链路已完成结果展示');
   } catch (e: any) {
     console.error(e);
     errorMsg.value = `检索发生错误: ${e.message}`;
@@ -592,11 +550,19 @@ const handleSearch = async () => {
       </div>
 
       <section
-        v-if="results.length === 0 && !isProcessing && (hasCoverageRejection || hasClarificationRejection) && weakResults.length > 0"
+        v-if="results.length === 0 && !isProcessing && (hasCoverageRejection || hasClarificationBehavior || hasRouteBehavior) && weakResults.length > 0"
         class="mt-6 space-y-3"
       >
         <div class="flex items-center justify-between text-[11px] uppercase tracking-[0.2em] text-slate-500">
-          <span>{{ weakResultsTitle }}</span>
+          <div class="flex items-center gap-3">
+            <span>{{ weakResultsTitle }}</span>
+            <span
+              v-if="hasRouteBehavior && entryTopicLabel"
+              class="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-2 py-0.5 text-[10px] tracking-normal text-cyan-200"
+            >
+              {{ entryTopicLabel }}
+            </span>
+          </div>
           <button
             @click="showWeakResults = !showWeakResults"
             class="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[10px] font-semibold tracking-normal text-slate-300 transition-all hover:border-white/20 hover:bg-white/[0.08]"

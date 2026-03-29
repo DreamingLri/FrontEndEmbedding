@@ -1,0 +1,4111 @@
+{
+  "generatedAt": "2026-03-29T08:15:14.354Z",
+  "datasetFile": "D:\\Project\\SuAsk\\SuAsk_Agent\\Backend\\test\\test_dataset_platform_mixed\\test_dataset_platform_mixed_daily_v1_2_reviewed.json",
+  "datasetName": "test_dataset_platform_mixed_daily_v1_2_reviewed",
+  "total": 70,
+  "config": {
+    "pipelineVersion": "canonical_full_v1",
+    "preset": {
+      "name": "canonical_full_v1",
+      "retrieval": {
+        "weights": {
+          "Q": 0.3333333333333333,
+          "KP": 0.13333333333333333,
+          "OT": 0.5333333333333333
+        },
+        "topHybridLimit": 1000,
+        "kpAggregationMode": "max",
+        "kpTopN": 3,
+        "kpTailWeight": 0.35,
+        "lexicalBonusMode": "sum",
+        "kpRoleRerankMode": "feature",
+        "kpRoleDocWeight": 0.35
+      },
+      "display": {
+        "rejectThreshold": 0.4,
+        "rerankBlendAlpha": 0.15,
+        "bestSentenceThreshold": 0.4,
+        "fetchMatchLimit": 15,
+        "fetchWeakMatchLimit": 10
+      }
+    },
+    "note": "当前报告直接调用统一 full pipeline，默认数据集已切到 mixed daily v1.2 reviewed。"
+  },
+  "summary": {
+    "total": 70,
+    "overallBehaviorAccuracy": 0.2857142857142857,
+    "platformTaskSuccess": 0.2857142857142857,
+    "behaviorOnlyAccuracy": 0.9428571428571428,
+    "directAnswerSuccessRate": {
+      "total": 35,
+      "success": 0,
+      "rate": 0
+    },
+    "latestTopicSuccessRate": {
+      "total": 15,
+      "success": 0,
+      "rate": 0
+    },
+    "clarifySuccessRate": {
+      "total": 7,
+      "success": 7,
+      "rate": 1
+    },
+    "routeToEntrySuccessRate": {
+      "total": 4,
+      "success": 4,
+      "rate": 1
+    },
+    "clarifyOrRouteSuccessRate": {
+      "total": 11,
+      "success": 11,
+      "rate": 1
+    },
+    "routeFamilyBehaviorAccuracy": {
+      "total": 20,
+      "success": 20,
+      "rate": 1
+    },
+    "rejectHitRate": {
+      "total": 9,
+      "success": 9,
+      "rate": 1
+    },
+    "unsafeDirectAnswerRate": {
+      "total": 20,
+      "success": 0,
+      "rate": 0
+    },
+    "directAnswerDocHits": {
+      "total": 50,
+      "hitAt1": 0,
+      "hitAt3": 0,
+      "hitAt5": 0,
+      "hitAt1Rate": 0,
+      "hitAt3Rate": 0,
+      "hitAt5Rate": 0
+    },
+    "retrievalStageDocHits": {
+      "total": 50,
+      "hitAt1": 40,
+      "hitAt3": 43,
+      "hitAt5": 43,
+      "hitAt1Rate": 0.8,
+      "hitAt3Rate": 0.86,
+      "hitAt5Rate": 0.86
+    },
+    "complexDirectSubsetDocHits": {
+      "total": 20,
+      "hitAt1": 0,
+      "hitAt3": 0,
+      "hitAt5": 0,
+      "hitAt1Rate": 0,
+      "hitAt3Rate": 0,
+      "hitAt5Rate": 0
+    },
+    "byScenarioFamily": {
+      "direct_answer_simple": {
+        "total": 15,
+        "successCount": 0,
+        "successRate": 0,
+        "behaviorAccuracy": 0.7333333333333333,
+        "directAnswerRate": 0.7333333333333333,
+        "clarifyRate": 0,
+        "routeToEntryRate": 0,
+        "rejectRate": 0.26666666666666666,
+        "docHitAt1Rate": 0,
+        "docHitAt3Rate": 0,
+        "docHitAt5Rate": 0,
+        "retrievalDocHitAt1Rate": 0.4666666666666667
+      },
+      "direct_answer_complex": {
+        "total": 20,
+        "successCount": 0,
+        "successRate": 0,
+        "behaviorAccuracy": 1,
+        "directAnswerRate": 1,
+        "clarifyRate": 0,
+        "routeToEntryRate": 0,
+        "rejectRate": 0,
+        "docHitAt1Rate": 0,
+        "docHitAt3Rate": 0,
+        "docHitAt5Rate": 0,
+        "retrievalDocHitAt1Rate": 0.9
+      },
+      "route_or_clarify": {
+        "total": 20,
+        "successCount": 20,
+        "successRate": 1,
+        "behaviorAccuracy": 1,
+        "directAnswerRate": 0,
+        "clarifyRate": 0.35,
+        "routeToEntryRate": 0.2,
+        "rejectRate": 0.45,
+        "unsafeDirectAnswerRate": 0
+      },
+      "latest_within_topic": {
+        "total": 15,
+        "successCount": 0,
+        "successRate": 0,
+        "behaviorAccuracy": 1,
+        "directAnswerRate": 1,
+        "clarifyRate": 0,
+        "routeToEntryRate": 0,
+        "rejectRate": 0,
+        "docHitAt1Rate": 0,
+        "docHitAt3Rate": 0,
+        "docHitAt5Rate": 0,
+        "retrievalDocHitAt1Rate": 1
+      }
+    },
+    "byPredictedBehavior": {
+      "direct_answer": 46,
+      "clarify": 7,
+      "route_to_entry": 4,
+      "reject": 13
+    },
+    "failureBreakdown": {
+      "direct_answer_wrong_doc": 46,
+      "direct_answer_rejected": 4,
+      "direct_answer_misrouted": 0,
+      "route_expected_clarify_but_routed": 0,
+      "route_expected_route_but_clarified": 0,
+      "route_expected_nonreject_but_rejected": 0,
+      "route_expected_nonreject_but_direct_answer": 0,
+      "route_expected_reject_but_clarified": 0,
+      "route_expected_reject_but_routed": 0,
+      "route_expected_reject_but_direct_answer": 0
+    }
+  },
+  "caseReports": [
+    {
+      "id": "mixed_daily_v1_simple_001",
+      "query": "港澳台考生报考中山大学2024年研究生需要哪些身份和学业条件？",
+      "query_type": "standard",
+      "scenario_family": "direct_answer_simple",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_ee3035722c4b481e",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 8431,
+      "weak_match_count": 0,
+      "match_count": 26,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_ee3035722c4b481e",
+          "score": 4.60236849773894,
+          "best_kpid": "kpid_ad82dfda25984fe2"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_07c96191f91e425a",
+          "score": 3.1623212621345536,
+          "best_kpid": "kpid_98f801a2cc5f421f"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_b9b1fa013e3d48e9",
+          "score": 2.664940957592252,
+          "best_kpid": "kpid_1619446533604dbd"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_44c68315287642c2",
+          "score": 2.033141688171727,
+          "best_kpid": "kpid_0ac01fcf81dc40b5"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_68999cb6f0a3468d",
+          "score": 1.7819275289717766,
+          "best_kpid": "kpid_5cc633a436f64d4a"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "v1.1 修订：将年份显式改为 2024，避免 query 年份与当前库内可回答总简章不一致。"
+    },
+    {
+      "id": "mixed_daily_v1_simple_002",
+      "query": "2019年下半年研究生证补办需要提交哪些材料？",
+      "query_type": "standard",
+      "scenario_family": "direct_answer_simple",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_a871b72be7c14bb1",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 16212,
+      "weak_match_count": 0,
+      "match_count": 56,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_a871b72be7c14bb1",
+          "score": 3.8070312919628835,
+          "best_kpid": "kpid_252128a43f404724"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_f7657ee8253243d0",
+          "score": 2.8865210039852482,
+          "best_kpid": "kpid_bba42abfe6ec4e36"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_50bde314ba8f4a2c",
+          "score": 2.614396602966133,
+          "best_kpid": "kpid_a1694cbfdf294db4"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_5b36fce72ab84f14",
+          "score": 2.5496941404013818
+        },
+        {
+          "rank": 5,
+          "otid": "otid_dcaea3047c9645ff",
+          "score": 2.458385833925991,
+          "best_kpid": "kpid_39fe381567cc4ed7"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "v1.1 修订：补充明确历史时间锚点，避免无历史提示却命中 2019 年文档。"
+    },
+    {
+      "id": "mixed_daily_v1_simple_003",
+      "query": "2021学年春季学期开学注册时间是怎么安排的？",
+      "query_type": "standard",
+      "scenario_family": "direct_answer_simple",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": false,
+      "success": false,
+      "rejection_reason": "low_consistency",
+      "expected_otid": "otid_9cd645190fe2468b",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "unsafe_direct_answer": false,
+      "candidate_count": 16212,
+      "weak_match_count": 0,
+      "match_count": 0,
+      "fetched_document_count": 0,
+      "top_matches": [],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "v1.1 修订：将问法收窄为 2021 学年春季注册安排，避免无时间锚点却命中历史学期通知。"
+    },
+    {
+      "id": "mixed_daily_v1_simple_004",
+      "query": "中山大学2024年硕士研究生招生章程在哪里下载？",
+      "query_type": "standard",
+      "scenario_family": "direct_answer_simple",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_1c14b6043fd645c8",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 8431,
+      "weak_match_count": 0,
+      "match_count": 25,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_1c14b6043fd645c8",
+          "score": 7.154841683419742,
+          "best_kpid": "kpid_59ef3b3207114a05"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_68999cb6f0a3468d",
+          "score": 3.7591192796672424,
+          "best_kpid": "kpid_7b4c104a067b4de1"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_ee3035722c4b481e",
+          "score": 2.5254687155500246,
+          "best_kpid": "kpid_a58c3f98cbf44114"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_b9b1fa013e3d48e9",
+          "score": 2.100823083244852,
+          "best_kpid": "kpid_1619446533604dbd"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_0d274d8aa9684e3e",
+          "score": 1.7182399989576191,
+          "best_kpid": "kpid_885fd936c9b849be"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "复用旧版通用集的明确直答样本，用于覆盖平台日常简单查询。"
+    },
+    {
+      "id": "mixed_daily_v1_simple_005",
+      "query": "中山大学报考点接受哪些类型的考生？",
+      "query_type": "standard",
+      "scenario_family": "direct_answer_simple",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_63a7acf7429240b8",
+      "retrieval_doc_rank": 3,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "unsafe_direct_answer": false,
+      "candidate_count": 8431,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_139b9801959d4db4",
+          "score": 3.218292224792853,
+          "best_kpid": "kpid_f1c36301466944cf"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_8ee6bdcf13e741b8",
+          "score": 2.694955154300315,
+          "best_kpid": "kpid_ede45b4354d04f82"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_63a7acf7429240b8",
+          "score": 2.4590647639973553,
+          "best_kpid": "kpid_1d6adf03473c4b5d"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_8f77ee9e86c84c7d",
+          "score": 2.4417876099076383,
+          "best_kpid": "kpid_456a8ac09242455e"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_097b17ffece641a7",
+          "score": 2.3226640170303186,
+          "best_kpid": "kpid_1376a142072b478f"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "复用旧版通用集的明确直答样本，用于覆盖平台日常简单查询。"
+    },
+    {
+      "id": "mixed_daily_v1_simple_006",
+      "query": "我打算报考中山大学2024年港澳台研究生，初试具体考什么科目？",
+      "query_type": "situational",
+      "scenario_family": "direct_answer_simple",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_ee3035722c4b481e",
+      "retrieval_doc_rank": 3,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "unsafe_direct_answer": false,
+      "candidate_count": 8431,
+      "weak_match_count": 0,
+      "match_count": 23,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_44c68315287642c2",
+          "score": 6.893224032481406,
+          "best_kpid": "kpid_77fc5dd08bce4efc"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_07c96191f91e425a",
+          "score": 6.653021656106048,
+          "best_kpid": "kpid_f94fd06523ba4da8"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_ee3035722c4b481e",
+          "score": 4.063557054694478,
+          "best_kpid": "kpid_a58c3f98cbf44114"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_e9ff52409e304167",
+          "score": 2.1242588065494363,
+          "best_kpid": "kpid_70a6e1a0c60c4662"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_1c14b6043fd645c8",
+          "score": 1.6924807093003023,
+          "best_kpid": "kpid_a5672865c8d54bcd"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "v1.1 修订：将年份显式改为 2024，避免 query 年份与当前库内可回答总简章不一致。"
+    },
+    {
+      "id": "mixed_daily_v1_simple_007",
+      "query": "2019年下半年我的火车票优惠卡损坏了，应该怎么补办？",
+      "query_type": "situational",
+      "scenario_family": "direct_answer_simple",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": false,
+      "success": false,
+      "rejection_reason": "low_consistency",
+      "expected_otid": "otid_a871b72be7c14bb1",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "unsafe_direct_answer": false,
+      "candidate_count": 16212,
+      "weak_match_count": 0,
+      "match_count": 0,
+      "fetched_document_count": 0,
+      "top_matches": [],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "v1.1 修订：补充明确历史时间锚点，避免无历史提示却命中 2019 年文档。"
+    },
+    {
+      "id": "mixed_daily_v1_simple_008",
+      "query": "我是2021学年在校研究生，需要在哪个平台完成春季学期注册？",
+      "query_type": "situational",
+      "scenario_family": "direct_answer_simple",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": false,
+      "success": false,
+      "rejection_reason": "low_consistency",
+      "expected_otid": "otid_9cd645190fe2468b",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "unsafe_direct_answer": false,
+      "candidate_count": 16212,
+      "weak_match_count": 0,
+      "match_count": 0,
+      "fetched_document_count": 0,
+      "top_matches": [],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "v1.1 修订：将问题限定到 2021 学年春季注册场景，避免无时间锚点却命中历史学期通知。"
+    },
+    {
+      "id": "mixed_daily_v1_simple_009",
+      "query": "我打算报考广州国家实验室的联合培养博士项目，想知道报名时需要提交哪些材料？",
+      "query_type": "situational",
+      "scenario_family": "direct_answer_simple",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_6258d4af76df4ee7",
+      "retrieval_doc_rank": 3,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "unsafe_direct_answer": false,
+      "candidate_count": 16212,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_7933bd21608a41dd",
+          "score": 4.529618348636268,
+          "best_kpid": "kpid_0e00baae0410403b"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_57fa7965fa92417a",
+          "score": 4.393691103115639,
+          "best_kpid": "kpid_72e11ddb888e49b6"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_6258d4af76df4ee7",
+          "score": 3.874865814218908,
+          "best_kpid": "kpid_f29a3d96be534262"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_ae46d4b5d6e74990",
+          "score": 3.7784202122247894,
+          "best_kpid": "kpid_53230507f99c472c"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_fe078e0584fe4b77",
+          "score": 3.7295884788670297,
+          "best_kpid": "kpid_c79987f3c20c4e11"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "复用旧版通用集的情境化直答样本，用于覆盖平台日常用户问法。"
+    },
+    {
+      "id": "mixed_daily_v1_simple_010",
+      "query": "我准备报考中山大学硕士研究生，现场确认需要带哪些材料？",
+      "query_type": "situational",
+      "scenario_family": "direct_answer_simple",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_18390f7cb6784527",
+      "retrieval_doc_rank": 9,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "unsafe_direct_answer": false,
+      "candidate_count": 16212,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_0c79f31a23594cc0",
+          "score": 3.6416183134921236,
+          "best_kpid": "kpid_0dcd0a286d894756"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_9afe985b96094331",
+          "score": 3.4997020832371164,
+          "best_kpid": "kpid_0d6b5d69ce1d4002"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_8f9030bdc1684758",
+          "score": 3.4724829098128436,
+          "best_kpid": "kpid_825ee6061b42485d"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_c15c87e71b5b49b0",
+          "score": 3.242546948977033,
+          "best_kpid": "kpid_816c523a3f82400c"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_e690e57c31f0415c",
+          "score": 2.9303440611674243,
+          "best_kpid": "kpid_4227c09381764797"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "复用旧版通用集的情境化直答样本，用于覆盖平台日常用户问法。"
+    },
+    {
+      "id": "mixed_daily_v1_simple_011",
+      "query": "2024港澳台研究生报名时间 准考证打印",
+      "query_type": "short_keyword",
+      "scenario_family": "direct_answer_simple",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_ee3035722c4b481e",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 8431,
+      "weak_match_count": 0,
+      "match_count": 25,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_ee3035722c4b481e",
+          "score": 5.58836079173446,
+          "best_kpid": "kpid_78fbb957a4ff436b"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_44c68315287642c2",
+          "score": 3.6288515634877063,
+          "best_kpid": "kpid_58164f3fd99a4306"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_07c96191f91e425a",
+          "score": 3.4931611685687924,
+          "best_kpid": "kpid_afb68e633a534132"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_b9b1fa013e3d48e9",
+          "score": 2.6831321641523886,
+          "best_kpid": "kpid_9b63a7c3ea264239"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_e9ff52409e304167",
+          "score": 1.791604050039762,
+          "best_kpid": "kpid_b44281da02134229"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "v1.1 修订：补充年份锚点，避免短关键词 query 与当前可回答总简章年份不一致。"
+    },
+    {
+      "id": "mixed_daily_v1_simple_012",
+      "query": "2019下半年 火车票优惠卡充值",
+      "query_type": "short_keyword",
+      "scenario_family": "direct_answer_simple",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_a871b72be7c14bb1",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 16212,
+      "weak_match_count": 0,
+      "match_count": 67,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_a871b72be7c14bb1",
+          "score": 4.235463780289733,
+          "best_kpid": "kpid_a27dea7222db4980"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_dadc91727823412b",
+          "score": 1.8129550659789102,
+          "best_kpid": "kpid_ebdd5989b69d4473"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_14f1526dcec041d6",
+          "score": 1.4735642402318965
+        },
+        {
+          "rank": 4,
+          "otid": "otid_5b36fce72ab84f14",
+          "score": 1.015552144845974
+        },
+        {
+          "rank": 5,
+          "otid": "otid_9a33b52f91614e6b",
+          "score": 0.9768486743262189,
+          "best_kpid": "kpid_c994f69f18014323"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "v1.1 修订：补充历史时间锚点，避免短关键词 query 无年份提示却命中 2019 年文档。"
+    },
+    {
+      "id": "mixed_daily_v1_simple_013",
+      "query": "2021学年春季学期注册时间",
+      "query_type": "short_keyword",
+      "scenario_family": "direct_answer_simple",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": false,
+      "success": false,
+      "rejection_reason": "low_consistency",
+      "expected_otid": "otid_9cd645190fe2468b",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "unsafe_direct_answer": false,
+      "candidate_count": 16212,
+      "weak_match_count": 0,
+      "match_count": 0,
+      "fetched_document_count": 0,
+      "top_matches": [],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "v1.1 修订：补充学年锚点，避免短关键词 query 无时间提示却命中历史学期通知。"
+    },
+    {
+      "id": "mixed_daily_v1_simple_014",
+      "query": "2024年硕士招生专业目录",
+      "query_type": "short_keyword",
+      "scenario_family": "direct_answer_simple",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_1c14b6043fd645c8",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 16212,
+      "weak_match_count": 0,
+      "match_count": 52,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_1c14b6043fd645c8",
+          "score": 5.365930797949015,
+          "best_kpid": "kpid_59ef3b3207114a05"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_68999cb6f0a3468d",
+          "score": 2.9902558102809635,
+          "best_kpid": "kpid_7b4c104a067b4de1"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_ee3035722c4b481e",
+          "score": 2.9135399701551474,
+          "best_kpid": "kpid_a58c3f98cbf44114"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_2db2c0c0349745ea",
+          "score": 2.620936245398835,
+          "best_kpid": "kpid_d0c4c999e62e4a4e"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_f69c96f748d44216",
+          "score": 2.5790562557210204,
+          "best_kpid": "kpid_388c9f18c485487f"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "复用旧版通用集的短关键词直答样本，用于覆盖平台日常检索式提问。"
+    },
+    {
+      "id": "mixed_daily_v1_simple_015",
+      "query": "推免预报名截止时间",
+      "query_type": "short_keyword",
+      "scenario_family": "direct_answer_simple",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_f86cd11add664a2c",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 8431,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_f86cd11add664a2c",
+          "score": 6.887666075296693,
+          "best_kpid": "kpid_e09bfaaa96134dd7"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_d2e81434d6754411",
+          "score": 4.529974230634028,
+          "best_kpid": "kpid_049caafd930e4c75"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_7479616835454c16",
+          "score": 4.397636850302639,
+          "best_kpid": "kpid_1d9cd306819f489f"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_fcc01f4998fe4c47",
+          "score": 3.6397247248890245,
+          "best_kpid": "kpid_c27825a3b79e478e"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_f672cc42a5a04134",
+          "score": 3.317369750251153,
+          "best_kpid": "kpid_471f45d33aa14431"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "复用旧版通用集的短关键词直答样本，用于覆盖平台日常检索式提问。"
+    },
+    {
+      "id": "mixed_daily_v1_complex_001",
+      "query": "2022年中山大学报考点网上确认的首次提交材料、补充材料、现场指导和准考证打印分别是什么时间安排？",
+      "query_type": "standard",
+      "scenario_family": "direct_answer_complex",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_c15c87e71b5b49b0",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 8431,
+      "weak_match_count": 0,
+      "match_count": 20,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_c15c87e71b5b49b0",
+          "score": 6.247069618087108,
+          "best_kpid": "kpid_816c523a3f82400c"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_8c27fc74819145d9",
+          "score": 3.3616356807127605,
+          "best_kpid": "kpid_ca8586b8f8424f05"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_1ef327d38b174afb",
+          "score": 3.2877137501411426,
+          "best_kpid": "kpid_7ace47f784974fcd"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_f4f08d56e1d84704",
+          "score": 3.0232482863269974,
+          "best_kpid": "kpid_0c27c78e90604c23"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_2c221a5f38864ced",
+          "score": 2.7139802544452514,
+          "best_kpid": "kpid_5b555627094a493a"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "需要跨多个时间片段整体梳理，单条 KP 无法完整覆盖。"
+    },
+    {
+      "id": "mixed_daily_v1_complex_002",
+      "query": "中山大学报考点网上确认一直提示材料审核不通过，我现在还来得及补交吗？如果补完还是不通过，最后应该怎么处理？",
+      "query_type": "situational",
+      "scenario_family": "direct_answer_complex",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_c15c87e71b5b49b0",
+      "retrieval_doc_rank": 13,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "unsafe_direct_answer": false,
+      "candidate_count": 8431,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_8f77ee9e86c84c7d",
+          "score": 4.232967513670269,
+          "best_kpid": "kpid_b186797bd66a4e5a"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_18390f7cb6784527",
+          "score": 2.722469931416261,
+          "best_kpid": "kpid_56ae9f921d12472c"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_b9b1fa013e3d48e9",
+          "score": 1.9008954518082533,
+          "best_kpid": "kpid_9b63a7c3ea264239"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_dc54d3033b3c4944",
+          "score": 1.4374183829656686,
+          "best_kpid": "kpid_45243b6a883441ea"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_aa024784667d4f5a",
+          "score": 1.348385427009977,
+          "best_kpid": "kpid_d2f0225255b5400e"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "处理流程与补交时限分散在不同 KP 中，适合作为 multi_kp 挑战项。"
+    },
+    {
+      "id": "mixed_daily_v1_complex_003",
+      "query": "我是一名同等学力申请临床医学博士的学生，已经完成了论文写作和预答辩，接下来要申请答辩，具体需要走哪些步骤？",
+      "query_type": "situational",
+      "scenario_family": "direct_answer_complex",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_f7a9215086674711",
+      "retrieval_doc_rank": 9,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "unsafe_direct_answer": false,
+      "candidate_count": 16212,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_5ceb74e586b947ab",
+          "score": 3.6211882326103275,
+          "best_kpid": "kpid_31f45ef5b0e141d3"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_b6cbd904b2fe420a",
+          "score": 3.4425452378573,
+          "best_kpid": "kpid_7439becb302c4f97"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_7681d9bcdbdf4af2",
+          "score": 3.4123712215591473,
+          "best_kpid": "kpid_4287e4d00cc94895"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_14f1526dcec041d6",
+          "score": 3.3441532164148513,
+          "best_kpid": "kpid_f001b6181e1f4354"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_a8ddddd49d224218",
+          "score": 3.2526154815667687,
+          "best_kpid": "kpid_bb876bc76f434065"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "复用 main_106 reviewed 条目，保留结构化检索价值样本。"
+    },
+    {
+      "id": "mixed_daily_v1_complex_004",
+      "query": "中山大学2024年港澳台研究生拟录取名单公示后，最终录取结果的有效性取决于什么？",
+      "query_type": "standard",
+      "scenario_family": "direct_answer_complex",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_e9ff52409e304167",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 8431,
+      "weak_match_count": 0,
+      "match_count": 24,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_e9ff52409e304167",
+          "score": 7.545418986245921,
+          "best_kpid": "kpid_5b1511a9de0b4fb1"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_ee3035722c4b481e",
+          "score": 2.70345812802613,
+          "best_kpid": "kpid_a58c3f98cbf44114"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_07c96191f91e425a",
+          "score": 2.687063820698553
+        },
+        {
+          "rank": 4,
+          "otid": "otid_a711c70a3db84204",
+          "score": 2.0558536773668132,
+          "best_kpid": "kpid_04b1672fc062484f"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_44c68315287642c2",
+          "score": 1.7960281503421753,
+          "best_kpid": "kpid_77fc5dd08bce4efc"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "复用 main_106 reviewed 条目，保留结构化检索价值样本。"
+    },
+    {
+      "id": "mixed_daily_v1_complex_005",
+      "query": "我是一名在职人员，有本科学历和4年工作经验，想通过单独考试报考中山大学2026年硕士，应该怎么操作？需要哪些条件？",
+      "query_type": "situational",
+      "scenario_family": "direct_answer_complex",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_7479616835454c16",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 8431,
+      "weak_match_count": 0,
+      "match_count": 20,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_7479616835454c16",
+          "score": 3.6237970271630293,
+          "best_kpid": "kpid_a5fd0bfb2e4f4955"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_226927e5287c498a",
+          "score": 3.398780411235856,
+          "best_kpid": "kpid_d4ee9a41d21e4847"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_139b9801959d4db4",
+          "score": 2.7785858415514078,
+          "best_kpid": "kpid_9d869d0722c14c11"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_8f77ee9e86c84c7d",
+          "score": 2.678969119832348,
+          "best_kpid": "kpid_e1a5dc451c774c80"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_fa0f61539ae34c82",
+          "score": 2.6646809382254975,
+          "best_kpid": "kpid_5c059b89320a4b4e"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "复用 main_106 reviewed 条目，保留结构化检索价值样本。"
+    },
+    {
+      "id": "mixed_daily_v1_complex_006",
+      "query": "中山大学2025年学术学位理学[07]和专业学位电子信息[0854]的复试总分和单科要求对比是什么？",
+      "query_type": "standard",
+      "scenario_family": "direct_answer_complex",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_de298a32eff04279",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 8431,
+      "weak_match_count": 0,
+      "match_count": 31,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_de298a32eff04279",
+          "score": 4.402090809948907,
+          "best_kpid": "kpid_abe8a759c9ee4c0a"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_95c5075eb4ff45c3",
+          "score": 1.6443452653758563,
+          "best_kpid": "kpid_8119e2405d9d4974"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_ed940aabc9c24803",
+          "score": 1.5020963770462306,
+          "best_kpid": "kpid_63d3efd1a6534c6d"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_8ee6bdcf13e741b8",
+          "score": 1.4025168726325041,
+          "best_kpid": "kpid_ede45b4354d04f82"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_c7af54f9342e4a1c",
+          "score": 1.3369188247835018,
+          "best_kpid": "kpid_830d19e3337c4993"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "复用 main_106 reviewed 条目，保留结构化检索价值样本。"
+    },
+    {
+      "id": "mixed_daily_v1_complex_007",
+      "query": "报考中山大学2026年临床医学硕士专业学位，考生需要满足哪些学历要求，并且复试时会有什么特殊安排？",
+      "query_type": "standard",
+      "scenario_family": "direct_answer_complex",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_7479616835454c16",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 8431,
+      "weak_match_count": 0,
+      "match_count": 20,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_7479616835454c16",
+          "score": 5.271424548167684,
+          "best_kpid": "kpid_a5fd0bfb2e4f4955"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_1ae107c08e73431e",
+          "score": 3.7053549689741354,
+          "best_kpid": "kpid_921e2206e7f24635"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_8f77ee9e86c84c7d",
+          "score": 2.7510287165395115,
+          "best_kpid": "kpid_e1a5dc451c774c80"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_fa0f61539ae34c82",
+          "score": 2.682637196465772,
+          "best_kpid": "kpid_5c059b89320a4b4e"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_097b17ffece641a7",
+          "score": 2.5128649394512172,
+          "best_kpid": "kpid_2ef4667810ab477c"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "复用 main_106 reviewed 条目，保留结构化检索价值样本。"
+    },
+    {
+      "id": "mixed_daily_v1_complex_008",
+      "query": "报考中山大学2025年临床医学专业学位硕士需要什么条件？",
+      "query_type": "standard",
+      "scenario_family": "direct_answer_complex",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_8ee6bdcf13e741b8",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 16212,
+      "weak_match_count": 0,
+      "match_count": 36,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_8ee6bdcf13e741b8",
+          "score": 4.201241281075026,
+          "best_kpid": "kpid_2444126748f74ecf"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_f672cc42a5a04134",
+          "score": 3.763789221597446,
+          "best_kpid": "kpid_3f0f3250cdfa4eaf"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_6711485a3ca748da",
+          "score": 2.515957295105241,
+          "best_kpid": "kpid_e9f032f88d574346"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_63a7acf7429240b8",
+          "score": 2.2155850769095884,
+          "best_kpid": "kpid_1d6adf03473c4b5d"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_286da9de105e4455",
+          "score": 2.083451546609278,
+          "best_kpid": "kpid_918146ce61d248f0"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "复用 main_106 reviewed 条目，保留结构化检索价值样本。"
+    },
+    {
+      "id": "mixed_daily_v1_complex_009",
+      "query": "中山大学2025年博士报名的完整流程包括哪些关键步骤？",
+      "query_type": "standard",
+      "scenario_family": "direct_answer_complex",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_2ec33053026040f8",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 8431,
+      "weak_match_count": 0,
+      "match_count": 36,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_2ec33053026040f8",
+          "score": 3.426883129601558,
+          "best_kpid": "kpid_819618d4980b4e36"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_d2c7f1cd37464fbf",
+          "score": 3.0355789813583907,
+          "best_kpid": "kpid_0b52c6fc9eef4ca1"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_6374df77359049f8",
+          "score": 2.8557998176132893,
+          "best_kpid": "kpid_12c77f6adce74184"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_8ee6bdcf13e741b8",
+          "score": 2.240776696207015,
+          "best_kpid": "kpid_54070a445ec148f4"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_f801613b0ec64544",
+          "score": 2.232159293976147,
+          "best_kpid": "kpid_23b7f5cc6ce847ad"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "复用 main_106 reviewed 条目，保留结构化检索价值样本。"
+    },
+    {
+      "id": "mixed_daily_v1_complex_010",
+      "query": "中山大学2025年博士网上报名的缴费金额和缴费截止日期是什么？",
+      "query_type": "standard",
+      "scenario_family": "direct_answer_complex",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_2ec33053026040f8",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 16212,
+      "weak_match_count": 0,
+      "match_count": 45,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_2ec33053026040f8",
+          "score": 4.531941529297618,
+          "best_kpid": "kpid_295c0a5b212c40bf"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_63a7acf7429240b8",
+          "score": 3.3637459874259092,
+          "best_kpid": "kpid_5c8531bbaf1e47b7"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_db7dfa0d6dde403a",
+          "score": 2.4828426894311346,
+          "best_kpid": "kpid_5b34133921e749e1"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_6258d4af76df4ee7",
+          "score": 2.3828514146699433,
+          "best_kpid": "kpid_c1f3c7c693c24b80"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_f331d70dd0f24b85",
+          "score": 1.688808371576842
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "复用 main_106 reviewed 条目，保留结构化检索价值样本。"
+    },
+    {
+      "id": "mixed_daily_v1_complex_011",
+      "query": "中山大学软件工程学院2025年博士改报志愿的申请和后续流程包括哪些步骤？",
+      "query_type": "standard",
+      "scenario_family": "direct_answer_complex",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_b8a98fa84f504d63",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 8431,
+      "weak_match_count": 0,
+      "match_count": 39,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_b8a98fa84f504d63",
+          "score": 10.819510172214496,
+          "best_kpid": "kpid_e0237a2573994c66"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_d2c7f1cd37464fbf",
+          "score": 10.623777758836757,
+          "best_kpid": "kpid_621f8e0dcf504674"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_32f33b04286b4f12",
+          "score": 7.79843119186637,
+          "best_kpid": "kpid_c7e29bb1da224a36"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_15996476fc324e33",
+          "score": 7.617921366079897,
+          "best_kpid": "kpid_9451b20d077f4828"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_5fff34b0edf94bfc",
+          "score": 2.2988007193625255,
+          "best_kpid": "kpid_8bf854c2542846f5"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "复用 main_106 reviewed 条目，保留结构化检索价值样本。"
+    },
+    {
+      "id": "mixed_daily_v1_complex_012",
+      "query": "中山大学软件工程学院2026年博士招生的报考条件和流程是什么？",
+      "query_type": "standard",
+      "scenario_family": "direct_answer_complex",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_cefdbe9b7cf34bdb",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 16212,
+      "weak_match_count": 0,
+      "match_count": 23,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_cefdbe9b7cf34bdb",
+          "score": 4.240826038476789,
+          "best_kpid": "kpid_681b9b6b66df47a4"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_ae46d4b5d6e74990",
+          "score": 2.7135401412808604,
+          "best_kpid": "kpid_53230507f99c472c"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_80529bdd365b4138",
+          "score": 2.711870507157467,
+          "best_kpid": "kpid_e39f8fb8fb2c4c57"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_f86cd11add664a2c",
+          "score": 2.6397816598627895,
+          "best_kpid": "kpid_0bedefffacf94361"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_8f77ee9e86c84c7d",
+          "score": 2.46585809565601,
+          "best_kpid": "kpid_114d6b0a809a4fff"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "复用 main_106 reviewed 条目，保留结构化检索价值样本。"
+    },
+    {
+      "id": "mixed_daily_v1_complex_013",
+      "query": "申请2024年度中山大学研究生港澳及华侨学生奖学金需要满足哪些条件，以及完整的申请流程是什么？",
+      "query_type": "standard",
+      "scenario_family": "direct_answer_complex",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_656f7a8ec44e4fac",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 6959,
+      "weak_match_count": 0,
+      "match_count": 22,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_656f7a8ec44e4fac",
+          "score": 4.565459639147958,
+          "best_kpid": "kpid_e6d4f092c7644704"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_37336f77399c4952",
+          "score": 3.1668969069310986,
+          "best_kpid": "kpid_e182e219d0644ded"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_d01c6336e7d84d11",
+          "score": 2.8039436151283725,
+          "best_kpid": "kpid_7c967fa9151e48fd"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_aaf61717840641ab",
+          "score": 2.5684714952519148,
+          "best_kpid": "kpid_40e0a484f0f44acf"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_1a4309ab66454772",
+          "score": 2.5527834559111313,
+          "best_kpid": "kpid_d40106953ec44d33"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "复用 main_106 reviewed 条目，保留结构化检索价值样本。"
+    },
+    {
+      "id": "mixed_daily_v1_complex_014",
+      "query": "2025学年研究生国家奖学金和宝钢优秀学生奖学金（内地）的评选范围是什么？",
+      "query_type": "standard",
+      "scenario_family": "direct_answer_complex",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_098373b8b06e48fe",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 6959,
+      "weak_match_count": 0,
+      "match_count": 10,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_098373b8b06e48fe",
+          "score": 5.842014164321265,
+          "best_kpid": "kpid_c01a4b0f2e33407c"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_365734142dd04954",
+          "score": 3.181095530482972,
+          "best_kpid": "kpid_443a81e8a2bd4c11"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_f801613b0ec64544",
+          "score": 1.3700306907572546,
+          "best_kpid": "kpid_741495c0c351471b"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_4ea8ed299783438b",
+          "score": 1.0687854516630142,
+          "best_kpid": "kpid_04729f3110dc4590"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_d0d8258f19744c72",
+          "score": 1.0221258323248468,
+          "best_kpid": "kpid_183d36614a6a4128"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "复用 main_106 reviewed 条目，保留结构化检索价值样本。"
+    },
+    {
+      "id": "mixed_daily_v1_complex_015",
+      "query": "2024年11月研究生奖助金的发放资格和条件是什么？",
+      "query_type": "standard",
+      "scenario_family": "direct_answer_complex",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_eb35af21c08c4706",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 6959,
+      "weak_match_count": 0,
+      "match_count": 22,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_eb35af21c08c4706",
+          "score": 5.422335838721198,
+          "best_kpid": "kpid_c3944b1fe93f4cf8"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_0cf1cfb3d7bc4735",
+          "score": 3.6724491926123846,
+          "best_kpid": "kpid_4c5e00d4eb284d99"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_b559ca9597eb4750",
+          "score": 3.6221029142652577,
+          "best_kpid": "kpid_8ae6f8354dfe4d40"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_b5b5d513960a454f",
+          "score": 2.596096315440048,
+          "best_kpid": "kpid_179523770a79427f"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_1a4309ab66454772",
+          "score": 1.809098784510613,
+          "best_kpid": "kpid_d40106953ec44d33"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "复用 main_106 reviewed 条目，保留结构化检索价值样本。"
+    },
+    {
+      "id": "mixed_daily_v1_complex_016",
+      "query": "根据通知，2024年11月研究生奖助金发放的整体流程和关键时间点是什么？",
+      "query_type": "standard",
+      "scenario_family": "direct_answer_complex",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_eb35af21c08c4706",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 6959,
+      "weak_match_count": 0,
+      "match_count": 22,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_eb35af21c08c4706",
+          "score": 5.20872587099874,
+          "best_kpid": "kpid_4875c82a886e4559"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_0cf1cfb3d7bc4735",
+          "score": 3.4038718187071253,
+          "best_kpid": "kpid_cea5cd08151146ae"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_b559ca9597eb4750",
+          "score": 3.2739676932145807,
+          "best_kpid": "kpid_8ae6f8354dfe4d40"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_b5b5d513960a454f",
+          "score": 1.870699375691962,
+          "best_kpid": "kpid_c4c119d1c74b4f16"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_1a4309ab66454772",
+          "score": 1.5309661081136714,
+          "best_kpid": "kpid_ea211f4880094631"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "复用 main_106 reviewed 条目，保留结构化检索价值样本。"
+    },
+    {
+      "id": "mixed_daily_v1_complex_017",
+      "query": "中山大学2025年接收推荐免试研究生的申请和录取完整流程是什么？",
+      "query_type": "standard",
+      "scenario_family": "direct_answer_complex",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_f672cc42a5a04134",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 8431,
+      "weak_match_count": 0,
+      "match_count": 35,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_f672cc42a5a04134",
+          "score": 4.785139918372248,
+          "best_kpid": "kpid_471f45d33aa14431"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_f801613b0ec64544",
+          "score": 2.032414035736953,
+          "best_kpid": "kpid_741495c0c351471b"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_8ee6bdcf13e741b8",
+          "score": 1.9540239930425252,
+          "best_kpid": "kpid_1392559a2521409b"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_6374df77359049f8",
+          "score": 1.6701250389639462,
+          "best_kpid": "kpid_965cff5f6da34962"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_b4064f9d765b45d0",
+          "score": 1.648720363313923,
+          "best_kpid": "kpid_2776fc5e69284675"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "复用 main_106 reviewed 条目，保留结构化检索价值样本。"
+    },
+    {
+      "id": "mixed_daily_v1_complex_018",
+      "query": "申请2025年海外优青项目，需要满足哪些基本条件并通过什么系统提交申请？",
+      "query_type": "standard",
+      "scenario_family": "direct_answer_complex",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_fec2d17303a94eb3",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 6959,
+      "weak_match_count": 0,
+      "match_count": 16,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_fec2d17303a94eb3",
+          "score": 6.77544007238649,
+          "best_kpid": "kpid_4087ad035c4c482d"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_2c2fffdc61b0465f",
+          "score": 2.19764394513913,
+          "best_kpid": "kpid_6b33de0cdf064f91"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_f331d70dd0f24b85",
+          "score": 1.880396751287663,
+          "best_kpid": "kpid_e70c49362df947be"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_098373b8b06e48fe",
+          "score": 1.2565608659263905,
+          "best_kpid": "kpid_c01a4b0f2e33407c"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_365734142dd04954",
+          "score": 1.1107874237671078,
+          "best_kpid": "kpid_d14ae1e116de46ce"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "复用 main_106 reviewed 条目，保留结构化检索价值样本。"
+    },
+    {
+      "id": "mixed_daily_v1_complex_019",
+      "query": "中山大学2026年退役大学生士兵计划的报考资格和报名所需材料有哪些？",
+      "query_type": "standard",
+      "scenario_family": "direct_answer_complex",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_097b17ffece641a7",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 8431,
+      "weak_match_count": 0,
+      "match_count": 20,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_097b17ffece641a7",
+          "score": 6.016878914214307,
+          "best_kpid": "kpid_2ef4667810ab477c"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_dc54d3033b3c4944",
+          "score": 1.244069030751052,
+          "best_kpid": "kpid_45243b6a883441ea"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_226927e5287c498a",
+          "score": 1.0958237087442386,
+          "best_kpid": "kpid_77269e3f3fba4151"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_f86cd11add664a2c",
+          "score": 1.0767739074403453,
+          "best_kpid": "kpid_e09bfaaa96134dd7"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_139b9801959d4db4",
+          "score": 1.0424519555711673,
+          "best_kpid": "kpid_9d869d0722c14c11"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "复用 main_106 reviewed 条目，保留结构化检索价值样本。"
+    },
+    {
+      "id": "mixed_daily_v1_complex_020",
+      "query": "软件工程学院2025年青年教师专职辅导员的选聘条件和程序是什么？",
+      "query_type": "standard",
+      "scenario_family": "direct_answer_complex",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_33a5558a3b214bde",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 16212,
+      "weak_match_count": 0,
+      "match_count": 35,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_33a5558a3b214bde",
+          "score": 4.15183381195929,
+          "best_kpid": "kpid_8f0181f04e9d41a0"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_db7dfa0d6dde403a",
+          "score": 1.8820496832798035,
+          "best_kpid": "kpid_b2e0c126d4194c9f"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_9a72545adb084d1d",
+          "score": 1.5286795610576212,
+          "best_kpid": "kpid_99e5eae945664d3a"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_2c2fffdc61b0465f",
+          "score": 1.017131440654323,
+          "best_kpid": "kpid_6b33de0cdf064f91"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_f21f7393864a4440",
+          "score": 0.9993792428679397,
+          "best_kpid": "kpid_5c79743bf3f848de"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "复用 main_106 reviewed 条目，保留结构化检索价值样本。"
+    },
+    {
+      "id": "mixed_daily_v1_route_001",
+      "query": "我考上了中山大学的研究生，我应该怎么办？",
+      "query_type": "situational",
+      "scenario_family": "route_or_clarify",
+      "expected_behavior": "route_to_entry",
+      "predicted_behavior": "route_to_entry",
+      "retrieval_behavior": "route_to_entry",
+      "behavior_correct": true,
+      "success": true,
+      "rejection_reason": "weak_anchor_needs_clarification",
+      "expected_entry_topic": "新生录取后手续总入口",
+      "predicted_entry_topic": "新生录取后手续总入口",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "unsafe_direct_answer": false,
+      "candidate_count": 16212,
+      "weak_match_count": 5,
+      "match_count": 0,
+      "fetched_document_count": 0,
+      "top_matches": [],
+      "top_weak_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_7479616835454c16",
+          "score": 1.0352518906254708
+        },
+        {
+          "rank": 2,
+          "otid": "otid_f1b9c5657c3c4c90",
+          "score": 0.8827628089816493,
+          "best_kpid": "kpid_9e755812cd2f4b05"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_faeac0ecd9304bd1",
+          "score": 0.8795300368427992
+        },
+        {
+          "rank": 4,
+          "otid": "otid_139b9801959d4db4",
+          "score": 0.842937549600551
+        },
+        {
+          "rank": 5,
+          "otid": "otid_3af3553b72dd476d",
+          "score": 0.8197108692790411
+        }
+      ],
+      "top_results": [],
+      "notes": "问题没有限定到录取通知书、报到、宿舍或党团关系，正确行为应是导向总入口。"
+    },
+    {
+      "id": "mixed_daily_v1_route_002",
+      "query": "我被拟录取了，接下来需要做什么？",
+      "query_type": "situational",
+      "scenario_family": "route_or_clarify",
+      "expected_behavior": "clarify",
+      "predicted_behavior": "clarify",
+      "retrieval_behavior": "clarify",
+      "behavior_correct": true,
+      "success": true,
+      "rejection_reason": "weak_anchor_needs_clarification",
+      "expected_entry_topic": "拟录取后具体事项待澄清",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "unsafe_direct_answer": false,
+      "candidate_count": 16212,
+      "weak_match_count": 5,
+      "match_count": 0,
+      "fetched_document_count": 0,
+      "top_matches": [],
+      "top_weak_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_fa0f61539ae34c82",
+          "score": 1.5531285246291737,
+          "best_kpid": "kpid_0f14b0808d154e57"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_915aba738ea449e4",
+          "score": 1.4394904918643867,
+          "best_kpid": "kpid_902d63c5c3404638"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_c7af54f9342e4a1c",
+          "score": 1.2758254229094113
+        },
+        {
+          "rank": 4,
+          "otid": "otid_1ae107c08e73431e",
+          "score": 1.2070445036215225,
+          "best_kpid": "kpid_689c919059a941db"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_ae46d4b5d6e74990",
+          "score": 1.1024213250919566,
+          "best_kpid": "kpid_b15e9733f1f54d4c"
+        }
+      ],
+      "top_results": [],
+      "notes": "应先追问用户想了解通知书、调档、政审还是报到，不宜直接给单一文档。"
+    },
+    {
+      "id": "mixed_daily_v1_route_003",
+      "query": "审核通过以后我还要做什么？",
+      "query_type": "situational",
+      "scenario_family": "route_or_clarify",
+      "expected_behavior": "clarify",
+      "predicted_behavior": "clarify",
+      "retrieval_behavior": "clarify",
+      "behavior_correct": true,
+      "success": true,
+      "rejection_reason": "weak_anchor_needs_clarification",
+      "expected_entry_topic": "审核通过后具体环节待澄清",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "unsafe_direct_answer": false,
+      "candidate_count": 16212,
+      "weak_match_count": 5,
+      "match_count": 0,
+      "fetched_document_count": 0,
+      "top_matches": [],
+      "top_weak_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_18390f7cb6784527",
+          "score": 2.234422629266636,
+          "best_kpid": "kpid_f90b524229144776"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_b9b1fa013e3d48e9",
+          "score": 2.1787472798422534,
+          "best_kpid": "kpid_f95f56f490c14eaf"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_2d77227bd2fa473c",
+          "score": 1.757367314663752,
+          "best_kpid": "kpid_8d7ec8f821ae4834"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_aa024784667d4f5a",
+          "score": 1.7489648459067362,
+          "best_kpid": "kpid_13aa965b4422479e"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_f47cc83680a34adf",
+          "score": 1.7180504930770852,
+          "best_kpid": "kpid_7bc7328ca85844b3"
+        }
+      ],
+      "top_results": [],
+      "notes": "审核通过可能对应网上确认、资格审核或材料审核，缺乏主题锚点。"
+    },
+    {
+      "id": "mixed_daily_v1_route_004",
+      "query": "我已经提交完材料了，下一步是什么？",
+      "query_type": "situational",
+      "scenario_family": "route_or_clarify",
+      "expected_behavior": "clarify",
+      "predicted_behavior": "clarify",
+      "retrieval_behavior": "clarify",
+      "behavior_correct": true,
+      "success": true,
+      "rejection_reason": "weak_anchor_needs_clarification",
+      "expected_entry_topic": "材料提交后具体事项待澄清",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "unsafe_direct_answer": false,
+      "candidate_count": 16212,
+      "weak_match_count": 5,
+      "match_count": 0,
+      "fetched_document_count": 0,
+      "top_matches": [],
+      "top_weak_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_6f4f7c3232be46da",
+          "score": 3.1740950650531516,
+          "best_kpid": "kpid_3f699bf402314e94"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_a5579c22ef594eed",
+          "score": 2.7644038390926324
+        },
+        {
+          "rank": 3,
+          "otid": "otid_189bc24102e2423a",
+          "score": 2.7512867517937454,
+          "best_kpid": "kpid_65b020d70e354e1c"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_ffd4fbd63cc34a41",
+          "score": 2.6981082922815083,
+          "best_kpid": "kpid_caedc9b58db449b5"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_fd6621f974774e1c",
+          "score": 2.636864450210755
+        }
+      ],
+      "top_results": [],
+      "notes": "材料提交在多个主题里都存在，系统若硬答很容易漂到错误流程。"
+    },
+    {
+      "id": "mixed_daily_v1_route_005",
+      "query": "我现在算是录取了，后面该怎么处理？",
+      "query_type": "situational",
+      "scenario_family": "route_or_clarify",
+      "expected_behavior": "route_to_entry",
+      "predicted_behavior": "route_to_entry",
+      "retrieval_behavior": "route_to_entry",
+      "behavior_correct": true,
+      "success": true,
+      "rejection_reason": "weak_anchor_needs_clarification",
+      "expected_entry_topic": "新生录取后手续总入口",
+      "predicted_entry_topic": "新生录取后手续总入口",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "unsafe_direct_answer": false,
+      "candidate_count": 16212,
+      "weak_match_count": 5,
+      "match_count": 0,
+      "fetched_document_count": 0,
+      "top_matches": [],
+      "top_weak_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_1ae107c08e73431e",
+          "score": 2.1921950214926964,
+          "best_kpid": "kpid_4b8458c31ef04d55"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_4eb5b7417ee3470a",
+          "score": 1.7652401802398388,
+          "best_kpid": "kpid_1a8767bfb99c4966"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_c4214c3cb4464737",
+          "score": 1.5273337093256731
+        },
+        {
+          "rank": 4,
+          "otid": "otid_d2e81434d6754411",
+          "score": 1.445303906619678,
+          "best_kpid": "kpid_049caafd930e4c75"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_b4064f9d765b45d0",
+          "score": 1.3083253449245755,
+          "best_kpid": "kpid_ffa0699df315411a"
+        }
+      ],
+      "top_results": [],
+      "notes": "与 route_001 类似，适合作为总入口路由样本。"
+    },
+    {
+      "id": "mixed_daily_v1_route_006",
+      "query": "我成了新生以后要办哪些事？",
+      "query_type": "situational",
+      "scenario_family": "route_or_clarify",
+      "expected_behavior": "route_to_entry",
+      "predicted_behavior": "route_to_entry",
+      "retrieval_behavior": "route_to_entry",
+      "behavior_correct": true,
+      "success": true,
+      "rejection_reason": "weak_anchor_needs_clarification",
+      "expected_entry_topic": "新生入学总入口",
+      "predicted_entry_topic": "新生入学总入口",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "unsafe_direct_answer": false,
+      "candidate_count": 16212,
+      "weak_match_count": 5,
+      "match_count": 0,
+      "fetched_document_count": 0,
+      "top_matches": [],
+      "top_weak_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_f21f7393864a4440",
+          "score": 2.190808343290426,
+          "best_kpid": "kpid_a2e78a9700594ae9"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_a197d7d56a914cf0",
+          "score": 1.1133598481578026
+        },
+        {
+          "rank": 3,
+          "otid": "otid_94fa33f7d6e34c81",
+          "score": 0.9991860239431716,
+          "best_kpid": "kpid_40e36326980a46fd"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_098373b8b06e48fe",
+          "score": 0.782509073456315,
+          "best_kpid": "kpid_5a34423b7ad54e4f"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_da09cc50e7bc46df",
+          "score": 0.6387626261132819,
+          "best_kpid": "kpid_2730481041cf460a"
+        }
+      ],
+      "top_results": [],
+      "notes": "虽然主题比“考上了怎么办”稍强，但仍属于总入口型问题。"
+    },
+    {
+      "id": "mixed_daily_v1_route_007",
+      "query": "我后面还需要再操作什么吗？",
+      "query_type": "situational",
+      "scenario_family": "route_or_clarify",
+      "expected_behavior": "reject",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "success": true,
+      "rejection_reason": "low_consistency",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "unsafe_direct_answer": false,
+      "candidate_count": 16212,
+      "weak_match_count": 0,
+      "match_count": 0,
+      "fetched_document_count": 0,
+      "top_matches": [],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "既没有主题，也没有状态信息，系统应明确拒答而不是尝试猜测。"
+    },
+    {
+      "id": "mixed_daily_v1_route_008",
+      "query": "食堂今天有什么菜？",
+      "query_type": "situational",
+      "scenario_family": "route_or_clarify",
+      "expected_behavior": "reject",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "success": true,
+      "rejection_reason": "low_topic_coverage",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "unsafe_direct_answer": false,
+      "candidate_count": 2585,
+      "weak_match_count": 5,
+      "match_count": 0,
+      "fetched_document_count": 0,
+      "top_matches": [],
+      "top_weak_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_6fbeeb14836743b5",
+          "score": 1.417331489616794
+        },
+        {
+          "rank": 2,
+          "otid": "otid_f97bb7b9f0ed48bd",
+          "score": 1.3273578291809547,
+          "best_kpid": "kpid_d928affdd9a64202"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_7476223384934f21",
+          "score": 1.2091569207063746,
+          "best_kpid": "kpid_b81bb8b019ed4f74"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_f78e09d69194437d",
+          "score": 1.1763209189226038
+        },
+        {
+          "rank": 5,
+          "otid": "otid_689fe94db6424593",
+          "score": 1.13596730631121
+        }
+      ],
+      "top_results": [],
+      "notes": "v1.1 新增：校园生活查询，明确不在当前研究生政策知识库覆盖范围内，系统应拒答而不是误命中政策通知。"
+    },
+    {
+      "id": "mixed_daily_v1_route_009",
+      "query": "图书馆还有座位吗？",
+      "query_type": "situational",
+      "scenario_family": "route_or_clarify",
+      "expected_behavior": "reject",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "success": true,
+      "rejection_reason": "low_topic_coverage",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "unsafe_direct_answer": false,
+      "candidate_count": 2509,
+      "weak_match_count": 5,
+      "match_count": 0,
+      "fetched_document_count": 0,
+      "top_matches": [],
+      "top_weak_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_a03c3337485448e0",
+          "score": 1.3609954192761602,
+          "best_kpid": "kpid_760ec6c675e641f4"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_14ff3c5f13ac4c49",
+          "score": 1.344008070353893,
+          "best_kpid": "kpid_19684236d4544077"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_c243887db39d4c98",
+          "score": 1.1971230378653688
+        },
+        {
+          "rank": 4,
+          "otid": "otid_484d051467384d83",
+          "score": 1.109167104177291,
+          "best_kpid": "kpid_bbbfaa2033344d4e"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_e0c52921de884ef1",
+          "score": 1.0536878415254995,
+          "best_kpid": "kpid_1fd6f01b26fd4261"
+        }
+      ],
+      "top_results": [],
+      "notes": "v1.1 新增：校园服务查询，明确不在当前研究生政策知识库覆盖范围内，系统应拒答而不是误命中无关政策通知。"
+    },
+    {
+      "id": "mixed_daily_v1_route_010",
+      "query": "我已经是新生了，正式入学前还要准备什么？",
+      "query_type": "situational",
+      "scenario_family": "route_or_clarify",
+      "expected_behavior": "route_to_entry",
+      "predicted_behavior": "route_to_entry",
+      "retrieval_behavior": "route_to_entry",
+      "behavior_correct": true,
+      "success": true,
+      "rejection_reason": "weak_anchor_needs_clarification",
+      "expected_entry_topic": "新生入学总入口",
+      "predicted_entry_topic": "新生入学总入口",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "unsafe_direct_answer": false,
+      "candidate_count": 16212,
+      "weak_match_count": 5,
+      "match_count": 0,
+      "fetched_document_count": 0,
+      "top_matches": [],
+      "top_weak_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_f21f7393864a4440",
+          "score": 1.7559011058428522,
+          "best_kpid": "kpid_e25032e9c5874390"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_1ae107c08e73431e",
+          "score": 1.0842131446856698,
+          "best_kpid": "kpid_4b8458c31ef04d55"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_b4064f9d765b45d0",
+          "score": 0.9129081259851728,
+          "best_kpid": "kpid_ffa0699df315411a"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_a197d7d56a914cf0",
+          "score": 0.7671263765649158,
+          "best_kpid": "kpid_ddfdeeb046444894"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_097b17ffece641a7",
+          "score": 0.6965494577929655,
+          "best_kpid": "kpid_2ef4667810ab477c"
+        }
+      ],
+      "top_results": [],
+      "notes": "主题偏向新生入学，但仍是总入口级提问，不应直接落到单一细节文档。"
+    },
+    {
+      "id": "mixed_daily_v1_route_011",
+      "query": "资格审核通过后我下一步该做什么？",
+      "query_type": "situational",
+      "scenario_family": "route_or_clarify",
+      "expected_behavior": "clarify",
+      "predicted_behavior": "clarify",
+      "retrieval_behavior": "clarify",
+      "behavior_correct": true,
+      "success": true,
+      "rejection_reason": "weak_anchor_needs_clarification",
+      "expected_entry_topic": "资格审核通过后具体事项待澄清",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "unsafe_direct_answer": false,
+      "candidate_count": 16212,
+      "weak_match_count": 5,
+      "match_count": 0,
+      "fetched_document_count": 0,
+      "top_matches": [],
+      "top_weak_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_ffd4fbd63cc34a41",
+          "score": 2.7148598502135193,
+          "best_kpid": "kpid_594b5d648f8a42b1"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_9c556b8654da4f98",
+          "score": 2.6494575367354987
+        },
+        {
+          "rank": 3,
+          "otid": "otid_79fde873cbd54280",
+          "score": 2.5765442589175955,
+          "best_kpid": "kpid_991fde5d2940422d"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_92ea2243bff94304",
+          "score": 2.5428059720352625,
+          "best_kpid": "kpid_135286563d9b4e1a"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_0f6e5f14259148ad",
+          "score": 2.141363866587376,
+          "best_kpid": "kpid_965b17333db74aff"
+        }
+      ],
+      "top_results": [],
+      "notes": "“资格审核”在校内语料里可能对应多种场景，仍应先追问具体事项。"
+    },
+    {
+      "id": "mixed_daily_v1_route_012",
+      "query": "材料补交完之后还要做什么？",
+      "query_type": "situational",
+      "scenario_family": "route_or_clarify",
+      "expected_behavior": "clarify",
+      "predicted_behavior": "clarify",
+      "retrieval_behavior": "clarify",
+      "behavior_correct": true,
+      "success": true,
+      "rejection_reason": "weak_anchor_needs_clarification",
+      "expected_entry_topic": "补交材料后具体事项待澄清",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "unsafe_direct_answer": false,
+      "candidate_count": 16212,
+      "weak_match_count": 5,
+      "match_count": 0,
+      "fetched_document_count": 0,
+      "top_matches": [],
+      "top_weak_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_5b36fce72ab84f14",
+          "score": 2.0373537580024146,
+          "best_kpid": "kpid_93e6159b056c4cdb"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_0df22eb440cd4892",
+          "score": 1.9291261392020114,
+          "best_kpid": "kpid_c323009358ba4df8"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_f78e09d69194437d",
+          "score": 1.9078581846836964,
+          "best_kpid": "kpid_4a65a2f1f2694e30"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_c2124ed761454f3f",
+          "score": 1.854584924089687,
+          "best_kpid": "kpid_fb2fdfa1cbe34d1c"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_e12192a9d6e942cf",
+          "score": 1.765583137238113,
+          "best_kpid": "kpid_33509948d46e4c54"
+        }
+      ],
+      "top_results": [],
+      "notes": "补交材料是结果态，但没说明是哪一个主题流程，容易误漂。"
+    },
+    {
+      "id": "mixed_daily_v1_route_013",
+      "query": "我的申请已经获批了，接下来怎么处理？",
+      "query_type": "situational",
+      "scenario_family": "route_or_clarify",
+      "expected_behavior": "clarify",
+      "predicted_behavior": "clarify",
+      "retrieval_behavior": "clarify",
+      "behavior_correct": true,
+      "success": true,
+      "rejection_reason": "weak_anchor_needs_clarification",
+      "expected_entry_topic": "获批后具体事项待澄清",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "unsafe_direct_answer": false,
+      "candidate_count": 16212,
+      "weak_match_count": 5,
+      "match_count": 0,
+      "fetched_document_count": 0,
+      "top_matches": [],
+      "top_weak_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_ae96b4bddb694238",
+          "score": 2.2571964928884594
+        },
+        {
+          "rank": 2,
+          "otid": "otid_da09cc50e7bc46df",
+          "score": 2.0806942733353906,
+          "best_kpid": "kpid_7b26a3fa937c41e4"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_58f55e16a4794114",
+          "score": 1.926632722372765
+        },
+        {
+          "rank": 4,
+          "otid": "otid_98669718896245fc",
+          "score": 1.795698121139699
+        },
+        {
+          "rank": 5,
+          "otid": "otid_afd67d4b1e9e427e",
+          "score": 1.703419974606759,
+          "best_kpid": "kpid_4382d7e403594030"
+        }
+      ],
+      "top_results": [],
+      "notes": "“获批”是强结果态，但缺少主题锚点，适合纳入 clarify 类。"
+    },
+    {
+      "id": "mixed_daily_v1_route_014",
+      "query": "我没过审，补完材料后下一步是什么？",
+      "query_type": "situational",
+      "scenario_family": "route_or_clarify",
+      "expected_behavior": "clarify",
+      "predicted_behavior": "clarify",
+      "retrieval_behavior": "clarify",
+      "behavior_correct": true,
+      "success": true,
+      "rejection_reason": "weak_anchor_needs_clarification",
+      "expected_entry_topic": "未过审补材料后具体事项待澄清",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "unsafe_direct_answer": false,
+      "candidate_count": 16212,
+      "weak_match_count": 5,
+      "match_count": 0,
+      "fetched_document_count": 0,
+      "top_matches": [],
+      "top_weak_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_189bc24102e2423a",
+          "score": 2.8000161170199407,
+          "best_kpid": "kpid_65b020d70e354e1c"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_fd6621f974774e1c",
+          "score": 2.6641840325304043
+        },
+        {
+          "rank": 3,
+          "otid": "otid_ffd4fbd63cc34a41",
+          "score": 2.441831784527388,
+          "best_kpid": "kpid_501037a02ec74c04"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_a5579c22ef594eed",
+          "score": 2.4070984961147315,
+          "best_kpid": "kpid_a74cdbe8ca13420f"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_9c556b8654da4f98",
+          "score": 2.3167820817465383
+        }
+      ],
+      "top_results": [],
+      "notes": "含有口语化“没过审”和补材料动作，适合测试失败后流程的空提问处理。"
+    },
+    {
+      "id": "mixed_daily_v1_route_015",
+      "query": "接下来怎么搞？",
+      "query_type": "situational",
+      "scenario_family": "route_or_clarify",
+      "expected_behavior": "reject",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "success": true,
+      "rejection_reason": "low_consistency",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "unsafe_direct_answer": false,
+      "candidate_count": 16212,
+      "weak_match_count": 0,
+      "match_count": 0,
+      "fetched_document_count": 0,
+      "top_matches": [],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "比“下一步应该怎么弄”更口语化，适合测试极端空提问拒识。"
+    },
+    {
+      "id": "mixed_daily_v1_latest_001",
+      "query": "中山大学报考点网上确认材料不通过后还能补交吗？",
+      "query_type": "situational",
+      "scenario_family": "latest_within_topic",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_8f77ee9e86c84c7d",
+      "expected_latest_otid": "otid_8f77ee9e86c84c7d",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 8431,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_8f77ee9e86c84c7d",
+          "score": 4.688310854772136,
+          "best_kpid": "kpid_b186797bd66a4e5a"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_18390f7cb6784527",
+          "score": 3.976587053646362,
+          "best_kpid": "kpid_56ae9f921d12472c"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_b9b1fa013e3d48e9",
+          "score": 3.3477980513037804,
+          "best_kpid": "kpid_f95f56f490c14eaf"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_aa024784667d4f5a",
+          "score": 2.9214981676997374,
+          "best_kpid": "kpid_d2f0225255b5400e"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_c15c87e71b5b49b0",
+          "score": 2.364477194547753,
+          "best_kpid": "kpid_1616dfb973154a9f"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "v1.1 修订：按 2026-03-28 当前库状态重对齐，该主题最新可直接回答文档为《2026年全国硕士研究生招生考试中山大学报考点（代码4413）网上确认公告》（2025-10-24），覆盖审核不通过后的补交与时限。"
+    },
+    {
+      "id": "mixed_daily_v1_latest_002",
+      "query": "中山大学博士报名现在完整流程是什么？",
+      "query_type": "standard",
+      "scenario_family": "latest_within_topic",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_40565beb38cf45c5",
+      "expected_latest_otid": "otid_40565beb38cf45c5",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 8431,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_40565beb38cf45c5",
+          "score": 1.7413517835757386,
+          "best_kpid": "kpid_c79155e58e744426"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_dc54d3033b3c4944",
+          "score": 1.4506824790752755,
+          "best_kpid": "kpid_45243b6a883441ea"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_80529bdd365b4138",
+          "score": 1.1486137406210186,
+          "best_kpid": "kpid_519b1685f7e64a3e"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_2ec33053026040f8",
+          "score": 1.0574240879878827,
+          "best_kpid": "kpid_819618d4980b4e36"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_7479616835454c16",
+          "score": 0.8419747357671105,
+          "best_kpid": "kpid_daa4bb62894f432c"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "已回填：当前对应最新文档为《中山大学2026年博士研究生招生网上报名通知》（2025-10-20）。"
+    },
+    {
+      "id": "mixed_daily_v1_latest_003",
+      "query": "中山大学推免申请现在的完整流程是什么？",
+      "query_type": "standard",
+      "scenario_family": "latest_within_topic",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_d2e81434d6754411",
+      "expected_latest_otid": "otid_d2e81434d6754411",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 8431,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_d2e81434d6754411",
+          "score": 4.110040032362658,
+          "best_kpid": "kpid_232b196e24b24bc7"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_7479616835454c16",
+          "score": 3.5365348545585267,
+          "best_kpid": "kpid_1d9cd306819f489f"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_92abdd62658c4fd2",
+          "score": 2.902101326412758,
+          "best_kpid": "kpid_3752c810b2204fd2"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_f86cd11add664a2c",
+          "score": 1.504536058377825,
+          "best_kpid": "kpid_e09bfaaa96134dd7"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_faeac0ecd9304bd1",
+          "score": 0.6118280044090754,
+          "best_kpid": "kpid_3c828ccb3e2344c4"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "已回填：当前对应最新文档为《中山大学2026年接收推荐免试研究生办法》（2025-09-04）。"
+    },
+    {
+      "id": "mixed_daily_v1_latest_004",
+      "query": "港澳台考生现在报考中大研究生要满足哪些条件？",
+      "query_type": "standard",
+      "scenario_family": "latest_within_topic",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_ee3035722c4b481e",
+      "expected_latest_otid": "otid_ee3035722c4b481e",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 8431,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_ee3035722c4b481e",
+          "score": 1.532606357089757,
+          "best_kpid": "kpid_ad82dfda25984fe2"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_fa0f61539ae34c82",
+          "score": 1.4132602384970996,
+          "best_kpid": "kpid_5c059b89320a4b4e"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_8f77ee9e86c84c7d",
+          "score": 1.3898994035025602,
+          "best_kpid": "kpid_456a8ac09242455e"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_139b9801959d4db4",
+          "score": 1.373900986812199,
+          "best_kpid": "kpid_9d869d0722c14c11"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_7479616835454c16",
+          "score": 1.1874843365293903,
+          "best_kpid": "kpid_a5fd0bfb2e4f4955"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "已回填：当前库内未见 2025/2026 年度港澳台总简章；当前可稳定回答报考条件问题的最新总简章为《中山大学2024年面向香港、澳门、台湾地区招收博士、硕士研究生章程及招生学科专业目录》（2024-03-30）。"
+    },
+    {
+      "id": "mixed_daily_v1_latest_005",
+      "query": "研究生奖助金最近一次发放怎么安排？",
+      "query_type": "standard",
+      "scenario_family": "latest_within_topic",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_d0d8258f19744c72",
+      "expected_latest_otid": "otid_d0d8258f19744c72",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 6959,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_d0d8258f19744c72",
+          "score": 3.783513277800703,
+          "best_kpid": "kpid_dbf7f4d171c441a2"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_4ea8ed299783438b",
+          "score": 2.8945611845583716,
+          "best_kpid": "kpid_500c964ade584160"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_b559ca9597eb4750",
+          "score": 2.1627545098687415,
+          "best_kpid": "kpid_b131e0f3bda54d87"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_0cf1cfb3d7bc4735",
+          "score": 2.07550525332356,
+          "best_kpid": "kpid_00a810ddf4f84fdb"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_eb35af21c08c4706",
+          "score": 2.0445788080040552,
+          "best_kpid": "kpid_c3944b1fe93f4cf8"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "已回填：当前对应最新文档为《党委学生工作部 研究生院关于2025学年10月研究生奖助金发放安排的通知》（2025-10-22）。"
+    },
+    {
+      "id": "mixed_daily_v1_latest_006",
+      "query": "软件工程学院博士改报志愿现在怎么操作？",
+      "query_type": "standard",
+      "scenario_family": "latest_within_topic",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_d2c7f1cd37464fbf",
+      "expected_latest_otid": "otid_d2c7f1cd37464fbf",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 8431,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_d2c7f1cd37464fbf",
+          "score": 6.700709338140611,
+          "best_kpid": "kpid_0b52c6fc9eef4ca1"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_b8a98fa84f504d63",
+          "score": 6.264522338308474,
+          "best_kpid": "kpid_cdd676e2d8e542c1"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_32f33b04286b4f12",
+          "score": 4.160450432834129,
+          "best_kpid": "kpid_c7e29bb1da224a36"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_15996476fc324e33",
+          "score": 3.981868960343589,
+          "best_kpid": "kpid_9451b20d077f4828"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_cefdbe9b7cf34bdb",
+          "score": 3.7428480615632203,
+          "best_kpid": "kpid_681b9b6b66df47a4"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "已回填：当前对应最新文档为《中山大学软件工程学院2025年以“申请-考核”制招收博士研究生改报志愿公告（第二批）》（2025-05-09）。"
+    },
+    {
+      "id": "mixed_daily_v1_latest_007",
+      "query": "退役大学生士兵计划现在报考中大需要什么条件？",
+      "query_type": "standard",
+      "scenario_family": "latest_within_topic",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_097b17ffece641a7",
+      "expected_latest_otid": "otid_097b17ffece641a7",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 8431,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_097b17ffece641a7",
+          "score": 3.9876766510133437,
+          "best_kpid": "kpid_ad6c262585494d78"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_8b89d42037fa4682",
+          "score": 1.3339153229011924,
+          "best_kpid": "kpid_e2324031df8041fc"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_7f9f774322c14d15",
+          "score": 1.1399000486126434,
+          "best_kpid": "kpid_9c4c92d057a74d38"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_8f9030bdc1684758",
+          "score": 0.8759034021627228,
+          "best_kpid": "kpid_de4aa0e869804b15"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_7479616835454c16",
+          "score": 0.8071596326554928,
+          "best_kpid": "kpid_a5fd0bfb2e4f4955"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "已回填：当前对应最新文档为《中山大学2026年“退役大学生士兵”专项硕士研究生招生公告》（2025-10-11）。"
+    },
+    {
+      "id": "mixed_daily_v1_latest_008",
+      "query": "单独考试报考中大硕士现在要满足哪些条件、怎么报名？",
+      "query_type": "standard",
+      "scenario_family": "latest_within_topic",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_139b9801959d4db4",
+      "expected_latest_otid": "otid_139b9801959d4db4",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 8431,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_139b9801959d4db4",
+          "score": 2.6702411159427335,
+          "best_kpid": "kpid_9d869d0722c14c11"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_8ee6bdcf13e741b8",
+          "score": 2.169958796797716,
+          "best_kpid": "kpid_0b1c1e0a19034e85"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_63a7acf7429240b8",
+          "score": 2.0700527760611838,
+          "best_kpid": "kpid_1d6adf03473c4b5d"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_226927e5287c498a",
+          "score": 1.8668825925186017,
+          "best_kpid": "kpid_d4ee9a41d21e4847"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_fa0f61539ae34c82",
+          "score": 1.5720804984777097,
+          "best_kpid": "kpid_5c059b89320a4b4e"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "已回填：当前库内该主题最新可稳定回答来源为《2026年全国硕士研究生报名考试中山大学报考点（代码：4413）公告》（2025-10-09），覆盖报考点资格与报名流程；库内未见展开单独考试专门条件细目的更新正文。"
+    },
+    {
+      "id": "mixed_daily_v1_latest_009",
+      "query": "海外优青项目现在申请流程和支持条件是什么？",
+      "query_type": "standard",
+      "scenario_family": "latest_within_topic",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_fec2d17303a94eb3",
+      "expected_latest_otid": "otid_fec2d17303a94eb3",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 6959,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_fec2d17303a94eb3",
+          "score": 4.316864757631578,
+          "best_kpid": "kpid_4087ad035c4c482d"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_9e6802e8b5224ae6",
+          "score": 1.251885391024906,
+          "best_kpid": "kpid_572dafd0c4524d70"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_98f334aa60cb4f06",
+          "score": 1.2201260092611996,
+          "best_kpid": "kpid_26c3348a370244ef"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_f21f7393864a4440",
+          "score": 1.082945228312139,
+          "best_kpid": "kpid_dae721b894ac4888"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_1e4c2112a331417e",
+          "score": 0.6205324383241015,
+          "best_kpid": "kpid_7778acefd9ed41b6"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "已回填：当前对应最新文档为《2025年海外优青 | 欢迎依托中山大学软件工程学院申报》（2025-03-05）。"
+    },
+    {
+      "id": "mixed_daily_v1_latest_010",
+      "query": "中山大学强基计划现在有哪些学院和专业？",
+      "query_type": "standard",
+      "scenario_family": "latest_within_topic",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_a0d33efa85ef4fa4",
+      "expected_latest_otid": "otid_a0d33efa85ef4fa4",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 4197,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_a0d33efa85ef4fa4",
+          "score": 1.9101993567429718,
+          "best_kpid": "kpid_3c0e4b504bc244bb"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_4eb5b7417ee3470a",
+          "score": 1.440941558257025,
+          "best_kpid": "kpid_1fbd5428f9cc49e5"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_12975d38e3234e5a",
+          "score": 1.3204261993378648,
+          "best_kpid": "kpid_58bb29607d1c494f"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_9fc8c3cad7a4411e",
+          "score": 1.224824202122051,
+          "best_kpid": "kpid_39e046abc2ce4194"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_1637de59ecdf419c",
+          "score": 0.7944563490941872,
+          "best_kpid": "kpid_55d00234efc94ad1"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "已回填：当前对应最新文档为《中山大学2025年强基计划培养方案及院系联系方式》（2025-04-18）。"
+    },
+    {
+      "id": "mixed_daily_v1_2_route_016",
+      "query": "南校园食堂现在几点开门？",
+      "query_type": "situational",
+      "scenario_family": "route_or_clarify",
+      "expected_behavior": "reject",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "success": true,
+      "rejection_reason": "low_topic_coverage",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "unsafe_direct_answer": false,
+      "candidate_count": 2585,
+      "weak_match_count": 5,
+      "match_count": 0,
+      "fetched_document_count": 0,
+      "top_matches": [],
+      "top_weak_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_f21f7393864a4440",
+          "score": 1.5981181453635824,
+          "best_kpid": "kpid_e4d28032862c4f50"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_5ff73caf3b104c08",
+          "score": 0.2908108099490437,
+          "best_kpid": "kpid_6536bf00fd944619"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_e0c52921de884ef1",
+          "score": 0.22604966958698577,
+          "best_kpid": "kpid_d09f33db00c3427b"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_cb15bb6977d54dca",
+          "score": 0.21014373871735503,
+          "best_kpid": "kpid_d5b57a1bb0614515"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_d9a92add41454352",
+          "score": 0.09436695561520735,
+          "best_kpid": "kpid_0059fff73b91480a"
+        }
+      ],
+      "top_results": [],
+      "notes": "v1.2 新增：食堂营业时间查询，语义具体但不在当前研究生政策知识库覆盖范围内，应拒答。"
+    },
+    {
+      "id": "mixed_daily_v1_2_route_017",
+      "query": "哪个饭堂现在还有夜宵？",
+      "query_type": "situational",
+      "scenario_family": "route_or_clarify",
+      "expected_behavior": "reject",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "success": true,
+      "rejection_reason": "low_topic_coverage",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "unsafe_direct_answer": false,
+      "candidate_count": 2585,
+      "weak_match_count": 5,
+      "match_count": 0,
+      "fetched_document_count": 0,
+      "top_matches": [],
+      "top_weak_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_7e87cc28dda74660",
+          "score": 0.542552183471386
+        },
+        {
+          "rank": 2,
+          "otid": "otid_d9a92add41454352",
+          "score": 0.5199041094397794,
+          "best_kpid": "kpid_e56977ee1f024800"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_1ab70aa425dd43cd",
+          "score": 0.46597952078440263,
+          "best_kpid": "kpid_5a51339c98ea4493"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_4ea8ed299783438b",
+          "score": 0.439739377750119,
+          "best_kpid": "kpid_500c964ade584160"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_e527444dadac4adf",
+          "score": 0.3838753856263959,
+          "best_kpid": "kpid_4518d40f21cb4d72"
+        }
+      ],
+      "top_results": [],
+      "notes": "v1.2 新增：餐饮可用性查询，问法具体但与研究生政策知识库无关，应拒答。"
+    },
+    {
+      "id": "mixed_daily_v1_2_route_018",
+      "query": "图书馆周末几点闭馆？",
+      "query_type": "situational",
+      "scenario_family": "route_or_clarify",
+      "expected_behavior": "reject",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "success": true,
+      "rejection_reason": "low_topic_coverage",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "unsafe_direct_answer": false,
+      "candidate_count": 2509,
+      "weak_match_count": 5,
+      "match_count": 0,
+      "fetched_document_count": 0,
+      "top_matches": [],
+      "top_weak_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_6fbeeb14836743b5",
+          "score": 1.4002911026420322,
+          "best_kpid": "kpid_96a2c1d2d0784f77"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_c243887db39d4c98",
+          "score": 0.5336702249507491,
+          "best_kpid": "kpid_f7c8422bdaa543c0"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_1ab70aa425dd43cd",
+          "score": 0.5119093286835221,
+          "best_kpid": "kpid_5a51339c98ea4493"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_689fe94db6424593",
+          "score": 0.49333333333333323,
+          "best_kpid": "kpid_33be27a986944343"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_fda8490f610f493a",
+          "score": 0.49070154010651196,
+          "best_kpid": "kpid_40426f59f3eb4eae"
+        }
+      ],
+      "top_results": [],
+      "notes": "v1.2 新增：图书馆服务时间查询，不属于当前政策知识库覆盖范围。"
+    },
+    {
+      "id": "mixed_daily_v1_2_route_019",
+      "query": "现在能预约图书馆研讨间吗？",
+      "query_type": "situational",
+      "scenario_family": "route_or_clarify",
+      "expected_behavior": "reject",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "success": true,
+      "rejection_reason": "low_topic_coverage",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "unsafe_direct_answer": false,
+      "candidate_count": 2509,
+      "weak_match_count": 5,
+      "match_count": 0,
+      "fetched_document_count": 0,
+      "top_matches": [],
+      "top_weak_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_a1d022f911314306",
+          "score": 0.4641261398446592,
+          "best_kpid": "kpid_2621d37bcabc43d7"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_025aaa1d3da84981",
+          "score": 0.387743582084296,
+          "best_kpid": "kpid_5afcb99b540d4b2d"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_1ab70aa425dd43cd",
+          "score": 0.17438763356417503,
+          "best_kpid": "kpid_5a51339c98ea4493"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_b30b6bf7f8ac4e26",
+          "score": 0.17149610745212132,
+          "best_kpid": "kpid_48d8d4e624aa4c28"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_972694a013b841ec",
+          "score": 0.16785215562704445,
+          "best_kpid": "kpid_6e5b3eab6844437f"
+        }
+      ],
+      "top_results": [],
+      "notes": "v1.2 新增：图书馆空间预约查询，系统应识别为知识库外问题并拒答。"
+    },
+    {
+      "id": "mixed_daily_v1_2_route_020",
+      "query": "图书馆借的书快到期了还能续借吗？",
+      "query_type": "situational",
+      "scenario_family": "route_or_clarify",
+      "expected_behavior": "reject",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "success": true,
+      "rejection_reason": "low_topic_coverage",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "unsafe_direct_answer": false,
+      "candidate_count": 2509,
+      "weak_match_count": 5,
+      "match_count": 0,
+      "fetched_document_count": 0,
+      "top_matches": [],
+      "top_weak_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_4a6d6375760e4f4b",
+          "score": 0.5361616161616161,
+          "best_kpid": "kpid_254648b0d9d242c6"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_6fbeeb14836743b5",
+          "score": 0.5349211106948087,
+          "best_kpid": "kpid_b0b153acb30b496f"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_58f55e16a4794114",
+          "score": 0.514991520633126,
+          "best_kpid": "kpid_60074d2afc7d4bc6"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_a871b72be7c14bb1",
+          "score": 0.509406328157427,
+          "best_kpid": "kpid_252128a43f404724"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_ae96b4bddb694238",
+          "score": 0.5009717696453189,
+          "best_kpid": "kpid_dd72b56319d54f9e"
+        }
+      ],
+      "top_results": [],
+      "notes": "v1.2 新增：图书借阅规则查询，语义明确但超出当前研究生政策库覆盖范围。"
+    },
+    {
+      "id": "mixed_daily_v1_2_latest_011",
+      "query": "中山大学硕士初试成绩现在怎么查？",
+      "query_type": "standard",
+      "scenario_family": "latest_within_topic",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_faeac0ecd9304bd1",
+      "expected_latest_otid": "otid_faeac0ecd9304bd1",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 8431,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_faeac0ecd9304bd1",
+          "score": 4.861922950288637,
+          "best_kpid": "kpid_303898cdfd8348e8"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_f1b9c5657c3c4c90",
+          "score": 2.738552993960103,
+          "best_kpid": "kpid_ea796db810a4488a"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_097b17ffece641a7",
+          "score": 2.321910371166553,
+          "best_kpid": "kpid_ad6c262585494d78"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_1ae107c08e73431e",
+          "score": 1.9791162654714134,
+          "best_kpid": "kpid_921e2206e7f24635"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_b751f09455b84a89",
+          "score": 1.7842098358503324,
+          "best_kpid": "kpid_c832420896c04cfc"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "v1.2 新增：当前对应最新文档为《中山大学2026年全国硕士研究生招生考试初试成绩查询公告》（2026-02-26），同主题存在 2025/2024/2023 多版本。"
+    },
+    {
+      "id": "mixed_daily_v1_2_latest_012",
+      "query": "中山大学硕士复试基本分数线现在是多少？",
+      "query_type": "standard",
+      "scenario_family": "latest_within_topic",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_226927e5287c498a",
+      "expected_latest_otid": "otid_226927e5287c498a",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 8431,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_226927e5287c498a",
+          "score": 3.2305872967052287,
+          "best_kpid": "kpid_77269e3f3fba4151"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_faeac0ecd9304bd1",
+          "score": 2.753473627916797,
+          "best_kpid": "kpid_282050a357f14476"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_de298a32eff04279",
+          "score": 1.9732846091208633,
+          "best_kpid": "kpid_abe8a759c9ee4c0a"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_1ae107c08e73431e",
+          "score": 1.8699317955776513,
+          "best_kpid": "kpid_921e2206e7f24635"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_f1b9c5657c3c4c90",
+          "score": 1.5305272072882161,
+          "best_kpid": "kpid_d1e108afd95747ba"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "v1.2 新增：当前对应最新文档为《中山大学2026年硕士研究生招生考试复试基本分数线》（2026-03-13），同主题存在 2025/2024/2023 多版本。"
+    },
+    {
+      "id": "mixed_daily_v1_2_latest_013",
+      "query": "研究生奖助金评审现在怎么安排？",
+      "query_type": "standard",
+      "scenario_family": "latest_within_topic",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_f801613b0ec64544",
+      "expected_latest_otid": "otid_f801613b0ec64544",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 6959,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_f801613b0ec64544",
+          "score": 3.4448970309393596,
+          "best_kpid": "kpid_3c2fc55a821a4064"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_d0d8258f19744c72",
+          "score": 3.2807001369616975,
+          "best_kpid": "kpid_dbf7f4d171c441a2"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_4ea8ed299783438b",
+          "score": 2.749751939255568,
+          "best_kpid": "kpid_500c964ade584160"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_b5b5d513960a454f",
+          "score": 2.029761059291261,
+          "best_kpid": "kpid_179523770a79427f"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_0cf1cfb3d7bc4735",
+          "score": 1.7422152076091928,
+          "best_kpid": "kpid_e93e20ed2e9e42bc"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "v1.2 新增：当前对应最新文档为《研究生院、党委学生工作部关于做好2025学年博士和硕士研究生奖助金评审工作的通知》（2025-07-01），同主题存在 2024 学年版本。"
+    },
+    {
+      "id": "mixed_daily_v1_2_latest_014",
+      "query": "港澳台研究生初试成绩现在怎么查？",
+      "query_type": "standard",
+      "scenario_family": "latest_within_topic",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_b751f09455b84a89",
+      "expected_latest_otid": "otid_b751f09455b84a89",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 8431,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_b751f09455b84a89",
+          "score": 4.80866546053263,
+          "best_kpid": "kpid_c832420896c04cfc"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_ed940aabc9c24803",
+          "score": 2.40523132838793,
+          "best_kpid": "kpid_7d3f8a1dcb06440e"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_95c5075eb4ff45c3",
+          "score": 2.24353347012841,
+          "best_kpid": "kpid_8119e2405d9d4974"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_faeac0ecd9304bd1",
+          "score": 1.3206158845713423,
+          "best_kpid": "kpid_303898cdfd8348e8"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_f1b9c5657c3c4c90",
+          "score": 0.7710093480215221,
+          "best_kpid": "kpid_ea796db810a4488a"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "v1.2 新增：当前对应最新文档为《中山大学2025年港澳台研究生招生初试成绩查询公告》（2025-04-27），同主题存在 2024 年版本。"
+    },
+    {
+      "id": "mixed_daily_v1_2_latest_015",
+      "query": "中山大学强基计划现在录取标准是什么？",
+      "query_type": "standard",
+      "scenario_family": "latest_within_topic",
+      "expected_behavior": "direct_answer",
+      "predicted_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "behavior_correct": true,
+      "success": false,
+      "rejection_reason": null,
+      "expected_otid": "otid_4eb5b7417ee3470a",
+      "expected_latest_otid": "otid_4eb5b7417ee3470a",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": true,
+      "unsafe_direct_answer": false,
+      "candidate_count": 4197,
+      "weak_match_count": 0,
+      "match_count": 87,
+      "fetched_document_count": 0,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_4eb5b7417ee3470a",
+          "score": 2.332916609085372,
+          "best_kpid": "kpid_1fbd5428f9cc49e5"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_e8bfcc47185b4554",
+          "score": 1.2921666380215164,
+          "best_kpid": "kpid_be22f7accfda4ae4"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_1637de59ecdf419c",
+          "score": 1.2507085415177568,
+          "best_kpid": "kpid_5d5bf453fe4544b2"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_12975d38e3234e5a",
+          "score": 1.0725791712972774,
+          "best_kpid": "kpid_58bb29607d1c494f"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_0d173e55107840a1",
+          "score": 0.6770539459397741,
+          "best_kpid": "kpid_fc431b8101264702"
+        }
+      ],
+      "top_weak_matches": [],
+      "top_results": [],
+      "notes": "v1.2 新增：当前对应最新文档为《中山大学关于公布2025年强基计划录取标准的通知》（2025-07-04），同主题存在 2024/2023 多版本。"
+    }
+  ]
+}

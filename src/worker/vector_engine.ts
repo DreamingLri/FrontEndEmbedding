@@ -168,7 +168,7 @@ export const QUERY_SCOPE_SPECIFICITY_TERMS = [
     "推免",
     "保研",
 ] as const;
-const QUERY_SCOPE_SPECIFICITY_TERM_SET = new Set(
+const QUERY_SCOPE_SPECIFICITY_TERM_SET: ReadonlySet<string> = new Set(
     QUERY_SCOPE_SPECIFICITY_TERMS,
 );
 export const DIRECT_ANSWER_EVIDENCE_TERMS = [
@@ -1873,8 +1873,8 @@ export function searchAndRank(params: {
             const otid = meta.type === "OT" ? meta.id : meta.parent_otid;
 
             for (let j = 0; j < meta.sparse.length; j += 2) {
-                const wordId = meta.sparse[j];
-                const tf = meta.sparse[j + 1];
+                const wordId: number = meta.sparse[j] as number;
+                const tf: number = meta.sparse[j + 1] as number;
                 const specificityTerm = scopeSpecificityWordIdToTerm?.get(wordId);
 
                 if (specificityTerm) {

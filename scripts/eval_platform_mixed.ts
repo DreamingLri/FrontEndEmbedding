@@ -2,19 +2,17 @@ import * as fs from "fs";
 import * as path from "path";
 
 import {
-    DIRECT_ANSWER_EVIDENCE_TERMS,
-    DEFAULT_WEIGHTS,
-    getQuerySparse,
-    parseQueryIntent,
-    QUERY_SCOPE_SPECIFICITY_TERMS,
-    searchAndRank,
-} from "../src/worker/vector_engine.ts";
-import { fmmTokenize } from "../src/worker/fmm_tokenize.ts";
-import { getCandidateIndicesForQuery } from "../src/worker/topic_partition.ts";
+    CANONICAL_PIPELINE_PRESET,
+    buildPipelineTermMaps,
+    buildSearchPipelineQueryContext,
+    executeSearchPipeline,
+    type PipelineBehavior,
+} from "../src/worker/search_pipeline.ts";
 import {
     embedQueries as embedFrontendQueries,
     loadFrontendEvalEngine,
 } from "./frontend_eval_engine.ts";
+import { createLocalDocumentLoader } from "./local_document_provider.ts";
 
 type ScenarioFamily =
     | "direct_answer_simple"
@@ -27,8 +25,6 @@ type ExpectedBehavior =
     | "clarify"
     | "route_to_entry"
     | "reject";
-
-type PredictedBehavior = "direct_answer" | "clarify_or_route" | "reject";
 
 type PlatformMixedCase = {
     id: string;
@@ -55,21 +51,26 @@ type CaseReport = {
     query_type?: string;
     scenario_family: ScenarioFamily;
     expected_behavior: ExpectedBehavior;
-    predicted_behavior: PredictedBehavior;
+    predicted_behavior: PipelineBehavior;
+    retrieval_behavior: PipelineBehavior;
     behavior_correct: boolean;
     success: boolean;
     rejection_reason: string | null;
     expected_otid?: string;
     expected_latest_otid?: string;
     expected_entry_topic?: string;
-    doc_rank: number | null;
+    predicted_entry_topic?: string;
+    retrieval_doc_rank: number | null;
+    rendered_doc_rank: number | null;
     doc_hit_at_1: boolean;
     doc_hit_at_3: boolean;
     doc_hit_at_5: boolean;
+    retrieval_doc_hit_at_1: boolean;
     unsafe_direct_answer: boolean;
     candidate_count: number;
     weak_match_count: number;
     match_count: number;
+    fetched_document_count: number;
     top_matches: Array<{
         rank: number;
         otid: string;
@@ -80,6 +81,13 @@ type CaseReport = {
         rank: number;
         otid: string;
         score: number;
+        best_kpid?: string;
+    }>;
+    top_results: Array<{
+        rank: number;
+        otid: string;
+        displayScore: number;
+        snippetScore?: number;
         best_kpid?: string;
     }>;
     notes?: string;
@@ -105,29 +113,36 @@ type ScenarioFamilySummary = {
     total: number;
     successRate: number;
     successCount: number;
+    behaviorAccuracy: number;
     directAnswerRate?: number;
+    clarifyRate?: number;
+    routeToEntryRate?: number;
     rejectRate?: number;
-    clarifyOrRouteRate?: number;
     unsafeDirectAnswerRate?: number;
     docHitAt1Rate?: number;
     docHitAt3Rate?: number;
     docHitAt5Rate?: number;
+    retrievalDocHitAt1Rate?: number;
 };
 
 type Summary = {
     total: number;
     overallBehaviorAccuracy: number;
     platformTaskSuccess: number;
+    behaviorOnlyAccuracy: number;
     directAnswerSuccessRate: RateSummary;
     latestTopicSuccessRate: RateSummary;
+    clarifySuccessRate: RateSummary;
+    routeToEntrySuccessRate: RateSummary;
     clarifyOrRouteSuccessRate: RateSummary;
     routeFamilyBehaviorAccuracy: RateSummary;
     rejectHitRate: RateSummary;
     unsafeDirectAnswerRate: RateSummary;
     directAnswerDocHits: DocHitSummary;
+    retrievalStageDocHits: DocHitSummary;
     complexDirectSubsetDocHits: DocHitSummary;
     byScenarioFamily: Record<ScenarioFamily, ScenarioFamilySummary>;
-    byPredictedBehavior: Record<PredictedBehavior, number>;
+    byPredictedBehavior: Record<PipelineBehavior, number>;
     failureBreakdown: Record<string, number>;
 };
 
@@ -137,7 +152,8 @@ type Report = {
     datasetName: string;
     total: number;
     config: {
-        defaultWeights: typeof DEFAULT_WEIGHTS;
+        pipelineVersion: string;
+        preset: typeof CANONICAL_PIPELINE_PRESET;
         note: string;
     };
     summary: Summary;
@@ -147,40 +163,36 @@ type Report = {
 const DATASET_FILE = path.resolve(
     process.cwd(),
     process.env.SUASK_PLATFORM_MIXED_DATASET_FILE ||
-        "../Backend/test/test_dataset_platform_mixed/test_dataset_platform_mixed_daily_v1_reviewed.json",
+        "../Backend/test/test_dataset_platform_mixed/test_dataset_platform_mixed_daily_v1_2_reviewed.json",
 );
 const RESULTS_DIR = path.resolve(process.cwd(), "./scripts/results");
 const CURRENT_TIMESTAMP = Date.now() / 1000;
-
-function dedupe(items: string[]): string[] {
-    return Array.from(new Set(items));
-}
-
-function toPredictedBehavior(rejectionReason: string | null): PredictedBehavior {
-    if (rejectionReason === "weak_anchor_needs_clarification") {
-        return "clarify_or_route";
-    }
-    if (rejectionReason) {
-        return "reject";
-    }
-    return "direct_answer";
-}
-
-function toExpectedRouteBehavior(
-    expectedBehavior: ExpectedBehavior,
-): PredictedBehavior {
-    return expectedBehavior === "reject" ? "reject" : "clarify_or_route";
-}
 
 function safeRate(numerator: number, denominator: number): number {
     return denominator > 0 ? numerator / denominator : 0;
 }
 
-function buildDocHitSummary(caseReports: CaseReport[]): DocHitSummary {
+function getRankByOtid(
+    otids: string[],
+    expectedOtid?: string,
+): number | null {
+    if (!expectedOtid) {
+        return null;
+    }
+
+    const index = otids.findIndex((otid) => otid === expectedOtid);
+    return index >= 0 ? index + 1 : null;
+}
+
+function buildDocHitSummary(
+    caseReports: CaseReport[],
+    rankField: "rendered_doc_rank" | "retrieval_doc_rank",
+): DocHitSummary {
     const total = caseReports.length;
-    const hitAt1 = caseReports.filter((item) => item.doc_hit_at_1).length;
-    const hitAt3 = caseReports.filter((item) => item.doc_hit_at_3).length;
-    const hitAt5 = caseReports.filter((item) => item.doc_hit_at_5).length;
+    const ranks = caseReports.map((item) => item[rankField]);
+    const hitAt1 = ranks.filter((rank) => rank === 1).length;
+    const hitAt3 = ranks.filter((rank) => rank !== null && rank <= 3).length;
+    const hitAt5 = ranks.filter((rank) => rank !== null && rank <= 5).length;
 
     return {
         total,
@@ -207,23 +219,33 @@ function buildScenarioFamilySummary(
 ): ScenarioFamilySummary {
     const total = caseReports.length;
     const successCount = caseReports.filter((item) => item.success).length;
-    const predictedDirectAnswer = caseReports.filter(
-        (item) => item.predicted_behavior === "direct_answer",
-    ).length;
-    const predictedReject = caseReports.filter(
-        (item) => item.predicted_behavior === "reject",
-    ).length;
-    const predictedClarifyOrRoute = caseReports.filter(
-        (item) => item.predicted_behavior === "clarify_or_route",
+    const behaviorCorrectCount = caseReports.filter(
+        (item) => item.behavior_correct,
     ).length;
 
     const base: ScenarioFamilySummary = {
         total,
         successCount,
         successRate: safeRate(successCount, total),
-        directAnswerRate: safeRate(predictedDirectAnswer, total),
-        rejectRate: safeRate(predictedReject, total),
-        clarifyOrRouteRate: safeRate(predictedClarifyOrRoute, total),
+        behaviorAccuracy: safeRate(behaviorCorrectCount, total),
+        directAnswerRate: safeRate(
+            caseReports.filter((item) => item.predicted_behavior === "direct_answer")
+                .length,
+            total,
+        ),
+        clarifyRate: safeRate(
+            caseReports.filter((item) => item.predicted_behavior === "clarify").length,
+            total,
+        ),
+        routeToEntryRate: safeRate(
+            caseReports.filter((item) => item.predicted_behavior === "route_to_entry")
+                .length,
+            total,
+        ),
+        rejectRate: safeRate(
+            caseReports.filter((item) => item.predicted_behavior === "reject").length,
+            total,
+        ),
     };
 
     if (scenarioFamily === "route_or_clarify") {
@@ -250,12 +272,17 @@ function buildScenarioFamilySummary(
             caseReports.filter((item) => item.doc_hit_at_5).length,
             total,
         ),
+        retrievalDocHitAt1Rate: safeRate(
+            caseReports.filter((item) => item.retrieval_doc_hit_at_1).length,
+            total,
+        ),
     };
 }
 
 function buildSummary(caseReports: CaseReport[]): Summary {
     const total = caseReports.length;
     const overallSuccess = caseReports.filter((item) => item.success).length;
+    const behaviorCorrect = caseReports.filter((item) => item.behavior_correct).length;
 
     const directAnswerFamilies = caseReports.filter(
         (item) =>
@@ -267,6 +294,12 @@ function buildSummary(caseReports: CaseReport[]): Summary {
     );
     const routeFamily = caseReports.filter(
         (item) => item.scenario_family === "route_or_clarify",
+    );
+    const clarifyCases = routeFamily.filter(
+        (item) => item.expected_behavior === "clarify",
+    );
+    const routeCases = routeFamily.filter(
+        (item) => item.expected_behavior === "route_to_entry",
     );
     const routeClarifyOrRouteCases = routeFamily.filter(
         (item) => item.expected_behavior !== "reject",
@@ -302,17 +335,22 @@ function buildSummary(caseReports: CaseReport[]): Summary {
         ),
     } as Record<ScenarioFamily, ScenarioFamilySummary>;
 
-    const byPredictedBehavior: Record<PredictedBehavior, number> = {
+    const byPredictedBehavior: Record<PipelineBehavior, number> = {
         direct_answer: 0,
-        clarify_or_route: 0,
+        clarify: 0,
+        route_to_entry: 0,
         reject: 0,
     };
     const failureBreakdown: Record<string, number> = {
         direct_answer_wrong_doc: 0,
         direct_answer_rejected: 0,
-        route_expected_clarify_or_route_but_rejected: 0,
-        route_expected_clarify_or_route_but_direct_answer: 0,
-        route_expected_reject_but_clarify_or_route: 0,
+        direct_answer_misrouted: 0,
+        route_expected_clarify_but_routed: 0,
+        route_expected_route_but_clarified: 0,
+        route_expected_nonreject_but_rejected: 0,
+        route_expected_nonreject_but_direct_answer: 0,
+        route_expected_reject_but_clarified: 0,
+        route_expected_reject_but_routed: 0,
         route_expected_reject_but_direct_answer: 0,
     };
 
@@ -324,23 +362,47 @@ function buildSummary(caseReports: CaseReport[]): Summary {
 
         if (item.scenario_family === "route_or_clarify") {
             if (item.expected_behavior === "reject") {
-                if (item.predicted_behavior === "clarify_or_route") {
-                    failureBreakdown.route_expected_reject_but_clarify_or_route += 1;
+                if (item.predicted_behavior === "clarify") {
+                    failureBreakdown.route_expected_reject_but_clarified += 1;
+                } else if (item.predicted_behavior === "route_to_entry") {
+                    failureBreakdown.route_expected_reject_but_routed += 1;
                 } else if (item.predicted_behavior === "direct_answer") {
                     failureBreakdown.route_expected_reject_but_direct_answer += 1;
                 }
-            } else if (item.predicted_behavior === "reject") {
-                failureBreakdown.route_expected_clarify_or_route_but_rejected += 1;
-            } else if (item.predicted_behavior === "direct_answer") {
-                failureBreakdown.route_expected_clarify_or_route_but_direct_answer += 1;
+                return;
+            }
+
+            if (item.predicted_behavior === "reject") {
+                failureBreakdown.route_expected_nonreject_but_rejected += 1;
+                return;
+            }
+
+            if (item.predicted_behavior === "direct_answer") {
+                failureBreakdown.route_expected_nonreject_but_direct_answer += 1;
+                return;
+            }
+
+            if (
+                item.expected_behavior === "clarify" &&
+                item.predicted_behavior === "route_to_entry"
+            ) {
+                failureBreakdown.route_expected_clarify_but_routed += 1;
+            }
+            if (
+                item.expected_behavior === "route_to_entry" &&
+                item.predicted_behavior === "clarify"
+            ) {
+                failureBreakdown.route_expected_route_but_clarified += 1;
             }
             return;
         }
 
         if (item.predicted_behavior === "direct_answer") {
             failureBreakdown.direct_answer_wrong_doc += 1;
-        } else {
+        } else if (item.predicted_behavior === "reject") {
             failureBreakdown.direct_answer_rejected += 1;
+        } else {
+            failureBreakdown.direct_answer_misrouted += 1;
         }
     });
 
@@ -348,6 +410,7 @@ function buildSummary(caseReports: CaseReport[]): Summary {
         total,
         overallBehaviorAccuracy: safeRate(overallSuccess, total),
         platformTaskSuccess: safeRate(overallSuccess, total),
+        behaviorOnlyAccuracy: safeRate(behaviorCorrect, total),
         directAnswerSuccessRate: buildRateSummary(
             directAnswerFamilies.filter((item) => item.success).length,
             directAnswerFamilies.length,
@@ -355,6 +418,14 @@ function buildSummary(caseReports: CaseReport[]): Summary {
         latestTopicSuccessRate: buildRateSummary(
             latestFamily.filter((item) => item.success).length,
             latestFamily.length,
+        ),
+        clarifySuccessRate: buildRateSummary(
+            clarifyCases.filter((item) => item.success).length,
+            clarifyCases.length,
+        ),
+        routeToEntrySuccessRate: buildRateSummary(
+            routeCases.filter((item) => item.success).length,
+            routeCases.length,
         ),
         clarifyOrRouteSuccessRate: buildRateSummary(
             routeClarifyOrRouteCases.filter((item) => item.success).length,
@@ -372,8 +443,18 @@ function buildSummary(caseReports: CaseReport[]): Summary {
             routeFamily.filter((item) => item.unsafe_direct_answer).length,
             routeFamily.length,
         ),
-        directAnswerDocHits: buildDocHitSummary(docTargetCases),
-        complexDirectSubsetDocHits: buildDocHitSummary(complexDirectCases),
+        directAnswerDocHits: buildDocHitSummary(
+            docTargetCases,
+            "rendered_doc_rank",
+        ),
+        retrievalStageDocHits: buildDocHitSummary(
+            docTargetCases,
+            "retrieval_doc_rank",
+        ),
+        complexDirectSubsetDocHits: buildDocHitSummary(
+            complexDirectCases,
+            "rendered_doc_rank",
+        ),
         byScenarioFamily,
         byPredictedBehavior,
         failureBreakdown,
@@ -390,20 +471,8 @@ async function main() {
     console.log(`Loaded ${testCases.length} cases.`);
 
     const engine = await loadFrontendEvalEngine();
-    const scopeSpecificityWordIdToTerm = new Map<number, string>();
-    QUERY_SCOPE_SPECIFICITY_TERMS.forEach((term) => {
-        const wordId = engine.vocabMap.get(term);
-        if (wordId !== undefined) {
-            scopeSpecificityWordIdToTerm.set(wordId, term);
-        }
-    });
-    const directAnswerEvidenceWordIdToTerm = new Map<number, string>();
-    DIRECT_ANSWER_EVIDENCE_TERMS.forEach((term) => {
-        const wordId = engine.vocabMap.get(term);
-        if (wordId !== undefined) {
-            directAnswerEvidenceWordIdToTerm.set(wordId, term);
-        }
-    });
+    const termMaps = buildPipelineTermMaps(engine.vocabMap);
+    const documentLoader = createLocalDocumentLoader();
     const queryVectors = await embedFrontendQueries(
         engine.extractor,
         testCases.map((item) => item.query),
@@ -412,62 +481,52 @@ async function main() {
 
     const caseReports: CaseReport[] = [];
 
-    for (let index = 0; index < testCases.length; index++) {
+    for (let index = 0; index < testCases.length; index += 1) {
         const testCase = testCases[index];
-        const queryIntent = parseQueryIntent(testCase.query);
-        const candidateIndices = getCandidateIndicesForQuery(
-            queryIntent,
+        const queryContext = buildSearchPipelineQueryContext(
+            testCase.query,
+            engine.vocabMap,
             engine.topicPartitionIndex,
         );
-        const queryWords = dedupe(fmmTokenize(testCase.query, engine.vocabMap));
-        const querySparse = getQuerySparse(queryWords, engine.vocabMap);
-        const queryYearWordIds = queryIntent.years
-            .map(String)
-            .map((year) => engine.vocabMap.get(year))
-            .filter((item): item is number => item !== undefined);
-
-        const result = searchAndRank({
+        const pipelineResult = await executeSearchPipeline({
+            query: testCase.query,
             queryVector: queryVectors[index],
-            querySparse,
-            queryWords,
-            queryYearWordIds,
-            queryIntent,
+            queryContext,
             metadata: engine.metadataList,
             vectorMatrix: engine.vectorMatrix,
             dimensions: engine.dimensions,
             currentTimestamp: CURRENT_TIMESTAMP,
             bm25Stats: engine.bm25Stats,
-            candidateIndices,
-            scopeSpecificityWordIdToTerm,
-            directAnswerEvidenceWordIdToTerm,
+            extractor: engine.extractor,
+            documentLoader,
+            termMaps,
+            preset: CANONICAL_PIPELINE_PRESET,
         });
 
-        const rejectionReason = result.rejection?.reason || null;
-        const predictedBehavior = toPredictedBehavior(rejectionReason);
+        const predictedBehavior = pipelineResult.finalDecision.behavior;
         const expectedDocOtid =
             testCase.scenario_family === "latest_within_topic"
                 ? testCase.expected_latest_otid || testCase.expected_otid
                 : testCase.expected_otid;
-        const docRank =
-            expectedDocOtid
-                ? result.matches.findIndex((match) => match.otid === expectedDocOtid) + 1
-                : 0;
-        const normalizedDocRank = docRank > 0 ? docRank : null;
-        const docHitAt1 = normalizedDocRank === 1;
-        const docHitAt3 =
-            normalizedDocRank !== null && normalizedDocRank <= 3;
-        const docHitAt5 =
-            normalizedDocRank !== null && normalizedDocRank <= 5;
+        const retrievalDocRank = getRankByOtid(
+            pipelineResult.searchOutput.matches.map((item) => item.otid),
+            expectedDocOtid,
+        );
+        const renderedDocRank = getRankByOtid(
+            pipelineResult.results
+                .map((item) => item.otid || item.id || "")
+                .filter((item): item is string => Boolean(item)),
+            expectedDocOtid,
+        );
 
         const behaviorCorrect =
             testCase.scenario_family === "route_or_clarify"
-                ? predictedBehavior ===
-                  toExpectedRouteBehavior(testCase.expected_behavior)
+                ? predictedBehavior === testCase.expected_behavior
                 : predictedBehavior === "direct_answer";
         const success =
             testCase.scenario_family === "route_or_clarify"
                 ? behaviorCorrect
-                : behaviorCorrect && docHitAt1;
+                : behaviorCorrect && renderedDocRank === 1;
 
         caseReports.push({
             id: testCase.id,
@@ -476,30 +535,31 @@ async function main() {
             scenario_family: testCase.scenario_family,
             expected_behavior: testCase.expected_behavior,
             predicted_behavior: predictedBehavior,
+            retrieval_behavior: pipelineResult.retrievalDecision.behavior,
             behavior_correct: behaviorCorrect,
             success,
-            rejection_reason: rejectionReason,
+            rejection_reason:
+                pipelineResult.finalDecision.rejectionReason ||
+                pipelineResult.rejection?.reason ||
+                null,
             expected_otid: testCase.expected_otid,
             expected_latest_otid: testCase.expected_latest_otid,
             expected_entry_topic: testCase.expected_entry_topic,
-            doc_rank: normalizedDocRank,
-            doc_hit_at_1: docHitAt1,
-            doc_hit_at_3: docHitAt3,
-            doc_hit_at_5: docHitAt5,
+            predicted_entry_topic: pipelineResult.finalDecision.entryTopic,
+            retrieval_doc_rank: retrievalDocRank,
+            rendered_doc_rank: renderedDocRank,
+            doc_hit_at_1: renderedDocRank === 1,
+            doc_hit_at_3: renderedDocRank !== null && renderedDocRank <= 3,
+            doc_hit_at_5: renderedDocRank !== null && renderedDocRank <= 5,
+            retrieval_doc_hit_at_1: retrievalDocRank === 1,
             unsafe_direct_answer:
                 testCase.scenario_family === "route_or_clarify" &&
                 predictedBehavior === "direct_answer",
-            candidate_count:
-                candidateIndices?.length ?? engine.metadataList.length,
-            weak_match_count: result.weakMatches.length,
-            match_count: result.matches.length,
-            top_matches: result.matches.slice(0, 5).map((match, rank) => ({
-                rank: rank + 1,
-                otid: match.otid,
-                score: match.score,
-                best_kpid: match.best_kpid,
-            })),
-            top_weak_matches: result.weakMatches
+            candidate_count: pipelineResult.trace.candidateCount,
+            weak_match_count: pipelineResult.trace.weakMatchCount,
+            match_count: pipelineResult.trace.matchCount,
+            fetched_document_count: pipelineResult.trace.fetchedDocumentCount,
+            top_matches: pipelineResult.searchOutput.matches
                 .slice(0, 5)
                 .map((match, rank) => ({
                     rank: rank + 1,
@@ -507,6 +567,26 @@ async function main() {
                     score: match.score,
                     best_kpid: match.best_kpid,
                 })),
+            top_weak_matches: pipelineResult.searchOutput.weakMatches
+                .slice(0, 5)
+                .map((match, rank) => ({
+                    rank: rank + 1,
+                    otid: match.otid,
+                    score: match.score,
+                    best_kpid: match.best_kpid,
+                })),
+            top_results: pipelineResult.results.slice(0, 5).map((result, rank) => ({
+                rank: rank + 1,
+                otid: result.otid || result.id || "",
+                displayScore:
+                    result.displayScore ??
+                    result.confidenceScore ??
+                    result.coarseScore ??
+                    result.score ??
+                    0,
+                snippetScore: result.snippetScore,
+                best_kpid: result.best_kpid,
+            })),
             notes: testCase.notes,
         });
     }
@@ -517,8 +597,9 @@ async function main() {
         datasetName,
         total: caseReports.length,
         config: {
-            defaultWeights: DEFAULT_WEIGHTS,
-            note: "当前报告评测的是现有前端默认检索与拒答机制；route_or_clarify 仍按 coarse-level 的 clarify_or_route vs reject 口径统计。",
+            pipelineVersion: CANONICAL_PIPELINE_PRESET.name,
+            preset: CANONICAL_PIPELINE_PRESET,
+            note: "当前报告直接调用统一 full pipeline，默认数据集已切到 mixed daily v1.2 reviewed。",
         },
         summary: buildSummary(caseReports),
         caseReports,
@@ -536,13 +617,15 @@ async function main() {
         [
             `overallBehaviorAccuracy=${(report.summary.overallBehaviorAccuracy * 100).toFixed(2)}%`,
             `platformTaskSuccess=${(report.summary.platformTaskSuccess * 100).toFixed(2)}%`,
+            `behaviorOnlyAccuracy=${(report.summary.behaviorOnlyAccuracy * 100).toFixed(2)}%`,
             `directAnswerSuccessRate=${(report.summary.directAnswerSuccessRate.rate * 100).toFixed(2)}%`,
             `latestTopicSuccessRate=${(report.summary.latestTopicSuccessRate.rate * 100).toFixed(2)}%`,
-            `clarifyOrRouteSuccessRate=${(report.summary.clarifyOrRouteSuccessRate.rate * 100).toFixed(2)}%`,
+            `clarifySuccessRate=${(report.summary.clarifySuccessRate.rate * 100).toFixed(2)}%`,
+            `routeToEntrySuccessRate=${(report.summary.routeToEntrySuccessRate.rate * 100).toFixed(2)}%`,
             `rejectHitRate=${(report.summary.rejectHitRate.rate * 100).toFixed(2)}%`,
             `unsafeDirectAnswerRate=${(report.summary.unsafeDirectAnswerRate.rate * 100).toFixed(2)}%`,
             `directAnswerDocHit@1=${(report.summary.directAnswerDocHits.hitAt1Rate * 100).toFixed(2)}%`,
-            `directAnswerDocHit@3=${(report.summary.directAnswerDocHits.hitAt3Rate * 100).toFixed(2)}%`,
+            `retrievalDocHit@1=${(report.summary.retrievalStageDocHits.hitAt1Rate * 100).toFixed(2)}%`,
             `complexDirectHit@1=${(report.summary.complexDirectSubsetDocHits.hitAt1Rate * 100).toFixed(2)}%`,
         ].join(" | "),
     );
