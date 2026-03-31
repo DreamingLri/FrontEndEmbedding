@@ -1,0 +1,93 @@
+{
+  "updatedAt": "2026-03-31T14:17:20.907Z",
+  "entries": {
+    "granularity_main_106_current": {
+      "slot": "granularity_main_106_current",
+      "label": "主方法主结果 `main_106`",
+      "datasetName": "test_dataset_granularity_main_106_reviewed",
+      "datasetFile": "../../../Backend/test/test_dataset_granularity/test_dataset_granularity_main_106_reviewed.json",
+      "resultFile": "../granularity_mix_test_dataset_granularity_main_106_reviewed_top1000_kpagg-max_lexsum_onlinekprolefeature-w035_kpreranknone_docreranknone_1774621526925.json",
+      "sourceScript": "../../eval_granularity_mix.ts",
+      "managedByScript": true,
+      "updatedAt": "2026-03-31T00:00:00+08:00",
+      "note": "当前脚本会在重跑后自动覆盖这条稳定入口。"
+    },
+    "granularity_holdout_v3_current": {
+      "slot": "granularity_holdout_v3_current",
+      "label": "外部泛化主结果 `holdout_v3`",
+      "datasetName": "test_dataset_granularity_holdout_v3_reviewed",
+      "datasetFile": "../../../Backend/test/test_dataset_granularity/test_dataset_granularity_holdout_v3_reviewed.json",
+      "resultFile": "../granularity_holdout_test_dataset_granularity_holdout_v3_reviewed_fixed_kp_ot_1774608204874.json",
+      "sourceScript": "../../eval_granularity_mix.ts",
+      "managedByScript": false,
+      "updatedAt": "2026-03-31T00:00:00+08:00",
+      "note": "当前主引用仍是固定 `KP+OT` 口径结果，这条入口暂由人工钉住。"
+    },
+    "platform_mixed_daily_v1_2_current": {
+      "slot": "platform_mixed_daily_v1_2_current",
+      "label": "现实问法主结果 `mixed_daily_v1.2`",
+      "datasetName": "test_dataset_platform_mixed_daily_v1_2_reviewed",
+      "datasetFile": "../../../../Backend/test/test_dataset_platform_mixed/test_dataset_platform_mixed_daily_v1_2_reviewed.json",
+      "resultFile": "../platform_mixed_test_dataset_platform_mixed_daily_v1_2_reviewed_1774966640901.json",
+      "sourceScript": "../../eval_platform_mixed.ts",
+      "managedByScript": true,
+      "updatedAt": "2026-03-31T14:17:20.907Z",
+      "note": "当前稳定入口会跟随 mixed 主线与 `kb_absent_v2` 边界线一起更新。"
+    },
+    "route_or_clarify_v2_dev_current": {
+      "slot": "route_or_clarify_v2_dev_current",
+      "label": "行为分流边界结果 `route_v2_dev`",
+      "datasetName": "test_dataset_route_or_clarify_v2_dev_reviewed",
+      "datasetFile": "../../../Backend/test/test_dataset_route_or_clarify/test_dataset_route_or_clarify_v2_dev_reviewed.json",
+      "resultFile": "../route_or_clarify_test_dataset_route_or_clarify_v2_dev_reviewed_1774838315857.json",
+      "sourceScript": "../../eval_route_or_clarify.ts",
+      "managedByScript": true,
+      "updatedAt": "2026-03-31T00:00:00+08:00",
+      "note": "当前脚本会在重跑后自动覆盖这条稳定入口。"
+    },
+    "route_or_clarify_v2_holdout_current": {
+      "slot": "route_or_clarify_v2_holdout_current",
+      "label": "行为分流边界结果 `route_v2_holdout`",
+      "datasetName": "test_dataset_route_or_clarify_v2_holdout_reviewed",
+      "datasetFile": "../../../../Backend/test/test_dataset_route_or_clarify/test_dataset_route_or_clarify_v2_holdout_reviewed.json",
+      "resultFile": "../route_or_clarify_test_dataset_route_or_clarify_v2_holdout_reviewed_1774966630290.json",
+      "sourceScript": "../../eval_route_or_clarify.ts",
+      "managedByScript": true,
+      "updatedAt": "2026-03-31T14:17:10.293Z",
+      "note": "当前稳定入口默认保留 `v2_dev` 与 `v2_holdout` 两条边界回归线。"
+    },
+    "platform_reject_kb_absent_v2_dev_current": {
+      "slot": "platform_reject_kb_absent_v2_dev_current",
+      "label": "高风险拒答边界结果 `kb_absent_v2_dev`",
+      "datasetName": "test_dataset_platform_reject_kb_absent_v2_dev_reviewed",
+      "datasetFile": "../../../Backend/test/test_dataset_platform_mixed/test_dataset_platform_reject_kb_absent_v2_dev_reviewed.json",
+      "resultFile": "../platform_mixed_test_dataset_platform_reject_kb_absent_v2_dev_reviewed_1774836595580.json",
+      "sourceScript": "../../eval_platform_mixed.ts",
+      "managedByScript": true,
+      "updatedAt": "2026-03-31T00:00:00+08:00",
+      "note": "当前脚本会在重跑后自动覆盖这条稳定入口。"
+    },
+    "platform_reject_kb_absent_v2_holdout_current": {
+      "slot": "platform_reject_kb_absent_v2_holdout_current",
+      "label": "高风险拒答边界结果 `kb_absent_v2_holdout`",
+      "datasetName": "test_dataset_platform_reject_kb_absent_v2_holdout_reviewed",
+      "datasetFile": "../../../Backend/test/test_dataset_platform_mixed/test_dataset_platform_reject_kb_absent_v2_holdout_reviewed.json",
+      "resultFile": "../platform_mixed_test_dataset_platform_reject_kb_absent_v2_holdout_reviewed_1774836586809.json",
+      "sourceScript": "../../eval_platform_mixed.ts",
+      "managedByScript": true,
+      "updatedAt": "2026-03-31T00:00:00+08:00",
+      "note": "当前脚本会在重跑后自动覆盖这条稳定入口。"
+    },
+    "platform_reject_kb_absent_pair_control_v2_holdout_flat_current": {
+      "slot": "platform_reject_kb_absent_pair_control_v2_holdout_flat_current",
+      "label": "高风险拒答对照结果 `pair_control_v2_holdout_flat`",
+      "datasetName": "test_dataset_platform_reject_kb_absent_pair_control_v2_holdout_flat_reviewed",
+      "datasetFile": "../../../Backend/test/test_dataset_platform_mixed/test_dataset_platform_reject_kb_absent_pair_control_v2_holdout_flat_reviewed.json",
+      "resultFile": "../platform_mixed_test_dataset_platform_reject_kb_absent_pair_control_v2_holdout_flat_reviewed_1774836819350.json",
+      "sourceScript": "../../eval_platform_mixed.ts",
+      "managedByScript": true,
+      "updatedAt": "2026-03-31T00:00:00+08:00",
+      "note": "当前脚本会在重跑后自动覆盖这条稳定入口。"
+    }
+  }
+}

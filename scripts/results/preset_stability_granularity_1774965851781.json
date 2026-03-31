@@ -1,0 +1,379 @@
+{
+  "generatedAt": "2026-03-31T14:04:11.781Z",
+  "note": "该报告用于在 granularity 主线与外部 holdout 上比较固定主配置的稳定性；排序优先看 holdout 最差 Hit@1，再看 holdout 平均 Hit@1，最后看 main_106。",
+  "datasets": [
+    {
+      "name": "main_106",
+      "label": "main_106",
+      "file": "D:\\Project\\SuAsk\\SuAsk_Agent\\Backend\\test\\test_dataset_granularity\\test_dataset_granularity_main_106_reviewed.json",
+      "isolateForRegistry": true
+    },
+    {
+      "name": "holdout_v1",
+      "label": "holdout_v1",
+      "file": "D:\\Project\\SuAsk\\SuAsk_Agent\\Backend\\test\\test_dataset_granularity\\test_dataset_granularity_holdout_v1_reviewed.json"
+    },
+    {
+      "name": "holdout_v2",
+      "label": "holdout_v2",
+      "file": "D:\\Project\\SuAsk\\SuAsk_Agent\\Backend\\test\\test_dataset_granularity\\test_dataset_granularity_holdout_v2_reviewed.json"
+    },
+    {
+      "name": "holdout_v3",
+      "label": "holdout_v3",
+      "file": "D:\\Project\\SuAsk\\SuAsk_Agent\\Backend\\test\\test_dataset_granularity\\test_dataset_granularity_holdout_v3_reviewed.json"
+    }
+  ],
+  "probes": [
+    {
+      "presetName": "paper_frozen_main_v1",
+      "label": "论文主配置",
+      "comboLabel": "KP+OT",
+      "retrieval": {
+        "weights": {
+          "Q": 0,
+          "KP": 0.28571428571428575,
+          "OT": 0.7142857142857143
+        },
+        "topHybridLimit": 1000,
+        "kpAggregationMode": "max",
+        "kpTopN": 3,
+        "kpTailWeight": 0.35,
+        "lexicalBonusMode": "sum",
+        "kpRoleRerankMode": "feature",
+        "kpRoleDocWeight": 0.35
+      },
+      "datasets": [
+        {
+          "datasetName": "main_106",
+          "datasetLabel": "main_106",
+          "outputPath": "D:/Project/SuAsk/SuAsk_Agent/FrontEnd/scripts/results/granularity_mix_test_dataset_granularity_main_106_reviewed_preset_stability_20260331_top1000_kpagg-max_lexsum_onlinekprolefeature-w035_kpreranknone_docreranknone_1774964778873.json",
+          "comboLabel": "KP+OT",
+          "docHitAt1": 78.30188679245283,
+          "docMRR": 0.8441952259932282,
+          "kpidHitAt1": 43.93939393939394,
+          "kpidMRR": 0.46768527405782306
+        },
+        {
+          "datasetName": "holdout_v1",
+          "datasetLabel": "holdout_v1",
+          "outputPath": "D:/Project/SuAsk/SuAsk_Agent/FrontEnd/scripts/results/granularity_mix_test_dataset_granularity_holdout_v1_reviewed_top1000_kpagg-max_lexsum_onlinekprolefeature-w035_kpreranknone_docreranknone_1774964831596.json",
+          "comboLabel": "KP+OT",
+          "docHitAt1": 71.42857142857143,
+          "docMRR": 0.7873015873015872,
+          "kpidHitAt1": 20,
+          "kpidMRR": 0.2
+        },
+        {
+          "datasetName": "holdout_v2",
+          "datasetLabel": "holdout_v2",
+          "outputPath": "D:/Project/SuAsk/SuAsk_Agent/FrontEnd/scripts/results/granularity_mix_test_dataset_granularity_holdout_v2_reviewed_top1000_kpagg-max_lexsum_onlinekprolefeature-w035_kpreranknone_docreranknone_1774964868256.json",
+          "comboLabel": "KP+OT",
+          "docHitAt1": 69.23076923076923,
+          "docMRR": 0.814102564102564,
+          "kpidHitAt1": 33.33333333333333,
+          "kpidMRR": 0.3888888888888889
+        },
+        {
+          "datasetName": "holdout_v3",
+          "datasetLabel": "holdout_v3",
+          "outputPath": "D:/Project/SuAsk/SuAsk_Agent/FrontEnd/scripts/results/granularity_mix_test_dataset_granularity_holdout_v3_reviewed_top1000_kpagg-max_lexsum_onlinekprolefeature-w035_kpreranknone_docreranknone_1774964916363.json",
+          "comboLabel": "KP+OT",
+          "docHitAt1": 84.21052631578947,
+          "docMRR": 0.8947368421052632,
+          "kpidHitAt1": 28.57142857142857,
+          "kpidMRR": 0.32142857142857145
+        }
+      ],
+      "aggregate": {
+        "main106DocHitAt1": 78.30188679245283,
+        "main106DocMRR": 0.8441952259932282,
+        "main106KpidHitAt1": 43.93939393939394,
+        "main106KpidMRR": 0.46768527405782306,
+        "holdoutAverageDocHitAt1": 74.95662232504338,
+        "holdoutAverageDocMRR": 0.8320469978364714,
+        "holdoutAverageKpidHitAt1": 27.3015873015873,
+        "holdoutAverageKpidMRR": 0.30343915343915345,
+        "holdoutWorstDocHitAt1": 69.23076923076923,
+        "holdoutWorstDocMRR": 0.7873015873015872,
+        "holdoutWorstKpidHitAt1": 20,
+        "holdoutWorstKpidMRR": 0.2,
+        "holdoutDocHitAt1Range": 14.979757085020239,
+        "holdoutKpidHitAt1Range": 13.333333333333329
+      }
+    },
+    {
+      "presetName": "product_canonical_full_v1",
+      "label": "产品旧 canonical 配置",
+      "comboLabel": "Q+KP+OT",
+      "retrieval": {
+        "weights": {
+          "Q": 0.3333333333333333,
+          "KP": 0.13333333333333333,
+          "OT": 0.5333333333333333
+        },
+        "topHybridLimit": 1000,
+        "kpAggregationMode": "max",
+        "kpTopN": 3,
+        "kpTailWeight": 0.35,
+        "lexicalBonusMode": "sum",
+        "kpRoleRerankMode": "feature",
+        "kpRoleDocWeight": 0.35
+      },
+      "datasets": [
+        {
+          "datasetName": "main_106",
+          "datasetLabel": "main_106",
+          "outputPath": "D:/Project/SuAsk/SuAsk_Agent/FrontEnd/scripts/results/granularity_mix_test_dataset_granularity_main_106_reviewed_preset_stability_20260331_top1000_kpagg-max_lexsum_onlinekprolefeature-w035_kpreranknone_docreranknone_1774965092986.json",
+          "comboLabel": "Q+KP+OT",
+          "docHitAt1": 81.13207547169812,
+          "docMRR": 0.8650042213305255,
+          "kpidHitAt1": 37.878787878787875,
+          "kpidMRR": 0.4267071164129988
+        },
+        {
+          "datasetName": "holdout_v1",
+          "datasetLabel": "holdout_v1",
+          "outputPath": "D:/Project/SuAsk/SuAsk_Agent/FrontEnd/scripts/results/granularity_mix_test_dataset_granularity_holdout_v1_reviewed_top1000_kpagg-max_lexsum_onlinekprolefeature-w035_kpreranknone_docreranknone_1774965129679.json",
+          "comboLabel": "Q+KP+OT",
+          "docHitAt1": 61.904761904761905,
+          "docMRR": 0.7396825396825397,
+          "kpidHitAt1": 20,
+          "kpidMRR": 0.2
+        },
+        {
+          "datasetName": "holdout_v2",
+          "datasetLabel": "holdout_v2",
+          "outputPath": "D:/Project/SuAsk/SuAsk_Agent/FrontEnd/scripts/results/granularity_mix_test_dataset_granularity_holdout_v2_reviewed_top1000_kpagg-max_lexsum_onlinekprolefeature-w035_kpreranknone_docreranknone_1774965154732.json",
+          "comboLabel": "Q+KP+OT",
+          "docHitAt1": 84.61538461538461,
+          "docMRR": 0.9230769230769231,
+          "kpidHitAt1": 44.44444444444444,
+          "kpidMRR": 0.4444444444444444
+        },
+        {
+          "datasetName": "holdout_v3",
+          "datasetLabel": "holdout_v3",
+          "outputPath": "D:/Project/SuAsk/SuAsk_Agent/FrontEnd/scripts/results/granularity_mix_test_dataset_granularity_holdout_v3_reviewed_top1000_kpagg-max_lexsum_onlinekprolefeature-w035_kpreranknone_docreranknone_1774965189211.json",
+          "comboLabel": "Q+KP+OT",
+          "docHitAt1": 63.1578947368421,
+          "docMRR": 0.7763157894736842,
+          "kpidHitAt1": 28.57142857142857,
+          "kpidMRR": 0.35714285714285715
+        }
+      ],
+      "aggregate": {
+        "main106DocHitAt1": 81.13207547169812,
+        "main106DocMRR": 0.8650042213305255,
+        "main106KpidHitAt1": 37.878787878787875,
+        "main106KpidMRR": 0.4267071164129988,
+        "holdoutAverageDocHitAt1": 69.8926804189962,
+        "holdoutAverageDocMRR": 0.8130250840777157,
+        "holdoutAverageKpidHitAt1": 31.005291005291003,
+        "holdoutAverageKpidMRR": 0.33386243386243386,
+        "holdoutWorstDocHitAt1": 61.904761904761905,
+        "holdoutWorstDocMRR": 0.7396825396825397,
+        "holdoutWorstKpidHitAt1": 20,
+        "holdoutWorstKpidMRR": 0.2,
+        "holdoutDocHitAt1Range": 22.710622710622708,
+        "holdoutKpidHitAt1Range": 24.444444444444443
+      }
+    },
+    {
+      "presetName": "paper_tail_top3_w020_v1",
+      "label": "论文主配置 + top3 tail0.20",
+      "comboLabel": "KP+OT",
+      "retrieval": {
+        "weights": {
+          "Q": 0,
+          "KP": 0.28571428571428575,
+          "OT": 0.7142857142857143
+        },
+        "topHybridLimit": 1000,
+        "kpAggregationMode": "max_plus_topn",
+        "kpTopN": 3,
+        "kpTailWeight": 0.2,
+        "lexicalBonusMode": "sum",
+        "kpRoleRerankMode": "feature",
+        "kpRoleDocWeight": 0.35
+      },
+      "datasets": [
+        {
+          "datasetName": "main_106",
+          "datasetLabel": "main_106",
+          "outputPath": "D:/Project/SuAsk/SuAsk_Agent/FrontEnd/scripts/results/granularity_mix_test_dataset_granularity_main_106_reviewed_preset_stability_20260331_top1000_kpagg-top3-w020_lexsum_onlinekprolefeature-w035_kpreranknone_docreranknone_1774965440660.json",
+          "comboLabel": "KP+OT",
+          "docHitAt1": 78.30188679245283,
+          "docMRR": 0.8441952259932282,
+          "kpidHitAt1": 43.93939393939394,
+          "kpidMRR": 0.46768527405782306
+        },
+        {
+          "datasetName": "holdout_v1",
+          "datasetLabel": "holdout_v1",
+          "outputPath": "D:/Project/SuAsk/SuAsk_Agent/FrontEnd/scripts/results/granularity_mix_test_dataset_granularity_holdout_v1_reviewed_top1000_kpagg-top3-w020_lexsum_onlinekprolefeature-w035_kpreranknone_docreranknone_1774965493618.json",
+          "comboLabel": "KP+OT",
+          "docHitAt1": 71.42857142857143,
+          "docMRR": 0.7873015873015872,
+          "kpidHitAt1": 20,
+          "kpidMRR": 0.2
+        },
+        {
+          "datasetName": "holdout_v2",
+          "datasetLabel": "holdout_v2",
+          "outputPath": "D:/Project/SuAsk/SuAsk_Agent/FrontEnd/scripts/results/granularity_mix_test_dataset_granularity_holdout_v2_reviewed_top1000_kpagg-top3-w020_lexsum_onlinekprolefeature-w035_kpreranknone_docreranknone_1774965530185.json",
+          "comboLabel": "KP+OT",
+          "docHitAt1": 76.92307692307693,
+          "docMRR": 0.8525641025641024,
+          "kpidHitAt1": 33.33333333333333,
+          "kpidMRR": 0.3888888888888889
+        },
+        {
+          "datasetName": "holdout_v3",
+          "datasetLabel": "holdout_v3",
+          "outputPath": "D:/Project/SuAsk/SuAsk_Agent/FrontEnd/scripts/results/granularity_mix_test_dataset_granularity_holdout_v3_reviewed_top1000_kpagg-top3-w020_lexsum_onlinekprolefeature-w035_kpreranknone_docreranknone_1774965578723.json",
+          "comboLabel": "KP+OT",
+          "docHitAt1": 84.21052631578947,
+          "docMRR": 0.8947368421052632,
+          "kpidHitAt1": 28.57142857142857,
+          "kpidMRR": 0.32142857142857145
+        }
+      ],
+      "aggregate": {
+        "main106DocHitAt1": 78.30188679245283,
+        "main106DocMRR": 0.8441952259932282,
+        "main106KpidHitAt1": 43.93939393939394,
+        "main106KpidMRR": 0.46768527405782306,
+        "holdoutAverageDocHitAt1": 77.52072488914594,
+        "holdoutAverageDocMRR": 0.8448675106569842,
+        "holdoutAverageKpidHitAt1": 27.3015873015873,
+        "holdoutAverageKpidMRR": 0.30343915343915345,
+        "holdoutWorstDocHitAt1": 71.42857142857143,
+        "holdoutWorstDocMRR": 0.7873015873015872,
+        "holdoutWorstKpidHitAt1": 20,
+        "holdoutWorstKpidMRR": 0.2,
+        "holdoutDocHitAt1Range": 12.781954887218035,
+        "holdoutKpidHitAt1Range": 13.333333333333329
+      }
+    },
+    {
+      "presetName": "product_tail_top3_w020_v1",
+      "label": "产品旧 canonical + top3 tail0.20",
+      "comboLabel": "Q+KP+OT",
+      "retrieval": {
+        "weights": {
+          "Q": 0.3333333333333333,
+          "KP": 0.13333333333333333,
+          "OT": 0.5333333333333333
+        },
+        "topHybridLimit": 1000,
+        "kpAggregationMode": "max_plus_topn",
+        "kpTopN": 3,
+        "kpTailWeight": 0.2,
+        "lexicalBonusMode": "sum",
+        "kpRoleRerankMode": "feature",
+        "kpRoleDocWeight": 0.35
+      },
+      "datasets": [
+        {
+          "datasetName": "main_106",
+          "datasetLabel": "main_106",
+          "outputPath": "D:/Project/SuAsk/SuAsk_Agent/FrontEnd/scripts/results/granularity_mix_test_dataset_granularity_main_106_reviewed_preset_stability_20260331_top1000_kpagg-top3-w020_lexsum_onlinekprolefeature-w035_kpreranknone_docreranknone_1774965754807.json",
+          "comboLabel": "Q+KP+OT",
+          "docHitAt1": 81.13207547169812,
+          "docMRR": 0.8650042213305255,
+          "kpidHitAt1": 37.878787878787875,
+          "kpidMRR": 0.4267071164129988
+        },
+        {
+          "datasetName": "holdout_v1",
+          "datasetLabel": "holdout_v1",
+          "outputPath": "D:/Project/SuAsk/SuAsk_Agent/FrontEnd/scripts/results/granularity_mix_test_dataset_granularity_holdout_v1_reviewed_top1000_kpagg-top3-w020_lexsum_onlinekprolefeature-w035_kpreranknone_docreranknone_1774965791721.json",
+          "comboLabel": "Q+KP+OT",
+          "docHitAt1": 61.904761904761905,
+          "docMRR": 0.7396825396825397,
+          "kpidHitAt1": 20,
+          "kpidMRR": 0.2
+        },
+        {
+          "datasetName": "holdout_v2",
+          "datasetLabel": "holdout_v2",
+          "outputPath": "D:/Project/SuAsk/SuAsk_Agent/FrontEnd/scripts/results/granularity_mix_test_dataset_granularity_holdout_v2_reviewed_top1000_kpagg-top3-w020_lexsum_onlinekprolefeature-w035_kpreranknone_docreranknone_1774965817443.json",
+          "comboLabel": "Q+KP+OT",
+          "docHitAt1": 84.61538461538461,
+          "docMRR": 0.9230769230769231,
+          "kpidHitAt1": 44.44444444444444,
+          "kpidMRR": 0.4444444444444444
+        },
+        {
+          "datasetName": "holdout_v3",
+          "datasetLabel": "holdout_v3",
+          "outputPath": "D:/Project/SuAsk/SuAsk_Agent/FrontEnd/scripts/results/granularity_mix_test_dataset_granularity_holdout_v3_reviewed_top1000_kpagg-top3-w020_lexsum_onlinekprolefeature-w035_kpreranknone_docreranknone_1774965851625.json",
+          "comboLabel": "Q+KP+OT",
+          "docHitAt1": 63.1578947368421,
+          "docMRR": 0.7763157894736842,
+          "kpidHitAt1": 28.57142857142857,
+          "kpidMRR": 0.35714285714285715
+        }
+      ],
+      "aggregate": {
+        "main106DocHitAt1": 81.13207547169812,
+        "main106DocMRR": 0.8650042213305255,
+        "main106KpidHitAt1": 37.878787878787875,
+        "main106KpidMRR": 0.4267071164129988,
+        "holdoutAverageDocHitAt1": 69.8926804189962,
+        "holdoutAverageDocMRR": 0.8130250840777157,
+        "holdoutAverageKpidHitAt1": 31.005291005291003,
+        "holdoutAverageKpidMRR": 0.33386243386243386,
+        "holdoutWorstDocHitAt1": 61.904761904761905,
+        "holdoutWorstDocMRR": 0.7396825396825397,
+        "holdoutWorstKpidHitAt1": 20,
+        "holdoutWorstKpidMRR": 0.2,
+        "holdoutDocHitAt1Range": 22.710622710622708,
+        "holdoutKpidHitAt1Range": 24.444444444444443
+      }
+    }
+  ],
+  "ranking": [
+    {
+      "rank": 1,
+      "presetName": "paper_tail_top3_w020_v1",
+      "label": "论文主配置 + top3 tail0.20",
+      "comboLabel": "KP+OT",
+      "holdoutWorstDocHitAt1": 71.42857142857143,
+      "holdoutAverageDocHitAt1": 77.52072488914594,
+      "main106DocHitAt1": 78.30188679245283,
+      "holdoutAverageKpidHitAt1": 27.3015873015873
+    },
+    {
+      "rank": 2,
+      "presetName": "paper_frozen_main_v1",
+      "label": "论文主配置",
+      "comboLabel": "KP+OT",
+      "holdoutWorstDocHitAt1": 69.23076923076923,
+      "holdoutAverageDocHitAt1": 74.95662232504338,
+      "main106DocHitAt1": 78.30188679245283,
+      "holdoutAverageKpidHitAt1": 27.3015873015873
+    },
+    {
+      "rank": 3,
+      "presetName": "product_canonical_full_v1",
+      "label": "产品旧 canonical 配置",
+      "comboLabel": "Q+KP+OT",
+      "holdoutWorstDocHitAt1": 61.904761904761905,
+      "holdoutAverageDocHitAt1": 69.8926804189962,
+      "main106DocHitAt1": 81.13207547169812,
+      "holdoutAverageKpidHitAt1": 31.005291005291003
+    },
+    {
+      "rank": 4,
+      "presetName": "product_tail_top3_w020_v1",
+      "label": "产品旧 canonical + top3 tail0.20",
+      "comboLabel": "Q+KP+OT",
+      "holdoutWorstDocHitAt1": 61.904761904761905,
+      "holdoutAverageDocHitAt1": 69.8926804189962,
+      "main106DocHitAt1": 81.13207547169812,
+      "holdoutAverageKpidHitAt1": 31.005291005291003
+    }
+  ]
+}

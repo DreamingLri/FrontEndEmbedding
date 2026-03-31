@@ -5,14 +5,18 @@ import {
     CANONICAL_PIPELINE_PRESET,
     buildPipelineTermMaps,
     buildSearchPipelineQueryContext,
+    resolvePipelinePresetByName,
     executeSearchPipeline,
     type PipelineBehavior,
+    type PipelinePreset,
 } from "../src/worker/search_pipeline.ts";
 import {
     embedQueries as embedFrontendQueries,
     loadFrontendEvalEngine,
 } from "./frontend_eval_engine.ts";
+import { CURRENT_EVAL_DATASET_FILES } from "./current_eval_targets.ts";
 import { createLocalDocumentLoader } from "./local_document_provider.ts";
+import { updateCurrentResultRegistry } from "./result_registry.ts";
 
 type ExpectedAction = "clarify" | "route_to_entry" | "reject";
 type CoarseBehavior = "clarify_or_route" | "reject" | "direct_answer";
@@ -99,7 +103,7 @@ type Report = {
     total: number;
     config: {
         pipelineVersion: string;
-        preset: typeof CANONICAL_PIPELINE_PRESET;
+        preset: PipelinePreset;
         note: string;
     };
     summary: Summary;
@@ -109,10 +113,16 @@ type Report = {
 const DATASET_FILE = path.resolve(
     process.cwd(),
     process.env.SUASK_ROUTE_DATASET_FILE ||
-        "../Backend/test/test_dataset_route_or_clarify/test_dataset_route_or_clarify_v1_seed.json",
+        CURRENT_EVAL_DATASET_FILES.routeOrClarifyV2Holdout,
 );
 const RESULTS_DIR = path.resolve(process.cwd(), "./scripts/results");
 const CURRENT_TIMESTAMP = Date.now() / 1000;
+const DEFAULT_REPORT_NOTE =
+    "当前报告直接调用统一 full pipeline，默认数据集已切到 route_or_clarify_v2_holdout_reviewed；如需开发回归，请显式传入 route_or_clarify_v2_dev_reviewed。";
+const REPORT_NOTE = process.env.SUASK_ROUTE_NOTE || DEFAULT_REPORT_NOTE;
+const PIPELINE_PRESET_NAME =
+    process.env.SUASK_PIPELINE_PRESET || CANONICAL_PIPELINE_PRESET.name;
+const EVAL_PRESET = resolvePipelinePresetByName(PIPELINE_PRESET_NAME);
 
 function safeRate(numerator: number, denominator: number): number {
     return denominator > 0 ? numerator / denominator : 0;
@@ -246,7 +256,7 @@ async function main() {
             extractor: engine.extractor,
             documentLoader,
             termMaps,
-            preset: CANONICAL_PIPELINE_PRESET,
+            preset: EVAL_PRESET,
         });
 
         const predictedBehavior = pipelineResult.finalDecision.behavior;
@@ -339,9 +349,9 @@ async function main() {
         datasetName,
         total: caseReports.length,
         config: {
-            pipelineVersion: CANONICAL_PIPELINE_PRESET.name,
-            preset: CANONICAL_PIPELINE_PRESET,
-            note: "当前报告直接调用统一 full pipeline，区分 clarify / route_to_entry / reject 三类行为。",
+            pipelineVersion: EVAL_PRESET.name,
+            preset: EVAL_PRESET,
+            note: REPORT_NOTE,
         },
         summary: buildSummary(caseReports),
         caseReports,
@@ -353,6 +363,13 @@ async function main() {
         `route_or_clarify_${datasetName}_${Date.now()}.json`,
     );
     fs.writeFileSync(outputPath, JSON.stringify(report, null, 2), "utf-8");
+    updateCurrentResultRegistry({
+        datasetName,
+        datasetFile: DATASET_FILE,
+        outputPath,
+        sourceScript: "eval_route_or_clarify.ts",
+        note: "当前稳定入口默认保留 `v2_dev` 与 `v2_holdout` 两条边界回归线。",
+    });
 
     console.log(`Saved report to ${outputPath}`);
     console.log(

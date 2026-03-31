@@ -5,14 +5,19 @@ import {
     CANONICAL_PIPELINE_PRESET,
     buildPipelineTermMaps,
     buildSearchPipelineQueryContext,
+    clonePipelinePreset,
     executeSearchPipeline,
+    resolvePipelinePresetByName,
     type PipelineBehavior,
+    type PipelinePreset,
 } from "../src/worker/search_pipeline.ts";
 import {
     embedQueries as embedFrontendQueries,
     loadFrontendEvalEngine,
 } from "./frontend_eval_engine.ts";
+import { CURRENT_EVAL_DATASET_FILES } from "./current_eval_targets.ts";
 import { createLocalDocumentLoader } from "./local_document_provider.ts";
+import { updateCurrentResultRegistry } from "./result_registry.ts";
 
 type ScenarioFamily =
     | "direct_answer_simple"
@@ -71,6 +76,17 @@ type CaseReport = {
     weak_match_count: number;
     match_count: number;
     fetched_document_count: number;
+    initial_top_confidence: number | null;
+    final_top_confidence: number | null;
+    rescue_attempted: boolean;
+    rescue_accepted: boolean;
+    rescue_succeeded: boolean;
+    rescue_reason: string | null;
+    retrieval_top1_top2_gap: number | null;
+    retrieval_dominant_topic_ratio: number | null;
+    query_has_explicit_topic_or_intent: boolean;
+    query_has_strong_detail_anchor: boolean;
+    query_has_explicit_year: boolean;
     top_matches: Array<{
         rank: number;
         otid: string;
@@ -138,6 +154,8 @@ type Summary = {
     routeFamilyBehaviorAccuracy: RateSummary;
     rejectHitRate: RateSummary;
     unsafeDirectAnswerRate: RateSummary;
+    directAnswerRescueAttemptRate: RateSummary;
+    directAnswerRescueSuccessRate: RateSummary;
     directAnswerDocHits: DocHitSummary;
     retrievalStageDocHits: DocHitSummary;
     complexDirectSubsetDocHits: DocHitSummary;
@@ -153,7 +171,7 @@ type Report = {
     total: number;
     config: {
         pipelineVersion: string;
-        preset: typeof CANONICAL_PIPELINE_PRESET;
+        preset: PipelinePreset;
         note: string;
     };
     summary: Summary;
@@ -163,10 +181,48 @@ type Report = {
 const DATASET_FILE = path.resolve(
     process.cwd(),
     process.env.SUASK_PLATFORM_MIXED_DATASET_FILE ||
-        "../Backend/test/test_dataset_platform_mixed/test_dataset_platform_mixed_daily_v1_2_reviewed.json",
+        CURRENT_EVAL_DATASET_FILES.platformMixedDailyV12,
 );
 const RESULTS_DIR = path.resolve(process.cwd(), "./scripts/results");
 const CURRENT_TIMESTAMP = Date.now() / 1000;
+const DEFAULT_REPORT_NOTE =
+    "当前报告直接调用统一 full pipeline，默认数据集已切到 mixed daily v1.2 reviewed。";
+const RESULTS_PREFIX =
+    process.env.SUASK_PLATFORM_MIXED_RESULTS_PREFIX || "platform_mixed";
+const REPORT_NOTE =
+    process.env.SUASK_PLATFORM_MIXED_NOTE || DEFAULT_REPORT_NOTE;
+const PIPELINE_PRESET_NAME =
+    process.env.SUASK_PIPELINE_PRESET || CANONICAL_PIPELINE_PRESET.name;
+
+function parseThresholdOverride(): number | null {
+    const raw = process.env.SUASK_PLATFORM_MIXED_REJECT_THRESHOLD;
+    if (!raw) {
+        return null;
+    }
+
+    const value = Number(raw);
+    if (!Number.isFinite(value) || value <= 0 || value >= 1) {
+        throw new Error(
+            `Invalid SUASK_PLATFORM_MIXED_REJECT_THRESHOLD: ${raw}`,
+        );
+    }
+
+    return value;
+}
+
+const REJECT_THRESHOLD_OVERRIDE = parseThresholdOverride();
+const BASE_PRESET = resolvePipelinePresetByName(PIPELINE_PRESET_NAME);
+const EVAL_PRESET: PipelinePreset =
+    REJECT_THRESHOLD_OVERRIDE === null
+        ? BASE_PRESET
+        : {
+              ...clonePipelinePreset(BASE_PRESET),
+              name: `${BASE_PRESET.name}_rt${REJECT_THRESHOLD_OVERRIDE.toFixed(2)}`,
+              display: {
+                  ...BASE_PRESET.display,
+                  rejectThreshold: REJECT_THRESHOLD_OVERRIDE,
+              },
+          };
 
 function safeRate(numerator: number, denominator: number): number {
     return denominator > 0 ? numerator / denominator : 0;
@@ -443,6 +499,14 @@ function buildSummary(caseReports: CaseReport[]): Summary {
             routeFamily.filter((item) => item.unsafe_direct_answer).length,
             routeFamily.length,
         ),
+        directAnswerRescueAttemptRate: buildRateSummary(
+            docTargetCases.filter((item) => item.rescue_attempted).length,
+            docTargetCases.length,
+        ),
+        directAnswerRescueSuccessRate: buildRateSummary(
+            docTargetCases.filter((item) => item.rescue_succeeded).length,
+            docTargetCases.length,
+        ),
         directAnswerDocHits: buildDocHitSummary(
             docTargetCases,
             "rendered_doc_rank",
@@ -500,7 +564,7 @@ async function main() {
             extractor: engine.extractor,
             documentLoader,
             termMaps,
-            preset: CANONICAL_PIPELINE_PRESET,
+            preset: EVAL_PRESET,
         });
 
         const predictedBehavior = pipelineResult.finalDecision.behavior;
@@ -559,6 +623,26 @@ async function main() {
             weak_match_count: pipelineResult.trace.weakMatchCount,
             match_count: pipelineResult.trace.matchCount,
             fetched_document_count: pipelineResult.trace.fetchedDocumentCount,
+            initial_top_confidence: pipelineResult.trace.initialTopConfidence ?? null,
+            final_top_confidence: pipelineResult.trace.topConfidence ?? null,
+            rescue_attempted:
+                pipelineResult.trace.directAnswerRescue?.attempted ?? false,
+            rescue_accepted:
+                pipelineResult.trace.directAnswerRescue?.accepted ?? false,
+            rescue_succeeded:
+                pipelineResult.trace.directAnswerRescue?.succeeded ?? false,
+            rescue_reason:
+                pipelineResult.trace.directAnswerRescue?.reason ?? null,
+            retrieval_top1_top2_gap:
+                pipelineResult.trace.retrievalSignals?.top1Top2Gap ?? null,
+            retrieval_dominant_topic_ratio:
+                pipelineResult.trace.retrievalSignals?.dominantTopicRatio ?? null,
+            query_has_explicit_topic_or_intent:
+                pipelineResult.trace.querySignals?.hasExplicitTopicOrIntent ?? false,
+            query_has_strong_detail_anchor:
+                pipelineResult.trace.querySignals?.hasStrongDetailAnchor ?? false,
+            query_has_explicit_year:
+                pipelineResult.trace.querySignals?.hasExplicitYear ?? false,
             top_matches: pipelineResult.searchOutput.matches
                 .slice(0, 5)
                 .map((match, rank) => ({
@@ -597,9 +681,9 @@ async function main() {
         datasetName,
         total: caseReports.length,
         config: {
-            pipelineVersion: CANONICAL_PIPELINE_PRESET.name,
-            preset: CANONICAL_PIPELINE_PRESET,
-            note: "当前报告直接调用统一 full pipeline，默认数据集已切到 mixed daily v1.2 reviewed。",
+            pipelineVersion: EVAL_PRESET.name,
+            preset: EVAL_PRESET,
+            note: REPORT_NOTE,
         },
         summary: buildSummary(caseReports),
         caseReports,
@@ -608,9 +692,16 @@ async function main() {
     fs.mkdirSync(RESULTS_DIR, { recursive: true });
     const outputPath = path.join(
         RESULTS_DIR,
-        `platform_mixed_${datasetName}_${Date.now()}.json`,
+        `${RESULTS_PREFIX}_${datasetName}_${Date.now()}.json`,
     );
     fs.writeFileSync(outputPath, JSON.stringify(report, null, 2), "utf-8");
+    updateCurrentResultRegistry({
+        datasetName,
+        datasetFile: DATASET_FILE,
+        outputPath,
+        sourceScript: "eval_platform_mixed.ts",
+        note: "当前稳定入口会跟随 mixed 主线与 `kb_absent_v2` 边界线一起更新。",
+    });
 
     console.log(`Saved report to ${outputPath}`);
     console.log(
@@ -624,6 +715,8 @@ async function main() {
             `routeToEntrySuccessRate=${(report.summary.routeToEntrySuccessRate.rate * 100).toFixed(2)}%`,
             `rejectHitRate=${(report.summary.rejectHitRate.rate * 100).toFixed(2)}%`,
             `unsafeDirectAnswerRate=${(report.summary.unsafeDirectAnswerRate.rate * 100).toFixed(2)}%`,
+            `directAnswerRescueAttemptRate=${(report.summary.directAnswerRescueAttemptRate.rate * 100).toFixed(2)}%`,
+            `directAnswerRescueSuccessRate=${(report.summary.directAnswerRescueSuccessRate.rate * 100).toFixed(2)}%`,
             `directAnswerDocHit@1=${(report.summary.directAnswerDocHits.hitAt1Rate * 100).toFixed(2)}%`,
             `retrievalDocHit@1=${(report.summary.retrievalStageDocHits.hitAt1Rate * 100).toFixed(2)}%`,
             `complexDirectHit@1=${(report.summary.complexDirectSubsetDocHits.hitAt1Rate * 100).toFixed(2)}%`,

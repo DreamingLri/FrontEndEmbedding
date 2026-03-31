@@ -25,6 +25,8 @@ import {
     embedQueries as embedFrontendQueries,
     loadFrontendEvalEngine,
 } from "./frontend_eval_engine.ts";
+import { CURRENT_EVAL_DATASET_FILES } from "./current_eval_targets.ts";
+import { updateCurrentResultRegistry } from "./result_registry.ts";
 
 type DatasetCase = EvalDatasetCase;
 type GranularityType = "Q" | "KP" | "OT";
@@ -185,8 +187,10 @@ type Report = {
     combos: ComboReport[];
 };
 
-const DATASET_VERSION = process.env.SUASK_EVAL_DATASET_VERSION || "v2";
-const DATASET_FILE = process.env.SUASK_EVAL_DATASET_FILE;
+const DATASET_VERSION = process.env.SUASK_EVAL_DATASET_VERSION || "granularity";
+const DATASET_FILE =
+    process.env.SUASK_EVAL_DATASET_FILE ||
+    CURRENT_EVAL_DATASET_FILES.granularityMain106;
 const SINGLE_FILE_AS_ALL = process.env.SUASK_EVAL_SINGLE_FILE_AS_ALL === "1";
 const DATASET_CONFIG = resolveEvalDatasetConfig({
     datasetVersion: DATASET_VERSION,
@@ -1784,6 +1788,13 @@ async function main() {
         `granularity_mix_${DATASET_CONFIG.datasetKey}_top${Number.isFinite(TOP_HYBRID_LIMIT) && TOP_HYBRID_LIMIT > 0 ? TOP_HYBRID_LIMIT : 1000}_${KP_AGGREGATION_MODE === "max_plus_topn" ? `kpagg-top${Number.isFinite(KP_TOP_N) && KP_TOP_N > 0 ? KP_TOP_N : 3}-w${(Number.isFinite(KP_TAIL_WEIGHT) && KP_TAIL_WEIGHT >= 0 ? KP_TAIL_WEIGHT : 0.35).toFixed(2).replace(".", "")}` : "kpagg-max"}_lex${LEXICAL_BONUS_MODE}_onlinekprole${ONLINE_KP_ROLE_RERANK_MODE}${ONLINE_KP_ROLE_RERANK_MODE === "feature" ? `-w${(Number.isFinite(ONLINE_KP_ROLE_DOC_WEIGHT) && ONLINE_KP_ROLE_DOC_WEIGHT >= 0 ? ONLINE_KP_ROLE_DOC_WEIGHT : 0.35).toFixed(2).replace(".", "")}` : ""}_kprerank${KP_CANDIDATE_RERANK_MODE}_docrerank${formatDocPostRerankSlug()}_${Date.now()}.json`,
     );
     fs.writeFileSync(outputPath, JSON.stringify(report, null, 2), "utf-8");
+    updateCurrentResultRegistry({
+        datasetName: DATASET_CONFIG.datasetKey,
+        datasetFile: DATASET_FILE,
+        outputPath,
+        sourceScript: "eval_granularity_mix.ts",
+        note: "当前脚本只会自动更新 `main_106` 的稳定结果入口；`holdout_v3` 当前仍使用单独固定口径结果。",
+    });
     console.log(`\nSaved report to ${outputPath}`);
 
     if (EXPORT_BAD_CASES) {

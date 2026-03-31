@@ -1,0 +1,3386 @@
+{
+  "generatedAt": "2026-03-31T12:49:24.893Z",
+  "datasetVersion": "granularity",
+  "datasetMode": "single_file",
+  "datasetKey": "test_dataset_granularity_main_106_reviewed_tail_probe_20260331",
+  "topHybridLimit": 1000,
+  "kpAggregationMode": "max_plus_topn",
+  "kpTopN": 3,
+  "kpTailWeight": 0.2,
+  "lexicalBonusMode": "sum",
+  "onlineKpRoleRerankMode": "feature",
+  "onlineKpRoleDocWeight": 0.35,
+  "kpCandidateRerankMode": "none",
+  "docPostRerankMode": "none",
+  "docPostRerankWeight": 0.35,
+  "weightSteps": [
+    0.2,
+    0.5,
+    0.8
+  ],
+  "datasetSizes": {
+    "tune": {
+      "test_dataset_granularity_main_106_reviewed_tail_probe_20260331_standard": 61,
+      "test_dataset_granularity_main_106_reviewed_tail_probe_20260331_short_keyword": 20
+    },
+    "holdout": {
+      "test_dataset_granularity_main_106_reviewed_tail_probe_20260331_situational": 25
+    },
+    "combined": {
+      "test_dataset_granularity_main_106_reviewed_tail_probe_20260331_standard": 61,
+      "test_dataset_granularity_main_106_reviewed_tail_probe_20260331_short_keyword": 20,
+      "test_dataset_granularity_main_106_reviewed_tail_probe_20260331_situational": 25
+    }
+  },
+  "globalMetadataTypeCounts": {
+    "Q": 12819,
+    "KP": 2877,
+    "OT": 516
+  },
+  "combos": [
+    {
+      "label": "Q",
+      "allowedTypes": [
+        "Q"
+      ],
+      "metadataCount": 12819,
+      "metadataTypeCounts": {
+        "Q": 12819,
+        "KP": 0,
+        "OT": 0
+      },
+      "uniform": {
+        "weights": {
+          "Q": 1,
+          "KP": 0,
+          "OT": 0
+        },
+        "combined": {
+          "total": 106,
+          "hitAt1": 79.24528301886792,
+          "hitAt3": 88.67924528301887,
+          "hitAt5": 89.62264150943396,
+          "mrr": 0.8440694278879391
+        },
+        "kpidCombined": {
+          "applicable": 66,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 50,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 50,
+          "docHitAt5Total": 58,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 58
+        },
+        "metricsByDataset": {
+          "test_dataset_granularity_main_106_reviewed_tail_probe_20260331_standard": {
+            "total": 61,
+            "hitAt1": 86.88524590163934,
+            "hitAt3": 93.44262295081968,
+            "hitAt5": 93.44262295081968,
+            "mrr": 0.9022638563622171
+          },
+          "test_dataset_granularity_main_106_reviewed_tail_probe_20260331_short_keyword": {
+            "total": 20,
+            "hitAt1": 65,
+            "hitAt3": 80,
+            "hitAt5": 85,
+            "mrr": 0.7306372549019609
+          },
+          "test_dataset_granularity_main_106_reviewed_tail_probe_20260331_situational": {
+            "total": 25,
+            "hitAt1": 72,
+            "hitAt3": 84,
+            "hitAt5": 84,
+            "mrr": 0.7928207607994843
+          }
+        }
+      },
+      "tuned": {
+        "candidateCount": 1,
+        "bestWeights": {
+          "Q": 1,
+          "KP": 0,
+          "OT": 0
+        },
+        "tuneCombined": {
+          "total": 81,
+          "hitAt1": 81.48148148148148,
+          "hitAt3": 90.12345679012346,
+          "hitAt5": 91.35802469135803,
+          "mrr": 0.859886917730055
+        },
+        "kpidTuneCombined": {
+          "applicable": 44,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 35,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 35,
+          "docHitAt5Total": 40,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 40
+        },
+        "holdoutCombined": {
+          "total": 25,
+          "hitAt1": 72,
+          "hitAt3": 84,
+          "hitAt5": 84,
+          "mrr": 0.7928207607994843
+        },
+        "kpidHoldoutCombined": {
+          "applicable": 22,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 15,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 15,
+          "docHitAt5Total": 18,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 18
+        },
+        "combinedCombined": {
+          "total": 106,
+          "hitAt1": 79.24528301886792,
+          "hitAt3": 88.67924528301887,
+          "hitAt5": 89.62264150943396,
+          "mrr": 0.8440694278879391
+        },
+        "kpidCombinedCombined": {
+          "applicable": 66,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 50,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 50,
+          "docHitAt5Total": 58,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 58
+        },
+        "topTuneCandidates": [
+          {
+            "weights": {
+              "Q": 1,
+              "KP": 0,
+              "OT": 0
+            },
+            "combined": {
+              "total": 81,
+              "hitAt1": 81.48148148148148,
+              "hitAt3": 90.12345679012346,
+              "hitAt5": 91.35802469135803,
+              "mrr": 0.859886917730055
+            }
+          }
+        ]
+      },
+      "groupBreakdowns": {
+        "supportPattern": {
+          "multi_kp": {
+            "total": 59,
+            "uniform": {
+              "total": 59,
+              "hitAt1": 81.35593220338984,
+              "hitAt3": 94.91525423728814,
+              "hitAt5": 94.91525423728814,
+              "mrr": 0.8774792643346556
+            },
+            "tunedCombined": {
+              "total": 59,
+              "hitAt1": 81.35593220338984,
+              "hitAt3": 94.91525423728814,
+              "hitAt5": 94.91525423728814,
+              "mrr": 0.8774792643346556
+            },
+            "kpidUniform": {
+              "applicable": 44,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 35,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 35,
+              "docHitAt5Total": 41,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 41
+            },
+            "kpidTunedCombined": {
+              "applicable": 44,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 35,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 35,
+              "docHitAt5Total": 41,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 41
+            }
+          },
+          "ot_required": {
+            "total": 29,
+            "uniform": {
+              "total": 29,
+              "hitAt1": 82.75862068965517,
+              "hitAt3": 86.20689655172413,
+              "hitAt5": 89.65517241379311,
+              "mrr": 0.8563218390804599
+            },
+            "tunedCombined": {
+              "total": 29,
+              "hitAt1": 82.75862068965517,
+              "hitAt3": 86.20689655172413,
+              "hitAt5": 89.65517241379311,
+              "mrr": 0.8563218390804599
+            },
+            "kpidUniform": {
+              "applicable": 4,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 4,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 4
+            },
+            "kpidTunedCombined": {
+              "applicable": 4,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 4,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 4
+            }
+          },
+          "single_kp": {
+            "total": 18,
+            "uniform": {
+              "total": 18,
+              "hitAt1": 66.66666666666666,
+              "hitAt3": 72.22222222222221,
+              "hitAt5": 72.22222222222221,
+              "mrr": 0.7148194126135303
+            },
+            "tunedCombined": {
+              "total": 18,
+              "hitAt1": 66.66666666666666,
+              "hitAt3": 72.22222222222221,
+              "hitAt5": 72.22222222222221,
+              "mrr": 0.7148194126135303
+            },
+            "kpidUniform": {
+              "applicable": 18,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 12,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 12,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 13
+            },
+            "kpidTunedCombined": {
+              "applicable": 18,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 12,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 12,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 13
+            }
+          }
+        },
+        "preferredGranularity": {
+          "KP": {
+            "total": 26,
+            "uniform": {
+              "total": 26,
+              "hitAt1": 73.07692307692307,
+              "hitAt3": 80.76923076923077,
+              "hitAt5": 80.76923076923077,
+              "mrr": 0.7769262600144953
+            },
+            "tunedCombined": {
+              "total": 26,
+              "hitAt1": 73.07692307692307,
+              "hitAt3": 80.76923076923077,
+              "hitAt5": 80.76923076923077,
+              "mrr": 0.7769262600144953
+            },
+            "kpidUniform": {
+              "applicable": 26,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 19,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 19,
+              "docHitAt5Total": 21,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 21
+            },
+            "kpidTunedCombined": {
+              "applicable": 26,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 19,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 19,
+              "docHitAt5Total": 21,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 21
+            }
+          },
+          "KP+OT": {
+            "total": 44,
+            "uniform": {
+              "total": 44,
+              "hitAt1": 84.0909090909091,
+              "hitAt3": 93.18181818181817,
+              "hitAt5": 93.18181818181817,
+              "mrr": 0.8849532559638942
+            },
+            "tunedCombined": {
+              "total": 44,
+              "hitAt1": 84.0909090909091,
+              "hitAt3": 93.18181818181817,
+              "hitAt5": 93.18181818181817,
+              "mrr": 0.8849532559638942
+            },
+            "kpidUniform": {
+              "applicable": 29,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 23,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 23,
+              "docHitAt5Total": 26,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 26
+            },
+            "kpidTunedCombined": {
+              "applicable": 29,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 23,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 23,
+              "docHitAt5Total": 26,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 26
+            }
+          },
+          "OT": {
+            "total": 27,
+            "uniform": {
+              "total": 27,
+              "hitAt1": 81.48148148148148,
+              "hitAt3": 85.18518518518519,
+              "hitAt5": 88.88888888888889,
+              "mrr": 0.8456790123456791
+            },
+            "tunedCombined": {
+              "total": 27,
+              "hitAt1": 81.48148148148148,
+              "hitAt3": 85.18518518518519,
+              "hitAt5": 88.88888888888889,
+              "mrr": 0.8456790123456791
+            },
+            "kpidUniform": {
+              "applicable": 4,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 4,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 4
+            },
+            "kpidTunedCombined": {
+              "applicable": 4,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 4,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 4
+            }
+          },
+          "Q+KP": {
+            "total": 9,
+            "uniform": {
+              "total": 9,
+              "hitAt1": 66.66666666666666,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 0.8333333333333334
+            },
+            "tunedCombined": {
+              "total": 9,
+              "hitAt1": 66.66666666666666,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 0.8333333333333334
+            },
+            "kpidUniform": {
+              "applicable": 7,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 5,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 5,
+              "docHitAt5Total": 7,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 7
+            },
+            "kpidTunedCombined": {
+              "applicable": 7,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 5,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 5,
+              "docHitAt5Total": 7,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 7
+            }
+          }
+        }
+      }
+    },
+    {
+      "label": "KP",
+      "allowedTypes": [
+        "KP"
+      ],
+      "metadataCount": 2877,
+      "metadataTypeCounts": {
+        "Q": 0,
+        "KP": 2877,
+        "OT": 0
+      },
+      "uniform": {
+        "weights": {
+          "Q": 0,
+          "KP": 1,
+          "OT": 0
+        },
+        "combined": {
+          "total": 106,
+          "hitAt1": 74.52830188679245,
+          "hitAt3": 85.84905660377359,
+          "hitAt5": 88.67924528301887,
+          "mrr": 0.811215997300903
+        },
+        "kpidCombined": {
+          "applicable": 66,
+          "hitAt1": 39.39393939393939,
+          "hitAt3": 43.93939393939394,
+          "hitAt5": 46.96969696969697,
+          "mrr": 0.42462514167059623,
+          "docHitAt1Total": 49,
+          "docHitAt1CorrectKpid": 26,
+          "docHitAt1WrongKpid": 23,
+          "docHitAt5Total": 58,
+          "docHitAt5CorrectKpid": 31,
+          "docHitAt5WrongKpid": 27
+        },
+        "metricsByDataset": {
+          "test_dataset_granularity_main_106_reviewed_tail_probe_20260331_standard": {
+            "total": 61,
+            "hitAt1": 80.32786885245902,
+            "hitAt3": 90.1639344262295,
+            "hitAt5": 91.80327868852459,
+            "mrr": 0.8609744990892532
+          },
+          "test_dataset_granularity_main_106_reviewed_tail_probe_20260331_short_keyword": {
+            "total": 20,
+            "hitAt1": 70,
+            "hitAt3": 80,
+            "hitAt5": 80,
+            "mrr": 0.7531190281190281
+          },
+          "test_dataset_granularity_main_106_reviewed_tail_probe_20260331_situational": {
+            "total": 25,
+            "hitAt1": 64,
+            "hitAt3": 80,
+            "hitAt5": 88,
+            "mrr": 0.7362828282828283
+          }
+        }
+      },
+      "tuned": {
+        "candidateCount": 1,
+        "bestWeights": {
+          "Q": 0,
+          "KP": 1,
+          "OT": 0
+        },
+        "tuneCombined": {
+          "total": 81,
+          "hitAt1": 77.77777777777779,
+          "hitAt3": 87.65432098765432,
+          "hitAt5": 88.88888888888889,
+          "mrr": 0.834343518602778
+        },
+        "kpidTuneCombined": {
+          "applicable": 44,
+          "hitAt1": 36.36363636363637,
+          "hitAt3": 40.909090909090914,
+          "hitAt5": 43.18181818181818,
+          "mrr": 0.39272283647283646,
+          "docHitAt1Total": 34,
+          "docHitAt1CorrectKpid": 16,
+          "docHitAt1WrongKpid": 18,
+          "docHitAt5Total": 39,
+          "docHitAt5CorrectKpid": 19,
+          "docHitAt5WrongKpid": 20
+        },
+        "holdoutCombined": {
+          "total": 25,
+          "hitAt1": 64,
+          "hitAt3": 80,
+          "hitAt5": 88,
+          "mrr": 0.7362828282828283
+        },
+        "kpidHoldoutCombined": {
+          "applicable": 22,
+          "hitAt1": 45.45454545454545,
+          "hitAt3": 50,
+          "hitAt5": 54.54545454545454,
+          "mrr": 0.4884297520661157,
+          "docHitAt1Total": 15,
+          "docHitAt1CorrectKpid": 10,
+          "docHitAt1WrongKpid": 5,
+          "docHitAt5Total": 19,
+          "docHitAt5CorrectKpid": 12,
+          "docHitAt5WrongKpid": 7
+        },
+        "combinedCombined": {
+          "total": 106,
+          "hitAt1": 74.52830188679245,
+          "hitAt3": 85.84905660377359,
+          "hitAt5": 88.67924528301887,
+          "mrr": 0.811215997300903
+        },
+        "kpidCombinedCombined": {
+          "applicable": 66,
+          "hitAt1": 39.39393939393939,
+          "hitAt3": 43.93939393939394,
+          "hitAt5": 46.96969696969697,
+          "mrr": 0.42462514167059623,
+          "docHitAt1Total": 49,
+          "docHitAt1CorrectKpid": 26,
+          "docHitAt1WrongKpid": 23,
+          "docHitAt5Total": 58,
+          "docHitAt5CorrectKpid": 31,
+          "docHitAt5WrongKpid": 27
+        },
+        "topTuneCandidates": [
+          {
+            "weights": {
+              "Q": 0,
+              "KP": 1,
+              "OT": 0
+            },
+            "combined": {
+              "total": 81,
+              "hitAt1": 77.77777777777779,
+              "hitAt3": 87.65432098765432,
+              "hitAt5": 88.88888888888889,
+              "mrr": 0.834343518602778
+            }
+          }
+        ]
+      },
+      "groupBreakdowns": {
+        "supportPattern": {
+          "multi_kp": {
+            "total": 59,
+            "uniform": {
+              "total": 59,
+              "hitAt1": 86.4406779661017,
+              "hitAt3": 91.52542372881356,
+              "hitAt5": 91.52542372881356,
+              "mrr": 0.8945814072932718
+            },
+            "tunedCombined": {
+              "total": 59,
+              "hitAt1": 86.4406779661017,
+              "hitAt3": 91.52542372881356,
+              "hitAt5": 91.52542372881356,
+              "mrr": 0.8945814072932718
+            },
+            "kpidUniform": {
+              "applicable": 44,
+              "hitAt1": 38.63636363636363,
+              "hitAt3": 43.18181818181818,
+              "hitAt5": 43.18181818181818,
+              "mrr": 0.4116161616161616,
+              "docHitAt1Total": 37,
+              "docHitAt1CorrectKpid": 17,
+              "docHitAt1WrongKpid": 20,
+              "docHitAt5Total": 40,
+              "docHitAt5CorrectKpid": 19,
+              "docHitAt5WrongKpid": 21
+            },
+            "kpidTunedCombined": {
+              "applicable": 44,
+              "hitAt1": 38.63636363636363,
+              "hitAt3": 43.18181818181818,
+              "hitAt5": 43.18181818181818,
+              "mrr": 0.4116161616161616,
+              "docHitAt1Total": 37,
+              "docHitAt1CorrectKpid": 17,
+              "docHitAt1WrongKpid": 20,
+              "docHitAt5Total": 40,
+              "docHitAt5CorrectKpid": 19,
+              "docHitAt5WrongKpid": 21
+            }
+          },
+          "ot_required": {
+            "total": 29,
+            "uniform": {
+              "total": 29,
+              "hitAt1": 58.620689655172406,
+              "hitAt3": 86.20689655172413,
+              "hitAt5": 89.65517241379311,
+              "mrr": 0.7342911877394636
+            },
+            "tunedCombined": {
+              "total": 29,
+              "hitAt1": 58.620689655172406,
+              "hitAt3": 86.20689655172413,
+              "hitAt5": 89.65517241379311,
+              "mrr": 0.7342911877394636
+            },
+            "kpidUniform": {
+              "applicable": 4,
+              "hitAt1": 25,
+              "hitAt3": 25,
+              "hitAt5": 25,
+              "mrr": 0.25,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 4,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 3
+            },
+            "kpidTunedCombined": {
+              "applicable": 4,
+              "hitAt1": 25,
+              "hitAt3": 25,
+              "hitAt5": 25,
+              "mrr": 0.25,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 4,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 3
+            }
+          },
+          "single_kp": {
+            "total": 18,
+            "uniform": {
+              "total": 18,
+              "hitAt1": 61.111111111111114,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 77.77777777777779,
+              "mrr": 0.6618971243971244
+            },
+            "tunedCombined": {
+              "total": 18,
+              "hitAt1": 61.111111111111114,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 77.77777777777779,
+              "mrr": 0.6618971243971244
+            },
+            "kpidUniform": {
+              "applicable": 18,
+              "hitAt1": 44.44444444444444,
+              "hitAt3": 50,
+              "hitAt5": 61.111111111111114,
+              "mrr": 0.49523045773045776,
+              "docHitAt1Total": 11,
+              "docHitAt1CorrectKpid": 8,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 14,
+              "docHitAt5CorrectKpid": 11,
+              "docHitAt5WrongKpid": 3
+            },
+            "kpidTunedCombined": {
+              "applicable": 18,
+              "hitAt1": 44.44444444444444,
+              "hitAt3": 50,
+              "hitAt5": 61.111111111111114,
+              "mrr": 0.49523045773045776,
+              "docHitAt1Total": 11,
+              "docHitAt1CorrectKpid": 8,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 14,
+              "docHitAt5CorrectKpid": 11,
+              "docHitAt5WrongKpid": 3
+            }
+          }
+        },
+        "preferredGranularity": {
+          "KP": {
+            "total": 26,
+            "uniform": {
+              "total": 26,
+              "hitAt1": 65.38461538461539,
+              "hitAt3": 73.07692307692307,
+              "hitAt5": 80.76923076923077,
+              "mrr": 0.7125099750099749
+            },
+            "tunedCombined": {
+              "total": 26,
+              "hitAt1": 65.38461538461539,
+              "hitAt3": 73.07692307692307,
+              "hitAt5": 80.76923076923077,
+              "mrr": 0.7125099750099749
+            },
+            "kpidUniform": {
+              "applicable": 26,
+              "hitAt1": 34.61538461538461,
+              "hitAt3": 38.46153846153847,
+              "hitAt5": 46.15384615384615,
+              "mrr": 0.3855868980868981,
+              "docHitAt1Total": 17,
+              "docHitAt1CorrectKpid": 9,
+              "docHitAt1WrongKpid": 8,
+              "docHitAt5Total": 21,
+              "docHitAt5CorrectKpid": 12,
+              "docHitAt5WrongKpid": 9
+            },
+            "kpidTunedCombined": {
+              "applicable": 26,
+              "hitAt1": 34.61538461538461,
+              "hitAt3": 38.46153846153847,
+              "hitAt5": 46.15384615384615,
+              "mrr": 0.3855868980868981,
+              "docHitAt1Total": 17,
+              "docHitAt1CorrectKpid": 9,
+              "docHitAt1WrongKpid": 8,
+              "docHitAt5Total": 21,
+              "docHitAt5CorrectKpid": 12,
+              "docHitAt5WrongKpid": 9
+            }
+          },
+          "KP+OT": {
+            "total": 44,
+            "uniform": {
+              "total": 44,
+              "hitAt1": 86.36363636363636,
+              "hitAt3": 90.9090909090909,
+              "hitAt5": 90.9090909090909,
+              "mrr": 0.8902089072543619
+            },
+            "tunedCombined": {
+              "total": 44,
+              "hitAt1": 86.36363636363636,
+              "hitAt3": 90.9090909090909,
+              "hitAt5": 90.9090909090909,
+              "mrr": 0.8902089072543619
+            },
+            "kpidUniform": {
+              "applicable": 29,
+              "hitAt1": 37.93103448275862,
+              "hitAt3": 44.827586206896555,
+              "hitAt5": 44.827586206896555,
+              "mrr": 0.41379310344827586,
+              "docHitAt1Total": 24,
+              "docHitAt1CorrectKpid": 11,
+              "docHitAt1WrongKpid": 13,
+              "docHitAt5Total": 26,
+              "docHitAt5CorrectKpid": 13,
+              "docHitAt5WrongKpid": 13
+            },
+            "kpidTunedCombined": {
+              "applicable": 29,
+              "hitAt1": 37.93103448275862,
+              "hitAt3": 44.827586206896555,
+              "hitAt5": 44.827586206896555,
+              "mrr": 0.41379310344827586,
+              "docHitAt1Total": 24,
+              "docHitAt1CorrectKpid": 11,
+              "docHitAt1WrongKpid": 13,
+              "docHitAt5Total": 26,
+              "docHitAt5CorrectKpid": 13,
+              "docHitAt5WrongKpid": 13
+            }
+          },
+          "OT": {
+            "total": 27,
+            "uniform": {
+              "total": 27,
+              "hitAt1": 55.55555555555556,
+              "hitAt3": 85.18518518518519,
+              "hitAt5": 88.88888888888889,
+              "mrr": 0.7146090534979423
+            },
+            "tunedCombined": {
+              "total": 27,
+              "hitAt1": 55.55555555555556,
+              "hitAt3": 85.18518518518519,
+              "hitAt5": 88.88888888888889,
+              "mrr": 0.7146090534979423
+            },
+            "kpidUniform": {
+              "applicable": 4,
+              "hitAt1": 25,
+              "hitAt3": 25,
+              "hitAt5": 25,
+              "mrr": 0.25,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 4,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 3
+            },
+            "kpidTunedCombined": {
+              "applicable": 4,
+              "hitAt1": 25,
+              "hitAt3": 25,
+              "hitAt5": 25,
+              "mrr": 0.25,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 4,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 3
+            }
+          },
+          "Q+KP": {
+            "total": 9,
+            "uniform": {
+              "total": 9,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "tunedCombined": {
+              "total": 9,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "kpidUniform": {
+              "applicable": 7,
+              "hitAt1": 71.42857142857143,
+              "hitAt3": 71.42857142857143,
+              "hitAt5": 71.42857142857143,
+              "mrr": 0.7142857142857143,
+              "docHitAt1Total": 7,
+              "docHitAt1CorrectKpid": 5,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 7,
+              "docHitAt5CorrectKpid": 5,
+              "docHitAt5WrongKpid": 2
+            },
+            "kpidTunedCombined": {
+              "applicable": 7,
+              "hitAt1": 71.42857142857143,
+              "hitAt3": 71.42857142857143,
+              "hitAt5": 71.42857142857143,
+              "mrr": 0.7142857142857143,
+              "docHitAt1Total": 7,
+              "docHitAt1CorrectKpid": 5,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 7,
+              "docHitAt5CorrectKpid": 5,
+              "docHitAt5WrongKpid": 2
+            }
+          }
+        }
+      }
+    },
+    {
+      "label": "OT",
+      "allowedTypes": [
+        "OT"
+      ],
+      "metadataCount": 516,
+      "metadataTypeCounts": {
+        "Q": 0,
+        "KP": 0,
+        "OT": 516
+      },
+      "uniform": {
+        "weights": {
+          "Q": 0,
+          "KP": 0,
+          "OT": 1
+        },
+        "combined": {
+          "total": 106,
+          "hitAt1": 74.52830188679245,
+          "hitAt3": 87.73584905660378,
+          "hitAt5": 90.56603773584906,
+          "mrr": 0.816936116267834
+        },
+        "kpidCombined": {
+          "applicable": 66,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 51,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 51,
+          "docHitAt5Total": 58,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 58
+        },
+        "metricsByDataset": {
+          "test_dataset_granularity_main_106_reviewed_tail_probe_20260331_standard": {
+            "total": 61,
+            "hitAt1": 78.68852459016394,
+            "hitAt3": 91.80327868852459,
+            "hitAt5": 93.44262295081968,
+            "mrr": 0.8536789332337906
+          },
+          "test_dataset_granularity_main_106_reviewed_tail_probe_20260331_short_keyword": {
+            "total": 20,
+            "hitAt1": 65,
+            "hitAt3": 85,
+            "hitAt5": 85,
+            "mrr": 0.7580519480519481
+          },
+          "test_dataset_granularity_main_106_reviewed_tail_probe_20260331_situational": {
+            "total": 25,
+            "hitAt1": 72,
+            "hitAt3": 80,
+            "hitAt5": 88,
+            "mrr": 0.7743909774436091
+          }
+        }
+      },
+      "tuned": {
+        "candidateCount": 1,
+        "bestWeights": {
+          "Q": 0,
+          "KP": 0,
+          "OT": 1
+        },
+        "tuneCombined": {
+          "total": 81,
+          "hitAt1": 75.30864197530865,
+          "hitAt3": 90.12345679012346,
+          "hitAt5": 91.35802469135803,
+          "mrr": 0.8300673319543233
+        },
+        "kpidTuneCombined": {
+          "applicable": 44,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 34,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 34,
+          "docHitAt5Total": 39,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 39
+        },
+        "holdoutCombined": {
+          "total": 25,
+          "hitAt1": 72,
+          "hitAt3": 80,
+          "hitAt5": 88,
+          "mrr": 0.7743909774436091
+        },
+        "kpidHoldoutCombined": {
+          "applicable": 22,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 17,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 17,
+          "docHitAt5Total": 19,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 19
+        },
+        "combinedCombined": {
+          "total": 106,
+          "hitAt1": 74.52830188679245,
+          "hitAt3": 87.73584905660378,
+          "hitAt5": 90.56603773584906,
+          "mrr": 0.816936116267834
+        },
+        "kpidCombinedCombined": {
+          "applicable": 66,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 51,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 51,
+          "docHitAt5Total": 58,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 58
+        },
+        "topTuneCandidates": [
+          {
+            "weights": {
+              "Q": 0,
+              "KP": 0,
+              "OT": 1
+            },
+            "combined": {
+              "total": 81,
+              "hitAt1": 75.30864197530865,
+              "hitAt3": 90.12345679012346,
+              "hitAt5": 91.35802469135803,
+              "mrr": 0.8300673319543233
+            }
+          }
+        ]
+      },
+      "groupBreakdowns": {
+        "supportPattern": {
+          "multi_kp": {
+            "total": 59,
+            "uniform": {
+              "total": 59,
+              "hitAt1": 86.4406779661017,
+              "hitAt3": 93.22033898305084,
+              "hitAt5": 93.22033898305084,
+              "mrr": 0.8987935941548787
+            },
+            "tunedCombined": {
+              "total": 59,
+              "hitAt1": 86.4406779661017,
+              "hitAt3": 93.22033898305084,
+              "hitAt5": 93.22033898305084,
+              "mrr": 0.8987935941548787
+            },
+            "kpidUniform": {
+              "applicable": 44,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 37,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 37,
+              "docHitAt5Total": 40,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 40
+            },
+            "kpidTunedCombined": {
+              "applicable": 44,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 37,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 37,
+              "docHitAt5Total": 40,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 40
+            }
+          },
+          "ot_required": {
+            "total": 29,
+            "uniform": {
+              "total": 29,
+              "hitAt1": 58.620689655172406,
+              "hitAt3": 86.20689655172413,
+              "hitAt5": 93.10344827586206,
+              "mrr": 0.7376605814739688
+            },
+            "tunedCombined": {
+              "total": 29,
+              "hitAt1": 58.620689655172406,
+              "hitAt3": 86.20689655172413,
+              "hitAt5": 93.10344827586206,
+              "mrr": 0.7376605814739688
+            },
+            "kpidUniform": {
+              "applicable": 4,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 4,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 4
+            },
+            "kpidTunedCombined": {
+              "applicable": 4,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 4,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 4
+            }
+          },
+          "single_kp": {
+            "total": 18,
+            "uniform": {
+              "total": 18,
+              "hitAt1": 61.111111111111114,
+              "hitAt3": 72.22222222222221,
+              "hitAt5": 77.77777777777779,
+              "mrr": 0.676347189250415
+            },
+            "tunedCombined": {
+              "total": 18,
+              "hitAt1": 61.111111111111114,
+              "hitAt3": 72.22222222222221,
+              "hitAt5": 77.77777777777779,
+              "mrr": 0.676347189250415
+            },
+            "kpidUniform": {
+              "applicable": 18,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 11,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 11,
+              "docHitAt5Total": 14,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 14
+            },
+            "kpidTunedCombined": {
+              "applicable": 18,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 11,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 11,
+              "docHitAt5Total": 14,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 14
+            }
+          }
+        },
+        "preferredGranularity": {
+          "KP": {
+            "total": 26,
+            "uniform": {
+              "total": 26,
+              "hitAt1": 69.23076923076923,
+              "hitAt3": 76.92307692307693,
+              "hitAt5": 80.76923076923077,
+              "mrr": 0.7429656365140235
+            },
+            "tunedCombined": {
+              "total": 26,
+              "hitAt1": 69.23076923076923,
+              "hitAt3": 76.92307692307693,
+              "hitAt5": 80.76923076923077,
+              "mrr": 0.7429656365140235
+            },
+            "kpidUniform": {
+              "applicable": 26,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 18,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 18,
+              "docHitAt5Total": 21,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 21
+            },
+            "kpidTunedCombined": {
+              "applicable": 26,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 18,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 18,
+              "docHitAt5Total": 21,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 21
+            }
+          },
+          "KP+OT": {
+            "total": 44,
+            "uniform": {
+              "total": 44,
+              "hitAt1": 81.81818181818183,
+              "hitAt3": 90.9090909090909,
+              "hitAt5": 93.18181818181817,
+              "mrr": 0.8667264752791067
+            },
+            "tunedCombined": {
+              "total": 44,
+              "hitAt1": 81.81818181818183,
+              "hitAt3": 90.9090909090909,
+              "hitAt5": 93.18181818181817,
+              "mrr": 0.8667264752791067
+            },
+            "kpidUniform": {
+              "applicable": 29,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 23,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 23,
+              "docHitAt5Total": 26,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 26
+            },
+            "kpidTunedCombined": {
+              "applicable": 29,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 23,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 23,
+              "docHitAt5Total": 26,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 26
+            }
+          },
+          "OT": {
+            "total": 27,
+            "uniform": {
+              "total": 27,
+              "hitAt1": 59.25925925925925,
+              "hitAt3": 88.88888888888889,
+              "hitAt5": 92.5925925925926,
+              "mrr": 0.7460058097312999
+            },
+            "tunedCombined": {
+              "total": 27,
+              "hitAt1": 59.25925925925925,
+              "hitAt3": 88.88888888888889,
+              "hitAt5": 92.5925925925926,
+              "mrr": 0.7460058097312999
+            },
+            "kpidUniform": {
+              "applicable": 4,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 4,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 4
+            },
+            "kpidTunedCombined": {
+              "applicable": 4,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 4,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 4
+            }
+          },
+          "Q+KP": {
+            "total": 9,
+            "uniform": {
+              "total": 9,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "tunedCombined": {
+              "total": 9,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "kpidUniform": {
+              "applicable": 7,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 7,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 7,
+              "docHitAt5Total": 7,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 7
+            },
+            "kpidTunedCombined": {
+              "applicable": 7,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 7,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 7,
+              "docHitAt5Total": 7,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 7
+            }
+          }
+        }
+      }
+    },
+    {
+      "label": "Q+KP",
+      "allowedTypes": [
+        "Q",
+        "KP"
+      ],
+      "metadataCount": 15696,
+      "metadataTypeCounts": {
+        "Q": 12819,
+        "KP": 2877,
+        "OT": 0
+      },
+      "uniform": {
+        "weights": {
+          "Q": 0.5,
+          "KP": 0.5,
+          "OT": 0
+        },
+        "combined": {
+          "total": 106,
+          "hitAt1": 81.13207547169812,
+          "hitAt3": 88.67924528301887,
+          "hitAt5": 89.62264150943396,
+          "mrr": 0.8549161137604534
+        },
+        "kpidCombined": {
+          "applicable": 66,
+          "hitAt1": 39.39393939393939,
+          "hitAt3": 43.93939393939394,
+          "hitAt5": 45.45454545454545,
+          "mrr": 0.42617451992451993,
+          "docHitAt1Total": 52,
+          "docHitAt1CorrectKpid": 26,
+          "docHitAt1WrongKpid": 26,
+          "docHitAt5Total": 58,
+          "docHitAt5CorrectKpid": 30,
+          "docHitAt5WrongKpid": 28
+        },
+        "metricsByDataset": {
+          "test_dataset_granularity_main_106_reviewed_tail_probe_20260331_standard": {
+            "total": 61,
+            "hitAt1": 85.24590163934425,
+            "hitAt3": 91.80327868852459,
+            "hitAt5": 91.80327868852459,
+            "mrr": 0.8888976460697772
+          },
+          "test_dataset_granularity_main_106_reviewed_tail_probe_20260331_short_keyword": {
+            "total": 20,
+            "hitAt1": 75,
+            "hitAt3": 85,
+            "hitAt5": 85,
+            "mrr": 0.7941666666666667
+          },
+          "test_dataset_granularity_main_106_reviewed_tail_probe_20260331_situational": {
+            "total": 25,
+            "hitAt1": 76,
+            "hitAt3": 84,
+            "hitAt5": 88,
+            "mrr": 0.8206007326007326
+          }
+        }
+      },
+      "tuned": {
+        "candidateCount": 7,
+        "bestWeights": {
+          "Q": 0.3846153846153846,
+          "KP": 0.6153846153846154,
+          "OT": 0
+        },
+        "tuneCombined": {
+          "total": 81,
+          "hitAt1": 82.71604938271605,
+          "hitAt3": 93.82716049382715,
+          "hitAt5": 93.82716049382715,
+          "mrr": 0.8864483938558013
+        },
+        "kpidTuneCombined": {
+          "applicable": 44,
+          "hitAt1": 36.36363636363637,
+          "hitAt3": 45.45454545454545,
+          "hitAt5": 45.45454545454545,
+          "mrr": 0.41343656343656343,
+          "docHitAt1Total": 35,
+          "docHitAt1CorrectKpid": 16,
+          "docHitAt1WrongKpid": 19,
+          "docHitAt5Total": 40,
+          "docHitAt5CorrectKpid": 20,
+          "docHitAt5WrongKpid": 20
+        },
+        "holdoutCombined": {
+          "total": 25,
+          "hitAt1": 60,
+          "hitAt3": 84,
+          "hitAt5": 84,
+          "mrr": 0.7368681318681318
+        },
+        "kpidHoldoutCombined": {
+          "applicable": 22,
+          "hitAt1": 36.36363636363637,
+          "hitAt3": 45.45454545454545,
+          "hitAt5": 45.45454545454545,
+          "mrr": 0.4247627372627372,
+          "docHitAt1Total": 14,
+          "docHitAt1CorrectKpid": 8,
+          "docHitAt1WrongKpid": 6,
+          "docHitAt5Total": 18,
+          "docHitAt5CorrectKpid": 10,
+          "docHitAt5WrongKpid": 8
+        },
+        "combinedCombined": {
+          "total": 106,
+          "hitAt1": 77.35849056603774,
+          "hitAt3": 91.50943396226415,
+          "hitAt5": 91.50943396226415,
+          "mrr": 0.8511700301794642
+        },
+        "kpidCombinedCombined": {
+          "applicable": 66,
+          "hitAt1": 36.36363636363637,
+          "hitAt3": 45.45454545454545,
+          "hitAt5": 45.45454545454545,
+          "mrr": 0.4172119547119547,
+          "docHitAt1Total": 49,
+          "docHitAt1CorrectKpid": 24,
+          "docHitAt1WrongKpid": 25,
+          "docHitAt5Total": 58,
+          "docHitAt5CorrectKpid": 30,
+          "docHitAt5WrongKpid": 28
+        },
+        "topTuneCandidates": [
+          {
+            "weights": {
+              "Q": 0.3846153846153846,
+              "KP": 0.6153846153846154,
+              "OT": 0
+            },
+            "combined": {
+              "total": 81,
+              "hitAt1": 82.71604938271605,
+              "hitAt3": 93.82716049382715,
+              "hitAt5": 93.82716049382715,
+              "mrr": 0.8864483938558013
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.5,
+              "KP": 0.5,
+              "OT": 0
+            },
+            "combined": {
+              "total": 81,
+              "hitAt1": 82.71604938271605,
+              "hitAt3": 90.12345679012346,
+              "hitAt5": 90.12345679012346,
+              "mrr": 0.8655072807850585
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.6153846153846154,
+              "KP": 0.3846153846153846,
+              "OT": 0
+            },
+            "combined": {
+              "total": 81,
+              "hitAt1": 81.48148148148148,
+              "hitAt3": 90.12345679012346,
+              "hitAt5": 90.12345679012346,
+              "mrr": 0.8572314395843806
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.7142857142857143,
+              "KP": 0.28571428571428575,
+              "OT": 0
+            },
+            "combined": {
+              "total": 81,
+              "hitAt1": 80.24691358024691,
+              "hitAt3": 90.12345679012346,
+              "hitAt5": 90.12345679012346,
+              "mrr": 0.8509613722032021
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.8,
+              "KP": 0.2,
+              "OT": 0
+            },
+            "combined": {
+              "total": 81,
+              "hitAt1": 80.24691358024691,
+              "hitAt3": 90.12345679012346,
+              "hitAt5": 90.12345679012346,
+              "mrr": 0.8509210268469528
+            }
+          }
+        ]
+      },
+      "groupBreakdowns": {
+        "supportPattern": {
+          "multi_kp": {
+            "total": 59,
+            "uniform": {
+              "total": 59,
+              "hitAt1": 86.4406779661017,
+              "hitAt3": 93.22033898305084,
+              "hitAt5": 93.22033898305084,
+              "mrr": 0.8979946607065252
+            },
+            "tunedCombined": {
+              "total": 59,
+              "hitAt1": 86.4406779661017,
+              "hitAt3": 94.91525423728814,
+              "hitAt5": 94.91525423728814,
+              "mrr": 0.9093872229465451
+            },
+            "kpidUniform": {
+              "applicable": 44,
+              "hitAt1": 36.36363636363637,
+              "hitAt3": 40.909090909090914,
+              "hitAt5": 40.909090909090914,
+              "mrr": 0.38798701298701294,
+              "docHitAt1Total": 37,
+              "docHitAt1CorrectKpid": 16,
+              "docHitAt1WrongKpid": 21,
+              "docHitAt5Total": 40,
+              "docHitAt5CorrectKpid": 18,
+              "docHitAt5WrongKpid": 22
+            },
+            "kpidTunedCombined": {
+              "applicable": 44,
+              "hitAt1": 36.36363636363637,
+              "hitAt3": 43.18181818181818,
+              "hitAt5": 43.18181818181818,
+              "mrr": 0.3994755244755245,
+              "docHitAt1Total": 37,
+              "docHitAt1CorrectKpid": 16,
+              "docHitAt1WrongKpid": 21,
+              "docHitAt5Total": 41,
+              "docHitAt5CorrectKpid": 19,
+              "docHitAt5WrongKpid": 22
+            }
+          },
+          "ot_required": {
+            "total": 29,
+            "uniform": {
+              "total": 29,
+              "hitAt1": 79.3103448275862,
+              "hitAt3": 89.65517241379311,
+              "hitAt5": 89.65517241379311,
+              "mrr": 0.8477011494252874
+            },
+            "tunedCombined": {
+              "total": 29,
+              "hitAt1": 72.41379310344827,
+              "hitAt3": 96.55172413793103,
+              "hitAt5": 96.55172413793103,
+              "mrr": 0.8486590038314176
+            },
+            "kpidUniform": {
+              "applicable": 4,
+              "hitAt1": 25,
+              "hitAt3": 25,
+              "hitAt5": 25,
+              "mrr": 0.25,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 4,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 3
+            },
+            "kpidTunedCombined": {
+              "applicable": 4,
+              "hitAt1": 25,
+              "hitAt3": 25,
+              "hitAt5": 25,
+              "mrr": 0.25,
+              "docHitAt1Total": 2,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 4,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 3
+            }
+          },
+          "single_kp": {
+            "total": 18,
+            "uniform": {
+              "total": 18,
+              "hitAt1": 66.66666666666666,
+              "hitAt3": 72.22222222222221,
+              "hitAt5": 77.77777777777779,
+              "mrr": 0.725338319088319
+            },
+            "tunedCombined": {
+              "total": 18,
+              "hitAt1": 55.55555555555556,
+              "hitAt3": 72.22222222222221,
+              "hitAt5": 72.22222222222221,
+              "mrr": 0.6643925518925519
+            },
+            "kpidUniform": {
+              "applicable": 18,
+              "hitAt1": 50,
+              "hitAt3": 55.55555555555556,
+              "hitAt5": 61.111111111111114,
+              "mrr": 0.5586716524216525,
+              "docHitAt1Total": 12,
+              "docHitAt1CorrectKpid": 9,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 14,
+              "docHitAt5CorrectKpid": 11,
+              "docHitAt5WrongKpid": 3
+            },
+            "kpidTunedCombined": {
+              "applicable": 18,
+              "hitAt1": 38.88888888888889,
+              "hitAt3": 55.55555555555556,
+              "hitAt5": 55.55555555555556,
+              "mrr": 0.4977258852258852,
+              "docHitAt1Total": 10,
+              "docHitAt1CorrectKpid": 7,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 10,
+              "docHitAt5WrongKpid": 3
+            }
+          }
+        },
+        "preferredGranularity": {
+          "KP": {
+            "total": 26,
+            "uniform": {
+              "total": 26,
+              "hitAt1": 73.07692307692307,
+              "hitAt3": 80.76923076923077,
+              "hitAt5": 84.61538461538461,
+              "mrr": 0.7842085798816568
+            },
+            "tunedCombined": {
+              "total": 26,
+              "hitAt1": 69.23076923076923,
+              "hitAt3": 80.76923076923077,
+              "hitAt5": 80.76923076923077,
+              "mrr": 0.767656382079459
+            },
+            "kpidUniform": {
+              "applicable": 26,
+              "hitAt1": 46.15384615384615,
+              "hitAt3": 50,
+              "hitAt5": 53.84615384615385,
+              "mrr": 0.5021572978303748,
+              "docHitAt1Total": 19,
+              "docHitAt1CorrectKpid": 12,
+              "docHitAt1WrongKpid": 7,
+              "docHitAt5Total": 22,
+              "docHitAt5CorrectKpid": 14,
+              "docHitAt5WrongKpid": 8
+            },
+            "kpidTunedCombined": {
+              "applicable": 26,
+              "hitAt1": 42.30769230769231,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.4791948436179205,
+              "docHitAt1Total": 18,
+              "docHitAt1CorrectKpid": 11,
+              "docHitAt1WrongKpid": 7,
+              "docHitAt5Total": 21,
+              "docHitAt5CorrectKpid": 13,
+              "docHitAt5WrongKpid": 8
+            }
+          },
+          "KP+OT": {
+            "total": 44,
+            "uniform": {
+              "total": 44,
+              "hitAt1": 84.0909090909091,
+              "hitAt3": 90.9090909090909,
+              "hitAt5": 90.9090909090909,
+              "mrr": 0.8783716283716284
+            },
+            "tunedCombined": {
+              "total": 44,
+              "hitAt1": 86.36363636363636,
+              "hitAt3": 93.18181818181817,
+              "hitAt5": 93.18181818181817,
+              "mrr": 0.9012237762237764
+            },
+            "kpidUniform": {
+              "applicable": 29,
+              "hitAt1": 31.03448275862069,
+              "hitAt3": 37.93103448275862,
+              "hitAt5": 37.93103448275862,
+              "mrr": 0.34729064039408863,
+              "docHitAt1Total": 23,
+              "docHitAt1CorrectKpid": 9,
+              "docHitAt1WrongKpid": 14,
+              "docHitAt5Total": 25,
+              "docHitAt5CorrectKpid": 11,
+              "docHitAt5WrongKpid": 14
+            },
+            "kpidTunedCombined": {
+              "applicable": 29,
+              "hitAt1": 34.48275862068966,
+              "hitAt3": 41.37931034482759,
+              "hitAt5": 41.37931034482759,
+              "mrr": 0.3819628647214854,
+              "docHitAt1Total": 24,
+              "docHitAt1CorrectKpid": 10,
+              "docHitAt1WrongKpid": 14,
+              "docHitAt5Total": 26,
+              "docHitAt5CorrectKpid": 12,
+              "docHitAt5WrongKpid": 14
+            }
+          },
+          "OT": {
+            "total": 27,
+            "uniform": {
+              "total": 27,
+              "hitAt1": 77.77777777777779,
+              "hitAt3": 88.88888888888889,
+              "hitAt5": 88.88888888888889,
+              "mrr": 0.8364197530864198
+            },
+            "tunedCombined": {
+              "total": 27,
+              "hitAt1": 70.37037037037037,
+              "hitAt3": 96.29629629629629,
+              "hitAt5": 96.29629629629629,
+              "mrr": 0.8374485596707819
+            },
+            "kpidUniform": {
+              "applicable": 4,
+              "hitAt1": 25,
+              "hitAt3": 25,
+              "hitAt5": 25,
+              "mrr": 0.25,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 4,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 3
+            },
+            "kpidTunedCombined": {
+              "applicable": 4,
+              "hitAt1": 25,
+              "hitAt3": 25,
+              "hitAt5": 25,
+              "mrr": 0.25,
+              "docHitAt1Total": 2,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 4,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 3
+            }
+          },
+          "Q+KP": {
+            "total": 9,
+            "uniform": {
+              "total": 9,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "tunedCombined": {
+              "total": 9,
+              "hitAt1": 77.77777777777779,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 0.8888888888888888
+            },
+            "kpidUniform": {
+              "applicable": 7,
+              "hitAt1": 57.14285714285714,
+              "hitAt3": 57.14285714285714,
+              "hitAt5": 57.14285714285714,
+              "mrr": 0.5714285714285714,
+              "docHitAt1Total": 7,
+              "docHitAt1CorrectKpid": 4,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 7,
+              "docHitAt5CorrectKpid": 4,
+              "docHitAt5WrongKpid": 3
+            },
+            "kpidTunedCombined": {
+              "applicable": 7,
+              "hitAt1": 28.57142857142857,
+              "hitAt3": 57.14285714285714,
+              "hitAt5": 57.14285714285714,
+              "mrr": 0.42857142857142855,
+              "docHitAt1Total": 5,
+              "docHitAt1CorrectKpid": 2,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 7,
+              "docHitAt5CorrectKpid": 4,
+              "docHitAt5WrongKpid": 3
+            }
+          }
+        }
+      }
+    },
+    {
+      "label": "Q+OT",
+      "allowedTypes": [
+        "Q",
+        "OT"
+      ],
+      "metadataCount": 13335,
+      "metadataTypeCounts": {
+        "Q": 12819,
+        "KP": 0,
+        "OT": 516
+      },
+      "uniform": {
+        "weights": {
+          "Q": 0.5,
+          "KP": 0,
+          "OT": 0.5
+        },
+        "combined": {
+          "total": 106,
+          "hitAt1": 76.41509433962264,
+          "hitAt3": 88.67924528301887,
+          "hitAt5": 89.62264150943396,
+          "mrr": 0.8287252579705409
+        },
+        "kpidCombined": {
+          "applicable": 66,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 47,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 47,
+          "docHitAt5Total": 58,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 58
+        },
+        "metricsByDataset": {
+          "test_dataset_granularity_main_106_reviewed_tail_probe_20260331_standard": {
+            "total": 61,
+            "hitAt1": 85.24590163934425,
+            "hitAt3": 91.80327868852459,
+            "hitAt5": 93.44262295081968,
+            "mrr": 0.8901840418233861
+          },
+          "test_dataset_granularity_main_106_reviewed_tail_probe_20260331_short_keyword": {
+            "total": 20,
+            "hitAt1": 65,
+            "hitAt3": 85,
+            "hitAt5": 85,
+            "mrr": 0.7347619047619047
+          },
+          "test_dataset_granularity_main_106_reviewed_tail_probe_20260331_situational": {
+            "total": 25,
+            "hitAt1": 64,
+            "hitAt3": 84,
+            "hitAt5": 84,
+            "mrr": 0.7539365079365079
+          }
+        }
+      },
+      "tuned": {
+        "candidateCount": 7,
+        "bestWeights": {
+          "Q": 0.3846153846153846,
+          "KP": 0,
+          "OT": 0.6153846153846154
+        },
+        "tuneCombined": {
+          "total": 81,
+          "hitAt1": 86.41975308641975,
+          "hitAt3": 92.5925925925926,
+          "hitAt5": 92.5925925925926,
+          "mrr": 0.8941700960219479
+        },
+        "kpidTuneCombined": {
+          "applicable": 44,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 37,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 37,
+          "docHitAt5Total": 40,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 40
+        },
+        "holdoutCombined": {
+          "total": 25,
+          "hitAt1": 64,
+          "hitAt3": 84,
+          "hitAt5": 84,
+          "mrr": 0.7452505175983437
+        },
+        "kpidHoldoutCombined": {
+          "applicable": 22,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 14,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 14,
+          "docHitAt5Total": 18,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 18
+        },
+        "combinedCombined": {
+          "total": 106,
+          "hitAt1": 81.13207547169812,
+          "hitAt3": 90.56603773584906,
+          "hitAt5": 90.56603773584906,
+          "mrr": 0.8590475539409089
+        },
+        "kpidCombinedCombined": {
+          "applicable": 66,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 51,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 51,
+          "docHitAt5Total": 58,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 58
+        },
+        "topTuneCandidates": [
+          {
+            "weights": {
+              "Q": 0.3846153846153846,
+              "KP": 0,
+              "OT": 0.6153846153846154
+            },
+            "combined": {
+              "total": 81,
+              "hitAt1": 86.41975308641975,
+              "hitAt3": 92.5925925925926,
+              "hitAt5": 92.5925925925926,
+              "mrr": 0.8941700960219479
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.5,
+              "KP": 0,
+              "OT": 0.5
+            },
+            "combined": {
+              "total": 81,
+              "hitAt1": 80.24691358024691,
+              "hitAt3": 90.12345679012346,
+              "hitAt5": 91.35802469135803,
+              "mrr": 0.8518082055119092
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.7142857142857143,
+              "KP": 0,
+              "OT": 0.28571428571428575
+            },
+            "combined": {
+              "total": 81,
+              "hitAt1": 80.24691358024691,
+              "hitAt3": 90.12345679012346,
+              "hitAt5": 91.35802469135803,
+              "mrr": 0.8517824815554434
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.8,
+              "KP": 0,
+              "OT": 0.2
+            },
+            "combined": {
+              "total": 81,
+              "hitAt1": 80.24691358024691,
+              "hitAt3": 90.12345679012346,
+              "hitAt5": 91.35802469135803,
+              "mrr": 0.8517824815554434
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.6153846153846154,
+              "KP": 0,
+              "OT": 0.3846153846153846
+            },
+            "combined": {
+              "total": 81,
+              "hitAt1": 80.24691358024691,
+              "hitAt3": 90.12345679012346,
+              "hitAt5": 91.35802469135803,
+              "mrr": 0.851772107035265
+            }
+          }
+        ]
+      },
+      "groupBreakdowns": {
+        "supportPattern": {
+          "multi_kp": {
+            "total": 59,
+            "uniform": {
+              "total": 59,
+              "hitAt1": 81.35593220338984,
+              "hitAt3": 93.22033898305084,
+              "hitAt5": 94.91525423728814,
+              "mrr": 0.8760828625235406
+            },
+            "tunedCombined": {
+              "total": 59,
+              "hitAt1": 88.13559322033898,
+              "hitAt3": 94.91525423728814,
+              "hitAt5": 94.91525423728814,
+              "mrr": 0.9139277818717759
+            },
+            "kpidUniform": {
+              "applicable": 44,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 35,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 35,
+              "docHitAt5Total": 41,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 41
+            },
+            "kpidTunedCombined": {
+              "applicable": 44,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 38,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 38,
+              "docHitAt5Total": 41,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 41
+            }
+          },
+          "ot_required": {
+            "total": 29,
+            "uniform": {
+              "total": 29,
+              "hitAt1": 79.3103448275862,
+              "hitAt3": 89.65517241379311,
+              "hitAt5": 89.65517241379311,
+              "mrr": 0.8422152560083593
+            },
+            "tunedCombined": {
+              "total": 29,
+              "hitAt1": 82.75862068965517,
+              "hitAt3": 93.10344827586206,
+              "hitAt5": 93.10344827586206,
+              "mrr": 0.8773946360153256
+            },
+            "kpidUniform": {
+              "applicable": 4,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 2,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 4,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 4
+            },
+            "kpidTunedCombined": {
+              "applicable": 4,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 4,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 4
+            }
+          },
+          "single_kp": {
+            "total": 18,
+            "uniform": {
+              "total": 18,
+              "hitAt1": 55.55555555555556,
+              "hitAt3": 72.22222222222221,
+              "hitAt5": 72.22222222222221,
+              "mrr": 0.6517636684303352
+            },
+            "tunedCombined": {
+              "total": 18,
+              "hitAt1": 55.55555555555556,
+              "hitAt3": 72.22222222222221,
+              "hitAt5": 72.22222222222221,
+              "mrr": 0.6496031746031747
+            },
+            "kpidUniform": {
+              "applicable": 18,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 10,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 10,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 13
+            },
+            "kpidTunedCombined": {
+              "applicable": 18,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 10,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 10,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 13
+            }
+          }
+        },
+        "preferredGranularity": {
+          "KP": {
+            "total": 26,
+            "uniform": {
+              "total": 26,
+              "hitAt1": 65.38461538461539,
+              "hitAt3": 80.76923076923077,
+              "hitAt5": 80.76923076923077,
+              "mrr": 0.7332722832722833
+            },
+            "tunedCombined": {
+              "total": 26,
+              "hitAt1": 69.23076923076923,
+              "hitAt3": 80.76923076923077,
+              "hitAt5": 80.76923076923077,
+              "mrr": 0.7574175824175824
+            },
+            "kpidUniform": {
+              "applicable": 26,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 17,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 17,
+              "docHitAt5Total": 21,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 21
+            },
+            "kpidTunedCombined": {
+              "applicable": 26,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 18,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 18,
+              "docHitAt5Total": 21,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 21
+            }
+          },
+          "KP+OT": {
+            "total": 44,
+            "uniform": {
+              "total": 44,
+              "hitAt1": 84.0909090909091,
+              "hitAt3": 90.9090909090909,
+              "hitAt5": 93.18181818181817,
+              "mrr": 0.8830808080808082
+            },
+            "tunedCombined": {
+              "total": 44,
+              "hitAt1": 88.63636363636364,
+              "hitAt3": 93.18181818181817,
+              "hitAt5": 93.18181818181817,
+              "mrr": 0.9073122529644269
+            },
+            "kpidUniform": {
+              "applicable": 29,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 23,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 23,
+              "docHitAt5Total": 26,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 26
+            },
+            "kpidTunedCombined": {
+              "applicable": 29,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 24,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 24,
+              "docHitAt5Total": 26,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 26
+            }
+          },
+          "OT": {
+            "total": 27,
+            "uniform": {
+              "total": 27,
+              "hitAt1": 77.77777777777779,
+              "hitAt3": 88.88888888888889,
+              "hitAt5": 88.88888888888889,
+              "mrr": 0.8305274971941637
+            },
+            "tunedCombined": {
+              "total": 27,
+              "hitAt1": 81.48148148148148,
+              "hitAt3": 92.5925925925926,
+              "hitAt5": 92.5925925925926,
+              "mrr": 0.868312757201646
+            },
+            "kpidUniform": {
+              "applicable": 4,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 2,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 4,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 4
+            },
+            "kpidTunedCombined": {
+              "applicable": 4,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 4,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 4
+            }
+          },
+          "Q+KP": {
+            "total": 9,
+            "uniform": {
+              "total": 9,
+              "hitAt1": 66.66666666666666,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 0.8333333333333334
+            },
+            "tunedCombined": {
+              "total": 9,
+              "hitAt1": 77.77777777777779,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 0.8888888888888888
+            },
+            "kpidUniform": {
+              "applicable": 7,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 5,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 5,
+              "docHitAt5Total": 7,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 7
+            },
+            "kpidTunedCombined": {
+              "applicable": 7,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 6,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 6,
+              "docHitAt5Total": 7,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 7
+            }
+          }
+        }
+      }
+    },
+    {
+      "label": "KP+OT",
+      "allowedTypes": [
+        "KP",
+        "OT"
+      ],
+      "metadataCount": 3393,
+      "metadataTypeCounts": {
+        "Q": 0,
+        "KP": 2877,
+        "OT": 516
+      },
+      "uniform": {
+        "weights": {
+          "Q": 0,
+          "KP": 0.5,
+          "OT": 0.5
+        },
+        "combined": {
+          "total": 106,
+          "hitAt1": 77.35849056603774,
+          "hitAt3": 90.56603773584906,
+          "hitAt5": 91.50943396226415,
+          "mrr": 0.8425520054820832
+        },
+        "kpidCombined": {
+          "applicable": 66,
+          "hitAt1": 43.93939393939394,
+          "hitAt3": 48.484848484848484,
+          "hitAt5": 50,
+          "mrr": 0.4638367805034471,
+          "docHitAt1Total": 50,
+          "docHitAt1CorrectKpid": 29,
+          "docHitAt1WrongKpid": 21,
+          "docHitAt5Total": 59,
+          "docHitAt5CorrectKpid": 33,
+          "docHitAt5WrongKpid": 26
+        },
+        "metricsByDataset": {
+          "test_dataset_granularity_main_106_reviewed_tail_probe_20260331_standard": {
+            "total": 61,
+            "hitAt1": 81.9672131147541,
+            "hitAt3": 93.44262295081968,
+            "hitAt5": 93.44262295081968,
+            "mrr": 0.880952380952381
+          },
+          "test_dataset_granularity_main_106_reviewed_tail_probe_20260331_short_keyword": {
+            "total": 20,
+            "hitAt1": 75,
+            "hitAt3": 90,
+            "hitAt5": 90,
+            "mrr": 0.8185185185185185
+          },
+          "test_dataset_granularity_main_106_reviewed_tail_probe_20260331_situational": {
+            "total": 25,
+            "hitAt1": 68,
+            "hitAt3": 84,
+            "hitAt5": 88,
+            "mrr": 0.7680818789054084
+          }
+        }
+      },
+      "tuned": {
+        "candidateCount": 1,
+        "bestWeights": {
+          "Q": 0,
+          "KP": 0.2857142857,
+          "OT": 0.7142857143
+        },
+        "tuneCombined": {
+          "total": 81,
+          "hitAt1": 82.71604938271605,
+          "hitAt3": 91.35802469135803,
+          "hitAt5": 92.5925925925926,
+          "mrr": 0.8753001685100451
+        },
+        "kpidTuneCombined": {
+          "applicable": 44,
+          "hitAt1": 45.45454545454545,
+          "hitAt3": 47.72727272727273,
+          "hitAt5": 47.72727272727273,
+          "mrr": 0.471024346024346,
+          "docHitAt1Total": 35,
+          "docHitAt1CorrectKpid": 20,
+          "docHitAt1WrongKpid": 15,
+          "docHitAt5Total": 40,
+          "docHitAt5CorrectKpid": 21,
+          "docHitAt5WrongKpid": 19
+        },
+        "holdoutCombined": {
+          "total": 25,
+          "hitAt1": 64,
+          "hitAt3": 84,
+          "hitAt5": 88,
+          "mrr": 0.7434152122387416
+        },
+        "kpidHoldoutCombined": {
+          "applicable": 22,
+          "hitAt1": 40.909090909090914,
+          "hitAt3": 50,
+          "hitAt5": 54.54545454545454,
+          "mrr": 0.4610071301247772,
+          "docHitAt1Total": 15,
+          "docHitAt1CorrectKpid": 9,
+          "docHitAt1WrongKpid": 6,
+          "docHitAt5Total": 19,
+          "docHitAt5CorrectKpid": 12,
+          "docHitAt5WrongKpid": 7
+        },
+        "combinedCombined": {
+          "total": 106,
+          "hitAt1": 78.30188679245283,
+          "hitAt3": 89.62264150943396,
+          "hitAt5": 91.50943396226415,
+          "mrr": 0.8441952259932282
+        },
+        "kpidCombinedCombined": {
+          "applicable": 66,
+          "hitAt1": 43.93939393939394,
+          "hitAt3": 48.484848484848484,
+          "hitAt5": 50,
+          "mrr": 0.46768527405782306,
+          "docHitAt1Total": 50,
+          "docHitAt1CorrectKpid": 29,
+          "docHitAt1WrongKpid": 21,
+          "docHitAt5Total": 59,
+          "docHitAt5CorrectKpid": 33,
+          "docHitAt5WrongKpid": 26
+        },
+        "topTuneCandidates": [
+          {
+            "weights": {
+              "Q": 0,
+              "KP": 0.2857142857,
+              "OT": 0.7142857143
+            },
+            "combined": {
+              "total": 81,
+              "hitAt1": 82.71604938271605,
+              "hitAt3": 91.35802469135803,
+              "hitAt5": 92.5925925925926,
+              "mrr": 0.8753001685100451
+            }
+          }
+        ]
+      },
+      "groupBreakdowns": {
+        "supportPattern": {
+          "multi_kp": {
+            "total": 59,
+            "uniform": {
+              "total": 59,
+              "hitAt1": 86.4406779661017,
+              "hitAt3": 93.22033898305084,
+              "hitAt5": 93.22033898305084,
+              "mrr": 0.8999539842012425
+            },
+            "tunedCombined": {
+              "total": 59,
+              "hitAt1": 86.4406779661017,
+              "hitAt3": 94.91525423728814,
+              "hitAt5": 94.91525423728814,
+              "mrr": 0.9058173464953126
+            },
+            "kpidUniform": {
+              "applicable": 44,
+              "hitAt1": 43.18181818181818,
+              "hitAt3": 47.72727272727273,
+              "hitAt5": 47.72727272727273,
+              "mrr": 0.4507575757575758,
+              "docHitAt1Total": 37,
+              "docHitAt1CorrectKpid": 19,
+              "docHitAt1WrongKpid": 18,
+              "docHitAt5Total": 41,
+              "docHitAt5CorrectKpid": 21,
+              "docHitAt5WrongKpid": 20
+            },
+            "kpidTunedCombined": {
+              "applicable": 44,
+              "hitAt1": 47.72727272727273,
+              "hitAt3": 47.72727272727273,
+              "hitAt5": 47.72727272727273,
+              "mrr": 0.4772727272727273,
+              "docHitAt1Total": 37,
+              "docHitAt1CorrectKpid": 21,
+              "docHitAt1WrongKpid": 16,
+              "docHitAt5Total": 41,
+              "docHitAt5CorrectKpid": 21,
+              "docHitAt5WrongKpid": 20
+            }
+          },
+          "ot_required": {
+            "total": 29,
+            "uniform": {
+              "total": 29,
+              "hitAt1": 65.51724137931035,
+              "hitAt3": 96.55172413793103,
+              "hitAt5": 96.55172413793103,
+              "mrr": 0.8080459770114943
+            },
+            "tunedCombined": {
+              "total": 29,
+              "hitAt1": 75.86206896551724,
+              "hitAt3": 89.65517241379311,
+              "hitAt5": 93.10344827586206,
+              "mrr": 0.833594566353187
+            },
+            "kpidUniform": {
+              "applicable": 4,
+              "hitAt1": 25,
+              "hitAt3": 25,
+              "hitAt5": 25,
+              "mrr": 0.25,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 4,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 3
+            },
+            "kpidTunedCombined": {
+              "applicable": 4,
+              "hitAt1": 25,
+              "hitAt3": 25,
+              "hitAt5": 25,
+              "mrr": 0.25,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 4,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 3
+            }
+          },
+          "single_kp": {
+            "total": 18,
+            "uniform": {
+              "total": 18,
+              "hitAt1": 66.66666666666666,
+              "hitAt3": 72.22222222222221,
+              "hitAt5": 77.77777777777779,
+              "mrr": 0.7099941211052322
+            },
+            "tunedCombined": {
+              "total": 18,
+              "hitAt1": 55.55555555555556,
+              "hitAt3": 72.22222222222221,
+              "hitAt5": 77.77777777777779,
+              "mrr": 0.6592904493231291
+            },
+            "kpidUniform": {
+              "applicable": 18,
+              "hitAt1": 50,
+              "hitAt3": 55.55555555555556,
+              "hitAt5": 61.111111111111114,
+              "mrr": 0.5433274544385656,
+              "docHitAt1Total": 12,
+              "docHitAt1CorrectKpid": 9,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 14,
+              "docHitAt5CorrectKpid": 11,
+              "docHitAt5WrongKpid": 3
+            },
+            "kpidTunedCombined": {
+              "applicable": 18,
+              "hitAt1": 38.88888888888889,
+              "hitAt3": 55.55555555555556,
+              "hitAt5": 61.111111111111114,
+              "mrr": 0.49262378265646234,
+              "docHitAt1Total": 10,
+              "docHitAt1CorrectKpid": 7,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 14,
+              "docHitAt5CorrectKpid": 11,
+              "docHitAt5WrongKpid": 3
+            }
+          }
+        },
+        "preferredGranularity": {
+          "KP": {
+            "total": 26,
+            "uniform": {
+              "total": 26,
+              "hitAt1": 69.23076923076923,
+              "hitAt3": 80.76923076923077,
+              "hitAt5": 84.61538461538461,
+              "mrr": 0.7543549043549044
+            },
+            "tunedCombined": {
+              "total": 26,
+              "hitAt1": 61.53846153846154,
+              "hitAt3": 80.76923076923077,
+              "hitAt5": 84.61538461538461,
+              "mrr": 0.7192523623519098
+            },
+            "kpidUniform": {
+              "applicable": 26,
+              "hitAt1": 38.46153846153847,
+              "hitAt3": 46.15384615384615,
+              "hitAt5": 50,
+              "mrr": 0.4274318274318274,
+              "docHitAt1Total": 18,
+              "docHitAt1CorrectKpid": 10,
+              "docHitAt1WrongKpid": 8,
+              "docHitAt5Total": 22,
+              "docHitAt5CorrectKpid": 13,
+              "docHitAt5WrongKpid": 9
+            },
+            "kpidTunedCombined": {
+              "applicable": 26,
+              "hitAt1": 34.61538461538461,
+              "hitAt3": 46.15384615384615,
+              "hitAt5": 50,
+              "mrr": 0.4179703110698586,
+              "docHitAt1Total": 16,
+              "docHitAt1CorrectKpid": 9,
+              "docHitAt1WrongKpid": 7,
+              "docHitAt5Total": 22,
+              "docHitAt5CorrectKpid": 13,
+              "docHitAt5WrongKpid": 9
+            }
+          },
+          "KP+OT": {
+            "total": 44,
+            "uniform": {
+              "total": 44,
+              "hitAt1": 86.36363636363636,
+              "hitAt3": 90.9090909090909,
+              "hitAt5": 90.9090909090909,
+              "mrr": 0.892362539421363
+            },
+            "tunedCombined": {
+              "total": 44,
+              "hitAt1": 88.63636363636364,
+              "hitAt3": 93.18181818181817,
+              "hitAt5": 93.18181818181817,
+              "mrr": 0.9115884115884115
+            },
+            "kpidUniform": {
+              "applicable": 29,
+              "hitAt1": 44.827586206896555,
+              "hitAt3": 48.275862068965516,
+              "hitAt5": 48.275862068965516,
+              "mrr": 0.46551724137931033,
+              "docHitAt1Total": 24,
+              "docHitAt1CorrectKpid": 13,
+              "docHitAt1WrongKpid": 11,
+              "docHitAt5Total": 26,
+              "docHitAt5CorrectKpid": 14,
+              "docHitAt5WrongKpid": 12
+            },
+            "kpidTunedCombined": {
+              "applicable": 29,
+              "hitAt1": 48.275862068965516,
+              "hitAt3": 48.275862068965516,
+              "hitAt5": 48.275862068965516,
+              "mrr": 0.4827586206896552,
+              "docHitAt1Total": 25,
+              "docHitAt1CorrectKpid": 14,
+              "docHitAt1WrongKpid": 11,
+              "docHitAt5Total": 26,
+              "docHitAt5CorrectKpid": 14,
+              "docHitAt5WrongKpid": 12
+            }
+          },
+          "OT": {
+            "total": 27,
+            "uniform": {
+              "total": 27,
+              "hitAt1": 62.96296296296296,
+              "hitAt3": 96.29629629629629,
+              "hitAt5": 96.29629629629629,
+              "mrr": 0.7938271604938272
+            },
+            "tunedCombined": {
+              "total": 27,
+              "hitAt1": 74.07407407407408,
+              "hitAt3": 88.88888888888889,
+              "hitAt5": 92.5925925925926,
+              "mrr": 0.8212682379349046
+            },
+            "kpidUniform": {
+              "applicable": 4,
+              "hitAt1": 25,
+              "hitAt3": 25,
+              "hitAt5": 25,
+              "mrr": 0.25,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 4,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 3
+            },
+            "kpidTunedCombined": {
+              "applicable": 4,
+              "hitAt1": 25,
+              "hitAt3": 25,
+              "hitAt5": 25,
+              "mrr": 0.25,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 4,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 3
+            }
+          },
+          "Q+KP": {
+            "total": 9,
+            "uniform": {
+              "total": 9,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "tunedCombined": {
+              "total": 9,
+              "hitAt1": 88.88888888888889,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 0.9444444444444444
+            },
+            "kpidUniform": {
+              "applicable": 7,
+              "hitAt1": 71.42857142857143,
+              "hitAt3": 71.42857142857143,
+              "hitAt5": 71.42857142857143,
+              "mrr": 0.7142857142857143,
+              "docHitAt1Total": 7,
+              "docHitAt1CorrectKpid": 5,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 7,
+              "docHitAt5CorrectKpid": 5,
+              "docHitAt5WrongKpid": 2
+            },
+            "kpidTunedCombined": {
+              "applicable": 7,
+              "hitAt1": 71.42857142857143,
+              "hitAt3": 71.42857142857143,
+              "hitAt5": 71.42857142857143,
+              "mrr": 0.7142857142857143,
+              "docHitAt1Total": 6,
+              "docHitAt1CorrectKpid": 5,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 7,
+              "docHitAt5CorrectKpid": 5,
+              "docHitAt5WrongKpid": 2
+            }
+          }
+        }
+      }
+    },
+    {
+      "label": "Q+KP+OT",
+      "allowedTypes": [
+        "Q",
+        "KP",
+        "OT"
+      ],
+      "metadataCount": 16212,
+      "metadataTypeCounts": {
+        "Q": 12819,
+        "KP": 2877,
+        "OT": 516
+      },
+      "uniform": {
+        "weights": {
+          "Q": 0.3333333333333333,
+          "KP": 0.3333333333333333,
+          "OT": 0.3333333333333333
+        },
+        "combined": {
+          "total": 106,
+          "hitAt1": 81.13207547169812,
+          "hitAt3": 90.56603773584906,
+          "hitAt5": 91.50943396226415,
+          "mrr": 0.8664574326893973
+        },
+        "kpidCombined": {
+          "applicable": 66,
+          "hitAt1": 40.909090909090914,
+          "hitAt3": 45.45454545454545,
+          "hitAt5": 46.96969696969697,
+          "mrr": 0.44207054086733233,
+          "docHitAt1Total": 52,
+          "docHitAt1CorrectKpid": 27,
+          "docHitAt1WrongKpid": 25,
+          "docHitAt5Total": 59,
+          "docHitAt5CorrectKpid": 31,
+          "docHitAt5WrongKpid": 28
+        },
+        "metricsByDataset": {
+          "test_dataset_granularity_main_106_reviewed_tail_probe_20260331_standard": {
+            "total": 61,
+            "hitAt1": 85.24590163934425,
+            "hitAt3": 93.44262295081968,
+            "hitAt5": 93.44262295081968,
+            "mrr": 0.8975600901830411
+          },
+          "test_dataset_granularity_main_106_reviewed_tail_probe_20260331_short_keyword": {
+            "total": 20,
+            "hitAt1": 85,
+            "hitAt3": 90,
+            "hitAt5": 90,
+            "mrr": 0.8779411764705882
+          },
+          "test_dataset_granularity_main_106_reviewed_tail_probe_20260331_situational": {
+            "total": 25,
+            "hitAt1": 68,
+            "hitAt3": 84,
+            "hitAt5": 88,
+            "mrr": 0.7813799533799534
+          }
+        }
+      },
+      "tuned": {
+        "candidateCount": 25,
+        "bestWeights": {
+          "Q": 0.2777777777777778,
+          "KP": 0.2777777777777778,
+          "OT": 0.4444444444444445
+        },
+        "tuneCombined": {
+          "total": 81,
+          "hitAt1": 87.65432098765432,
+          "hitAt3": 91.35802469135803,
+          "hitAt5": 91.35802469135803,
+          "mrr": 0.8969433737407593
+        },
+        "kpidTuneCombined": {
+          "applicable": 44,
+          "hitAt1": 38.63636363636363,
+          "hitAt3": 43.18181818181818,
+          "hitAt5": 43.18181818181818,
+          "mrr": 0.4140699986288222,
+          "docHitAt1Total": 37,
+          "docHitAt1CorrectKpid": 17,
+          "docHitAt1WrongKpid": 20,
+          "docHitAt5Total": 39,
+          "docHitAt5CorrectKpid": 19,
+          "docHitAt5WrongKpid": 20
+        },
+        "holdoutCombined": {
+          "total": 25,
+          "hitAt1": 64,
+          "hitAt3": 84,
+          "hitAt5": 88,
+          "mrr": 0.7617435897435897
+        },
+        "kpidHoldoutCombined": {
+          "applicable": 22,
+          "hitAt1": 36.36363636363637,
+          "hitAt3": 45.45454545454545,
+          "hitAt5": 50,
+          "mrr": 0.4303030303030303,
+          "docHitAt1Total": 14,
+          "docHitAt1CorrectKpid": 8,
+          "docHitAt1WrongKpid": 6,
+          "docHitAt5Total": 19,
+          "docHitAt5CorrectKpid": 11,
+          "docHitAt5WrongKpid": 8
+        },
+        "combinedCombined": {
+          "total": 106,
+          "hitAt1": 82.0754716981132,
+          "hitAt3": 89.62264150943396,
+          "hitAt5": 90.56603773584906,
+          "mrr": 0.8650566322319929
+        },
+        "kpidCombinedCombined": {
+          "applicable": 66,
+          "hitAt1": 37.878787878787875,
+          "hitAt3": 43.93939393939394,
+          "hitAt5": 45.45454545454545,
+          "mrr": 0.4194810091868916,
+          "docHitAt1Total": 51,
+          "docHitAt1CorrectKpid": 25,
+          "docHitAt1WrongKpid": 26,
+          "docHitAt5Total": 58,
+          "docHitAt5CorrectKpid": 30,
+          "docHitAt5WrongKpid": 28
+        },
+        "topTuneCandidates": [
+          {
+            "weights": {
+              "Q": 0.2777777777777778,
+              "KP": 0.2777777777777778,
+              "OT": 0.4444444444444445
+            },
+            "combined": {
+              "total": 81,
+              "hitAt1": 87.65432098765432,
+              "hitAt3": 91.35802469135803,
+              "hitAt5": 91.35802469135803,
+              "mrr": 0.8969433737407593
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.3333333333333333,
+              "KP": 0.13333333333333333,
+              "OT": 0.5333333333333333
+            },
+            "combined": {
+              "total": 81,
+              "hitAt1": 86.41975308641975,
+              "hitAt3": 92.5925925925926,
+              "hitAt5": 92.5925925925926,
+              "mrr": 0.8970805479520076
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.3333333333333333,
+              "KP": 0.3333333333333333,
+              "OT": 0.3333333333333333
+            },
+            "combined": {
+              "total": 81,
+              "hitAt1": 85.18518518518519,
+              "hitAt3": 92.5925925925926,
+              "hitAt5": 92.5925925925926,
+              "mrr": 0.8927159139577441
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.38095238095238093,
+              "KP": 0.38095238095238093,
+              "OT": 0.23809523809523808
+            },
+            "combined": {
+              "total": 81,
+              "hitAt1": 85.18518518518519,
+              "hitAt3": 92.5925925925926,
+              "hitAt5": 92.5925925925926,
+              "mrr": 0.8925278425278425
+            }
+          },
+          {
+            "weights": {
+              "Q": 0.4166666666666667,
+              "KP": 0.4166666666666667,
+              "OT": 0.16666666666666669
+            },
+            "combined": {
+              "total": 81,
+              "hitAt1": 83.9506172839506,
+              "hitAt3": 92.5925925925926,
+              "hitAt5": 92.5925925925926,
+              "mrr": 0.8863550030216696
+            }
+          }
+        ]
+      },
+      "groupBreakdowns": {
+        "supportPattern": {
+          "multi_kp": {
+            "total": 59,
+            "uniform": {
+              "total": 59,
+              "hitAt1": 88.13559322033898,
+              "hitAt3": 94.91525423728814,
+              "hitAt5": 94.91525423728814,
+              "mrr": 0.9180988503022403
+            },
+            "tunedCombined": {
+              "total": 59,
+              "hitAt1": 89.83050847457628,
+              "hitAt3": 93.22033898305084,
+              "hitAt5": 93.22033898305084,
+              "mrr": 0.9182529335071709
+            },
+            "kpidUniform": {
+              "applicable": 44,
+              "hitAt1": 38.63636363636363,
+              "hitAt3": 43.18181818181818,
+              "hitAt5": 43.18181818181818,
+              "mrr": 0.4111570247933885,
+              "docHitAt1Total": 38,
+              "docHitAt1CorrectKpid": 17,
+              "docHitAt1WrongKpid": 21,
+              "docHitAt5Total": 41,
+              "docHitAt5CorrectKpid": 19,
+              "docHitAt5WrongKpid": 22
+            },
+            "kpidTunedCombined": {
+              "applicable": 44,
+              "hitAt1": 36.36363636363637,
+              "hitAt3": 40.909090909090914,
+              "hitAt5": 40.909090909090914,
+              "mrr": 0.38863636363636367,
+              "docHitAt1Total": 38,
+              "docHitAt1CorrectKpid": 16,
+              "docHitAt1WrongKpid": 22,
+              "docHitAt5Total": 40,
+              "docHitAt5CorrectKpid": 18,
+              "docHitAt5WrongKpid": 22
+            }
+          },
+          "ot_required": {
+            "total": 29,
+            "uniform": {
+              "total": 29,
+              "hitAt1": 75.86206896551724,
+              "hitAt3": 93.10344827586206,
+              "hitAt5": 93.10344827586206,
+              "mrr": 0.847962382445141
+            },
+            "tunedCombined": {
+              "total": 29,
+              "hitAt1": 79.3103448275862,
+              "hitAt3": 93.10344827586206,
+              "hitAt5": 93.10344827586206,
+              "mrr": 0.8597701149425288
+            },
+            "kpidUniform": {
+              "applicable": 4,
+              "hitAt1": 25,
+              "hitAt3": 25,
+              "hitAt5": 25,
+              "mrr": 0.25,
+              "docHitAt1Total": 2,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 4,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 3
+            },
+            "kpidTunedCombined": {
+              "applicable": 4,
+              "hitAt1": 25,
+              "hitAt3": 25,
+              "hitAt5": 25,
+              "mrr": 0.25,
+              "docHitAt1Total": 2,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 4,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 3
+            }
+          },
+          "single_kp": {
+            "total": 18,
+            "uniform": {
+              "total": 18,
+              "hitAt1": 66.66666666666666,
+              "hitAt3": 72.22222222222221,
+              "hitAt5": 77.77777777777779,
+              "mrr": 0.7269859225741578
+            },
+            "tunedCombined": {
+              "total": 18,
+              "hitAt1": 61.111111111111114,
+              "hitAt3": 72.22222222222221,
+              "hitAt5": 77.77777777777779,
+              "mrr": 0.69920814479638
+            },
+            "kpidUniform": {
+              "applicable": 18,
+              "hitAt1": 50,
+              "hitAt3": 55.55555555555556,
+              "hitAt5": 61.111111111111114,
+              "mrr": 0.5603192559074912,
+              "docHitAt1Total": 12,
+              "docHitAt1CorrectKpid": 9,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 14,
+              "docHitAt5CorrectKpid": 11,
+              "docHitAt5WrongKpid": 3
+            },
+            "kpidTunedCombined": {
+              "applicable": 18,
+              "hitAt1": 44.44444444444444,
+              "hitAt3": 55.55555555555556,
+              "hitAt5": 61.111111111111114,
+              "mrr": 0.5325414781297134,
+              "docHitAt1Total": 11,
+              "docHitAt1CorrectKpid": 8,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 14,
+              "docHitAt5CorrectKpid": 11,
+              "docHitAt5WrongKpid": 3
+            }
+          }
+        },
+        "preferredGranularity": {
+          "KP": {
+            "total": 26,
+            "uniform": {
+              "total": 26,
+              "hitAt1": 76.92307692307693,
+              "hitAt3": 80.76923076923077,
+              "hitAt5": 84.61538461538461,
+              "mrr": 0.8109902540898017
+            },
+            "tunedCombined": {
+              "total": 26,
+              "hitAt1": 73.07692307692307,
+              "hitAt3": 80.76923076923077,
+              "hitAt5": 84.61538461538461,
+              "mrr": 0.7917594848590325
+            },
+            "kpidUniform": {
+              "applicable": 26,
+              "hitAt1": 46.15384615384615,
+              "hitAt3": 50,
+              "hitAt5": 53.84615384615385,
+              "mrr": 0.5032979463974938,
+              "docHitAt1Total": 20,
+              "docHitAt1CorrectKpid": 12,
+              "docHitAt1WrongKpid": 8,
+              "docHitAt5Total": 22,
+              "docHitAt5CorrectKpid": 14,
+              "docHitAt5WrongKpid": 8
+            },
+            "kpidTunedCombined": {
+              "applicable": 26,
+              "hitAt1": 42.30769230769231,
+              "hitAt3": 50,
+              "hitAt5": 53.84615384615385,
+              "mrr": 0.48406717716672465,
+              "docHitAt1Total": 19,
+              "docHitAt1CorrectKpid": 11,
+              "docHitAt1WrongKpid": 8,
+              "docHitAt5Total": 22,
+              "docHitAt5CorrectKpid": 14,
+              "docHitAt5WrongKpid": 8
+            }
+          },
+          "KP+OT": {
+            "total": 44,
+            "uniform": {
+              "total": 44,
+              "hitAt1": 84.0909090909091,
+              "hitAt3": 93.18181818181817,
+              "hitAt5": 93.18181818181817,
+              "mrr": 0.8901780038143676
+            },
+            "tunedCombined": {
+              "total": 44,
+              "hitAt1": 86.36363636363636,
+              "hitAt3": 90.9090909090909,
+              "hitAt5": 90.9090909090909,
+              "mrr": 0.8903846153846154
+            },
+            "kpidUniform": {
+              "applicable": 29,
+              "hitAt1": 34.48275862068966,
+              "hitAt3": 41.37931034482759,
+              "hitAt5": 41.37931034482759,
+              "mrr": 0.3824451410658308,
+              "docHitAt1Total": 23,
+              "docHitAt1CorrectKpid": 10,
+              "docHitAt1WrongKpid": 13,
+              "docHitAt5Total": 26,
+              "docHitAt5CorrectKpid": 12,
+              "docHitAt5WrongKpid": 14
+            },
+            "kpidTunedCombined": {
+              "applicable": 29,
+              "hitAt1": 31.03448275862069,
+              "hitAt3": 37.93103448275862,
+              "hitAt5": 37.93103448275862,
+              "mrr": 0.3482758620689655,
+              "docHitAt1Total": 23,
+              "docHitAt1CorrectKpid": 9,
+              "docHitAt1WrongKpid": 14,
+              "docHitAt5Total": 25,
+              "docHitAt5CorrectKpid": 11,
+              "docHitAt5WrongKpid": 14
+            }
+          },
+          "OT": {
+            "total": 27,
+            "uniform": {
+              "total": 27,
+              "hitAt1": 74.07407407407408,
+              "hitAt3": 92.5925925925926,
+              "hitAt5": 92.5925925925926,
+              "mrr": 0.8367003367003366
+            },
+            "tunedCombined": {
+              "total": 27,
+              "hitAt1": 77.77777777777779,
+              "hitAt3": 92.5925925925926,
+              "hitAt5": 92.5925925925926,
+              "mrr": 0.8493827160493828
+            },
+            "kpidUniform": {
+              "applicable": 4,
+              "hitAt1": 25,
+              "hitAt3": 25,
+              "hitAt5": 25,
+              "mrr": 0.25,
+              "docHitAt1Total": 2,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 4,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 3
+            },
+            "kpidTunedCombined": {
+              "applicable": 4,
+              "hitAt1": 25,
+              "hitAt3": 25,
+              "hitAt5": 25,
+              "mrr": 0.25,
+              "docHitAt1Total": 2,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 4,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 3
+            }
+          },
+          "Q+KP": {
+            "total": 9,
+            "uniform": {
+              "total": 9,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "tunedCombined": {
+              "total": 9,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "kpidUniform": {
+              "applicable": 7,
+              "hitAt1": 57.14285714285714,
+              "hitAt3": 57.14285714285714,
+              "hitAt5": 57.14285714285714,
+              "mrr": 0.5714285714285714,
+              "docHitAt1Total": 7,
+              "docHitAt1CorrectKpid": 4,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 7,
+              "docHitAt5CorrectKpid": 4,
+              "docHitAt5WrongKpid": 3
+            },
+            "kpidTunedCombined": {
+              "applicable": 7,
+              "hitAt1": 57.14285714285714,
+              "hitAt3": 57.14285714285714,
+              "hitAt5": 57.14285714285714,
+              "mrr": 0.5714285714285714,
+              "docHitAt1Total": 7,
+              "docHitAt1CorrectKpid": 4,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 7,
+              "docHitAt5CorrectKpid": 4,
+              "docHitAt5WrongKpid": 3
+            }
+          }
+        }
+      }
+    }
+  ]
+}

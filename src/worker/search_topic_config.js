@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.TOPIC_CONFIGS = exports.INTENT_VECTOR_TABLE = exports.HISTORICAL_QUERY_HINTS = exports.LATEST_QUERY_HINTS = exports.EVENT_TYPE_TABLE = exports.DEGREE_LEVEL_TABLE = void 0;
+var search_domain_config_json_1 = require("./search_domain_config.json");
+var DOMAIN_CONFIG = search_domain_config_json_1.default;
+exports.DEGREE_LEVEL_TABLE = DOMAIN_CONFIG.degree_levels;
+exports.EVENT_TYPE_TABLE = DOMAIN_CONFIG.event_type_table;
+exports.LATEST_QUERY_HINTS = DOMAIN_CONFIG.latest_query_hints;
+exports.HISTORICAL_QUERY_HINTS = DOMAIN_CONFIG.historical_query_hints;
+exports.INTENT_VECTOR_TABLE = DOMAIN_CONFIG.intent_vector_table;
+exports.TOPIC_CONFIGS = DOMAIN_CONFIG.topic_configs;

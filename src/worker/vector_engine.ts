@@ -96,11 +96,19 @@ export interface ResponseDecision {
 
 type ResponseModeScores = Record<ResponseMode, number>;
 
+export interface SearchRankDiagnostics {
+    querySignals: QuerySignals;
+    retrievalSignals: RetrievalSignals;
+    explicitOutOfScopeOnly: boolean;
+    inDomainEvidenceRejectLabel: string | null;
+}
+
 export interface SearchRankOutput {
     matches: SearchResult[];
     weakMatches: SearchResult[];
     rejection?: SearchRejection;
     responseDecision?: ResponseDecision;
+    diagnostics?: SearchRankDiagnostics;
 }
 
 export interface BM25Stats {
@@ -151,8 +159,16 @@ const BM25_B = 0.4;
 const EVENT_TYPE_MISMATCH_PENALTY = 0.95;
 const LATEST_YEAR_BOOST_BASE = 0.82;
 const LATEST_POLICY_TIMESTAMP_BOOST_BASE = 0.97;
+const CURRENT_PROCESS_TIMESTAMP_BOOST_BASE = 0.984;
 const DEFAULT_KP_ROLE_DOC_WEIGHT = 0.35;
 const DEFAULT_KP_ROLE_CANDIDATE_LIMIT = 5;
+const CURRENT_PROCESS_EVENT_TYPES = [
+    "招生章程",
+    "报名通知",
+    "考试安排",
+    "材料提交",
+    "资格要求",
+] as const;
 export const QUERY_SCOPE_SPECIFICITY_TERMS = [
     "港澳台",
     "海外",
@@ -275,13 +291,13 @@ function hasPostOutcomeConditionCue(query: string): boolean {
 }
 
 function hasStrongDetailAnchorCue(query: string): boolean {
-    return /录取通知书|通知书|报到|宿舍|党团关系|奖助金|档案|调档|政审|网上确认|答辩|报名|考试|缴费|申请书|复试|面试|邮寄|地址|银行卡|学费/.test(
+    return /录取通知书|通知书|报到|宿舍|党团关系|奖助金|档案|调档|政审|网上确认|现场确认|答辩|报名|考试|考试内容|考试科目|科目|题型|缴费|申请书|复试|面试|邮寄|地址|银行卡|学费/.test(
         query,
     );
 }
 
 function hasEntryLikeAnchorCue(query: string): boolean {
-    return /新生|入学|录取|拟录取|审核|初审|资格审核|申请|材料/.test(
+    return /新生|入学|录取|拟录取|审核|初审|资格审核|申请|材料|网上确认|现场确认/.test(
         query,
     );
 }
@@ -536,6 +552,8 @@ type QueryIntentContext = {
     months: number[];
     hasExplicitYear: boolean;
     hasExplicitMonth: boolean;
+    hasHistoricalHint: boolean;
+    hasStrongDetailAnchor: boolean;
     topicIds: string[];
     intentIds: string[];
     relatedIntentIds: string[];
@@ -782,6 +800,8 @@ function createQueryIntentContext(
         months: queryIntent?.months || [],
         hasExplicitYear: years.length > 0,
         hasExplicitMonth: (queryIntent?.months || []).length > 0,
+        hasHistoricalHint: Boolean(queryIntent?.signals.hasHistoricalHint),
+        hasStrongDetailAnchor: Boolean(queryIntent?.signals.hasStrongDetailAnchor),
         topicIds: queryIntent?.topicIds || [],
         intentIds,
         relatedIntentIds: getRelatedIntentTypes(intentIds),
@@ -918,6 +938,7 @@ type QueryRoleSignals = {
     asksPostOutcomeCondition: boolean;
     asksMaterials: boolean;
     asksProcedure: boolean;
+    asksExamContent: boolean;
     asksAnnouncementPeriod: boolean;
     asksApplicationStage: boolean;
     mentionsThesis: boolean;
@@ -950,6 +971,8 @@ function deriveQueryRoleSignals(
         asksProcedure: /怎么办|怎么处理|不通过|补交|补充|流程|步骤/.test(
             rawQuery,
         ),
+        asksExamContent:
+            /考什么|考哪些|考试内容|考试科目|科目|题型|综合能力/.test(rawQuery),
         asksAnnouncementPeriod: /公示期|哪几天/.test(rawQuery),
         asksApplicationStage:
             /申请|报名|确认|提交/.test(rawQuery) &&
@@ -1050,13 +1073,34 @@ function computeKpRoleBonus(
 
     if (signals.asksProcedure) {
         if (hasKpRoleTag(candidate, "procedure")) {
-            bonus += 1.0;
+            bonus += 1.25;
         }
         if (
             hasKpRoleTag(candidate, "reminder")
             || hasKpRoleTag(candidate, "background")
         ) {
             bonus -= 0.8;
+        }
+    }
+
+    if (signals.asksExamContent) {
+        if (hasKpRoleTag(candidate, "schedule")) {
+            bonus += 1.1;
+        }
+        if (hasKpRoleTag(candidate, "time_expression")) {
+            bonus += 0.25;
+        }
+        if (hasKpRoleTag(candidate, "post_outcome")) {
+            bonus -= 1.35;
+        }
+        if (hasKpRoleTag(candidate, "announcement_period")) {
+            bonus -= 0.9;
+        }
+        if (hasKpRoleTag(candidate, "deadline")) {
+            bonus -= 0.55;
+        }
+        if (hasKpRoleTag(candidate, "publish")) {
+            bonus -= 0.45;
         }
     }
 
@@ -1296,6 +1340,7 @@ function applyTopicCoverageBoost(
     boost: number,
     intentContext: QueryIntentContext,
     scores: AggregatedDocScores,
+    signals: DocQuerySignals,
 ): number {
     if (intentContext.topicIds.length === 0) {
         return boost;
@@ -1314,6 +1359,17 @@ function applyTopicCoverageBoost(
         hasAnyOverlap(intentContext.topicIds, scores.weak_topic_ids)
     ) {
         return boost * 1.02;
+    }
+
+    const hasStructuredFallbackEvidence =
+        intentContext.querySpecificityTerms.length > 0 &&
+        (signals.hasStructuredYearMatch ||
+            signals.hasLexicalYearMatch ||
+            signals.hasPublishYearMatch) &&
+        (hasAnyOverlap(intentContext.degreeLevels, scores.degree_levels) ||
+            (scores.event_types?.length || 0) > 0);
+    if (hasStructuredFallbackEvidence) {
+        return boost * 0.98;
     }
 
     return boost * 0.84;
@@ -1421,6 +1477,65 @@ function applyLatestTimestampBoost(
 
     const gapMonths = gapSeconds / (60 * 60 * 24 * 30);
     return boost * Math.pow(LATEST_POLICY_TIMESTAMP_BOOST_BASE, gapMonths);
+}
+
+function shouldPreferCurrentProcessVersion(
+    intentContext: QueryIntentContext,
+): boolean {
+    if (intentContext.hasExplicitYear || intentContext.hasHistoricalHint) {
+        return false;
+    }
+
+    if (intentContext.hasPostOutcomeCondition) {
+        return false;
+    }
+
+    const hasProcessCue =
+        /报名|确认|提交|材料|申请|答辩|流程|步骤|怎么办|如何|接下来/.test(
+            intentContext.rawQuery,
+        );
+    if (!hasProcessCue) {
+        return false;
+    }
+
+    return (
+        intentContext.hasStrongDetailAnchor ||
+        /流程|步骤|怎么办|如何|接下来/.test(intentContext.rawQuery)
+    );
+}
+
+function applyCurrentProcessTimestampBoost(
+    boost: number,
+    intentContext: QueryIntentContext,
+    scores: AggregatedDocScores,
+    latestTimestamp?: number,
+): number {
+    if (
+        !shouldPreferCurrentProcessVersion(intentContext) ||
+        latestTimestamp === undefined
+    ) {
+        return boost;
+    }
+
+    if (scores.timestamp === undefined) {
+        return boost * 0.9;
+    }
+
+    const gapSeconds = Math.max(0, latestTimestamp - scores.timestamp);
+    if (gapSeconds <= 0) {
+        return boost;
+    }
+
+    const gapMonths = gapSeconds / (60 * 60 * 24 * 30);
+    const hasProcessLikeEvent = hasAnyOverlap(
+        [...CURRENT_PROCESS_EVENT_TYPES],
+        scores.event_types,
+    );
+    const decayBase = hasProcessLikeEvent
+        ? CURRENT_PROCESS_TIMESTAMP_BOOST_BASE
+        : 0.992;
+
+    return boost * Math.pow(decayBase, gapMonths);
 }
 
 function applyScopeSpecificityBoost(
@@ -1554,7 +1669,7 @@ function computeBoostMultiplier(params: {
         signals,
     );
     boost = applyIntentBoost(boost, intentContext, scores);
-    boost = applyTopicCoverageBoost(boost, intentContext, scores);
+    boost = applyTopicCoverageBoost(boost, intentContext, scores, signals);
     boost = applyDegreeBoost(boost, intentContext, scores);
     boost = applyEventBoost(boost, intentContext, scores);
     boost = applyLatestYearBoost(
@@ -1564,6 +1679,12 @@ function computeBoostMultiplier(params: {
         latestTargetYear,
     );
     boost = applyLatestTimestampBoost(
+        boost,
+        intentContext,
+        scores,
+        latestTimestamp,
+    );
+    boost = applyCurrentProcessTimestampBoost(
         boost,
         intentContext,
         scores,
@@ -2095,6 +2216,20 @@ export function searchAndRank(params: {
         (queryIntent?.intentIds.length || 0) === 0 &&
         hasOnlyOutOfScopeTopics(queryIntent?.topicIds || []);
 
+    const inDomainEvidenceReject = shouldRejectForMissingInDomainEvidence({
+        rawQuery: queryIntent?.rawQuery || "",
+        queryIntent,
+        sortedRanking,
+        docEvidenceStatsMap: docDirectAnswerEvidenceStatsMap,
+        otidMap,
+    });
+    const diagnostics: SearchRankDiagnostics = {
+        querySignals,
+        retrievalSignals,
+        explicitOutOfScopeOnly,
+        inDomainEvidenceRejectLabel: inDomainEvidenceReject.label || null,
+    };
+
     if (explicitOutOfScopeOnly) {
         return {
             matches: [],
@@ -2111,16 +2246,9 @@ export function searchAndRank(params: {
                 preferLatestWithinTopic: false,
                 useWeakMatches: true,
             },
+            diagnostics,
         };
     }
-
-    const inDomainEvidenceReject = shouldRejectForMissingInDomainEvidence({
-        rawQuery: queryIntent?.rawQuery || "",
-        queryIntent,
-        sortedRanking,
-        docEvidenceStatsMap: docDirectAnswerEvidenceStatsMap,
-        otidMap,
-    });
 
     if (
         responseDecision.mode === "direct_answer" &&
@@ -2141,6 +2269,7 @@ export function searchAndRank(params: {
                 preferLatestWithinTopic: false,
                 useWeakMatches: true,
             },
+            diagnostics,
         };
     }
 
@@ -2153,6 +2282,7 @@ export function searchAndRank(params: {
                 topicIds: [],
             },
             responseDecision,
+            diagnostics,
         };
     }
 
@@ -2167,6 +2297,7 @@ export function searchAndRank(params: {
                 topicIds: [],
             },
             responseDecision,
+            diagnostics,
         };
     }
 
@@ -2174,5 +2305,6 @@ export function searchAndRank(params: {
         matches: sortedRanking.slice(0, 100),
         weakMatches: [],
         responseDecision,
+        diagnostics,
     };
 }

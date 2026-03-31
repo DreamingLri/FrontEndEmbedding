@@ -8,47 +8,35 @@ import {
   Layers,
   ShieldAlert
 } from 'lucide-vue-next';
+import type {
+  PipelineBehavior,
+  PipelineDecision,
+  PipelineDocumentRecord,
+  PipelineTrace,
+} from '../worker/search_pipeline';
+import type { SearchRejection } from '../worker/vector_engine';
+import {
+  formatPercent,
+  formatRetrievalScore,
+  getDisplayScore,
+  getPreviewText,
+  isOriginalSnippet,
+} from '../utils/searchPresentation';
 
-type PipelineBehavior = 'direct_answer' | 'clarify' | 'route_to_entry' | 'reject';
-
-type TraceDecision = {
-  behavior: PipelineBehavior;
-  reason: string;
-  confidence: number;
-  entryTopic?: string;
-  preferLatestWithinTopic: boolean;
-  useWeakMatches: boolean;
-  rejectionReason?: 'low_topic_coverage' | 'low_consistency' | 'weak_anchor_needs_clarification' | 'display_threshold' | null;
-  displayRejected?: boolean;
-};
-
-type TraceRejection = {
-  reason: 'low_topic_coverage' | 'low_consistency' | 'weak_anchor_needs_clarification';
-  topicIds: string[];
-};
-
-type TraceResult = {
-  id?: string;
-  otid?: string;
-  ot_title?: string;
-  link?: string;
-  publish_time?: string;
-  bestSentence?: string;
-  bestPoint?: string;
-  score?: number;
-  coarseScore?: number;
-  displayScore?: number;
-  rerankScore?: number;
-  confidenceScore?: number;
-  snippetScore?: number;
-};
+type TraceDecision = PipelineDecision;
+type TraceRejection = SearchRejection;
+type TraceResult = PipelineDocumentRecord;
 
 type TraceData = {
   query: string;
   results: TraceResult[];
+  retrievalDecision?: TraceDecision | null;
   decision?: TraceDecision | null;
   rejection?: TraceRejection | null;
   weakResultsCount?: number;
+  directAnswerRescue?: PipelineTrace['directAnswerRescue'] | null;
+  querySignals?: PipelineTrace['querySignals'] | null;
+  retrievalSignals?: PipelineTrace['retrievalSignals'] | null;
   stats?: {
     totalMs: string;
     searchMs: string;
@@ -60,6 +48,7 @@ type TraceData = {
     maxChunksPerDoc?: number;
     chunkPlanReason?: string;
     rejectionThreshold?: number;
+    initialTopConfidence?: number | null;
     topConfidence?: number | null;
     rejected?: boolean;
   };
@@ -69,17 +58,11 @@ const props = defineProps<{
   traceData: TraceData | null;
 }>();
 
-const formatPercent = (score: number) => ((score || 0) * 100).toFixed(1) + '%';
-const formatRetrievalScore = (score: number) => `Score ${Number(score || 0).toFixed(2)}`;
-const getDisplayScore = (res: TraceResult) =>
-  res.displayScore ?? res.coarseScore ?? res.confidenceScore ?? res.rerankScore ?? res.score ?? 0;
-const getPreviewText = (res: TraceResult) => res.bestSentence || res.bestPoint || '';
-const isOriginalSnippet = (res: TraceResult) => (res.snippetScore ?? -999) > 0.4 && !!res.bestSentence;
 const top3Results = () => props.traceData?.results?.slice(0, 3) ?? [];
 const compactResults = () => props.traceData?.results?.slice(3, 10) ?? [];
 
-const behaviorLabel = () => {
-  switch (props.traceData?.decision?.behavior) {
+const behaviorLabel = (behavior?: PipelineBehavior | null) => {
+  switch (behavior) {
     case 'direct_answer':
       return '直接回答';
     case 'clarify':
@@ -93,8 +76,8 @@ const behaviorLabel = () => {
   }
 };
 
-const behaviorClass = () => {
-  switch (props.traceData?.decision?.behavior) {
+const behaviorClass = (behavior?: PipelineBehavior | null) => {
+  switch (behavior) {
     case 'direct_answer':
       return 'border-emerald-500/25 bg-emerald-500/10 text-emerald-200';
     case 'clarify':
@@ -106,6 +89,15 @@ const behaviorClass = () => {
     default:
       return 'border-white/10 bg-white/[0.03] text-slate-300';
   }
+};
+
+const decisionFlowLabel = () => {
+  const retrievalBehavior = props.traceData?.retrievalDecision?.behavior;
+  const finalBehavior = props.traceData?.decision?.behavior;
+  if (!retrievalBehavior || !finalBehavior || retrievalBehavior === finalBehavior) {
+    return '';
+  }
+  return `${behaviorLabel(retrievalBehavior)} -> ${behaviorLabel(finalBehavior)}`;
 };
 
 const rejectionReasonLabel = () => {
@@ -152,6 +144,20 @@ const decisionSubtitle = () => {
   }
 
   return '系统已进入直接回答链路，并对候选文档完成展示前重排。';
+};
+
+const rescueSubtitle = () => {
+  const rescue = props.traceData?.directAnswerRescue;
+  if (!rescue?.attempted) {
+    return '';
+  }
+  if (rescue.succeeded) {
+    return '直答候选在首次展示评分偏低时，系统扩大了重排范围并成功保留答案。';
+  }
+  if (rescue.accepted) {
+    return '系统触发了补救重排，但补救后仍未达到最终保留条件。';
+  }
+  return rescue.reason || '当前直答候选未满足补救重排的触发条件。';
 };
 </script>
 
@@ -212,8 +218,14 @@ const decisionSubtitle = () => {
           <div class="min-w-0">
             <div class="mb-2 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">行为决策</div>
             <div class="flex flex-wrap items-center gap-2">
-              <span class="rounded-full border px-2.5 py-1 text-[10px] font-semibold" :class="behaviorClass()">
-                {{ behaviorLabel() }}
+              <span class="rounded-full border px-2.5 py-1 text-[10px] font-semibold" :class="behaviorClass(traceData.decision.behavior)">
+                {{ behaviorLabel(traceData.decision.behavior) }}
+              </span>
+              <span
+                v-if="traceData.retrievalDecision"
+                class="rounded-full border border-white/10 bg-black/20 px-2.5 py-1 text-[10px] text-slate-300"
+              >
+                检索阶段 {{ behaviorLabel(traceData.retrievalDecision.behavior) }}
               </span>
               <span
                 v-if="traceData.decision.entryTopic"
@@ -231,6 +243,9 @@ const decisionSubtitle = () => {
 
         <div class="mt-2 text-[11px] leading-6 text-slate-400">
           {{ decisionSubtitle() }}
+        </div>
+        <div v-if="decisionFlowLabel()" class="mt-2 text-[10px] text-slate-500">
+          展示阶段调整: {{ decisionFlowLabel() }}
         </div>
 
         <div class="mt-3 flex flex-wrap gap-2 text-[10px]">
@@ -271,6 +286,99 @@ const decisionSubtitle = () => {
             / 阈值: {{ formatPercent(traceData.stats.rejectionThreshold) }}
           </span>
         </div>
+        <div
+          v-if="traceData.stats.initialTopConfidence !== null && traceData.stats.initialTopConfidence !== undefined"
+          class="mt-1 text-[11px] opacity-70"
+        >
+          初始重排置信度: {{ formatPercent(traceData.stats.initialTopConfidence || 0) }}
+        </div>
+      </div>
+
+      <div
+        v-if="traceData.directAnswerRescue?.attempted"
+        class="rounded-xl border px-3 py-2 text-xs"
+        :class="traceData.directAnswerRescue.succeeded ? 'border-sky-500/25 bg-sky-500/10 text-sky-200' : 'border-white/10 bg-white/[0.03] text-slate-300'"
+      >
+        <div class="flex items-center justify-between gap-3">
+          <div class="flex items-center gap-2">
+            <Cpu class="h-4 w-4" />
+            <span>直答补救重排</span>
+          </div>
+          <span class="rounded-full border border-white/10 px-2 py-0.5 text-[10px]">
+            {{ traceData.directAnswerRescue.succeeded ? '已保留' : '未保留' }}
+          </span>
+        </div>
+        <div class="mt-1 text-[11px] opacity-80">
+          {{ rescueSubtitle() }}
+        </div>
+        <div class="mt-2 flex flex-wrap gap-2 text-[10px] opacity-80">
+          <span>
+            初始 {{ formatPercent(traceData.directAnswerRescue.initialTopConfidence || 0) }}
+          </span>
+          <span v-if="traceData.directAnswerRescue.rescueTopConfidence !== undefined">
+            补救后 {{ formatPercent(traceData.directAnswerRescue.rescueTopConfidence || 0) }}
+          </span>
+          <span v-if="traceData.directAnswerRescue.initialRerankDocCount !== undefined">
+            文档窗口 {{ traceData.directAnswerRescue.initialRerankDocCount }} -> {{ traceData.directAnswerRescue.rescueRerankDocCount ?? traceData.directAnswerRescue.initialRerankDocCount }}
+          </span>
+          <span v-if="traceData.directAnswerRescue.initialMaxChunksPerDoc !== undefined">
+            chunks/文档 {{ traceData.directAnswerRescue.initialMaxChunksPerDoc }} -> {{ traceData.directAnswerRescue.rescueMaxChunksPerDoc ?? traceData.directAnswerRescue.initialMaxChunksPerDoc }}
+          </span>
+        </div>
+      </div>
+
+      <div
+        v-if="traceData.querySignals || traceData.retrievalSignals"
+        class="rounded-xl border border-white/5 bg-white/[0.03] p-3"
+      >
+        <div class="mb-2 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">诊断信号</div>
+        <div class="flex flex-wrap gap-2 text-[10px]">
+          <span
+            v-if="traceData.querySignals?.hasExplicitTopicOrIntent"
+            class="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-2 py-0.5 text-emerald-200"
+          >
+            显式主题/意图
+          </span>
+          <span
+            v-if="traceData.querySignals?.hasStrongDetailAnchor"
+            class="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-2 py-0.5 text-emerald-200"
+          >
+            强细节锚点
+          </span>
+          <span
+            v-if="traceData.querySignals?.hasExplicitYear"
+            class="rounded-full border border-sky-400/20 bg-sky-400/10 px-2 py-0.5 text-sky-200"
+          >
+            显式年份
+          </span>
+          <span
+            v-if="traceData.querySignals?.hasLatestPolicyState"
+            class="rounded-full border border-sky-400/20 bg-sky-400/10 px-2 py-0.5 text-sky-200"
+          >
+            latest 诉求
+          </span>
+          <span
+            v-if="traceData.querySignals?.hasEntryLikeAnchor"
+            class="rounded-full border border-amber-400/20 bg-amber-400/10 px-2 py-0.5 text-amber-200"
+          >
+            入口型问法
+          </span>
+        </div>
+        <div class="mt-3 grid grid-cols-2 gap-2 text-[10px] text-slate-400">
+          <div v-if="traceData.querySignals">
+            查询长度 {{ traceData.querySignals.queryLength }}
+            <span v-if="traceData.querySignals.tokenCount"> / 分词 {{ traceData.querySignals.tokenCount }}</span>
+          </div>
+          <div v-if="traceData.retrievalSignals">
+            Top1-Top2 间隔 {{ formatPercent(traceData.retrievalSignals.top1Top2Gap || 0) }}
+          </div>
+          <div v-if="traceData.retrievalSignals">
+            主导主题占比 {{ formatPercent(traceData.retrievalSignals.dominantTopicRatio || 0) }}
+          </div>
+          <div v-if="traceData.retrievalSignals">
+            主题数 {{ traceData.retrievalSignals.distinctTopicCount }} / 候选 {{ traceData.retrievalSignals.candidateCount }}
+          </div>
+        </div>
       </div>
 
       <section v-if="top3Results().length > 0" class="space-y-2">
@@ -289,13 +397,13 @@ const decisionSubtitle = () => {
               <div class="mb-1 flex items-center gap-2">
                 <span class="text-[10px] font-semibold text-slate-500">#{{ i + 1 }}</span>
                 <span class="rounded-full border border-white/8 px-2 py-0.5 text-[10px] text-slate-400">
-                  {{ isOriginalSnippet(res) ? '官方原话' : '相关要点' }}
+                  {{ isOriginalSnippet(res, traceData.stats?.rejectionThreshold ?? 0.4) ? '官方原话' : '相关要点' }}
                 </span>
               </div>
               <div class="text-xs font-semibold text-slate-200">{{ res.ot_title || '未命名政策文档' }}</div>
             </div>
             <div class="text-right">
-              <div v-if="isOriginalSnippet(res)" class="text-[10px] font-mono text-slate-300">
+              <div v-if="isOriginalSnippet(res, traceData.stats?.rejectionThreshold ?? 0.4)" class="text-[10px] font-mono text-slate-300">
                 {{ formatPercent(res.snippetScore ?? 0) }}
               </div>
               <div v-else class="text-[10px] font-mono text-slate-400">

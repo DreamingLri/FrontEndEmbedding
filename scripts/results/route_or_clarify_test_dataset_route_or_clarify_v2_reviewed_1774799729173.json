@@ -1,0 +1,1863 @@
+{
+  "generatedAt": "2026-03-29T15:55:29.171Z",
+  "datasetFile": "D:\\Project\\SuAsk\\SuAsk_Agent\\Backend\\test\\test_dataset_route_or_clarify\\test_dataset_route_or_clarify_v2_reviewed.json",
+  "datasetName": "test_dataset_route_or_clarify_v2_reviewed",
+  "total": 35,
+  "config": {
+    "pipelineVersion": "canonical_full_v1",
+    "preset": {
+      "name": "canonical_full_v1",
+      "retrieval": {
+        "weights": {
+          "Q": 0.3333333333333333,
+          "KP": 0.13333333333333333,
+          "OT": 0.5333333333333333
+        },
+        "topHybridLimit": 1000,
+        "kpAggregationMode": "max",
+        "kpTopN": 3,
+        "kpTailWeight": 0.35,
+        "lexicalBonusMode": "sum",
+        "kpRoleRerankMode": "feature",
+        "kpRoleDocWeight": 0.35
+      },
+      "display": {
+        "rejectThreshold": 0.4,
+        "rerankBlendAlpha": 0.15,
+        "bestSentenceThreshold": 0.4,
+        "fetchMatchLimit": 15,
+        "fetchWeakMatchLimit": 10
+      }
+    },
+    "note": "当前报告直接调用统一 full pipeline，区分 clarify / route_to_entry / reject 三类行为。"
+  },
+  "summary": {
+    "total": 35,
+    "byExpectedAction": {
+      "clarify": 9,
+      "route_to_entry": 13,
+      "reject": 13
+    },
+    "byPredictedBehavior": {
+      "direct_answer": 23,
+      "clarify": 2,
+      "route_to_entry": 1,
+      "reject": 9
+    },
+    "coarseBehaviorAccuracy": 0.22857142857142856,
+    "exactBehaviorAccuracy": 0.2,
+    "clarifyHitRate": 0.1111111111111111,
+    "routeHitRate": 0.07692307692307693,
+    "routeEntryTopicAccuracy": 0,
+    "rejectHitRate": 0.38461538461538464,
+    "unsafeDirectAnswerRate": 0.6571428571428571
+  },
+  "caseReports": [
+    {
+      "id": "route_v2_batch1_0001",
+      "query": "我入围了综合评价录取，接下来要做什么？",
+      "expected_action": "route_to_entry",
+      "expected_coarse_behavior": "clarify_or_route",
+      "predicted_behavior": "route_to_entry",
+      "predicted_coarse_behavior": "clarify_or_route",
+      "retrieval_behavior": "route_to_entry",
+      "predicted_entry_topic": "新生录取后手续总入口",
+      "expected_entry_topic": "综合评价录取面试考核安排总览",
+      "behavior_correct": true,
+      "coarse_behavior_correct": true,
+      "entry_topic_correct": false,
+      "unsafe_direct_answer": false,
+      "rejection_reason": "weak_anchor_needs_clarification",
+      "weak_match_count": 5,
+      "match_count": 0,
+      "candidate_count": 4197,
+      "query_intent": {
+        "years": [],
+        "topicIds": [
+          "undergraduate_admission"
+        ],
+        "intentIds": [],
+        "preferLatest": true,
+        "preferLatestStrong": true,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": true,
+          "hasLatestPolicyState": true,
+          "hasGenericNextStep": true
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_b78d8162d15b4481",
+          "score": 2.0524391598730616,
+          "best_kpid": "kpid_58ca7514f24946c6"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_8be68548ed504099",
+          "score": 1.9999719744886781,
+          "best_kpid": "kpid_842f67f02e444f1f"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_64c41c82baca43e4",
+          "score": 1.5877565360158736,
+          "best_kpid": "kpid_a6ff456660174727"
+        }
+      ]
+    },
+    {
+      "id": "route_v2_batch1_0003",
+      "query": "怎么去参加考核？",
+      "expected_action": "reject",
+      "expected_coarse_behavior": "reject",
+      "predicted_behavior": "direct_answer",
+      "predicted_coarse_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "expected_entry_topic": "",
+      "behavior_correct": false,
+      "coarse_behavior_correct": false,
+      "entry_topic_correct": null,
+      "unsafe_direct_answer": true,
+      "rejection_reason": null,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 16212,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_92e6bf026e144ebd",
+          "score": 2.4796802343948166,
+          "best_kpid": "kpid_cb87029ede524d50"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_e8bfcc47185b4554",
+          "score": 2.292760274335773,
+          "best_kpid": "kpid_8f44465b386f42df"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_8c27fc74819145d9",
+          "score": 2.2266291300142105,
+          "best_kpid": "kpid_678e33ef4e114262"
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch1_0006",
+      "query": "什么时候能知道面试安排？",
+      "expected_action": "reject",
+      "expected_coarse_behavior": "reject",
+      "predicted_behavior": "direct_answer",
+      "predicted_coarse_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "expected_entry_topic": "",
+      "behavior_correct": false,
+      "coarse_behavior_correct": false,
+      "entry_topic_correct": null,
+      "unsafe_direct_answer": true,
+      "rejection_reason": null,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 16212,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_ccb3b891b8f64953",
+          "score": 2.991143738852571,
+          "best_kpid": "kpid_ae1357d2e0a14449"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_83b704957347492c",
+          "score": 2.9805240442475562,
+          "best_kpid": "kpid_a344b24ecd8e4b86"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_681df4bddf9c4ecb",
+          "score": 2.528051389913199,
+          "best_kpid": "kpid_727b2c9e86184a0d"
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch1_0007",
+      "query": "我通过了初审，接下来要做什么？",
+      "expected_action": "route_to_entry",
+      "expected_coarse_behavior": "clarify_or_route",
+      "predicted_behavior": "clarify",
+      "predicted_coarse_behavior": "clarify_or_route",
+      "retrieval_behavior": "clarify",
+      "expected_entry_topic": "资格审核通过后具体事项待澄清",
+      "behavior_correct": false,
+      "coarse_behavior_correct": true,
+      "entry_topic_correct": false,
+      "unsafe_direct_answer": false,
+      "rejection_reason": "weak_anchor_needs_clarification",
+      "weak_match_count": 5,
+      "match_count": 0,
+      "candidate_count": 16212,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": true,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": true
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_c19ddd94e52346c1",
+          "score": 1.7599021288320191
+        },
+        {
+          "rank": 2,
+          "otid": "otid_fd6621f974774e1c",
+          "score": 1.4902684767122913,
+          "best_kpid": "kpid_cbf33dac61254a6b"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_07c96191f91e425a",
+          "score": 1.4743491590306932
+        }
+      ]
+    },
+    {
+      "id": "route_v2_batch1_0010",
+      "query": "我参加了综合评价，接下来要做什么？",
+      "expected_action": "clarify",
+      "expected_coarse_behavior": "clarify_or_route",
+      "predicted_behavior": "direct_answer",
+      "predicted_coarse_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "expected_entry_topic": "综合评价后续流程待澄清",
+      "behavior_correct": false,
+      "coarse_behavior_correct": false,
+      "entry_topic_correct": null,
+      "unsafe_direct_answer": true,
+      "rejection_reason": null,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 4197,
+      "query_intent": {
+        "years": [],
+        "topicIds": [
+          "undergraduate_admission"
+        ],
+        "intentIds": [],
+        "preferLatest": true,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": true
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_8be68548ed504099",
+          "score": 2.7380385690874243,
+          "best_kpid": "kpid_424739db616f470e"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_b78d8162d15b4481",
+          "score": 2.411978921939904,
+          "best_kpid": "kpid_c7ccedc4e16e4ea0"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_395fb889a17b49fa",
+          "score": 1.9270008416671491,
+          "best_kpid": "kpid_49bcc92debc646b1"
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch1_0011",
+      "query": "综合评价录取的流程是怎样的？",
+      "expected_action": "route_to_entry",
+      "expected_coarse_behavior": "clarify_or_route",
+      "predicted_behavior": "direct_answer",
+      "predicted_coarse_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "expected_entry_topic": "综合评价录取流程总览",
+      "behavior_correct": false,
+      "coarse_behavior_correct": false,
+      "entry_topic_correct": false,
+      "unsafe_direct_answer": true,
+      "rejection_reason": null,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 4197,
+      "query_intent": {
+        "years": [],
+        "topicIds": [
+          "undergraduate_admission"
+        ],
+        "intentIds": [],
+        "preferLatest": true,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": true,
+          "hasLatestPolicyState": true,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_8be68548ed504099",
+          "score": 2.790779694744426,
+          "best_kpid": "kpid_93d57508c98b4b7d"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_23801bcd14384525",
+          "score": 2.3942942636815885,
+          "best_kpid": "kpid_a661d0677f604cd9"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_395fb889a17b49fa",
+          "score": 1.7675182077579559,
+          "best_kpid": "kpid_98b2a9d3bf224910"
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch1_0012",
+      "query": "我的成绩什么时候出来？",
+      "expected_action": "reject",
+      "expected_coarse_behavior": "reject",
+      "predicted_behavior": "direct_answer",
+      "predicted_coarse_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "expected_entry_topic": "",
+      "behavior_correct": false,
+      "coarse_behavior_correct": false,
+      "entry_topic_correct": null,
+      "unsafe_direct_answer": true,
+      "rejection_reason": null,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 16212,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_d2ae42cd17dc4842",
+          "score": 2.6613309713069384,
+          "best_kpid": "kpid_b1b2397328c8467c"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_0c80adc4e2fa4459",
+          "score": 2.4509659384674616,
+          "best_kpid": "kpid_63a810eec8d143cb"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_8324591f8f8e4ef8",
+          "score": 2.4394114802779026,
+          "best_kpid": "kpid_256d3a1d404f4953"
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch1_0013",
+      "query": "综合评价录取名单公示后，接下来要做什么？",
+      "expected_action": "route_to_entry",
+      "expected_coarse_behavior": "clarify_or_route",
+      "predicted_behavior": "direct_answer",
+      "predicted_coarse_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "expected_entry_topic": "录取名单公示后流程总览",
+      "behavior_correct": false,
+      "coarse_behavior_correct": false,
+      "entry_topic_correct": false,
+      "unsafe_direct_answer": true,
+      "rejection_reason": null,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 4197,
+      "query_intent": {
+        "years": [],
+        "topicIds": [
+          "undergraduate_admission"
+        ],
+        "intentIds": [],
+        "preferLatest": true,
+        "preferLatestStrong": true,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": true,
+          "hasLatestPolicyState": true,
+          "hasGenericNextStep": true
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_8be68548ed504099",
+          "score": 2.00742311059016,
+          "best_kpid": "kpid_842f67f02e444f1f"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_f536f4e1af9e43aa",
+          "score": 1.719260276253163,
+          "best_kpid": "kpid_b1973a1246884750"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_9366d85ec4ba4471",
+          "score": 1.162620858677093,
+          "best_kpid": "kpid_b3d6c0f9b9f24cbf"
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch1_0015",
+      "query": "名单什么时候能看？",
+      "expected_action": "reject",
+      "expected_coarse_behavior": "reject",
+      "predicted_behavior": "direct_answer",
+      "predicted_coarse_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "expected_entry_topic": "",
+      "behavior_correct": false,
+      "coarse_behavior_correct": false,
+      "entry_topic_correct": null,
+      "unsafe_direct_answer": true,
+      "rejection_reason": null,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 16212,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_9fd063879be24d9e",
+          "score": 2.6291623747388355,
+          "best_kpid": "kpid_d4d1e5b0df8f4abd"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_b2a1cc3ccb21453c",
+          "score": 2.5464644731951216,
+          "best_kpid": "kpid_d57143e245584e84"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_0653973ae1784e7e",
+          "score": 2.540613556217366
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch1_0016",
+      "query": "综合评价录取的后续流程是什么？",
+      "expected_action": "route_to_entry",
+      "expected_coarse_behavior": "clarify_or_route",
+      "predicted_behavior": "direct_answer",
+      "predicted_coarse_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "expected_entry_topic": "综合评价录取后续流程总览",
+      "behavior_correct": false,
+      "coarse_behavior_correct": false,
+      "entry_topic_correct": false,
+      "unsafe_direct_answer": true,
+      "rejection_reason": null,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 4197,
+      "query_intent": {
+        "years": [],
+        "topicIds": [
+          "undergraduate_admission"
+        ],
+        "intentIds": [],
+        "preferLatest": true,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": true,
+          "hasLatestPolicyState": true,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_8be68548ed504099",
+          "score": 3.2606871794443237,
+          "best_kpid": "kpid_842f67f02e444f1f"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_395fb889a17b49fa",
+          "score": 1.9527065093750224,
+          "best_kpid": "kpid_98b2a9d3bf224910"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_b78d8162d15b4481",
+          "score": 1.3755619933150993,
+          "best_kpid": "kpid_c7ccedc4e16e4ea0"
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch1_0017",
+      "query": "我的成绩有问题怎么办？",
+      "expected_action": "clarify",
+      "expected_coarse_behavior": "clarify_or_route",
+      "predicted_behavior": "reject",
+      "predicted_coarse_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "expected_entry_topic": "成绩问题处理流程待澄清",
+      "behavior_correct": false,
+      "coarse_behavior_correct": false,
+      "entry_topic_correct": null,
+      "unsafe_direct_answer": false,
+      "rejection_reason": "low_consistency",
+      "weak_match_count": 0,
+      "match_count": 0,
+      "candidate_count": 16212,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": true
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch1_0018",
+      "query": "什么时候能知道结果？",
+      "expected_action": "reject",
+      "expected_coarse_behavior": "reject",
+      "predicted_behavior": "reject",
+      "predicted_coarse_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "expected_entry_topic": "",
+      "behavior_correct": true,
+      "coarse_behavior_correct": true,
+      "entry_topic_correct": null,
+      "unsafe_direct_answer": false,
+      "rejection_reason": "low_consistency",
+      "weak_match_count": 0,
+      "match_count": 0,
+      "candidate_count": 16212,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch2_0001",
+      "query": "我想办个证明，需要带什么材料？",
+      "expected_action": "clarify",
+      "expected_coarse_behavior": "clarify_or_route",
+      "predicted_behavior": "reject",
+      "predicted_coarse_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "expected_entry_topic": "办理学业证明材料所需材料待澄清",
+      "behavior_correct": false,
+      "coarse_behavior_correct": false,
+      "entry_topic_correct": null,
+      "unsafe_direct_answer": false,
+      "rejection_reason": "low_consistency",
+      "weak_match_count": 0,
+      "match_count": 0,
+      "candidate_count": 16212,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch2_0002",
+      "query": "研究生院有哪些服务可以办理？",
+      "expected_action": "route_to_entry",
+      "expected_coarse_behavior": "clarify_or_route",
+      "predicted_behavior": "direct_answer",
+      "predicted_coarse_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "expected_entry_topic": "研究生院学业证明材料办理总览",
+      "behavior_correct": false,
+      "coarse_behavior_correct": false,
+      "entry_topic_correct": false,
+      "unsafe_direct_answer": true,
+      "rejection_reason": null,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 16212,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_689fe94db6424593",
+          "score": 3.587075195685505,
+          "best_kpid": "kpid_dd4164f3654844f1"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_42791a5498da4c46",
+          "score": 2.3784126214161043,
+          "best_kpid": "kpid_90b5e8af1e044488"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_7d9f138aeeb74dac",
+          "score": 2.0151710231380475,
+          "best_kpid": "kpid_50a1234a102b4926"
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch2_0003",
+      "query": "怎么交钱？",
+      "expected_action": "reject",
+      "expected_coarse_behavior": "reject",
+      "predicted_behavior": "direct_answer",
+      "predicted_coarse_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "expected_entry_topic": "",
+      "behavior_correct": false,
+      "coarse_behavior_correct": false,
+      "entry_topic_correct": null,
+      "unsafe_direct_answer": true,
+      "rejection_reason": null,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 16212,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_da09cc50e7bc46df",
+          "score": 1.6667150761141742
+        },
+        {
+          "rank": 2,
+          "otid": "otid_0209edf20b14478f",
+          "score": 1.5105848015442207,
+          "best_kpid": "kpid_d8135b3d81e44d41"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_8d5cb18b777644c5",
+          "score": 1.424408061352778
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch2_0004",
+      "query": "新生报到后需要做什么？",
+      "expected_action": "route_to_entry",
+      "expected_coarse_behavior": "clarify_or_route",
+      "predicted_behavior": "direct_answer",
+      "predicted_coarse_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "expected_entry_topic": "新生报到后流程总览",
+      "behavior_correct": false,
+      "coarse_behavior_correct": false,
+      "entry_topic_correct": false,
+      "unsafe_direct_answer": true,
+      "rejection_reason": null,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 16212,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": true
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_a0c675b775404ed8",
+          "score": 3.3660881232317337,
+          "best_kpid": "kpid_5f735f4dcef5452f"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_3c8fbcf6bdb24c95",
+          "score": 2.921651277221366,
+          "best_kpid": "kpid_0707ff93c07e499a"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_a918179bb0e2441b",
+          "score": 2.086291487543669,
+          "best_kpid": "kpid_f740361f10744dc5"
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch2_0006",
+      "query": "关于研究生新生的通知有哪些？",
+      "expected_action": "reject",
+      "expected_coarse_behavior": "reject",
+      "predicted_behavior": "reject",
+      "predicted_coarse_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "expected_entry_topic": "",
+      "behavior_correct": true,
+      "coarse_behavior_correct": true,
+      "entry_topic_correct": null,
+      "unsafe_direct_answer": false,
+      "rejection_reason": "low_consistency",
+      "weak_match_count": 0,
+      "match_count": 0,
+      "candidate_count": 16212,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch2_0007",
+      "query": "报到注册需要准备什么材料？",
+      "expected_action": "route_to_entry",
+      "expected_coarse_behavior": "clarify_or_route",
+      "predicted_behavior": "direct_answer",
+      "predicted_coarse_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "expected_entry_topic": "新生报到注册材料准备",
+      "behavior_correct": false,
+      "coarse_behavior_correct": false,
+      "entry_topic_correct": false,
+      "unsafe_direct_answer": true,
+      "rejection_reason": null,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 16212,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": true
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_1d0896a191814c1e",
+          "score": 1.80164346597971
+        },
+        {
+          "rank": 2,
+          "otid": "otid_e0c52921de884ef1",
+          "score": 1.6943191743612758,
+          "best_kpid": "kpid_d09f33db00c3427b"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_ed940aabc9c24803",
+          "score": 1.6062526802546748,
+          "best_kpid": "kpid_4f89e590446a464e"
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch2_0008",
+      "query": "如果报到有问题怎么办？",
+      "expected_action": "clarify",
+      "expected_coarse_behavior": "clarify_or_route",
+      "predicted_behavior": "direct_answer",
+      "predicted_coarse_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "expected_entry_topic": "报到问题处理方式待澄清",
+      "behavior_correct": false,
+      "coarse_behavior_correct": false,
+      "entry_topic_correct": null,
+      "unsafe_direct_answer": true,
+      "rejection_reason": null,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 16212,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": true
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_23801bcd14384525",
+          "score": 1.9962071485779809,
+          "best_kpid": "kpid_ea47fcee29754082"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_ed940aabc9c24803",
+          "score": 1.2603750676546521,
+          "best_kpid": "kpid_4f89e590446a464e"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_dc54d3033b3c4944",
+          "score": 1.1595996126656158,
+          "best_kpid": "kpid_b97801b322a14567"
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch2_0012",
+      "query": "提交材料需要准备什么？",
+      "expected_action": "clarify",
+      "expected_coarse_behavior": "clarify_or_route",
+      "predicted_behavior": "clarify",
+      "predicted_coarse_behavior": "clarify_or_route",
+      "retrieval_behavior": "clarify",
+      "expected_entry_topic": "提交材料具体内容待澄清",
+      "behavior_correct": true,
+      "coarse_behavior_correct": true,
+      "entry_topic_correct": null,
+      "unsafe_direct_answer": false,
+      "rejection_reason": "weak_anchor_needs_clarification",
+      "weak_match_count": 5,
+      "match_count": 0,
+      "candidate_count": 16212,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": true
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_42791a5498da4c46",
+          "score": 2.9694115685659366,
+          "best_kpid": "kpid_45c2837ce611459c"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_a5579c22ef594eed",
+          "score": 2.704465144348783
+        },
+        {
+          "rank": 3,
+          "otid": "otid_2c2fffdc61b0465f",
+          "score": 2.694926410642366,
+          "best_kpid": "kpid_6cae4bce99bc4329"
+        }
+      ]
+    },
+    {
+      "id": "route_v2_batch2_0013",
+      "query": "课程学习怎么安排？",
+      "expected_action": "reject",
+      "expected_coarse_behavior": "reject",
+      "predicted_behavior": "direct_answer",
+      "predicted_coarse_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "expected_entry_topic": "",
+      "behavior_correct": false,
+      "coarse_behavior_correct": false,
+      "entry_topic_correct": null,
+      "unsafe_direct_answer": true,
+      "rejection_reason": null,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 6814,
+      "query_intent": {
+        "years": [],
+        "topicIds": [
+          "academic_affairs"
+        ],
+        "intentIds": [],
+        "preferLatest": true,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_ae46d4b5d6e74990",
+          "score": 1.7661290762734412,
+          "best_kpid": "kpid_45b7dc88ab244679"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_32ea2774d5cf4886",
+          "score": 1.5218207601349547,
+          "best_kpid": "kpid_fd4d590d1418468b"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_84df27f6b6114f27",
+          "score": 1.387518886326064,
+          "best_kpid": "kpid_52f48c606c97454c"
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch2_0014",
+      "query": "我想申请奖助金，接下来要做什么？",
+      "expected_action": "route_to_entry",
+      "expected_coarse_behavior": "clarify_or_route",
+      "predicted_behavior": "direct_answer",
+      "predicted_coarse_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "expected_entry_topic": "奖助金申请流程总览",
+      "behavior_correct": false,
+      "coarse_behavior_correct": false,
+      "entry_topic_correct": false,
+      "unsafe_direct_answer": true,
+      "rejection_reason": null,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 6959,
+      "query_intent": {
+        "years": [],
+        "topicIds": [
+          "student_funding"
+        ],
+        "intentIds": [],
+        "preferLatest": true,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": true
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_f801613b0ec64544",
+          "score": 2.77479032572165,
+          "best_kpid": "kpid_3c2fc55a821a4064"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_d0d8258f19744c72",
+          "score": 2.373815123156625,
+          "best_kpid": "kpid_dbf7f4d171c441a2"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_b5b5d513960a454f",
+          "score": 1.9231405792031415,
+          "best_kpid": "kpid_179523770a79427f"
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch2_0015",
+      "query": "我们学院的名额是怎么分的？",
+      "expected_action": "clarify",
+      "expected_coarse_behavior": "clarify_or_route",
+      "predicted_behavior": "direct_answer",
+      "predicted_coarse_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "expected_entry_topic": "名额分配具体条件待澄清",
+      "behavior_correct": false,
+      "coarse_behavior_correct": false,
+      "entry_topic_correct": null,
+      "unsafe_direct_answer": true,
+      "rejection_reason": null,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 16212,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_46b7578040384d16",
+          "score": 2.696755389951781,
+          "best_kpid": "kpid_c98d3b3ecd01437d"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_37336f77399c4952",
+          "score": 2.3305788169276167,
+          "best_kpid": "kpid_bab77973da61400b"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_2c2fffdc61b0465f",
+          "score": 2.0013405958763104,
+          "best_kpid": "kpid_5f756313a1ea4b07"
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch2_0016",
+      "query": "什么时候能知道结果？",
+      "expected_action": "reject",
+      "expected_coarse_behavior": "reject",
+      "predicted_behavior": "direct_answer",
+      "predicted_coarse_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "expected_entry_topic": "",
+      "behavior_correct": false,
+      "coarse_behavior_correct": false,
+      "entry_topic_correct": null,
+      "unsafe_direct_answer": true,
+      "rejection_reason": null,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 16212,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_5178ac4ea52c4766",
+          "score": 2.593719659805765,
+          "best_kpid": "kpid_35549e482f1a418c"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_94116dceb8f543e9",
+          "score": 2.305929497117388,
+          "best_kpid": "kpid_4480869683114c86"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_0c80adc4e2fa4459",
+          "score": 1.7549440963099707
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch2_0017",
+      "query": "复试名单在哪里看？",
+      "expected_action": "route_to_entry",
+      "expected_coarse_behavior": "clarify_or_route",
+      "predicted_behavior": "direct_answer",
+      "predicted_coarse_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "expected_entry_topic": "复试名单查看入口",
+      "behavior_correct": false,
+      "coarse_behavior_correct": false,
+      "entry_topic_correct": false,
+      "unsafe_direct_answer": true,
+      "rejection_reason": null,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 8431,
+      "query_intent": {
+        "years": [],
+        "topicIds": [
+          "graduate_admission"
+        ],
+        "intentIds": [
+          "master_unified_exam"
+        ],
+        "preferLatest": true,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_fd99e3167f2849d0",
+          "score": 3.4399946773027854,
+          "best_kpid": "kpid_308d35646a41480d"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_1ae107c08e73431e",
+          "score": 3.0109456119658287,
+          "best_kpid": "kpid_4d746a44e9234967"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_c7af54f9342e4a1c",
+          "score": 2.76830972135288,
+          "best_kpid": "kpid_d4d0d23a82cc4b33"
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch2_0018",
+      "query": "我该准备什么材料？",
+      "expected_action": "clarify",
+      "expected_coarse_behavior": "clarify_or_route",
+      "predicted_behavior": "reject",
+      "predicted_coarse_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "expected_entry_topic": "复试材料准备要求待澄清",
+      "behavior_correct": false,
+      "coarse_behavior_correct": false,
+      "entry_topic_correct": null,
+      "unsafe_direct_answer": false,
+      "rejection_reason": "low_consistency",
+      "weak_match_count": 0,
+      "match_count": 0,
+      "candidate_count": 16212,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": true
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch2_0019",
+      "query": "什么时候更新？",
+      "expected_action": "reject",
+      "expected_coarse_behavior": "reject",
+      "predicted_behavior": "reject",
+      "predicted_coarse_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "expected_entry_topic": "",
+      "behavior_correct": true,
+      "coarse_behavior_correct": true,
+      "entry_topic_correct": null,
+      "unsafe_direct_answer": false,
+      "rejection_reason": "low_consistency",
+      "weak_match_count": 0,
+      "match_count": 0,
+      "candidate_count": 16212,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch2_0020",
+      "query": "我该怎么申请奖助金？",
+      "expected_action": "route_to_entry",
+      "expected_coarse_behavior": "clarify_or_route",
+      "predicted_behavior": "direct_answer",
+      "predicted_coarse_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "expected_entry_topic": "奖助金申请流程总览",
+      "behavior_correct": false,
+      "coarse_behavior_correct": false,
+      "entry_topic_correct": false,
+      "unsafe_direct_answer": true,
+      "rejection_reason": null,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 6959,
+      "query_intent": {
+        "years": [],
+        "topicIds": [
+          "student_funding"
+        ],
+        "intentIds": [],
+        "preferLatest": true,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_f801613b0ec64544",
+          "score": 2.969973585833416,
+          "best_kpid": "kpid_741495c0c351471b"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_d0d8258f19744c72",
+          "score": 2.3277582959192653,
+          "best_kpid": "kpid_dbf7f4d171c441a2"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_b5b5d513960a454f",
+          "score": 2.042597067967651,
+          "best_kpid": "kpid_179523770a79427f"
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch2_0021",
+      "query": "我们学院的名额什么时候能知道？",
+      "expected_action": "clarify",
+      "expected_coarse_behavior": "clarify_or_route",
+      "predicted_behavior": "direct_answer",
+      "predicted_coarse_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "expected_entry_topic": "名额分配时间与单位确认",
+      "behavior_correct": false,
+      "coarse_behavior_correct": false,
+      "entry_topic_correct": null,
+      "unsafe_direct_answer": true,
+      "rejection_reason": null,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 16212,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_368788a742004738",
+          "score": 2.3569860746239,
+          "best_kpid": "kpid_1929653059c14ac5"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_fa0f61539ae34c82",
+          "score": 2.0936606067397543,
+          "best_kpid": "kpid_b4f1681639bd4a23"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_37336f77399c4952",
+          "score": 2.060874251447873,
+          "best_kpid": "kpid_902dba7ea0cc470d"
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch2_0022",
+      "query": "评审结果有异议怎么办？",
+      "expected_action": "reject",
+      "expected_coarse_behavior": "reject",
+      "predicted_behavior": "reject",
+      "predicted_coarse_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "expected_entry_topic": "",
+      "behavior_correct": true,
+      "coarse_behavior_correct": true,
+      "entry_topic_correct": null,
+      "unsafe_direct_answer": false,
+      "rejection_reason": "low_consistency",
+      "weak_match_count": 0,
+      "match_count": 0,
+      "candidate_count": 16212,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": true
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch2_0025",
+      "query": "我的材料有问题吗？",
+      "expected_action": "reject",
+      "expected_coarse_behavior": "reject",
+      "predicted_behavior": "reject",
+      "predicted_coarse_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "expected_entry_topic": "",
+      "behavior_correct": true,
+      "coarse_behavior_correct": true,
+      "entry_topic_correct": null,
+      "unsafe_direct_answer": false,
+      "rejection_reason": "low_consistency",
+      "weak_match_count": 0,
+      "match_count": 0,
+      "candidate_count": 16212,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch2_0027",
+      "query": "我通过了初试，接下来要做什么？",
+      "expected_action": "route_to_entry",
+      "expected_coarse_behavior": "clarify_or_route",
+      "predicted_behavior": "direct_answer",
+      "predicted_coarse_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "expected_entry_topic": "资格审核通过后具体事项待澄清",
+      "behavior_correct": false,
+      "coarse_behavior_correct": false,
+      "entry_topic_correct": false,
+      "unsafe_direct_answer": true,
+      "rejection_reason": null,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 8431,
+      "query_intent": {
+        "years": [],
+        "topicIds": [
+          "graduate_admission"
+        ],
+        "intentIds": [
+          "master_unified_exam"
+        ],
+        "preferLatest": true,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": true,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": true
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_faeac0ecd9304bd1",
+          "score": 2.3109013400226117,
+          "best_kpid": "kpid_303898cdfd8348e8"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_097b17ffece641a7",
+          "score": 1.7868361761286409,
+          "best_kpid": "kpid_ad6c262585494d78"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_07c96191f91e425a",
+          "score": 1.769781802000449,
+          "best_kpid": "kpid_afb68e633a534132"
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch2_0030",
+      "query": "报名之后要做什么？",
+      "expected_action": "route_to_entry",
+      "expected_coarse_behavior": "clarify_or_route",
+      "predicted_behavior": "direct_answer",
+      "predicted_coarse_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "expected_entry_topic": "报名后流程总览",
+      "behavior_correct": false,
+      "coarse_behavior_correct": false,
+      "entry_topic_correct": false,
+      "unsafe_direct_answer": true,
+      "rejection_reason": null,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 16212,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": true
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_40565beb38cf45c5",
+          "score": 1.8650795550959691,
+          "best_kpid": "kpid_c91194ef81d84355"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_dc54d3033b3c4944",
+          "score": 1.679226514832194,
+          "best_kpid": "kpid_b4525820ba244a3f"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_84df27f6b6114f27",
+          "score": 1.2922070013985805,
+          "best_kpid": "kpid_b1156b7a045748b0"
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch2_0031",
+      "query": "材料审核要注意什么？",
+      "expected_action": "clarify",
+      "expected_coarse_behavior": "clarify_or_route",
+      "predicted_behavior": "reject",
+      "predicted_coarse_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "expected_entry_topic": "材料审核具体要求待澄清",
+      "behavior_correct": false,
+      "coarse_behavior_correct": false,
+      "entry_topic_correct": null,
+      "unsafe_direct_answer": false,
+      "rejection_reason": "low_consistency",
+      "weak_match_count": 0,
+      "match_count": 0,
+      "candidate_count": 16212,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch2_0032",
+      "query": "怎么联系导师？",
+      "expected_action": "reject",
+      "expected_coarse_behavior": "reject",
+      "predicted_behavior": "direct_answer",
+      "predicted_coarse_behavior": "direct_answer",
+      "retrieval_behavior": "direct_answer",
+      "expected_entry_topic": "",
+      "behavior_correct": false,
+      "coarse_behavior_correct": false,
+      "entry_topic_correct": null,
+      "unsafe_direct_answer": true,
+      "rejection_reason": null,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 16212,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_e2bcfb99b4af4c46",
+          "score": 2.5172856047849455,
+          "best_kpid": "kpid_9c921b95adf24e9c"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_80529bdd365b4138",
+          "score": 2.451036052399549,
+          "best_kpid": "kpid_65ea0d88569c441d"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_79fde873cbd54280",
+          "score": 2.3071125727346513,
+          "best_kpid": "kpid_d43c196a27d24c39"
+        }
+      ],
+      "top_weak_matches": []
+    }
+  ]
+}

@@ -10,74 +10,27 @@ import {
 } from 'lucide-vue-next';
 import localforage from 'localforage';
 import VectorWorker from '../worker/embedding.worker.ts?worker';
-import { CANONICAL_PIPELINE_PRESET } from '../worker/search_pipeline';
+import {
+  CANONICAL_PIPELINE_PRESET,
+  type PipelineBehavior,
+  type PipelineDecision,
+  type PipelineDocumentRecord,
+  type PipelineTrace,
+  type SearchPipelineResult,
+} from '../worker/search_pipeline';
+import type { SearchRejection } from '../worker/vector_engine';
+import {
+  formatPercent,
+  formatRetrievalScore,
+  getDisplayScore,
+  getPreviewText,
+  isOriginalSnippet,
+} from '../utils/searchPresentation';
 
-type SearchRejection = {
-  reason: 'low_topic_coverage' | 'low_consistency' | 'weak_anchor_needs_clarification';
-  topicIds: string[];
-};
-
-type PipelineBehavior = 'direct_answer' | 'clarify' | 'route_to_entry' | 'reject';
-
-type SearchResultDoc = {
-  id?: string;
-  otid?: string;
-  ot_title?: string;
-  ot_text?: string;
-  link?: string;
-  publish_time?: string;
-  bestSentence?: string;
-  bestPoint?: string;
-  best_kpid?: string;
-  kps?: Array<{ kpid?: string; kp_text?: string }>;
-  score?: number;
-  coarseScore?: number;
-  displayScore?: number;
-  rerankScore?: number;
-  confidenceScore?: number;
-  snippetScore?: number;
-};
-
-type WorkerDecision = {
-  behavior: PipelineBehavior;
-  reason: string;
-  confidence: number;
-  entryTopic?: string;
-  preferLatestWithinTopic: boolean;
-  useWeakMatches: boolean;
-  rejectionReason: SearchRejection['reason'] | 'display_threshold' | null;
-  displayRejected: boolean;
-};
-
-type WorkerTrace = {
-  totalMs: number;
-  searchMs: number;
-  fetchMs: number;
-  rerankMs: number;
-  candidateCount: number;
-  partitionUsed: boolean;
-  partitionCandidateCount?: number;
-  matchCount: number;
-  weakMatchCount: number;
-  fetchedDocumentCount: number;
-  rerankedDocCount: number;
-  chunksScored: number;
-  rerankWindowReason?: string;
-  maxChunksPerDoc?: number;
-  chunkPlanReason?: string;
-  topConfidence?: number | null;
-  rejectionThreshold: number;
-};
-
-type WorkerSearchResult = {
-  results: SearchResultDoc[];
-  weakResults: SearchResultDoc[];
-  rejection?: SearchRejection | null;
-  retrievalDecision: WorkerDecision;
-  finalDecision: WorkerDecision;
-  trace: WorkerTrace;
-};
-
+type SearchResultDoc = PipelineDocumentRecord;
+type WorkerDecision = PipelineDecision;
+type WorkerTrace = PipelineTrace;
+type WorkerSearchResult = SearchPipelineResult;
 
 
 const emit = defineEmits(['trace-updated']);
@@ -205,25 +158,6 @@ const highlightSnippet = (text: string, query: string) => {
   );
 };
 
-const getPreviewText = (res: SearchResultDoc) => {
-  if (res.bestSentence) return res.bestSentence;
-  if (res.bestPoint) return res.bestPoint;
-
-  if (res.best_kpid && Array.isArray(res.kps)) {
-    const hitKp = res.kps.find((kp) => kp.kpid === res.best_kpid);
-    if (hitKp?.kp_text) return hitKp.kp_text;
-  }
-
-  return '';
-};
-
-const isOriginalSnippet = (res: SearchResultDoc) =>
-  (res.snippetScore ?? -999) > ORIGINAL_SNIPPET_THRESHOLD;
-const getDisplayScore = (res: SearchResultDoc) =>
-  res.displayScore ?? res.coarseScore ?? res.confidenceScore ?? res.rerankScore ?? 0;
-const formatRetrievalScore = (score: number) => `Score ${Number(score || 0).toFixed(2)}`;
-const formatPercent = (score: number) => `${((score || 0) * 100).toFixed(1)}%`;
-
 const logDiagnostic = (msg: string) => {
   const time = new Date().toLocaleTimeString();
   const formatted = `[${time}] ${msg}`;
@@ -244,16 +178,22 @@ const emitTrace = (
     rerankWindowReason?: string;
     maxChunksPerDoc?: number;
     chunkPlanReason?: string;
+    initialTopConfidence?: number | null;
     topConfidence?: number | null;
     rejected?: boolean;
     rejection?: SearchRejection | null;
     weakResultsCount?: number;
+    retrievalDecision?: WorkerDecision | null;
     decision?: WorkerDecision | null;
+    directAnswerRescue?: WorkerTrace['directAnswerRescue'];
+    querySignals?: WorkerTrace['querySignals'];
+    retrievalSignals?: WorkerTrace['retrievalSignals'];
   }
 ) => {
   emit('trace-updated', {
     query,
     results: traceResults,
+    retrievalDecision: opts.retrievalDecision ?? null,
     stats: {
       totalMs: opts.totalMs,
       searchMs: opts.searchMs,
@@ -264,6 +204,7 @@ const emitTrace = (
       rerankWindowReason: opts.rerankWindowReason ?? '',
       maxChunksPerDoc: opts.maxChunksPerDoc ?? 0,
       chunkPlanReason: opts.chunkPlanReason ?? '',
+      initialTopConfidence: opts.initialTopConfidence ?? null,
       rejectionThreshold: REJECTION_THRESHOLD,
       topConfidence: opts.topConfidence ?? null,
       rejected: opts.rejected ?? false,
@@ -273,6 +214,9 @@ const emitTrace = (
     decision: opts.decision ?? null,
     rejection: opts.rejection ?? null,
     weakResultsCount: opts.weakResultsCount ?? 0,
+    directAnswerRescue: opts.directAnswerRescue ?? null,
+    querySignals: opts.querySignals ?? null,
+    retrievalSignals: opts.retrievalSignals ?? null,
   });
 };
 
@@ -414,6 +358,7 @@ const handleSearch = async () => {
     const finalRender = searchResult?.results || [];
     const localWeakResults = searchResult?.weakResults || [];
     const rejection = searchResult?.rejection || null;
+    const retrievalDecision = searchResult?.retrievalDecision || null;
     const finalDecision = searchResult?.finalDecision || null;
     const trace = searchResult?.trace;
 
@@ -432,17 +377,28 @@ const handleSearch = async () => {
       rerankWindowReason: trace?.rerankWindowReason,
       maxChunksPerDoc: trace?.maxChunksPerDoc,
       chunkPlanReason: trace?.chunkPlanReason,
+      initialTopConfidence: trace?.initialTopConfidence ?? null,
       topConfidence: trace?.topConfidence ?? null,
       rejected: finalDecision?.behavior === 'reject',
       rejection,
       weakResultsCount: localWeakResults.length,
+      retrievalDecision,
       decision: finalDecision,
+      directAnswerRescue: trace?.directAnswerRescue,
+      querySignals: trace?.querySignals,
+      retrievalSignals: trace?.retrievalSignals,
     });
 
     if (!finalDecision) {
       statusMsg.value = '未能解析当前查询结果';
       logDiagnostic('未收到统一链路的最终决策');
       return;
+    }
+
+    if (retrievalDecision && retrievalDecision.behavior !== finalDecision.behavior) {
+      logDiagnostic(
+        `展示阶段改写行为：${retrievalDecision.behavior} -> ${finalDecision.behavior}`
+      );
     }
 
     if (finalDecision.behavior === 'route_to_entry') {
@@ -462,7 +418,14 @@ const handleSearch = async () => {
     if (finalDecision.behavior === 'reject') {
       if (finalDecision.rejectionReason === 'display_threshold') {
         statusMsg.value = `未达到展示阈值 ${(REJECTION_THRESHOLD * 100).toFixed(0)}%，已拒答`;
-        logDiagnostic(`展示阶段拒答：Top 1 原话匹配度 ${formatPercent(trace?.topConfidence ?? 0)}`);
+        logDiagnostic(
+          `展示阶段拒答：初始 ${formatPercent(trace?.initialTopConfidence ?? 0)} / 最终 ${formatPercent(trace?.topConfidence ?? 0)}`
+        );
+        if (trace?.directAnswerRescue?.attempted) {
+          logDiagnostic(
+            `直答补救重排未保留：${trace.directAnswerRescue.reason || '补救后仍未通过阈值'}`
+          );
+        }
       } else if (rejection?.reason === 'low_topic_coverage') {
         statusMsg.value = '当前知识库暂无该主题的直接内容，已给出弱相关入口。';
         logDiagnostic('主题覆盖不足，已拒绝直接回答并保留弱相关入口');
@@ -473,7 +436,22 @@ const handleSearch = async () => {
       return;
     }
 
+    if (trace?.directAnswerRescue?.attempted) {
+      if (trace.directAnswerRescue.succeeded) {
+        logDiagnostic(
+          `直答补救重排成功：${formatPercent(trace.directAnswerRescue.initialTopConfidence ?? 0)} -> ${formatPercent(trace.directAnswerRescue.rescueTopConfidence ?? 0)}`
+        );
+      } else {
+        logDiagnostic(
+          `直答补救重排未生效：${trace.directAnswerRescue.reason || '未满足保留条件'}`
+        );
+      }
+    }
+
     statusMsg.value = `找到 ${finalRender.length} 篇相关结果（总耗时 ${Number(trace?.totalMs ?? 0).toFixed(1)}ms）`;
+    if (trace?.directAnswerRescue?.succeeded) {
+      statusMsg.value = `找到 ${finalRender.length} 篇相关结果（经补救重排保留，耗时 ${Number(trace?.totalMs ?? 0).toFixed(1)}ms）`;
+    }
     logDiagnostic('统一链路已完成结果展示');
   } catch (e: any) {
     console.error(e);
@@ -616,7 +594,7 @@ const handleSearch = async () => {
                 <div class="mb-2 flex items-center gap-2">
                   <span class="text-[10px] font-semibold text-slate-500">#{{ i + 1 }}</span>
                   <span class="rounded-full border border-white/8 px-2 py-0.5 text-[10px] text-slate-400">
-                    {{ isOriginalSnippet(res) ? '官方原话' : '相关要点' }}
+                    {{ isOriginalSnippet(res, ORIGINAL_SNIPPET_THRESHOLD) ? '官方原话' : '相关要点' }}
                   </span>
                 </div>
                 <h3 class="text-[15px] font-semibold leading-6 text-slate-100">
@@ -625,14 +603,14 @@ const handleSearch = async () => {
               </div>
 
               <div class="shrink-0 text-right">
-                <div v-if="isOriginalSnippet(res)" class="font-mono text-[11px] text-slate-300">
+                <div v-if="isOriginalSnippet(res, ORIGINAL_SNIPPET_THRESHOLD)" class="font-mono text-[11px] text-slate-300">
                   {{ formatPercent(res.snippetScore ?? 0) }}
                 </div>
                 <div v-else class="font-mono text-[11px] text-slate-400">
                   {{ formatRetrievalScore(getDisplayScore(res)) }}
                 </div>
                 <div class="mt-1 text-[10px] text-slate-500">
-                  {{ isOriginalSnippet(res) ? '原话匹配度' : '检索分' }}
+                  {{ isOriginalSnippet(res, ORIGINAL_SNIPPET_THRESHOLD) ? '原话匹配度' : '检索分' }}
                 </div>
               </div>
             </div>

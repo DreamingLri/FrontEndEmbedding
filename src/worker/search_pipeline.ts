@@ -2,12 +2,10 @@ import type { FeatureExtractionPipeline } from "@huggingface/transformers";
 
 import { fmmTokenize } from "./fmm_tokenize";
 import {
-    getAdaptiveChunkPlan,
-    getAdaptiveRerankPlan,
-    normalizeMinMax,
-    normalizeSnippetScore,
-    splitIntoSemanticChunks,
-} from "./rerank_helpers";
+    runDirectAnswerDisplayStage,
+    type DirectAnswerRescueTrace,
+    type DocumentRerankStats,
+} from "./direct_answer_display";
 import {
     DIRECT_ANSWER_EVIDENCE_TERMS,
     getQuerySparse,
@@ -20,6 +18,8 @@ import {
     type LexicalBonusMode,
     type Metadata,
     type ParsedQueryIntent,
+    type QuerySignals,
+    type RetrievalSignals,
     type ResponseDecision,
     type ResponseMode,
     type SearchRankOutput,
@@ -61,8 +61,35 @@ export type PipelinePreset = {
     };
 };
 
-export const CANONICAL_PIPELINE_PRESET: PipelinePreset = {
-    name: "canonical_full_v1",
+const DEFAULT_DISPLAY_CONFIG: PipelinePreset["display"] = {
+    rejectThreshold: 0.4,
+    rerankBlendAlpha: 0.15,
+    bestSentenceThreshold: 0.4,
+    fetchMatchLimit: 15,
+    fetchWeakMatchLimit: 10,
+};
+
+export const PAPER_FROZEN_MAIN_PIPELINE_PRESET: PipelinePreset = {
+    name: "paper_frozen_main_v1",
+    retrieval: {
+        weights: {
+            Q: 0,
+            KP: 0.28571428571428575,
+            OT: 0.7142857142857143,
+        },
+        topHybridLimit: 1000,
+        kpAggregationMode: "max",
+        kpTopN: 3,
+        kpTailWeight: 0.35,
+        lexicalBonusMode: "sum",
+        kpRoleRerankMode: "feature",
+        kpRoleDocWeight: 0.35,
+    },
+    display: { ...DEFAULT_DISPLAY_CONFIG },
+};
+
+export const PRODUCT_CANONICAL_FULL_PIPELINE_PRESET: PipelinePreset = {
+    name: "product_canonical_full_v1",
     retrieval: {
         weights: {
             Q: 0.3333333333333333,
@@ -77,14 +104,66 @@ export const CANONICAL_PIPELINE_PRESET: PipelinePreset = {
         kpRoleRerankMode: "feature",
         kpRoleDocWeight: 0.35,
     },
-    display: {
-        rejectThreshold: 0.4,
-        rerankBlendAlpha: 0.15,
-        bestSentenceThreshold: 0.4,
-        fetchMatchLimit: 15,
-        fetchWeakMatchLimit: 10,
-    },
+    display: { ...DEFAULT_DISPLAY_CONFIG },
 };
+
+export const PAPER_TAIL_TOP3_W020_PIPELINE_PRESET: PipelinePreset = {
+    name: "paper_tail_top3_w020_v1",
+    retrieval: {
+        ...PAPER_FROZEN_MAIN_PIPELINE_PRESET.retrieval,
+        kpAggregationMode: "max_plus_topn",
+        kpTopN: 3,
+        kpTailWeight: 0.2,
+    },
+    display: { ...DEFAULT_DISPLAY_CONFIG },
+};
+
+export const PRODUCT_TAIL_TOP3_W020_PIPELINE_PRESET: PipelinePreset = {
+    name: "product_tail_top3_w020_v1",
+    retrieval: {
+        ...PRODUCT_CANONICAL_FULL_PIPELINE_PRESET.retrieval,
+        kpAggregationMode: "max_plus_topn",
+        kpTopN: 3,
+        kpTailWeight: 0.2,
+    },
+    display: { ...DEFAULT_DISPLAY_CONFIG },
+};
+
+export const PIPELINE_PRESET_REGISTRY = {
+    paper_frozen_main_v1: PAPER_FROZEN_MAIN_PIPELINE_PRESET,
+    product_canonical_full_v1: PRODUCT_CANONICAL_FULL_PIPELINE_PRESET,
+    paper_tail_top3_w020_v1: PAPER_TAIL_TOP3_W020_PIPELINE_PRESET,
+    product_tail_top3_w020_v1: PRODUCT_TAIL_TOP3_W020_PIPELINE_PRESET,
+} as const;
+
+export type PipelinePresetName = keyof typeof PIPELINE_PRESET_REGISTRY;
+
+export const CANONICAL_PIPELINE_PRESET =
+    PRODUCT_CANONICAL_FULL_PIPELINE_PRESET;
+
+export function clonePipelinePreset(preset: PipelinePreset): PipelinePreset {
+    return {
+        ...preset,
+        retrieval: {
+            ...preset.retrieval,
+            weights: { ...preset.retrieval.weights },
+        },
+        display: { ...preset.display },
+    };
+}
+
+export function resolvePipelinePresetByName(
+    presetName?: string,
+): PipelinePreset {
+    if (!presetName) {
+        return clonePipelinePreset(CANONICAL_PIPELINE_PRESET);
+    }
+
+    const preset = PIPELINE_PRESET_REGISTRY[
+        presetName as PipelinePresetName
+    ];
+    return clonePipelinePreset(preset || CANONICAL_PIPELINE_PRESET);
+}
 
 export type PipelineTermMaps = {
     scopeSpecificityWordIdToTerm: Map<number, string>;
@@ -150,8 +229,12 @@ export type PipelineTrace = {
     rerankWindowReason?: string;
     maxChunksPerDoc?: number;
     chunkPlanReason?: string;
+    initialTopConfidence?: number | null;
     topConfidence?: number | null;
     rejectionThreshold: number;
+    querySignals?: QuerySignals;
+    retrievalSignals?: RetrievalSignals;
+    directAnswerRescue?: DirectAnswerRescueTrace;
 };
 
 export type RetrievalStageResult = {
@@ -183,14 +266,7 @@ export type PipelineDocumentLoader = (params: {
 
 type DocumentRerankResult = {
     documents: PipelineDocumentRecord[];
-    stats: {
-        rerankedDocCount: number;
-        chunksScored: number;
-        windowReason?: string;
-        maxChunksPerDoc?: number;
-        chunkPlanReason?: string;
-        topConfidence?: number | null;
-    };
+    stats: DocumentRerankStats;
 };
 
 const ROUTE_ENTRY_TOPIC_BY_PATTERN: Array<{
@@ -216,6 +292,45 @@ function nowMs(): number {
 
 function dedupe(items: string[]): string[] {
     return Array.from(new Set(items));
+}
+
+const QUERY_EXPANSION_RULES: Array<{
+    pattern: RegExp;
+    terms: string[];
+    intentTerms?: string[];
+}> = [
+    {
+        pattern: /现场确认/,
+        terms: ["网上确认"],
+        intentTerms: ["网上确认"],
+    },
+];
+
+function buildExpandedQueryWords(
+    query: string,
+    vocabMap: Map<string, number>,
+): string[] {
+    const baseWords = fmmTokenize(query, vocabMap);
+    const expandedWords = QUERY_EXPANSION_RULES.flatMap((rule) => {
+        if (!rule.pattern.test(query)) {
+            return [];
+        }
+        return rule.terms.flatMap((term) => fmmTokenize(term, vocabMap));
+    });
+
+    return dedupe([...baseWords, ...expandedWords]);
+}
+
+function buildExpandedIntentQuery(query: string): string {
+    const expandedTerms = dedupe(
+        QUERY_EXPANSION_RULES.flatMap((rule) =>
+            rule.pattern.test(query) ? rule.intentTerms || [] : [],
+        ),
+    );
+    if (expandedTerms.length === 0) {
+        return query;
+    }
+    return `${query} ${expandedTerms.join(" ")}`;
 }
 
 export function buildPipelineTermMaps(
@@ -248,12 +363,20 @@ export function buildSearchPipelineQueryContext(
     vocabMap: Map<string, number>,
     topicPartitionIndex: TopicPartitionIndex,
 ): SearchPipelineQueryContext {
-    const queryIntent = parseQueryIntent(query);
+    const expandedIntentQuery = buildExpandedIntentQuery(query);
+    const parsedQueryIntent = parseQueryIntent(expandedIntentQuery);
+    const queryIntent =
+        expandedIntentQuery === query
+            ? parsedQueryIntent
+            : {
+                  ...parsedQueryIntent,
+                  rawQuery: query,
+              };
     const candidateIndices = getCandidateIndicesForQuery(
         queryIntent,
         topicPartitionIndex,
     );
-    const queryWords = dedupe(fmmTokenize(query, vocabMap));
+    const queryWords = buildExpandedQueryWords(query, vocabMap);
     const querySparse = getQuerySparse(queryWords, vocabMap);
     const queryYearWordIds = queryIntent.years
         .map(String)
@@ -377,153 +500,6 @@ export function mergeCoarseMatchesIntoDocuments(
             };
         })
         .filter(Boolean) as PipelineDocumentRecord[];
-}
-
-async function rerankDocuments(params: {
-    query: string;
-    queryVector: Float32Array;
-    documents: PipelineDocumentRecord[];
-    extractor: FeatureExtractionPipeline;
-    dimensions: number;
-    preset: PipelinePreset;
-}): Promise<DocumentRerankResult> {
-    const { query, queryVector, documents, extractor, dimensions, preset } = params;
-    const results = documents.map((doc) => {
-        let defaultPoint = "暂无要点";
-        if (doc.best_kpid && Array.isArray(doc.kps)) {
-            const hitKp = doc.kps.find((kp) => kp.kpid === doc.best_kpid);
-            if (hitKp?.kp_text) {
-                defaultPoint = hitKp.kp_text;
-            }
-        }
-
-        return {
-            ...doc,
-            coarseScore: doc.coarseScore ?? doc.score ?? 0,
-            displayScore: doc.displayScore ?? doc.score ?? 0,
-            rerankScore: 0,
-            snippetScore: 0,
-            confidenceScore: 0,
-            bestPoint: defaultPoint,
-            bestSentence: "",
-        };
-    });
-
-    const rerankPlan = getAdaptiveRerankPlan(results);
-    const rerankDocCount = rerankPlan.rerankDocCount;
-    const chunkPlan = getAdaptiveChunkPlan(query, rerankDocCount);
-    const rerankDocs = results.slice(0, rerankDocCount);
-    const batchChunks: Array<{ text: string; docIdx: number }> = [];
-
-    for (let index = 0; index < rerankDocs.length; index += 1) {
-        const textChunks = splitIntoSemanticChunks(
-            rerankDocs[index].ot_text || "",
-            150,
-            chunkPlan.maxChunksPerDoc,
-        );
-
-        textChunks.forEach((chunk) => {
-            const normalizedChunk = (chunk || "").trim();
-            if (normalizedChunk) {
-                batchChunks.push({
-                    text: normalizedChunk,
-                    docIdx: index,
-                });
-            }
-        });
-    }
-
-    if (batchChunks.length > 0) {
-        const batchTexts = batchChunks.map((item) => item.text);
-        const batchOutputs = await extractor(batchTexts, {
-            pooling: "mean",
-            normalize: true,
-            truncation: true,
-            max_length: 512,
-        } as any);
-
-        const pureData = (batchOutputs.data as Float32Array).subarray(
-            0,
-            batchChunks.length * dimensions,
-        );
-        const rawDocumentScores = new Float32Array(rerankDocs.length).fill(-1);
-        const documentBestSentence = new Array<string>(rerankDocs.length).fill("");
-
-        for (let chunkIndex = 0; chunkIndex < batchChunks.length; chunkIndex += 1) {
-            const chunkVec = pureData.subarray(
-                chunkIndex * dimensions,
-                (chunkIndex + 1) * dimensions,
-            );
-            let score = 0;
-            for (let dimensionIndex = 0; dimensionIndex < dimensions; dimensionIndex += 1) {
-                score += queryVector[dimensionIndex] * chunkVec[dimensionIndex];
-            }
-
-            const docIdx = batchChunks[chunkIndex].docIdx;
-            if (score > rawDocumentScores[docIdx]) {
-                rawDocumentScores[docIdx] = score;
-                documentBestSentence[docIdx] = batchChunks[chunkIndex].text;
-            }
-        }
-
-        const coarseNorm = normalizeMinMax(
-            rerankDocs.map((doc) => doc.coarseScore ?? 0),
-        );
-
-        for (let index = 0; index < rerankDocs.length; index += 1) {
-            const normalizedSnippetScore = normalizeSnippetScore(
-                rawDocumentScores[index],
-            );
-            const blendedScore =
-                preset.display.rerankBlendAlpha * coarseNorm[index] +
-                (1 - preset.display.rerankBlendAlpha) * normalizedSnippetScore;
-
-            rerankDocs[index].snippetScore = normalizedSnippetScore;
-            rerankDocs[index].confidenceScore = blendedScore;
-            rerankDocs[index].rerankScore = blendedScore;
-            rerankDocs[index].displayScore = blendedScore;
-
-            if (
-                normalizedSnippetScore > preset.display.bestSentenceThreshold &&
-                documentBestSentence[index]
-            ) {
-                rerankDocs[index].bestSentence = documentBestSentence[index];
-            }
-        }
-
-        rerankDocs.sort((a, b) => {
-            const scoreDiff = (b.rerankScore ?? 0) - (a.rerankScore ?? 0);
-            if (Math.abs(scoreDiff) > 1e-9) {
-                return scoreDiff;
-            }
-            return (b.coarseScore ?? 0) - (a.coarseScore ?? 0);
-        });
-    } else {
-        rerankDocs.forEach((doc) => {
-            doc.displayScore = 0;
-            doc.rerankScore = 0;
-            doc.snippetScore = 0;
-            doc.confidenceScore = 0;
-        });
-    }
-
-    const documentsWithRerank = rerankDocs.concat(results.slice(rerankDocCount));
-    const topConfidence =
-        documentsWithRerank[0]?.confidenceScore ??
-        documentsWithRerank[0]?.rerankScore ??
-        null;
-
-    return {
-        documents: documentsWithRerank,
-        stats: {
-            rerankedDocCount: rerankDocCount,
-            chunksScored: batchChunks.length,
-            windowReason: rerankPlan.reason,
-            maxChunksPerDoc: chunkPlan.maxChunksPerDoc,
-            chunkPlanReason: chunkPlan.reason,
-            topConfidence,
-        },
-    };
 }
 
 export function executeRetrievalStage(params: {
@@ -665,6 +641,8 @@ export async function executeSearchPipeline(params: {
         chunksScored: 0,
         topConfidence: null,
     };
+    let initialTopConfidence: number | null = null;
+    let directAnswerRescue: DirectAnswerRescueTrace | undefined;
 
     if (fetchIds.length > 0) {
         onStatus?.("正在请求原文数据...");
@@ -690,21 +668,22 @@ export async function executeSearchPipeline(params: {
 
             onStatus?.("正在重排并提炼可信原话...");
             const rerankStartedAt = nowMs();
-            const rerankResult = await rerankDocuments({
+            const displayStage = await runDirectAnswerDisplayStage({
                 query,
                 queryVector,
                 documents: directDocuments,
                 extractor,
                 dimensions,
                 preset,
+                querySignals: searchOutput.diagnostics?.querySignals,
+                retrievalSignals: searchOutput.diagnostics?.retrievalSignals,
             });
             rerankMs = nowMs() - rerankStartedAt;
-            rerankStats = rerankResult.stats;
+            rerankStats = displayStage.stats;
+            initialTopConfidence = displayStage.initialTopConfidence;
+            directAnswerRescue = displayStage.directAnswerRescue;
 
-            const topConfidence = rerankResult.stats.topConfidence ?? -999;
-            const displayRejected =
-                rerankResult.documents.length > 0 &&
-                topConfidence < preset.display.rejectThreshold;
+            const displayRejected = displayStage.displayRejected;
 
             finalDecision = displayRejected
                 ? {
@@ -717,7 +696,7 @@ export async function executeSearchPipeline(params: {
                   }
                 : retrievalDecision;
 
-            results = displayRejected ? [] : rerankResult.documents;
+            results = displayRejected ? [] : displayStage.documents;
         }
 
         if (shouldFetchWeakResults) {
@@ -761,8 +740,12 @@ export async function executeSearchPipeline(params: {
             rerankWindowReason: rerankStats.windowReason,
             maxChunksPerDoc: rerankStats.maxChunksPerDoc,
             chunkPlanReason: rerankStats.chunkPlanReason,
+            initialTopConfidence,
             topConfidence: rerankStats.topConfidence,
             rejectionThreshold: preset.display.rejectThreshold,
+            querySignals: searchOutput.diagnostics?.querySignals,
+            retrievalSignals: searchOutput.diagnostics?.retrievalSignals,
+            directAnswerRescue,
         },
     };
 }
