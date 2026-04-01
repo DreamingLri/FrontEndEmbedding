@@ -1,5 +1,12 @@
-import * as fs from 'fs';
-import * as path from 'path';
+import * as fs from "fs";
+import * as path from "path";
+
+import { CURRENT_EVAL_DATASET_FILES } from "./current_eval_targets.ts";
+import {
+    MAIN_DB_VERSION,
+    resolveFrontendMetadataFile,
+    resolveFrontendVectorFile,
+} from "./kb_version_paths.ts";
 
 export type EvalDatasetCase = {
     query: string;
@@ -19,7 +26,7 @@ export type EvalDatasetCase = {
     dataset: string;
 };
 
-type RawEvalDatasetCase = Omit<EvalDatasetCase, 'dataset'>;
+type RawEvalDatasetCase = Omit<EvalDatasetCase, "dataset">;
 
 export type EvalDatasetSource = {
     path: string;
@@ -27,19 +34,89 @@ export type EvalDatasetSource = {
     queryTypes?: string[];
 };
 
+export type EvalDatasetGroupRole =
+    | "benchmark"
+    | "in_domain_holdout"
+    | "external_ood_holdout"
+    | "legacy_tune"
+    | "legacy_holdout"
+    | "adhoc";
+
+export type EvalDatasetGroup = {
+    key: string;
+    label: string;
+    role: EvalDatasetGroupRole;
+    sources: EvalDatasetSource[];
+    resolvedFromFallback?: boolean;
+};
+
 export type EvalDatasetConfig = {
     datasetVersion: string;
-    datasetMode: 'split' | 'single_file';
+    datasetMode: "split" | "single_file" | "named_group";
     datasetKey: string;
+    datasetLabel: string;
+    groups: EvalDatasetGroup[];
     tuneSources: EvalDatasetSource[];
     holdoutSources: EvalDatasetSource[];
     allSources: EvalDatasetSource[];
 };
 
-export const FRONTEND_MODEL_NAME = 'DMetaSoul/Dmeta-embedding-zh-small';
-export const FRONTEND_METADATA_FILE = 'public/data/frontend_metadata_dmeta_small.json';
-export const FRONTEND_VECTOR_FILE = 'public/data/frontend_vectors_dmeta_small.bin';
+export type GranularityDatasetTargetKey =
+    | "main_bench_120"
+    | "in_domain_holdout_50"
+    | "external_ood_holdout_30";
+
+type GranularityDatasetTargetDefinition = {
+    key: GranularityDatasetTargetKey;
+    label: string;
+    role: EvalDatasetGroupRole;
+    primaryPath: string;
+    fallbackPath?: string;
+};
+
+export type ResolvedGranularityDatasetTarget = {
+    key: GranularityDatasetTargetKey;
+    label: string;
+    role: EvalDatasetGroupRole;
+    datasetFile: string;
+    datasetKey: string;
+    resolvedFromFallback: boolean;
+};
+
+export const FRONTEND_MODEL_NAME = "DMetaSoul/Dmeta-embedding-zh-small";
+export const ACTIVE_MAIN_DB_VERSION = MAIN_DB_VERSION;
+export const FRONTEND_METADATA_FILE = resolveFrontendMetadataFile();
+export const FRONTEND_VECTOR_FILE = resolveFrontendVectorFile();
 export const DEFAULT_QUERY_EMBED_BATCH_SIZE = 16;
+
+const DEFAULT_GRANULARITY_TARGET_KEY: GranularityDatasetTargetKey =
+    "main_bench_120";
+
+const GRANULARITY_DATASET_TARGETS: Record<
+    GranularityDatasetTargetKey,
+    GranularityDatasetTargetDefinition
+> = {
+    main_bench_120: {
+        key: "main_bench_120",
+        label: "MainBench-120",
+        role: "benchmark",
+        primaryPath: CURRENT_EVAL_DATASET_FILES.granularityMain120,
+        fallbackPath: CURRENT_EVAL_DATASET_FILES.granularityMain106,
+    },
+    in_domain_holdout_50: {
+        key: "in_domain_holdout_50",
+        label: "InDomainHoldout-50",
+        role: "in_domain_holdout",
+        primaryPath: CURRENT_EVAL_DATASET_FILES.granularityInDomainHoldout50,
+        fallbackPath: CURRENT_EVAL_DATASET_FILES.granularityHoldoutV3,
+    },
+    external_ood_holdout_30: {
+        key: "external_ood_holdout_30",
+        label: "ExternalOODHoldout-30",
+        role: "external_ood_holdout",
+        primaryPath: CURRENT_EVAL_DATASET_FILES.granularityExternalOodHoldout30,
+    },
+};
 
 export function loadDataset(
     datasetPath: string,
@@ -50,9 +127,9 @@ export function loadDataset(
 ): EvalDatasetCase[] {
     const absolutePath = path.resolve(process.cwd(), datasetPath);
     const raw = JSON.parse(
-        fs.readFileSync(absolutePath, 'utf-8'),
+        fs.readFileSync(absolutePath, "utf-8"),
     ) as RawEvalDatasetCase[];
-    const dataset = options?.datasetLabel || path.basename(datasetPath, '.json');
+    const dataset = options?.datasetLabel || path.basename(datasetPath, ".json");
     const queryTypes = options?.queryTypes;
     const filtered = queryTypes?.length
         ? raw.filter((item) => item.query_type && queryTypes.includes(item.query_type))
@@ -87,6 +164,22 @@ export function loadDatasetSources(
     });
 }
 
+function buildDatasetGroup(
+    key: string,
+    label: string,
+    role: EvalDatasetGroupRole,
+    sources: EvalDatasetSource[],
+    resolvedFromFallback = false,
+): EvalDatasetGroup {
+    return {
+        key,
+        label,
+        role,
+        sources,
+        resolvedFromFallback,
+    };
+}
+
 function buildSplitSources(datasetDir: string): EvalDatasetConfig {
     const tuneSources: EvalDatasetSource[] = [
         { path: `${datasetDir}/test_dataset_standard.json` },
@@ -95,11 +188,22 @@ function buildSplitSources(datasetDir: string): EvalDatasetConfig {
     const holdoutSources: EvalDatasetSource[] = [
         { path: `${datasetDir}/test_dataset_situational.json` },
     ];
+    const datasetKey = path.basename(datasetDir);
 
     return {
-        datasetVersion: path.basename(datasetDir).replace(/^test_dataset_/, ''),
-        datasetMode: 'split',
-        datasetKey: path.basename(datasetDir),
+        datasetVersion: path.basename(datasetDir).replace(/^test_dataset_/, ""),
+        datasetMode: "split",
+        datasetKey,
+        datasetLabel: datasetKey,
+        groups: [
+            buildDatasetGroup("legacy_tune", "legacy_tune", "legacy_tune", tuneSources),
+            buildDatasetGroup(
+                "legacy_holdout",
+                "legacy_holdout",
+                "legacy_holdout",
+                holdoutSources,
+            ),
+        ],
         tuneSources,
         holdoutSources,
         allSources: [...tuneSources, ...holdoutSources],
@@ -110,65 +214,191 @@ function buildSingleFileSources(
     datasetVersion: string,
     datasetFile: string,
 ): EvalDatasetConfig {
-    const datasetKey = path.basename(datasetFile, '.json');
+    const datasetKey = path.basename(datasetFile, ".json");
     const tuneSources: EvalDatasetSource[] = [
         {
             path: datasetFile,
             datasetLabel: `${datasetKey}_standard`,
-            queryTypes: ['standard'],
+            queryTypes: ["standard"],
         },
         {
             path: datasetFile,
             datasetLabel: `${datasetKey}_short_keyword`,
-            queryTypes: ['short_keyword'],
+            queryTypes: ["short_keyword"],
         },
     ];
     const holdoutSources: EvalDatasetSource[] = [
         {
             path: datasetFile,
             datasetLabel: `${datasetKey}_situational`,
-            queryTypes: ['situational'],
+            queryTypes: ["situational"],
         },
     ];
 
     return {
         datasetVersion,
-        datasetMode: 'single_file',
+        datasetMode: "single_file",
         datasetKey,
+        datasetLabel: datasetKey,
+        groups: [
+            buildDatasetGroup("legacy_tune", "legacy_tune", "legacy_tune", tuneSources),
+            buildDatasetGroup(
+                "legacy_holdout",
+                "legacy_holdout",
+                "legacy_holdout",
+                holdoutSources,
+            ),
+        ],
         tuneSources,
         holdoutSources,
         allSources: [...tuneSources, ...holdoutSources],
     };
 }
 
+function buildSingleFrozenFileConfig(
+    datasetVersion: string,
+    datasetFile: string,
+    datasetLabel?: string,
+): EvalDatasetConfig {
+    const datasetKey = path.basename(datasetFile, ".json");
+    const sources: EvalDatasetSource[] = [
+        {
+            path: datasetFile,
+            datasetLabel: datasetKey,
+        },
+    ];
+
+    return {
+        datasetVersion,
+        datasetMode: "single_file",
+        datasetKey,
+        datasetLabel: datasetLabel || datasetKey,
+        groups: [
+            buildDatasetGroup("evaluation", datasetLabel || datasetKey, "adhoc", sources),
+        ],
+        tuneSources: sources,
+        holdoutSources: [],
+        allSources: sources,
+    };
+}
+
+function buildNamedGroupConfig(
+    datasetVersion: string,
+    target: ResolvedGranularityDatasetTarget,
+): EvalDatasetConfig {
+    const sources: EvalDatasetSource[] = [
+        {
+            path: target.datasetFile,
+            datasetLabel: target.datasetKey,
+        },
+    ];
+
+    return {
+        datasetVersion,
+        datasetMode: "named_group",
+        datasetKey: target.datasetKey,
+        datasetLabel: target.label,
+        groups: [
+            buildDatasetGroup(
+                target.key,
+                target.label,
+                target.role,
+                sources,
+                target.resolvedFromFallback,
+            ),
+        ],
+        tuneSources: sources,
+        holdoutSources: [],
+        allSources: sources,
+    };
+}
+
+function resolveExistingDatasetPath(
+    datasetPaths: readonly string[],
+): { datasetFile: string; resolvedFromFallback: boolean } | null {
+    for (let index = 0; index < datasetPaths.length; index++) {
+        const datasetPath = datasetPaths[index];
+        const absolutePath = path.resolve(process.cwd(), datasetPath);
+        if (fs.existsSync(absolutePath)) {
+            return {
+                datasetFile: datasetPath,
+                resolvedFromFallback: index > 0,
+            };
+        }
+    }
+
+    return null;
+}
+
+export function resolveGranularityDatasetTarget(
+    key: GranularityDatasetTargetKey,
+): ResolvedGranularityDatasetTarget {
+    const definition = GRANULARITY_DATASET_TARGETS[key];
+    const resolved = resolveExistingDatasetPath(
+        definition.fallbackPath
+            ? [definition.primaryPath, definition.fallbackPath]
+            : [definition.primaryPath],
+    );
+
+    if (!resolved) {
+        throw new Error(
+            `Unable to resolve dataset target "${key}". Checked ${[
+                definition.primaryPath,
+                definition.fallbackPath,
+            ]
+                .filter(Boolean)
+                .join(" and ")}.`,
+        );
+    }
+
+    return {
+        key: definition.key,
+        label: definition.label,
+        role: definition.role,
+        datasetFile: resolved.datasetFile,
+        datasetKey: path.basename(resolved.datasetFile, ".json"),
+        resolvedFromFallback: resolved.resolvedFromFallback,
+    };
+}
+
+export function listAvailableGranularityDatasetTargets(
+    keys: readonly GranularityDatasetTargetKey[] = [
+        "main_bench_120",
+        "in_domain_holdout_50",
+        "external_ood_holdout_30",
+    ],
+): ResolvedGranularityDatasetTarget[] {
+    return keys.flatMap((key) => {
+        try {
+            return [resolveGranularityDatasetTarget(key)];
+        } catch {
+            return [];
+        }
+    });
+}
+
 export function resolveEvalDatasetConfig(options?: {
     datasetVersion?: string;
     datasetFile?: string;
     singleFileAsAll?: boolean;
+    datasetTargetKey?: GranularityDatasetTargetKey;
 }): EvalDatasetConfig {
-    const datasetVersion = options?.datasetVersion || 'v2';
+    const datasetVersion = options?.datasetVersion || "v2";
     const explicitDatasetFile = options?.datasetFile;
     const singleFileAsAll = options?.singleFileAsAll || false;
 
     if (explicitDatasetFile) {
         if (singleFileAsAll) {
-            const datasetKey = path.basename(explicitDatasetFile, '.json');
-            const tuneSources: EvalDatasetSource[] = [
-                {
-                    path: explicitDatasetFile,
-                    datasetLabel: datasetKey,
-                },
-            ];
-            return {
-                datasetVersion,
-                datasetMode: 'single_file',
-                datasetKey,
-                tuneSources,
-                holdoutSources: [],
-                allSources: [...tuneSources],
-            };
+            return buildSingleFrozenFileConfig(datasetVersion, explicitDatasetFile);
         }
         return buildSingleFileSources(datasetVersion, explicitDatasetFile);
+    }
+
+    if (datasetVersion === "granularity") {
+        const target = resolveGranularityDatasetTarget(
+            options?.datasetTargetKey || DEFAULT_GRANULARITY_TARGET_KEY,
+        );
+        return buildNamedGroupConfig(datasetVersion, target);
     }
 
     const datasetDir = `../Backend/test/test_dataset_${datasetVersion}`;
@@ -187,6 +417,9 @@ export function resolveEvalDatasetConfig(options?: {
 
     const singleFilePath = `${datasetDir}/test_dataset_${datasetVersion}.json`;
     if (fs.existsSync(path.resolve(process.cwd(), singleFilePath))) {
+        if (singleFileAsAll) {
+            return buildSingleFrozenFileConfig(datasetVersion, singleFilePath);
+        }
         return buildSingleFileSources(datasetVersion, singleFilePath);
     }
 

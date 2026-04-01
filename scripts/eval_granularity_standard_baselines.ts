@@ -16,19 +16,20 @@ import { fmmTokenize } from "../src/worker/fmm_tokenize.ts";
 import {
     FRONTEND_MODEL_NAME,
     loadDataset,
+    resolveGranularityDatasetTarget,
     type EvalDatasetCase,
+    type GranularityDatasetTargetKey,
 } from "./eval_shared.ts";
 import {
     embedQueries as embedFrontendQueries,
     loadFrontendEvalEngine,
 } from "./frontend_eval_engine.ts";
-import { CURRENT_EVAL_DATASET_FILES } from "./current_eval_targets.ts";
 
 type DatasetCase = EvalDatasetCase & {
     id?: string;
 };
 
-type DatasetTargetKey = "main_106" | "holdout_v3";
+type DatasetTargetKey = GranularityDatasetTargetKey;
 
 type DatasetTarget = {
     key: DatasetTargetKey;
@@ -173,21 +174,34 @@ const SAFE_RANDOMIZATION_ITERATIONS =
 const SAFE_RANDOM_SEED =
     Number.isFinite(RNG_SEED) && RNG_SEED > 0 ? RNG_SEED : 20260331;
 
-const DATASET_TARGETS: Record<DatasetTargetKey, DatasetTarget> = {
-    main_106: {
-        key: "main_106",
-        label: "MainBench-106",
-        datasetFile: CURRENT_EVAL_DATASET_FILES.granularityMain106,
-    },
-    holdout_v3: {
-        key: "holdout_v3",
-        label: "FrozenHoldout-v3",
-        datasetFile: CURRENT_EVAL_DATASET_FILES.granularityHoldoutV3,
-    },
-};
+function resolveDatasetTarget(key: DatasetTargetKey): DatasetTarget | null {
+    try {
+        const target = resolveGranularityDatasetTarget(key);
+        return {
+            key,
+            label: target.label,
+            datasetFile: target.datasetFile,
+        };
+    } catch {
+        return null;
+    }
+}
+
+const AVAILABLE_DATASET_TARGETS = (
+    [
+        resolveDatasetTarget("main_bench_120"),
+        resolveDatasetTarget("in_domain_holdout_50"),
+        resolveDatasetTarget("external_ood_holdout_30"),
+    ] as Array<DatasetTarget | null>
+).filter((item): item is DatasetTarget => Boolean(item));
+
+const DATASET_TARGETS = Object.fromEntries(
+    AVAILABLE_DATASET_TARGETS.map((item) => [item.key, item]),
+) as Partial<Record<DatasetTargetKey, DatasetTarget>>;
 
 const DATASET_TARGET_ORDER = parseDatasetTargets(
-    process.env.SUASK_STANDARD_BASELINE_DATASETS || "main_106,holdout_v3",
+    process.env.SUASK_STANDARD_BASELINE_DATASETS ||
+        AVAILABLE_DATASET_TARGETS.map((item) => item.key).join(","),
 );
 
 const STRUCTURED_KP_OT_WEIGHTS = {
@@ -224,9 +238,7 @@ function parseDatasetTargets(raw: string): DatasetTarget[] {
         .map((key) => DATASET_TARGETS[key])
         .filter((item): item is DatasetTarget => Boolean(item));
 
-    return resolved.length > 0
-        ? resolved
-        : [DATASET_TARGETS.main_106, DATASET_TARGETS.holdout_v3];
+    return resolved.length > 0 ? resolved : AVAILABLE_DATASET_TARGETS;
 }
 
 function hashString(input: string): number {
@@ -948,6 +960,12 @@ function printDatasetSummary(report: DatasetReport) {
 }
 
 async function main() {
+    if (DATASET_TARGET_ORDER.length === 0) {
+        throw new Error(
+            "未解析到可用的 granularity 数据集目标，请先生成主集或 holdout 新文件。",
+        );
+    }
+
     console.log("Loading frontend eval engine...");
     await loadEngine();
 

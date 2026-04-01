@@ -5,10 +5,13 @@ import type {
     PipelineDocumentLoader,
     PipelineDocumentRecord,
 } from "../src/worker/search_pipeline.ts";
+import {
+    resolveBackendArticlesFile,
+    resolveBackendKnowledgePointsFile,
+} from "./kb_version_paths.ts";
 
-const ARTICLE_FILE = "../Backend/data/embeddings_v2/backend_articles.json";
-const KNOWLEDGE_POINT_FILE =
-    "../Backend/data/embeddings_v2/backend_knowledge_points.json";
+const ARTICLE_FILE = resolveBackendArticlesFile();
+const KNOWLEDGE_POINT_FILE = resolveBackendKnowledgePointsFile();
 
 let articleMapCache: Map<string, PipelineDocumentRecord> | null = null;
 

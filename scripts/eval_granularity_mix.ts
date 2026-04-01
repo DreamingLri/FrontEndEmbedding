@@ -20,12 +20,16 @@ import {
     resolveEvalDatasetConfig,
     type EvalDatasetCase,
     type EvalDatasetSource,
+    type GranularityDatasetTargetKey,
 } from "./eval_shared.ts";
 import {
     embedQueries as embedFrontendQueries,
     loadFrontendEvalEngine,
 } from "./frontend_eval_engine.ts";
-import { CURRENT_EVAL_DATASET_FILES } from "./current_eval_targets.ts";
+import {
+    resolveBackendArticlesFile,
+    resolveBackendKnowledgePointsFile,
+} from "./kb_version_paths.ts";
 import { updateCurrentResultRegistry } from "./result_registry.ts";
 
 type DatasetCase = EvalDatasetCase;
@@ -143,6 +147,7 @@ type ComboReport = {
         metricsByDataset: Record<string, Metrics>;
     };
     tuned: {
+        selectionMode: "legacy_tune_holdout" | "single_frozen_set";
         candidateCount: number;
         bestWeights: WeightConfig;
         tuneCombined: Metrics;
@@ -164,8 +169,16 @@ type ComboReport = {
 type Report = {
     generatedAt: string;
     datasetVersion: string;
-    datasetMode: "split" | "single_file";
+    datasetMode: "split" | "single_file" | "named_group";
     datasetKey: string;
+    datasetLabel: string;
+    datasetGroups: Array<{
+        key: string;
+        label: string;
+        role: string;
+        sourceCount: number;
+        resolvedFromFallback?: boolean;
+    }>;
     topHybridLimit: number;
     kpAggregationMode: KPAggregationMode;
     kpTopN: number;
@@ -188,14 +201,16 @@ type Report = {
 };
 
 const DATASET_VERSION = process.env.SUASK_EVAL_DATASET_VERSION || "granularity";
-const DATASET_FILE =
-    process.env.SUASK_EVAL_DATASET_FILE ||
-    CURRENT_EVAL_DATASET_FILES.granularityMain106;
-const SINGLE_FILE_AS_ALL = process.env.SUASK_EVAL_SINGLE_FILE_AS_ALL === "1";
+const DATASET_FILE = process.env.SUASK_EVAL_DATASET_FILE;
+const DATASET_TARGET_KEY = (
+    process.env.SUASK_EVAL_DATASET_TARGET || "main_bench_120"
+) as GranularityDatasetTargetKey;
+const SINGLE_FILE_AS_ALL = process.env.SUASK_EVAL_SINGLE_FILE_AS_ALL !== "0";
 const DATASET_CONFIG = resolveEvalDatasetConfig({
     datasetVersion: DATASET_VERSION,
     datasetFile: DATASET_FILE,
     singleFileAsAll: SINGLE_FILE_AS_ALL,
+    datasetTargetKey: DATASET_TARGET_KEY,
 });
 const LIMIT_PER_DATASET = Number.parseInt(
     process.env.SUASK_EVAL_LIMIT_PER_DATASET || "",
@@ -313,8 +328,8 @@ type ArticleTimeAnchor = {
     publishTime: string;
 };
 
-const KP_TEXTS_FILE = "../Backend/data/embeddings_v2/backend_knowledge_points.json";
-const ARTICLE_TEXTS_FILE = "../Backend/data/embeddings_v2/backend_articles.json";
+const KP_TEXTS_FILE = resolveBackendKnowledgePointsFile();
+const ARTICLE_TEXTS_FILE = resolveBackendArticlesFile();
 const QUERY_STOPWORDS = new Set([
     "什么",
     "什么时候",
@@ -1599,11 +1614,14 @@ function summarizeCombo(
         bm25Stats,
         uniformWeights,
     );
+    const hasIndependentHoldout = holdoutCache.length > 0;
 
     const fixedWeights = FIXED_COMBO_WEIGHTS[combo.label];
     const candidateWeights = fixedWeights
         ? [normalizeProvidedWeights(combo.allowedTypes, fixedWeights)]
-        : generateWeightConfigs(combo.allowedTypes);
+        : hasIndependentHoldout
+          ? generateWeightConfigs(combo.allowedTypes)
+          : [uniformWeights];
     const candidates = candidateWeights.map((weights) => ({
         weights,
         result: evaluateQueryCache(tuneCache, filteredMetadata, bm25Stats, weights),
@@ -1611,18 +1629,20 @@ function summarizeCombo(
 
     candidates.sort((a, b) => compareMetrics(a.result.combined, b.result.combined));
     const bestCandidate = candidates[0];
-    const holdoutMetrics = evaluateQueryCache(
-        holdoutCache,
-        filteredMetadata,
-        bm25Stats,
-        bestCandidate.weights,
-    );
     const combinedMetrics = evaluateQueryCache(
         allCache,
         filteredMetadata,
         bm25Stats,
         bestCandidate.weights,
     );
+    const holdoutMetrics = hasIndependentHoldout
+        ? evaluateQueryCache(
+              holdoutCache,
+              filteredMetadata,
+              bm25Stats,
+              bestCandidate.weights,
+          )
+        : combinedMetrics;
     const shouldAttachCaseDetails =
         EXPORT_BAD_CASES && combo.label === BAD_CASE_COMBO;
     const caseDetailsWeights =
@@ -1650,6 +1670,9 @@ function summarizeCombo(
             metricsByDataset: uniformMetrics.metricsByDataset,
         },
         tuned: {
+            selectionMode: hasIndependentHoldout
+                ? "legacy_tune_holdout"
+                : "single_frozen_set",
             candidateCount: candidates.length,
             bestWeights: bestCandidate.weights,
             tuneCombined: bestCandidate.result.combined,
@@ -1708,10 +1731,17 @@ async function main() {
     const tuneCases = loadDatasets(DATASET_CONFIG.tuneSources);
     const holdoutCases = loadDatasets(DATASET_CONFIG.holdoutSources);
     const allCases = [...tuneCases, ...holdoutCases];
+    const hasIndependentHoldout = holdoutCases.length > 0;
 
-    console.log(
-        `Loaded tune=${tuneCases.length}, holdout=${holdoutCases.length}, combined=${allCases.length} cases`,
-    );
+    if (hasIndependentHoldout) {
+        console.log(
+            `Loaded tune=${tuneCases.length}, holdout=${holdoutCases.length}, combined=${allCases.length} cases`,
+        );
+    } else {
+        console.log(
+            `Loaded frozen evaluation set ${DATASET_CONFIG.datasetLabel}: total=${allCases.length} cases`,
+        );
+    }
 
     const allCache = await buildQueryCache(allCases);
     const tuneCache = allCache.slice(0, tuneCases.length);
@@ -1722,6 +1752,14 @@ async function main() {
         datasetVersion: DATASET_CONFIG.datasetVersion,
         datasetMode: DATASET_CONFIG.datasetMode,
         datasetKey: DATASET_CONFIG.datasetKey,
+        datasetLabel: DATASET_CONFIG.datasetLabel,
+        datasetGroups: DATASET_CONFIG.groups.map((group) => ({
+            key: group.key,
+            label: group.label,
+            role: group.role,
+            sourceCount: group.sources.length,
+            resolvedFromFallback: group.resolvedFromFallback,
+        })),
         topHybridLimit:
             Number.isFinite(TOP_HYBRID_LIMIT) && TOP_HYBRID_LIMIT > 0
                 ? TOP_HYBRID_LIMIT
@@ -1767,12 +1805,18 @@ async function main() {
         console.log(
             `Uniform  | ${formatWeights(comboReport.uniform.weights)} | ${formatMetricLine(comboReport.uniform.combined)}`,
         );
-        console.log(
-            `Best tune| ${formatWeights(comboReport.tuned.bestWeights)} | ${formatMetricLine(comboReport.tuned.tuneCombined)}`,
-        );
-        console.log(
-            `Holdout  | ${formatMetricLine(comboReport.tuned.holdoutCombined)}`,
-        );
+        if (hasIndependentHoldout) {
+            console.log(
+                `Best tune| ${formatWeights(comboReport.tuned.bestWeights)} | ${formatMetricLine(comboReport.tuned.tuneCombined)}`,
+            );
+            console.log(
+                `Holdout  | ${formatMetricLine(comboReport.tuned.holdoutCombined)}`,
+            );
+        } else {
+            console.log(
+                `Frozen set| ${formatWeights(comboReport.tuned.bestWeights)} | ${formatMetricLine(comboReport.tuned.combinedCombined)}`,
+            );
+        }
         console.log(
             `Combined | ${formatMetricLine(comboReport.tuned.combinedCombined)}`,
         );
@@ -1790,10 +1834,12 @@ async function main() {
     fs.writeFileSync(outputPath, JSON.stringify(report, null, 2), "utf-8");
     updateCurrentResultRegistry({
         datasetName: DATASET_CONFIG.datasetKey,
-        datasetFile: DATASET_FILE,
+        datasetFile: DATASET_FILE || DATASET_CONFIG.allSources[0]?.path || "",
         outputPath,
         sourceScript: "eval_granularity_mix.ts",
-        note: "当前脚本只会自动更新 `main_106` 的稳定结果入口；`holdout_v3` 当前仍使用单独固定口径结果。",
+        note: hasIndependentHoldout
+            ? "当前结果基于旧式 tune/holdout 分流口径导出。"
+            : `当前结果基于单冻结集入口 ${DATASET_CONFIG.datasetLabel} 导出，不再默认按 tune/holdout 切分。`,
     });
     console.log(`\nSaved report to ${outputPath}`);
 

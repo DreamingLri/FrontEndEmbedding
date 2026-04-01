@@ -1,0 +1,4841 @@
+{
+  "generatedAt": "2026-04-01T08:17:39.583Z",
+  "datasetVersion": "granularity",
+  "datasetMode": "named_group",
+  "datasetKey": "test_dataset_granularity_external_ood_holdout_30_reviewed",
+  "datasetLabel": "ExternalOODHoldout-30",
+  "datasetGroups": [
+    {
+      "key": "external_ood_holdout_30",
+      "label": "ExternalOODHoldout-30",
+      "role": "external_ood_holdout",
+      "sourceCount": 1,
+      "resolvedFromFallback": false
+    }
+  ],
+  "topHybridLimit": 1000,
+  "kpAggregationMode": "max",
+  "kpTopN": 3,
+  "kpTailWeight": 0.35,
+  "lexicalBonusMode": "sum",
+  "onlineKpRoleRerankMode": "off",
+  "onlineKpRoleDocWeight": 0.35,
+  "kpCandidateRerankMode": "none",
+  "docPostRerankMode": "none",
+  "docPostRerankWeight": 0.35,
+  "weightSteps": [
+    0.2,
+    0.5,
+    0.8
+  ],
+  "datasetSizes": {
+    "tune": {
+      "test_dataset_granularity_external_ood_holdout_30_reviewed": 30
+    },
+    "holdout": {},
+    "combined": {
+      "test_dataset_granularity_external_ood_holdout_30_reviewed": 30
+    }
+  },
+  "globalMetadataTypeCounts": {
+    "Q": 14935,
+    "KP": 3359,
+    "OT": 605
+  },
+  "combos": [
+    {
+      "label": "Q",
+      "allowedTypes": [
+        "Q"
+      ],
+      "metadataCount": 14935,
+      "metadataTypeCounts": {
+        "Q": 14935,
+        "KP": 0,
+        "OT": 0
+      },
+      "uniform": {
+        "weights": {
+          "Q": 1,
+          "KP": 0,
+          "OT": 0
+        },
+        "combined": {
+          "total": 30,
+          "hitAt1": 50,
+          "hitAt3": 73.33333333333333,
+          "hitAt5": 76.66666666666667,
+          "mrr": 0.613095238095238
+        },
+        "kpidCombined": {
+          "applicable": 30,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 15,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 15,
+          "docHitAt5Total": 23,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 23
+        },
+        "metricsByDataset": {
+          "test_dataset_granularity_external_ood_holdout_30_reviewed": {
+            "total": 30,
+            "hitAt1": 50,
+            "hitAt3": 73.33333333333333,
+            "hitAt5": 76.66666666666667,
+            "mrr": 0.613095238095238
+          }
+        }
+      },
+      "tuned": {
+        "selectionMode": "single_frozen_set",
+        "candidateCount": 1,
+        "bestWeights": {
+          "Q": 1,
+          "KP": 0,
+          "OT": 0
+        },
+        "tuneCombined": {
+          "total": 30,
+          "hitAt1": 50,
+          "hitAt3": 73.33333333333333,
+          "hitAt5": 76.66666666666667,
+          "mrr": 0.613095238095238
+        },
+        "kpidTuneCombined": {
+          "applicable": 30,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 15,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 15,
+          "docHitAt5Total": 23,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 23
+        },
+        "holdoutCombined": {
+          "total": 30,
+          "hitAt1": 50,
+          "hitAt3": 73.33333333333333,
+          "hitAt5": 76.66666666666667,
+          "mrr": 0.613095238095238
+        },
+        "kpidHoldoutCombined": {
+          "applicable": 30,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 15,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 15,
+          "docHitAt5Total": 23,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 23
+        },
+        "combinedCombined": {
+          "total": 30,
+          "hitAt1": 50,
+          "hitAt3": 73.33333333333333,
+          "hitAt5": 76.66666666666667,
+          "mrr": 0.613095238095238
+        },
+        "kpidCombinedCombined": {
+          "applicable": 30,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 15,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 15,
+          "docHitAt5Total": 23,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 23
+        },
+        "topTuneCandidates": [
+          {
+            "weights": {
+              "Q": 1,
+              "KP": 0,
+              "OT": 0
+            },
+            "combined": {
+              "total": 30,
+              "hitAt1": 50,
+              "hitAt3": 73.33333333333333,
+              "hitAt5": 76.66666666666667,
+              "mrr": 0.613095238095238
+            }
+          }
+        ]
+      },
+      "groupBreakdowns": {
+        "supportPattern": {
+          "multi_kp": {
+            "total": 18,
+            "uniform": {
+              "total": 18,
+              "hitAt1": 50,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 72.22222222222221,
+              "mrr": 0.5958994708994709
+            },
+            "tunedCombined": {
+              "total": 18,
+              "hitAt1": 50,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 72.22222222222221,
+              "mrr": 0.5958994708994709
+            },
+            "kpidUniform": {
+              "applicable": 18,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 9,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 9,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 13
+            },
+            "kpidTunedCombined": {
+              "applicable": 18,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 9,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 9,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 13
+            }
+          },
+          "ot_required": {
+            "total": 10,
+            "uniform": {
+              "total": 10,
+              "hitAt1": 40,
+              "hitAt3": 80,
+              "hitAt5": 80,
+              "mrr": 0.5666666666666667
+            },
+            "tunedCombined": {
+              "total": 10,
+              "hitAt1": 40,
+              "hitAt3": 80,
+              "hitAt5": 80,
+              "mrr": 0.5666666666666667
+            },
+            "kpidUniform": {
+              "applicable": 10,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 4,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 8
+            },
+            "kpidTunedCombined": {
+              "applicable": 10,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 4,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 8
+            }
+          },
+          "single_kp": {
+            "total": 2,
+            "uniform": {
+              "total": 2,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "tunedCombined": {
+              "total": 2,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 2,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 2
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 2,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 2
+            }
+          }
+        },
+        "preferredGranularity": {
+          "KP": {
+            "total": 2,
+            "uniform": {
+              "total": 2,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "tunedCombined": {
+              "total": 2,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 2,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 2
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 2,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 2
+            }
+          },
+          "KP+OT": {
+            "total": 18,
+            "uniform": {
+              "total": 18,
+              "hitAt1": 50,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 72.22222222222221,
+              "mrr": 0.5958994708994709
+            },
+            "tunedCombined": {
+              "total": 18,
+              "hitAt1": 50,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 72.22222222222221,
+              "mrr": 0.5958994708994709
+            },
+            "kpidUniform": {
+              "applicable": 18,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 9,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 9,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 13
+            },
+            "kpidTunedCombined": {
+              "applicable": 18,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 9,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 9,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 13
+            }
+          },
+          "OT": {
+            "total": 10,
+            "uniform": {
+              "total": 10,
+              "hitAt1": 40,
+              "hitAt3": 80,
+              "hitAt5": 80,
+              "mrr": 0.5666666666666667
+            },
+            "tunedCombined": {
+              "total": 10,
+              "hitAt1": 40,
+              "hitAt3": 80,
+              "hitAt5": 80,
+              "mrr": 0.5666666666666667
+            },
+            "kpidUniform": {
+              "applicable": 10,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 4,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 8
+            },
+            "kpidTunedCombined": {
+              "applicable": 10,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 4,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 8
+            }
+          }
+        }
+      }
+    },
+    {
+      "label": "KP",
+      "allowedTypes": [
+        "KP"
+      ],
+      "metadataCount": 3359,
+      "metadataTypeCounts": {
+        "Q": 0,
+        "KP": 3359,
+        "OT": 0
+      },
+      "uniform": {
+        "weights": {
+          "Q": 0,
+          "KP": 1,
+          "OT": 0
+        },
+        "combined": {
+          "total": 30,
+          "hitAt1": 13.333333333333334,
+          "hitAt3": 53.333333333333336,
+          "hitAt5": 70,
+          "mrr": 0.3653174603174603
+        },
+        "kpidCombined": {
+          "applicable": 30,
+          "hitAt1": 6.666666666666667,
+          "hitAt3": 23.333333333333332,
+          "hitAt5": 30,
+          "mrr": 0.15777777777777782,
+          "docHitAt1Total": 4,
+          "docHitAt1CorrectKpid": 2,
+          "docHitAt1WrongKpid": 2,
+          "docHitAt5Total": 21,
+          "docHitAt5CorrectKpid": 9,
+          "docHitAt5WrongKpid": 12
+        },
+        "metricsByDataset": {
+          "test_dataset_granularity_external_ood_holdout_30_reviewed": {
+            "total": 30,
+            "hitAt1": 13.333333333333334,
+            "hitAt3": 53.333333333333336,
+            "hitAt5": 70,
+            "mrr": 0.3653174603174603
+          }
+        }
+      },
+      "tuned": {
+        "selectionMode": "single_frozen_set",
+        "candidateCount": 1,
+        "bestWeights": {
+          "Q": 0,
+          "KP": 1,
+          "OT": 0
+        },
+        "tuneCombined": {
+          "total": 30,
+          "hitAt1": 13.333333333333334,
+          "hitAt3": 53.333333333333336,
+          "hitAt5": 70,
+          "mrr": 0.3653174603174603
+        },
+        "kpidTuneCombined": {
+          "applicable": 30,
+          "hitAt1": 6.666666666666667,
+          "hitAt3": 23.333333333333332,
+          "hitAt5": 30,
+          "mrr": 0.15777777777777782,
+          "docHitAt1Total": 4,
+          "docHitAt1CorrectKpid": 2,
+          "docHitAt1WrongKpid": 2,
+          "docHitAt5Total": 21,
+          "docHitAt5CorrectKpid": 9,
+          "docHitAt5WrongKpid": 12
+        },
+        "holdoutCombined": {
+          "total": 30,
+          "hitAt1": 13.333333333333334,
+          "hitAt3": 53.333333333333336,
+          "hitAt5": 70,
+          "mrr": 0.3653174603174603
+        },
+        "kpidHoldoutCombined": {
+          "applicable": 30,
+          "hitAt1": 6.666666666666667,
+          "hitAt3": 23.333333333333332,
+          "hitAt5": 30,
+          "mrr": 0.15777777777777782,
+          "docHitAt1Total": 4,
+          "docHitAt1CorrectKpid": 2,
+          "docHitAt1WrongKpid": 2,
+          "docHitAt5Total": 21,
+          "docHitAt5CorrectKpid": 9,
+          "docHitAt5WrongKpid": 12
+        },
+        "combinedCombined": {
+          "total": 30,
+          "hitAt1": 13.333333333333334,
+          "hitAt3": 53.333333333333336,
+          "hitAt5": 70,
+          "mrr": 0.3653174603174603
+        },
+        "kpidCombinedCombined": {
+          "applicable": 30,
+          "hitAt1": 6.666666666666667,
+          "hitAt3": 23.333333333333332,
+          "hitAt5": 30,
+          "mrr": 0.15777777777777782,
+          "docHitAt1Total": 4,
+          "docHitAt1CorrectKpid": 2,
+          "docHitAt1WrongKpid": 2,
+          "docHitAt5Total": 21,
+          "docHitAt5CorrectKpid": 9,
+          "docHitAt5WrongKpid": 12
+        },
+        "topTuneCandidates": [
+          {
+            "weights": {
+              "Q": 0,
+              "KP": 1,
+              "OT": 0
+            },
+            "combined": {
+              "total": 30,
+              "hitAt1": 13.333333333333334,
+              "hitAt3": 53.333333333333336,
+              "hitAt5": 70,
+              "mrr": 0.3653174603174603
+            }
+          }
+        ]
+      },
+      "groupBreakdowns": {
+        "supportPattern": {
+          "multi_kp": {
+            "total": 18,
+            "uniform": {
+              "total": 18,
+              "hitAt1": 16.666666666666664,
+              "hitAt3": 50,
+              "hitAt5": 66.66666666666666,
+              "mrr": 0.36944444444444446
+            },
+            "tunedCombined": {
+              "total": 18,
+              "hitAt1": 16.666666666666664,
+              "hitAt3": 50,
+              "hitAt5": 66.66666666666666,
+              "mrr": 0.36944444444444446
+            },
+            "kpidUniform": {
+              "applicable": 18,
+              "hitAt1": 11.11111111111111,
+              "hitAt3": 27.77777777777778,
+              "hitAt5": 38.88888888888889,
+              "mrr": 0.22592592592592592,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 2,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 12,
+              "docHitAt5CorrectKpid": 7,
+              "docHitAt5WrongKpid": 5
+            },
+            "kpidTunedCombined": {
+              "applicable": 18,
+              "hitAt1": 11.11111111111111,
+              "hitAt3": 27.77777777777778,
+              "hitAt5": 38.88888888888889,
+              "mrr": 0.22592592592592592,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 2,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 12,
+              "docHitAt5CorrectKpid": 7,
+              "docHitAt5WrongKpid": 5
+            }
+          },
+          "ot_required": {
+            "total": 10,
+            "uniform": {
+              "total": 10,
+              "hitAt1": 10,
+              "hitAt3": 50,
+              "hitAt5": 70,
+              "mrr": 0.3476190476190476
+            },
+            "tunedCombined": {
+              "total": 10,
+              "hitAt1": 10,
+              "hitAt3": 50,
+              "hitAt5": 70,
+              "mrr": 0.3476190476190476
+            },
+            "kpidUniform": {
+              "applicable": 10,
+              "hitAt1": 0,
+              "hitAt3": 10,
+              "hitAt5": 10,
+              "mrr": 0.03333333333333333,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 7,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 6
+            },
+            "kpidTunedCombined": {
+              "applicable": 10,
+              "hitAt1": 0,
+              "hitAt3": 10,
+              "hitAt5": 10,
+              "mrr": 0.03333333333333333,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 7,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 6
+            }
+          },
+          "single_kp": {
+            "total": 2,
+            "uniform": {
+              "total": 2,
+              "hitAt1": 0,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 0.41666666666666663
+            },
+            "tunedCombined": {
+              "total": 2,
+              "hitAt1": 0,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 0.41666666666666663
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.16666666666666666,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 1
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.16666666666666666,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 1
+            }
+          }
+        },
+        "preferredGranularity": {
+          "KP": {
+            "total": 2,
+            "uniform": {
+              "total": 2,
+              "hitAt1": 0,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 0.41666666666666663
+            },
+            "tunedCombined": {
+              "total": 2,
+              "hitAt1": 0,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 0.41666666666666663
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.16666666666666666,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 1
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.16666666666666666,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 1
+            }
+          },
+          "KP+OT": {
+            "total": 18,
+            "uniform": {
+              "total": 18,
+              "hitAt1": 16.666666666666664,
+              "hitAt3": 50,
+              "hitAt5": 66.66666666666666,
+              "mrr": 0.36944444444444446
+            },
+            "tunedCombined": {
+              "total": 18,
+              "hitAt1": 16.666666666666664,
+              "hitAt3": 50,
+              "hitAt5": 66.66666666666666,
+              "mrr": 0.36944444444444446
+            },
+            "kpidUniform": {
+              "applicable": 18,
+              "hitAt1": 11.11111111111111,
+              "hitAt3": 27.77777777777778,
+              "hitAt5": 38.88888888888889,
+              "mrr": 0.22592592592592592,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 2,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 12,
+              "docHitAt5CorrectKpid": 7,
+              "docHitAt5WrongKpid": 5
+            },
+            "kpidTunedCombined": {
+              "applicable": 18,
+              "hitAt1": 11.11111111111111,
+              "hitAt3": 27.77777777777778,
+              "hitAt5": 38.88888888888889,
+              "mrr": 0.22592592592592592,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 2,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 12,
+              "docHitAt5CorrectKpid": 7,
+              "docHitAt5WrongKpid": 5
+            }
+          },
+          "OT": {
+            "total": 10,
+            "uniform": {
+              "total": 10,
+              "hitAt1": 10,
+              "hitAt3": 50,
+              "hitAt5": 70,
+              "mrr": 0.3476190476190476
+            },
+            "tunedCombined": {
+              "total": 10,
+              "hitAt1": 10,
+              "hitAt3": 50,
+              "hitAt5": 70,
+              "mrr": 0.3476190476190476
+            },
+            "kpidUniform": {
+              "applicable": 10,
+              "hitAt1": 0,
+              "hitAt3": 10,
+              "hitAt5": 10,
+              "mrr": 0.03333333333333333,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 7,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 6
+            },
+            "kpidTunedCombined": {
+              "applicable": 10,
+              "hitAt1": 0,
+              "hitAt3": 10,
+              "hitAt5": 10,
+              "mrr": 0.03333333333333333,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 7,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 6
+            }
+          }
+        }
+      }
+    },
+    {
+      "label": "OT",
+      "allowedTypes": [
+        "OT"
+      ],
+      "metadataCount": 605,
+      "metadataTypeCounts": {
+        "Q": 0,
+        "KP": 0,
+        "OT": 605
+      },
+      "uniform": {
+        "weights": {
+          "Q": 0,
+          "KP": 0,
+          "OT": 1
+        },
+        "combined": {
+          "total": 30,
+          "hitAt1": 46.666666666666664,
+          "hitAt3": 66.66666666666666,
+          "hitAt5": 70,
+          "mrr": 0.5686507936507936
+        },
+        "kpidCombined": {
+          "applicable": 30,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 14,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 14,
+          "docHitAt5Total": 21,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 21
+        },
+        "metricsByDataset": {
+          "test_dataset_granularity_external_ood_holdout_30_reviewed": {
+            "total": 30,
+            "hitAt1": 46.666666666666664,
+            "hitAt3": 66.66666666666666,
+            "hitAt5": 70,
+            "mrr": 0.5686507936507936
+          }
+        }
+      },
+      "tuned": {
+        "selectionMode": "single_frozen_set",
+        "candidateCount": 1,
+        "bestWeights": {
+          "Q": 0,
+          "KP": 0,
+          "OT": 1
+        },
+        "tuneCombined": {
+          "total": 30,
+          "hitAt1": 46.666666666666664,
+          "hitAt3": 66.66666666666666,
+          "hitAt5": 70,
+          "mrr": 0.5686507936507936
+        },
+        "kpidTuneCombined": {
+          "applicable": 30,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 14,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 14,
+          "docHitAt5Total": 21,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 21
+        },
+        "holdoutCombined": {
+          "total": 30,
+          "hitAt1": 46.666666666666664,
+          "hitAt3": 66.66666666666666,
+          "hitAt5": 70,
+          "mrr": 0.5686507936507936
+        },
+        "kpidHoldoutCombined": {
+          "applicable": 30,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 14,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 14,
+          "docHitAt5Total": 21,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 21
+        },
+        "combinedCombined": {
+          "total": 30,
+          "hitAt1": 46.666666666666664,
+          "hitAt3": 66.66666666666666,
+          "hitAt5": 70,
+          "mrr": 0.5686507936507936
+        },
+        "kpidCombinedCombined": {
+          "applicable": 30,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 14,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 14,
+          "docHitAt5Total": 21,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 21
+        },
+        "topTuneCandidates": [
+          {
+            "weights": {
+              "Q": 0,
+              "KP": 0,
+              "OT": 1
+            },
+            "combined": {
+              "total": 30,
+              "hitAt1": 46.666666666666664,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 70,
+              "mrr": 0.5686507936507936
+            }
+          }
+        ]
+      },
+      "groupBreakdowns": {
+        "supportPattern": {
+          "multi_kp": {
+            "total": 18,
+            "uniform": {
+              "total": 18,
+              "hitAt1": 55.55555555555556,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 72.22222222222221,
+              "mrr": 0.6157407407407408
+            },
+            "tunedCombined": {
+              "total": 18,
+              "hitAt1": 55.55555555555556,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 72.22222222222221,
+              "mrr": 0.6157407407407408
+            },
+            "kpidUniform": {
+              "applicable": 18,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 10,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 10,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 13
+            },
+            "kpidTunedCombined": {
+              "applicable": 18,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 10,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 10,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 13
+            }
+          },
+          "ot_required": {
+            "total": 10,
+            "uniform": {
+              "total": 10,
+              "hitAt1": 40,
+              "hitAt3": 60,
+              "hitAt5": 60,
+              "mrr": 0.4976190476190476
+            },
+            "tunedCombined": {
+              "total": 10,
+              "hitAt1": 40,
+              "hitAt3": 60,
+              "hitAt5": 60,
+              "mrr": 0.4976190476190476
+            },
+            "kpidUniform": {
+              "applicable": 10,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 4,
+              "docHitAt5Total": 6,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 6
+            },
+            "kpidTunedCombined": {
+              "applicable": 10,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 4,
+              "docHitAt5Total": 6,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 6
+            }
+          },
+          "single_kp": {
+            "total": 2,
+            "uniform": {
+              "total": 2,
+              "hitAt1": 0,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 0.5
+            },
+            "tunedCombined": {
+              "total": 2,
+              "hitAt1": 0,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 0.5
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 2
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 2
+            }
+          }
+        },
+        "preferredGranularity": {
+          "KP": {
+            "total": 2,
+            "uniform": {
+              "total": 2,
+              "hitAt1": 0,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 0.5
+            },
+            "tunedCombined": {
+              "total": 2,
+              "hitAt1": 0,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 0.5
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 2
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 2
+            }
+          },
+          "KP+OT": {
+            "total": 18,
+            "uniform": {
+              "total": 18,
+              "hitAt1": 55.55555555555556,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 72.22222222222221,
+              "mrr": 0.6157407407407408
+            },
+            "tunedCombined": {
+              "total": 18,
+              "hitAt1": 55.55555555555556,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 72.22222222222221,
+              "mrr": 0.6157407407407408
+            },
+            "kpidUniform": {
+              "applicable": 18,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 10,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 10,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 13
+            },
+            "kpidTunedCombined": {
+              "applicable": 18,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 10,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 10,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 13
+            }
+          },
+          "OT": {
+            "total": 10,
+            "uniform": {
+              "total": 10,
+              "hitAt1": 40,
+              "hitAt3": 60,
+              "hitAt5": 60,
+              "mrr": 0.4976190476190476
+            },
+            "tunedCombined": {
+              "total": 10,
+              "hitAt1": 40,
+              "hitAt3": 60,
+              "hitAt5": 60,
+              "mrr": 0.4976190476190476
+            },
+            "kpidUniform": {
+              "applicable": 10,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 4,
+              "docHitAt5Total": 6,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 6
+            },
+            "kpidTunedCombined": {
+              "applicable": 10,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 4,
+              "docHitAt5Total": 6,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 6
+            }
+          }
+        }
+      }
+    },
+    {
+      "label": "Q+KP",
+      "allowedTypes": [
+        "Q",
+        "KP"
+      ],
+      "metadataCount": 18294,
+      "metadataTypeCounts": {
+        "Q": 14935,
+        "KP": 3359,
+        "OT": 0
+      },
+      "uniform": {
+        "weights": {
+          "Q": 0.5,
+          "KP": 0.5,
+          "OT": 0
+        },
+        "combined": {
+          "total": 30,
+          "hitAt1": 43.333333333333336,
+          "hitAt3": 70,
+          "hitAt5": 76.66666666666667,
+          "mrr": 0.5753174603174603
+        },
+        "kpidCombined": {
+          "applicable": 30,
+          "hitAt1": 23.333333333333332,
+          "hitAt3": 33.33333333333333,
+          "hitAt5": 36.666666666666664,
+          "mrr": 0.2947619047619047,
+          "docHitAt1Total": 13,
+          "docHitAt1CorrectKpid": 7,
+          "docHitAt1WrongKpid": 6,
+          "docHitAt5Total": 23,
+          "docHitAt5CorrectKpid": 11,
+          "docHitAt5WrongKpid": 12
+        },
+        "metricsByDataset": {
+          "test_dataset_granularity_external_ood_holdout_30_reviewed": {
+            "total": 30,
+            "hitAt1": 43.333333333333336,
+            "hitAt3": 70,
+            "hitAt5": 76.66666666666667,
+            "mrr": 0.5753174603174603
+          }
+        }
+      },
+      "tuned": {
+        "selectionMode": "single_frozen_set",
+        "candidateCount": 1,
+        "bestWeights": {
+          "Q": 0.5,
+          "KP": 0.5,
+          "OT": 0
+        },
+        "tuneCombined": {
+          "total": 30,
+          "hitAt1": 43.333333333333336,
+          "hitAt3": 70,
+          "hitAt5": 76.66666666666667,
+          "mrr": 0.5753174603174603
+        },
+        "kpidTuneCombined": {
+          "applicable": 30,
+          "hitAt1": 23.333333333333332,
+          "hitAt3": 33.33333333333333,
+          "hitAt5": 36.666666666666664,
+          "mrr": 0.2947619047619047,
+          "docHitAt1Total": 13,
+          "docHitAt1CorrectKpid": 7,
+          "docHitAt1WrongKpid": 6,
+          "docHitAt5Total": 23,
+          "docHitAt5CorrectKpid": 11,
+          "docHitAt5WrongKpid": 12
+        },
+        "holdoutCombined": {
+          "total": 30,
+          "hitAt1": 43.333333333333336,
+          "hitAt3": 70,
+          "hitAt5": 76.66666666666667,
+          "mrr": 0.5753174603174603
+        },
+        "kpidHoldoutCombined": {
+          "applicable": 30,
+          "hitAt1": 23.333333333333332,
+          "hitAt3": 33.33333333333333,
+          "hitAt5": 36.666666666666664,
+          "mrr": 0.2947619047619047,
+          "docHitAt1Total": 13,
+          "docHitAt1CorrectKpid": 7,
+          "docHitAt1WrongKpid": 6,
+          "docHitAt5Total": 23,
+          "docHitAt5CorrectKpid": 11,
+          "docHitAt5WrongKpid": 12
+        },
+        "combinedCombined": {
+          "total": 30,
+          "hitAt1": 43.333333333333336,
+          "hitAt3": 70,
+          "hitAt5": 76.66666666666667,
+          "mrr": 0.5753174603174603
+        },
+        "kpidCombinedCombined": {
+          "applicable": 30,
+          "hitAt1": 23.333333333333332,
+          "hitAt3": 33.33333333333333,
+          "hitAt5": 36.666666666666664,
+          "mrr": 0.2947619047619047,
+          "docHitAt1Total": 13,
+          "docHitAt1CorrectKpid": 7,
+          "docHitAt1WrongKpid": 6,
+          "docHitAt5Total": 23,
+          "docHitAt5CorrectKpid": 11,
+          "docHitAt5WrongKpid": 12
+        },
+        "topTuneCandidates": [
+          {
+            "weights": {
+              "Q": 0.5,
+              "KP": 0.5,
+              "OT": 0
+            },
+            "combined": {
+              "total": 30,
+              "hitAt1": 43.333333333333336,
+              "hitAt3": 70,
+              "hitAt5": 76.66666666666667,
+              "mrr": 0.5753174603174603
+            }
+          }
+        ]
+      },
+      "groupBreakdowns": {
+        "supportPattern": {
+          "multi_kp": {
+            "total": 18,
+            "uniform": {
+              "total": 18,
+              "hitAt1": 44.44444444444444,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 72.22222222222221,
+              "mrr": 0.5653439153439153
+            },
+            "tunedCombined": {
+              "total": 18,
+              "hitAt1": 44.44444444444444,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 72.22222222222221,
+              "mrr": 0.5653439153439153
+            },
+            "kpidUniform": {
+              "applicable": 18,
+              "hitAt1": 27.77777777777778,
+              "hitAt3": 38.88888888888889,
+              "hitAt5": 44.44444444444444,
+              "mrr": 0.35238095238095235,
+              "docHitAt1Total": 8,
+              "docHitAt1CorrectKpid": 5,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 8,
+              "docHitAt5WrongKpid": 5
+            },
+            "kpidTunedCombined": {
+              "applicable": 18,
+              "hitAt1": 27.77777777777778,
+              "hitAt3": 38.88888888888889,
+              "hitAt5": 44.44444444444444,
+              "mrr": 0.35238095238095235,
+              "docHitAt1Total": 8,
+              "docHitAt1CorrectKpid": 5,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 8,
+              "docHitAt5WrongKpid": 5
+            }
+          },
+          "ot_required": {
+            "total": 10,
+            "uniform": {
+              "total": 10,
+              "hitAt1": 30,
+              "hitAt3": 70,
+              "hitAt5": 80,
+              "mrr": 0.5083333333333334
+            },
+            "tunedCombined": {
+              "total": 10,
+              "hitAt1": 30,
+              "hitAt3": 70,
+              "hitAt5": 80,
+              "mrr": 0.5083333333333334
+            },
+            "kpidUniform": {
+              "applicable": 10,
+              "hitAt1": 10,
+              "hitAt3": 20,
+              "hitAt5": 20,
+              "mrr": 0.15,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 2,
+              "docHitAt5WrongKpid": 6
+            },
+            "kpidTunedCombined": {
+              "applicable": 10,
+              "hitAt1": 10,
+              "hitAt3": 20,
+              "hitAt5": 20,
+              "mrr": 0.15,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 2,
+              "docHitAt5WrongKpid": 6
+            }
+          },
+          "single_kp": {
+            "total": 2,
+            "uniform": {
+              "total": 2,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "tunedCombined": {
+              "total": 2,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5,
+              "docHitAt1Total": 2,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 1
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5,
+              "docHitAt1Total": 2,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 1
+            }
+          }
+        },
+        "preferredGranularity": {
+          "KP": {
+            "total": 2,
+            "uniform": {
+              "total": 2,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "tunedCombined": {
+              "total": 2,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5,
+              "docHitAt1Total": 2,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 1
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5,
+              "docHitAt1Total": 2,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 1
+            }
+          },
+          "KP+OT": {
+            "total": 18,
+            "uniform": {
+              "total": 18,
+              "hitAt1": 44.44444444444444,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 72.22222222222221,
+              "mrr": 0.5653439153439153
+            },
+            "tunedCombined": {
+              "total": 18,
+              "hitAt1": 44.44444444444444,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 72.22222222222221,
+              "mrr": 0.5653439153439153
+            },
+            "kpidUniform": {
+              "applicable": 18,
+              "hitAt1": 27.77777777777778,
+              "hitAt3": 38.88888888888889,
+              "hitAt5": 44.44444444444444,
+              "mrr": 0.35238095238095235,
+              "docHitAt1Total": 8,
+              "docHitAt1CorrectKpid": 5,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 8,
+              "docHitAt5WrongKpid": 5
+            },
+            "kpidTunedCombined": {
+              "applicable": 18,
+              "hitAt1": 27.77777777777778,
+              "hitAt3": 38.88888888888889,
+              "hitAt5": 44.44444444444444,
+              "mrr": 0.35238095238095235,
+              "docHitAt1Total": 8,
+              "docHitAt1CorrectKpid": 5,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 8,
+              "docHitAt5WrongKpid": 5
+            }
+          },
+          "OT": {
+            "total": 10,
+            "uniform": {
+              "total": 10,
+              "hitAt1": 30,
+              "hitAt3": 70,
+              "hitAt5": 80,
+              "mrr": 0.5083333333333334
+            },
+            "tunedCombined": {
+              "total": 10,
+              "hitAt1": 30,
+              "hitAt3": 70,
+              "hitAt5": 80,
+              "mrr": 0.5083333333333334
+            },
+            "kpidUniform": {
+              "applicable": 10,
+              "hitAt1": 10,
+              "hitAt3": 20,
+              "hitAt5": 20,
+              "mrr": 0.15,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 2,
+              "docHitAt5WrongKpid": 6
+            },
+            "kpidTunedCombined": {
+              "applicable": 10,
+              "hitAt1": 10,
+              "hitAt3": 20,
+              "hitAt5": 20,
+              "mrr": 0.15,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 2,
+              "docHitAt5WrongKpid": 6
+            }
+          }
+        }
+      }
+    },
+    {
+      "label": "Q+OT",
+      "allowedTypes": [
+        "Q",
+        "OT"
+      ],
+      "metadataCount": 15540,
+      "metadataTypeCounts": {
+        "Q": 14935,
+        "KP": 0,
+        "OT": 605
+      },
+      "uniform": {
+        "weights": {
+          "Q": 0.5,
+          "KP": 0,
+          "OT": 0.5
+        },
+        "combined": {
+          "total": 30,
+          "hitAt1": 50,
+          "hitAt3": 70,
+          "hitAt5": 76.66666666666667,
+          "mrr": 0.6086507936507937
+        },
+        "kpidCombined": {
+          "applicable": 30,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 15,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 15,
+          "docHitAt5Total": 23,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 23
+        },
+        "metricsByDataset": {
+          "test_dataset_granularity_external_ood_holdout_30_reviewed": {
+            "total": 30,
+            "hitAt1": 50,
+            "hitAt3": 70,
+            "hitAt5": 76.66666666666667,
+            "mrr": 0.6086507936507937
+          }
+        }
+      },
+      "tuned": {
+        "selectionMode": "single_frozen_set",
+        "candidateCount": 1,
+        "bestWeights": {
+          "Q": 0.5,
+          "KP": 0,
+          "OT": 0.5
+        },
+        "tuneCombined": {
+          "total": 30,
+          "hitAt1": 50,
+          "hitAt3": 70,
+          "hitAt5": 76.66666666666667,
+          "mrr": 0.6086507936507937
+        },
+        "kpidTuneCombined": {
+          "applicable": 30,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 15,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 15,
+          "docHitAt5Total": 23,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 23
+        },
+        "holdoutCombined": {
+          "total": 30,
+          "hitAt1": 50,
+          "hitAt3": 70,
+          "hitAt5": 76.66666666666667,
+          "mrr": 0.6086507936507937
+        },
+        "kpidHoldoutCombined": {
+          "applicable": 30,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 15,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 15,
+          "docHitAt5Total": 23,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 23
+        },
+        "combinedCombined": {
+          "total": 30,
+          "hitAt1": 50,
+          "hitAt3": 70,
+          "hitAt5": 76.66666666666667,
+          "mrr": 0.6086507936507937
+        },
+        "kpidCombinedCombined": {
+          "applicable": 30,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 15,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 15,
+          "docHitAt5Total": 23,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 23
+        },
+        "topTuneCandidates": [
+          {
+            "weights": {
+              "Q": 0.5,
+              "KP": 0,
+              "OT": 0.5
+            },
+            "combined": {
+              "total": 30,
+              "hitAt1": 50,
+              "hitAt3": 70,
+              "hitAt5": 76.66666666666667,
+              "mrr": 0.6086507936507937
+            }
+          }
+        ]
+      },
+      "groupBreakdowns": {
+        "supportPattern": {
+          "multi_kp": {
+            "total": 18,
+            "uniform": {
+              "total": 18,
+              "hitAt1": 50,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 72.22222222222221,
+              "mrr": 0.593121693121693
+            },
+            "tunedCombined": {
+              "total": 18,
+              "hitAt1": 50,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 72.22222222222221,
+              "mrr": 0.593121693121693
+            },
+            "kpidUniform": {
+              "applicable": 18,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 9,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 9,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 13
+            },
+            "kpidTunedCombined": {
+              "applicable": 18,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 9,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 9,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 13
+            }
+          },
+          "ot_required": {
+            "total": 10,
+            "uniform": {
+              "total": 10,
+              "hitAt1": 40,
+              "hitAt3": 70,
+              "hitAt5": 80,
+              "mrr": 0.5583333333333333
+            },
+            "tunedCombined": {
+              "total": 10,
+              "hitAt1": 40,
+              "hitAt3": 70,
+              "hitAt5": 80,
+              "mrr": 0.5583333333333333
+            },
+            "kpidUniform": {
+              "applicable": 10,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 4,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 8
+            },
+            "kpidTunedCombined": {
+              "applicable": 10,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 4,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 8
+            }
+          },
+          "single_kp": {
+            "total": 2,
+            "uniform": {
+              "total": 2,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "tunedCombined": {
+              "total": 2,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 2,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 2
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 2,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 2
+            }
+          }
+        },
+        "preferredGranularity": {
+          "KP": {
+            "total": 2,
+            "uniform": {
+              "total": 2,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "tunedCombined": {
+              "total": 2,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 2,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 2
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 2,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 2
+            }
+          },
+          "KP+OT": {
+            "total": 18,
+            "uniform": {
+              "total": 18,
+              "hitAt1": 50,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 72.22222222222221,
+              "mrr": 0.593121693121693
+            },
+            "tunedCombined": {
+              "total": 18,
+              "hitAt1": 50,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 72.22222222222221,
+              "mrr": 0.593121693121693
+            },
+            "kpidUniform": {
+              "applicable": 18,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 9,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 9,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 13
+            },
+            "kpidTunedCombined": {
+              "applicable": 18,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 9,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 9,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 13
+            }
+          },
+          "OT": {
+            "total": 10,
+            "uniform": {
+              "total": 10,
+              "hitAt1": 40,
+              "hitAt3": 70,
+              "hitAt5": 80,
+              "mrr": 0.5583333333333333
+            },
+            "tunedCombined": {
+              "total": 10,
+              "hitAt1": 40,
+              "hitAt3": 70,
+              "hitAt5": 80,
+              "mrr": 0.5583333333333333
+            },
+            "kpidUniform": {
+              "applicable": 10,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 4,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 8
+            },
+            "kpidTunedCombined": {
+              "applicable": 10,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 4,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 8
+            }
+          }
+        }
+      }
+    },
+    {
+      "label": "KP+OT",
+      "allowedTypes": [
+        "KP",
+        "OT"
+      ],
+      "metadataCount": 3964,
+      "metadataTypeCounts": {
+        "Q": 0,
+        "KP": 3359,
+        "OT": 605
+      },
+      "uniform": {
+        "weights": {
+          "Q": 0,
+          "KP": 0.5,
+          "OT": 0.5
+        },
+        "combined": {
+          "total": 30,
+          "hitAt1": 36.666666666666664,
+          "hitAt3": 60,
+          "hitAt5": 73.33333333333333,
+          "mrr": 0.5114814814814814
+        },
+        "kpidCombined": {
+          "applicable": 30,
+          "hitAt1": 16.666666666666664,
+          "hitAt3": 26.666666666666668,
+          "hitAt5": 30,
+          "mrr": 0.22148148148148147,
+          "docHitAt1Total": 11,
+          "docHitAt1CorrectKpid": 5,
+          "docHitAt1WrongKpid": 6,
+          "docHitAt5Total": 22,
+          "docHitAt5CorrectKpid": 9,
+          "docHitAt5WrongKpid": 13
+        },
+        "metricsByDataset": {
+          "test_dataset_granularity_external_ood_holdout_30_reviewed": {
+            "total": 30,
+            "hitAt1": 36.666666666666664,
+            "hitAt3": 60,
+            "hitAt5": 73.33333333333333,
+            "mrr": 0.5114814814814814
+          }
+        }
+      },
+      "tuned": {
+        "selectionMode": "single_frozen_set",
+        "candidateCount": 1,
+        "bestWeights": {
+          "Q": 0,
+          "KP": 0.5,
+          "OT": 0.5
+        },
+        "tuneCombined": {
+          "total": 30,
+          "hitAt1": 36.666666666666664,
+          "hitAt3": 60,
+          "hitAt5": 73.33333333333333,
+          "mrr": 0.5114814814814814
+        },
+        "kpidTuneCombined": {
+          "applicable": 30,
+          "hitAt1": 16.666666666666664,
+          "hitAt3": 26.666666666666668,
+          "hitAt5": 30,
+          "mrr": 0.22148148148148147,
+          "docHitAt1Total": 11,
+          "docHitAt1CorrectKpid": 5,
+          "docHitAt1WrongKpid": 6,
+          "docHitAt5Total": 22,
+          "docHitAt5CorrectKpid": 9,
+          "docHitAt5WrongKpid": 13
+        },
+        "holdoutCombined": {
+          "total": 30,
+          "hitAt1": 36.666666666666664,
+          "hitAt3": 60,
+          "hitAt5": 73.33333333333333,
+          "mrr": 0.5114814814814814
+        },
+        "kpidHoldoutCombined": {
+          "applicable": 30,
+          "hitAt1": 16.666666666666664,
+          "hitAt3": 26.666666666666668,
+          "hitAt5": 30,
+          "mrr": 0.22148148148148147,
+          "docHitAt1Total": 11,
+          "docHitAt1CorrectKpid": 5,
+          "docHitAt1WrongKpid": 6,
+          "docHitAt5Total": 22,
+          "docHitAt5CorrectKpid": 9,
+          "docHitAt5WrongKpid": 13
+        },
+        "combinedCombined": {
+          "total": 30,
+          "hitAt1": 36.666666666666664,
+          "hitAt3": 60,
+          "hitAt5": 73.33333333333333,
+          "mrr": 0.5114814814814814
+        },
+        "kpidCombinedCombined": {
+          "applicable": 30,
+          "hitAt1": 16.666666666666664,
+          "hitAt3": 26.666666666666668,
+          "hitAt5": 30,
+          "mrr": 0.22148148148148147,
+          "docHitAt1Total": 11,
+          "docHitAt1CorrectKpid": 5,
+          "docHitAt1WrongKpid": 6,
+          "docHitAt5Total": 22,
+          "docHitAt5CorrectKpid": 9,
+          "docHitAt5WrongKpid": 13
+        },
+        "topTuneCandidates": [
+          {
+            "weights": {
+              "Q": 0,
+              "KP": 0.5,
+              "OT": 0.5
+            },
+            "combined": {
+              "total": 30,
+              "hitAt1": 36.666666666666664,
+              "hitAt3": 60,
+              "hitAt5": 73.33333333333333,
+              "mrr": 0.5114814814814814
+            }
+          }
+        ]
+      },
+      "groupBreakdowns": {
+        "supportPattern": {
+          "multi_kp": {
+            "total": 18,
+            "uniform": {
+              "total": 18,
+              "hitAt1": 44.44444444444444,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 72.22222222222221,
+              "mrr": 0.5635802469135802
+            },
+            "tunedCombined": {
+              "total": 18,
+              "hitAt1": 44.44444444444444,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 72.22222222222221,
+              "mrr": 0.5635802469135802
+            },
+            "kpidUniform": {
+              "applicable": 18,
+              "hitAt1": 27.77777777777778,
+              "hitAt3": 33.33333333333333,
+              "hitAt5": 38.88888888888889,
+              "mrr": 0.3228395061728395,
+              "docHitAt1Total": 8,
+              "docHitAt1CorrectKpid": 5,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 7,
+              "docHitAt5WrongKpid": 6
+            },
+            "kpidTunedCombined": {
+              "applicable": 18,
+              "hitAt1": 27.77777777777778,
+              "hitAt3": 33.33333333333333,
+              "hitAt5": 38.88888888888889,
+              "mrr": 0.3228395061728395,
+              "docHitAt1Total": 8,
+              "docHitAt1CorrectKpid": 5,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 7,
+              "docHitAt5WrongKpid": 6
+            }
+          },
+          "ot_required": {
+            "total": 10,
+            "uniform": {
+              "total": 10,
+              "hitAt1": 30,
+              "hitAt3": 40,
+              "hitAt5": 70,
+              "mrr": 0.4366666666666667
+            },
+            "tunedCombined": {
+              "total": 10,
+              "hitAt1": 30,
+              "hitAt3": 40,
+              "hitAt5": 70,
+              "mrr": 0.4366666666666667
+            },
+            "kpidUniform": {
+              "applicable": 10,
+              "hitAt1": 0,
+              "hitAt3": 10,
+              "hitAt5": 10,
+              "mrr": 0.05,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 7,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 6
+            },
+            "kpidTunedCombined": {
+              "applicable": 10,
+              "hitAt1": 0,
+              "hitAt3": 10,
+              "hitAt5": 10,
+              "mrr": 0.05,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 7,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 6
+            }
+          },
+          "single_kp": {
+            "total": 2,
+            "uniform": {
+              "total": 2,
+              "hitAt1": 0,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 0.41666666666666663
+            },
+            "tunedCombined": {
+              "total": 2,
+              "hitAt1": 0,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 0.41666666666666663
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.16666666666666666,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 1
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.16666666666666666,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 1
+            }
+          }
+        },
+        "preferredGranularity": {
+          "KP": {
+            "total": 2,
+            "uniform": {
+              "total": 2,
+              "hitAt1": 0,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 0.41666666666666663
+            },
+            "tunedCombined": {
+              "total": 2,
+              "hitAt1": 0,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 0.41666666666666663
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.16666666666666666,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 1
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.16666666666666666,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 1
+            }
+          },
+          "KP+OT": {
+            "total": 18,
+            "uniform": {
+              "total": 18,
+              "hitAt1": 44.44444444444444,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 72.22222222222221,
+              "mrr": 0.5635802469135802
+            },
+            "tunedCombined": {
+              "total": 18,
+              "hitAt1": 44.44444444444444,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 72.22222222222221,
+              "mrr": 0.5635802469135802
+            },
+            "kpidUniform": {
+              "applicable": 18,
+              "hitAt1": 27.77777777777778,
+              "hitAt3": 33.33333333333333,
+              "hitAt5": 38.88888888888889,
+              "mrr": 0.3228395061728395,
+              "docHitAt1Total": 8,
+              "docHitAt1CorrectKpid": 5,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 7,
+              "docHitAt5WrongKpid": 6
+            },
+            "kpidTunedCombined": {
+              "applicable": 18,
+              "hitAt1": 27.77777777777778,
+              "hitAt3": 33.33333333333333,
+              "hitAt5": 38.88888888888889,
+              "mrr": 0.3228395061728395,
+              "docHitAt1Total": 8,
+              "docHitAt1CorrectKpid": 5,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 7,
+              "docHitAt5WrongKpid": 6
+            }
+          },
+          "OT": {
+            "total": 10,
+            "uniform": {
+              "total": 10,
+              "hitAt1": 30,
+              "hitAt3": 40,
+              "hitAt5": 70,
+              "mrr": 0.4366666666666667
+            },
+            "tunedCombined": {
+              "total": 10,
+              "hitAt1": 30,
+              "hitAt3": 40,
+              "hitAt5": 70,
+              "mrr": 0.4366666666666667
+            },
+            "kpidUniform": {
+              "applicable": 10,
+              "hitAt1": 0,
+              "hitAt3": 10,
+              "hitAt5": 10,
+              "mrr": 0.05,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 7,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 6
+            },
+            "kpidTunedCombined": {
+              "applicable": 10,
+              "hitAt1": 0,
+              "hitAt3": 10,
+              "hitAt5": 10,
+              "mrr": 0.05,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 7,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 6
+            }
+          }
+        }
+      },
+      "caseDetails": [
+        {
+          "query": "2021年中山大学人工智能学院夏令营什么时候报名，报名对象和申请材料有哪些？",
+          "expected_otid": "otid_9cf3ef26730b4cb4",
+          "expected_kpid": "kpid_d0b86c09108c4337",
+          "dataset": "test_dataset_granularity_external_ood_holdout_30_reviewed",
+          "query_type": "standard",
+          "query_scope": "policy_overview",
+          "preferred_granularity": "OT",
+          "support_pattern": "ot_required",
+          "granularity_sensitive": true,
+          "theme_family": "夏令营报名",
+          "source_dataset": "external_ood_holdout_30",
+          "source_seed_id": "sai_seed_001",
+          "challenge_tags": [
+            "policy_overview",
+            "summer_camp",
+            "standard_query",
+            "pref_ot"
+          ],
+          "notes": "初版种子导出，待人工复核。",
+          "docRank": null,
+          "kpidRank": null,
+          "docHitAt1": false,
+          "docHitAt5": false,
+          "kpidHitAt1": false,
+          "kpidHitAt5": false,
+          "failure_risk": "needs_ot_context",
+          "failure_reasons": [
+            "正确文档未进入前5，优先表现为文档级召回或排序失败。",
+            "文档候选中未能稳定选出正确主证据 KP。",
+            "该样本更依赖整篇通知上下文，适合补 ot_required 或 OT 邻近样本。"
+          ],
+          "topDocMatches": [],
+          "topKpidMatches": []
+        },
+        {
+          "query": "2022年人工智能学院全国优秀大学生夏令营的报名方式和活动安排是什么？",
+          "expected_otid": "otid_c7828d5c12cc4c90",
+          "expected_kpid": "kpid_f811959d47824b88",
+          "dataset": "test_dataset_granularity_external_ood_holdout_30_reviewed",
+          "query_type": "standard",
+          "query_scope": "policy_overview",
+          "preferred_granularity": "OT",
+          "support_pattern": "ot_required",
+          "granularity_sensitive": true,
+          "theme_family": "夏令营报名",
+          "source_dataset": "external_ood_holdout_30",
+          "source_seed_id": "sai_seed_003",
+          "challenge_tags": [
+            "policy_overview",
+            "summer_camp",
+            "standard_query",
+            "pref_ot"
+          ],
+          "notes": "初版种子导出，待人工复核。",
+          "docRank": null,
+          "kpidRank": null,
+          "docHitAt1": false,
+          "docHitAt5": false,
+          "kpidHitAt1": false,
+          "kpidHitAt5": false,
+          "failure_risk": "needs_ot_context",
+          "failure_reasons": [
+            "正确文档未进入前5，优先表现为文档级召回或排序失败。",
+            "文档候选中未能稳定选出正确主证据 KP。",
+            "该样本更依赖整篇通知上下文，适合补 ot_required 或 OT 邻近样本。"
+          ],
+          "topDocMatches": [],
+          "topKpidMatches": []
+        },
+        {
+          "query": "中山大学人工智能学院2022年免试生接收办法中，是否接收直博生、申请条件和考核要求有哪些？",
+          "expected_otid": "otid_ca3a4c98f51f48e8",
+          "expected_kpid": "kpid_65a33b7ae39943a8",
+          "dataset": "test_dataset_granularity_external_ood_holdout_30_reviewed",
+          "query_type": "standard",
+          "query_scope": "eligibility_condition",
+          "preferred_granularity": "KP+OT",
+          "support_pattern": "multi_kp",
+          "granularity_sensitive": true,
+          "theme_family": "免试生接收",
+          "source_dataset": "external_ood_holdout_30",
+          "source_seed_id": "sai_seed_004",
+          "challenge_tags": [
+            "eligibility_condition",
+            "recommendation_exemption",
+            "standard_query",
+            "pref_kp_plus_ot"
+          ],
+          "notes": "初版种子导出，待人工复核。",
+          "docRank": 9,
+          "kpidRank": 9,
+          "docHitAt1": false,
+          "docHitAt5": false,
+          "kpidHitAt1": false,
+          "kpidHitAt5": false,
+          "failure_risk": "requires_multi_kp",
+          "failure_reasons": [
+            "正确文档未进入前5，优先表现为文档级召回或排序失败。",
+            "文档候选中未能稳定选出正确主证据 KP。",
+            "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+          ],
+          "topDocMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_81112559b6b240f2",
+              "score": 3.441471206645394,
+              "best_kpid": "kpid_0ce4691f1eb24d8e"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_5f10b726aa1d4728",
+              "score": 3.2254719672150443,
+              "best_kpid": "kpid_7327e216102040e7"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_5e4e1434da5748eb",
+              "score": 2.825707376371029,
+              "best_kpid": "kpid_79904ecf12d04839"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_dc2fbd2f88f7453b",
+              "score": 2.7874239161510257,
+              "best_kpid": "kpid_d40e015da0ff4fbd"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_392eac0b27fa4b09",
+              "score": 2.6464344902429056,
+              "best_kpid": "kpid_081fa6516435497f"
+            }
+          ],
+          "topKpidMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_81112559b6b240f2",
+              "best_kpid": "kpid_0ce4691f1eb24d8e"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_5f10b726aa1d4728",
+              "best_kpid": "kpid_7327e216102040e7"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_5e4e1434da5748eb",
+              "best_kpid": "kpid_79904ecf12d04839"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_dc2fbd2f88f7453b",
+              "best_kpid": "kpid_d40e015da0ff4fbd"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_392eac0b27fa4b09",
+              "best_kpid": "kpid_081fa6516435497f"
+            }
+          ]
+        },
+        {
+          "query": "2023年人工智能学院全国优秀大学生夏令营报名需要满足哪些条件并提交哪些材料？",
+          "expected_otid": "otid_7229bb63ab97456a",
+          "expected_kpid": "kpid_079fdadcb96a44be",
+          "dataset": "test_dataset_granularity_external_ood_holdout_30_reviewed",
+          "query_type": "standard",
+          "query_scope": "eligibility_condition",
+          "preferred_granularity": "KP+OT",
+          "support_pattern": "multi_kp",
+          "granularity_sensitive": true,
+          "theme_family": "夏令营报名",
+          "source_dataset": "external_ood_holdout_30",
+          "source_seed_id": "sai_seed_005",
+          "challenge_tags": [
+            "eligibility_condition",
+            "materials",
+            "summer_camp",
+            "pref_kp_plus_ot"
+          ],
+          "notes": "初版种子导出，待人工复核。",
+          "docRank": null,
+          "kpidRank": null,
+          "docHitAt1": false,
+          "docHitAt5": false,
+          "kpidHitAt1": false,
+          "kpidHitAt5": false,
+          "failure_risk": "requires_multi_kp",
+          "failure_reasons": [
+            "正确文档未进入前5，优先表现为文档级召回或排序失败。",
+            "文档候选中未能稳定选出正确主证据 KP。",
+            "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+          ],
+          "topDocMatches": [],
+          "topKpidMatches": []
+        },
+        {
+          "query": "想申请中山大学人工智能学院2023年推免预报名，什么时候开始、通过什么渠道申请？",
+          "expected_otid": "otid_eada182ca6104c99",
+          "expected_kpid": "kpid_384144f00ea84a26",
+          "dataset": "test_dataset_granularity_external_ood_holdout_30_reviewed",
+          "query_type": "situational",
+          "query_scope": "time_location",
+          "preferred_granularity": "KP+OT",
+          "support_pattern": "multi_kp",
+          "granularity_sensitive": true,
+          "theme_family": "推免预报名",
+          "source_dataset": "external_ood_holdout_30",
+          "source_seed_id": "sai_seed_006",
+          "challenge_tags": [
+            "time_location",
+            "application_channel",
+            "situational_query",
+            "pref_kp_plus_ot"
+          ],
+          "notes": "初版种子导出，待人工复核。",
+          "docRank": 5,
+          "kpidRank": 5,
+          "docHitAt1": false,
+          "docHitAt5": true,
+          "kpidHitAt1": false,
+          "kpidHitAt5": true,
+          "failure_risk": "best_kpid_confusion",
+          "failure_reasons": [
+            "正确文档进入前5但未到第1名，存在文档级排序偏差。",
+            "正确文档命中后，主证据 KP 选择仍不够准确。",
+            "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+          ],
+          "topDocMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_84a37b294495492a",
+              "score": 4.335993197710379,
+              "best_kpid": "kpid_a7ede2d90d56476b"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_7229bb63ab97456a",
+              "score": 3.0425122754341367,
+              "best_kpid": "kpid_3e67de51d64c48f1"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_c495d5e1d55d4213",
+              "score": 2.981632924833481,
+              "best_kpid": "kpid_ffc94c2de43b4e5e"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_0653973ae1784e7e",
+              "score": 2.353415138322505,
+              "best_kpid": "kpid_93a39d8137f64634"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_eada182ca6104c99",
+              "score": 2.298112666309739,
+              "best_kpid": "kpid_384144f00ea84a26"
+            }
+          ],
+          "topKpidMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_84a37b294495492a",
+              "best_kpid": "kpid_a7ede2d90d56476b"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_7229bb63ab97456a",
+              "best_kpid": "kpid_3e67de51d64c48f1"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_c495d5e1d55d4213",
+              "best_kpid": "kpid_ffc94c2de43b4e5e"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_0653973ae1784e7e",
+              "best_kpid": "kpid_93a39d8137f64634"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_eada182ca6104c99",
+              "best_kpid": "kpid_384144f00ea84a26"
+            }
+          ]
+        },
+        {
+          "query": "中山大学人工智能学院2024年推荐免试研究生接收办法的整体要求是什么？",
+          "expected_otid": "otid_64fee3c7ad80452e",
+          "expected_kpid": "kpid_0c934bf42f4c4eee",
+          "dataset": "test_dataset_granularity_external_ood_holdout_30_reviewed",
+          "query_type": "standard",
+          "query_scope": "policy_overview",
+          "preferred_granularity": "OT",
+          "support_pattern": "ot_required",
+          "granularity_sensitive": true,
+          "theme_family": "推免接收办法",
+          "source_dataset": "external_ood_holdout_30",
+          "source_seed_id": "sai_seed_007",
+          "challenge_tags": [
+            "policy_overview",
+            "recommendation_exemption",
+            "standard_query",
+            "pref_ot"
+          ],
+          "notes": "初版种子导出，待人工复核。",
+          "docRank": 2,
+          "kpidRank": 2,
+          "docHitAt1": false,
+          "docHitAt5": true,
+          "kpidHitAt1": false,
+          "kpidHitAt5": true,
+          "failure_risk": "best_kpid_confusion",
+          "failure_reasons": [
+            "正确文档进入前5但未到第1名，存在文档级排序偏差。",
+            "正确文档命中后，主证据 KP 选择仍不够准确。",
+            "该样本更依赖整篇通知上下文，适合补 ot_required 或 OT 邻近样本。"
+          ],
+          "topDocMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_f3ee1947f40e4b18",
+              "score": 5.233521908324049,
+              "best_kpid": "kpid_a8b0421d25904028"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_64fee3c7ad80452e",
+              "score": 3.616167687314981,
+              "best_kpid": "kpid_0c934bf42f4c4eee"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_1c14b6043fd645c8",
+              "score": 2.846479136349763,
+              "best_kpid": "kpid_b943642bdaa64ded"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_fd6621f974774e1c",
+              "score": 2.7723047642275205,
+              "best_kpid": "kpid_57c00c925907451a"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_027393e8a6f64ec3",
+              "score": 2.4285089759518055,
+              "best_kpid": "kpid_31f91bbc37614220"
+            }
+          ],
+          "topKpidMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_f3ee1947f40e4b18",
+              "best_kpid": "kpid_a8b0421d25904028"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_64fee3c7ad80452e",
+              "best_kpid": "kpid_0c934bf42f4c4eee"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_1c14b6043fd645c8",
+              "best_kpid": "kpid_b943642bdaa64ded"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_fd6621f974774e1c",
+              "best_kpid": "kpid_57c00c925907451a"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_027393e8a6f64ec3",
+              "best_kpid": "kpid_31f91bbc37614220"
+            }
+          ]
+        },
+        {
+          "query": "2025 推免 接收办法 申请条件 材料",
+          "expected_otid": "otid_3770fb6348d24f6b",
+          "expected_kpid": "kpid_594ad118d3284994",
+          "dataset": "test_dataset_granularity_external_ood_holdout_30_reviewed",
+          "query_type": "short_keyword",
+          "query_scope": "eligibility_condition",
+          "preferred_granularity": "KP",
+          "support_pattern": "single_kp",
+          "granularity_sensitive": true,
+          "theme_family": "推免接收办法",
+          "source_dataset": "external_ood_holdout_30",
+          "source_seed_id": "sai_seed_008",
+          "challenge_tags": [
+            "short_query",
+            "eligibility_condition",
+            "materials",
+            "pref_kp"
+          ],
+          "notes": "初版种子导出，待人工复核。",
+          "docRank": 2,
+          "kpidRank": null,
+          "docHitAt1": false,
+          "docHitAt5": true,
+          "kpidHitAt1": false,
+          "kpidHitAt5": false,
+          "failure_risk": "best_kpid_confusion",
+          "failure_reasons": [
+            "正确文档进入前5但未到第1名，存在文档级排序偏差。",
+            "文档候选中未能稳定选出正确主证据 KP。"
+          ],
+          "topDocMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_f672cc42a5a04134",
+              "score": 4.331441681617706,
+              "best_kpid": "kpid_3f0f3250cdfa4eaf"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_3770fb6348d24f6b",
+              "score": 3.478486634793879,
+              "best_kpid": "kpid_17cc6ec8e1c54d88"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_8ee6bdcf13e741b8",
+              "score": 2.5684793678546414,
+              "best_kpid": "kpid_1392559a2521409b"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_5d30aea8c4a64cce",
+              "score": 2.1979830384927577,
+              "best_kpid": "kpid_3c71c92c723b448b"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_538c64bb37164663",
+              "score": 2.172288524296685,
+              "best_kpid": "kpid_a9bda7fe2e9c4db7"
+            }
+          ],
+          "topKpidMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_f672cc42a5a04134",
+              "best_kpid": "kpid_3f0f3250cdfa4eaf"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_3770fb6348d24f6b",
+              "best_kpid": "kpid_17cc6ec8e1c54d88"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_8ee6bdcf13e741b8",
+              "best_kpid": "kpid_1392559a2521409b"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_5d30aea8c4a64cce",
+              "best_kpid": "kpid_3c71c92c723b448b"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_538c64bb37164663",
+              "best_kpid": "kpid_a9bda7fe2e9c4db7"
+            }
+          ]
+        },
+        {
+          "query": "中山大学人工智能学院2021年硕士研究生是否接收调剂，调剂申请需要注意什么？",
+          "expected_otid": "otid_a2f94115e88244d4",
+          "expected_kpid": "kpid_ea2e82562f5a46bd",
+          "dataset": "test_dataset_granularity_external_ood_holdout_30_reviewed",
+          "query_type": "standard",
+          "query_scope": "policy_overview",
+          "preferred_granularity": "KP+OT",
+          "support_pattern": "multi_kp",
+          "granularity_sensitive": true,
+          "theme_family": "硕士调剂",
+          "source_dataset": "external_ood_holdout_30",
+          "source_seed_id": "sai_seed_010",
+          "challenge_tags": [
+            "policy_overview",
+            "adjustment",
+            "standard_query",
+            "pref_kp_plus_ot"
+          ],
+          "notes": "初版种子导出，待人工复核。",
+          "docRank": null,
+          "kpidRank": null,
+          "docHitAt1": false,
+          "docHitAt5": false,
+          "kpidHitAt1": false,
+          "kpidHitAt5": false,
+          "failure_risk": "requires_multi_kp",
+          "failure_reasons": [
+            "正确文档未进入前5，优先表现为文档级召回或排序失败。",
+            "文档候选中未能稳定选出正确主证据 KP。",
+            "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+          ],
+          "topDocMatches": [],
+          "topKpidMatches": []
+        },
+        {
+          "query": "2021年人工智能学院硕士复试录取方案中，复试形式和总成绩计算方式是什么？",
+          "expected_otid": "otid_c1fa6db91e294a94",
+          "expected_kpid": "kpid_5a27a2d3224e4331",
+          "dataset": "test_dataset_granularity_external_ood_holdout_30_reviewed",
+          "query_type": "standard",
+          "query_scope": "procedure",
+          "preferred_granularity": "KP+OT",
+          "support_pattern": "multi_kp",
+          "granularity_sensitive": true,
+          "theme_family": "硕士复试录取",
+          "source_dataset": "external_ood_holdout_30",
+          "source_seed_id": "sai_seed_011",
+          "challenge_tags": [
+            "procedure",
+            "score_calculation",
+            "standard_query",
+            "pref_kp_plus_ot"
+          ],
+          "notes": "初版种子导出，待人工复核。",
+          "docRank": 2,
+          "kpidRank": null,
+          "docHitAt1": false,
+          "docHitAt5": true,
+          "kpidHitAt1": false,
+          "kpidHitAt5": false,
+          "failure_risk": "best_kpid_confusion",
+          "failure_reasons": [
+            "正确文档进入前5但未到第1名，存在文档级排序偏差。",
+            "文档候选中未能稳定选出正确主证据 KP。",
+            "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+          ],
+          "topDocMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_c4270d3c6e9944fd",
+              "score": 5.231211329714957,
+              "best_kpid": "kpid_da164126eff345df"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_c1fa6db91e294a94",
+              "score": 5.132113012664829,
+              "best_kpid": "kpid_3e56a932e48e4b8a"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_29dd671742524792",
+              "score": 4.8603599420867525,
+              "best_kpid": "kpid_2bf623934eac4d0c"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_77c43125dba648d2",
+              "score": 4.218521128728989,
+              "best_kpid": "kpid_604a3fa158e341c2"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_a2f94115e88244d4",
+              "score": 3.213047887431195,
+              "best_kpid": "kpid_338b4e382d0242d7"
+            }
+          ],
+          "topKpidMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_c4270d3c6e9944fd",
+              "best_kpid": "kpid_da164126eff345df"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_c1fa6db91e294a94",
+              "best_kpid": "kpid_3e56a932e48e4b8a"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_29dd671742524792",
+              "best_kpid": "kpid_2bf623934eac4d0c"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_77c43125dba648d2",
+              "best_kpid": "kpid_604a3fa158e341c2"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_a2f94115e88244d4",
+              "best_kpid": "kpid_338b4e382d0242d7"
+            }
+          ]
+        },
+        {
+          "query": "2022年人工智能学院硕士复试的考核内容、成绩计算和录取原则有哪些？",
+          "expected_otid": "otid_7893d1be905b4266",
+          "expected_kpid": "kpid_733911bb9c554506",
+          "dataset": "test_dataset_granularity_external_ood_holdout_30_reviewed",
+          "query_type": "standard",
+          "query_scope": "policy_overview",
+          "preferred_granularity": "OT",
+          "support_pattern": "ot_required",
+          "granularity_sensitive": true,
+          "theme_family": "硕士复试录取",
+          "source_dataset": "external_ood_holdout_30",
+          "source_seed_id": "sai_seed_012",
+          "challenge_tags": [
+            "policy_overview",
+            "score_calculation",
+            "standard_query",
+            "pref_ot"
+          ],
+          "notes": "初版种子导出，待人工复核。",
+          "docRank": 1,
+          "kpidRank": null,
+          "docHitAt1": true,
+          "docHitAt5": true,
+          "kpidHitAt1": false,
+          "kpidHitAt5": false,
+          "failure_risk": "best_kpid_confusion",
+          "failure_reasons": [
+            "文档候选中未能稳定选出正确主证据 KP。",
+            "该样本更依赖整篇通知上下文，适合补 ot_required 或 OT 邻近样本。"
+          ],
+          "topDocMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_7893d1be905b4266",
+              "score": 4.883219791874652,
+              "best_kpid": "kpid_f5d26a6984b34360"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_eae8392d216d48ea",
+              "score": 4.791925320315778,
+              "best_kpid": "kpid_c1604e824c76441c"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_ca3a4c98f51f48e8",
+              "score": 3.7491529120841083,
+              "best_kpid": "kpid_c6246f6a82c6446a"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_dcfe8d5d21b24255",
+              "score": 2.786888138072792,
+              "best_kpid": "kpid_17177c987f994169"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_860f1ae2b71c4de9",
+              "score": 2.257687476980401,
+              "best_kpid": "kpid_e9dc07ad4de14960"
+            }
+          ],
+          "topKpidMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_7893d1be905b4266",
+              "best_kpid": "kpid_f5d26a6984b34360"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_eae8392d216d48ea",
+              "best_kpid": "kpid_c1604e824c76441c"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_ca3a4c98f51f48e8",
+              "best_kpid": "kpid_c6246f6a82c6446a"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_dcfe8d5d21b24255",
+              "best_kpid": "kpid_17177c987f994169"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_860f1ae2b71c4de9",
+              "best_kpid": "kpid_e9dc07ad4de14960"
+            }
+          ]
+        },
+        {
+          "query": "如果参加中山大学人工智能学院2023年硕士复试，需要经过哪些流程和资格审查？",
+          "expected_otid": "otid_c03e584363934e90",
+          "expected_kpid": "kpid_38b120104d8c4854",
+          "dataset": "test_dataset_granularity_external_ood_holdout_30_reviewed",
+          "query_type": "situational",
+          "query_scope": "procedure",
+          "preferred_granularity": "KP+OT",
+          "support_pattern": "multi_kp",
+          "granularity_sensitive": true,
+          "theme_family": "硕士复试录取",
+          "source_dataset": "external_ood_holdout_30",
+          "source_seed_id": "sai_seed_013",
+          "challenge_tags": [
+            "procedure",
+            "qualification_review",
+            "situational_query",
+            "pref_kp_plus_ot"
+          ],
+          "notes": "初版种子导出，待人工复核。",
+          "docRank": 1,
+          "kpidRank": null,
+          "docHitAt1": true,
+          "docHitAt5": true,
+          "kpidHitAt1": false,
+          "kpidHitAt5": false,
+          "failure_risk": "best_kpid_confusion",
+          "failure_reasons": [
+            "文档候选中未能稳定选出正确主证据 KP。",
+            "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+          ],
+          "topDocMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_c03e584363934e90",
+              "score": 4.261765032633404,
+              "best_kpid": "kpid_6be60bcbe407434c"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_c495d5e1d55d4213",
+              "score": 3.2193956095213956,
+              "best_kpid": "kpid_73d0c8465fe6405c"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_7dd1e1ab60ea44bc",
+              "score": 3.1178103181488765,
+              "best_kpid": "kpid_32f825cd18c84fe5"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_0f30eade3efc4803",
+              "score": 2.835699259574659,
+              "best_kpid": "kpid_2b0f816523314ffb"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_84a37b294495492a",
+              "score": 2.7930843753674925,
+              "best_kpid": "kpid_48dd250062c141c4"
+            }
+          ],
+          "topKpidMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_c03e584363934e90",
+              "best_kpid": "kpid_6be60bcbe407434c"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_c495d5e1d55d4213",
+              "best_kpid": "kpid_73d0c8465fe6405c"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_7dd1e1ab60ea44bc",
+              "best_kpid": "kpid_32f825cd18c84fe5"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_0f30eade3efc4803",
+              "best_kpid": "kpid_2b0f816523314ffb"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_84a37b294495492a",
+              "best_kpid": "kpid_48dd250062c141c4"
+            }
+          ]
+        },
+        {
+          "query": "2024年人工智能学院硕士复试录取方案里，复试安排和分值权重是怎么规定的？",
+          "expected_otid": "otid_54fc4d3ca3a94536",
+          "expected_kpid": "kpid_0c86517188654311",
+          "dataset": "test_dataset_granularity_external_ood_holdout_30_reviewed",
+          "query_type": "standard",
+          "query_scope": "fact_detail",
+          "preferred_granularity": "KP+OT",
+          "support_pattern": "multi_kp",
+          "granularity_sensitive": true,
+          "theme_family": "硕士复试录取",
+          "source_dataset": "external_ood_holdout_30",
+          "source_seed_id": "sai_seed_014",
+          "challenge_tags": [
+            "fact_detail",
+            "score_weight",
+            "standard_query",
+            "pref_kp_plus_ot"
+          ],
+          "notes": "初版种子导出，待人工复核。",
+          "docRank": 1,
+          "kpidRank": null,
+          "docHitAt1": true,
+          "docHitAt5": true,
+          "kpidHitAt1": false,
+          "kpidHitAt5": false,
+          "failure_risk": "best_kpid_confusion",
+          "failure_reasons": [
+            "文档候选中未能稳定选出正确主证据 KP。",
+            "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+          ],
+          "topDocMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_54fc4d3ca3a94536",
+              "score": 5.772329346757033,
+              "best_kpid": "kpid_e46b39a2bc3f49d6"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_2875f7b8cd70429c",
+              "score": 5.507693688901635,
+              "best_kpid": "kpid_34c28ec20fd24423"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_b3ee840c319f48d2",
+              "score": 4.480466501308259,
+              "best_kpid": "kpid_981a36617e884100"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_db511e3324ad43f5",
+              "score": 4.408954956353563,
+              "best_kpid": "kpid_2386b8733e19443c"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_2d31ea40a9df404b",
+              "score": 2.698201279823129,
+              "best_kpid": "kpid_4b4e36c18fb646de"
+            }
+          ],
+          "topKpidMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_54fc4d3ca3a94536",
+              "best_kpid": "kpid_e46b39a2bc3f49d6"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_2875f7b8cd70429c",
+              "best_kpid": "kpid_34c28ec20fd24423"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_b3ee840c319f48d2",
+              "best_kpid": "kpid_981a36617e884100"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_db511e3324ad43f5",
+              "best_kpid": "kpid_2386b8733e19443c"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_2d31ea40a9df404b",
+              "best_kpid": "kpid_4b4e36c18fb646de"
+            }
+          ]
+        },
+        {
+          "query": "2025年人工智能学院硕士研究生复试录取实施细则的完整要求是什么？",
+          "expected_otid": "otid_bacada41bba74749",
+          "expected_kpid": "kpid_cf09ccb0de784179",
+          "dataset": "test_dataset_granularity_external_ood_holdout_30_reviewed",
+          "query_type": "standard",
+          "query_scope": "policy_overview",
+          "preferred_granularity": "OT",
+          "support_pattern": "ot_required",
+          "granularity_sensitive": true,
+          "theme_family": "硕士复试录取",
+          "source_dataset": "external_ood_holdout_30",
+          "source_seed_id": "sai_seed_015",
+          "challenge_tags": [
+            "policy_overview",
+            "master_retest",
+            "standard_query",
+            "pref_ot"
+          ],
+          "notes": "初版种子导出，待人工复核。",
+          "docRank": 6,
+          "kpidRank": null,
+          "docHitAt1": false,
+          "docHitAt5": false,
+          "kpidHitAt1": false,
+          "kpidHitAt5": false,
+          "failure_risk": "needs_ot_context",
+          "failure_reasons": [
+            "正确文档未进入前5，优先表现为文档级召回或排序失败。",
+            "文档候选中未能稳定选出正确主证据 KP。",
+            "该样本更依赖整篇通知上下文，适合补 ot_required 或 OT 邻近样本。"
+          ],
+          "topDocMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_1435d9cf85914ea7",
+              "score": 5.749725393470055,
+              "best_kpid": "kpid_83c29da57219497d"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_beb149b3688b4f4c",
+              "score": 5.724029416522279,
+              "best_kpid": "kpid_bcc1e23617d74178"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_6c5b2af52b1d4df5",
+              "score": 5.561013271363095,
+              "best_kpid": "kpid_02517d7c32c8474e"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_3eaad7074d4a4dc9",
+              "score": 5.38161862580161,
+              "best_kpid": "kpid_edf4fed384a84f13"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_ed940aabc9c24803",
+              "score": 4.395287840268878,
+              "best_kpid": "kpid_9c08b43bad6b4437"
+            }
+          ],
+          "topKpidMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_1435d9cf85914ea7",
+              "best_kpid": "kpid_83c29da57219497d"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_beb149b3688b4f4c",
+              "best_kpid": "kpid_bcc1e23617d74178"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_6c5b2af52b1d4df5",
+              "best_kpid": "kpid_02517d7c32c8474e"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_3eaad7074d4a4dc9",
+              "best_kpid": "kpid_edf4fed384a84f13"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_ed940aabc9c24803",
+              "best_kpid": "kpid_9c08b43bad6b4437"
+            }
+          ]
+        },
+        {
+          "query": "2026硕士复试录取实施细则 提交材料 考核要求",
+          "expected_otid": "otid_52ffc460a3284f93",
+          "expected_kpid": "kpid_1705b878f04c4cff",
+          "dataset": "test_dataset_granularity_external_ood_holdout_30_reviewed",
+          "query_type": "short_keyword",
+          "query_scope": "eligibility_condition",
+          "preferred_granularity": "KP",
+          "support_pattern": "single_kp",
+          "granularity_sensitive": true,
+          "theme_family": "硕士复试录取",
+          "source_dataset": "external_ood_holdout_30",
+          "source_seed_id": "sai_seed_016",
+          "challenge_tags": [
+            "short_query",
+            "materials",
+            "eligibility_condition",
+            "pref_kp"
+          ],
+          "notes": "初版种子导出，待人工复核。",
+          "docRank": 3,
+          "kpidRank": 3,
+          "docHitAt1": false,
+          "docHitAt5": true,
+          "kpidHitAt1": false,
+          "kpidHitAt5": true,
+          "failure_risk": "best_kpid_confusion",
+          "failure_reasons": [
+            "正确文档进入前5但未到第1名，存在文档级排序偏差。",
+            "正确文档命中后，主证据 KP 选择仍不够准确。"
+          ],
+          "topDocMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_42225868ea784bbf",
+              "score": 5.795873559893377,
+              "best_kpid": "kpid_90213a0a806247e1"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_1ae107c08e73431e",
+              "score": 5.776947519114337,
+              "best_kpid": "kpid_6df5d76fd292421a"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_52ffc460a3284f93",
+              "score": 5.636832357039304,
+              "best_kpid": "kpid_1705b878f04c4cff"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_7479616835454c16",
+              "score": 3.0937750041073806,
+              "best_kpid": "kpid_a5fd0bfb2e4f4955"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_8fd3944fd7814ff5",
+              "score": 2.869526931748558,
+              "best_kpid": "kpid_06bae225da7a4fb8"
+            }
+          ],
+          "topKpidMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_42225868ea784bbf",
+              "best_kpid": "kpid_90213a0a806247e1"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_1ae107c08e73431e",
+              "best_kpid": "kpid_6df5d76fd292421a"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_52ffc460a3284f93",
+              "best_kpid": "kpid_1705b878f04c4cff"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_7479616835454c16",
+              "best_kpid": "kpid_a5fd0bfb2e4f4955"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_8fd3944fd7814ff5",
+              "best_kpid": "kpid_06bae225da7a4fb8"
+            }
+          ]
+        },
+        {
+          "query": "2021年人工智能学院博士申请考核制的实施办法里，考核流程和录取规则怎么安排？",
+          "expected_otid": "otid_9911c0374cdd4ce4",
+          "expected_kpid": "kpid_0091e76236194235",
+          "dataset": "test_dataset_granularity_external_ood_holdout_30_reviewed",
+          "query_type": "standard",
+          "query_scope": "procedure",
+          "preferred_granularity": "KP+OT",
+          "support_pattern": "multi_kp",
+          "granularity_sensitive": true,
+          "theme_family": "博士实施办法",
+          "source_dataset": "external_ood_holdout_30",
+          "source_seed_id": "sai_seed_018",
+          "challenge_tags": [
+            "procedure",
+            "admission_rule",
+            "phd_application",
+            "pref_kp_plus_ot"
+          ],
+          "notes": "初版种子导出，待人工复核。",
+          "docRank": null,
+          "kpidRank": null,
+          "docHitAt1": false,
+          "docHitAt5": false,
+          "kpidHitAt1": false,
+          "kpidHitAt5": false,
+          "failure_risk": "requires_multi_kp",
+          "failure_reasons": [
+            "正确文档未进入前5，优先表现为文档级召回或排序失败。",
+            "文档候选中未能稳定选出正确主证据 KP。",
+            "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+          ],
+          "topDocMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_06f7620140244798",
+              "score": 5.479740639008551,
+              "best_kpid": "kpid_158a1aebb51b4a51"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_77c43125dba648d2",
+              "score": 5.019861098428734,
+              "best_kpid": "kpid_d0deb3e83f6946c8"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_10c83368275647b5",
+              "score": 4.586250416908624,
+              "best_kpid": "kpid_05170c6019dc48ae"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_1fe8155fa2f64320",
+              "score": 3.7562744133546007,
+              "best_kpid": "kpid_2244415eff4045e0"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_c4270d3c6e9944fd",
+              "score": 2.04773638966109,
+              "best_kpid": "kpid_da164126eff345df"
+            }
+          ],
+          "topKpidMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_06f7620140244798",
+              "best_kpid": "kpid_158a1aebb51b4a51"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_77c43125dba648d2",
+              "best_kpid": "kpid_d0deb3e83f6946c8"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_10c83368275647b5",
+              "best_kpid": "kpid_05170c6019dc48ae"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_1fe8155fa2f64320",
+              "best_kpid": "kpid_2244415eff4045e0"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_c4270d3c6e9944fd",
+              "best_kpid": "kpid_da164126eff345df"
+            }
+          ]
+        },
+        {
+          "query": "2022年人工智能学院博士申请考核招生简章中，报名时间、申请资格和材料有哪些要求？",
+          "expected_otid": "otid_5e4e1434da5748eb",
+          "expected_kpid": "kpid_79904ecf12d04839",
+          "dataset": "test_dataset_granularity_external_ood_holdout_30_reviewed",
+          "query_type": "standard",
+          "query_scope": "eligibility_condition",
+          "preferred_granularity": "KP+OT",
+          "support_pattern": "multi_kp",
+          "granularity_sensitive": true,
+          "theme_family": "博士招生简章",
+          "source_dataset": "external_ood_holdout_30",
+          "source_seed_id": "sai_seed_020",
+          "challenge_tags": [
+            "eligibility_condition",
+            "materials",
+            "time_location",
+            "pref_kp_plus_ot"
+          ],
+          "notes": "初版种子导出，待人工复核。",
+          "docRank": 2,
+          "kpidRank": 2,
+          "docHitAt1": false,
+          "docHitAt5": true,
+          "kpidHitAt1": false,
+          "kpidHitAt5": true,
+          "failure_risk": "best_kpid_confusion",
+          "failure_reasons": [
+            "正确文档进入前5但未到第1名，存在文档级排序偏差。",
+            "正确文档命中后，主证据 KP 选择仍不够准确。",
+            "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+          ],
+          "topDocMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_392eac0b27fa4b09",
+              "score": 5.0914729652845985,
+              "best_kpid": "kpid_081fa6516435497f"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_5e4e1434da5748eb",
+              "score": 4.966468223027711,
+              "best_kpid": "kpid_79904ecf12d04839"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_8c27fc74819145d9",
+              "score": 4.011005033601952,
+              "best_kpid": "kpid_ca8586b8f8424f05"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_5f10b726aa1d4728",
+              "score": 3.7200410601949145,
+              "best_kpid": "kpid_5b5f80bbf4e249bf"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_b53a9170fcfe4d2e",
+              "score": 3.6099628515141258,
+              "best_kpid": "kpid_0194502bc5ff4689"
+            }
+          ],
+          "topKpidMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_392eac0b27fa4b09",
+              "best_kpid": "kpid_081fa6516435497f"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_5e4e1434da5748eb",
+              "best_kpid": "kpid_79904ecf12d04839"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_8c27fc74819145d9",
+              "best_kpid": "kpid_ca8586b8f8424f05"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_5f10b726aa1d4728",
+              "best_kpid": "kpid_5b5f80bbf4e249bf"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_b53a9170fcfe4d2e",
+              "best_kpid": "kpid_0194502bc5ff4689"
+            }
+          ]
+        },
+        {
+          "query": "中山大学人工智能学院2023年博士申请考核制实施办法的核心规则是什么？",
+          "expected_otid": "otid_dc2fbd2f88f7453b",
+          "expected_kpid": "kpid_52e7ec7e1d33472b",
+          "dataset": "test_dataset_granularity_external_ood_holdout_30_reviewed",
+          "query_type": "standard",
+          "query_scope": "policy_overview",
+          "preferred_granularity": "OT",
+          "support_pattern": "ot_required",
+          "granularity_sensitive": true,
+          "theme_family": "博士实施办法",
+          "source_dataset": "external_ood_holdout_30",
+          "source_seed_id": "sai_seed_021",
+          "challenge_tags": [
+            "policy_overview",
+            "phd_application",
+            "standard_query",
+            "pref_ot"
+          ],
+          "notes": "初版种子导出，待人工复核。",
+          "docRank": 4,
+          "kpidRank": null,
+          "docHitAt1": false,
+          "docHitAt5": true,
+          "kpidHitAt1": false,
+          "kpidHitAt5": false,
+          "failure_risk": "best_kpid_confusion",
+          "failure_reasons": [
+            "正确文档进入前5但未到第1名，存在文档级排序偏差。",
+            "文档候选中未能稳定选出正确主证据 KP。",
+            "该样本更依赖整篇通知上下文，适合补 ot_required 或 OT 邻近样本。"
+          ],
+          "topDocMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_c495d5e1d55d4213",
+              "score": 5.751435066074951,
+              "best_kpid": "kpid_73d0c8465fe6405c"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_1d07d7c9f48e4090",
+              "score": 5.460273769274778,
+              "best_kpid": "kpid_f076cb0187714e12"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_84a37b294495492a",
+              "score": 4.937083987266279,
+              "best_kpid": "kpid_48dd250062c141c4"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_dc2fbd2f88f7453b",
+              "score": 4.505408471944936,
+              "best_kpid": "kpid_d40e015da0ff4fbd"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_0f30eade3efc4803",
+              "score": 4.4293505824308745,
+              "best_kpid": "kpid_2b0f816523314ffb"
+            }
+          ],
+          "topKpidMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_c495d5e1d55d4213",
+              "best_kpid": "kpid_73d0c8465fe6405c"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_1d07d7c9f48e4090",
+              "best_kpid": "kpid_f076cb0187714e12"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_84a37b294495492a",
+              "best_kpid": "kpid_48dd250062c141c4"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_dc2fbd2f88f7453b",
+              "best_kpid": "kpid_d40e015da0ff4fbd"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_0f30eade3efc4803",
+              "best_kpid": "kpid_2b0f816523314ffb"
+            }
+          ]
+        },
+        {
+          "query": "报考中山大学人工智能学院2024年博士研究生，需要满足哪些条件并提交哪些申请材料？",
+          "expected_otid": "otid_f0baf746fd75421e",
+          "expected_kpid": "kpid_9b0b633eb4354385",
+          "dataset": "test_dataset_granularity_external_ood_holdout_30_reviewed",
+          "query_type": "situational",
+          "query_scope": "eligibility_condition",
+          "preferred_granularity": "KP+OT",
+          "support_pattern": "multi_kp",
+          "granularity_sensitive": true,
+          "theme_family": "博士招生简章",
+          "source_dataset": "external_ood_holdout_30",
+          "source_seed_id": "sai_seed_022",
+          "challenge_tags": [
+            "situational_query",
+            "materials",
+            "eligibility_condition",
+            "pref_kp_plus_ot"
+          ],
+          "notes": "初版种子导出，待人工复核。",
+          "docRank": 1,
+          "kpidRank": null,
+          "docHitAt1": true,
+          "docHitAt5": true,
+          "kpidHitAt1": false,
+          "kpidHitAt5": false,
+          "failure_risk": "best_kpid_confusion",
+          "failure_reasons": [
+            "文档候选中未能稳定选出正确主证据 KP。",
+            "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+          ],
+          "topDocMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_f0baf746fd75421e",
+              "score": 3.7637841307953166,
+              "best_kpid": "kpid_69002c70a59c4fba"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_68999cb6f0a3468d",
+              "score": 2.67125385722697,
+              "best_kpid": "kpid_5cc633a436f64d4a"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_c79e15cfe7c848e3",
+              "score": 2.4009978109164343,
+              "best_kpid": "kpid_eb8b17c59a98479c"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_ee3035722c4b481e",
+              "score": 2.3806223716874735,
+              "best_kpid": "kpid_ad82dfda25984fe2"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_61e44e3f9f6548de",
+              "score": 2.1890075322581275,
+              "best_kpid": "kpid_8ac4a6ad6eb84145"
+            }
+          ],
+          "topKpidMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_f0baf746fd75421e",
+              "best_kpid": "kpid_69002c70a59c4fba"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_68999cb6f0a3468d",
+              "best_kpid": "kpid_5cc633a436f64d4a"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_c79e15cfe7c848e3",
+              "best_kpid": "kpid_eb8b17c59a98479c"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_ee3035722c4b481e",
+              "best_kpid": "kpid_ad82dfda25984fe2"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_61e44e3f9f6548de",
+              "best_kpid": "kpid_8ac4a6ad6eb84145"
+            }
+          ]
+        },
+        {
+          "query": "2025年人工智能学院博士招生简章的报名节点、申请材料和考核方式是什么？",
+          "expected_otid": "otid_1e743544c32142f1",
+          "expected_kpid": "kpid_6a3184e232c34801",
+          "dataset": "test_dataset_granularity_external_ood_holdout_30_reviewed",
+          "query_type": "standard",
+          "query_scope": "policy_overview",
+          "preferred_granularity": "OT",
+          "support_pattern": "ot_required",
+          "granularity_sensitive": true,
+          "theme_family": "博士招生简章",
+          "source_dataset": "external_ood_holdout_30",
+          "source_seed_id": "sai_seed_023",
+          "challenge_tags": [
+            "policy_overview",
+            "time_location",
+            "materials",
+            "pref_ot"
+          ],
+          "notes": "初版种子导出，待人工复核。",
+          "docRank": 1,
+          "kpidRank": null,
+          "docHitAt1": true,
+          "docHitAt5": true,
+          "kpidHitAt1": false,
+          "kpidHitAt5": false,
+          "failure_risk": "best_kpid_confusion",
+          "failure_reasons": [
+            "文档候选中未能稳定选出正确主证据 KP。",
+            "该样本更依赖整篇通知上下文，适合补 ot_required 或 OT 邻近样本。"
+          ],
+          "topDocMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_1e743544c32142f1",
+              "score": 4.039457565636471,
+              "best_kpid": "kpid_649e20d1ca1d4ed4"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_a555af8a126c4703",
+              "score": 3.6976373145084622,
+              "best_kpid": "kpid_81ce6f82ca094037"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_401c4896f5614967",
+              "score": 3.449929284425006,
+              "best_kpid": "kpid_04094d91f9d54dfe"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_9a0576424d284199",
+              "score": 3.4261404172003744,
+              "best_kpid": "kpid_d72853bd031247e8"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_69ad2834eb564017",
+              "score": 3.100813647223769,
+              "best_kpid": "kpid_fb43689e20ba4e45"
+            }
+          ],
+          "topKpidMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_1e743544c32142f1",
+              "best_kpid": "kpid_649e20d1ca1d4ed4"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_a555af8a126c4703",
+              "best_kpid": "kpid_81ce6f82ca094037"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_401c4896f5614967",
+              "best_kpid": "kpid_04094d91f9d54dfe"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_9a0576424d284199",
+              "best_kpid": "kpid_d72853bd031247e8"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_69ad2834eb564017",
+              "best_kpid": "kpid_fb43689e20ba4e45"
+            }
+          ]
+        },
+        {
+          "query": "2026年人工智能学院博士招生简章的最新报名条件和时间线是什么？",
+          "expected_otid": "otid_1180b6d41c0e4ca7",
+          "expected_kpid": "kpid_f99f33fa77cd46f9",
+          "dataset": "test_dataset_granularity_external_ood_holdout_30_reviewed",
+          "query_type": "standard",
+          "query_scope": "time_location",
+          "preferred_granularity": "OT",
+          "support_pattern": "ot_required",
+          "granularity_sensitive": true,
+          "theme_family": "博士招生简章",
+          "source_dataset": "external_ood_holdout_30",
+          "source_seed_id": "sai_seed_025",
+          "challenge_tags": [
+            "time_location",
+            "eligibility_condition",
+            "standard_query",
+            "pref_ot"
+          ],
+          "notes": "初版种子导出，待人工复核。",
+          "docRank": 5,
+          "kpidRank": null,
+          "docHitAt1": false,
+          "docHitAt5": true,
+          "kpidHitAt1": false,
+          "kpidHitAt5": false,
+          "failure_risk": "best_kpid_confusion",
+          "failure_reasons": [
+            "正确文档进入前5但未到第1名，存在文档级排序偏差。",
+            "文档候选中未能稳定选出正确主证据 KP。",
+            "该样本更依赖整篇通知上下文，适合补 ot_required 或 OT 邻近样本。"
+          ],
+          "topDocMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_8fd3944fd7814ff5",
+              "score": 4.6182161700092506,
+              "best_kpid": "kpid_8d27b364d1f443ee"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_f38fd69ea2d64794",
+              "score": 4.486993885704016,
+              "best_kpid": "kpid_6327783ef0e247ff"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_9c03330f339d4f33",
+              "score": 4.043433340151354,
+              "best_kpid": "kpid_f3e2d2b7bac34041"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_eb3d3855deb74340",
+              "score": 3.980636908580301,
+              "best_kpid": "kpid_69f10b673a554b24"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_1180b6d41c0e4ca7",
+              "score": 3.792429450271511,
+              "best_kpid": "kpid_72b3299a78cb44a5"
+            }
+          ],
+          "topKpidMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_8fd3944fd7814ff5",
+              "best_kpid": "kpid_8d27b364d1f443ee"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_f38fd69ea2d64794",
+              "best_kpid": "kpid_6327783ef0e247ff"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_9c03330f339d4f33",
+              "best_kpid": "kpid_f3e2d2b7bac34041"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_eb3d3855deb74340",
+              "best_kpid": "kpid_69f10b673a554b24"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_1180b6d41c0e4ca7",
+              "best_kpid": "kpid_72b3299a78cb44a5"
+            }
+          ]
+        },
+        {
+          "query": "2026年人工智能学院博士调剂公告中，申请条件、流程和批次安排有哪些要求？",
+          "expected_otid": "otid_8fd3944fd7814ff5",
+          "expected_kpid": "kpid_06bae225da7a4fb8",
+          "dataset": "test_dataset_granularity_external_ood_holdout_30_reviewed",
+          "query_type": "situational",
+          "query_scope": "procedure",
+          "preferred_granularity": "KP+OT",
+          "support_pattern": "multi_kp",
+          "granularity_sensitive": true,
+          "theme_family": "博士调剂",
+          "source_dataset": "external_ood_holdout_30",
+          "source_seed_id": "sai_seed_026",
+          "challenge_tags": [
+            "procedure",
+            "adjustment",
+            "situational_query",
+            "pref_kp_plus_ot"
+          ],
+          "notes": "初版种子导出，待人工复核。",
+          "docRank": null,
+          "kpidRank": null,
+          "docHitAt1": false,
+          "docHitAt5": false,
+          "kpidHitAt1": false,
+          "kpidHitAt5": false,
+          "failure_risk": "requires_multi_kp",
+          "failure_reasons": [
+            "正确文档未进入前5，优先表现为文档级召回或排序失败。",
+            "文档候选中未能稳定选出正确主证据 KP。",
+            "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+          ],
+          "topDocMatches": [],
+          "topKpidMatches": []
+        },
+        {
+          "query": "中山大学人工智能学院科研团队秘书岗位的职责、招聘条件和报名方式是什么？",
+          "expected_otid": "otid_69b895a0ab0c40ea",
+          "expected_kpid": "kpid_fd342e42fa51488a",
+          "dataset": "test_dataset_granularity_external_ood_holdout_30_reviewed",
+          "query_type": "standard",
+          "query_scope": "policy_overview",
+          "preferred_granularity": "OT",
+          "support_pattern": "ot_required",
+          "granularity_sensitive": true,
+          "theme_family": "岗位招聘",
+          "source_dataset": "external_ood_holdout_30",
+          "source_seed_id": "sai_seed_027",
+          "challenge_tags": [
+            "policy_overview",
+            "recruitment",
+            "standard_query",
+            "pref_ot"
+          ],
+          "notes": "初版种子导出，待人工复核。",
+          "docRank": 4,
+          "kpidRank": null,
+          "docHitAt1": false,
+          "docHitAt5": true,
+          "kpidHitAt1": false,
+          "kpidHitAt5": false,
+          "failure_risk": "best_kpid_confusion",
+          "failure_reasons": [
+            "正确文档进入前5但未到第1名，存在文档级排序偏差。",
+            "文档候选中未能稳定选出正确主证据 KP。",
+            "该样本更依赖整篇通知上下文，适合补 ot_required 或 OT 邻近样本。"
+          ],
+          "topDocMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_33a5558a3b214bde",
+              "score": 3.0499921241430212,
+              "best_kpid": "kpid_8651a375284a4cad"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_1180b6d41c0e4ca7",
+              "score": 2.6880761371591735,
+              "best_kpid": "kpid_72b3299a78cb44a5"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_fbcafa75ba9f468e",
+              "score": 2.474194317405627,
+              "best_kpid": "kpid_9d6acafbdcce4889"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_69b895a0ab0c40ea",
+              "score": 2.3860588475810673,
+              "best_kpid": "kpid_566c89b2703f4c7b"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_1e743544c32142f1",
+              "score": 2.289634396566993,
+              "best_kpid": "kpid_649e20d1ca1d4ed4"
+            }
+          ],
+          "topKpidMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_33a5558a3b214bde",
+              "best_kpid": "kpid_8651a375284a4cad"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_1180b6d41c0e4ca7",
+              "best_kpid": "kpid_72b3299a78cb44a5"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_fbcafa75ba9f468e",
+              "best_kpid": "kpid_9d6acafbdcce4889"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_69b895a0ab0c40ea",
+              "best_kpid": "kpid_566c89b2703f4c7b"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_1e743544c32142f1",
+              "best_kpid": "kpid_649e20d1ca1d4ed4"
+            }
+          ]
+        },
+        {
+          "query": "逸仙博士后项目对申请人的条件和支持政策有哪些要求？",
+          "expected_otid": "otid_55c5131d829e4a00",
+          "expected_kpid": "kpid_22c34a1fdcf84c26",
+          "dataset": "test_dataset_granularity_external_ood_holdout_30_reviewed",
+          "query_type": "standard",
+          "query_scope": "eligibility_condition",
+          "preferred_granularity": "KP+OT",
+          "support_pattern": "multi_kp",
+          "granularity_sensitive": true,
+          "theme_family": "博士后项目",
+          "source_dataset": "external_ood_holdout_30",
+          "source_seed_id": "sai_seed_028",
+          "challenge_tags": [
+            "eligibility_condition",
+            "postdoc",
+            "standard_query",
+            "pref_kp_plus_ot"
+          ],
+          "notes": "初版种子导出，待人工复核。",
+          "docRank": 3,
+          "kpidRank": null,
+          "docHitAt1": false,
+          "docHitAt5": true,
+          "kpidHitAt1": false,
+          "kpidHitAt5": false,
+          "failure_risk": "best_kpid_confusion",
+          "failure_reasons": [
+            "正确文档进入前5但未到第1名，存在文档级排序偏差。",
+            "文档候选中未能稳定选出正确主证据 KP。",
+            "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+          ],
+          "topDocMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_98f334aa60cb4f06",
+              "score": 4.857424739852208,
+              "best_kpid": "kpid_26c3348a370244ef"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_906af0c4c6e541c2",
+              "score": 4.812354254732391,
+              "best_kpid": "kpid_8df5da891616430e"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_55c5131d829e4a00",
+              "score": 4.6463966970632145,
+              "best_kpid": "kpid_e5cf6151992846fe"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_ddc82e31ec8748a7",
+              "score": 4.565956325757108,
+              "best_kpid": "kpid_0456d357722443bb"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_6f4f7c3232be46da",
+              "score": 3.8126219374676307,
+              "best_kpid": "kpid_fbf84c7e3ac748cf"
+            }
+          ],
+          "topKpidMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_98f334aa60cb4f06",
+              "best_kpid": "kpid_26c3348a370244ef"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_906af0c4c6e541c2",
+              "best_kpid": "kpid_8df5da891616430e"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_55c5131d829e4a00",
+              "best_kpid": "kpid_e5cf6151992846fe"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_ddc82e31ec8748a7",
+              "best_kpid": "kpid_0456d357722443bb"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_6f4f7c3232be46da",
+              "best_kpid": "kpid_fbf84c7e3ac748cf"
+            }
+          ]
+        },
+        {
+          "query": "2025年度海外优青依托中山大学人工智能学院申报，适用对象和支持方向是什么？",
+          "expected_otid": "otid_8406d7042b9f4fbf",
+          "expected_kpid": "kpid_8308c9d7341446d5",
+          "dataset": "test_dataset_granularity_external_ood_holdout_30_reviewed",
+          "query_type": "standard",
+          "query_scope": "policy_overview",
+          "preferred_granularity": "OT",
+          "support_pattern": "ot_required",
+          "granularity_sensitive": true,
+          "theme_family": "海外优青",
+          "source_dataset": "external_ood_holdout_30",
+          "source_seed_id": "sai_seed_029",
+          "challenge_tags": [
+            "policy_overview",
+            "talent_program",
+            "standard_query",
+            "pref_ot"
+          ],
+          "notes": "初版种子导出，待人工复核。",
+          "docRank": 1,
+          "kpidRank": null,
+          "docHitAt1": true,
+          "docHitAt5": true,
+          "kpidHitAt1": false,
+          "kpidHitAt5": false,
+          "failure_risk": "best_kpid_confusion",
+          "failure_reasons": [
+            "文档候选中未能稳定选出正确主证据 KP。",
+            "该样本更依赖整篇通知上下文，适合补 ot_required 或 OT 邻近样本。"
+          ],
+          "topDocMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_8406d7042b9f4fbf",
+              "score": 4.337987787518619,
+              "best_kpid": "kpid_5811fe61dcee4d37"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_fec2d17303a94eb3",
+              "score": 2.9127353491298456,
+              "best_kpid": "kpid_bcd13de6373f4c80"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_69ad2834eb564017",
+              "score": 2.4663631991836428,
+              "best_kpid": "kpid_adfb87c373fc4a5b"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_538c64bb37164663",
+              "score": 2.2397308969724072,
+              "best_kpid": "kpid_be0fb3c6fb1540bd"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_906af0c4c6e541c2",
+              "score": 2.135951612001466,
+              "best_kpid": "kpid_d5de3d67bdc14dcd"
+            }
+          ],
+          "topKpidMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_8406d7042b9f4fbf",
+              "best_kpid": "kpid_5811fe61dcee4d37"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_fec2d17303a94eb3",
+              "best_kpid": "kpid_bcd13de6373f4c80"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_69ad2834eb564017",
+              "best_kpid": "kpid_adfb87c373fc4a5b"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_538c64bb37164663",
+              "best_kpid": "kpid_be0fb3c6fb1540bd"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_906af0c4c6e541c2",
+              "best_kpid": "kpid_d5de3d67bdc14dcd"
+            }
+          ]
+        },
+        {
+          "query": "2020-2021学年家庭经济困难学生认定需要提交哪些材料，流程怎么走？",
+          "expected_otid": "otid_5c5176fae0a54caf",
+          "expected_kpid": "kpid_653b4dc1fa804a2e",
+          "dataset": "test_dataset_granularity_external_ood_holdout_30_reviewed",
+          "query_type": "situational",
+          "query_scope": "procedure",
+          "preferred_granularity": "KP+OT",
+          "support_pattern": "multi_kp",
+          "granularity_sensitive": true,
+          "theme_family": "学生资助",
+          "source_dataset": "external_ood_holdout_30",
+          "source_seed_id": "sai_seed_030",
+          "challenge_tags": [
+            "procedure",
+            "materials",
+            "student_affairs",
+            "situational_query"
+          ],
+          "notes": "初版种子导出，待人工复核。",
+          "docRank": 2,
+          "kpidRank": null,
+          "docHitAt1": false,
+          "docHitAt5": true,
+          "kpidHitAt1": false,
+          "kpidHitAt5": false,
+          "failure_risk": "best_kpid_confusion",
+          "failure_reasons": [
+            "正确文档进入前5但未到第1名，存在文档级排序偏差。",
+            "文档候选中未能稳定选出正确主证据 KP。",
+            "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+          ],
+          "topDocMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_adca877b5b1c4857",
+              "score": 4.5330349316517955,
+              "best_kpid": "kpid_3c2360e180594244"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_5c5176fae0a54caf",
+              "score": 4.4913872848421486,
+              "best_kpid": "kpid_cab73c29967b486b"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_6819da91f4a34ef6",
+              "score": 3.8717048077259215,
+              "best_kpid": "kpid_8fb69490c1ca4c85"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_39afa5909d6a4750",
+              "score": 3.564032611691721,
+              "best_kpid": "kpid_a0a76fa26b884a07"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_3912909c5f1449bd",
+              "score": 3.542116003885759,
+              "best_kpid": "kpid_5aea9f61615c4275"
+            }
+          ],
+          "topKpidMatches": [
+            {
+              "rank": 1,
+              "otid": "otid_adca877b5b1c4857",
+              "best_kpid": "kpid_3c2360e180594244"
+            },
+            {
+              "rank": 2,
+              "otid": "otid_5c5176fae0a54caf",
+              "best_kpid": "kpid_cab73c29967b486b"
+            },
+            {
+              "rank": 3,
+              "otid": "otid_6819da91f4a34ef6",
+              "best_kpid": "kpid_8fb69490c1ca4c85"
+            },
+            {
+              "rank": 4,
+              "otid": "otid_39afa5909d6a4750",
+              "best_kpid": "kpid_a0a76fa26b884a07"
+            },
+            {
+              "rank": 5,
+              "otid": "otid_3912909c5f1449bd",
+              "best_kpid": "kpid_5aea9f61615c4275"
+            }
+          ]
+        }
+      ],
+      "caseDetailsWeightMode": "tuned"
+    },
+    {
+      "label": "Q+KP+OT",
+      "allowedTypes": [
+        "Q",
+        "KP",
+        "OT"
+      ],
+      "metadataCount": 18899,
+      "metadataTypeCounts": {
+        "Q": 14935,
+        "KP": 3359,
+        "OT": 605
+      },
+      "uniform": {
+        "weights": {
+          "Q": 0.3333333333333333,
+          "KP": 0.3333333333333333,
+          "OT": 0.3333333333333333
+        },
+        "combined": {
+          "total": 30,
+          "hitAt1": 50,
+          "hitAt3": 70,
+          "hitAt5": 73.33333333333333,
+          "mrr": 0.6083333333333333
+        },
+        "kpidCombined": {
+          "applicable": 30,
+          "hitAt1": 26.666666666666668,
+          "hitAt3": 30,
+          "hitAt5": 30,
+          "mrr": 0.2944444444444444,
+          "docHitAt1Total": 15,
+          "docHitAt1CorrectKpid": 8,
+          "docHitAt1WrongKpid": 7,
+          "docHitAt5Total": 22,
+          "docHitAt5CorrectKpid": 9,
+          "docHitAt5WrongKpid": 13
+        },
+        "metricsByDataset": {
+          "test_dataset_granularity_external_ood_holdout_30_reviewed": {
+            "total": 30,
+            "hitAt1": 50,
+            "hitAt3": 70,
+            "hitAt5": 73.33333333333333,
+            "mrr": 0.6083333333333333
+          }
+        }
+      },
+      "tuned": {
+        "selectionMode": "single_frozen_set",
+        "candidateCount": 1,
+        "bestWeights": {
+          "Q": 0.3333333333333333,
+          "KP": 0.3333333333333333,
+          "OT": 0.3333333333333333
+        },
+        "tuneCombined": {
+          "total": 30,
+          "hitAt1": 50,
+          "hitAt3": 70,
+          "hitAt5": 73.33333333333333,
+          "mrr": 0.6083333333333333
+        },
+        "kpidTuneCombined": {
+          "applicable": 30,
+          "hitAt1": 26.666666666666668,
+          "hitAt3": 30,
+          "hitAt5": 30,
+          "mrr": 0.2944444444444444,
+          "docHitAt1Total": 15,
+          "docHitAt1CorrectKpid": 8,
+          "docHitAt1WrongKpid": 7,
+          "docHitAt5Total": 22,
+          "docHitAt5CorrectKpid": 9,
+          "docHitAt5WrongKpid": 13
+        },
+        "holdoutCombined": {
+          "total": 30,
+          "hitAt1": 50,
+          "hitAt3": 70,
+          "hitAt5": 73.33333333333333,
+          "mrr": 0.6083333333333333
+        },
+        "kpidHoldoutCombined": {
+          "applicable": 30,
+          "hitAt1": 26.666666666666668,
+          "hitAt3": 30,
+          "hitAt5": 30,
+          "mrr": 0.2944444444444444,
+          "docHitAt1Total": 15,
+          "docHitAt1CorrectKpid": 8,
+          "docHitAt1WrongKpid": 7,
+          "docHitAt5Total": 22,
+          "docHitAt5CorrectKpid": 9,
+          "docHitAt5WrongKpid": 13
+        },
+        "combinedCombined": {
+          "total": 30,
+          "hitAt1": 50,
+          "hitAt3": 70,
+          "hitAt5": 73.33333333333333,
+          "mrr": 0.6083333333333333
+        },
+        "kpidCombinedCombined": {
+          "applicable": 30,
+          "hitAt1": 26.666666666666668,
+          "hitAt3": 30,
+          "hitAt5": 30,
+          "mrr": 0.2944444444444444,
+          "docHitAt1Total": 15,
+          "docHitAt1CorrectKpid": 8,
+          "docHitAt1WrongKpid": 7,
+          "docHitAt5Total": 22,
+          "docHitAt5CorrectKpid": 9,
+          "docHitAt5WrongKpid": 13
+        },
+        "topTuneCandidates": [
+          {
+            "weights": {
+              "Q": 0.3333333333333333,
+              "KP": 0.3333333333333333,
+              "OT": 0.3333333333333333
+            },
+            "combined": {
+              "total": 30,
+              "hitAt1": 50,
+              "hitAt3": 70,
+              "hitAt5": 73.33333333333333,
+              "mrr": 0.6083333333333333
+            }
+          }
+        ]
+      },
+      "groupBreakdowns": {
+        "supportPattern": {
+          "multi_kp": {
+            "total": 18,
+            "uniform": {
+              "total": 18,
+              "hitAt1": 55.55555555555556,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 66.66666666666666,
+              "mrr": 0.6203703703703703
+            },
+            "tunedCombined": {
+              "total": 18,
+              "hitAt1": 55.55555555555556,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 66.66666666666666,
+              "mrr": 0.6203703703703703
+            },
+            "kpidUniform": {
+              "applicable": 18,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 38.88888888888889,
+              "hitAt5": 38.88888888888889,
+              "mrr": 0.3796296296296296,
+              "docHitAt1Total": 10,
+              "docHitAt1CorrectKpid": 6,
+              "docHitAt1WrongKpid": 4,
+              "docHitAt5Total": 12,
+              "docHitAt5CorrectKpid": 7,
+              "docHitAt5WrongKpid": 5
+            },
+            "kpidTunedCombined": {
+              "applicable": 18,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 38.88888888888889,
+              "hitAt5": 38.88888888888889,
+              "mrr": 0.3796296296296296,
+              "docHitAt1Total": 10,
+              "docHitAt1CorrectKpid": 6,
+              "docHitAt1WrongKpid": 4,
+              "docHitAt5Total": 12,
+              "docHitAt5CorrectKpid": 7,
+              "docHitAt5WrongKpid": 5
+            }
+          },
+          "ot_required": {
+            "total": 10,
+            "uniform": {
+              "total": 10,
+              "hitAt1": 30,
+              "hitAt3": 70,
+              "hitAt5": 80,
+              "mrr": 0.5083333333333334
+            },
+            "tunedCombined": {
+              "total": 10,
+              "hitAt1": 30,
+              "hitAt3": 70,
+              "hitAt5": 80,
+              "mrr": 0.5083333333333334
+            },
+            "kpidUniform": {
+              "applicable": 10,
+              "hitAt1": 10,
+              "hitAt3": 10,
+              "hitAt5": 10,
+              "mrr": 0.1,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 7
+            },
+            "kpidTunedCombined": {
+              "applicable": 10,
+              "hitAt1": 10,
+              "hitAt3": 10,
+              "hitAt5": 10,
+              "mrr": 0.1,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 7
+            }
+          },
+          "single_kp": {
+            "total": 2,
+            "uniform": {
+              "total": 2,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "tunedCombined": {
+              "total": 2,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5,
+              "docHitAt1Total": 2,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 1
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5,
+              "docHitAt1Total": 2,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 1
+            }
+          }
+        },
+        "preferredGranularity": {
+          "KP": {
+            "total": 2,
+            "uniform": {
+              "total": 2,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "tunedCombined": {
+              "total": 2,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5,
+              "docHitAt1Total": 2,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 1
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5,
+              "docHitAt1Total": 2,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 1
+            }
+          },
+          "KP+OT": {
+            "total": 18,
+            "uniform": {
+              "total": 18,
+              "hitAt1": 55.55555555555556,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 66.66666666666666,
+              "mrr": 0.6203703703703703
+            },
+            "tunedCombined": {
+              "total": 18,
+              "hitAt1": 55.55555555555556,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 66.66666666666666,
+              "mrr": 0.6203703703703703
+            },
+            "kpidUniform": {
+              "applicable": 18,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 38.88888888888889,
+              "hitAt5": 38.88888888888889,
+              "mrr": 0.3796296296296296,
+              "docHitAt1Total": 10,
+              "docHitAt1CorrectKpid": 6,
+              "docHitAt1WrongKpid": 4,
+              "docHitAt5Total": 12,
+              "docHitAt5CorrectKpid": 7,
+              "docHitAt5WrongKpid": 5
+            },
+            "kpidTunedCombined": {
+              "applicable": 18,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 38.88888888888889,
+              "hitAt5": 38.88888888888889,
+              "mrr": 0.3796296296296296,
+              "docHitAt1Total": 10,
+              "docHitAt1CorrectKpid": 6,
+              "docHitAt1WrongKpid": 4,
+              "docHitAt5Total": 12,
+              "docHitAt5CorrectKpid": 7,
+              "docHitAt5WrongKpid": 5
+            }
+          },
+          "OT": {
+            "total": 10,
+            "uniform": {
+              "total": 10,
+              "hitAt1": 30,
+              "hitAt3": 70,
+              "hitAt5": 80,
+              "mrr": 0.5083333333333334
+            },
+            "tunedCombined": {
+              "total": 10,
+              "hitAt1": 30,
+              "hitAt3": 70,
+              "hitAt5": 80,
+              "mrr": 0.5083333333333334
+            },
+            "kpidUniform": {
+              "applicable": 10,
+              "hitAt1": 10,
+              "hitAt3": 10,
+              "hitAt5": 10,
+              "mrr": 0.1,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 7
+            },
+            "kpidTunedCombined": {
+              "applicable": 10,
+              "hitAt1": 10,
+              "hitAt3": 10,
+              "hitAt5": 10,
+              "mrr": 0.1,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 7
+            }
+          }
+        }
+      }
+    }
+  ]
+}

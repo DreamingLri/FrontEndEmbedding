@@ -9,7 +9,7 @@ import {
     PRODUCT_TAIL_TOP3_W020_PIPELINE_PRESET,
     type PipelinePreset,
 } from "../src/worker/search_pipeline.ts";
-import { CURRENT_EVAL_DATASET_FILES } from "./current_eval_targets.ts";
+import { resolveGranularityDatasetTarget } from "./eval_shared.ts";
 
 type DatasetTarget = {
     name: string;
@@ -43,20 +43,20 @@ type PresetSummary = {
     retrieval: PipelinePreset["retrieval"];
     datasets: DatasetMetrics[];
     aggregate: {
-        main106DocHitAt1?: number;
-        main106DocMRR?: number;
-        main106KpidHitAt1?: number;
-        main106KpidMRR?: number;
-        holdoutAverageDocHitAt1: number;
-        holdoutAverageDocMRR: number;
-        holdoutAverageKpidHitAt1: number;
-        holdoutAverageKpidMRR: number;
-        holdoutWorstDocHitAt1: number;
-        holdoutWorstDocMRR: number;
-        holdoutWorstKpidHitAt1: number;
-        holdoutWorstKpidMRR: number;
-        holdoutDocHitAt1Range: number;
-        holdoutKpidHitAt1Range: number;
+        benchmarkDocHitAt1?: number;
+        benchmarkDocMRR?: number;
+        benchmarkKpidHitAt1?: number;
+        benchmarkKpidMRR?: number;
+        generalizationAverageDocHitAt1: number;
+        generalizationAverageDocMRR: number;
+        generalizationAverageKpidHitAt1: number;
+        generalizationAverageKpidMRR: number;
+        generalizationWorstDocHitAt1: number;
+        generalizationWorstDocMRR: number;
+        generalizationWorstKpidHitAt1: number;
+        generalizationWorstKpidMRR: number;
+        generalizationDocHitAt1Range: number;
+        generalizationKpidHitAt1Range: number;
     };
 };
 
@@ -70,10 +70,10 @@ type StabilityReport = {
         presetName: string;
         label: string;
         comboLabel: "KP+OT" | "Q+KP+OT";
-        holdoutWorstDocHitAt1: number;
-        holdoutAverageDocHitAt1: number;
-        main106DocHitAt1?: number;
-        holdoutAverageKpidHitAt1: number;
+        generalizationWorstDocHitAt1: number;
+        generalizationAverageDocHitAt1: number;
+        benchmarkDocHitAt1?: number;
+        generalizationAverageKpidHitAt1: number;
     }>;
 };
 
@@ -84,41 +84,29 @@ const TEMP_DATASET_DIR = path.resolve(
     "../Backend/test/_archive/drafts/preset_stability",
 );
 
-const DEFAULT_DATASET_TARGETS: DatasetTarget[] = [
-    {
-        name: "main_106",
-        label: "main_106",
-        file: path.resolve(
-            FRONTEND_ROOT,
-            CURRENT_EVAL_DATASET_FILES.granularityMain106,
-        ),
-        isolateForRegistry: true,
-    },
-    {
-        name: "holdout_v1",
-        label: "holdout_v1",
-        file: path.resolve(
-            FRONTEND_ROOT,
-            "../Backend/test/test_dataset_granularity/test_dataset_granularity_holdout_v1_reviewed.json",
-        ),
-    },
-    {
-        name: "holdout_v2",
-        label: "holdout_v2",
-        file: path.resolve(
-            FRONTEND_ROOT,
-            "../Backend/test/test_dataset_granularity/test_dataset_granularity_holdout_v2_reviewed.json",
-        ),
-    },
-    {
-        name: "holdout_v3",
-        label: "holdout_v3",
-        file: path.resolve(
-            FRONTEND_ROOT,
-            "../Backend/test/test_dataset_granularity/test_dataset_granularity_holdout_v3_reviewed.json",
-        ),
-    },
-];
+function buildDefaultDatasetTargets(): DatasetTarget[] {
+    return [
+        "main_bench_120",
+        "in_domain_holdout_50",
+        "external_ood_holdout_30",
+    ].flatMap((key) => {
+        try {
+            const target = resolveGranularityDatasetTarget(key);
+            return [
+                {
+                    name: target.key,
+                    label: target.label,
+                    file: path.resolve(FRONTEND_ROOT, target.datasetFile),
+                    isolateForRegistry: true,
+                } satisfies DatasetTarget,
+            ];
+        } catch {
+            return [];
+        }
+    });
+}
+
+const DEFAULT_DATASET_TARGETS: DatasetTarget[] = buildDefaultDatasetTargets();
 
 const DEFAULT_PROBES: PresetProbe[] = [
     {
@@ -287,12 +275,16 @@ function computeSummary(
     probe: PresetProbe,
     datasets: DatasetMetrics[],
 ): PresetSummary {
-    const main106 = datasets.find((item) => item.datasetName === "main_106");
-    const holdouts = datasets.filter((item) => item.datasetName !== "main_106");
-    const holdoutDocHitAt1 = holdouts.map((item) => item.docHitAt1);
-    const holdoutDocMRR = holdouts.map((item) => item.docMRR);
-    const holdoutKpidHitAt1 = holdouts.map((item) => item.kpidHitAt1);
-    const holdoutKpidMRR = holdouts.map((item) => item.kpidMRR);
+    const benchmark = datasets.find((item) => item.datasetName === "main_bench_120");
+    const generalizationSets = datasets.filter(
+        (item) => item.datasetName !== "main_bench_120",
+    );
+    const generalizationDocHitAt1 = generalizationSets.map((item) => item.docHitAt1);
+    const generalizationDocMRR = generalizationSets.map((item) => item.docMRR);
+    const generalizationKpidHitAt1 = generalizationSets.map(
+        (item) => item.kpidHitAt1,
+    );
+    const generalizationKpidMRR = generalizationSets.map((item) => item.kpidMRR);
 
     return {
         presetName: probe.presetName,
@@ -301,32 +293,39 @@ function computeSummary(
         retrieval: probe.preset.retrieval,
         datasets,
         aggregate: {
-            main106DocHitAt1: main106?.docHitAt1,
-            main106DocMRR: main106?.docMRR,
-            main106KpidHitAt1: main106?.kpidHitAt1,
-            main106KpidMRR: main106?.kpidMRR,
-            holdoutAverageDocHitAt1: mean(holdoutDocHitAt1),
-            holdoutAverageDocMRR: mean(holdoutDocMRR),
-            holdoutAverageKpidHitAt1: mean(holdoutKpidHitAt1),
-            holdoutAverageKpidMRR: mean(holdoutKpidMRR),
-            holdoutWorstDocHitAt1:
-                holdoutDocHitAt1.length > 0 ? Math.min(...holdoutDocHitAt1) : 0,
-            holdoutWorstDocMRR:
-                holdoutDocMRR.length > 0 ? Math.min(...holdoutDocMRR) : 0,
-            holdoutWorstKpidHitAt1:
-                holdoutKpidHitAt1.length > 0
-                    ? Math.min(...holdoutKpidHitAt1)
+            benchmarkDocHitAt1: benchmark?.docHitAt1,
+            benchmarkDocMRR: benchmark?.docMRR,
+            benchmarkKpidHitAt1: benchmark?.kpidHitAt1,
+            benchmarkKpidMRR: benchmark?.kpidMRR,
+            generalizationAverageDocHitAt1: mean(generalizationDocHitAt1),
+            generalizationAverageDocMRR: mean(generalizationDocMRR),
+            generalizationAverageKpidHitAt1: mean(generalizationKpidHitAt1),
+            generalizationAverageKpidMRR: mean(generalizationKpidMRR),
+            generalizationWorstDocHitAt1:
+                generalizationDocHitAt1.length > 0
+                    ? Math.min(...generalizationDocHitAt1)
                     : 0,
-            holdoutWorstKpidMRR:
-                holdoutKpidMRR.length > 0 ? Math.min(...holdoutKpidMRR) : 0,
-            holdoutDocHitAt1Range:
-                holdoutDocHitAt1.length > 0
-                    ? Math.max(...holdoutDocHitAt1) - Math.min(...holdoutDocHitAt1)
+            generalizationWorstDocMRR:
+                generalizationDocMRR.length > 0
+                    ? Math.min(...generalizationDocMRR)
                     : 0,
-            holdoutKpidHitAt1Range:
-                holdoutKpidHitAt1.length > 0
-                    ? Math.max(...holdoutKpidHitAt1) -
-                      Math.min(...holdoutKpidHitAt1)
+            generalizationWorstKpidHitAt1:
+                generalizationKpidHitAt1.length > 0
+                    ? Math.min(...generalizationKpidHitAt1)
+                    : 0,
+            generalizationWorstKpidMRR:
+                generalizationKpidMRR.length > 0
+                    ? Math.min(...generalizationKpidMRR)
+                    : 0,
+            generalizationDocHitAt1Range:
+                generalizationDocHitAt1.length > 0
+                    ? Math.max(...generalizationDocHitAt1) -
+                      Math.min(...generalizationDocHitAt1)
+                    : 0,
+            generalizationKpidHitAt1Range:
+                generalizationKpidHitAt1.length > 0
+                    ? Math.max(...generalizationKpidHitAt1) -
+                      Math.min(...generalizationKpidHitAt1)
                     : 0,
         },
     };
@@ -336,26 +335,26 @@ function buildRanking(probes: PresetSummary[]): StabilityReport["ranking"] {
     return [...probes]
         .sort((left, right) => {
             if (
-                right.aggregate.holdoutWorstDocHitAt1 !==
-                left.aggregate.holdoutWorstDocHitAt1
+                right.aggregate.generalizationWorstDocHitAt1 !==
+                left.aggregate.generalizationWorstDocHitAt1
             ) {
                 return (
-                    right.aggregate.holdoutWorstDocHitAt1 -
-                    left.aggregate.holdoutWorstDocHitAt1
+                    right.aggregate.generalizationWorstDocHitAt1 -
+                    left.aggregate.generalizationWorstDocHitAt1
                 );
             }
             if (
-                right.aggregate.holdoutAverageDocHitAt1 !==
-                left.aggregate.holdoutAverageDocHitAt1
+                right.aggregate.generalizationAverageDocHitAt1 !==
+                left.aggregate.generalizationAverageDocHitAt1
             ) {
                 return (
-                    right.aggregate.holdoutAverageDocHitAt1 -
-                    left.aggregate.holdoutAverageDocHitAt1
+                    right.aggregate.generalizationAverageDocHitAt1 -
+                    left.aggregate.generalizationAverageDocHitAt1
                 );
             }
             return (
-                (right.aggregate.main106DocHitAt1 || 0) -
-                (left.aggregate.main106DocHitAt1 || 0)
+                (right.aggregate.benchmarkDocHitAt1 || 0) -
+                (left.aggregate.benchmarkDocHitAt1 || 0)
             );
         })
         .map((item, index) => ({
@@ -363,10 +362,13 @@ function buildRanking(probes: PresetSummary[]): StabilityReport["ranking"] {
             presetName: item.presetName,
             label: item.label,
             comboLabel: item.comboLabel,
-            holdoutWorstDocHitAt1: item.aggregate.holdoutWorstDocHitAt1,
-            holdoutAverageDocHitAt1: item.aggregate.holdoutAverageDocHitAt1,
-            main106DocHitAt1: item.aggregate.main106DocHitAt1,
-            holdoutAverageKpidHitAt1: item.aggregate.holdoutAverageKpidHitAt1,
+            generalizationWorstDocHitAt1:
+                item.aggregate.generalizationWorstDocHitAt1,
+            generalizationAverageDocHitAt1:
+                item.aggregate.generalizationAverageDocHitAt1,
+            benchmarkDocHitAt1: item.aggregate.benchmarkDocHitAt1,
+            generalizationAverageKpidHitAt1:
+                item.aggregate.generalizationAverageKpidHitAt1,
         }));
 }
 
@@ -422,7 +424,7 @@ async function main(): Promise<void> {
     const report: StabilityReport = {
         generatedAt: new Date().toISOString(),
         note:
-            "该报告用于在 granularity 主线与外部 holdout 上比较固定主配置的稳定性；排序优先看 holdout 最差 Hit@1，再看 holdout 平均 Hit@1，最后看 main_106。",
+            "该报告用于在主 benchmark、同域泛化集与跨域 OOD 集上比较固定主配置的稳定性；排序优先看泛化集最差 Hit@1，再看泛化集平均 Hit@1，最后看主 benchmark。",
         datasets: datasetTargets,
         probes: summaries,
         ranking: buildRanking(summaries),

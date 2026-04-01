@@ -1,4 +1,10 @@
 export const CURRENT_EVAL_DATASET_FILES = {
+    granularityMain120:
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_main_120_reviewed.json",
+    granularityInDomainHoldout50:
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_in_domain_holdout_50_reviewed.json",
+    granularityExternalOodHoldout30:
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_external_ood_holdout_30_reviewed.json",
     granularityMain106:
         "../Backend/test/test_dataset_granularity/test_dataset_granularity_main_106_reviewed.json",
     granularityHoldoutV3:
