@@ -1,16 +1,27 @@
 {
-  "updatedAt": "2026-04-01T08:26:36.249Z",
+  "updatedAt": "2026-04-01T16:20:00.000Z",
   "entries": {
     "granularity_main_106_current": {
       "slot": "granularity_main_106_current",
       "label": "主方法主结果 `main_106`",
       "datasetName": "test_dataset_granularity_main_106_reviewed",
       "datasetFile": "../../../../Backend/test/test_dataset_granularity/test_dataset_granularity_main_106_reviewed.json",
-      "resultFile": "../granularity_mix_test_dataset_granularity_main_106_reviewed_top1000_kpagg-max_lexsum_onlinekprolefeature-w035_kpreranknone_docreranknone_1774973753683.json",
+      "resultFile": "../granularity_mix_test_dataset_granularity_main_106_reviewed_top1000_kpagg-max_lexsum_onlinekprolefeature-w035_kpreranknone_docreranknone_1775049908146.json",
       "sourceScript": "../../eval_granularity_mix.ts",
       "managedByScript": true,
-      "updatedAt": "2026-03-31T16:15:53.686Z",
-      "note": "当前脚本只会自动更新 `main_106` 的稳定结果入口；`holdout_v3` 当前仍使用单独固定口径结果。"
+      "updatedAt": "2026-04-01T13:25:08.148Z",
+      "note": "当前结果基于单冻结集入口 test_dataset_granularity_main_106_reviewed 导出，不再默认按 tune/holdout 切分。"
+    },
+    "granularity_in_domain_holdout_50_current": {
+      "slot": "granularity_in_domain_holdout_50_current",
+      "label": "同域泛化结果 `in_domain_holdout_50`",
+      "datasetName": "test_dataset_granularity_in_domain_holdout_50_reviewed",
+      "datasetFile": "../../../../Backend/test/test_dataset_granularity/test_dataset_granularity_in_domain_holdout_50_reviewed.json",
+      "resultFile": "../granularity_mix_test_dataset_granularity_in_domain_holdout_50_reviewed_skeleton_v2_top1000_kpagg-max_lexsum_onlinekprolefeature-w035_kpreranknone_docreranknone_1775050012729.json",
+      "sourceScript": "../../eval_granularity_mix.ts",
+      "managedByScript": false,
+      "updatedAt": "2026-04-01T16:20:00.000Z",
+      "note": "正式冻结文件已落盘；当前主结果暂沿用 skeleton_v2 口径结果，待以正式文件名重跑后再替换。"
     },
     "granularity_holdout_v3_current": {
       "slot": "granularity_holdout_v3_current",
@@ -94,11 +105,11 @@
       "label": "跨域泛化结果 `external_ood_holdout_30`",
       "datasetName": "test_dataset_granularity_external_ood_holdout_30_reviewed",
       "datasetFile": "../../../../Backend/test/test_dataset_granularity/test_dataset_granularity_external_ood_holdout_30_reviewed.json",
-      "resultFile": "../granularity_mix_test_dataset_granularity_external_ood_holdout_30_reviewed_top1000_kpagg-max_lexsum_onlinekproleoff_kpreranknone_docreranknone_1775031996247.json",
+      "resultFile": "../granularity_mix_test_dataset_granularity_external_ood_holdout_30_reviewed_top1000_kpagg-max_lexsum_onlinekprolefeature-w035_kpreranknone_docreranknone_1775050083568.json",
       "sourceScript": "../../eval_granularity_mix.ts",
       "managedByScript": true,
-      "updatedAt": "2026-04-01T08:26:36.249Z",
-      "note": "当前结果基于单冻结集入口 ExternalOODHoldout-30 导出，不再默认按 tune/holdout 切分。"
+      "updatedAt": "2026-04-01T13:28:03.570Z",
+      "note": "当前结果基于单冻结集入口 test_dataset_granularity_external_ood_holdout_30_reviewed 导出，不再默认按 tune/holdout 切分。"
     }
   }
 }

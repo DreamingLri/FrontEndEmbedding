@@ -21,6 +21,7 @@ import {
     type EvalDatasetCase,
     type EvalDatasetSource,
     type GranularityDatasetTargetKey,
+    type KpEvalMode,
 } from "./eval_shared.ts";
 import {
     embedQueries as embedFrontendQueries,
@@ -74,11 +75,25 @@ type KpidMetrics = {
     docHitAt5WrongKpid: number;
 };
 
+type SupportCoverageMetrics = {
+    applicable: number;
+    docHitAt1Total: number;
+    docHitAt5Total: number;
+    docHitAt1FullCoverAt3: number;
+    docHitAt1FullCoverAt5: number;
+    docHitAt5FullCoverAt5: number;
+    partialCoverAt5: number;
+    avgCoveredGroupsAt5: number;
+    avgCoverageRatioAt5: number;
+};
+
 type MetricsBundle = {
     metricsByDataset: Record<string, Metrics>;
     combined: Metrics;
     kpidMetricsByDataset: Record<string, KpidMetrics>;
     kpidCombined: KpidMetrics;
+    supportCoverageMetricsByDataset: Record<string, SupportCoverageMetrics>;
+    supportCoverageCombined: SupportCoverageMetrics;
 };
 
 type ComboDefinition = {
@@ -97,12 +112,40 @@ type GroupMetricsReport = {
     tunedCombined: Metrics;
     kpidUniform: KpidMetrics;
     kpidTunedCombined: KpidMetrics;
+    supportCoverageUniform: SupportCoverageMetrics;
+    supportCoverageTunedCombined: SupportCoverageMetrics;
+};
+
+type NormalizedKpEvalTarget = {
+    mode: KpEvalMode;
+    acceptableAnchorKpids: string[];
+    requiredKpidGroups: string[][];
+    minGroupsToCover: number;
+};
+
+type RerankedKpCandidate = {
+    kpid: string;
+    rawScore: number;
+    rerankedScore: number;
+};
+
+type SupportCoverageState = {
+    coverageDepth: number;
+    coveredGroupsTop3: number;
+    coveredGroupsTop5: number;
+    coverageRatioTop5: number;
+    totalGroups: number;
+    minGroupsToCover: number;
 };
 
 type CaseDetail = {
     query: string;
     expected_otid: string;
     expected_kpid?: string;
+    kp_eval_mode?: KpEvalMode;
+    acceptable_anchor_kpids?: string[];
+    required_kpid_groups?: string[][];
+    min_groups_to_cover?: number;
     dataset: string;
     query_type?: string;
     query_scope?: string;
@@ -116,6 +159,11 @@ type CaseDetail = {
     notes?: string;
     docRank: number | null;
     kpidRank: number | null;
+    supportCoverageDepth: number | null;
+    supportGroupsCoveredTop5: number;
+    supportGroupsRequired: number;
+    supportFullCoverTop5: boolean;
+    supportPartialCoverTop5: boolean;
     docHitAt1: boolean;
     docHitAt5: boolean;
     kpidHitAt1: boolean;
@@ -133,6 +181,12 @@ type CaseDetail = {
         otid: string;
         best_kpid?: string;
     }>;
+    expectedDocTopKpCandidates: Array<{
+        rank: number;
+        kpid: string;
+        rawScore: number;
+        rerankedScore: number;
+    }>;
 };
 
 type ComboReport = {
@@ -144,6 +198,7 @@ type ComboReport = {
         weights: WeightConfig;
         combined: Metrics;
         kpidCombined: KpidMetrics;
+        supportCoverageCombined: SupportCoverageMetrics;
         metricsByDataset: Record<string, Metrics>;
     };
     tuned: {
@@ -152,10 +207,13 @@ type ComboReport = {
         bestWeights: WeightConfig;
         tuneCombined: Metrics;
         kpidTuneCombined: KpidMetrics;
+        supportCoverageTuneCombined: SupportCoverageMetrics;
         holdoutCombined: Metrics;
         kpidHoldoutCombined: KpidMetrics;
+        supportCoverageHoldoutCombined: SupportCoverageMetrics;
         combinedCombined: Metrics;
         kpidCombinedCombined: KpidMetrics;
+        supportCoverageCombinedCombined: SupportCoverageMetrics;
         topTuneCandidates: WeightCandidateSummary[];
     };
     groupBreakdowns: {
@@ -672,17 +730,123 @@ function getRank(matches: readonly { otid: string }[], expectedOtid: string): nu
 function getKpidRank(
     matches: readonly { otid: string; best_kpid?: string }[],
     expectedOtid: string,
-    expectedKpid?: string,
+    expectedKpids: readonly string[],
 ): number {
-    if (!expectedKpid) {
+    if (expectedKpids.length === 0) {
         return Number.POSITIVE_INFINITY;
     }
 
+    const expectedKpidSet = new Set(expectedKpids);
     const rankIndex = matches.findIndex(
         (item) =>
-            item.otid === expectedOtid && item.best_kpid === expectedKpid,
+            item.otid === expectedOtid &&
+            item.best_kpid !== undefined &&
+            expectedKpidSet.has(item.best_kpid),
     );
     return rankIndex === -1 ? Number.POSITIVE_INFINITY : rankIndex + 1;
+}
+
+function parseRequiredKpidGroups(
+    groups?: string[][],
+): string[][] {
+    if (!Array.isArray(groups)) {
+        return [];
+    }
+
+    return groups
+        .map((group) =>
+            Array.isArray(group)
+                ? Array.from(
+                      new Set(
+                          group.filter(
+                              (item): item is string =>
+                                  typeof item === "string" && item.length > 0,
+                          ),
+                      ),
+                  )
+                : [],
+        )
+        .filter((group) => group.length > 0);
+}
+
+function resolveKpEvalTarget(testCase: DatasetCase): NormalizedKpEvalTarget {
+    const inferredGroups = parseRequiredKpidGroups(testCase.required_kpid_groups);
+    const supportGroups =
+        inferredGroups.length > 0
+            ? inferredGroups
+            : testCase.support_pattern === "multi_kp" &&
+                Array.isArray(testCase.support_kpids) &&
+                testCase.support_kpids.length > 1
+              ? Array.from(
+                    new Set(
+                        testCase.support_kpids.filter(
+                            (item): item is string =>
+                                typeof item === "string" && item.length > 0,
+                        ),
+                    ),
+                ).map((kpid) => [kpid])
+              : [];
+
+    const preliminaryAnchorKpids = Array.from(
+        new Set(
+            [
+                ...(testCase.expected_kpid ? [testCase.expected_kpid] : []),
+                ...supportGroups.flat(),
+            ].filter((item): item is string => typeof item === "string" && item.length > 0),
+        ),
+    );
+
+    const inferredMode: KpEvalMode =
+        testCase.kp_eval_mode ||
+        (supportGroups.length > 1
+            ? "aspect_coverage"
+            : preliminaryAnchorKpids.length > 0
+              ? "single_anchor"
+              : "ot_only");
+
+    const acceptableAnchorKpids = Array.from(
+        new Set(
+            (
+                inferredMode === "single_anchor"
+                    ? [
+                          ...(testCase.expected_kpid ? [testCase.expected_kpid] : []),
+                          ...(supportGroups.length === 1 ? supportGroups[0] : []),
+                      ]
+                    : [
+                          ...(testCase.expected_kpid ? [testCase.expected_kpid] : []),
+                          ...supportGroups.flat(),
+                      ]
+            ).filter((item): item is string => typeof item === "string" && item.length > 0),
+        ),
+    );
+
+    const minGroupsCandidate = Number.isFinite(testCase.min_groups_to_cover)
+        ? Math.max(1, Number(testCase.min_groups_to_cover))
+        : supportGroups.length > 0
+          ? supportGroups.length
+          : acceptableAnchorKpids.length > 0
+            ? 1
+            : 0;
+
+    return {
+        mode: inferredMode,
+        acceptableAnchorKpids,
+        requiredKpidGroups:
+            inferredMode === "aspect_coverage"
+                ? supportGroups.length > 0
+                    ? supportGroups
+                    : acceptableAnchorKpids.map((kpid) => [kpid])
+                : supportGroups,
+        minGroupsToCover:
+            inferredMode === "aspect_coverage"
+                ? Math.min(
+                      minGroupsCandidate,
+                      supportGroups.length > 0
+                          ? supportGroups.length
+                          : Math.max(acceptableAnchorKpids.length, 1),
+                  )
+                : minGroupsCandidate,
+    };
 }
 
 function stripKpTimestampPrefix(text: string): string {
@@ -973,6 +1137,98 @@ function rerankBestKpidForMatch(
     return getHeuristicKpSelection(item, match).bestKpid;
 }
 
+function getRerankedKpCandidates(
+    item: QueryCacheItem,
+    match: {
+        kp_candidates?: Array<{ kpid: string; score: number }>;
+    },
+): RerankedKpCandidate[] {
+    const kpCandidates = match.kp_candidates || [];
+
+    return kpCandidates
+        .map((candidate) => {
+            let rerankedScore = candidate.score;
+
+            if (KP_CANDIDATE_RERANK_MODE === "heuristic") {
+                const kpText = kpTextMap.get(candidate.kpid);
+                if (kpText) {
+                    rerankedScore += computeHeuristicKpBonus(item, kpText);
+                }
+            } else if (KP_CANDIDATE_RERANK_MODE === "feature_heuristic") {
+                const kpFeatures = kpFeatureMap.get(candidate.kpid);
+                if (kpFeatures) {
+                    rerankedScore += computeFeatureHeuristicKpBonus(item, kpFeatures);
+                }
+            }
+
+            return {
+                kpid: candidate.kpid,
+                rawScore: candidate.score,
+                rerankedScore,
+            };
+        })
+        .sort((left, right) => right.rerankedScore - left.rerankedScore);
+}
+
+function computeCoveredGroupCount(
+    requiredGroups: readonly string[][],
+    candidates: readonly RerankedKpCandidate[],
+    depth: number,
+): number {
+    if (requiredGroups.length === 0 || depth <= 0) {
+        return 0;
+    }
+
+    const topKpidSet = new Set(
+        candidates.slice(0, depth).map((candidate) => candidate.kpid),
+    );
+
+    return requiredGroups.filter((group) =>
+        group.some((kpid) => topKpidSet.has(kpid)),
+    ).length;
+}
+
+function computeSupportCoverageState(
+    requiredGroups: readonly string[][],
+    minGroupsToCover: number,
+    candidates: readonly RerankedKpCandidate[],
+): SupportCoverageState {
+    if (requiredGroups.length === 0 || minGroupsToCover <= 0) {
+        return {
+            coverageDepth: Number.POSITIVE_INFINITY,
+            coveredGroupsTop3: 0,
+            coveredGroupsTop5: 0,
+            coverageRatioTop5: 0,
+            totalGroups: requiredGroups.length,
+            minGroupsToCover,
+        };
+    }
+
+    const maxDepth = Math.min(candidates.length, 5);
+    let coverageDepth = Number.POSITIVE_INFINITY;
+
+    for (let depth = 1; depth <= maxDepth; depth += 1) {
+        const covered = computeCoveredGroupCount(requiredGroups, candidates, depth);
+        if (covered >= minGroupsToCover) {
+            coverageDepth = depth;
+            break;
+        }
+    }
+
+    const coveredGroupsTop3 = computeCoveredGroupCount(requiredGroups, candidates, 3);
+    const coveredGroupsTop5 = computeCoveredGroupCount(requiredGroups, candidates, 5);
+
+    return {
+        coverageDepth,
+        coveredGroupsTop3,
+        coveredGroupsTop5,
+        coverageRatioTop5:
+            requiredGroups.length > 0 ? coveredGroupsTop5 / requiredGroups.length : 0,
+        totalGroups: requiredGroups.length,
+        minGroupsToCover,
+    };
+}
+
 function rerankMatchesForDocumentMetrics(
     item: QueryCacheItem,
     matches: readonly EvalSearchMatch[],
@@ -1094,6 +1350,8 @@ function buildFailureReasons(
     item: QueryCacheItem,
     docRank: number,
     kpidRank: number,
+    kpEvalTarget: NormalizedKpEvalTarget,
+    supportCoverageState: SupportCoverageState,
 ): string[] {
     const reasons: string[] = [];
 
@@ -1103,11 +1361,28 @@ function buildFailureReasons(
         reasons.push("正确文档进入前5但未到第1名，存在文档级排序偏差。");
     }
 
-    if (item.testCase.expected_kpid) {
+    if (kpEvalTarget.acceptableAnchorKpids.length > 0) {
         if (!Number.isFinite(kpidRank) || kpidRank > 5) {
             reasons.push("文档候选中未能稳定选出正确主证据 KP。");
         } else if (kpidRank > 1) {
             reasons.push("正确文档命中后，主证据 KP 选择仍不够准确。");
+        }
+    }
+
+    if (kpEvalTarget.mode === "aspect_coverage") {
+        if (Number.isFinite(docRank) && docRank <= 5) {
+            if (
+                !Number.isFinite(supportCoverageState.coverageDepth) ||
+                supportCoverageState.coverageDepth > 5
+            ) {
+                if (supportCoverageState.coveredGroupsTop5 > 0) {
+                    reasons.push("正确文档命中后，仅覆盖了部分同等重要的证据方面。");
+                } else {
+                    reasons.push("正确文档命中后，前5个 KP 候选仍未覆盖任何必需证据方面。");
+                }
+            }
+        } else {
+            reasons.push("多重点样本当前仍先受文档级召回限制，尚未进入方面覆盖判定阶段。");
         }
     }
 
@@ -1126,9 +1401,23 @@ function inferFailureRisk(
     item: QueryCacheItem,
     docRank: number,
     kpidRank: number,
+    kpEvalTarget: NormalizedKpEvalTarget,
+    supportCoverageState: SupportCoverageState,
 ): string {
     if (
-        item.testCase.expected_kpid &&
+        kpEvalTarget.mode === "aspect_coverage" &&
+        Number.isFinite(docRank) &&
+        docRank <= 5 &&
+        (!Number.isFinite(supportCoverageState.coverageDepth) ||
+            supportCoverageState.coverageDepth > 5)
+    ) {
+        return supportCoverageState.coveredGroupsTop5 > 0
+            ? "partial_multi_kp_coverage"
+            : "multi_kp_aspect_miss";
+    }
+
+    if (
+        kpEvalTarget.acceptableAnchorKpids.length > 0 &&
         Number.isFinite(docRank) &&
         docRank <= 5 &&
         (!Number.isFinite(kpidRank) || kpidRank > 1)
@@ -1169,7 +1458,11 @@ function shouldKeepCaseDetail(
         return true;
     }
 
-    if (detail.expected_kpid && !detail.kpidHitAt1) {
+    if (detail.acceptable_anchor_kpids?.length && !detail.kpidHitAt1) {
+        return true;
+    }
+
+    if (detail.kp_eval_mode === "aspect_coverage" && !detail.supportFullCoverTop5) {
         return true;
     }
 
@@ -1192,6 +1485,7 @@ function collectCaseDetails(
             : 5;
 
     const details = queryCache.map((item) => {
+        const kpEvalTarget = resolveKpEvalTarget(item.testCase);
         const result = searchAndRank({
             queryVector: item.queryVector,
             querySparse: item.querySparse,
@@ -1237,14 +1531,54 @@ function collectCaseDetails(
         const kpidRank = getKpidRank(
             rerankedMatches,
             item.testCase.expected_otid,
-            item.testCase.expected_kpid,
+            kpEvalTarget.acceptableAnchorKpids,
         );
-        const failureReasons = buildFailureReasons(item, docRank, kpidRank);
+        const expectedDocMatch = docRerankedMatches.find(
+            (match) => match.otid === item.testCase.expected_otid,
+        );
+        const expectedDocTopKpCandidates = expectedDocMatch
+            ? getRerankedKpCandidates(item, expectedDocMatch)
+            : [];
+        const supportCoverageState =
+            kpEvalTarget.mode === "aspect_coverage"
+                ? computeSupportCoverageState(
+                      kpEvalTarget.requiredKpidGroups,
+                      kpEvalTarget.minGroupsToCover,
+                      expectedDocTopKpCandidates,
+                  )
+                : {
+                      coverageDepth: Number.POSITIVE_INFINITY,
+                      coveredGroupsTop3: 0,
+                      coveredGroupsTop5: 0,
+                      coverageRatioTop5: 0,
+                      totalGroups: 0,
+                      minGroupsToCover: 0,
+                  };
+        const failureReasons = buildFailureReasons(
+            item,
+            docRank,
+            kpidRank,
+            kpEvalTarget,
+            supportCoverageState,
+        );
+        const supportFullCoverTop5 =
+            Number.isFinite(docRank) &&
+            docRank <= 5 &&
+            Number.isFinite(supportCoverageState.coverageDepth) &&
+            supportCoverageState.coverageDepth <= 5;
+        const supportPartialCoverTop5 =
+            Number.isFinite(docRank) &&
+            docRank <= 5 &&
+            supportCoverageState.coveredGroupsTop5 > 0;
 
         const detail: CaseDetail = {
             query: item.testCase.query,
             expected_otid: item.testCase.expected_otid,
             expected_kpid: item.testCase.expected_kpid,
+            kp_eval_mode: kpEvalTarget.mode,
+            acceptable_anchor_kpids: kpEvalTarget.acceptableAnchorKpids,
+            required_kpid_groups: kpEvalTarget.requiredKpidGroups,
+            min_groups_to_cover: kpEvalTarget.minGroupsToCover,
             dataset: item.testCase.dataset,
             query_type: item.testCase.query_type,
             query_scope: item.testCase.query_scope,
@@ -1258,11 +1592,24 @@ function collectCaseDetails(
             notes: item.testCase.notes,
             docRank: rankToNullable(docRank),
             kpidRank: rankToNullable(kpidRank),
+            supportCoverageDepth: rankToNullable(
+                supportCoverageState.coverageDepth,
+            ),
+            supportGroupsCoveredTop5: supportCoverageState.coveredGroupsTop5,
+            supportGroupsRequired: supportCoverageState.totalGroups,
+            supportFullCoverTop5,
+            supportPartialCoverTop5,
             docHitAt1: docRank === 1,
             docHitAt5: docRank <= 5,
             kpidHitAt1: kpidRank === 1,
             kpidHitAt5: kpidRank <= 5,
-            failure_risk: inferFailureRisk(item, docRank, kpidRank),
+            failure_risk: inferFailureRisk(
+                item,
+                docRank,
+                kpidRank,
+                kpEvalTarget,
+                supportCoverageState,
+            ),
             failure_reasons: failureReasons,
             topDocMatches: docRerankedMatches
                 .slice(0, topMatchLimit)
@@ -1278,6 +1625,14 @@ function collectCaseDetails(
                     rank: index + 1,
                     otid: match.otid,
                     best_kpid: match.best_kpid,
+                })),
+            expectedDocTopKpCandidates: expectedDocTopKpCandidates
+                .slice(0, topMatchLimit)
+                .map((candidate, index) => ({
+                    rank: index + 1,
+                    kpid: candidate.kpid,
+                    rawScore: candidate.rawScore,
+                    rerankedScore: candidate.rerankedScore,
                 })),
         };
 
@@ -1323,6 +1678,20 @@ function evaluateQueryCache(
             docHitAt5WrongKpid: number;
         }
     > = {};
+    const supportCoverageMetricsSeed: Record<
+        string,
+        {
+            applicable: number;
+            docHitAt1Total: number;
+            docHitAt5Total: number;
+            docHitAt1FullCoverAt3: number;
+            docHitAt1FullCoverAt5: number;
+            docHitAt5FullCoverAt5: number;
+            partialCoverAt5: number;
+            coveredGroupsTop5Sum: number;
+            coverageRatioTop5Sum: number;
+        }
+    > = {};
 
     const combinedSeed = {
         total: 0,
@@ -1344,8 +1713,20 @@ function evaluateQueryCache(
         docHitAt5CorrectKpid: 0,
         docHitAt5WrongKpid: 0,
     };
+    const supportCoverageCombinedSeed = {
+        applicable: 0,
+        docHitAt1Total: 0,
+        docHitAt5Total: 0,
+        docHitAt1FullCoverAt3: 0,
+        docHitAt1FullCoverAt5: 0,
+        docHitAt5FullCoverAt5: 0,
+        partialCoverAt5: 0,
+        coveredGroupsTop5Sum: 0,
+        coverageRatioTop5Sum: 0,
+    };
 
     queryCache.forEach((item) => {
+        const kpEvalTarget = resolveKpEvalTarget(item.testCase);
         const result = searchAndRank({
             queryVector: item.queryVector,
             querySparse: item.querySparse,
@@ -1391,8 +1772,29 @@ function evaluateQueryCache(
         const kpidRank = getKpidRank(
             rerankedMatches,
             item.testCase.expected_otid,
-            item.testCase.expected_kpid,
+            kpEvalTarget.acceptableAnchorKpids,
         );
+        const expectedDocMatch = docRerankedMatches.find(
+            (match) => match.otid === item.testCase.expected_otid,
+        );
+        const expectedDocTopKpCandidates = expectedDocMatch
+            ? getRerankedKpCandidates(item, expectedDocMatch)
+            : [];
+        const supportCoverageState =
+            kpEvalTarget.mode === "aspect_coverage"
+                ? computeSupportCoverageState(
+                      kpEvalTarget.requiredKpidGroups,
+                      kpEvalTarget.minGroupsToCover,
+                      expectedDocTopKpCandidates,
+                  )
+                : {
+                      coverageDepth: Number.POSITIVE_INFINITY,
+                      coveredGroupsTop3: 0,
+                      coveredGroupsTop5: 0,
+                      coverageRatioTop5: 0,
+                      totalGroups: 0,
+                      minGroupsToCover: 0,
+                  };
         const datasetSeed =
             metricsSeed[item.testCase.dataset] ||
             (metricsSeed[item.testCase.dataset] = {
@@ -1417,6 +1819,19 @@ function evaluateQueryCache(
                 docHitAt5CorrectKpid: 0,
                 docHitAt5WrongKpid: 0,
             });
+        const datasetSupportCoverageSeed =
+            supportCoverageMetricsSeed[item.testCase.dataset] ||
+            (supportCoverageMetricsSeed[item.testCase.dataset] = {
+                applicable: 0,
+                docHitAt1Total: 0,
+                docHitAt5Total: 0,
+                docHitAt1FullCoverAt3: 0,
+                docHitAt1FullCoverAt5: 0,
+                docHitAt5FullCoverAt5: 0,
+                partialCoverAt5: 0,
+                coveredGroupsTop5Sum: 0,
+                coverageRatioTop5Sum: 0,
+            });
 
         const targets = [datasetSeed, combinedSeed];
         targets.forEach((target) => {
@@ -1429,7 +1844,7 @@ function evaluateQueryCache(
             }
         });
 
-        if (item.testCase.expected_kpid) {
+        if (kpEvalTarget.acceptableAnchorKpids.length > 0) {
             const kpidTargets = [datasetKpidSeed, kpidCombinedSeed];
             kpidTargets.forEach((target) => {
                 target.applicable += 1;
@@ -1450,6 +1865,47 @@ function evaluateQueryCache(
                     target.docHitAt5Total += 1;
                     if (kpidRank <= 5) target.docHitAt5CorrectKpid += 1;
                     else target.docHitAt5WrongKpid += 1;
+                }
+            });
+        }
+
+        if (
+            kpEvalTarget.mode === "aspect_coverage" &&
+            kpEvalTarget.requiredKpidGroups.length > 0
+        ) {
+            const supportTargets = [
+                datasetSupportCoverageSeed,
+                supportCoverageCombinedSeed,
+            ];
+            supportTargets.forEach((target) => {
+                target.applicable += 1;
+
+                const docHitAt1 = rank === 1;
+                const docHitAt5 = rank <= 5;
+                const fullCoverAt3 =
+                    docHitAt1 &&
+                    Number.isFinite(supportCoverageState.coverageDepth) &&
+                    supportCoverageState.coverageDepth <= 3;
+                const fullCoverAt5 =
+                    docHitAt5 &&
+                    Number.isFinite(supportCoverageState.coverageDepth) &&
+                    supportCoverageState.coverageDepth <= 5;
+                const partialCoverAt5 =
+                    docHitAt5 && supportCoverageState.coveredGroupsTop5 > 0;
+
+                if (docHitAt1) {
+                    target.docHitAt1Total += 1;
+                    if (fullCoverAt3) target.docHitAt1FullCoverAt3 += 1;
+                    if (fullCoverAt5) target.docHitAt1FullCoverAt5 += 1;
+                }
+
+                if (docHitAt5) {
+                    target.docHitAt5Total += 1;
+                    if (fullCoverAt5) target.docHitAt5FullCoverAt5 += 1;
+                    if (partialCoverAt5) target.partialCoverAt5 += 1;
+                    target.coveredGroupsTop5Sum += supportCoverageState.coveredGroupsTop5;
+                    target.coverageRatioTop5Sum +=
+                        supportCoverageState.coverageRatioTop5;
                 }
             });
         }
@@ -1482,7 +1938,36 @@ function evaluateQueryCache(
             docHitAt5WrongKpid: seed.docHitAt5WrongKpid,
         };
     });
+    const supportCoverageMetricsByDataset: Record<string, SupportCoverageMetrics> =
+        {};
+    Object.entries(supportCoverageMetricsSeed).forEach(([dataset, seed]) => {
+        const safeApplicable = seed.applicable || 1;
+        supportCoverageMetricsByDataset[dataset] = {
+            applicable: seed.applicable,
+            docHitAt1Total: seed.docHitAt1Total,
+            docHitAt5Total: seed.docHitAt5Total,
+            docHitAt1FullCoverAt3: seed.applicable
+                ? (seed.docHitAt1FullCoverAt3 / safeApplicable) * 100
+                : 0,
+            docHitAt1FullCoverAt5: seed.applicable
+                ? (seed.docHitAt1FullCoverAt5 / safeApplicable) * 100
+                : 0,
+            docHitAt5FullCoverAt5: seed.applicable
+                ? (seed.docHitAt5FullCoverAt5 / safeApplicable) * 100
+                : 0,
+            partialCoverAt5: seed.applicable
+                ? (seed.partialCoverAt5 / safeApplicable) * 100
+                : 0,
+            avgCoveredGroupsAt5: seed.applicable
+                ? seed.coveredGroupsTop5Sum / safeApplicable
+                : 0,
+            avgCoverageRatioAt5: seed.applicable
+                ? seed.coverageRatioTop5Sum / safeApplicable
+                : 0,
+        };
+    });
     const safeCombinedApplicable = kpidCombinedSeed.applicable || 1;
+    const safeSupportCombinedApplicable = supportCoverageCombinedSeed.applicable || 1;
 
     return {
         metricsByDataset,
@@ -1514,6 +1999,40 @@ function evaluateQueryCache(
             docHitAt5Total: kpidCombinedSeed.docHitAt5Total,
             docHitAt5CorrectKpid: kpidCombinedSeed.docHitAt5CorrectKpid,
             docHitAt5WrongKpid: kpidCombinedSeed.docHitAt5WrongKpid,
+        },
+        supportCoverageMetricsByDataset,
+        supportCoverageCombined: {
+            applicable: supportCoverageCombinedSeed.applicable,
+            docHitAt1Total: supportCoverageCombinedSeed.docHitAt1Total,
+            docHitAt5Total: supportCoverageCombinedSeed.docHitAt5Total,
+            docHitAt1FullCoverAt3: supportCoverageCombinedSeed.applicable
+                ? (supportCoverageCombinedSeed.docHitAt1FullCoverAt3 /
+                      safeSupportCombinedApplicable) *
+                  100
+                : 0,
+            docHitAt1FullCoverAt5: supportCoverageCombinedSeed.applicable
+                ? (supportCoverageCombinedSeed.docHitAt1FullCoverAt5 /
+                      safeSupportCombinedApplicable) *
+                  100
+                : 0,
+            docHitAt5FullCoverAt5: supportCoverageCombinedSeed.applicable
+                ? (supportCoverageCombinedSeed.docHitAt5FullCoverAt5 /
+                      safeSupportCombinedApplicable) *
+                  100
+                : 0,
+            partialCoverAt5: supportCoverageCombinedSeed.applicable
+                ? (supportCoverageCombinedSeed.partialCoverAt5 /
+                      safeSupportCombinedApplicable) *
+                  100
+                : 0,
+            avgCoveredGroupsAt5: supportCoverageCombinedSeed.applicable
+                ? supportCoverageCombinedSeed.coveredGroupsTop5Sum /
+                  safeSupportCombinedApplicable
+                : 0,
+            avgCoverageRatioAt5: supportCoverageCombinedSeed.applicable
+                ? supportCoverageCombinedSeed.coverageRatioTop5Sum /
+                  safeSupportCombinedApplicable
+                : 0,
         },
     };
 }
@@ -1559,6 +2078,8 @@ function buildGroupBreakdown(
                 tunedCombined: tunedResult.combined,
                 kpidUniform: uniformResult.kpidCombined,
                 kpidTunedCombined: tunedResult.kpidCombined,
+                supportCoverageUniform: uniformResult.supportCoverageCombined,
+                supportCoverageTunedCombined: tunedResult.supportCoverageCombined,
             };
         });
 
@@ -1667,6 +2188,7 @@ function summarizeCombo(
             weights: uniformWeights,
             combined: uniformMetrics.combined,
             kpidCombined: uniformMetrics.kpidCombined,
+            supportCoverageCombined: uniformMetrics.supportCoverageCombined,
             metricsByDataset: uniformMetrics.metricsByDataset,
         },
         tuned: {
@@ -1677,10 +2199,13 @@ function summarizeCombo(
             bestWeights: bestCandidate.weights,
             tuneCombined: bestCandidate.result.combined,
             kpidTuneCombined: bestCandidate.result.kpidCombined,
+            supportCoverageTuneCombined: bestCandidate.result.supportCoverageCombined,
             holdoutCombined: holdoutMetrics.combined,
             kpidHoldoutCombined: holdoutMetrics.kpidCombined,
+            supportCoverageHoldoutCombined: holdoutMetrics.supportCoverageCombined,
             combinedCombined: combinedMetrics.combined,
             kpidCombinedCombined: combinedMetrics.kpidCombined,
+            supportCoverageCombinedCombined: combinedMetrics.supportCoverageCombined,
             topTuneCandidates: candidates
                 .slice(0, TOP_TUNE_CANDIDATE_LIMIT)
                 .map((item) => ({
@@ -1722,6 +2247,16 @@ function formatMetricLine(metrics: Metrics): string {
 
 function formatWeights(weights: WeightConfig): string {
     return `Q=${weights.Q.toFixed(2)}, KP=${weights.KP.toFixed(2)}, OT=${weights.OT.toFixed(2)}`;
+}
+
+function formatSupportCoverageLine(metrics: SupportCoverageMetrics): string {
+    return [
+        `applicable=${metrics.applicable}`,
+        `doc@1+cover@5=${metrics.docHitAt1FullCoverAt5.toFixed(2)}%`,
+        `doc@5+cover@5=${metrics.docHitAt5FullCoverAt5.toFixed(2)}%`,
+        `partial@5=${metrics.partialCoverAt5.toFixed(2)}%`,
+        `avgCoverRatio@5=${metrics.avgCoverageRatioAt5.toFixed(4)}`,
+    ].join(" | ");
 }
 
 async function main() {
@@ -1820,6 +2355,11 @@ async function main() {
         console.log(
             `Combined | ${formatMetricLine(comboReport.tuned.combinedCombined)}`,
         );
+        if (comboReport.tuned.supportCoverageCombinedCombined.applicable > 0) {
+            console.log(
+                `Aspect  | ${formatSupportCoverageLine(comboReport.tuned.supportCoverageCombinedCombined)}`,
+            );
+        }
     });
 
     const resultsDir = path.resolve(process.cwd(), "scripts/results");

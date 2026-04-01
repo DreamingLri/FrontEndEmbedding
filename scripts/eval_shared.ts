@@ -8,11 +8,16 @@ import {
     resolveFrontendVectorFile,
 } from "./kb_version_paths.ts";
 
+export type KpEvalMode = "single_anchor" | "aspect_coverage" | "ot_only";
+
 export type EvalDatasetCase = {
     query: string;
     expected_otid: string;
     expected_kpid?: string;
     support_kpids?: string[];
+    kp_eval_mode?: KpEvalMode;
+    required_kpid_groups?: string[][];
+    min_groups_to_cover?: number;
     query_type?: string;
     query_scope?: string;
     preferred_granularity?: string;
@@ -108,7 +113,7 @@ const GRANULARITY_DATASET_TARGETS: Record<
         label: "InDomainHoldout-50",
         role: "in_domain_holdout",
         primaryPath: CURRENT_EVAL_DATASET_FILES.granularityInDomainHoldout50,
-        fallbackPath: CURRENT_EVAL_DATASET_FILES.granularityHoldoutV3,
+        fallbackPath: CURRENT_EVAL_DATASET_FILES.granularityInDomainHoldout50SkeletonV2,
     },
     external_ood_holdout_30: {
         key: "external_ood_holdout_30",

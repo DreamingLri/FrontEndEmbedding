@@ -560,6 +560,8 @@ type QueryIntentContext = {
     degreeLevels: string[];
     eventTypes: string[];
     hasPostOutcomeCondition: boolean;
+    asksRuleDocument: boolean;
+    asksOutcomeDocument: boolean;
     preferLatest: boolean;
     preferLatestStrong: boolean;
     querySpecificityTerms: string[];
@@ -604,6 +606,19 @@ function extractQuerySpecificityTerms(queryWords: string[]): string[] {
     return dedupe(
         queryWords.filter((word) => QUERY_SCOPE_SPECIFICITY_TERM_SET.has(word)),
     );
+}
+
+function queryAsksRuleDocument(rawQuery: string): boolean {
+    return (
+        /(招生简章|简章|招生章程|章程|实施细则|细则|实施办法|办法|接收办法|录取方案|方案)/.test(
+            rawQuery,
+        ) &&
+        !/(结果|公示|名单|递补|增补|拟录取|录取结果)/.test(rawQuery)
+    );
+}
+
+function queryAsksOutcomeDocument(rawQuery: string): boolean {
+    return /(结果|公示|名单|递补|增补|拟录取|录取结果)/.test(rawQuery);
 }
 
 function buildEvidenceCoverageRequirement(
@@ -810,6 +825,8 @@ function createQueryIntentContext(
         hasPostOutcomeCondition: hasPostOutcomeConditionCue(
             rawQuery,
         ),
+        asksRuleDocument: queryAsksRuleDocument(rawQuery),
+        asksOutcomeDocument: queryAsksOutcomeDocument(rawQuery),
         preferLatest: Boolean(queryIntent?.preferLatest),
         preferLatestStrong: Boolean(queryIntent?.preferLatestStrong),
         querySpecificityTerms,
@@ -967,12 +984,14 @@ function deriveQueryRoleSignals(
             /条件|满足|资格/.test(rawQuery) ||
             queryScopeHint === "eligibility_condition",
         asksPostOutcomeCondition: hasPostOutcomeConditionCue(rawQuery),
-        asksMaterials: /材料|扫描件|电子版|邮箱|mail/i.test(rawQuery),
-        asksProcedure: /怎么办|怎么处理|不通过|补交|补充|流程|步骤/.test(
+        asksMaterials: /材料|扫描件|电子版|邮箱|mail|提交|携带/i.test(rawQuery),
+        asksProcedure: /怎么办|怎么处理|不通过|补交|补充|流程|步骤|报到|候考|地点|现场|资格审查/.test(
             rawQuery,
         ),
         asksExamContent:
-            /考什么|考哪些|考试内容|考试科目|科目|题型|综合能力/.test(rawQuery),
+            /考什么|考哪些|考试内容|考试科目|科目|题型|综合能力|分值|权重|占比|比例/.test(
+                rawQuery,
+            ),
         asksAnnouncementPeriod: /公示期|哪几天/.test(rawQuery),
         asksApplicationStage:
             /申请|报名|确认|提交/.test(rawQuery) &&
@@ -990,6 +1009,16 @@ function computeKpRoleBonus(
     rawQuery: string,
 ): number {
     let bonus = 0;
+    const asksOperationalEvidence =
+        signals.asksCondition ||
+        signals.asksMaterials ||
+        signals.asksProcedure ||
+        signals.asksTime ||
+        /资格审查|报到|候考|地点|现场|安排/.test(rawQuery);
+    const asksRuleDocument =
+        /(招生简章|简章|招生章程|章程|实施细则|细则|实施办法|办法|接收办法|录取方案|方案)/.test(
+            rawQuery,
+        ) && !/(结果|公示|名单|递补|增补|拟录取|录取结果)/.test(rawQuery);
 
     if (signals.asksTime) {
         if (
@@ -1020,7 +1049,10 @@ function computeKpRoleBonus(
 
     if (signals.asksMaterials) {
         if (hasKpRoleTag(candidate, "materials")) {
-            bonus += 0.8;
+            bonus += 1.0;
+        }
+        if (hasKpRoleTag(candidate, "procedure")) {
+            bonus += 0.35;
         }
         if (
             hasKpRoleTag(candidate, "materials")
@@ -1073,7 +1105,10 @@ function computeKpRoleBonus(
 
     if (signals.asksProcedure) {
         if (hasKpRoleTag(candidate, "procedure")) {
-            bonus += 1.25;
+            bonus += 1.35;
+        }
+        if (hasKpRoleTag(candidate, "schedule")) {
+            bonus += 0.6;
         }
         if (
             hasKpRoleTag(candidate, "reminder")
@@ -1101,6 +1136,54 @@ function computeKpRoleBonus(
         }
         if (hasKpRoleTag(candidate, "publish")) {
             bonus -= 0.45;
+        }
+    }
+
+    if (/(权重|占比|比例|分值)/.test(rawQuery)) {
+        if (hasKpRoleTag(candidate, "schedule")) {
+            bonus += 0.45;
+        }
+        if (hasKpRoleTag(candidate, "background")) {
+            bonus -= 0.4;
+        }
+        if (hasKpRoleTag(candidate, "post_outcome")) {
+            bonus -= 0.6;
+        }
+    }
+
+    if (/资格审查|报到|候考|地点|现场|安排/.test(rawQuery)) {
+        if (hasKpRoleTag(candidate, "materials")) {
+            bonus += 0.55;
+        }
+        if (hasKpRoleTag(candidate, "procedure")) {
+            bonus += 0.85;
+        }
+        if (hasKpRoleTag(candidate, "schedule")) {
+            bonus += 0.7;
+        }
+        if (hasKpRoleTag(candidate, "background")) {
+            bonus -= 0.7;
+        }
+        if (hasKpRoleTag(candidate, "post_outcome")) {
+            bonus -= 0.6;
+        }
+    }
+
+    if (asksRuleDocument) {
+        if (
+            hasKpRoleTag(candidate, "condition") ||
+            hasKpRoleTag(candidate, "materials") ||
+            hasKpRoleTag(candidate, "procedure") ||
+            hasKpRoleTag(candidate, "application_stage")
+        ) {
+            bonus += 0.25;
+        }
+        if (
+            hasKpRoleTag(candidate, "background") ||
+            hasKpRoleTag(candidate, "publish") ||
+            hasKpRoleTag(candidate, "post_outcome")
+        ) {
+            bonus -= 0.55;
         }
     }
 
@@ -1177,6 +1260,18 @@ function computeKpRoleBonus(
 
     if (hasKpRoleTag(candidate, "background")) {
         bonus -= 0.15;
+    }
+
+    if (asksOperationalEvidence) {
+        if (hasKpRoleTag(candidate, "background")) {
+            bonus -= 0.45;
+        }
+        if (hasKpRoleTag(candidate, "publish")) {
+            bonus -= 0.35;
+        }
+        if (hasKpRoleTag(candidate, "post_outcome")) {
+            bonus -= 0.6;
+        }
     }
 
     return bonus;
@@ -1435,6 +1530,59 @@ function applyEventBoost(
         boost *= 0.35;
     }
 
+    if (intentContext.asksRuleDocument) {
+        const asksBrochure =
+            /(招生简章|简章|招生章程|章程)/.test(intentContext.rawQuery);
+        const asksImplementationRule =
+            /(实施细则|细则|实施办法|办法|接收办法|录取方案|方案)/.test(
+                intentContext.rawQuery,
+            );
+
+        if (asksBrochure && hasAnyOverlap(["招生章程"], scores.event_types)) {
+            boost *= 1.22;
+        }
+
+        if (
+            asksImplementationRule &&
+            hasAnyOverlap(
+                ["推免实施办法", "资格要求", "材料提交", "考试安排", "复试通知"],
+                scores.event_types,
+            )
+        ) {
+            boost *= 1.14;
+        }
+
+        if (hasAnyOverlap(["录取公示", "推免资格公示"], scores.event_types)) {
+            boost *= 0.62;
+        }
+
+        if (asksBrochure && hasAnyOverlap(["复试通知"], scores.event_types)) {
+            boost *= 0.78;
+        }
+    }
+
+    if (intentContext.asksOutcomeDocument) {
+        if (hasAnyOverlap(["录取公示", "推免资格公示"], scores.event_types)) {
+            boost *= 1.14;
+        }
+        if (
+            hasAnyOverlap(
+                ["招生章程", "推免实施办法", "资格要求", "材料提交"],
+                scores.event_types,
+            )
+        ) {
+            boost *= 0.86;
+        }
+    }
+
+    if (
+        /调剂/.test(intentContext.rawQuery) &&
+        !intentContext.asksOutcomeDocument &&
+        hasAnyOverlap(["录取公示"], scores.event_types)
+    ) {
+        boost *= 0.82;
+    }
+
     return boost;
 }
 
@@ -1454,6 +1602,46 @@ function applyLatestYearBoost(
 
     const yearGap = Math.max(0, latestTargetYear - scores.target_year);
     return boost * Math.pow(LATEST_YEAR_BOOST_BASE, yearGap);
+}
+
+function applyExplicitYearAlignmentBoost(
+    boost: number,
+    intentContext: QueryIntentContext,
+    scores: AggregatedDocScores,
+    signals: DocQuerySignals,
+): number {
+    if (!intentContext.hasExplicitYear) {
+        return boost;
+    }
+
+    if (signals.hasStructuredYearMatch && signals.hasPublishYearMatch) {
+        return boost * 1.1;
+    }
+
+    if (signals.hasStructuredYearMatch && !signals.hasSuspiciousStructuredYear) {
+        return boost * 1.06;
+    }
+
+    if (signals.hasPublishYearMatch) {
+        return boost * 1.04;
+    }
+
+    if (
+        signals.hasLexicalYearMatch &&
+        !signals.hasStructuredYearMatch &&
+        !signals.hasPublishYearMatch
+    ) {
+        return boost * 0.9;
+    }
+
+    if (
+        scores.target_year !== undefined ||
+        signals.docPublishYear !== undefined
+    ) {
+        return boost * 0.78;
+    }
+
+    return boost;
 }
 
 function applyLatestTimestampBoost(
@@ -1627,6 +1815,108 @@ function applySpecificityLocalFreshnessBoost(
     return boost * Math.pow(0.75, gapMonths);
 }
 
+function hasAnyRoleEvidence(
+    candidates: readonly KPCandidate[],
+    tags: readonly string[],
+): boolean {
+    return candidates.some((candidate) =>
+        tags.some((tag) => hasKpRoleTag(candidate, tag)),
+    );
+}
+
+function applyMultiEvidenceKpBoost(
+    boost: number,
+    intentContext: QueryIntentContext,
+    scores: AggregatedDocScores,
+): number {
+    if (!scores.kp_candidates || scores.kp_candidates.length === 0) {
+        return boost;
+    }
+
+    const signals = deriveQueryRoleSignals(intentContext.rawQuery);
+    const window = scores.kp_candidates.slice(0, DEFAULT_KP_ROLE_CANDIDATE_LIMIT);
+    const matchedCondition =
+        signals.asksCondition &&
+        hasAnyRoleEvidence(window, ["condition", "deadline"]);
+    const matchedMaterials =
+        signals.asksMaterials &&
+        hasAnyRoleEvidence(window, ["materials", "email"]);
+    const matchedProcedure =
+        signals.asksProcedure &&
+        hasAnyRoleEvidence(window, ["procedure", "application_stage", "schedule"]);
+    const matchedTime =
+        signals.asksTime &&
+        hasAnyRoleEvidence(window, [
+            "schedule",
+            "arrival",
+            "deadline",
+            "announcement_period",
+            "time_expression",
+        ]);
+    const matchedExam =
+        signals.asksExamContent && hasAnyRoleEvidence(window, ["schedule"]);
+
+    const matchedGroupCount = [
+        matchedCondition,
+        matchedMaterials,
+        matchedProcedure,
+        matchedTime,
+        matchedExam,
+    ].filter(Boolean).length;
+
+    let nextBoost = boost;
+    if (matchedGroupCount >= 2) {
+        nextBoost *= 1 + Math.min(0.12, matchedGroupCount * 0.03);
+    }
+
+    if (matchedCondition && matchedMaterials) {
+        nextBoost *= 1.05;
+    }
+
+    if (matchedMaterials && matchedProcedure) {
+        nextBoost *= 1.06;
+    }
+
+    if (matchedTime && matchedProcedure) {
+        nextBoost *= 1.04;
+    }
+
+    const topCandidate = window[0];
+    const asksOperationalEvidence =
+        signals.asksCondition ||
+        signals.asksMaterials ||
+        signals.asksProcedure ||
+        signals.asksTime;
+    const topCandidateIsBackgroundLike =
+        hasKpRoleTag(topCandidate, "background") ||
+        hasKpRoleTag(topCandidate, "publish") ||
+        hasKpRoleTag(topCandidate, "post_outcome");
+    const hasOperationalAlternative = hasAnyRoleEvidence(
+        window.slice(1),
+        [
+            "condition",
+            "materials",
+            "email",
+            "procedure",
+            "application_stage",
+            "schedule",
+            "arrival",
+            "deadline",
+            "announcement_period",
+        ],
+    );
+
+    if (
+        asksOperationalEvidence &&
+        topCandidateIsBackgroundLike &&
+        hasOperationalAlternative
+    ) {
+        nextBoost *= 0.96;
+    }
+
+    return nextBoost;
+}
+
 function computeBoostMultiplier(params: {
     otid: string;
     scores: AggregatedDocScores;
@@ -1672,11 +1962,18 @@ function computeBoostMultiplier(params: {
     boost = applyTopicCoverageBoost(boost, intentContext, scores, signals);
     boost = applyDegreeBoost(boost, intentContext, scores);
     boost = applyEventBoost(boost, intentContext, scores);
+    boost = applyMultiEvidenceKpBoost(boost, intentContext, scores);
     boost = applyLatestYearBoost(
         boost,
         intentContext,
         scores,
         latestTargetYear,
+    );
+    boost = applyExplicitYearAlignmentBoost(
+        boost,
+        intentContext,
+        scores,
+        signals,
     );
     boost = applyLatestTimestampBoost(
         boost,
