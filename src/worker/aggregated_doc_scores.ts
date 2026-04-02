@@ -1,6 +1,7 @@
 type AggregatableMetadata = {
     id: string;
     type: "Q" | "KP" | "OT";
+    parent_pkid?: string;
     parent_otid: string;
     timestamp?: number;
     target_year?: number;
@@ -23,6 +24,7 @@ export interface KPCandidate {
 export interface AggregatedDocScores {
     max_q: number;
     max_kp: number;
+    kp_score_map: Record<string, number>;
     kp_scores: number[];
     kp_candidates: KPCandidate[];
     ot_score: number;
@@ -68,6 +70,7 @@ export function createAggregatedDocScores(
     return {
         max_q: 0,
         max_kp: 0,
+        kp_score_map: {},
         kp_scores: [],
         kp_candidates: [],
         ot_score: 0,
@@ -105,7 +108,7 @@ export function mergeAggregatedDocMetadata(
 
 export function applyScoreToAggregatedDocScores(
     target: AggregatedDocScores,
-    meta: Pick<AggregatableMetadata, "id" | "type" | "kp_role_tags">,
+    meta: Pick<AggregatableMetadata, "id" | "type" | "kp_role_tags" | "parent_pkid">,
     score: number,
 ) {
     if (meta.type === "Q") {
@@ -114,23 +117,33 @@ export function applyScoreToAggregatedDocScores(
     }
 
     if (meta.type === "KP") {
-        target.kp_scores.push(score);
-        target.kp_scores.sort((a, b) => b - a);
-        if (target.kp_scores.length > MAX_TRACKED_KP_SCORES) {
-            target.kp_scores.length = MAX_TRACKED_KP_SCORES;
-        }
-        target.kp_candidates.push({
-            kpid: meta.id,
-            score,
-            kp_role_tags: meta.kp_role_tags,
-        });
-        target.kp_candidates.sort((a, b) => b.score - a.score);
-        if (target.kp_candidates.length > MAX_TRACKED_KP_SCORES) {
-            target.kp_candidates.length = MAX_TRACKED_KP_SCORES;
-        }
-        if (score > target.max_kp) {
-            target.max_kp = score;
-            target.best_kpid = meta.id;
+        const canonicalKpid = meta.parent_pkid || meta.id;
+        const previousScore = target.kp_score_map[canonicalKpid];
+        if (previousScore === undefined || score > previousScore) {
+            target.kp_score_map[canonicalKpid] = score;
+            target.kp_scores = Object.values(target.kp_score_map)
+                .sort((a, b) => b - a)
+                .slice(0, MAX_TRACKED_KP_SCORES);
+
+            const existingCandidate = target.kp_candidates.find(
+                (candidate) => candidate.kpid === canonicalKpid,
+            );
+            if (existingCandidate) {
+                existingCandidate.score = score;
+                existingCandidate.kp_role_tags = meta.kp_role_tags;
+            } else {
+                target.kp_candidates.push({
+                    kpid: canonicalKpid,
+                    score,
+                    kp_role_tags: meta.kp_role_tags,
+                });
+            }
+            target.kp_candidates.sort((a, b) => b.score - a.score);
+            if (target.kp_candidates.length > MAX_TRACKED_KP_SCORES) {
+                target.kp_candidates.length = MAX_TRACKED_KP_SCORES;
+            }
+            target.max_kp = target.kp_scores[0] || 0;
+            target.best_kpid = target.kp_candidates[0]?.kpid;
         }
         return;
     }

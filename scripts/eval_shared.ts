@@ -106,6 +106,7 @@ const GRANULARITY_DATASET_TARGETS: Record<
         label: "MainBench-120",
         role: "benchmark",
         primaryPath: CURRENT_EVAL_DATASET_FILES.granularityMain120,
+        // 仅在 MainBench-120 本体缺失时回退到历史主集，正常测评不应依赖这个分支。
         fallbackPath: CURRENT_EVAL_DATASET_FILES.granularityMain106,
     },
     in_domain_holdout_50: {
@@ -113,6 +114,7 @@ const GRANULARITY_DATASET_TARGETS: Record<
         label: "InDomainHoldout-50",
         role: "in_domain_holdout",
         primaryPath: CURRENT_EVAL_DATASET_FILES.granularityInDomainHoldout50,
+        // skeleton_v2 只作为未完成 review 时的兼容回退。
         fallbackPath: CURRENT_EVAL_DATASET_FILES.granularityInDomainHoldout50SkeletonV2,
     },
     external_ood_holdout_30: {

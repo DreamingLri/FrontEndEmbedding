@@ -15,6 +15,7 @@ import {
 } from "../src/worker/vector_engine.ts";
 import { fmmTokenize } from "../src/worker/fmm_tokenize.ts";
 import {
+    ACTIVE_MAIN_DB_VERSION,
     DEFAULT_QUERY_EMBED_BATCH_SIZE,
     loadDatasetSources,
     resolveEvalDatasetConfig,
@@ -43,14 +44,20 @@ type WeightConfig = {
     OT: number;
 };
 
+type MetadataWithParentPkid = Metadata & {
+    parent_pkid?: string;
+};
+
 type QueryCacheItem = {
     testCase: DatasetCase;
+    effectiveQueryText: string;
     queryVector: Float32Array;
     queryIntent: ParsedQueryIntent;
     queryMonths: number[];
     queryWords: string[];
     querySparse: Record<number, number>;
     queryYearWordIds: number[];
+    denseScoreOverrides?: ReadonlyMap<string, number>;
 };
 
 type Metrics = {
@@ -226,6 +233,26 @@ type ComboReport = {
 
 type Report = {
     generatedAt: string;
+    mainDbVersion: string;
+    otDenseMode: string;
+    queryStyleMode?: string;
+    kpStyleMode?: string;
+    qPerDocCap?: number;
+    kpPerDocCap?: number;
+    lexicalTypeMultipliers?: {
+        Q: number;
+        KP: number;
+        OT: number;
+    };
+    otDenseSlidingWindowConfig?: {
+        windowSize: number;
+        overlap: number;
+        stride: number;
+        batchSize: number;
+        docCount: number;
+        windowCount: number;
+        missingDocCount: number;
+    };
     datasetVersion: string;
     datasetMode: "split" | "single_file" | "named_group";
     datasetKey: string;
@@ -321,10 +348,41 @@ const BAD_CASE_TOP_MATCHES = Number.parseInt(
     process.env.SUASK_BAD_CASE_TOP_MATCHES || "",
     10,
 );
+const SKIP_RESULT_REGISTRY_UPDATE =
+    process.env.SUASK_SKIP_RESULT_REGISTRY_UPDATE === "1";
+const OT_DENSE_MODE = process.env.SUASK_OT_DENSE_MODE || "original";
+const OT_DENSE_WINDOW_SIZE = Number.parseInt(
+    process.env.SUASK_OT_DENSE_WINDOW_SIZE || "",
+    10,
+);
+const OT_DENSE_WINDOW_OVERLAP = Number.parseInt(
+    process.env.SUASK_OT_DENSE_WINDOW_OVERLAP || "",
+    10,
+);
+const OT_DENSE_WINDOW_BATCH_SIZE = Number.parseInt(
+    process.env.SUASK_OT_DENSE_WINDOW_BATCH_SIZE || "",
+    10,
+);
 const KP_TOP_N = Number.parseInt(process.env.SUASK_KP_TOP_N || "", 10);
 const KP_TAIL_WEIGHT = Number.parseFloat(
     process.env.SUASK_KP_TAIL_WEIGHT || "",
 );
+const Q_PER_DOC_CAP = Number.parseInt(process.env.SUASK_Q_PER_DOC_CAP || "", 10);
+const KP_PER_DOC_CAP = Number.parseInt(
+    process.env.SUASK_KP_PER_DOC_CAP || "",
+    10,
+);
+const Q_LEXICAL_MULTIPLIER = Number.parseFloat(
+    process.env.SUASK_Q_LEXICAL_MULTIPLIER || "",
+);
+const KP_LEXICAL_MULTIPLIER = Number.parseFloat(
+    process.env.SUASK_KP_LEXICAL_MULTIPLIER || "",
+);
+const OT_LEXICAL_MULTIPLIER = Number.parseFloat(
+    process.env.SUASK_OT_LEXICAL_MULTIPLIER || "",
+);
+const QUERY_STYLE_MODE = process.env.SUASK_QUERY_STYLE_MODE || "original";
+const KP_STYLE_MODE = process.env.SUASK_KP_STYLE_MODE || "original";
 const WEIGHT_STEPS = parseWeightSteps(
     process.env.SUASK_WEIGHT_STEPS || "0.2,0.5,0.8",
 );
@@ -333,6 +391,25 @@ const FIXED_COMBO_WEIGHTS = parseFixedComboWeights(
 );
 const TOP_TUNE_CANDIDATE_LIMIT = 5;
 const CURRENT_TIMESTAMP = 0;
+const SAFE_OT_DENSE_WINDOW_SIZE =
+    Number.isFinite(OT_DENSE_WINDOW_SIZE) && OT_DENSE_WINDOW_SIZE >= 64
+        ? Math.floor(OT_DENSE_WINDOW_SIZE)
+        : 512;
+const SAFE_OT_DENSE_WINDOW_OVERLAP =
+    Number.isFinite(OT_DENSE_WINDOW_OVERLAP) && OT_DENSE_WINDOW_OVERLAP >= 0
+        ? Math.min(
+              Math.floor(OT_DENSE_WINDOW_OVERLAP),
+              SAFE_OT_DENSE_WINDOW_SIZE - 1,
+          )
+        : 128;
+const SAFE_OT_DENSE_WINDOW_STRIDE = Math.max(
+    1,
+    SAFE_OT_DENSE_WINDOW_SIZE - SAFE_OT_DENSE_WINDOW_OVERLAP,
+);
+const SAFE_OT_DENSE_WINDOW_BATCH_SIZE =
+    Number.isFinite(OT_DENSE_WINDOW_BATCH_SIZE) && OT_DENSE_WINDOW_BATCH_SIZE > 0
+        ? Math.floor(OT_DENSE_WINDOW_BATCH_SIZE)
+        : 16;
 
 const COMBOS: ComboDefinition[] = [
     { label: "Q", allowedTypes: ["Q"] },
@@ -352,6 +429,8 @@ let extractor: Awaited<ReturnType<typeof loadFrontendEvalEngine>>["extractor"] |
 let kpTextMap = new Map<string, string>();
 let kpFeatureMap = new Map<string, KPFeatureFlags>();
 let articleTimeAnchorMap = new Map<string, ArticleTimeAnchor>();
+let otDenseSlidingWindowCorpus: OtDenseSlidingWindowCorpus | null = null;
+let kpDenseStyleCorpus: KpDenseStyleCorpus | null = null;
 
 type EvalSearchMatch = {
     otid: string;
@@ -386,6 +465,25 @@ type ArticleTimeAnchor = {
     publishTime: string;
 };
 
+type BackendArticleRecord = {
+    otid?: string;
+    ot_text?: string;
+    ot_title?: string;
+    publish_time?: string;
+};
+
+type OtDenseSlidingWindowCorpus = {
+    windowOtids: string[];
+    vectors: Float32Array[];
+    windowCountByOtid: Map<string, number>;
+    missingOtids: string[];
+};
+
+type KpDenseStyleCorpus = {
+    kpids: string[];
+    vectors: Float32Array[];
+};
+
 const KP_TEXTS_FILE = resolveBackendKnowledgePointsFile();
 const ARTICLE_TEXTS_FILE = resolveBackendArticlesFile();
 const QUERY_STOPWORDS = new Set([
@@ -405,6 +503,312 @@ const QUERY_STOPWORDS = new Set([
     "需要",
     "一下",
 ]);
+
+function shouldUseOtDenseSlidingWindow(): boolean {
+    return OT_DENSE_MODE === "sliding_window_max";
+}
+
+function loadBackendArticleRecords(): BackendArticleRecord[] {
+    const absolutePath = path.resolve(process.cwd(), ARTICLE_TEXTS_FILE);
+    if (!fs.existsSync(absolutePath)) {
+        return [];
+    }
+
+    return JSON.parse(
+        fs.readFileSync(absolutePath, "utf-8"),
+    ) as BackendArticleRecord[];
+}
+
+async function tokenizeTextWithoutSpecialTokens(text: string): Promise<number[]> {
+    if (!extractor) {
+        throw new Error("Extractor not initialized");
+    }
+
+    const tokenizerOutput = await extractor.tokenizer(text, {
+        truncation: false,
+        add_special_tokens: false,
+    });
+    return Array.from(tokenizerOutput.input_ids.data).map((item) => Number(item));
+}
+
+function buildOtDenseSlidingWindowTexts(text: string, tokenIds: number[]): string[] {
+    if (!extractor) {
+        throw new Error("Extractor not initialized");
+    }
+
+    if (tokenIds.length <= SAFE_OT_DENSE_WINDOW_SIZE) {
+        return text.trim() ? [text] : [];
+    }
+
+    const windows: string[] = [];
+    for (
+        let start = 0;
+        start < tokenIds.length;
+        start += SAFE_OT_DENSE_WINDOW_STRIDE
+    ) {
+        const end = Math.min(start + SAFE_OT_DENSE_WINDOW_SIZE, tokenIds.length);
+        const windowIds = tokenIds.slice(start, end);
+        if (windowIds.length === 0) {
+            continue;
+        }
+
+        const decoded = extractor.tokenizer.decode(windowIds);
+        if (decoded.trim()) {
+            windows.push(decoded);
+        }
+
+        if (end >= tokenIds.length) {
+            break;
+        }
+    }
+
+    return windows.length > 0 ? windows : (text.trim() ? [text] : []);
+}
+
+async function buildOtDenseSlidingWindowCorpus(): Promise<OtDenseSlidingWindowCorpus> {
+    if (!extractor) {
+        throw new Error("Extractor not initialized");
+    }
+
+    const otidSet = new Set(
+        metadataList
+            .filter((item) => item.type === "OT")
+            .map((item) => item.id),
+    );
+    const articleRecords = loadBackendArticleRecords();
+    const windowTexts: string[] = [];
+    const windowOtids: string[] = [];
+    const windowCountByOtid = new Map<string, number>();
+
+    console.log(
+        "Building OT dense sliding-window corpus: " +
+            `window=${SAFE_OT_DENSE_WINDOW_SIZE}, ` +
+            `overlap=${SAFE_OT_DENSE_WINDOW_OVERLAP}, ` +
+            `stride=${SAFE_OT_DENSE_WINDOW_STRIDE}`,
+    );
+
+    for (const article of articleRecords) {
+        const otid = article.otid;
+        const otText = article.ot_text || "";
+        if (!otid || !otidSet.has(otid) || !otText.trim()) {
+            continue;
+        }
+
+        const tokenIds = await tokenizeTextWithoutSpecialTokens(otText);
+        const windows = buildOtDenseSlidingWindowTexts(otText, tokenIds);
+        if (windows.length === 0) {
+            continue;
+        }
+
+        windowCountByOtid.set(otid, windows.length);
+        windows.forEach((windowText) => {
+            windowOtids.push(otid);
+            windowTexts.push(windowText);
+        });
+    }
+
+    const missingOtids = metadataList
+        .filter((item) => item.type === "OT")
+        .map((item) => item.id)
+        .filter((otid) => !windowCountByOtid.has(otid));
+
+    console.log(
+        `OT dense sliding-window corpus ready: ${windowCountByOtid.size} docs, ${windowTexts.length} windows` +
+            (missingOtids.length > 0 ? `, missing ${missingOtids.length} docs` : ""),
+    );
+
+    const vectors = await embedFrontendQueries(extractor, windowTexts, dimensions, {
+        batchSize: SAFE_OT_DENSE_WINDOW_BATCH_SIZE,
+        onProgress: (done, total) => {
+            if (
+                done === total ||
+                done === Math.min(total, SAFE_OT_DENSE_WINDOW_BATCH_SIZE)
+            ) {
+                console.log(`OT dense window embedding progress: ${done}/${total}`);
+            }
+        },
+    });
+
+    return {
+        windowOtids,
+        vectors,
+        windowCountByOtid,
+        missingOtids,
+    };
+}
+
+function dotVectorPair(queryVector: Float32Array, candidateVector: Float32Array): number {
+    let score = 0;
+    for (let index = 0; index < dimensions; index++) {
+        score += queryVector[index] * candidateVector[index];
+    }
+    return score;
+}
+
+function buildOtDenseScoreOverrides(
+    queryVector: Float32Array,
+): ReadonlyMap<string, number> | undefined {
+    if (!otDenseSlidingWindowCorpus) {
+        return undefined;
+    }
+
+    const scoreMap = new Map<string, number>();
+    otDenseSlidingWindowCorpus.windowOtids.forEach((otid, index) => {
+        const score = dotVectorPair(
+            queryVector,
+            otDenseSlidingWindowCorpus.vectors[index],
+        );
+        const current = scoreMap.get(otid);
+        if (current === undefined || score > current) {
+            scoreMap.set(otid, score);
+        }
+    });
+    return scoreMap;
+}
+
+function shouldUseKpDenseStyleCorpus(): boolean {
+    return (
+        KP_STYLE_MODE === "question_wrap" || KP_STYLE_MODE === "truncate128"
+    );
+}
+
+async function buildKpDenseStyleCorpus(): Promise<KpDenseStyleCorpus | null> {
+    if (!extractor || !shouldUseKpDenseStyleCorpus()) {
+        return null;
+    }
+
+    const kpids = metadataList
+        .filter((item) => item.type === "KP" && kpTextMap.has(item.id))
+        .map((item) => item.id);
+    let rewrittenTexts: string[] = [];
+    if (KP_STYLE_MODE === "truncate128") {
+        for (
+            let startIndex = 0;
+            startIndex < kpids.length;
+            startIndex += DEFAULT_QUERY_EMBED_BATCH_SIZE
+        ) {
+            const batchKpids = kpids.slice(
+                startIndex,
+                startIndex + DEFAULT_QUERY_EMBED_BATCH_SIZE,
+            );
+            const batchTexts = batchKpids.map((kpid) =>
+                rewriteKpTextByStyle(kpTextMap.get(kpid) || ""),
+            );
+            const tokenizerOutput = await extractor.tokenizer(batchTexts, {
+                truncation: true,
+                max_length: 128,
+                padding: true,
+            });
+            const inputIds = tokenizerOutput.input_ids.tolist() as bigint[][];
+            inputIds.forEach((row) => {
+                const trimmed = row.filter(
+                    (tokenId) => tokenId !== 0n && tokenId !== 101n && tokenId !== 102n,
+                );
+                const decoded = extractor!.tokenizer
+                    .decode(trimmed)
+                    .replace(/\[CLS\]|\[SEP\]|\[PAD\]/g, "")
+                    .replace(/\s+/g, "")
+                    .trim();
+                rewrittenTexts.push(decoded);
+            });
+        }
+    } else {
+        rewrittenTexts = kpids.map((kpid) =>
+            rewriteKpTextByStyle(kpTextMap.get(kpid) || ""),
+        );
+    }
+    const vectors = await embedFrontendQueries(extractor, rewrittenTexts, dimensions, {
+        batchSize: DEFAULT_QUERY_EMBED_BATCH_SIZE,
+        onProgress: (done, total) => {
+            if (done === total || done % 256 === 0) {
+                console.log(`KP style corpus embedding progress: ${done}/${total}`);
+            }
+        },
+    });
+
+    return {
+        kpids,
+        vectors,
+    };
+}
+
+function buildKpDenseScoreOverrides(
+    queryVector: Float32Array,
+): ReadonlyMap<string, number> | undefined {
+    if (!kpDenseStyleCorpus) {
+        return undefined;
+    }
+
+    const scoreMap = new Map<string, number>();
+    kpDenseStyleCorpus.kpids.forEach((kpid, index) => {
+        scoreMap.set(
+            kpid,
+            dotVectorPair(queryVector, kpDenseStyleCorpus.vectors[index]),
+        );
+    });
+    return scoreMap;
+}
+
+function mergeDenseScoreOverrides(
+    ...maps: Array<ReadonlyMap<string, number> | undefined>
+): ReadonlyMap<string, number> | undefined {
+    const merged = new Map<string, number>();
+    maps.forEach((map) => {
+        map?.forEach((value, key) => {
+            merged.set(key, value);
+        });
+    });
+    return merged.size > 0 ? merged : undefined;
+}
+
+function formatOtDenseModeSlug(): string {
+    if (!shouldUseOtDenseSlidingWindow()) {
+        return "otdenseorig";
+    }
+
+    return `otdensewin${SAFE_OT_DENSE_WINDOW_SIZE}o${SAFE_OT_DENSE_WINDOW_OVERLAP}`;
+}
+
+function getSafeLexicalTypeMultipliers(): {
+    Q: number;
+    KP: number;
+    OT: number;
+} {
+    return {
+        Q: Number.isFinite(Q_LEXICAL_MULTIPLIER) ? Q_LEXICAL_MULTIPLIER : 1.5,
+        KP: Number.isFinite(KP_LEXICAL_MULTIPLIER) ? KP_LEXICAL_MULTIPLIER : 1.2,
+        OT: Number.isFinite(OT_LEXICAL_MULTIPLIER) ? OT_LEXICAL_MULTIPLIER : 1.0,
+    };
+}
+
+function formatLexicalTypeMultiplierSlug(): string {
+    const multipliers = getSafeLexicalTypeMultipliers();
+    const isDefault =
+        multipliers.Q === 1.5 &&
+        multipliers.KP === 1.2 &&
+        multipliers.OT === 1.0;
+    if (isDefault) {
+        return "";
+    }
+
+    const formatPart = (value: number): string =>
+        value.toFixed(2).replace(".", "");
+    return `_typelex-q${formatPart(multipliers.Q)}-kp${formatPart(multipliers.KP)}-ot${formatPart(multipliers.OT)}`;
+}
+
+function formatQueryStyleModeSlug(): string {
+    return QUERY_STYLE_MODE === "declarative" ? "_qstyledecl" : "";
+}
+
+function formatKpStyleModeSlug(): string {
+    if (KP_STYLE_MODE === "question_wrap") {
+        return "_kpstyleqwrap";
+    }
+    if (KP_STYLE_MODE === "truncate128") {
+        return "_kpstyletruncate128";
+    }
+    return "";
+}
 
 function parseWeightSteps(raw: string): number[] {
     const values = raw
@@ -515,6 +919,102 @@ function countMetadataTypes(
         counts[item.type] += 1;
     });
     return counts;
+}
+
+function applyQPerDocCap(metadata: readonly Metadata[]): Metadata[] {
+    if (!Number.isFinite(Q_PER_DOC_CAP) || Q_PER_DOC_CAP <= 0) {
+        return [...metadata];
+    }
+
+    const qGroupsByDoc = new Map<
+        string,
+        Map<string, MetadataWithParentPkid[]>
+    >();
+
+    metadata.forEach((item) => {
+        if (item.type !== "Q") {
+            return;
+        }
+
+        const qItem = item as MetadataWithParentPkid;
+        const docKey = item.parent_otid || item.id;
+        const kpKey = qItem.parent_pkid || `__ungrouped__:${item.id}`;
+
+        if (!qGroupsByDoc.has(docKey)) {
+            qGroupsByDoc.set(docKey, new Map<string, MetadataWithParentPkid[]>());
+        }
+        const groupedByKp = qGroupsByDoc.get(docKey)!;
+        if (!groupedByKp.has(kpKey)) {
+            groupedByKp.set(kpKey, []);
+        }
+        groupedByKp.get(kpKey)!.push(qItem);
+    });
+
+    const keptQids = new Set<string>();
+
+    qGroupsByDoc.forEach((groupedByKp) => {
+        const buckets = Array.from(groupedByKp.values()).map((bucket) =>
+            [...bucket].sort((left, right) => left.vector_index - right.vector_index),
+        );
+        let keptForDoc = 0;
+        let depth = 0;
+
+        while (keptForDoc < Q_PER_DOC_CAP) {
+            let madeProgress = false;
+            for (const bucket of buckets) {
+                if (keptForDoc >= Q_PER_DOC_CAP) {
+                    break;
+                }
+                const candidate = bucket[depth];
+                if (!candidate) {
+                    continue;
+                }
+                keptQids.add(candidate.id);
+                keptForDoc += 1;
+                madeProgress = true;
+            }
+            if (!madeProgress) {
+                break;
+            }
+            depth += 1;
+        }
+    });
+
+    return metadata.filter((item) => item.type !== "Q" || keptQids.has(item.id));
+}
+
+function applyKpPerDocCap(metadata: readonly Metadata[]): Metadata[] {
+    if (!Number.isFinite(KP_PER_DOC_CAP) || KP_PER_DOC_CAP <= 0) {
+        return [...metadata];
+    }
+
+    const kpByDoc = new Map<string, Metadata[]>();
+
+    metadata.forEach((item) => {
+        if (item.type !== "KP") {
+            return;
+        }
+
+        const docKey = item.parent_otid || item.id;
+        if (!kpByDoc.has(docKey)) {
+            kpByDoc.set(docKey, []);
+        }
+        kpByDoc.get(docKey)!.push(item);
+    });
+
+    const keptKpids = new Set<string>();
+    kpByDoc.forEach((items) => {
+        [...items]
+            .sort((left, right) => left.vector_index - right.vector_index)
+            .slice(0, KP_PER_DOC_CAP)
+            .forEach((item) => keptKpids.add(item.id));
+    });
+
+    return metadata.filter((item) => item.type !== "KP" || keptKpids.has(item.id));
+}
+
+function applyPerDocTypeCaps(metadata: readonly Metadata[]): Metadata[] {
+    return applyKpPerDocCap(applyQPerDocCap(metadata));
 }
 
 function loadDatasets(datasetSources: readonly EvalDatasetSource[]): DatasetCase[] {
@@ -677,6 +1177,12 @@ async function loadEngine() {
     kpTextMap = loadKnowledgePointTexts();
     kpFeatureMap = loadKnowledgePointFeatures(kpTextMap);
     articleTimeAnchorMap = loadArticleTimeAnchors();
+    otDenseSlidingWindowCorpus = shouldUseOtDenseSlidingWindow()
+        ? await buildOtDenseSlidingWindowCorpus()
+        : null;
+    kpDenseStyleCorpus = shouldUseKpDenseStyleCorpus()
+        ? await buildKpDenseStyleCorpus()
+        : null;
 }
 
 async function buildQueryCache(
@@ -686,9 +1192,13 @@ async function buildQueryCache(
         throw new Error("Extractor not initialized");
     }
 
+    const effectiveQueries = testCases.map((item) =>
+        rewriteQueryTextByStyle(item.query),
+    );
+
     const queryVectors = await embedFrontendQueries(
         extractor,
-        testCases.map((item) => item.query),
+        effectiveQueries,
         dimensions,
         {
             batchSize: DEFAULT_QUERY_EMBED_BATCH_SIZE,
@@ -698,28 +1208,47 @@ async function buildQueryCache(
         },
     );
 
-    return testCases.map((testCase, index) => {
+    const queryCache: QueryCacheItem[] = [];
+    testCases.forEach((testCase, index) => {
+        const effectiveQueryText = effectiveQueries[index] || testCase.query;
         const queryIntent = parseQueryIntent(testCase.query);
         const queryMonths = extractMonths(testCase.query);
         const queryWords = Array.from(
-            new Set(fmmTokenize(testCase.query, vocabMap)),
+            new Set(fmmTokenize(effectiveQueryText, vocabMap)),
         );
         const querySparse = getQuerySparse(queryWords, vocabMap);
         const queryYearWordIds = queryIntent.years
             .map(String)
             .map((year) => vocabMap.get(year))
             .filter((item): item is number => item !== undefined);
+        const denseScoreOverrides = mergeDenseScoreOverrides(
+            buildOtDenseScoreOverrides(queryVectors[index]),
+            buildKpDenseScoreOverrides(queryVectors[index]),
+        );
 
-        return {
+        queryCache.push({
             testCase,
+            effectiveQueryText,
             queryVector: queryVectors[index],
             queryIntent,
             queryMonths,
             queryWords,
             querySparse,
             queryYearWordIds,
-        };
+            denseScoreOverrides,
+        });
+
+        if (
+            shouldUseOtDenseSlidingWindow() &&
+            (index + 1 === testCases.length || (index + 1) % 16 === 0)
+        ) {
+            console.log(
+                `Computed OT dense sliding overrides: ${index + 1} / ${testCases.length}`,
+            );
+        }
     });
+
+    return queryCache;
 }
 
 function getRank(matches: readonly { otid: string }[], expectedOtid: string): number {
@@ -851,6 +1380,65 @@ function resolveKpEvalTarget(testCase: DatasetCase): NormalizedKpEvalTarget {
 
 function stripKpTimestampPrefix(text: string): string {
     return text.replace(/^\[[^\]]+\]\s*/, "");
+}
+
+function rewriteQueryToDeclarative(text: string): string {
+    let rewritten = text.trim();
+    rewritten = rewritten.replace(/[？?]+$/g, "");
+    rewritten = rewritten.replace(
+        /^(请问一下|请问|我想知道|想知道|我想了解|想了解|我想问一下|我想问|想问一下|想问|咨询一下|咨询|请教一下|请教)\s*/g,
+        "",
+    );
+    rewritten = rewritten.replace(/^如果我/, "");
+    rewritten = rewritten.replace(/^我是([^，。]*)[，,]\s*/g, "");
+    rewritten = rewritten.replace(/^我(准备|打算|想|要|需要)/, "");
+    rewritten = rewritten.replace(/什么时候|何时|什么时间/g, "时间");
+    rewritten = rewritten.replace(/在哪(里|儿)?|去哪里/g, "地点");
+    rewritten = rewritten.replace(/哪些材料|什么材料/g, "材料要求");
+    rewritten = rewritten.replace(/哪些条件|什么条件|条件是什么/g, "条件要求");
+    rewritten = rewritten.replace(/分别是什么/g, "具体内容");
+    rewritten = rewritten.replace(/有哪些/g, "相关内容");
+    rewritten = rewritten.replace(/怎么(办|做|操作|申请|报名|提交|确认)|如何(办|做|操作|申请|报名|提交|确认)/g, "流程");
+    rewritten = rewritten.replace(/怎么办/g, "处理方式");
+    rewritten = rewritten.replace(/是多少/g, "数额");
+    rewritten = rewritten.replace(/吗|呢|呀|么|嘛|吧/g, "");
+    rewritten = rewritten.replace(/[，,；;！!]/g, " ");
+    rewritten = rewritten.replace(/\s+/g, " ").trim();
+
+    if (!rewritten) {
+        return text.trim();
+    }
+    return rewritten;
+}
+
+function rewriteQueryTextByStyle(text: string): string {
+    if (QUERY_STYLE_MODE === "declarative") {
+        return rewriteQueryToDeclarative(text);
+    }
+    return text;
+}
+
+function rewriteKpTextToQuestionWrap(kpText: string): string {
+    const normalized = stripKpTimestampPrefix(kpText).trim();
+    const firstSentence = normalized
+        .split(/[。！？]/)
+        .map((item) => item.trim())
+        .find((item) => item.length > 0) || normalized;
+    let focus = firstSentence;
+    if (focus.startsWith("根据") && focus.includes("，")) {
+        focus = focus.slice(focus.indexOf("，") + 1).trim();
+    }
+    if (focus.length > 72) {
+        focus = `${focus.slice(0, 72)}...`;
+    }
+    return `关于${focus}，具体要求是什么？`;
+}
+
+function rewriteKpTextByStyle(kpText: string): string {
+    if (KP_STYLE_MODE === "question_wrap") {
+        return rewriteKpTextToQuestionWrap(kpText);
+    }
+    return stripKpTimestampPrefix(kpText).trim();
 }
 
 function hasAnyKeyword(text: string, keywords: readonly string[]): boolean {
@@ -1509,12 +2097,22 @@ function collectCaseDetails(
                     ? KP_TAIL_WEIGHT
                     : undefined,
             lexicalBonusMode: LEXICAL_BONUS_MODE,
+            qLexicalMultiplier: Number.isFinite(Q_LEXICAL_MULTIPLIER)
+                ? Q_LEXICAL_MULTIPLIER
+                : undefined,
+            kpLexicalMultiplier: Number.isFinite(KP_LEXICAL_MULTIPLIER)
+                ? KP_LEXICAL_MULTIPLIER
+                : undefined,
+            otLexicalMultiplier: Number.isFinite(OT_LEXICAL_MULTIPLIER)
+                ? OT_LEXICAL_MULTIPLIER
+                : undefined,
             kpRoleRerankMode: ONLINE_KP_ROLE_RERANK_MODE,
             kpRoleDocWeight:
                 Number.isFinite(ONLINE_KP_ROLE_DOC_WEIGHT)
                 && ONLINE_KP_ROLE_DOC_WEIGHT >= 0
                     ? ONLINE_KP_ROLE_DOC_WEIGHT
                     : undefined,
+            denseScoreOverrides: item.denseScoreOverrides,
         });
         const docRerankedMatches = rerankMatchesForDocumentMetrics(
             item,
@@ -1750,12 +2348,22 @@ function evaluateQueryCache(
                     ? KP_TAIL_WEIGHT
                     : undefined,
             lexicalBonusMode: LEXICAL_BONUS_MODE,
+            qLexicalMultiplier: Number.isFinite(Q_LEXICAL_MULTIPLIER)
+                ? Q_LEXICAL_MULTIPLIER
+                : undefined,
+            kpLexicalMultiplier: Number.isFinite(KP_LEXICAL_MULTIPLIER)
+                ? KP_LEXICAL_MULTIPLIER
+                : undefined,
+            otLexicalMultiplier: Number.isFinite(OT_LEXICAL_MULTIPLIER)
+                ? OT_LEXICAL_MULTIPLIER
+                : undefined,
             kpRoleRerankMode: ONLINE_KP_ROLE_RERANK_MODE,
             kpRoleDocWeight:
                 Number.isFinite(ONLINE_KP_ROLE_DOC_WEIGHT)
                 && ONLINE_KP_ROLE_DOC_WEIGHT >= 0
                     ? ONLINE_KP_ROLE_DOC_WEIGHT
                     : undefined,
+            denseScoreOverrides: item.denseScoreOverrides,
         });
         const docRerankedMatches = rerankMatchesForDocumentMetrics(
             item,
@@ -2120,8 +2728,8 @@ function summarizeCombo(
     holdoutCache: readonly QueryCacheItem[],
     allCache: readonly QueryCacheItem[],
 ): ComboReport {
-    const filteredMetadata = metadataList.filter((item) =>
-        combo.allowedTypes.includes(item.type),
+    const filteredMetadata = applyPerDocTypeCaps(
+        metadataList.filter((item) => combo.allowedTypes.includes(item.type)),
     );
     const bm25Stats = buildBM25Stats(filteredMetadata);
     const metadataTypeCounts = countMetadataTypes(filteredMetadata);
@@ -2261,6 +2869,8 @@ function formatSupportCoverageLine(metrics: SupportCoverageMetrics): string {
 
 async function main() {
     console.log("Loading evaluation engine...");
+    console.log(`Active main DB version: ${ACTIVE_MAIN_DB_VERSION}`);
+    console.log(`OT dense mode: ${OT_DENSE_MODE}`);
     await loadEngine();
 
     const tuneCases = loadDatasets(DATASET_CONFIG.tuneSources);
@@ -2284,6 +2894,33 @@ async function main() {
 
     const report: Report = {
         generatedAt: new Date().toISOString(),
+        mainDbVersion: ACTIVE_MAIN_DB_VERSION,
+        otDenseMode: OT_DENSE_MODE,
+        queryStyleMode: QUERY_STYLE_MODE,
+        kpStyleMode: KP_STYLE_MODE,
+        qPerDocCap:
+            Number.isFinite(Q_PER_DOC_CAP) && Q_PER_DOC_CAP > 0
+                ? Q_PER_DOC_CAP
+                : undefined,
+        kpPerDocCap:
+            Number.isFinite(KP_PER_DOC_CAP) && KP_PER_DOC_CAP > 0
+                ? KP_PER_DOC_CAP
+                : undefined,
+        lexicalTypeMultipliers: getSafeLexicalTypeMultipliers(),
+        otDenseSlidingWindowConfig: shouldUseOtDenseSlidingWindow()
+            ? {
+                  windowSize: SAFE_OT_DENSE_WINDOW_SIZE,
+                  overlap: SAFE_OT_DENSE_WINDOW_OVERLAP,
+                  stride: SAFE_OT_DENSE_WINDOW_STRIDE,
+                  batchSize: SAFE_OT_DENSE_WINDOW_BATCH_SIZE,
+                  docCount:
+                      otDenseSlidingWindowCorpus?.windowCountByOtid.size || 0,
+                  windowCount:
+                      otDenseSlidingWindowCorpus?.windowOtids.length || 0,
+                  missingDocCount:
+                      otDenseSlidingWindowCorpus?.missingOtids.length || 0,
+              }
+            : undefined,
         datasetVersion: DATASET_CONFIG.datasetVersion,
         datasetMode: DATASET_CONFIG.datasetMode,
         datasetKey: DATASET_CONFIG.datasetKey,
@@ -2369,18 +3006,28 @@ async function main() {
 
     const outputPath = path.join(
         resultsDir,
-        `granularity_mix_${DATASET_CONFIG.datasetKey}_top${Number.isFinite(TOP_HYBRID_LIMIT) && TOP_HYBRID_LIMIT > 0 ? TOP_HYBRID_LIMIT : 1000}_${KP_AGGREGATION_MODE === "max_plus_topn" ? `kpagg-top${Number.isFinite(KP_TOP_N) && KP_TOP_N > 0 ? KP_TOP_N : 3}-w${(Number.isFinite(KP_TAIL_WEIGHT) && KP_TAIL_WEIGHT >= 0 ? KP_TAIL_WEIGHT : 0.35).toFixed(2).replace(".", "")}` : "kpagg-max"}_lex${LEXICAL_BONUS_MODE}_onlinekprole${ONLINE_KP_ROLE_RERANK_MODE}${ONLINE_KP_ROLE_RERANK_MODE === "feature" ? `-w${(Number.isFinite(ONLINE_KP_ROLE_DOC_WEIGHT) && ONLINE_KP_ROLE_DOC_WEIGHT >= 0 ? ONLINE_KP_ROLE_DOC_WEIGHT : 0.35).toFixed(2).replace(".", "")}` : ""}_kprerank${KP_CANDIDATE_RERANK_MODE}_docrerank${formatDocPostRerankSlug()}_${Date.now()}.json`,
+        `granularity_mix_${DATASET_CONFIG.datasetKey}_top${Number.isFinite(TOP_HYBRID_LIMIT) && TOP_HYBRID_LIMIT > 0 ? TOP_HYBRID_LIMIT : 1000}_${KP_AGGREGATION_MODE === "max_plus_topn" ? `kpagg-top${Number.isFinite(KP_TOP_N) && KP_TOP_N > 0 ? KP_TOP_N : 3}-w${(Number.isFinite(KP_TAIL_WEIGHT) && KP_TAIL_WEIGHT >= 0 ? KP_TAIL_WEIGHT : 0.35).toFixed(2).replace(".", "")}` : "kpagg-max"}_lex${LEXICAL_BONUS_MODE}${formatLexicalTypeMultiplierSlug()}_${formatOtDenseModeSlug()}${formatQueryStyleModeSlug()}${formatKpStyleModeSlug()}${Number.isFinite(Q_PER_DOC_CAP) && Q_PER_DOC_CAP > 0 ? `_qcap${Q_PER_DOC_CAP}` : ""}${Number.isFinite(KP_PER_DOC_CAP) && KP_PER_DOC_CAP > 0 ? `_kpcap${KP_PER_DOC_CAP}` : ""}_onlinekprole${ONLINE_KP_ROLE_RERANK_MODE}${ONLINE_KP_ROLE_RERANK_MODE === "feature" ? `-w${(Number.isFinite(ONLINE_KP_ROLE_DOC_WEIGHT) && ONLINE_KP_ROLE_DOC_WEIGHT >= 0 ? ONLINE_KP_ROLE_DOC_WEIGHT : 0.35).toFixed(2).replace(".", "")}` : ""}_kprerank${KP_CANDIDATE_RERANK_MODE}_docrerank${formatDocPostRerankSlug()}_${Date.now()}.json`,
     );
     fs.writeFileSync(outputPath, JSON.stringify(report, null, 2), "utf-8");
-    updateCurrentResultRegistry({
-        datasetName: DATASET_CONFIG.datasetKey,
-        datasetFile: DATASET_FILE || DATASET_CONFIG.allSources[0]?.path || "",
-        outputPath,
-        sourceScript: "eval_granularity_mix.ts",
-        note: hasIndependentHoldout
-            ? "当前结果基于旧式 tune/holdout 分流口径导出。"
-            : `当前结果基于单冻结集入口 ${DATASET_CONFIG.datasetLabel} 导出，不再默认按 tune/holdout 切分。`,
-    });
+    if (
+        !SKIP_RESULT_REGISTRY_UPDATE &&
+        ACTIVE_MAIN_DB_VERSION === "main_v2_plus" &&
+        OT_DENSE_MODE === "original"
+    ) {
+        updateCurrentResultRegistry({
+            datasetName: DATASET_CONFIG.datasetKey,
+            datasetFile: DATASET_FILE || DATASET_CONFIG.allSources[0]?.path || "",
+            outputPath,
+            sourceScript: "eval_granularity_mix.ts",
+            note: hasIndependentHoldout
+                ? "当前结果基于旧式 tune/holdout 分流口径导出。"
+                : `当前结果基于单冻结集入口 ${DATASET_CONFIG.datasetLabel} 导出，不再默认按 tune/holdout 切分。`,
+        });
+    } else {
+        console.log(
+            `Skip current result registry update: db=${ACTIVE_MAIN_DB_VERSION}, otDenseMode=${OT_DENSE_MODE}, explicitSkip=${SKIP_RESULT_REGISTRY_UPDATE}`,
+        );
+    }
     console.log(`\nSaved report to ${outputPath}`);
 
     if (EXPORT_BAD_CASES) {

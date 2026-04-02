@@ -17,6 +17,7 @@ import {
 export interface Metadata {
     id: string;
     type: "Q" | "KP" | "OT";
+    parent_pkid?: string;
     parent_otid: string;
     timestamp?: number;
     vector_index: number;
@@ -252,6 +253,10 @@ export function resolveMetadataTopicIds(
         return meta.topic_ids;
     }
     return deriveTopicIdsFromIntents(meta.subtopic_ids || meta.intent_ids || []);
+}
+
+function resolveDocOtid(meta: Pick<Metadata, "id" | "parent_otid">): string {
+    return meta.parent_otid || meta.id;
 }
 
 function matchTopicIds(query: string): string[] {
@@ -2224,8 +2229,13 @@ export function searchAndRank(params: {
     kpTopN?: number;
     kpTailWeight?: number;
     lexicalBonusMode?: LexicalBonusMode;
+    qLexicalMultiplier?: number;
+    kpLexicalMultiplier?: number;
+    otLexicalMultiplier?: number;
+    denseScoreOverrides?: ReadonlyMap<string, number>;
     kpRoleRerankMode?: KPRoleRerankMode;
     kpRoleDocWeight?: number;
+    otDenseScoreOverrides?: ReadonlyMap<string, number>;
 }): SearchRankOutput {
     const {
         queryVector,
@@ -2248,9 +2258,23 @@ export function searchAndRank(params: {
         kpTopN = 3,
         kpTailWeight = 0.35,
         lexicalBonusMode = "sum",
+        qLexicalMultiplier = 1.5,
+        kpLexicalMultiplier = 1.2,
+        otLexicalMultiplier = 1.0,
+        denseScoreOverrides,
         kpRoleRerankMode = "off",
         kpRoleDocWeight = DEFAULT_KP_ROLE_DOC_WEIGHT,
+        otDenseScoreOverrides,
     } = params;
+    const safeQLexicalMultiplier = Number.isFinite(qLexicalMultiplier)
+        ? qLexicalMultiplier
+        : 1.5;
+    const safeKpLexicalMultiplier = Number.isFinite(kpLexicalMultiplier)
+        ? kpLexicalMultiplier
+        : 1.2;
+    const safeOtLexicalMultiplier = Number.isFinite(otLexicalMultiplier)
+        ? otLexicalMultiplier
+        : 1.0;
 
     const n = metadata.length;
     const activeCandidateIndices =
@@ -2281,6 +2305,12 @@ export function searchAndRank(params: {
         );
         if (meta.scale !== undefined && meta.scale !== null)
             dense *= meta.scale;
+        const overriddenDense =
+            denseScoreOverrides?.get(meta.id) ??
+            (meta.type === "OT" ? otDenseScoreOverrides?.get(meta.id) : undefined);
+        if (overriddenDense !== undefined) {
+            dense = overriddenDense;
+        }
         denseScores[localIndex] = dense;
         denseOrder[localIndex] = localIndex;
 
@@ -2288,7 +2318,7 @@ export function searchAndRank(params: {
         if (querySparse && meta.sparse && meta.sparse.length > 0) {
             const dl = bm25Stats.docLengths[metaIndex];
             const safeDl = Math.max(dl, bm25Stats.avgdl * 0.25);
-            const otid = meta.type === "OT" ? meta.id : meta.parent_otid;
+            const otid = resolveDocOtid(meta);
 
             for (let j = 0; j < meta.sparse.length; j += 2) {
                 const wordId: number = meta.sparse[j] as number;
@@ -2338,13 +2368,13 @@ export function searchAndRank(params: {
             }
 
             if (sparse > 0) {
-                const otid = meta.type === "OT" ? meta.id : meta.parent_otid;
+                const otid = resolveDocOtid(meta);
                 const weightedBonus =
                     meta.type === "Q"
-                        ? sparse * 1.5
+                        ? sparse * safeQLexicalMultiplier
                         : meta.type === "KP"
-                          ? sparse * 1.2
-                          : sparse;
+                          ? sparse * safeKpLexicalMultiplier
+                          : sparse * safeOtLexicalMultiplier;
                 const currentBonus = lexicalBonusMap.get(otid) || 0;
                 const nextBonus =
                     lexicalBonusMode === "max"
@@ -2390,7 +2420,7 @@ export function searchAndRank(params: {
     const otidMap: Record<string, AggregatedDocScores> = {};
 
     for (const [meta, score] of topHybrid) {
-        const otid = meta.type === "OT" ? meta.id : meta.parent_otid;
+        const otid = resolveDocOtid(meta);
         const topicIds = resolveMetadataTopicIds(meta);
         if (!otidMap[otid]) {
             otidMap[otid] = createAggregatedDocScores(meta, topicIds);
