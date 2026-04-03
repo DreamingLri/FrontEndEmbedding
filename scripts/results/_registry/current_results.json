@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-03T14:01:56.678Z",
+  "updatedAt": "2026-04-03T14:20:00.000Z",
   "entries": {
     "granularity_main_bench_120_current": {
       "slot": "granularity_main_bench_120_current",
@@ -34,27 +34,16 @@
       "updatedAt": "2026-04-03T21:36:02.8816726+08:00",
       "note": "当前结果基于静态 userized_v1 正式外域集 external_ood_50 导出。"
     },
-    "route_or_clarify_v2_holdout_current": {
-      "slot": "route_or_clarify_v2_holdout_current",
-      "label": "行为分流边界结果 `route_v2_holdout`",
+    "answer_or_reject_current": {
+      "slot": "answer_or_reject_current",
+      "label": "唯一行为结果 `answer_or_reject_holdout`",
       "datasetName": "test_dataset_route_or_clarify_v2_holdout_reviewed",
       "datasetFile": "../../../../Backend/test/test_dataset_route_or_clarify/test_dataset_route_or_clarify_v2_holdout_reviewed.json",
       "resultFile": "../route_or_clarify_test_dataset_route_or_clarify_v2_holdout_reviewed_1775224904823.json",
       "sourceScript": "../../eval_route_or_clarify.ts",
       "managedByScript": true,
-      "updatedAt": "2026-04-03T14:01:44.825Z",
-      "note": "当前稳定入口默认保留 `v2_dev` 与 `v2_holdout` 两条边界回归线。"
-    },
-    "platform_mixed_daily_v1_2_current": {
-      "slot": "platform_mixed_daily_v1_2_current",
-      "label": "现实问法主结果 `mixed_daily_v1.2`",
-      "datasetName": "test_dataset_platform_mixed_daily_v1_2_reviewed",
-      "datasetFile": "../../../../Backend/test/test_dataset_platform_mixed/test_dataset_platform_mixed_daily_v1_2_reviewed.json",
-      "resultFile": "../platform_mixed_test_dataset_platform_mixed_daily_v1_2_reviewed_1775224916675.json",
-      "sourceScript": "../../eval_platform_mixed.ts",
-      "managedByScript": true,
-      "updatedAt": "2026-04-03T14:01:56.678Z",
-      "note": "当前稳定入口会跟随 mixed 主线与 `kb_absent_v2` 边界线一起更新。"
+      "updatedAt": "2026-04-03T14:20:00.000Z",
+      "note": "当前稳定入口只保留单一 answer_or_reject holdout 主线。"
     }
   }
 }

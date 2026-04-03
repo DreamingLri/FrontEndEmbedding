@@ -12,13 +12,17 @@ export const CURRENT_EVAL_DATASET_FILES = {
     // 历史 hard OOD，仅保留参考
     granularityExternalOodHard30:
         "../Backend/test/test_dataset_granularity/test_dataset_granularity_external_ood_holdout_30_reviewed_userized_v1.json",
-    // 当前 mixed / route / kb-absent 主线
+    // 当前唯一 behavior 主线
+    answerOrRejectCurrent:
+        "../Backend/test/test_dataset_route_or_clarify/test_dataset_route_or_clarify_v2_holdout_reviewed.json",
+    // 历史停用 behavior / product 入口，仅保留追溯
     platformMixedDailyV12:
         "../Backend/test/test_dataset_platform_mixed/test_dataset_platform_mixed_daily_v1_2_reviewed.json",
     routeOrClarifyV2Dev:
         "../Backend/test/test_dataset_route_or_clarify/test_dataset_route_or_clarify_v2_dev_reviewed.json",
     routeOrClarifyV2Holdout:
         "../Backend/test/test_dataset_route_or_clarify/test_dataset_route_or_clarify_v2_holdout_reviewed.json",
+    // 历史高风险拒答补充参考
     kbAbsentV2Dev:
         "../Backend/test/test_dataset_platform_mixed/test_dataset_platform_reject_kb_absent_v2_dev_reviewed.json",
     kbAbsentV2Holdout:

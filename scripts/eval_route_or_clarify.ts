@@ -104,12 +104,12 @@ type Report = {
 const DATASET_FILE = path.resolve(
     process.cwd(),
     process.env.SUASK_ROUTE_DATASET_FILE ||
-        CURRENT_EVAL_DATASET_FILES.routeOrClarifyV2Holdout,
+        CURRENT_EVAL_DATASET_FILES.answerOrRejectCurrent,
 );
 const RESULTS_DIR = path.resolve(process.cwd(), "./scripts/results");
 const CURRENT_TIMESTAMP = Date.now() / 1000;
 const DEFAULT_REPORT_NOTE =
-    "当前报告直接调用统一 full pipeline，默认数据集已切到 route_or_clarify_v2_holdout_reviewed；如需开发回归，请显式传入 route_or_clarify_v2_dev_reviewed。";
+    "当前报告直接调用统一 full pipeline，默认数据集已固定为唯一的 answer_or_reject holdout。";
 const REPORT_NOTE = process.env.SUASK_ROUTE_NOTE || DEFAULT_REPORT_NOTE;
 const PIPELINE_PRESET_NAME =
     process.env.SUASK_PIPELINE_PRESET || CANONICAL_PIPELINE_PRESET.name;
@@ -183,7 +183,7 @@ async function main() {
         fs.readFileSync(DATASET_FILE, "utf-8"),
     ) as RouteCase[];
 
-    console.log(`Loading route-or-clarify dataset: ${DATASET_FILE}`);
+    console.log(`Loading answer-or-reject dataset: ${DATASET_FILE}`);
     console.log(`Loaded ${testCases.length} cases.`);
 
     const engine = await loadFrontendEvalEngine();
@@ -310,7 +310,7 @@ async function main() {
     fs.mkdirSync(RESULTS_DIR, { recursive: true });
     const outputPath = path.join(
         RESULTS_DIR,
-        `route_or_clarify_${datasetName}_${Date.now()}.json`,
+        `answer_or_reject_${datasetName}_${Date.now()}.json`,
     );
     fs.writeFileSync(outputPath, JSON.stringify(report, null, 2), "utf-8");
     updateCurrentResultRegistry({
@@ -318,7 +318,7 @@ async function main() {
         datasetFile: DATASET_FILE,
         outputPath,
         sourceScript: "eval_route_or_clarify.ts",
-        note: "当前稳定入口默认保留 `v2_dev` 与 `v2_holdout` 两条边界回归线。",
+        note: "当前稳定入口只保留单一 answer_or_reject holdout 主线。",
     });
 
     console.log(`Saved report to ${outputPath}`);
