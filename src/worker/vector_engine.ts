@@ -53,15 +53,11 @@ export interface SearchResult {
 export interface SearchRejection {
     reason:
         | "low_topic_coverage"
-        | "low_consistency"
-        | "weak_anchor_needs_clarification";
+        | "low_consistency";
     topicIds: string[];
 }
 
-export type ResponseMode =
-    | "direct_answer"
-    | "clarify_or_route"
-    | "reject";
+export type ResponseMode = "answer" | "reject";
 
 export interface QuerySignals {
     hasExplicitTopicOrIntent: boolean;
@@ -2177,46 +2173,42 @@ export function classifyResponseMode(
     retrievalSignals: RetrievalSignals,
 ): ResponseDecision {
     const scores: ResponseModeScores = {
-        direct_answer: 0.5,
-        clarify_or_route: 0,
+        answer: 0.5,
         reject: 0,
     };
     const reasons = new Set<string>();
 
     if (querySignals.hasExplicitTopicOrIntent) {
-        scores.direct_answer += 2.6;
-        scores.clarify_or_route -= 1.1;
+        scores.answer += 2.6;
         scores.reject -= 1.3;
         reasons.add("explicit_topic_or_intent");
     }
 
     if (querySignals.hasStrongDetailAnchor) {
-        scores.direct_answer += 3.0;
-        scores.clarify_or_route -= 2.0;
+        scores.answer += 3.0;
         scores.reject -= 1.1;
         reasons.add("strong_detail_anchor");
     }
 
     if (querySignals.hasExplicitYear) {
-        scores.direct_answer += 0.8;
+        scores.answer += 0.8;
         reasons.add("explicit_year");
     }
 
     if (querySignals.hasResultState) {
-        scores.clarify_or_route += 0.55;
+        scores.answer += 0.55;
         scores.reject -= 0.9;
         reasons.add("result_state");
     }
 
     if (querySignals.hasGenericNextStep) {
-        scores.clarify_or_route += 1.35;
+        scores.answer += 0.35;
         scores.reject += 1.1;
-        scores.direct_answer -= 0.75;
         reasons.add("generic_next_step");
     }
 
     if (querySignals.hasEntryLikeAnchor) {
-        scores.clarify_or_route += 0.5;
+        scores.answer += 0.5;
         scores.reject -= 0.25;
         reasons.add("entry_like_anchor");
     }
@@ -2228,7 +2220,7 @@ export function classifyResponseMode(
         !querySignals.hasStrongDetailAnchor
     ) {
         scores.reject += 1.6;
-        scores.clarify_or_route -= 0.45;
+        scores.answer -= 0.3;
         reasons.add("empty_next_step_without_state");
     }
 
@@ -2237,9 +2229,9 @@ export function classifyResponseMode(
         querySignals.hasGenericNextStep &&
         !querySignals.hasStrongDetailAnchor
     ) {
-        scores.clarify_or_route += 1.35;
-        scores.direct_answer -= 0.3;
-        reasons.add("result_state_needs_clarification");
+        scores.answer += 0.45;
+        scores.reject -= 0.2;
+        reasons.add("result_state_needs_specific_context");
     }
 
     if (
@@ -2247,7 +2239,7 @@ export function classifyResponseMode(
         querySignals.hasGenericNextStep &&
         querySignals.hasStrongDetailAnchor
     ) {
-        scores.direct_answer += 1.0;
+        scores.answer += 1.0;
         reasons.add("detail_anchor_overrides_generic_state");
     }
 
@@ -2256,9 +2248,8 @@ export function classifyResponseMode(
         !querySignals.hasGenericNextStep &&
         (querySignals.hasEntryLikeAnchor || querySignals.hasResultState)
     ) {
-        scores.direct_answer += 0.8;
-        scores.clarify_or_route -= 0.25;
-        reasons.add("time_anchor_supports_direct_answer");
+        scores.answer += 0.8;
+        reasons.add("time_anchor_supports_answer");
     }
 
     if (
@@ -2272,19 +2263,19 @@ export function classifyResponseMode(
 
     if ((querySignals.tokenCount || 0) === 0) {
         scores.reject += 0.45;
-        scores.direct_answer -= 0.15;
+        scores.answer -= 0.15;
         reasons.add("zero_sparse_token");
     }
 
     if (retrievalSignals.candidateCount === 0) {
         scores.reject += 1.4;
-        scores.direct_answer -= 0.7;
+        scores.answer -= 0.7;
         reasons.add("no_candidates");
     }
 
     if (retrievalSignals.labeledTopicCount === 0) {
         scores.reject += 1.1;
-        scores.direct_answer -= 0.4;
+        scores.answer -= 0.4;
         reasons.add("no_labeled_topics");
     }
 
@@ -2293,12 +2284,12 @@ export function classifyResponseMode(
         retrievalSignals.dominantTopicRatio < 0.45
     ) {
         scores.reject += 1.15;
-        scores.direct_answer -= 0.35;
+        scores.answer -= 0.35;
         reasons.add("low_topic_consistency");
     }
 
     if (retrievalSignals.top1Top2Gap >= 0.12) {
-        scores.direct_answer += 0.35;
+        scores.answer += 0.35;
         reasons.add("stable_top1_gap");
     }
 
@@ -2307,7 +2298,7 @@ export function classifyResponseMode(
         retrievalSignals.distinctTopicCount <= 2 &&
         retrievalSignals.dominantTopicRatio >= 0.5
     ) {
-        scores.direct_answer += 0.35;
+        scores.answer += 0.35;
         reasons.add("stable_topic_cluster");
     }
 
@@ -2329,7 +2320,7 @@ export function classifyResponseMode(
             "scored_response_mode",
         preferLatestWithinTopic:
             querySignals.hasLatestPolicyState && !querySignals.hasExplicitYear,
-        useWeakMatches: mode === "clarify_or_route",
+        useWeakMatches: false,
     };
 }
 
@@ -2746,7 +2737,7 @@ export function searchAndRank(params: {
     }
 
     if (
-        responseDecision.mode === "direct_answer" &&
+        responseDecision.mode === "answer" &&
         inDomainEvidenceReject.shouldReject
     ) {
         return {
@@ -2777,18 +2768,6 @@ export function searchAndRank(params: {
                 topicIds: [],
             },
             responseDecision,
-            diagnostics,
-        };
-    }
-
-    if (responseDecision.mode === "clarify_or_route") {
-        return {
-            matches: sortedRanking.slice(0, 100),
-            weakMatches: [],
-            responseDecision: {
-                ...responseDecision,
-                useWeakMatches: false,
-            },
             diagnostics,
         };
     }

@@ -12,6 +12,6 @@
 当前评测脚本会在写出时间戳结果后，自动更新这里的稳定入口：
 
 1. [eval_granularity_mix.ts](/d:/Project/SuAsk/SuAsk_Agent/FrontEnd/scripts/eval_granularity_mix.ts)
-2. [eval_route_or_clarify.ts](/d:/Project/SuAsk/SuAsk_Agent/FrontEnd/scripts/eval_route_or_clarify.ts)
+2. [eval_answer_reject.ts](/d:/Project/SuAsk/SuAsk_Agent/FrontEnd/scripts/eval_answer_reject.ts)
 
 当前目录已按“现行主线优先”做过清理；旧结果入口统一转入历史记录，不再在这里保留稳定指针。

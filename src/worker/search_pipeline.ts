@@ -418,7 +418,7 @@ function buildPipelineDecision(params: {
     const { searchOutput } = params;
     const rawMode =
         searchOutput.responseDecision?.mode ||
-        (searchOutput.rejection ? "reject" : "direct_answer");
+        (searchOutput.rejection ? "reject" : "answer");
     const behavior = rawMode === "reject" ? "reject" : "answer";
 
     return {

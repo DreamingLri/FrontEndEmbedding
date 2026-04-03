@@ -8,7 +8,7 @@ export type CurrentResultSlot =
     | "granularity_external_ood_holdout_30_current"
     | "granularity_main_106_current"
     | "granularity_holdout_v3_current"
-    | "answer_or_reject_current"
+    | "answer_reject_current"
     | "platform_reject_kb_absent_v2_dev_current"
     | "platform_reject_kb_absent_v2_holdout_current"
     | "platform_reject_kb_absent_pair_control_v2_holdout_flat_current";
@@ -39,7 +39,7 @@ const SLOT_LABELS: Record<CurrentResultSlot, string> = {
         "内部 hard stress `external_ood_holdout_30`",
     granularity_main_106_current: "主方法主结果 `main_106`",
     granularity_holdout_v3_current: "外部泛化主结果 `holdout_v3`",
-    answer_or_reject_current: "唯一行为结果 `answer_or_reject_holdout`",
+    answer_reject_current: "唯一行为结果 `answer_reject_holdout`",
     platform_reject_kb_absent_v2_dev_current:
         "高风险拒答边界结果 `kb_absent_v2_dev`",
     platform_reject_kb_absent_v2_holdout_current:
@@ -63,8 +63,8 @@ const SLOT_BY_DATASET_NAME: Partial<Record<string, CurrentResultSlot>> = {
         "granularity_external_ood_holdout_30_current",
     test_dataset_granularity_main_106_reviewed:
         "granularity_main_106_current",
-    test_dataset_route_or_clarify_v2_holdout_reviewed:
-        "answer_or_reject_current",
+    test_dataset_answer_reject_v1_holdout_reviewed:
+        "answer_reject_current",
     test_dataset_platform_reject_kb_absent_v2_dev_reviewed:
         "platform_reject_kb_absent_v2_dev_current",
     test_dataset_platform_reject_kb_absent_v2_holdout_reviewed:
@@ -125,9 +125,22 @@ export function updateCurrentResultRegistry(params: {
         ...currentRegistry.entries,
     } as Record<string, ResultRegistryEntry>;
 
+    delete nextEntries["answer_or_reject_current"];
     delete nextEntries["platform_mixed_daily_v1_2_current"];
     delete nextEntries["route_or_clarify_v2_dev_current"];
     delete nextEntries["route_or_clarify_v2_holdout_current"];
+
+    [
+        "answer_or_reject_current.json",
+        "platform_mixed_daily_v1_2_current.json",
+        "route_or_clarify_v2_dev_current.json",
+        "route_or_clarify_v2_holdout_current.json",
+    ].forEach((fileName) => {
+        const filePath = path.join(registryDir, fileName);
+        if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+        }
+    });
 
     const entry: ResultRegistryEntry = {
         slot,
