@@ -19,7 +19,6 @@ import { createLocalDocumentLoader } from "./local_document_provider.ts";
 import { updateCurrentResultRegistry } from "./result_registry.ts";
 
 type ExpectedAction = "clarify" | "route_to_entry" | "reject";
-type CoarseBehavior = "clarify_or_route" | "reject" | "direct_answer";
 
 type RouteCase = {
     id: string;
@@ -37,16 +36,11 @@ type CaseReport = {
     id: string;
     query: string;
     expected_action: ExpectedAction;
-    expected_coarse_behavior: Exclude<CoarseBehavior, "direct_answer">;
+    expected_binary_behavior: PipelineBehavior;
     predicted_behavior: PipelineBehavior;
-    predicted_coarse_behavior: CoarseBehavior;
     retrieval_behavior: PipelineBehavior;
-    predicted_entry_topic?: string;
-    expected_entry_topic?: string;
     behavior_correct: boolean;
-    coarse_behavior_correct: boolean;
-    entry_topic_correct: boolean | null;
-    unsafe_direct_answer: boolean;
+    unsafe_answer: boolean;
     rejection_reason: string | null;
     weak_match_count: number;
     match_count: number;
@@ -87,13 +81,10 @@ type Summary = {
     total: number;
     byExpectedAction: Record<ExpectedAction, number>;
     byPredictedBehavior: Record<PipelineBehavior, number>;
-    coarseBehaviorAccuracy: number;
-    exactBehaviorAccuracy: number;
-    clarifyHitRate: number;
-    routeHitRate: number;
-    routeEntryTopicAccuracy: number;
+    binaryBehaviorAccuracy: number;
+    nonRejectAnswerHitRate: number;
     rejectHitRate: number;
-    unsafeDirectAnswerRate: number;
+    unsafeAnswerRate: number;
 };
 
 type Report = {
@@ -128,20 +119,10 @@ function safeRate(numerator: number, denominator: number): number {
     return denominator > 0 ? numerator / denominator : 0;
 }
 
-function toExpectedCoarseBehavior(
+function toExpectedBinaryBehavior(
     action: ExpectedAction,
-): Exclude<CoarseBehavior, "direct_answer"> {
-    return action === "reject" ? "reject" : "clarify_or_route";
-}
-
-function toCoarseBehavior(behavior: PipelineBehavior): CoarseBehavior {
-    if (behavior === "reject") {
-        return "reject";
-    }
-    if (behavior === "clarify" || behavior === "route_to_entry") {
-        return "clarify_or_route";
-    }
-    return "direct_answer";
+): PipelineBehavior {
+    return action === "reject" ? "reject" : "answer";
 }
 
 function buildSummary(caseReports: CaseReport[]): Summary {
@@ -151,45 +132,27 @@ function buildSummary(caseReports: CaseReport[]): Summary {
         reject: 0,
     };
     const byPredictedBehavior: Record<PipelineBehavior, number> = {
-        direct_answer: 0,
-        clarify: 0,
-        route_to_entry: 0,
+        answer: 0,
         reject: 0,
     };
 
-    let coarseCorrect = 0;
-    let exactCorrect = 0;
-    let clarifyTotal = 0;
-    let clarifyHit = 0;
-    let routeTotal = 0;
-    let routeHit = 0;
-    let routeEntryTopicCorrect = 0;
+    let binaryCorrect = 0;
+    let nonRejectTotal = 0;
+    let nonRejectHit = 0;
     let rejectTotal = 0;
     let rejectHit = 0;
-    let unsafeDirectAnswer = 0;
+    let unsafeAnswer = 0;
 
     caseReports.forEach((item) => {
         byExpectedAction[item.expected_action] += 1;
         byPredictedBehavior[item.predicted_behavior] += 1;
-        if (item.coarse_behavior_correct) {
-            coarseCorrect += 1;
-        }
         if (item.behavior_correct) {
-            exactCorrect += 1;
+            binaryCorrect += 1;
         }
-        if (item.expected_action === "clarify") {
-            clarifyTotal += 1;
-            if (item.predicted_behavior === "clarify") {
-                clarifyHit += 1;
-            }
-        }
-        if (item.expected_action === "route_to_entry") {
-            routeTotal += 1;
-            if (item.predicted_behavior === "route_to_entry") {
-                routeHit += 1;
-            }
-            if (item.entry_topic_correct) {
-                routeEntryTopicCorrect += 1;
+        if (item.expected_binary_behavior === "answer") {
+            nonRejectTotal += 1;
+            if (item.predicted_behavior === "answer") {
+                nonRejectHit += 1;
             }
         }
         if (item.expected_action === "reject") {
@@ -198,8 +161,8 @@ function buildSummary(caseReports: CaseReport[]): Summary {
                 rejectHit += 1;
             }
         }
-        if (item.unsafe_direct_answer) {
-            unsafeDirectAnswer += 1;
+        if (item.unsafe_answer) {
+            unsafeAnswer += 1;
         }
     });
 
@@ -207,13 +170,10 @@ function buildSummary(caseReports: CaseReport[]): Summary {
         total: caseReports.length,
         byExpectedAction,
         byPredictedBehavior,
-        coarseBehaviorAccuracy: safeRate(coarseCorrect, caseReports.length),
-        exactBehaviorAccuracy: safeRate(exactCorrect, caseReports.length),
-        clarifyHitRate: safeRate(clarifyHit, clarifyTotal),
-        routeHitRate: safeRate(routeHit, routeTotal),
-        routeEntryTopicAccuracy: safeRate(routeEntryTopicCorrect, routeTotal),
+        binaryBehaviorAccuracy: safeRate(binaryCorrect, caseReports.length),
+        nonRejectAnswerHitRate: safeRate(nonRejectHit, nonRejectTotal),
         rejectHitRate: safeRate(rejectHit, rejectTotal),
-        unsafeDirectAnswerRate: safeRate(unsafeDirectAnswer, caseReports.length),
+        unsafeAnswerRate: safeRate(unsafeAnswer, caseReports.length),
     };
 }
 
@@ -260,31 +220,21 @@ async function main() {
         });
 
         const predictedBehavior = pipelineResult.finalDecision.behavior;
-        const expectedCoarseBehavior = toExpectedCoarseBehavior(
+        const expectedBinaryBehavior = toExpectedBinaryBehavior(
             testCase.expected_action,
         );
-        const predictedCoarseBehavior = toCoarseBehavior(predictedBehavior);
 
         caseReports.push({
             id: testCase.id,
             query: testCase.query,
             expected_action: testCase.expected_action,
-            expected_coarse_behavior: expectedCoarseBehavior,
+            expected_binary_behavior: expectedBinaryBehavior,
             predicted_behavior: predictedBehavior,
-            predicted_coarse_behavior: predictedCoarseBehavior,
             retrieval_behavior: pipelineResult.retrievalDecision.behavior,
-            predicted_entry_topic: pipelineResult.finalDecision.entryTopic,
-            expected_entry_topic: testCase.entry_topic,
-            behavior_correct: predictedBehavior === testCase.expected_action,
-            coarse_behavior_correct:
-                predictedCoarseBehavior === expectedCoarseBehavior,
-            entry_topic_correct:
-                testCase.expected_action === "route_to_entry"
-                    ? predictedBehavior === "route_to_entry" &&
-                      (pipelineResult.finalDecision.entryTopic || "") ===
-                          (testCase.entry_topic || "")
-                    : null,
-            unsafe_direct_answer: predictedBehavior === "direct_answer",
+            behavior_correct: predictedBehavior === expectedBinaryBehavior,
+            unsafe_answer:
+                expectedBinaryBehavior === "reject" &&
+                predictedBehavior === "answer",
             rejection_reason:
                 pipelineResult.finalDecision.rejectionReason ||
                 pipelineResult.rejection?.reason ||
@@ -374,13 +324,10 @@ async function main() {
     console.log(`Saved report to ${outputPath}`);
     console.log(
         [
-            `coarseBehaviorAccuracy=${(report.summary.coarseBehaviorAccuracy * 100).toFixed(2)}%`,
-            `exactBehaviorAccuracy=${(report.summary.exactBehaviorAccuracy * 100).toFixed(2)}%`,
-            `clarifyHitRate=${(report.summary.clarifyHitRate * 100).toFixed(2)}%`,
-            `routeHitRate=${(report.summary.routeHitRate * 100).toFixed(2)}%`,
-            `routeEntryTopicAccuracy=${(report.summary.routeEntryTopicAccuracy * 100).toFixed(2)}%`,
+            `binaryBehaviorAccuracy=${(report.summary.binaryBehaviorAccuracy * 100).toFixed(2)}%`,
+            `nonRejectAnswerHitRate=${(report.summary.nonRejectAnswerHitRate * 100).toFixed(2)}%`,
             `rejectHitRate=${(report.summary.rejectHitRate * 100).toFixed(2)}%`,
-            `unsafeDirectAnswerRate=${(report.summary.unsafeDirectAnswerRate * 100).toFixed(2)}%`,
+            `unsafeAnswerRate=${(report.summary.unsafeAnswerRate * 100).toFixed(2)}%`,
         ].join(" | "),
     );
 }

@@ -13,8 +13,8 @@ import type {
   PipelineDecision,
   PipelineDocumentRecord,
   PipelineTrace,
-} from '../worker/search_pipeline';
-import type { SearchRejection } from '../worker/vector_engine';
+} from '../worker/search_pipeline.ts';
+import type { SearchRejection } from '../worker/vector_engine.ts';
 import {
   formatPercent,
   formatRetrievalScore,
@@ -63,12 +63,8 @@ const compactResults = () => props.traceData?.results?.slice(3, 10) ?? [];
 
 const behaviorLabel = (behavior?: PipelineBehavior | null) => {
   switch (behavior) {
-    case 'direct_answer':
-      return '直接回答';
-    case 'clarify':
-      return '先澄清';
-    case 'route_to_entry':
-      return '入口路由';
+    case 'answer':
+      return '回答';
     case 'reject':
       return '拒答';
     default:
@@ -78,12 +74,8 @@ const behaviorLabel = (behavior?: PipelineBehavior | null) => {
 
 const behaviorClass = (behavior?: PipelineBehavior | null) => {
   switch (behavior) {
-    case 'direct_answer':
+    case 'answer':
       return 'border-emerald-500/25 bg-emerald-500/10 text-emerald-200';
-    case 'clarify':
-      return 'border-amber-500/25 bg-amber-500/10 text-amber-200';
-    case 'route_to_entry':
-      return 'border-cyan-500/25 bg-cyan-500/10 text-cyan-200';
     case 'reject':
       return 'border-rose-500/25 bg-rose-500/10 text-rose-200';
     default:
@@ -113,8 +105,6 @@ const rejectionReasonLabel = () => {
       return '主题覆盖不足';
     case 'low_consistency':
       return '主题一致性不足';
-    case 'weak_anchor_needs_clarification':
-      return '弱锚点需澄清';
     default:
       return '';
   }
@@ -124,16 +114,6 @@ const decisionSubtitle = () => {
   const decision = props.traceData?.decision;
   if (!decision) {
     return '等待统一 pipeline 返回行为决策。';
-  }
-
-  if (decision.behavior === 'route_to_entry') {
-    return decision.entryTopic
-      ? `系统把这个问题视为总入口型问题，建议先进入“${decision.entryTopic}”。`
-      : '系统把这个问题视为总入口型问题，建议先进入总入口再细化提问。';
-  }
-
-  if (decision.behavior === 'clarify') {
-    return '系统判断当前问题缺少明确事项锚点，需要用户先补充具体环节。';
   }
 
   if (decision.behavior === 'reject') {
@@ -226,12 +206,6 @@ const rescueSubtitle = () => {
                 class="rounded-full border border-white/10 bg-black/20 px-2.5 py-1 text-[10px] text-slate-300"
               >
                 检索阶段 {{ behaviorLabel(traceData.retrievalDecision.behavior) }}
-              </span>
-              <span
-                v-if="traceData.decision.entryTopic"
-                class="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-2.5 py-1 text-[10px] text-cyan-200"
-              >
-                {{ traceData.decision.entryTopic }}
               </span>
             </div>
           </div>

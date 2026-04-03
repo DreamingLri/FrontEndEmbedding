@@ -3,6 +3,7 @@ import * as path from "path";
 
 import {
     buildBM25Stats,
+    type FusionMode,
     getQuerySparse,
     parseQueryIntent,
     searchAndRank,
@@ -12,6 +13,7 @@ import {
     type LexicalBonusMode,
     type Metadata,
     type ParsedQueryIntent,
+    type QConfusionMode,
 } from "../src/worker/vector_engine.ts";
 import { fmmTokenize } from "../src/worker/fmm_tokenize.ts";
 import {
@@ -23,6 +25,7 @@ import {
     type EvalDatasetSource,
     type GranularityDatasetTargetKey,
     type KpEvalMode,
+    type OtidEvalMode,
 } from "./eval_shared.ts";
 import {
     embedQueries as embedFrontendQueries,
@@ -51,9 +54,11 @@ type MetadataWithParentPkid = Metadata & {
 type QueryCacheItem = {
     testCase: DatasetCase;
     effectiveQueryText: string;
+    referenceQueryText: string;
     queryVector: Float32Array;
     queryIntent: ParsedQueryIntent;
     queryMonths: number[];
+    queryPhaseAnchor: PhaseAnchor;
     queryWords: string[];
     querySparse: Record<number, number>;
     queryYearWordIds: number[];
@@ -130,6 +135,13 @@ type NormalizedKpEvalTarget = {
     minGroupsToCover: number;
 };
 
+type NormalizedOtidEvalTarget = {
+    mode: OtidEvalMode;
+    acceptableOtids: string[];
+    requiredOtidGroups: string[][];
+    minGroupsToCover: number;
+};
+
 type RerankedKpCandidate = {
     kpid: string;
     rawScore: number;
@@ -145,9 +157,22 @@ type SupportCoverageState = {
     minGroupsToCover: number;
 };
 
+type OtidCoverageState = {
+    coverageDepth: number;
+    coveredGroupsTop3: number;
+    coveredGroupsTop5: number;
+    coverageRatioTop5: number;
+    totalGroups: number;
+    minGroupsToCover: number;
+};
+
 type CaseDetail = {
     query: string;
     expected_otid: string;
+    otid_eval_mode?: OtidEvalMode;
+    acceptable_otids?: string[];
+    required_otid_groups?: string[][];
+    min_otid_groups_to_cover?: number;
     expected_kpid?: string;
     kp_eval_mode?: KpEvalMode;
     acceptable_anchor_kpids?: string[];
@@ -167,6 +192,11 @@ type CaseDetail = {
     docRank: number | null;
     kpidRank: number | null;
     supportCoverageDepth: number | null;
+    docCoverageDepth: number | null;
+    docGroupsCoveredTop5: number;
+    docGroupsRequired: number;
+    docFullCoverTop5: boolean;
+    docPartialCoverTop5: boolean;
     supportGroupsCoveredTop5: number;
     supportGroupsRequired: number;
     supportFullCoverTop5: boolean;
@@ -177,6 +207,7 @@ type CaseDetail = {
     kpidHitAt5: boolean;
     failure_risk: string;
     failure_reasons: string[];
+    topDocMatchesSource?: "matches" | "weak_matches" | "none";
     topDocMatches: Array<{
         rank: number;
         otid: string;
@@ -234,7 +265,17 @@ type ComboReport = {
 type Report = {
     generatedAt: string;
     mainDbVersion: string;
+    experimentTrack?: "default" | "minimal_first";
+    minimalBaselineMode?: boolean;
+    minimalAddYear?: boolean;
+    minimalAddPhase?: boolean;
+    minimalAddAspect?: boolean;
+    minimalDisableDocMulti?: boolean;
+    fusionMode?: FusionMode;
+    fixedComboWeights?: Record<string, WeightConfig>;
     otDenseMode: string;
+    qConfusionMode?: QConfusionMode;
+    qConfusionWeight?: number;
     queryStyleMode?: string;
     kpStyleMode?: string;
     qPerDocCap?: number;
@@ -350,6 +391,24 @@ const BAD_CASE_TOP_MATCHES = Number.parseInt(
 );
 const SKIP_RESULT_REGISTRY_UPDATE =
     process.env.SUASK_SKIP_RESULT_REGISTRY_UPDATE === "1";
+const EXPERIMENT_TRACK = (
+    process.env.SUASK_EXPERIMENT_TRACK === "minimal_first"
+        ? "minimal_first"
+        : "default"
+) as "default" | "minimal_first";
+const MINIMAL_BASELINE_MODE =
+    process.env.SUASK_MINIMAL_BASELINE === "1" ||
+    EXPERIMENT_TRACK === "minimal_first";
+const MINIMAL_ADD_YEAR = process.env.SUASK_MINIMAL_ADD_YEAR === "1";
+const MINIMAL_ADD_PHASE = process.env.SUASK_MINIMAL_ADD_PHASE === "1";
+const MINIMAL_ADD_ASPECT = process.env.SUASK_MINIMAL_ADD_ASPECT === "1";
+const MINIMAL_DISABLE_DOC_MULTI =
+    process.env.SUASK_MINIMAL_DISABLE_DOC_MULTI === "1";
+const FUSION_MODE = (
+    process.env.SUASK_FUSION_MODE === "max_q_vs_kpot"
+        ? "max_q_vs_kpot"
+        : "default"
+) as FusionMode;
 const OT_DENSE_MODE = process.env.SUASK_OT_DENSE_MODE || "original";
 const OT_DENSE_WINDOW_SIZE = Number.parseInt(
     process.env.SUASK_OT_DENSE_WINDOW_SIZE || "",
@@ -383,6 +442,20 @@ const OT_LEXICAL_MULTIPLIER = Number.parseFloat(
 );
 const QUERY_STYLE_MODE = process.env.SUASK_QUERY_STYLE_MODE || "original";
 const KP_STYLE_MODE = process.env.SUASK_KP_STYLE_MODE || "original";
+const Q_CONFUSION_MODE = (
+    process.env.SUASK_Q_CONFUSION_MODE === "consensus"
+        ? "consensus"
+        : process.env.SUASK_Q_CONFUSION_MODE === "consensus_no_year"
+          ? "consensus_no_year"
+        : process.env.SUASK_Q_CONFUSION_MODE === "competition"
+          ? "competition"
+          : process.env.SUASK_Q_CONFUSION_MODE === "combined"
+            ? "combined"
+            : "off"
+) as QConfusionMode;
+const Q_CONFUSION_WEIGHT = Number.parseFloat(
+    process.env.SUASK_Q_CONFUSION_WEIGHT || "",
+);
 const WEIGHT_STEPS = parseWeightSteps(
     process.env.SUASK_WEIGHT_STEPS || "0.2,0.5,0.8",
 );
@@ -463,6 +536,28 @@ type ArticleTimeAnchor = {
     month?: number;
     title: string;
     publishTime: string;
+    phaseAnchor: PhaseAnchor;
+};
+
+type PhaseLabel =
+    | "half_1"
+    | "half_2"
+    | "batch_1"
+    | "batch_2"
+    | "batch_3"
+    | "batch_4"
+    | "pre_apply"
+    | "apply_notice"
+    | "rule_plan"
+    | "brochure"
+    | "assessment"
+    | "retest"
+    | "adjustment";
+
+type PhaseAnchor = {
+    half?: Extract<PhaseLabel, "half_1" | "half_2">;
+    batch?: Extract<PhaseLabel, "batch_1" | "batch_2" | "batch_3" | "batch_4">;
+    stages: PhaseLabel[];
 };
 
 type BackendArticleRecord = {
@@ -505,7 +600,7 @@ const QUERY_STOPWORDS = new Set([
 ]);
 
 function shouldUseOtDenseSlidingWindow(): boolean {
-    return OT_DENSE_MODE === "sliding_window_max";
+    return !MINIMAL_BASELINE_MODE && OT_DENSE_MODE === "sliding_window_max";
 }
 
 function loadBackendArticleRecords(): BackendArticleRecord[] {
@@ -668,7 +763,8 @@ function buildOtDenseScoreOverrides(
 
 function shouldUseKpDenseStyleCorpus(): boolean {
     return (
-        KP_STYLE_MODE === "question_wrap" || KP_STYLE_MODE === "truncate128"
+        !MINIMAL_BASELINE_MODE &&
+        (KP_STYLE_MODE === "question_wrap" || KP_STYLE_MODE === "truncate128")
     );
 }
 
@@ -797,10 +893,19 @@ function formatLexicalTypeMultiplierSlug(): string {
 }
 
 function formatQueryStyleModeSlug(): string {
+    if (QUERY_STYLE_MODE === "userized_v1") {
+        return "_qstyleuserv1";
+    }
+    if (MINIMAL_BASELINE_MODE) {
+        return "";
+    }
     return QUERY_STYLE_MODE === "declarative" ? "_qstyledecl" : "";
 }
 
 function formatKpStyleModeSlug(): string {
+    if (MINIMAL_BASELINE_MODE) {
+        return "";
+    }
     if (KP_STYLE_MODE === "question_wrap") {
         return "_kpstyleqwrap";
     }
@@ -808,6 +913,72 @@ function formatKpStyleModeSlug(): string {
         return "_kpstyletruncate128";
     }
     return "";
+}
+
+function formatExperimentTrackSlug(): string {
+    if (EXPERIMENT_TRACK === "minimal_first") {
+        return "_track-minadd";
+    }
+    return "";
+}
+
+function formatMinimalAdditionsSlug(): string {
+    if (!MINIMAL_BASELINE_MODE) {
+        return "";
+    }
+
+    const additions: string[] = [];
+    if (MINIMAL_ADD_YEAR) {
+        additions.push("year");
+    }
+    if (MINIMAL_ADD_PHASE) {
+        additions.push("phase");
+    }
+    if (MINIMAL_ADD_ASPECT) {
+        additions.push("aspect");
+    }
+    if (MINIMAL_DISABLE_DOC_MULTI) {
+        additions.push("nodocmulti");
+    }
+
+    return additions.length > 0 ? `_add-${additions.join("-")}` : "";
+}
+
+function formatQConfusionModeSlug(): string {
+    if (Q_CONFUSION_MODE === "off") {
+        return "";
+    }
+    const weightPart =
+        Number.isFinite(Q_CONFUSION_WEIGHT) && Q_CONFUSION_WEIGHT > 0
+            ? `-w${Q_CONFUSION_WEIGHT.toFixed(2).replace(".", "")}`
+            : "";
+    return `_qconf-${Q_CONFUSION_MODE}${weightPart}`;
+}
+
+function formatFusionModeSlug(): string {
+    if (FUSION_MODE === "default") {
+        return "";
+    }
+    return `_fusion-${FUSION_MODE.replace(/_/g, "-")}`;
+}
+
+function formatFixedComboWeightsSlug(): string {
+    const entries = Object.entries(FIXED_COMBO_WEIGHTS);
+    if (entries.length === 0) {
+        return "";
+    }
+
+    const parts = entries
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([label, weights]) => {
+            const comboSlug = label.toLowerCase().replace(/\+/g, "");
+            const q = (weights.Q * 100).toFixed(0).padStart(2, "0");
+            const kp = (weights.KP * 100).toFixed(0).padStart(2, "0");
+            const ot = (weights.OT * 100).toFixed(0).padStart(2, "0");
+            return `${comboSlug}-q${q}-kp${kp}-ot${ot}`;
+        });
+
+    return `_fw-${parts.join("__")}`;
 }
 
 function parseWeightSteps(raw: string): number[] {
@@ -1060,6 +1231,72 @@ function extractMonths(text: string): number[] {
     );
 }
 
+function hasRegex(text: string, pattern: RegExp): boolean {
+    pattern.lastIndex = 0;
+    return pattern.test(text);
+}
+
+function dedupePhaseStages(stages: PhaseLabel[]): PhaseLabel[] {
+    return Array.from(new Set(stages));
+}
+
+function extractPhaseAnchor(text: string): PhaseAnchor {
+    const normalized = text.replace(/\s+/g, "");
+    let half: PhaseAnchor["half"];
+    let batch: PhaseAnchor["batch"];
+    const stages: PhaseLabel[] = [];
+
+    if (hasRegex(normalized, /上半年/)) {
+        half = "half_1";
+    } else if (hasRegex(normalized, /下半年/)) {
+        half = "half_2";
+    }
+
+    if (hasRegex(normalized, /第(?:一|1)批/)) {
+        batch = "batch_1";
+    } else if (hasRegex(normalized, /第(?:二|2)批/)) {
+        batch = "batch_2";
+    } else if (hasRegex(normalized, /第(?:三|3)批/)) {
+        batch = "batch_3";
+    } else if (hasRegex(normalized, /第(?:四|4)批/)) {
+        batch = "batch_4";
+    }
+
+    if (hasRegex(normalized, /预报名/)) {
+        stages.push("pre_apply");
+    } else if (
+        hasRegex(normalized, /(报名通知|报名公告|申请通知|申请公告|报名方式|申请方式)/)
+    ) {
+        stages.push("apply_notice");
+    }
+
+    if (hasRegex(normalized, /(工作方案|接收办法|实施办法|录取方案)/)) {
+        stages.push("rule_plan");
+    }
+
+    if (hasRegex(normalized, /(招生简章|简章|招生章程|章程)/)) {
+        stages.push("brochure");
+    }
+
+    if (hasRegex(normalized, /综合考核/)) {
+        stages.push("assessment");
+    }
+
+    if (hasRegex(normalized, /复试/)) {
+        stages.push("retest");
+    }
+
+    if (hasRegex(normalized, /调剂/)) {
+        stages.push("adjustment");
+    }
+
+    return {
+        half,
+        batch,
+        stages: dedupePhaseStages(stages),
+    };
+}
+
 function parsePublishTimeParts(publishTime: string): {
     year?: number;
     month?: number;
@@ -1106,6 +1343,7 @@ function loadArticleTimeAnchors(): Map<string, ArticleTimeAnchor> {
             month: titleMonths[0] ?? publishParts.month,
             title,
             publishTime,
+            phaseAnchor: extractPhaseAnchor(title),
         });
     });
 
@@ -1211,8 +1449,11 @@ async function buildQueryCache(
     const queryCache: QueryCacheItem[] = [];
     testCases.forEach((testCase, index) => {
         const effectiveQueryText = effectiveQueries[index] || testCase.query;
-        const queryIntent = parseQueryIntent(testCase.query);
-        const queryMonths = extractMonths(testCase.query);
+        const referenceQueryText =
+            testCase.source_query?.trim() || testCase.query;
+        const queryIntent = parseQueryIntent(referenceQueryText);
+        const queryMonths = extractMonths(referenceQueryText);
+        const queryPhaseAnchor = extractPhaseAnchor(referenceQueryText);
         const queryWords = Array.from(
             new Set(fmmTokenize(effectiveQueryText, vocabMap)),
         );
@@ -1221,17 +1462,21 @@ async function buildQueryCache(
             .map(String)
             .map((year) => vocabMap.get(year))
             .filter((item): item is number => item !== undefined);
-        const denseScoreOverrides = mergeDenseScoreOverrides(
-            buildOtDenseScoreOverrides(queryVectors[index]),
-            buildKpDenseScoreOverrides(queryVectors[index]),
-        );
+        const denseScoreOverrides = MINIMAL_BASELINE_MODE
+            ? undefined
+            : mergeDenseScoreOverrides(
+                  buildOtDenseScoreOverrides(queryVectors[index]),
+                  buildKpDenseScoreOverrides(queryVectors[index]),
+              );
 
         queryCache.push({
             testCase,
             effectiveQueryText,
+            referenceQueryText,
             queryVector: queryVectors[index],
             queryIntent,
             queryMonths,
+            queryPhaseAnchor,
             queryWords,
             querySparse,
             queryYearWordIds,
@@ -1253,6 +1498,19 @@ async function buildQueryCache(
 
 function getRank(matches: readonly { otid: string }[], expectedOtid: string): number {
     const rankIndex = matches.findIndex((item) => item.otid === expectedOtid);
+    return rankIndex === -1 ? Number.POSITIVE_INFINITY : rankIndex + 1;
+}
+
+function getBestRankForOtidSet(
+    matches: readonly { otid: string }[],
+    acceptableOtids: readonly string[],
+): number {
+    if (acceptableOtids.length === 0) {
+        return Number.POSITIVE_INFINITY;
+    }
+
+    const acceptableOtidSet = new Set(acceptableOtids);
+    const rankIndex = matches.findIndex((item) => acceptableOtidSet.has(item.otid));
     return rankIndex === -1 ? Number.POSITIVE_INFINITY : rankIndex + 1;
 }
 
@@ -1296,6 +1554,136 @@ function parseRequiredKpidGroups(
                 : [],
         )
         .filter((group) => group.length > 0);
+}
+
+function parseRequiredOtidGroups(
+    groups?: string[][],
+): string[][] {
+    if (!Array.isArray(groups)) {
+        return [];
+    }
+
+    return groups
+        .map((group) =>
+            Array.isArray(group)
+                ? Array.from(
+                      new Set(
+                          group.filter(
+                              (item): item is string =>
+                                  typeof item === "string" && item.length > 0,
+                          ),
+                      ),
+                  )
+                : [],
+        )
+        .filter((group) => group.length > 0);
+}
+
+function resolveOtidEvalTarget(testCase: DatasetCase): NormalizedOtidEvalTarget {
+    if (MINIMAL_BASELINE_MODE && MINIMAL_DISABLE_DOC_MULTI) {
+        const acceptableOtids = testCase.expected_otid
+            ? [testCase.expected_otid]
+            : [];
+        return {
+            mode: "single_expected",
+            acceptableOtids,
+            requiredOtidGroups: [],
+            minGroupsToCover: acceptableOtids.length > 0 ? 1 : 0,
+        };
+    }
+
+    const explicitRequiredGroups = parseRequiredOtidGroups(
+        testCase.required_otid_groups,
+    );
+    const acceptableOtids = Array.from(
+        new Set(
+            [
+                testCase.expected_otid,
+                ...(Array.isArray(testCase.acceptable_otids)
+                    ? testCase.acceptable_otids
+                    : []),
+            ].filter((item): item is string => typeof item === "string" && item.length > 0),
+        ),
+    );
+
+    const inferredMode: OtidEvalMode =
+        testCase.otid_eval_mode ||
+        (explicitRequiredGroups.length > 0
+            ? "required_otid_groups"
+            : acceptableOtids.length > 1
+              ? "acceptable_otids"
+              : "single_expected");
+
+    const minGroupsCandidate = Number.isFinite(testCase.min_otid_groups_to_cover)
+        ? Math.max(1, Number(testCase.min_otid_groups_to_cover))
+        : explicitRequiredGroups.length > 0
+          ? explicitRequiredGroups.length
+          : acceptableOtids.length > 0
+            ? 1
+            : 0;
+
+    return {
+        mode: inferredMode,
+        acceptableOtids,
+        requiredOtidGroups:
+            inferredMode === "required_otid_groups" ? explicitRequiredGroups : [],
+        minGroupsToCover:
+            inferredMode === "required_otid_groups"
+                ? Math.min(
+                      minGroupsCandidate,
+                      Math.max(explicitRequiredGroups.length, 1),
+                  )
+                : minGroupsCandidate,
+    };
+}
+
+function computeOtidCoverageState(
+    requiredGroups: readonly string[][],
+    minGroupsToCover: number,
+    matches: readonly { otid: string }[],
+): OtidCoverageState {
+    if (requiredGroups.length === 0) {
+        return {
+            coverageDepth: Number.POSITIVE_INFINITY,
+            coveredGroupsTop3: 0,
+            coveredGroupsTop5: 0,
+            coverageRatioTop5: 0,
+            totalGroups: 0,
+            minGroupsToCover: 0,
+        };
+    }
+
+    const groupDepths = requiredGroups.map((group) => {
+        const groupSet = new Set(group);
+        const rankIndex = matches.findIndex((match) => groupSet.has(match.otid));
+        return rankIndex === -1 ? Number.POSITIVE_INFINITY : rankIndex + 1;
+    });
+
+    const coveredGroupsTop3 = groupDepths.filter((depth) => depth <= 3).length;
+    const coveredGroupsTop5 = groupDepths.filter((depth) => depth <= 5).length;
+    const sortedDepths = groupDepths
+        .filter((depth) => Number.isFinite(depth))
+        .sort((left, right) => left - right);
+    const requiredCount = Math.max(
+        1,
+        Math.min(minGroupsToCover || requiredGroups.length, requiredGroups.length),
+    );
+    const coverageDepth =
+        sortedDepths.length >= requiredCount
+            ? sortedDepths[requiredCount - 1]
+            : Number.POSITIVE_INFINITY;
+
+    return {
+        coverageDepth,
+        coveredGroupsTop3,
+        coveredGroupsTop5,
+        coverageRatioTop5:
+            requiredGroups.length > 0
+                ? coveredGroupsTop5 / requiredGroups.length
+                : 0,
+        totalGroups: requiredGroups.length,
+        minGroupsToCover: requiredCount,
+    };
 }
 
 function resolveKpEvalTarget(testCase: DatasetCase): NormalizedKpEvalTarget {
@@ -1411,7 +1799,57 @@ function rewriteQueryToDeclarative(text: string): string {
     return rewritten;
 }
 
+function rewriteQueryToUserizedV1(text: string): string {
+    let rewritten = text.trim();
+    rewritten = rewritten.replace(/[？?]+$/g, "");
+    rewritten = rewritten.replace(
+        /^(请问一下|请问|我想知道|想知道|我想了解|想了解|我想问一下|我想问|想问一下|想问|咨询一下|咨询|请教一下|请教)\s*/g,
+        "",
+    );
+    rewritten = rewritten.replace(/中山大学/g, "");
+    rewritten = rewritten.replace(/推荐免试(攻读)?研究生/g, "推免");
+    rewritten = rewritten.replace(/全国优秀大学生夏令营/g, "夏令营");
+    rewritten = rewritten.replace(/硕士研究生/g, "硕士");
+    rewritten = rewritten.replace(/博士研究生/g, "博士");
+    rewritten = rewritten.replace(/招生章程|招生简章/g, "招生要求");
+    rewritten = rewritten.replace(/招生学科专业目录/g, "专业目录");
+    rewritten = rewritten.replace(/报名方式|申请方式|通过什么渠道申请/g, "怎么报名");
+    rewritten = rewritten.replace(/申请材料|材料清单|提交材料/g, "要准备什么材料");
+    rewritten = rewritten.replace(/资格条件|申请条件|报考条件|录取条件/g, "要什么条件");
+    rewritten = rewritten.replace(/时间线|时间安排|时间节点/g, "时间怎么安排");
+    rewritten = rewritten.replace(/完整流程|具体流程|流程包括哪些步骤|流程是什么/g, "流程怎么走");
+    rewritten = rewritten.replace(/联系方式|咨询电话/g, "找谁");
+    rewritten = rewritten.replace(/是否接收调剂/g, "能不能调剂");
+    rewritten = rewritten.replace(/综合考核/g, "考核");
+    rewritten = rewritten.replace(/复试录取方案|复试录取实施细则/g, "复试要求");
+    rewritten = rewritten.replace(/什么时候|何时|什么时间/g, "什么时候");
+    rewritten = rewritten.replace(/哪些材料|什么材料/g, "要准备什么材料");
+    rewritten = rewritten.replace(/哪些条件|什么条件|条件是什么/g, "要什么条件");
+    rewritten = rewritten.replace(/分别是什么|有哪些/g, "都有哪些");
+    rewritten = rewritten.replace(
+        /怎么(办|做|操作|申请|报名|提交|确认)|如何(办|做|操作|申请|报名|提交|确认)/g,
+        "怎么弄",
+    );
+    rewritten = rewritten.replace(/^如果我/, "");
+    rewritten = rewritten.replace(/^我是([^，。]*)[，,]\s*/g, "$1 ");
+    rewritten = rewritten.replace(/^我(准备|打算|想|要|需要)/, "");
+    rewritten = rewritten.replace(/[；;！!]/g, " ");
+    rewritten = rewritten.replace(/[，,]/g, " ");
+    rewritten = rewritten.replace(/\s+/g, " ").trim();
+
+    if (!rewritten) {
+        return text.trim();
+    }
+    return rewritten;
+}
+
 function rewriteQueryTextByStyle(text: string): string {
+    if (QUERY_STYLE_MODE === "userized_v1") {
+        return rewriteQueryToUserizedV1(text);
+    }
+    if (MINIMAL_BASELINE_MODE) {
+        return text;
+    }
     if (QUERY_STYLE_MODE === "declarative") {
         return rewriteQueryToDeclarative(text);
     }
@@ -1463,7 +1901,7 @@ function computeHeuristicKpBonus(
     item: QueryCacheItem,
     kpText: string,
 ): number {
-    const query = item.testCase.query;
+    const query = item.referenceQueryText;
     const scope = item.testCase.query_scope || "";
     const normalized = stripKpTimestampPrefix(kpText);
     let bonus = computeQueryWordBonus(item.queryWords, normalized);
@@ -1551,7 +1989,7 @@ function computeFeatureHeuristicKpBonus(
     item: QueryCacheItem,
     features: KPFeatureFlags,
 ): number {
-    const query = item.testCase.query;
+    const query = item.referenceQueryText;
     const scope = item.testCase.query_scope || "";
     let bonus = 0;
 
@@ -1647,6 +2085,15 @@ function computeFeatureHeuristicKpBonus(
     return bonus;
 }
 
+function getEffectiveKpCandidateRerankMode(
+    enableMinimalAspect = false,
+): KPCandidateRerankMode {
+    if (MINIMAL_BASELINE_MODE && enableMinimalAspect) {
+        return "feature_heuristic";
+    }
+    return KP_CANDIDATE_RERANK_MODE;
+}
+
 function getHeuristicKpSelection(
     item: QueryCacheItem,
     match: {
@@ -1670,11 +2117,12 @@ function getHeuristicKpSelection(
     let bestKpid = match.best_kpid;
     let bestScore = Number.NEGATIVE_INFINITY;
     const rawTopScore = kpCandidates[0]?.score ?? Number.NEGATIVE_INFINITY;
+    const rerankMode = getEffectiveKpCandidateRerankMode();
 
     kpCandidates.forEach((candidate) => {
         let rerankedScore = candidate.score;
 
-        if (KP_CANDIDATE_RERANK_MODE === "heuristic") {
+        if (rerankMode === "heuristic") {
             const kpText = kpTextMap.get(candidate.kpid);
             if (!kpText) {
                 if (candidate.score > bestScore) {
@@ -1685,7 +2133,7 @@ function getHeuristicKpSelection(
             }
 
             rerankedScore += computeHeuristicKpBonus(item, kpText);
-        } else if (KP_CANDIDATE_RERANK_MODE === "feature_heuristic") {
+        } else if (rerankMode === "feature_heuristic") {
             const kpFeatures = kpFeatureMap.get(candidate.kpid);
             if (!kpFeatures) {
                 if (candidate.score > bestScore) {
@@ -1717,8 +2165,17 @@ function rerankBestKpidForMatch(
         best_kpid?: string;
         kp_candidates?: Array<{ kpid: string; score: number }>;
     },
+    options?: {
+        enableMinimalAspect?: boolean;
+    },
 ): string | undefined {
-    if (KP_CANDIDATE_RERANK_MODE === "none") {
+    const rerankMode = getEffectiveKpCandidateRerankMode(
+        options?.enableMinimalAspect,
+    );
+    if (MINIMAL_BASELINE_MODE && !options?.enableMinimalAspect) {
+        return match.best_kpid;
+    }
+    if (rerankMode === "none") {
         return match.best_kpid;
     }
 
@@ -1730,19 +2187,35 @@ function getRerankedKpCandidates(
     match: {
         kp_candidates?: Array<{ kpid: string; score: number }>;
     },
+    options?: {
+        enableMinimalAspect?: boolean;
+    },
 ): RerankedKpCandidate[] {
     const kpCandidates = match.kp_candidates || [];
+    const rerankMode = getEffectiveKpCandidateRerankMode(
+        options?.enableMinimalAspect,
+    );
+
+    if (MINIMAL_BASELINE_MODE && !options?.enableMinimalAspect) {
+        return kpCandidates
+            .map((candidate) => ({
+                kpid: candidate.kpid,
+                rawScore: candidate.score,
+                rerankedScore: candidate.score,
+            }))
+            .sort((left, right) => right.rerankedScore - left.rerankedScore);
+    }
 
     return kpCandidates
         .map((candidate) => {
             let rerankedScore = candidate.score;
 
-            if (KP_CANDIDATE_RERANK_MODE === "heuristic") {
+            if (rerankMode === "heuristic") {
                 const kpText = kpTextMap.get(candidate.kpid);
                 if (kpText) {
                     rerankedScore += computeHeuristicKpBonus(item, kpText);
                 }
-            } else if (KP_CANDIDATE_RERANK_MODE === "feature_heuristic") {
+            } else if (rerankMode === "feature_heuristic") {
                 const kpFeatures = kpFeatureMap.get(candidate.kpid);
                 if (kpFeatures) {
                     rerankedScore += computeFeatureHeuristicKpBonus(item, kpFeatures);
@@ -1821,7 +2294,12 @@ function rerankMatchesForDocumentMetrics(
     item: QueryCacheItem,
     matches: readonly EvalSearchMatch[],
 ): EvalSearchMatch[] {
-    if (DOC_POST_RERANK_MODE === "none") {
+    const shouldApplyMinimalPhaseAnchor =
+        MINIMAL_BASELINE_MODE && MINIMAL_ADD_PHASE;
+    if (MINIMAL_BASELINE_MODE && !shouldApplyMinimalPhaseAnchor) {
+        return [...matches];
+    }
+    if (!shouldApplyMinimalPhaseAnchor && DOC_POST_RERANK_MODE === "none") {
         return [...matches];
     }
 
@@ -1834,6 +2312,9 @@ function rerankMatchesForDocumentMetrics(
         .map((match) => {
             let delta = 0;
 
+            if (shouldApplyMinimalPhaseAnchor) {
+                delta += computePhaseAnchorDocDelta(item, match);
+            }
             if (DOC_POST_RERANK_MODE === "kp_heuristic_delta") {
                 const selection = getHeuristicKpSelection(item, match);
                 delta =
@@ -1896,6 +2377,63 @@ function computeTimeAnchorDocDelta(
     return delta;
 }
 
+function computePhaseAnchorDocDelta(
+    item: QueryCacheItem,
+    match: EvalSearchMatch,
+): number {
+    const queryPhase = item.queryPhaseAnchor;
+    const hasExplicitPhase =
+        queryPhase.half !== undefined ||
+        queryPhase.batch !== undefined ||
+        queryPhase.stages.length > 0;
+    if (!hasExplicitPhase) {
+        return 0;
+    }
+
+    const articleAnchor = articleTimeAnchorMap.get(match.otid);
+    if (!articleAnchor) {
+        return -0.15;
+    }
+
+    const articlePhase = articleAnchor.phaseAnchor;
+    let delta = 0;
+
+    if (queryPhase.half) {
+        if (articlePhase.half === queryPhase.half) {
+            delta += 0.9;
+        } else if (articlePhase.half) {
+            delta -= 0.9;
+        } else {
+            delta -= 0.2;
+        }
+    }
+
+    if (queryPhase.batch) {
+        if (articlePhase.batch === queryPhase.batch) {
+            delta += 1.0;
+        } else if (articlePhase.batch) {
+            delta -= 1.0;
+        } else {
+            delta -= 0.2;
+        }
+    }
+
+    if (queryPhase.stages.length > 0) {
+        const hasExactStage = queryPhase.stages.some((stage) =>
+            articlePhase.stages.includes(stage),
+        );
+        if (hasExactStage) {
+            delta += 0.8;
+        } else if (articlePhase.stages.length > 0) {
+            delta -= 0.8;
+        } else {
+            delta -= 0.15;
+        }
+    }
+
+    return Math.max(-1.8, Math.min(1.8, delta));
+}
+
 function formatDocPostRerankSlug(): string {
     if (DOC_POST_RERANK_MODE === "kp_heuristic_delta") {
         const safeWeight =
@@ -1919,11 +2457,35 @@ function formatDocPostRerankSlug(): string {
 function rerankMatchesForKpidMetrics(
     item: QueryCacheItem,
     matches: readonly EvalSearchMatch[],
+    options?: {
+        enableMinimalAspect?: boolean;
+    },
 ): Array<{ otid: string; best_kpid?: string }> {
+    if (MINIMAL_BASELINE_MODE) {
+        return matches.map((match) => ({
+            otid: match.otid,
+            best_kpid: options?.enableMinimalAspect
+                ? rerankBestKpidForMatch(item, match, options)
+                : match.best_kpid,
+        }));
+    }
     return matches.map((match) => ({
         otid: match.otid,
-        best_kpid: rerankBestKpidForMatch(item, match),
+        best_kpid: rerankBestKpidForMatch(item, match, options),
     }));
+}
+
+function shouldApplyMinimalAspectForCase(
+    item: QueryCacheItem,
+    docRank: number,
+): boolean {
+    return (
+        MINIMAL_BASELINE_MODE &&
+        MINIMAL_ADD_ASPECT &&
+        item.testCase.support_pattern === "multi_kp" &&
+        Number.isFinite(docRank) &&
+        docRank === 1
+    );
 }
 
 function rankToNullable(rank: number): number | null {
@@ -1938,12 +2500,28 @@ function buildFailureReasons(
     item: QueryCacheItem,
     docRank: number,
     kpidRank: number,
+    otidEvalTarget: NormalizedOtidEvalTarget,
+    otidCoverageState: OtidCoverageState,
     kpEvalTarget: NormalizedKpEvalTarget,
     supportCoverageState: SupportCoverageState,
 ): string[] {
     const reasons: string[] = [];
 
-    if (!Number.isFinite(docRank) || docRank > 5) {
+    if (otidEvalTarget.mode === "required_otid_groups") {
+        if (!Number.isFinite(docRank) || docRank > 5) {
+            reasons.push("必需文档组未能在前5内完成覆盖，优先表现为多文档召回或排序失败。");
+        } else if (docRank > 1) {
+            reasons.push("必需文档组进入前5但未能更早完成覆盖，存在多文档排序偏差。");
+        }
+
+        if (Number.isFinite(docRank) && docRank <= 5) {
+            if (otidCoverageState.coveredGroupsTop5 > 0) {
+                reasons.push("文档候选中已覆盖部分必需通知，但仍未形成完整文档链。");
+            } else {
+                reasons.push("文档候选中尚未覆盖任何必需通知组。");
+            }
+        }
+    } else if (!Number.isFinite(docRank) || docRank > 5) {
         reasons.push("正确文档未进入前5，优先表现为文档级召回或排序失败。");
     } else if (docRank > 1) {
         reasons.push("正确文档进入前5但未到第1名，存在文档级排序偏差。");
@@ -1989,9 +2567,23 @@ function inferFailureRisk(
     item: QueryCacheItem,
     docRank: number,
     kpidRank: number,
+    otidEvalTarget: NormalizedOtidEvalTarget,
+    otidCoverageState: OtidCoverageState,
     kpEvalTarget: NormalizedKpEvalTarget,
     supportCoverageState: SupportCoverageState,
 ): string {
+    if (
+        otidEvalTarget.mode === "required_otid_groups" &&
+        Number.isFinite(docRank) &&
+        docRank <= 5 &&
+        (!Number.isFinite(otidCoverageState.coverageDepth) ||
+            otidCoverageState.coverageDepth > 5)
+    ) {
+        return otidCoverageState.coveredGroupsTop5 > 0
+            ? "partial_multi_doc_coverage"
+            : "multi_doc_chain_miss";
+    }
+
     if (
         kpEvalTarget.mode === "aspect_coverage" &&
         Number.isFinite(docRank) &&
@@ -2073,6 +2665,7 @@ function collectCaseDetails(
             : 5;
 
     const details = queryCache.map((item) => {
+        const otidEvalTarget = resolveOtidEvalTarget(item.testCase);
         const kpEvalTarget = resolveKpEvalTarget(item.testCase);
         const result = searchAndRank({
             queryVector: item.queryVector,
@@ -2096,6 +2689,7 @@ function collectCaseDetails(
                 Number.isFinite(KP_TAIL_WEIGHT) && KP_TAIL_WEIGHT >= 0
                     ? KP_TAIL_WEIGHT
                     : undefined,
+            fusionMode: FUSION_MODE,
             lexicalBonusMode: LEXICAL_BONUS_MODE,
             qLexicalMultiplier: Number.isFinite(Q_LEXICAL_MULTIPLIER)
                 ? Q_LEXICAL_MULTIPLIER
@@ -2113,19 +2707,59 @@ function collectCaseDetails(
                     ? ONLINE_KP_ROLE_DOC_WEIGHT
                     : undefined,
             denseScoreOverrides: item.denseScoreOverrides,
+            qConfusionMode: Q_CONFUSION_MODE,
+            qConfusionWeight: Number.isFinite(Q_CONFUSION_WEIGHT)
+                ? Q_CONFUSION_WEIGHT
+                : undefined,
+            enableExplicitYearFilter: !MINIMAL_BASELINE_MODE || MINIMAL_ADD_YEAR,
+            minimalMode: MINIMAL_BASELINE_MODE,
         });
         const docRerankedMatches = rerankMatchesForDocumentMetrics(
             item,
             result.matches,
         );
+        const weakDocRerankedMatches =
+            docRerankedMatches.length === 0 && result.weakMatches.length > 0
+                ? rerankMatchesForDocumentMetrics(item, result.weakMatches)
+                : [];
+        const exportDocMatches =
+            docRerankedMatches.length > 0
+                ? docRerankedMatches
+                : weakDocRerankedMatches;
+        const otidCoverageState =
+            otidEvalTarget.mode === "required_otid_groups"
+                ? computeOtidCoverageState(
+                      otidEvalTarget.requiredOtidGroups,
+                      otidEvalTarget.minGroupsToCover,
+                      docRerankedMatches,
+                  )
+                : {
+                      coverageDepth: getBestRankForOtidSet(
+                          docRerankedMatches,
+                          otidEvalTarget.acceptableOtids,
+                      ),
+                      coveredGroupsTop3: 0,
+                      coveredGroupsTop5: 0,
+                      coverageRatioTop5: 0,
+                      totalGroups: 0,
+                      minGroupsToCover: 0,
+                  };
+        const docRank = otidCoverageState.coverageDepth;
+        const enableMinimalAspect = shouldApplyMinimalAspectForCase(
+            item,
+            docRank,
+        );
         const rerankedMatches = rerankMatchesForKpidMetrics(
             item,
             docRerankedMatches,
+            { enableMinimalAspect },
         );
-        const docRank = getRank(
-            docRerankedMatches,
-            item.testCase.expected_otid,
-        );
+        const exportRerankedMatches =
+            exportDocMatches === docRerankedMatches
+                ? rerankedMatches
+                : rerankMatchesForKpidMetrics(item, exportDocMatches, {
+                      enableMinimalAspect,
+                  });
         const kpidRank = getKpidRank(
             rerankedMatches,
             item.testCase.expected_otid,
@@ -2135,8 +2769,21 @@ function collectCaseDetails(
             (match) => match.otid === item.testCase.expected_otid,
         );
         const expectedDocTopKpCandidates = expectedDocMatch
-            ? getRerankedKpCandidates(item, expectedDocMatch)
+            ? getRerankedKpCandidates(item, expectedDocMatch, {
+                  enableMinimalAspect,
+              })
             : [];
+        const exportExpectedDocMatch =
+            expectedDocMatch ||
+            exportDocMatches.find(
+                (match) => match.otid === item.testCase.expected_otid,
+            );
+        const exportExpectedDocTopKpCandidates =
+            exportExpectedDocMatch && exportExpectedDocMatch !== expectedDocMatch
+                ? getRerankedKpCandidates(item, exportExpectedDocMatch, {
+                      enableMinimalAspect,
+                  })
+                : expectedDocTopKpCandidates;
         const supportCoverageState =
             kpEvalTarget.mode === "aspect_coverage"
                 ? computeSupportCoverageState(
@@ -2156,9 +2803,18 @@ function collectCaseDetails(
             item,
             docRank,
             kpidRank,
+            otidEvalTarget,
+            otidCoverageState,
             kpEvalTarget,
             supportCoverageState,
         );
+        const docFullCoverTop5 =
+            otidEvalTarget.mode === "required_otid_groups" &&
+            Number.isFinite(otidCoverageState.coverageDepth) &&
+            otidCoverageState.coverageDepth <= 5;
+        const docPartialCoverTop5 =
+            otidEvalTarget.mode === "required_otid_groups" &&
+            otidCoverageState.coveredGroupsTop5 > 0;
         const supportFullCoverTop5 =
             Number.isFinite(docRank) &&
             docRank <= 5 &&
@@ -2172,6 +2828,10 @@ function collectCaseDetails(
         const detail: CaseDetail = {
             query: item.testCase.query,
             expected_otid: item.testCase.expected_otid,
+            otid_eval_mode: otidEvalTarget.mode,
+            acceptable_otids: otidEvalTarget.acceptableOtids,
+            required_otid_groups: otidEvalTarget.requiredOtidGroups,
+            min_otid_groups_to_cover: otidEvalTarget.minGroupsToCover,
             expected_kpid: item.testCase.expected_kpid,
             kp_eval_mode: kpEvalTarget.mode,
             acceptable_anchor_kpids: kpEvalTarget.acceptableAnchorKpids,
@@ -2193,6 +2853,11 @@ function collectCaseDetails(
             supportCoverageDepth: rankToNullable(
                 supportCoverageState.coverageDepth,
             ),
+            docCoverageDepth: rankToNullable(otidCoverageState.coverageDepth),
+            docGroupsCoveredTop5: otidCoverageState.coveredGroupsTop5,
+            docGroupsRequired: otidCoverageState.totalGroups,
+            docFullCoverTop5,
+            docPartialCoverTop5,
             supportGroupsCoveredTop5: supportCoverageState.coveredGroupsTop5,
             supportGroupsRequired: supportCoverageState.totalGroups,
             supportFullCoverTop5,
@@ -2205,11 +2870,19 @@ function collectCaseDetails(
                 item,
                 docRank,
                 kpidRank,
+                otidEvalTarget,
+                otidCoverageState,
                 kpEvalTarget,
                 supportCoverageState,
             ),
             failure_reasons: failureReasons,
-            topDocMatches: docRerankedMatches
+            topDocMatchesSource:
+                docRerankedMatches.length > 0
+                    ? "matches"
+                    : exportDocMatches.length > 0
+                      ? "weak_matches"
+                      : "none",
+            topDocMatches: exportDocMatches
                 .slice(0, topMatchLimit)
                 .map((match, index) => ({
                     rank: index + 1,
@@ -2217,14 +2890,14 @@ function collectCaseDetails(
                     score: match.score,
                     best_kpid: match.best_kpid,
                 })),
-            topKpidMatches: rerankedMatches
+            topKpidMatches: exportRerankedMatches
                 .slice(0, topMatchLimit)
                 .map((match, index) => ({
                     rank: index + 1,
                     otid: match.otid,
                     best_kpid: match.best_kpid,
                 })),
-            expectedDocTopKpCandidates: expectedDocTopKpCandidates
+            expectedDocTopKpCandidates: exportExpectedDocTopKpCandidates
                 .slice(0, topMatchLimit)
                 .map((candidate, index) => ({
                     rank: index + 1,
@@ -2324,6 +2997,7 @@ function evaluateQueryCache(
     };
 
     queryCache.forEach((item) => {
+        const otidEvalTarget = resolveOtidEvalTarget(item.testCase);
         const kpEvalTarget = resolveKpEvalTarget(item.testCase);
         const result = searchAndRank({
             queryVector: item.queryVector,
@@ -2347,6 +3021,7 @@ function evaluateQueryCache(
                 Number.isFinite(KP_TAIL_WEIGHT) && KP_TAIL_WEIGHT >= 0
                     ? KP_TAIL_WEIGHT
                     : undefined,
+            fusionMode: FUSION_MODE,
             lexicalBonusMode: LEXICAL_BONUS_MODE,
             qLexicalMultiplier: Number.isFinite(Q_LEXICAL_MULTIPLIER)
                 ? Q_LEXICAL_MULTIPLIER
@@ -2364,18 +3039,44 @@ function evaluateQueryCache(
                     ? ONLINE_KP_ROLE_DOC_WEIGHT
                     : undefined,
             denseScoreOverrides: item.denseScoreOverrides,
+            qConfusionMode: Q_CONFUSION_MODE,
+            qConfusionWeight: Number.isFinite(Q_CONFUSION_WEIGHT)
+                ? Q_CONFUSION_WEIGHT
+                : undefined,
+            enableExplicitYearFilter: !MINIMAL_BASELINE_MODE || MINIMAL_ADD_YEAR,
+            minimalMode: MINIMAL_BASELINE_MODE,
         });
         const docRerankedMatches = rerankMatchesForDocumentMetrics(
             item,
             result.matches,
         );
+        const otidCoverageState =
+            otidEvalTarget.mode === "required_otid_groups"
+                ? computeOtidCoverageState(
+                      otidEvalTarget.requiredOtidGroups,
+                      otidEvalTarget.minGroupsToCover,
+                      docRerankedMatches,
+                  )
+                : {
+                      coverageDepth: getBestRankForOtidSet(
+                          docRerankedMatches,
+                          otidEvalTarget.acceptableOtids,
+                      ),
+                      coveredGroupsTop3: 0,
+                      coveredGroupsTop5: 0,
+                      coverageRatioTop5: 0,
+                      totalGroups: 0,
+                      minGroupsToCover: 0,
+                  };
+        const rank = otidCoverageState.coverageDepth;
+        const enableMinimalAspect = shouldApplyMinimalAspectForCase(
+            item,
+            rank,
+        );
         const rerankedMatches = rerankMatchesForKpidMetrics(
             item,
             docRerankedMatches,
-        );
-        const rank = getRank(
-            docRerankedMatches,
-            item.testCase.expected_otid,
+            { enableMinimalAspect },
         );
         const kpidRank = getKpidRank(
             rerankedMatches,
@@ -2386,7 +3087,9 @@ function evaluateQueryCache(
             (match) => match.otid === item.testCase.expected_otid,
         );
         const expectedDocTopKpCandidates = expectedDocMatch
-            ? getRerankedKpCandidates(item, expectedDocMatch)
+            ? getRerankedKpCandidates(item, expectedDocMatch, {
+                  enableMinimalAspect,
+              })
             : [];
         const supportCoverageState =
             kpEvalTarget.mode === "aspect_coverage"
@@ -2870,7 +3573,19 @@ function formatSupportCoverageLine(metrics: SupportCoverageMetrics): string {
 async function main() {
     console.log("Loading evaluation engine...");
     console.log(`Active main DB version: ${ACTIVE_MAIN_DB_VERSION}`);
+    console.log(`Experiment track: ${EXPERIMENT_TRACK}`);
     console.log(`OT dense mode: ${OT_DENSE_MODE}`);
+    console.log(`Minimal baseline mode: ${MINIMAL_BASELINE_MODE ? "on" : "off"}`);
+    console.log(`Minimal add year: ${MINIMAL_ADD_YEAR ? "on" : "off"}`);
+    console.log(`Minimal add phase: ${MINIMAL_ADD_PHASE ? "on" : "off"}`);
+    console.log(`Minimal add aspect: ${MINIMAL_ADD_ASPECT ? "on" : "off"}`);
+    console.log(
+        `Minimal disable doc multi: ${MINIMAL_DISABLE_DOC_MULTI ? "on" : "off"}`,
+    );
+    console.log(`Fusion mode: ${FUSION_MODE}`);
+    console.log(
+        `Q confusion mode: ${Q_CONFUSION_MODE}${Number.isFinite(Q_CONFUSION_WEIGHT) ? ` (weight=${Q_CONFUSION_WEIGHT})` : ""}`,
+    );
     await loadEngine();
 
     const tuneCases = loadDatasets(DATASET_CONFIG.tuneSources);
@@ -2895,7 +3610,23 @@ async function main() {
     const report: Report = {
         generatedAt: new Date().toISOString(),
         mainDbVersion: ACTIVE_MAIN_DB_VERSION,
+        experimentTrack: EXPERIMENT_TRACK !== "default" ? EXPERIMENT_TRACK : undefined,
+        minimalBaselineMode: MINIMAL_BASELINE_MODE || undefined,
+        minimalAddYear: MINIMAL_ADD_YEAR || undefined,
+        minimalAddPhase: MINIMAL_ADD_PHASE || undefined,
+        minimalAddAspect: MINIMAL_ADD_ASPECT || undefined,
+        minimalDisableDocMulti: MINIMAL_DISABLE_DOC_MULTI || undefined,
+        fusionMode: FUSION_MODE !== "default" ? FUSION_MODE : undefined,
+        fixedComboWeights:
+            Object.keys(FIXED_COMBO_WEIGHTS).length > 0
+                ? FIXED_COMBO_WEIGHTS
+                : undefined,
         otDenseMode: OT_DENSE_MODE,
+        qConfusionMode: Q_CONFUSION_MODE !== "off" ? Q_CONFUSION_MODE : undefined,
+        qConfusionWeight:
+            Q_CONFUSION_MODE !== "off" && Number.isFinite(Q_CONFUSION_WEIGHT)
+                ? Q_CONFUSION_WEIGHT
+                : undefined,
         queryStyleMode: QUERY_STYLE_MODE,
         kpStyleMode: KP_STYLE_MODE,
         qPerDocCap:
@@ -3006,11 +3737,12 @@ async function main() {
 
     const outputPath = path.join(
         resultsDir,
-        `granularity_mix_${DATASET_CONFIG.datasetKey}_top${Number.isFinite(TOP_HYBRID_LIMIT) && TOP_HYBRID_LIMIT > 0 ? TOP_HYBRID_LIMIT : 1000}_${KP_AGGREGATION_MODE === "max_plus_topn" ? `kpagg-top${Number.isFinite(KP_TOP_N) && KP_TOP_N > 0 ? KP_TOP_N : 3}-w${(Number.isFinite(KP_TAIL_WEIGHT) && KP_TAIL_WEIGHT >= 0 ? KP_TAIL_WEIGHT : 0.35).toFixed(2).replace(".", "")}` : "kpagg-max"}_lex${LEXICAL_BONUS_MODE}${formatLexicalTypeMultiplierSlug()}_${formatOtDenseModeSlug()}${formatQueryStyleModeSlug()}${formatKpStyleModeSlug()}${Number.isFinite(Q_PER_DOC_CAP) && Q_PER_DOC_CAP > 0 ? `_qcap${Q_PER_DOC_CAP}` : ""}${Number.isFinite(KP_PER_DOC_CAP) && KP_PER_DOC_CAP > 0 ? `_kpcap${KP_PER_DOC_CAP}` : ""}_onlinekprole${ONLINE_KP_ROLE_RERANK_MODE}${ONLINE_KP_ROLE_RERANK_MODE === "feature" ? `-w${(Number.isFinite(ONLINE_KP_ROLE_DOC_WEIGHT) && ONLINE_KP_ROLE_DOC_WEIGHT >= 0 ? ONLINE_KP_ROLE_DOC_WEIGHT : 0.35).toFixed(2).replace(".", "")}` : ""}_kprerank${KP_CANDIDATE_RERANK_MODE}_docrerank${formatDocPostRerankSlug()}_${Date.now()}.json`,
+        `granularity_mix_${DATASET_CONFIG.datasetKey}_top${Number.isFinite(TOP_HYBRID_LIMIT) && TOP_HYBRID_LIMIT > 0 ? TOP_HYBRID_LIMIT : 1000}${formatExperimentTrackSlug()}_${MINIMAL_BASELINE_MODE ? "minimal" : KP_AGGREGATION_MODE === "max_plus_topn" ? `kpagg-top${Number.isFinite(KP_TOP_N) && KP_TOP_N > 0 ? KP_TOP_N : 3}-w${(Number.isFinite(KP_TAIL_WEIGHT) && KP_TAIL_WEIGHT >= 0 ? KP_TAIL_WEIGHT : 0.35).toFixed(2).replace(".", "")}` : "kpagg-max"}${formatMinimalAdditionsSlug()}_lex${LEXICAL_BONUS_MODE}${formatLexicalTypeMultiplierSlug()}_${formatOtDenseModeSlug()}${formatQueryStyleModeSlug()}${formatKpStyleModeSlug()}${formatQConfusionModeSlug()}${formatFusionModeSlug()}${formatFixedComboWeightsSlug()}${Number.isFinite(Q_PER_DOC_CAP) && Q_PER_DOC_CAP > 0 ? `_qcap${Q_PER_DOC_CAP}` : ""}${Number.isFinite(KP_PER_DOC_CAP) && KP_PER_DOC_CAP > 0 ? `_kpcap${KP_PER_DOC_CAP}` : ""}_onlinekprole${MINIMAL_BASELINE_MODE ? "off" : ONLINE_KP_ROLE_RERANK_MODE}${!MINIMAL_BASELINE_MODE && ONLINE_KP_ROLE_RERANK_MODE === "feature" ? `-w${(Number.isFinite(ONLINE_KP_ROLE_DOC_WEIGHT) && ONLINE_KP_ROLE_DOC_WEIGHT >= 0 ? ONLINE_KP_ROLE_DOC_WEIGHT : 0.35).toFixed(2).replace(".", "")}` : ""}_kprerank${MINIMAL_BASELINE_MODE ? "none" : KP_CANDIDATE_RERANK_MODE}_docrerank${MINIMAL_BASELINE_MODE ? "none" : formatDocPostRerankSlug()}_${Date.now()}.json`,
     );
     fs.writeFileSync(outputPath, JSON.stringify(report, null, 2), "utf-8");
     if (
         !SKIP_RESULT_REGISTRY_UPDATE &&
+        EXPERIMENT_TRACK === "default" &&
         ACTIVE_MAIN_DB_VERSION === "main_v2_plus" &&
         OT_DENSE_MODE === "original"
     ) {
@@ -3025,7 +3757,7 @@ async function main() {
         });
     } else {
         console.log(
-            `Skip current result registry update: db=${ACTIVE_MAIN_DB_VERSION}, otDenseMode=${OT_DENSE_MODE}, explicitSkip=${SKIP_RESULT_REGISTRY_UPDATE}`,
+            `Skip current result registry update: db=${ACTIVE_MAIN_DB_VERSION}, track=${EXPERIMENT_TRACK}, otDenseMode=${OT_DENSE_MODE}, explicitSkip=${SKIP_RESULT_REGISTRY_UPDATE}`,
         );
     }
     console.log(`\nSaved report to ${outputPath}`);

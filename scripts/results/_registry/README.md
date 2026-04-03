@@ -15,7 +15,4 @@
 2. [eval_route_or_clarify.ts](/d:/Project/SuAsk/SuAsk_Agent/FrontEnd/scripts/eval_route_or_clarify.ts)
 3. [eval_platform_mixed.ts](/d:/Project/SuAsk/SuAsk_Agent/FrontEnd/scripts/eval_platform_mixed.ts)
 
-当前仍需要人工维护的结果入口：
-
-1. `granularity_holdout_v3_current`
-   - 因为它当前对应的是单独保留的固定口径结果，而不是上述脚本直接产出
+当前目录已按“现行主线优先”做过清理；旧结果入口统一转入历史记录，不再在这里保留稳定指针。

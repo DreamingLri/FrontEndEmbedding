@@ -23,6 +23,7 @@ export interface KPCandidate {
 
 export interface AggregatedDocScores {
     max_q: number;
+    q_scores: number[];
     max_kp: number;
     kp_score_map: Record<string, number>;
     kp_scores: number[];
@@ -51,6 +52,7 @@ type ArrayFieldKey =
     | "degree_levels"
     | "event_types";
 
+const MAX_TRACKED_Q_SCORES = 4;
 const MAX_TRACKED_KP_SCORES = 8;
 
 function assignArrayIfMissing(
@@ -69,6 +71,7 @@ export function createAggregatedDocScores(
 ): AggregatedDocScores {
     return {
         max_q: 0,
+        q_scores: [],
         max_kp: 0,
         kp_score_map: {},
         kp_scores: [],
@@ -112,7 +115,12 @@ export function applyScoreToAggregatedDocScores(
     score: number,
 ) {
     if (meta.type === "Q") {
-        target.max_q = Math.max(target.max_q, score);
+        target.q_scores.push(score);
+        target.q_scores.sort((a, b) => b - a);
+        if (target.q_scores.length > MAX_TRACKED_Q_SCORES) {
+            target.q_scores.length = MAX_TRACKED_Q_SCORES;
+        }
+        target.max_q = target.q_scores[0] || 0;
         return;
     }
 

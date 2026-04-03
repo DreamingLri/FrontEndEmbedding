@@ -9,10 +9,19 @@ import {
 } from "./kb_version_paths.ts";
 
 export type KpEvalMode = "single_anchor" | "aspect_coverage" | "ot_only";
+export type OtidEvalMode =
+    | "single_expected"
+    | "acceptable_otids"
+    | "required_otid_groups";
 
 export type EvalDatasetCase = {
     query: string;
+    source_query?: string;
     expected_otid: string;
+    otid_eval_mode?: OtidEvalMode;
+    acceptable_otids?: string[];
+    required_otid_groups?: string[][];
+    min_otid_groups_to_cover?: number;
     expected_kpid?: string;
     support_kpids?: string[];
     kp_eval_mode?: KpEvalMode;
@@ -69,6 +78,7 @@ export type EvalDatasetConfig = {
 export type GranularityDatasetTargetKey =
     | "main_bench_120"
     | "in_domain_holdout_50"
+    | "external_ood_50"
     | "external_ood_holdout_30";
 
 type GranularityDatasetTargetDefinition = {
@@ -103,23 +113,26 @@ const GRANULARITY_DATASET_TARGETS: Record<
 > = {
     main_bench_120: {
         key: "main_bench_120",
-        label: "MainBench-120",
+        label: "MainBench-120-UserizedV1",
         role: "benchmark",
         primaryPath: CURRENT_EVAL_DATASET_FILES.granularityMain120,
-        // 仅在 MainBench-120 本体缺失时回退到历史主集，正常测评不应依赖这个分支。
-        fallbackPath: CURRENT_EVAL_DATASET_FILES.granularityMain106,
     },
     in_domain_holdout_50: {
         key: "in_domain_holdout_50",
-        label: "InDomainHoldout-50",
+        label: "InDomainHoldout-50-UserizedV1",
         role: "in_domain_holdout",
         primaryPath: CURRENT_EVAL_DATASET_FILES.granularityInDomainHoldout50,
-        // skeleton_v2 只作为未完成 review 时的兼容回退。
-        fallbackPath: CURRENT_EVAL_DATASET_FILES.granularityInDomainHoldout50SkeletonV2,
+    },
+    external_ood_50: {
+        key: "external_ood_50",
+        label: "ExternalOOD-50-UserizedV1",
+        role: "external_ood_holdout",
+        primaryPath: CURRENT_EVAL_DATASET_FILES.granularityExternalOod50,
     },
     external_ood_holdout_30: {
         key: "external_ood_holdout_30",
-        label: "ExternalOODHoldout-30",
+        // 兼容保留旧 target key，但当前正式外域口径已切换为 external_ood_50。
+        label: "ExternalOOD-50-UserizedV1",
         role: "external_ood_holdout",
         primaryPath: CURRENT_EVAL_DATASET_FILES.granularityExternalOodHoldout30,
     },
@@ -372,7 +385,7 @@ export function listAvailableGranularityDatasetTargets(
     keys: readonly GranularityDatasetTargetKey[] = [
         "main_bench_120",
         "in_domain_holdout_50",
-        "external_ood_holdout_30",
+        "external_ood_50",
     ],
 ): ResolvedGranularityDatasetTarget[] {
     return keys.flatMap((key) => {

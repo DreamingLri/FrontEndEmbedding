@@ -88,7 +88,7 @@ function buildDefaultDatasetTargets(): DatasetTarget[] {
     return [
         "main_bench_120",
         "in_domain_holdout_50",
-        "external_ood_holdout_30",
+        "external_ood_50",
     ].flatMap((key) => {
         try {
             const target = resolveGranularityDatasetTarget(key);

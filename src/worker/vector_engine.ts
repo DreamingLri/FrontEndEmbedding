@@ -5,14 +5,14 @@ import {
     INTENT_VECTOR_TABLE as CONFIG_INTENT_VECTOR_TABLE,
     LATEST_QUERY_HINTS as CONFIG_LATEST_QUERY_HINTS,
     TOPIC_CONFIGS as CONFIG_TOPIC_CONFIGS,
-} from "./search_topic_config";
+} from "./search_topic_config.ts";
 import {
     applyScoreToAggregatedDocScores,
     createAggregatedDocScores,
     mergeAggregatedDocMetadata,
     type AggregatedDocScores,
     type KPCandidate,
-} from "./aggregated_doc_scores";
+} from "./aggregated_doc_scores.ts";
 
 export interface Metadata {
     id: string;
@@ -137,6 +137,13 @@ export interface ParsedQueryIntent {
 export type KPAggregationMode = "max" | "max_plus_topn";
 export type LexicalBonusMode = "sum" | "max";
 export type KPRoleRerankMode = "off" | "feature";
+export type FusionMode = "default" | "max_q_vs_kpot";
+export type QConfusionMode =
+    | "off"
+    | "consensus"
+    | "consensus_no_year"
+    | "competition"
+    | "combined";
 
 export interface IntentVectorItem {
     intent_id: string;
@@ -162,6 +169,7 @@ const LATEST_YEAR_BOOST_BASE = 0.82;
 const LATEST_POLICY_TIMESTAMP_BOOST_BASE = 0.97;
 const CURRENT_PROCESS_TIMESTAMP_BOOST_BASE = 0.984;
 const DEFAULT_KP_ROLE_DOC_WEIGHT = 0.35;
+const DEFAULT_Q_CONFUSION_WEIGHT = 0.2;
 const DEFAULT_KP_ROLE_CANDIDATE_LIMIT = 5;
 const CURRENT_PROCESS_EVENT_TYPES = [
     "招生章程",
@@ -918,6 +926,85 @@ function shouldSkipForExplicitYear(
     );
 }
 
+function computeQConsensusPenaltyMultiplier(params: {
+    weightedQ: number;
+    weightedKP: number;
+    weightedOT: number;
+    qConfusionWeight: number;
+}): number {
+    const { weightedQ, weightedKP, weightedOT, qConfusionWeight } = params;
+    if (weightedQ <= 0) {
+        return 1;
+    }
+
+    const supportStrength = Math.max(weightedKP, weightedOT);
+    if (supportStrength >= weightedQ) {
+        return 1;
+    }
+
+    const supportGapRatio = Math.min(
+        1,
+        (weightedQ - supportStrength) / Math.max(weightedQ, 1e-6),
+    );
+    const dualWeakSupportFactor =
+        weightedKP <= weightedQ * 0.6 && weightedOT <= weightedQ * 0.6
+            ? 1
+            : 0.65;
+
+    return Math.max(
+        0.35,
+        1 - qConfusionWeight * supportGapRatio * dualWeakSupportFactor,
+    );
+}
+
+function computeQCompetitionPenaltyMap(params: {
+    otidMap: Record<string, AggregatedDocScores>;
+    qConfusionWeight: number;
+}): Map<string, number> {
+    const { otidMap, qConfusionWeight } = params;
+    const penaltyMap = new Map<string, number>();
+
+    for (const [otid, scores] of Object.entries(otidMap)) {
+        const currentQ = scores.max_q;
+        if (currentQ <= 0) {
+            penaltyMap.set(otid, 1);
+            continue;
+        }
+
+        const closeThreshold = Math.max(0.03, currentQ * 0.05);
+        let closeDocCount = 0;
+
+        for (const [otherOtid, otherScores] of Object.entries(otidMap)) {
+            if (otherOtid === otid || otherScores.max_q <= 0) {
+                continue;
+            }
+            if (otherScores.max_q >= currentQ - closeThreshold) {
+                closeDocCount += 1;
+            }
+        }
+
+        const localCrowding =
+            scores.q_scores.length > 1 &&
+            scores.q_scores[1]! >= currentQ - closeThreshold
+                ? 1
+                : 0;
+        const normalizedCrowding = Math.min(
+            1,
+            (Math.min(closeDocCount, 4) + localCrowding) / 4,
+        );
+
+        penaltyMap.set(
+            otid,
+            Math.max(
+                0.35,
+                1 - qConfusionWeight * 0.85 * normalizedCrowding,
+            ),
+        );
+    }
+
+    return penaltyMap;
+}
+
 function computeBaseScore(
     scores: AggregatedDocScores,
     weights: typeof DEFAULT_WEIGHTS,
@@ -925,6 +1012,10 @@ function computeBaseScore(
         kpAggregationMode?: KPAggregationMode;
         kpTopN?: number;
         kpTailWeight?: number;
+        fusionMode?: FusionMode;
+        qConfusionMode?: QConfusionMode;
+        qConfusionWeight?: number;
+        qCompetitionPenaltyMultiplier?: number;
     },
 ): number {
     const kpAggregationMode = options?.kpAggregationMode || "max";
@@ -946,10 +1037,44 @@ function computeBaseScore(
     const weightedQ = scores.max_q * weights.Q;
     const weightedKP = aggregatedKpScore * weights.KP;
     const weightedOT = scores.ot_score * weights.OT;
+    const qConfusionMode = options?.qConfusionMode || "off";
+    const qConfusionWeight =
+        Number.isFinite(options?.qConfusionWeight) &&
+        (options?.qConfusionWeight || 0) > 0
+            ? Math.min(options!.qConfusionWeight!, 1)
+            : DEFAULT_Q_CONFUSION_WEIGHT;
+    let qPenaltyMultiplier = 1;
 
-    const maxComponent = Math.max(weightedQ, weightedKP, weightedOT);
+    if (
+        qConfusionMode === "consensus" ||
+        qConfusionMode === "combined"
+    ) {
+        qPenaltyMultiplier *= computeQConsensusPenaltyMultiplier({
+            weightedQ,
+            weightedKP,
+            weightedOT,
+            qConfusionWeight,
+        });
+    }
+
+    if (
+        qConfusionMode === "competition" ||
+        qConfusionMode === "combined"
+    ) {
+        qPenaltyMultiplier *= options?.qCompetitionPenaltyMultiplier || 1;
+    }
+
+    qPenaltyMultiplier = Math.max(0.35, Math.min(1, qPenaltyMultiplier));
+    const effectiveWeightedQ = weightedQ * qPenaltyMultiplier;
+    const fusionMode = options?.fusionMode || "default";
+
+    if (fusionMode === "max_q_vs_kpot") {
+        return Math.max(effectiveWeightedQ, weightedKP + weightedOT);
+    }
+
+    const maxComponent = Math.max(effectiveWeightedQ, weightedKP, weightedOT);
     const unionBonus =
-        weightedQ * 0.1 + weightedKP * 0.1 + weightedOT * 0.1;
+        effectiveWeightedQ * 0.1 + weightedKP * 0.1 + weightedOT * 0.1;
 
     return maxComponent + unionBonus;
 }
@@ -2228,6 +2353,7 @@ export function searchAndRank(params: {
     kpAggregationMode?: KPAggregationMode;
     kpTopN?: number;
     kpTailWeight?: number;
+    fusionMode?: FusionMode;
     lexicalBonusMode?: LexicalBonusMode;
     qLexicalMultiplier?: number;
     kpLexicalMultiplier?: number;
@@ -2236,6 +2362,10 @@ export function searchAndRank(params: {
     kpRoleRerankMode?: KPRoleRerankMode;
     kpRoleDocWeight?: number;
     otDenseScoreOverrides?: ReadonlyMap<string, number>;
+    qConfusionMode?: QConfusionMode;
+    qConfusionWeight?: number;
+    enableExplicitYearFilter?: boolean;
+    minimalMode?: boolean;
 }): SearchRankOutput {
     const {
         queryVector,
@@ -2257,6 +2387,7 @@ export function searchAndRank(params: {
         kpAggregationMode = "max",
         kpTopN = 3,
         kpTailWeight = 0.35,
+        fusionMode = "default",
         lexicalBonusMode = "sum",
         qLexicalMultiplier = 1.5,
         kpLexicalMultiplier = 1.2,
@@ -2265,6 +2396,10 @@ export function searchAndRank(params: {
         kpRoleRerankMode = "off",
         kpRoleDocWeight = DEFAULT_KP_ROLE_DOC_WEIGHT,
         otDenseScoreOverrides,
+        qConfusionMode = "off",
+        qConfusionWeight = DEFAULT_Q_CONFUSION_WEIGHT,
+        enableExplicitYearFilter,
+        minimalMode = false,
     } = params;
     const safeQLexicalMultiplier = Number.isFinite(qLexicalMultiplier)
         ? qLexicalMultiplier
@@ -2275,6 +2410,10 @@ export function searchAndRank(params: {
     const safeOtLexicalMultiplier = Number.isFinite(otLexicalMultiplier)
         ? otLexicalMultiplier
         : 1.0;
+    const safeEnableExplicitYearFilter =
+        typeof enableExplicitYearFilter === "boolean"
+            ? enableExplicitYearFilter
+            : !minimalMode;
 
     const n = metadata.length;
     const activeCandidateIndices =
@@ -2470,6 +2609,23 @@ export function searchAndRank(params: {
                       undefined,
                   )
             : undefined;
+    const effectiveQConfusionMode: QConfusionMode =
+        qConfusionMode === "consensus_no_year"
+            ? intentContext.hasExplicitYear
+                ? "off"
+                : "consensus"
+            : qConfusionMode;
+    const qCompetitionPenaltyMap =
+        effectiveQConfusionMode === "competition" ||
+        effectiveQConfusionMode === "combined"
+            ? computeQCompetitionPenaltyMap({
+                  otidMap,
+                  qConfusionWeight:
+                      Number.isFinite(qConfusionWeight) && qConfusionWeight > 0
+                          ? Math.min(qConfusionWeight, 1)
+                          : DEFAULT_Q_CONFUSION_WEIGHT,
+              })
+            : undefined;
 
     for (const [otid, scores] of Object.entries(otidMap)) {
         const signals = getDocQuerySignals(
@@ -2479,7 +2635,7 @@ export function searchAndRank(params: {
             yearHitMap,
         );
 
-        if (shouldSkipForExplicitYear(scores, intentContext, signals)) {
+        if (safeEnableExplicitYearFilter && shouldSkipForExplicitYear(scores, intentContext, signals)) {
             continue;
         }
 
@@ -2487,26 +2643,38 @@ export function searchAndRank(params: {
             kpAggregationMode,
             kpTopN,
             kpTailWeight,
+            fusionMode,
+            qConfusionMode: effectiveQConfusionMode,
+            qConfusionWeight,
+            qCompetitionPenaltyMultiplier: qCompetitionPenaltyMap?.get(otid),
         });
-        const kpRoleSelection = rerankKpCandidatesByRole({
-            kpCandidates: scores.kp_candidates,
-            bestKpid: scores.best_kpid,
-            rawQuery: queryIntent?.rawQuery || "",
-            queryScopeHint,
-            mode: kpRoleRerankMode,
-        });
-        const boost = computeBoostMultiplier({
-            otid,
-            scores,
-            lexicalBonusMap,
-            yearHitMap,
-            queryYearWordIds,
-            intentContext,
-            latestTargetYear,
-            latestTimestamp,
-            scopeSpecificityStats: docScopeSpecificityStatsMap.get(otid),
-            latestFocusedSpecificityTimestamp,
-        });
+        const kpRoleSelection = minimalMode
+            ? {
+                  bestKpid: scores.best_kpid,
+                  orderedCandidates: scores.kp_candidates,
+                  docScoreDelta: 0,
+              }
+            : rerankKpCandidatesByRole({
+                  kpCandidates: scores.kp_candidates,
+                  bestKpid: scores.best_kpid,
+                  rawQuery: queryIntent?.rawQuery || "",
+                  queryScopeHint,
+                  mode: kpRoleRerankMode,
+              });
+        const boost = minimalMode
+            ? 1
+            : computeBoostMultiplier({
+                  otid,
+                  scores,
+                  lexicalBonusMap,
+                  yearHitMap,
+                  queryYearWordIds,
+                  intentContext,
+                  latestTargetYear,
+                  latestTimestamp,
+                  scopeSpecificityStats: docScopeSpecificityStatsMap.get(otid),
+                  latestFocusedSpecificityTimestamp,
+              });
 
         finalRanking.push({
             otid,
@@ -2615,15 +2783,12 @@ export function searchAndRank(params: {
 
     if (responseDecision.mode === "clarify_or_route") {
         return {
-            matches: [],
-            weakMatches: responseDecision.useWeakMatches
-                ? sortedRanking.slice(0, 5)
-                : [],
-            rejection: {
-                reason: "weak_anchor_needs_clarification",
-                topicIds: [],
+            matches: sortedRanking.slice(0, 100),
+            weakMatches: [],
+            responseDecision: {
+                ...responseDecision,
+                useWeakMatches: false,
             },
-            responseDecision,
             diagnostics,
         };
     }

@@ -4,6 +4,7 @@ import * as path from "path";
 export type CurrentResultSlot =
     | "granularity_main_bench_120_current"
     | "granularity_in_domain_holdout_50_current"
+    | "granularity_external_ood_50_current"
     | "granularity_external_ood_holdout_30_current"
     | "granularity_main_106_current"
     | "granularity_holdout_v3_current"
@@ -35,8 +36,9 @@ const SLOT_LABELS: Record<CurrentResultSlot, string> = {
     granularity_main_bench_120_current: "主方法主结果 `main_bench_120`",
     granularity_in_domain_holdout_50_current:
         "同域泛化结果 `in_domain_holdout_50`",
+    granularity_external_ood_50_current: "跨域泛化结果 `external_ood_50`",
     granularity_external_ood_holdout_30_current:
-        "跨域泛化结果 `external_ood_holdout_30`",
+        "内部 hard stress `external_ood_holdout_30`",
     granularity_main_106_current: "主方法主结果 `main_106`",
     granularity_holdout_v3_current: "外部泛化主结果 `holdout_v3`",
     platform_mixed_daily_v1_2_current: "现实问法主结果 `mixed_daily_v1.2`",
@@ -53,8 +55,14 @@ const SLOT_LABELS: Record<CurrentResultSlot, string> = {
 const SLOT_BY_DATASET_NAME: Partial<Record<string, CurrentResultSlot>> = {
     test_dataset_granularity_main_120_reviewed:
         "granularity_main_bench_120_current",
+    test_dataset_granularity_main_120_reviewed_userized_v1:
+        "granularity_main_bench_120_current",
     test_dataset_granularity_in_domain_holdout_50_reviewed:
         "granularity_in_domain_holdout_50_current",
+    test_dataset_granularity_in_domain_holdout_50_reviewed_userized_v1:
+        "granularity_in_domain_holdout_50_current",
+    test_dataset_granularity_external_ood_50_reviewed_userized_v1:
+        "granularity_external_ood_50_current",
     test_dataset_granularity_external_ood_holdout_30_reviewed:
         "granularity_external_ood_holdout_30_current",
     test_dataset_granularity_main_106_reviewed:

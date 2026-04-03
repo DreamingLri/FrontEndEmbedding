@@ -12,13 +12,12 @@ import localforage from 'localforage';
 import VectorWorker from '../worker/embedding.worker.ts?worker';
 import {
   CANONICAL_PIPELINE_PRESET,
-  type PipelineBehavior,
   type PipelineDecision,
   type PipelineDocumentRecord,
   type PipelineTrace,
   type SearchPipelineResult,
-} from '../worker/search_pipeline';
-import type { SearchRejection } from '../worker/vector_engine';
+} from '../worker/search_pipeline.ts';
+import type { SearchRejection } from '../worker/vector_engine.ts';
 import {
   formatPercent,
   formatRetrievalScore,
@@ -54,49 +53,25 @@ const INDEX_CACHE_VERSION = '20260324-v3';
 
 const heroResults = computed(() => results.value.slice(0, 3));
 const compactResults = computed(() => results.value.slice(3, 10));
-const currentBehavior = computed<PipelineBehavior | null>(
-  () => decisionInfo.value?.behavior ?? null
-);
 const hasCoverageRejection = computed(
   () => rejectionInfo.value?.reason === 'low_topic_coverage'
 );
 const hasConsistencyRejection = computed(
   () => rejectionInfo.value?.reason === 'low_consistency'
 );
-const hasClarificationBehavior = computed(
-  () => currentBehavior.value === 'clarify'
-);
-const hasRouteBehavior = computed(
-  () => currentBehavior.value === 'route_to_entry'
-);
 const hasDisplayThresholdReject = computed(
   () => decisionInfo.value?.rejectionReason === 'display_threshold'
-);
-const entryTopicLabel = computed(
-  () => decisionInfo.value?.entryTopic ?? ''
 );
 const weakToggleLabel = computed(() =>
   showWeakResults.value ? '收起弱相关结果' : '查看弱相关结果'
 );
-const weakResultsTitle = computed(() =>
-  hasRouteBehavior.value
-    ? '建议入口'
-    : hasClarificationBehavior.value
-      ? '可能相关入口'
-      : '弱相关结果'
-);
+const weakResultsTitle = computed(() => '弱相关结果');
 const emptyTitle = computed(() => {
   if (hasCoverageRejection.value) {
     return '当前知识库暂无该主题的直接内容，暂不展示弱相关结果。';
   }
   if (hasConsistencyRejection.value) {
     return '当前查询未能形成稳定的主题结果，暂不展示不可靠答案。';
-  }
-  if (hasRouteBehavior.value) {
-    return '这是一个总入口型问题，系统先不给出单篇答案。';
-  }
-  if (hasClarificationBehavior.value) {
-    return '当前问题缺少具体事项，系统先不给出单一答案。';
   }
   if (hasDisplayThresholdReject.value) {
     return '当前问题未达到可信展示阈值。';
@@ -109,14 +84,6 @@ const emptySubtitle = computed(() => {
   }
   if (hasConsistencyRejection.value) {
     return '当前结果主题分散或仅靠弱语义相似命中，因此系统选择拒答。';
-  }
-  if (hasRouteBehavior.value) {
-    return entryTopicLabel.value
-      ? `建议先从“${entryTopicLabel.value}”开始，再进入具体事项。`
-      : '这类问题更适合先进入总入口，再继续查看具体事项。';
-  }
-  if (hasClarificationBehavior.value) {
-    return '请补充你想问的具体环节，例如录取通知书、报到手续、党团关系、宿舍或奖助金；也可展开查看可能相关入口。';
   }
   if (hasDisplayThresholdReject.value) {
     return `Top 1 原话匹配度需不低于 ${(REJECTION_THRESHOLD * 100).toFixed(0)}%`;
@@ -401,20 +368,6 @@ const handleSearch = async () => {
       );
     }
 
-    if (finalDecision.behavior === 'route_to_entry') {
-      statusMsg.value = finalDecision.entryTopic
-        ? `已切换到入口模式：${finalDecision.entryTopic}`
-        : '已切换到入口模式';
-      logDiagnostic('系统判定为总入口型问题，已提供入口候选');
-      return;
-    }
-
-    if (finalDecision.behavior === 'clarify') {
-      statusMsg.value = '当前问题缺少具体事项，已切换到澄清模式。';
-      logDiagnostic('系统判定需要先澄清具体事项');
-      return;
-    }
-
     if (finalDecision.behavior === 'reject') {
       if (finalDecision.rejectionReason === 'display_threshold') {
         statusMsg.value = `未达到展示阈值 ${(REJECTION_THRESHOLD * 100).toFixed(0)}%，已拒答`;
@@ -528,18 +481,12 @@ const handleSearch = async () => {
       </div>
 
       <section
-        v-if="results.length === 0 && !isProcessing && (hasCoverageRejection || hasClarificationBehavior || hasRouteBehavior) && weakResults.length > 0"
+        v-if="results.length === 0 && !isProcessing && hasCoverageRejection && weakResults.length > 0"
         class="mt-6 space-y-3"
       >
         <div class="flex items-center justify-between text-[11px] uppercase tracking-[0.2em] text-slate-500">
           <div class="flex items-center gap-3">
             <span>{{ weakResultsTitle }}</span>
-            <span
-              v-if="hasRouteBehavior && entryTopicLabel"
-              class="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-2 py-0.5 text-[10px] tracking-normal text-cyan-200"
-            >
-              {{ entryTopicLabel }}
-            </span>
           </div>
           <button
             @click="showWeakResults = !showWeakResults"

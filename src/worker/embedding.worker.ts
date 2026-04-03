@@ -3,20 +3,20 @@ import type { FeatureExtractionPipeline } from '@huggingface/transformers';
 import type {
     BM25Stats,
     Metadata
-} from './vector_engine';
+} from './vector_engine.ts';
 import {
     buildBM25Stats
-} from './vector_engine';
+} from './vector_engine.ts';
 import {
     buildTopicPartitionIndex,
     type TopicPartitionIndex,
-} from './topic_partition';
+} from './topic_partition.ts';
 import {
     buildPipelineTermMaps,
     buildSearchPipelineQueryContext,
     CANONICAL_PIPELINE_PRESET,
     executeSearchPipeline,
-} from './search_pipeline';
+} from './search_pipeline.ts';
 
 const MODEL_NAME = 'DMetaSoul/Dmeta-embedding-zh-small';
 

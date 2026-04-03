@@ -1,18 +1,17 @@
 export const CURRENT_EVAL_DATASET_FILES = {
     // 当前 granularity 主线
     granularityMain120:
-        "../Backend/test/test_dataset_granularity/test_dataset_granularity_main_120_reviewed.json",
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_main_120_reviewed_userized_v1.json",
     granularityInDomainHoldout50:
-        "../Backend/test/test_dataset_granularity/test_dataset_granularity_in_domain_holdout_50_reviewed.json",
-    granularityInDomainHoldout50SkeletonV2:
-        "../Backend/test/test_dataset_granularity/test_dataset_granularity_in_domain_holdout_50_reviewed_skeleton_v2.json",
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_in_domain_holdout_50_reviewed_userized_v1.json",
+    granularityExternalOod50:
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_external_ood_50_reviewed_userized_v1.json",
+    // 兼容旧 target key，当前仍指向正式 external_ood_50
     granularityExternalOodHoldout30:
-        "../Backend/test/test_dataset_granularity/test_dataset_granularity_external_ood_holdout_30_reviewed.json",
-    // 历史参考集，当前只保留为回退或旧结果对照
-    granularityMain106:
-        "../Backend/test/test_dataset_granularity/test_dataset_granularity_main_106_reviewed.json",
-    granularityHoldoutV3:
-        "../Backend/test/test_dataset_granularity/test_dataset_granularity_holdout_v3_reviewed.json",
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_external_ood_50_reviewed_userized_v1.json",
+    // 历史 hard OOD，仅保留参考
+    granularityExternalOodHard30:
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_external_ood_holdout_30_reviewed_userized_v1.json",
     // 当前 mixed / route / kb-absent 主线
     platformMixedDailyV12:
         "../Backend/test/test_dataset_platform_mixed/test_dataset_platform_mixed_daily_v1_2_reviewed.json",

@@ -6,9 +6,12 @@ import {
     normalizeMinMax,
     normalizeSnippetScore,
     splitIntoSemanticChunks,
-} from "./rerank_helpers";
-import type { PipelineDocumentRecord, PipelinePreset } from "./search_pipeline";
-import type { QuerySignals, RetrievalSignals } from "./vector_engine";
+} from "./rerank_helpers.ts";
+import type {
+    PipelineDocumentRecord,
+    PipelinePreset,
+} from "./search_pipeline.ts";
+import type { QuerySignals, RetrievalSignals } from "./vector_engine.ts";
 
 const NEAR_TIE_COARSE_WINDOW = 0.025;
 const DIRECT_ANSWER_RESCUE_MARGIN = 0.12;

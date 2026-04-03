@@ -1,5 +1,5 @@
 process.env.SUASK_PLATFORM_MIXED_DATASET_FILE =
-    "../Backend/test/test_dataset_platform_mixed/test_dataset_platform_direct_answer_rescue_v1_reviewed.json";
+    "../Backend/test/_archive/legacy_datasets/test_dataset_platform_mixed/test_dataset_platform_direct_answer_rescue_v1_reviewed.json";
 process.env.SUASK_PLATFORM_MIXED_REJECT_THRESHOLD = "0.85";
 process.env.SUASK_PLATFORM_MIXED_RESULTS_PREFIX =
     "platform_direct_answer_rescue";

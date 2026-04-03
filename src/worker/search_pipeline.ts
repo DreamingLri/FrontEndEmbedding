@@ -1,11 +1,11 @@
 import type { FeatureExtractionPipeline } from "@huggingface/transformers";
 
-import { fmmTokenize } from "./fmm_tokenize";
+import { fmmTokenize } from "./fmm_tokenize.ts";
 import {
     runDirectAnswerDisplayStage,
     type DirectAnswerRescueTrace,
     type DocumentRerankStats,
-} from "./direct_answer_display";
+} from "./direct_answer_display.ts";
 import {
     DIRECT_ANSWER_EVIDENCE_TERMS,
     getQuerySparse,
@@ -24,17 +24,13 @@ import {
     type ResponseMode,
     type SearchRankOutput,
     type SearchRejection,
-} from "./vector_engine";
+} from "./vector_engine.ts";
 import {
     getCandidateIndicesForQuery,
     type TopicPartitionIndex,
-} from "./topic_partition";
+} from "./topic_partition.ts";
 
-export type PipelineBehavior =
-    | "direct_answer"
-    | "clarify"
-    | "route_to_entry"
-    | "reject";
+export type PipelineBehavior = "answer" | "reject";
 
 export type PipelinePreset = {
     name: string;
@@ -51,6 +47,9 @@ export type PipelinePreset = {
         lexicalBonusMode: LexicalBonusMode;
         kpRoleRerankMode: KPRoleRerankMode;
         kpRoleDocWeight: number;
+        useQueryExpansion: boolean;
+        useTopicPartition: boolean;
+        minimalMode: boolean;
     };
     display: {
         rejectThreshold: number;
@@ -84,6 +83,9 @@ export const PAPER_FROZEN_MAIN_PIPELINE_PRESET: PipelinePreset = {
         lexicalBonusMode: "sum",
         kpRoleRerankMode: "feature",
         kpRoleDocWeight: 0.35,
+        useQueryExpansion: true,
+        useTopicPartition: true,
+        minimalMode: false,
     },
     display: { ...DEFAULT_DISPLAY_CONFIG },
 };
@@ -103,6 +105,9 @@ export const PRODUCT_CANONICAL_FULL_PIPELINE_PRESET: PipelinePreset = {
         lexicalBonusMode: "sum",
         kpRoleRerankMode: "feature",
         kpRoleDocWeight: 0.35,
+        useQueryExpansion: true,
+        useTopicPartition: true,
+        minimalMode: false,
     },
     display: { ...DEFAULT_DISPLAY_CONFIG },
 };
@@ -129,11 +134,34 @@ export const PRODUCT_TAIL_TOP3_W020_PIPELINE_PRESET: PipelinePreset = {
     display: { ...DEFAULT_DISPLAY_CONFIG },
 };
 
+export const MINIMAL_BASELINE_PIPELINE_PRESET: PipelinePreset = {
+    name: "minimal_q_kp_ot_v1",
+    retrieval: {
+        weights: {
+            Q: 0.3333333333333333,
+            KP: 0.3333333333333333,
+            OT: 0.3333333333333333,
+        },
+        topHybridLimit: 1000,
+        kpAggregationMode: "max",
+        kpTopN: 3,
+        kpTailWeight: 0.35,
+        lexicalBonusMode: "sum",
+        kpRoleRerankMode: "off",
+        kpRoleDocWeight: 0,
+        useQueryExpansion: false,
+        useTopicPartition: false,
+        minimalMode: true,
+    },
+    display: { ...DEFAULT_DISPLAY_CONFIG },
+};
+
 export const PIPELINE_PRESET_REGISTRY = {
     paper_frozen_main_v1: PAPER_FROZEN_MAIN_PIPELINE_PRESET,
     product_canonical_full_v1: PRODUCT_CANONICAL_FULL_PIPELINE_PRESET,
     paper_tail_top3_w020_v1: PAPER_TAIL_TOP3_W020_PIPELINE_PRESET,
     product_tail_top3_w020_v1: PRODUCT_TAIL_TOP3_W020_PIPELINE_PRESET,
+    minimal_q_kp_ot_v1: MINIMAL_BASELINE_PIPELINE_PRESET,
 } as const;
 
 export type PipelinePresetName = keyof typeof PIPELINE_PRESET_REGISTRY;
@@ -203,7 +231,6 @@ export type PipelineDecision = {
     rawMode: ResponseMode;
     confidence: number;
     reason: string;
-    entryTopic?: string;
     preferLatestWithinTopic: boolean;
     useWeakMatches: boolean;
     rejectionReason:
@@ -268,20 +295,6 @@ type DocumentRerankResult = {
     documents: PipelineDocumentRecord[];
     stats: DocumentRerankStats;
 };
-
-const ROUTE_ENTRY_TOPIC_BY_PATTERN: Array<{
-    pattern: RegExp;
-    entryTopic: string;
-}> = [
-    {
-        pattern: /录取|拟录取|考上|录取结果|拿到.*录取/,
-        entryTopic: "新生录取后手续总入口",
-    },
-    {
-        pattern: /新生|入学前|正式入学|入学以后|报到前/,
-        entryTopic: "新生入学总入口",
-    },
-];
 
 function nowMs(): number {
     if (typeof performance !== "undefined" && performance.now) {
@@ -362,8 +375,11 @@ export function buildSearchPipelineQueryContext(
     query: string,
     vocabMap: Map<string, number>,
     topicPartitionIndex: TopicPartitionIndex,
+    preset: PipelinePreset = CANONICAL_PIPELINE_PRESET,
 ): SearchPipelineQueryContext {
-    const expandedIntentQuery = buildExpandedIntentQuery(query);
+    const expandedIntentQuery = preset.retrieval.useQueryExpansion
+        ? buildExpandedIntentQuery(query)
+        : query;
     const parsedQueryIntent = parseQueryIntent(expandedIntentQuery);
     const queryIntent =
         expandedIntentQuery === query
@@ -372,11 +388,12 @@ export function buildSearchPipelineQueryContext(
                   ...parsedQueryIntent,
                   rawQuery: query,
               };
-    const candidateIndices = getCandidateIndicesForQuery(
-        queryIntent,
-        topicPartitionIndex,
-    );
-    const queryWords = buildExpandedQueryWords(query, vocabMap);
+    const candidateIndices = preset.retrieval.useTopicPartition
+        ? getCandidateIndicesForQuery(queryIntent, topicPartitionIndex)
+        : undefined;
+    const queryWords = preset.retrieval.useQueryExpansion
+        ? buildExpandedQueryWords(query, vocabMap)
+        : Array.from(new Set(fmmTokenize(query, vocabMap)));
     const querySparse = getQuerySparse(queryWords, vocabMap);
     const queryYearWordIds = queryIntent.years
         .map(String)
@@ -393,67 +410,16 @@ export function buildSearchPipelineQueryContext(
     };
 }
 
-function inferEntryTopic(query: string): string | undefined {
-    for (const item of ROUTE_ENTRY_TOPIC_BY_PATTERN) {
-        if (item.pattern.test(query)) {
-            return item.entryTopic;
-        }
-    }
-    return undefined;
-}
-
-function inferClarifyOrRouteBehavior(
-    query: string,
-    queryIntent: ParsedQueryIntent,
-): PipelineBehavior {
-    const normalizedQuery = query.replace(/\s+/g, "");
-    const hasPendingOfferCue = /拟录取/.test(normalizedQuery);
-    const hasOnboardingCue =
-        /新生|入学|录取|考上|录取结果/.test(normalizedQuery) ||
-        /拿到.*录取/.test(normalizedQuery);
-    const hasClarifyCue =
-        /审核|初审|资格审核|材料|补交|申请|获批|过审|通过了|通知我通过|学校通知我通过/.test(
-            normalizedQuery,
-        );
-
-    if (hasPendingOfferCue) {
-        return "clarify";
-    }
-
-    if (
-        /新生|入学前|正式入学/.test(normalizedQuery) &&
-        queryIntent.signals.hasGenericNextStep
-    ) {
-        return "route_to_entry";
-    }
-
-    if (
-        hasOnboardingCue &&
-        queryIntent.signals.hasGenericNextStep &&
-        !hasClarifyCue &&
-        !queryIntent.signals.hasStrongDetailAnchor
-    ) {
-        return "route_to_entry";
-    }
-
-    return "clarify";
-}
-
 function buildPipelineDecision(params: {
     query: string;
     queryIntent: ParsedQueryIntent;
     searchOutput: SearchRankOutput;
 }): PipelineDecision {
-    const { query, queryIntent, searchOutput } = params;
+    const { searchOutput } = params;
     const rawMode =
         searchOutput.responseDecision?.mode ||
         (searchOutput.rejection ? "reject" : "direct_answer");
-    const behavior =
-        rawMode === "clarify_or_route"
-            ? inferClarifyOrRouteBehavior(query, queryIntent)
-            : rawMode === "reject"
-              ? "reject"
-              : "direct_answer";
+    const behavior = rawMode === "reject" ? "reject" : "answer";
 
     return {
         behavior,
@@ -463,15 +429,14 @@ function buildPipelineDecision(params: {
             searchOutput.responseDecision?.reason ||
             searchOutput.rejection?.reason ||
             "scored_pipeline_behavior",
-        entryTopic:
-            behavior === "route_to_entry" ? inferEntryTopic(query) : undefined,
         preferLatestWithinTopic:
             searchOutput.responseDecision?.preferLatestWithinTopic ?? false,
         useWeakMatches:
-            behavior !== "direct_answer" &&
+            behavior === "reject" &&
             (searchOutput.responseDecision?.useWeakMatches ??
                 searchOutput.weakMatches.length > 0),
-        rejectionReason: searchOutput.rejection?.reason || null,
+        rejectionReason:
+            behavior === "reject" ? searchOutput.rejection?.reason || null : null,
         displayRejected: false,
     };
 }
@@ -552,6 +517,7 @@ export function executeRetrievalStage(params: {
         lexicalBonusMode: preset.retrieval.lexicalBonusMode,
         kpRoleRerankMode: preset.retrieval.kpRoleRerankMode,
         kpRoleDocWeight: preset.retrieval.kpRoleDocWeight,
+        minimalMode: preset.retrieval.minimalMode,
     });
 
     return {
@@ -614,11 +580,10 @@ export async function executeSearchPipeline(params: {
 
     const { searchOutput, retrievalDecision } = retrievalStage;
     const shouldFetchWeakResults =
-        retrievalDecision.behavior === "clarify" ||
-        retrievalDecision.behavior === "route_to_entry" ||
+        retrievalDecision.behavior === "reject" &&
         searchOutput.rejection?.reason === "low_topic_coverage";
     const matchIds =
-        retrievalDecision.behavior === "direct_answer"
+        retrievalDecision.behavior === "answer"
             ? searchOutput.matches
                   .slice(0, preset.display.fetchMatchLimit)
                   .map((item) => item.otid)
@@ -654,7 +619,7 @@ export async function executeSearchPipeline(params: {
         fetchMs = nowMs() - fetchStartedAt;
         fetchedDocumentCount = documents.length;
 
-        if (retrievalDecision.behavior === "direct_answer") {
+        if (retrievalDecision.behavior === "answer") {
             const directDocuments = mergeCoarseMatchesIntoDocuments(
                 documents,
                 searchOutput.matches

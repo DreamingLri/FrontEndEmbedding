@@ -1,5 +1,5 @@
-import type { Metadata, ParsedQueryIntent } from "./vector_engine";
-import { resolveMetadataTopicIds } from "./vector_engine";
+import type { Metadata, ParsedQueryIntent } from "./vector_engine.ts";
+import { resolveMetadataTopicIds } from "./vector_engine.ts";
 
 export type TopicPartitionIndex = {
     topicCandidateIndex: Map<string, number[]>;
