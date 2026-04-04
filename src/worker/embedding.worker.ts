@@ -14,8 +14,8 @@ import {
 import {
     buildPipelineTermMaps,
     buildSearchPipelineQueryContext,
-    CANONICAL_PIPELINE_PRESET,
     executeSearchPipeline,
+    FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET,
 } from './search_pipeline.ts';
 
 const MODEL_NAME = 'DMetaSoul/Dmeta-embedding-zh-small';
@@ -180,7 +180,7 @@ async function handleSearch(query: string, taskId?: string) {
             scopeSpecificityWordIdToTerm,
             directAnswerEvidenceWordIdToTerm,
         },
-        preset: CANONICAL_PIPELINE_PRESET,
+        preset: FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET,
         onStatus: (message) => {
             self.postMessage({
                 taskId,

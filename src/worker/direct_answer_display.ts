@@ -139,6 +139,142 @@ function parsePublishDate(
     };
 }
 
+type PhaseAnchor = {
+    half?: "上半年" | "下半年";
+    batch?: string;
+    stages: string[];
+};
+
+const PHASE_STAGE_RULES: Array<{ stage: string; pattern: RegExp }> = [
+    { stage: "预报名", pattern: /预报名/ },
+    { stage: "报名通知", pattern: /报名通知|网上报名/ },
+    { stage: "工作方案", pattern: /工作方案/ },
+    { stage: "接收办法", pattern: /接收办法/ },
+    { stage: "实施办法", pattern: /实施办法/ },
+    { stage: "录取方案", pattern: /录取方案/ },
+    { stage: "招生简章", pattern: /招生简章/ },
+    { stage: "招生章程", pattern: /招生章程/ },
+    { stage: "综合考核", pattern: /综合考核/ },
+    { stage: "复试", pattern: /复试/ },
+    { stage: "调剂", pattern: /调剂/ },
+] as const;
+
+function extractYears(text: string): number[] {
+    return Array.from(
+        new Set((text.match(/20\d{2}/g) || []).map((value) => Number(value))),
+    );
+}
+
+function normalizeBatchToken(token: string): string | undefined {
+    switch (token) {
+        case "1":
+        case "一":
+            return "1";
+        case "2":
+        case "二":
+            return "2";
+        case "3":
+        case "三":
+            return "3";
+        case "4":
+        case "四":
+            return "4";
+        default:
+            return undefined;
+    }
+}
+
+function extractPhaseAnchor(text: string): PhaseAnchor {
+    const halfMatch = text.match(/上半年|下半年/);
+    const batchMatch = text.match(/第?\s*([一二三四1234])\s*批/);
+
+    return {
+        half:
+            halfMatch?.[0] === "上半年" || halfMatch?.[0] === "下半年"
+                ? halfMatch[0]
+                : undefined,
+        batch: batchMatch?.[1]
+            ? normalizeBatchToken(batchMatch[1])
+            : undefined,
+        stages: PHASE_STAGE_RULES.filter((rule) => rule.pattern.test(text)).map(
+            (rule) => rule.stage,
+        ),
+    };
+}
+
+function hasExplicitPhaseAnchor(anchor: PhaseAnchor): boolean {
+    return Boolean(anchor.half || anchor.batch || anchor.stages.length > 0);
+}
+
+function computeYearPhaseTitleAdjustment(
+    query: string,
+    docTitle?: string,
+    publishTime?: string,
+): number {
+    const normalizedQuery = query.replace(/\s+/g, "");
+    const normalizedTitle = (docTitle || "").replace(/\s+/g, "");
+
+    if (!normalizedTitle) {
+        return 0;
+    }
+
+    let adjustment = 0;
+    const queryYears = extractYears(normalizedQuery);
+    const titleYears = extractYears(normalizedTitle);
+    const publishDate = parsePublishDate(publishTime);
+    const docYears = Array.from(
+        new Set([
+            ...titleYears,
+            ...(publishDate ? [publishDate.year] : []),
+        ]),
+    );
+
+    if (queryYears.length > 0) {
+        if (docYears.length === 0) {
+            adjustment -= 0.06;
+        } else if (queryYears.some((year) => docYears.includes(year))) {
+            adjustment += 0.12;
+        } else {
+            adjustment -= 0.18;
+        }
+    }
+
+    const queryPhase = extractPhaseAnchor(normalizedQuery);
+    const titlePhase = extractPhaseAnchor(normalizedTitle);
+    if (!hasExplicitPhaseAnchor(queryPhase)) {
+        return adjustment;
+    }
+
+    if (queryPhase.half) {
+        if (titlePhase.half === queryPhase.half) {
+            adjustment += 0.08;
+        } else if (titlePhase.half) {
+            adjustment -= 0.12;
+        }
+    }
+
+    if (queryPhase.batch) {
+        if (titlePhase.batch === queryPhase.batch) {
+            adjustment += 0.12;
+        } else if (titlePhase.batch) {
+            adjustment -= 0.16;
+        }
+    }
+
+    if (queryPhase.stages.length > 0) {
+        const hasExactStage = queryPhase.stages.some((stage) =>
+            titlePhase.stages.includes(stage),
+        );
+        if (hasExactStage) {
+            adjustment += 0.08;
+        } else if (titlePhase.stages.length > 0) {
+            adjustment -= 0.12;
+        }
+    }
+
+    return adjustment;
+}
+
 function extractDegreeLevels(text: string): string[] {
     const levels: string[] = [];
     if (text.includes("本科")) levels.push("本科");
@@ -155,6 +291,7 @@ function computeTitleAdjustment(
     query: string,
     docTitle?: string,
     publishTime?: string,
+    useYearPhaseTitleAdjustment = false,
 ): number {
     const normalizedQuery = query.replace(/\s+/g, "");
     const normalizedTitle = (docTitle || "").replace(/\s+/g, "");
@@ -251,7 +388,15 @@ function computeTitleAdjustment(
         }
     }
 
-    return Math.max(-0.34, Math.min(0.28, adjustment));
+    if (useYearPhaseTitleAdjustment) {
+        adjustment += computeYearPhaseTitleAdjustment(
+            normalizedQuery,
+            normalizedTitle,
+            publishTime,
+        );
+    }
+
+    return Math.max(-0.4, Math.min(0.32, adjustment));
 }
 
 function rerankDocuments(params: {
@@ -370,6 +515,7 @@ function rerankDocuments(params: {
                     query,
                     rerankDocs[index].ot_title,
                     rerankDocs[index].publish_time,
+                    preset.display.useYearPhaseTitleAdjustment,
                 );
                 const finalScore = clamp01(blendedScore + titleAdjustment);
 

@@ -3,6 +3,7 @@ import { computed, onMounted, onUnmounted, ref } from 'vue';
 import {
   AlertCircle,
   Clock,
+  Cpu,
   ExternalLink,
   Info,
   Loader2,
@@ -11,7 +12,7 @@ import {
 import localforage from 'localforage';
 import VectorWorker from '../worker/embedding.worker.ts?worker';
 import {
-  CANONICAL_PIPELINE_PRESET,
+  FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET,
   type PipelineDecision,
   type PipelineDocumentRecord,
   type PipelineTrace,
@@ -46,9 +47,9 @@ const errorMsg = ref<string | null>(null);
 const diagnosticLogs = ref<string[]>([]);
 const isWorkerReady = ref(false);
 
-const REJECTION_THRESHOLD = CANONICAL_PIPELINE_PRESET.display.rejectThreshold;
+const REJECTION_THRESHOLD = FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.display.rejectThreshold;
 const ORIGINAL_SNIPPET_THRESHOLD =
-  CANONICAL_PIPELINE_PRESET.display.bestSentenceThreshold;
+  FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.display.bestSentenceThreshold;
 const INDEX_CACHE_VERSION = '20260324-v3';
 
 const heroResults = computed(() => results.value.slice(0, 3));
@@ -62,10 +63,51 @@ const hasConsistencyRejection = computed(
 const hasDisplayThresholdReject = computed(
   () => decisionInfo.value?.rejectionReason === 'display_threshold'
 );
+const isRejectDecision = computed(
+  () => decisionInfo.value?.behavior === 'reject'
+);
 const weakToggleLabel = computed(() =>
   showWeakResults.value ? '收起弱相关结果' : '查看弱相关结果'
 );
 const weakResultsTitle = computed(() => '弱相关结果');
+const rejectReasonLabel = computed(() => {
+  switch (decisionInfo.value?.rejectionReason ?? rejectionInfo.value?.reason) {
+    case 'display_threshold':
+      return '展示阈值不足';
+    case 'low_topic_coverage':
+      return '主题覆盖不足';
+    case 'low_consistency':
+      return '主题一致性不足';
+    case 'invalid_input':
+      return '输入无效';
+    default:
+      return '当前不适合直接回答';
+  }
+});
+const rejectTierLabel = computed(() => {
+  switch (decisionInfo.value?.rejectTier) {
+    case 'hard_reject':
+      return '硬拒答';
+    case 'boundary_uncertain':
+      return '边界不确定';
+    case 'invalid_input':
+      return '无效输入';
+    default:
+      return '';
+  }
+});
+const rejectDescription = computed(() => {
+  if (hasCoverageRejection.value) {
+    return '当前知识库内没有形成同主题、可直接回答的稳定锚点，因此系统只保留弱相关入口，不直接给出答案。';
+  }
+  if (hasConsistencyRejection.value) {
+    return '当前候选结果主题分散，或者证据只停留在弱相似层，系统拒绝输出不稳定答案。';
+  }
+  if (hasDisplayThresholdReject.value) {
+    return `虽然召回到了候选文档，但 Top 1 原话匹配度没有达到 ${(REJECTION_THRESHOLD * 100).toFixed(0)}% 的展示阈值。`;
+  }
+  return '当前问题没有达到可安全展示的直接回答条件，系统进入拒答模式。';
+});
 const emptyTitle = computed(() => {
   if (hasCoverageRejection.value) {
     return '当前知识库暂无该主题的直接内容，暂不展示弱相关结果。';
@@ -470,7 +512,7 @@ const handleSearch = async () => {
 
     <div class="custom-scrollbar flex-1 overflow-y-auto px-5 py-4">
       <div
-        v-if="results.length === 0 && !isProcessing"
+        v-if="results.length === 0 && !isProcessing && !isRejectDecision"
         class="flex h-full flex-col items-center justify-center text-center text-slate-500"
       >
         <div class="mb-4 flex h-14 w-14 items-center justify-center rounded-full border border-dashed border-slate-700">
@@ -479,6 +521,47 @@ const handleSearch = async () => {
         <p class="text-sm font-medium">{{ emptyTitle }}</p>
         <p class="mt-1 text-[11px] text-slate-600">{{ emptySubtitle }}</p>
       </div>
+
+      <section
+        v-if="results.length === 0 && !isProcessing && isRejectDecision"
+        class="mt-1 rounded-[22px] border border-rose-400/18 bg-rose-400/8 p-4"
+      >
+        <div class="flex flex-wrap items-start justify-between gap-3">
+          <div class="min-w-0">
+            <div class="mb-2 flex flex-wrap items-center gap-2">
+              <span class="rounded-full border border-rose-400/20 bg-rose-400/12 px-2.5 py-1 text-[10px] font-semibold text-rose-200">
+                拒答
+              </span>
+              <span class="rounded-full border border-white/10 bg-black/20 px-2.5 py-1 text-[10px] text-slate-300">
+                {{ rejectReasonLabel }}
+              </span>
+              <span
+                v-if="rejectTierLabel"
+                class="rounded-full border border-white/10 bg-black/20 px-2.5 py-1 text-[10px] text-slate-400"
+              >
+                {{ rejectTierLabel }}
+              </span>
+            </div>
+            <p class="text-sm font-medium text-rose-100">当前查询不返回直接答案</p>
+            <p class="mt-2 text-[12px] leading-6 text-rose-100/80">
+              {{ rejectDescription }}
+            </p>
+          </div>
+
+          <div class="min-w-[120px] rounded-2xl border border-white/8 bg-black/20 px-3 py-2 text-right">
+            <div class="text-[10px] uppercase tracking-[0.16em] text-slate-500">阈值</div>
+            <div class="mt-1 font-mono text-[13px] text-slate-100">
+              {{ (REJECTION_THRESHOLD * 100).toFixed(0) }}%
+            </div>
+            <div
+              v-if="weakResults.length > 0"
+              class="mt-2 text-[10px] text-slate-400"
+            >
+              弱相关 {{ weakResults.length }} 条
+            </div>
+          </div>
+        </div>
+      </section>
 
       <section
         v-if="results.length === 0 && !isProcessing && hasCoverageRejection && weakResults.length > 0"

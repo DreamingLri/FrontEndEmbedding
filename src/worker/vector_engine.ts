@@ -226,29 +226,6 @@ export const QUERY_SCOPE_SPECIFICITY_TERMS = [
 const QUERY_SCOPE_SPECIFICITY_TERM_SET: ReadonlySet<string> = new Set(
     QUERY_SCOPE_SPECIFICITY_TERMS,
 );
-export const DIRECT_ANSWER_EVIDENCE_TERMS = [
-    "夏令营",
-    "调剂",
-    "港澳台",
-    "报名",
-    "申请",
-    "招生简章",
-    "简章",
-    "招生章程",
-    "章程",
-    "外语类",
-    "保送生",
-    "综合评价",
-    "免修",
-    "选课",
-    "补退选",
-    "退选",
-    "转专业",
-    "优惠",
-    "优秀营员",
-    "缺额",
-    "缺额专业",
-] as const;
 const BROAD_LATEST_SCOPE_CUE_PATTERN =
     /完整流程|完整|通用|一般|总流程|怎么报名|如何报名|条件.*报名|条件.*流程|条件.*操作/;
 
@@ -2255,7 +2232,6 @@ export function searchAndRank(params: {
     weights?: typeof DEFAULT_WEIGHTS;
     candidateIndices?: readonly number[];
     scopeSpecificityWordIdToTerm?: Map<number, string>;
-    directAnswerEvidenceWordIdToTerm?: Map<number, string>;
     topHybridLimit?: number;
     kpAggregationMode?: KPAggregationMode;
     kpTopN?: number;
@@ -2603,13 +2579,20 @@ export function searchAndRank(params: {
     const explicitOutOfScopeOnly =
         (queryIntent?.intentIds.length || 0) === 0 &&
         hasOnlyOutOfScopeTopics(queryIntent?.topicIds || []);
+    const inDomainEvidenceReject = shouldRejectForMissingInDomainEvidence({
+        rawQuery: queryIntent?.rawQuery || "",
+        queryIntent,
+        sortedRanking,
+        docEvidenceStatsMap: docDirectAnswerEvidenceStatsMap,
+        otidMap,
+    });
 
     const diagnostics: SearchRankDiagnostics = {
         querySignals,
         retrievalSignals,
         evidenceSignals,
         explicitOutOfScopeOnly,
-        inDomainEvidenceRejectLabel: null,
+        inDomainEvidenceRejectLabel: inDomainEvidenceReject.label || null,
     };
 
     if (explicitOutOfScopeOnly) {
@@ -2632,6 +2615,34 @@ export function searchAndRank(params: {
                     HARD_REJECT_SCORE_THRESHOLD,
                 ),
                 rejectTier: "hard_reject",
+            },
+            diagnostics,
+        };
+    }
+
+    if (
+        responseDecision.mode === "answer" &&
+        inDomainEvidenceReject.shouldReject
+    ) {
+        return {
+            matches: [],
+            weakMatches: sortedRanking.slice(0, 5),
+            rejection: {
+                reason: "low_consistency",
+                topicIds: queryIntent?.topicIds || [],
+            },
+            responseDecision: {
+                ...responseDecision,
+                mode: "reject",
+                confidence: Math.max(responseDecision.confidence, 0.9),
+                reason: `missing_in_domain_evidence:${inDomainEvidenceReject.label || "unknown"}`,
+                preferLatestWithinTopic: false,
+                useWeakMatches: true,
+                rejectScore: Math.max(
+                    responseDecision.rejectScore || 0,
+                    BOUNDARY_REJECT_SCORE_THRESHOLD,
+                ),
+                rejectTier: "boundary_uncertain",
             },
             diagnostics,
         };

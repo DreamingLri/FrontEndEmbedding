@@ -50,6 +50,7 @@ export type PipelinePreset = {
         kpRoleDocWeight: number;
         useQueryExpansion: boolean;
         useTopicPartition: boolean;
+        enableExplicitYearFilter: boolean;
         minimalMode: boolean;
     };
     display: {
@@ -58,6 +59,7 @@ export type PipelinePreset = {
         bestSentenceThreshold: number;
         fetchMatchLimit: number;
         fetchWeakMatchLimit: number;
+        useYearPhaseTitleAdjustment: boolean;
     };
 };
 
@@ -67,6 +69,7 @@ const DEFAULT_DISPLAY_CONFIG: PipelinePreset["display"] = {
     bestSentenceThreshold: 0.4,
     fetchMatchLimit: 15,
     fetchWeakMatchLimit: 10,
+    useYearPhaseTitleAdjustment: false,
 };
 
 export const PAPER_FROZEN_MAIN_PIPELINE_PRESET: PipelinePreset = {
@@ -86,6 +89,7 @@ export const PAPER_FROZEN_MAIN_PIPELINE_PRESET: PipelinePreset = {
         kpRoleDocWeight: 0.35,
         useQueryExpansion: true,
         useTopicPartition: true,
+        enableExplicitYearFilter: true,
         minimalMode: false,
     },
     display: { ...DEFAULT_DISPLAY_CONFIG },
@@ -108,6 +112,7 @@ export const PRODUCT_CANONICAL_FULL_PIPELINE_PRESET: PipelinePreset = {
         kpRoleDocWeight: 0.35,
         useQueryExpansion: true,
         useTopicPartition: true,
+        enableExplicitYearFilter: true,
         minimalMode: false,
     },
     display: { ...DEFAULT_DISPLAY_CONFIG },
@@ -152,9 +157,24 @@ export const MINIMAL_BASELINE_PIPELINE_PRESET: PipelinePreset = {
         kpRoleDocWeight: 0,
         useQueryExpansion: false,
         useTopicPartition: false,
+        enableExplicitYearFilter: false,
         minimalMode: true,
     },
     display: { ...DEFAULT_DISPLAY_CONFIG },
+};
+
+export const FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET: PipelinePreset = {
+    name: "frontend_research_sync_v1",
+    retrieval: {
+        ...MINIMAL_BASELINE_PIPELINE_PRESET.retrieval,
+        enableExplicitYearFilter: true,
+    },
+    display: {
+        ...DEFAULT_DISPLAY_CONFIG,
+        fetchMatchLimit: 20,
+        fetchWeakMatchLimit: 12,
+        useYearPhaseTitleAdjustment: true,
+    },
 };
 
 export const PIPELINE_PRESET_REGISTRY = {
@@ -163,6 +183,7 @@ export const PIPELINE_PRESET_REGISTRY = {
     paper_tail_top3_w020_v1: PAPER_TAIL_TOP3_W020_PIPELINE_PRESET,
     product_tail_top3_w020_v1: PRODUCT_TAIL_TOP3_W020_PIPELINE_PRESET,
     minimal_q_kp_ot_v1: MINIMAL_BASELINE_PIPELINE_PRESET,
+    frontend_research_sync_v1: FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET,
 } as const;
 
 export type PipelinePresetName = keyof typeof PIPELINE_PRESET_REGISTRY;
@@ -539,6 +560,7 @@ export function executeRetrievalStage(params: {
         lexicalBonusMode: preset.retrieval.lexicalBonusMode,
         kpRoleRerankMode: preset.retrieval.kpRoleRerankMode,
         kpRoleDocWeight: preset.retrieval.kpRoleDocWeight,
+        enableExplicitYearFilter: preset.retrieval.enableExplicitYearFilter,
         minimalMode: preset.retrieval.minimalMode,
     });
 
