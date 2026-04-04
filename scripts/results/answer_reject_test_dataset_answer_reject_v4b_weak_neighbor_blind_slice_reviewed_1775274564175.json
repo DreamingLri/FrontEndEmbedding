@@ -1,0 +1,710 @@
+{
+  "generatedAt": "2026-04-04T03:49:24.168Z",
+  "datasetFile": "D:\\Project\\SuAsk\\SuAsk_Agent\\Backend\\test\\test_dataset_answer_reject\\test_dataset_answer_reject_v4b_weak_neighbor_blind_slice_reviewed.json",
+  "datasetName": "test_dataset_answer_reject_v4b_weak_neighbor_blind_slice_reviewed",
+  "total": 10,
+  "config": {
+    "pipelineVersion": "product_canonical_full_v1",
+    "preset": {
+      "name": "product_canonical_full_v1",
+      "retrieval": {
+        "weights": {
+          "Q": 0.3333333333333333,
+          "KP": 0.13333333333333333,
+          "OT": 0.5333333333333333
+        },
+        "topHybridLimit": 1000,
+        "kpAggregationMode": "max",
+        "kpTopN": 3,
+        "kpTailWeight": 0.35,
+        "lexicalBonusMode": "sum",
+        "kpRoleRerankMode": "feature",
+        "kpRoleDocWeight": 0.35,
+        "useQueryExpansion": true,
+        "useTopicPartition": true,
+        "minimalMode": false
+      },
+      "display": {
+        "rejectThreshold": 0.4,
+        "rerankBlendAlpha": 0.15,
+        "bestSentenceThreshold": 0.4,
+        "fetchMatchLimit": 15,
+        "fetchWeakMatchLimit": 10
+      }
+    },
+    "note": "当前报告直接调用统一 full pipeline，默认数据集固定为未看过的 answer_reject v4 frozen holdout。"
+  },
+  "summary": {
+    "total": 10,
+    "byExpectedBehavior": {
+      "answer": 0,
+      "reject": 10
+    },
+    "byPredictedBehavior": {
+      "answer": 0,
+      "reject": 10
+    },
+    "binaryBehaviorAccuracy": 1,
+    "answerHitRate": 0,
+    "rejectRecall": 1,
+    "falseRejectRate": 0,
+    "unsafeAnswerRate": 0,
+    "answerDocHitRate": 0,
+    "pairCount": 0,
+    "pairConsistency": null
+  },
+  "caseReports": [
+    {
+      "id": "answer_reject_v4b_blind_reject_0001",
+      "query": "校园网忘记密码以后，一般在哪个平台重置账号？",
+      "expected_behavior": "reject",
+      "db_absent_evidence_class": "weak_neighbor_but_no_answer_anchor",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": null,
+      "top_result_otid": null,
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": "low_consistency",
+      "retrieval_reject_score": 0.567,
+      "final_reject_score": 0.567,
+      "retrieval_reject_tier": "boundary_uncertain",
+      "final_reject_tier": "boundary_uncertain",
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "materials",
+        "publish",
+        "background",
+        "schedule"
+      ],
+      "weak_match_count": 0,
+      "match_count": 0,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v4b_blind_reject_0002",
+      "query": "来学校参加讲座的访客想连WiFi，一般要怎么申请临时上网？",
+      "expected_behavior": "reject",
+      "db_absent_evidence_class": "weak_neighbor_but_no_answer_anchor",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": null,
+      "top_result_otid": null,
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": "low_consistency",
+      "retrieval_reject_score": 0.5534,
+      "final_reject_score": 0.5534,
+      "retrieval_reject_tier": "boundary_uncertain",
+      "final_reject_tier": "boundary_uncertain",
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "background",
+        "materials",
+        "thesis",
+        "post_outcome",
+        "time_expression",
+        "condition"
+      ],
+      "weak_match_count": 0,
+      "match_count": 0,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v4b_blind_reject_0003",
+      "query": "图书馆小组讨论室一般通过哪个系统预约？",
+      "expected_behavior": "reject",
+      "db_absent_evidence_class": "weak_neighbor_but_no_answer_anchor",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": null,
+      "top_result_otid": null,
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": "low_topic_coverage",
+      "retrieval_reject_score": 0.68,
+      "final_reject_score": 0.68,
+      "retrieval_reject_tier": "hard_reject",
+      "final_reject_tier": "hard_reject",
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "materials",
+        "distribution",
+        "publish",
+        "background",
+        "reminder",
+        "deadline",
+        "post_outcome"
+      ],
+      "weak_match_count": 5,
+      "match_count": 0,
+      "candidate_count": 2554,
+      "query_intent": {
+        "years": [],
+        "topicIds": [
+          "library_services"
+        ],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_689fe94db6424593",
+          "score": 2.3902945706375243,
+          "best_kpid": "kpid_9b51a08a5cca4874",
+          "top_role_tags": [
+            "time_expression",
+            "materials",
+            "distribution",
+            "publish"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_9fd063879be24d9e",
+          "score": 2.3245970106030853,
+          "best_kpid": "kpid_c35497a3e73e4897",
+          "top_role_tags": [
+            "background",
+            "reminder",
+            "materials",
+            "time_expression",
+            "deadline"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_d6b2e4f0900b4984",
+          "score": 2.1154461395094244,
+          "best_kpid": "kpid_bc88058265924c4c",
+          "top_role_tags": [
+            "post_outcome"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "answer_reject_v4b_blind_reject_0004",
+      "query": "图书馆借的书快到期后，一般在哪个平台续借？",
+      "expected_behavior": "reject",
+      "db_absent_evidence_class": "weak_neighbor_but_no_answer_anchor",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": null,
+      "top_result_otid": null,
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": "low_topic_coverage",
+      "retrieval_reject_score": 0.68,
+      "final_reject_score": 0.68,
+      "retrieval_reject_tier": "hard_reject",
+      "final_reject_tier": "hard_reject",
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "schedule",
+        "publish",
+        "background"
+      ],
+      "weak_match_count": 5,
+      "match_count": 0,
+      "candidate_count": 2554,
+      "query_intent": {
+        "years": [],
+        "topicIds": [
+          "library_services"
+        ],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_14ff3c5f13ac4c49",
+          "score": 2.225724718938421,
+          "best_kpid": "kpid_b592926609204ed8",
+          "top_role_tags": [
+            "time_expression",
+            "schedule",
+            "publish",
+            "background"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_a03c3337485448e0",
+          "score": 2.1389804685862734,
+          "best_kpid": "kpid_18204ace7e4e4d21",
+          "top_role_tags": [
+            "time_expression",
+            "schedule"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_5cf6359f7bc54615",
+          "score": 2.1381220268898082,
+          "best_kpid": "kpid_f71f3f3187ac42af",
+          "top_role_tags": [
+            "time_expression"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "answer_reject_v4b_blind_reject_0005",
+      "query": "校内汽车停车一般按什么标准收费？",
+      "expected_behavior": "reject",
+      "db_absent_evidence_class": "weak_neighbor_but_no_answer_anchor",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": null,
+      "top_result_otid": null,
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": "low_consistency",
+      "retrieval_reject_score": 0.5771823414005053,
+      "final_reject_score": 0.5771823414005053,
+      "retrieval_reject_tier": "boundary_uncertain",
+      "final_reject_tier": "boundary_uncertain",
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "schedule",
+        "materials",
+        "time_expression",
+        "publish",
+        "background",
+        "thesis",
+        "application_stage",
+        "email",
+        "post_outcome"
+      ],
+      "weak_match_count": 0,
+      "match_count": 0,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v4b_blind_reject_0006",
+      "query": "访客来校开会如果要停到晚上，一般该提前报备到哪个部门？",
+      "expected_behavior": "reject",
+      "db_absent_evidence_class": "weak_neighbor_but_no_answer_anchor",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": null,
+      "top_result_otid": null,
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": "low_topic_coverage",
+      "retrieval_reject_score": 0.7473636363636362,
+      "final_reject_score": 0.7473636363636362,
+      "retrieval_reject_tier": "hard_reject",
+      "final_reject_tier": "hard_reject",
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "reminder",
+        "post_outcome"
+      ],
+      "weak_match_count": 5,
+      "match_count": 0,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_ae96b4bddb694238",
+          "score": 2.6798705908584872,
+          "best_kpid": "kpid_d52fec97a5314713",
+          "top_role_tags": [
+            "reminder",
+            "post_outcome"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_9fd063879be24d9e",
+          "score": 2.1230555487702145,
+          "best_kpid": "kpid_717c6572468f4a3c",
+          "top_role_tags": []
+        },
+        {
+          "rank": 3,
+          "otid": "otid_f77c101d05104a9e",
+          "score": 2.060383966152546,
+          "top_role_tags": []
+        }
+      ]
+    },
+    {
+      "id": "answer_reject_v4b_blind_reject_0007",
+      "query": "如果想打印论文封面并顺便胶装，校内一般去哪里办？",
+      "expected_behavior": "reject",
+      "db_absent_evidence_class": "weak_neighbor_but_no_answer_anchor",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": null,
+      "top_result_otid": null,
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": "low_consistency",
+      "retrieval_reject_score": 0.5878,
+      "final_reject_score": 0.5878,
+      "retrieval_reject_tier": "boundary_uncertain",
+      "final_reject_tier": "boundary_uncertain",
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "background",
+        "post_outcome",
+        "thesis",
+        "publish",
+        "time_expression",
+        "deadline",
+        "reminder",
+        "schedule",
+        "materials"
+      ],
+      "weak_match_count": 0,
+      "match_count": 0,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v4b_blind_reject_0008",
+      "query": "自助打印机卡纸以后，一般联系哪里报修？",
+      "expected_behavior": "reject",
+      "db_absent_evidence_class": "weak_neighbor_but_no_answer_anchor",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": null,
+      "top_result_otid": null,
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": "low_consistency",
+      "retrieval_reject_score": 0.5197999999999999,
+      "final_reject_score": 0.5197999999999999,
+      "retrieval_reject_tier": "boundary_uncertain",
+      "final_reject_tier": "boundary_uncertain",
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "materials",
+        "distribution",
+        "publish"
+      ],
+      "weak_match_count": 0,
+      "match_count": 0,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v4b_blind_reject_0009",
+      "query": "校内快递驿站寄件一般先在什么小程序下单？",
+      "expected_behavior": "reject",
+      "db_absent_evidence_class": "weak_neighbor_but_no_answer_anchor",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": null,
+      "top_result_otid": null,
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": "low_topic_coverage",
+      "retrieval_reject_score": 0.7210727272727272,
+      "final_reject_score": 0.7210727272727272,
+      "retrieval_reject_tier": "hard_reject",
+      "final_reject_tier": "hard_reject",
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "background",
+        "reminder",
+        "time_expression",
+        "schedule"
+      ],
+      "weak_match_count": 5,
+      "match_count": 0,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_9de366add7674bb6",
+          "score": 5.209638519991079,
+          "best_kpid": "kpid_9c20ae3bec154ef1",
+          "top_role_tags": [
+            "background",
+            "reminder"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_7476223384934f21",
+          "score": 2.20054436148812,
+          "best_kpid": "kpid_739b2ef82e334def",
+          "top_role_tags": [
+            "background",
+            "reminder"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_f387b01fc639428d",
+          "score": 2.0814806767221805,
+          "best_kpid": "kpid_bd730b0127a34099",
+          "top_role_tags": [
+            "time_expression",
+            "schedule"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "answer_reject_v4b_blind_reject_0010",
+      "query": "需要上门取件的快递，在校内一般能约到宿舍楼下吗？",
+      "expected_behavior": "reject",
+      "db_absent_evidence_class": "weak_neighbor_but_no_answer_anchor",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": null,
+      "top_result_otid": null,
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": "low_consistency",
+      "retrieval_reject_score": 0.5740727272727272,
+      "final_reject_score": 0.5740727272727272,
+      "retrieval_reject_tier": "boundary_uncertain",
+      "final_reject_tier": "boundary_uncertain",
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "reminder",
+        "background",
+        "post_outcome",
+        "time_expression",
+        "materials"
+      ],
+      "weak_match_count": 0,
+      "match_count": 0,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": []
+    }
+  ]
+}

@@ -39,7 +39,7 @@ const SLOT_LABELS: Record<CurrentResultSlot, string> = {
         "内部 hard stress `external_ood_holdout_30`",
     granularity_main_106_current: "主方法主结果 `main_106`",
     granularity_holdout_v3_current: "外部泛化主结果 `holdout_v3`",
-    answer_reject_current: "唯一行为结果 `answer_reject_holdout`",
+    answer_reject_current: "唯一行为结果 `answer_reject_v4_frozen_holdout`",
     platform_reject_kb_absent_v2_dev_current:
         "高风险拒答边界结果 `kb_absent_v2_dev`",
     platform_reject_kb_absent_v2_holdout_current:
@@ -63,7 +63,7 @@ const SLOT_BY_DATASET_NAME: Partial<Record<string, CurrentResultSlot>> = {
         "granularity_external_ood_holdout_30_current",
     test_dataset_granularity_main_106_reviewed:
         "granularity_main_106_current",
-    test_dataset_answer_reject_v1_holdout_reviewed:
+    test_dataset_answer_reject_v4_frozen_holdout_reviewed:
         "answer_reject_current",
     test_dataset_platform_reject_kb_absent_v2_dev_reviewed:
         "platform_reject_kb_absent_v2_dev_current",

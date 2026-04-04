@@ -27,6 +27,7 @@ type CaseReport = {
     id: string;
     query: string;
     expected_behavior: AnswerRejectBehavior;
+    db_absent_evidence_class?: AnswerRejectCase["db_absent_evidence_class"];
     predicted_behavior: PipelineBehavior;
     retrieval_behavior: PipelineBehavior;
     behavior_correct: boolean;
@@ -38,6 +39,13 @@ type CaseReport = {
     pair_id: string | null;
     pair_role: "positive" | "negative" | null;
     rejection_reason: string | null;
+    retrieval_reject_score: number | null;
+    final_reject_score: number | null;
+    retrieval_reject_tier: string | null;
+    final_reject_tier: string | null;
+    initial_top_confidence: number | null;
+    final_top_confidence: number | null;
+    evidence_top_role_tags: string[];
     weak_match_count: number;
     match_count: number;
     candidate_count: number;
@@ -64,12 +72,14 @@ type CaseReport = {
         otid: string;
         score: number;
         best_kpid?: string;
+        top_role_tags: string[];
     }>;
     top_weak_matches: Array<{
         rank: number;
         otid: string;
         score: number;
         best_kpid?: string;
+        top_role_tags: string[];
     }>;
 };
 
@@ -109,7 +119,7 @@ const DATASET_FILE = path.resolve(
 const RESULTS_DIR = path.resolve(process.cwd(), "./scripts/results");
 const CURRENT_TIMESTAMP = Date.now() / 1000;
 const DEFAULT_REPORT_NOTE =
-    "当前报告直接调用统一 full pipeline，默认数据集固定为唯一的 answer_reject holdout。";
+    "当前报告直接调用统一 full pipeline，默认数据集固定为未看过的 answer_reject v4 frozen holdout。";
 const REPORT_NOTE = process.env.SUASK_ANSWER_REJECT_NOTE || DEFAULT_REPORT_NOTE;
 const PIPELINE_PRESET_NAME =
     process.env.SUASK_PIPELINE_PRESET || CANONICAL_PIPELINE_PRESET.name;
@@ -298,6 +308,7 @@ async function main() {
             id: testCase.id,
             query: testCase.query,
             expected_behavior: testCase.expected_behavior,
+            db_absent_evidence_class: testCase.db_absent_evidence_class,
             predicted_behavior: predictedBehavior,
             retrieval_behavior: pipelineResult.retrievalDecision.behavior,
             behavior_correct:
@@ -317,6 +328,21 @@ async function main() {
                 pipelineResult.finalDecision.rejectionReason ||
                 pipelineResult.rejection?.reason ||
                 null,
+            retrieval_reject_score:
+                pipelineResult.retrievalDecision.rejectScore ?? null,
+            final_reject_score:
+                pipelineResult.finalDecision.rejectScore ?? null,
+            retrieval_reject_tier:
+                pipelineResult.retrievalDecision.rejectTier ?? null,
+            final_reject_tier:
+                pipelineResult.finalDecision.rejectTier ?? null,
+            initial_top_confidence:
+                pipelineResult.trace.initialTopConfidence ?? null,
+            final_top_confidence:
+                pipelineResult.trace.topConfidence ?? null,
+            evidence_top_role_tags:
+                pipelineResult.searchOutput.diagnostics?.evidenceSignals
+                    ?.topRoleTags || [],
             weak_match_count: pipelineResult.trace.weakMatchCount,
             match_count: pipelineResult.trace.matchCount,
             candidate_count: pipelineResult.trace.candidateCount,
@@ -359,6 +385,13 @@ async function main() {
                     otid: match.otid,
                     score: match.score,
                     best_kpid: match.best_kpid,
+                    top_role_tags: Array.from(
+                        new Set(
+                            (match.kp_candidates || []).flatMap(
+                                (candidate) => candidate.kp_role_tags || [],
+                            ),
+                        ),
+                    ),
                 })),
             top_weak_matches: pipelineResult.searchOutput.weakMatches
                 .slice(0, 3)
@@ -367,6 +400,13 @@ async function main() {
                     otid: match.otid,
                     score: match.score,
                     best_kpid: match.best_kpid,
+                    top_role_tags: Array.from(
+                        new Set(
+                            (match.kp_candidates || []).flatMap(
+                                (candidate) => candidate.kp_role_tags || [],
+                            ),
+                        ),
+                    ),
                 })),
         });
     }
@@ -396,7 +436,7 @@ async function main() {
         datasetFile: DATASET_FILE,
         outputPath,
         sourceScript: "eval_answer_reject.ts",
-        note: "当前稳定入口只保留单一 answer_reject holdout 主线。",
+        note: "当前稳定入口只保留未看过的单一 answer_reject v4 frozen holdout 主线。",
     });
 
     console.log(`Saved report to ${outputPath}`);

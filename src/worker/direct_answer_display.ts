@@ -105,7 +105,57 @@ function inferQueryDisambiguationFloor(query: string): {
     };
 }
 
-function computeTitleAdjustment(query: string, docTitle?: string): number {
+function extractExactQueryDate(
+    query: string,
+): { year: number; month: number; day: number } | null {
+    const match = query.match(/(20\d{2})年(\d{1,2})月(\d{1,2})日/);
+    if (!match) {
+        return null;
+    }
+
+    return {
+        year: Number(match[1]),
+        month: Number(match[2]),
+        day: Number(match[3]),
+    };
+}
+
+function parsePublishDate(
+    publishTime?: string,
+): { year: number; month: number; day: number } | null {
+    if (!publishTime) {
+        return null;
+    }
+
+    const match = publishTime.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (!match) {
+        return null;
+    }
+
+    return {
+        year: Number(match[1]),
+        month: Number(match[2]),
+        day: Number(match[3]),
+    };
+}
+
+function extractDegreeLevels(text: string): string[] {
+    const levels: string[] = [];
+    if (text.includes("本科")) levels.push("本科");
+    if (text.includes("硕士")) levels.push("硕士");
+    if (text.includes("博士") || text.includes("直博")) levels.push("博士");
+    return levels;
+}
+
+function hasAnyDegreeOverlap(queryLevels: string[], titleLevels: string[]): boolean {
+    return queryLevels.some((level) => titleLevels.includes(level));
+}
+
+function computeTitleAdjustment(
+    query: string,
+    docTitle?: string,
+    publishTime?: string,
+): number {
     const normalizedQuery = query.replace(/\s+/g, "");
     const normalizedTitle = (docTitle || "").replace(/\s+/g, "");
 
@@ -157,7 +207,51 @@ function computeTitleAdjustment(query: string, docTitle?: string): number {
         adjustment += 0.05;
     }
 
-    return Math.max(-0.28, Math.min(0.22, adjustment));
+    const queryDegreeLevels = extractDegreeLevels(normalizedQuery);
+    const titleDegreeLevels = extractDegreeLevels(normalizedTitle);
+    if (queryDegreeLevels.length > 0 && titleDegreeLevels.length > 0) {
+        if (hasAnyDegreeOverlap(queryDegreeLevels, titleDegreeLevels)) {
+            adjustment += 0.08;
+        } else {
+            adjustment -= 0.14;
+        }
+    }
+
+    const exactQueryDate = extractExactQueryDate(normalizedQuery);
+    const docPublishDate = parsePublishDate(publishTime);
+    if (exactQueryDate && docPublishDate) {
+        const exactMatch =
+            exactQueryDate.year === docPublishDate.year &&
+            exactQueryDate.month === docPublishDate.month &&
+            exactQueryDate.day === docPublishDate.day;
+        if (exactMatch) {
+            adjustment += 0.14;
+        } else if (
+            exactQueryDate.year === docPublishDate.year &&
+            exactQueryDate.month === docPublishDate.month
+        ) {
+            adjustment -= 0.12;
+        }
+    }
+
+    const asksScheduleOrProcedure =
+        /(安排|流程|步骤|时间|时段|哪天|几分钟|地点|报到|何时|什么时候|怎么|如何|方式)/.test(
+            normalizedQuery,
+        );
+    const titleLooksOperational =
+        /(安排|流程|步骤|办法|系统|校对|报到|考核安排)/.test(normalizedTitle);
+    const titleLooksOutcomeLike =
+        /(名单|公示|结果|标准|入围|录取名单|综合成绩)/.test(normalizedTitle);
+    if (asksScheduleOrProcedure) {
+        if (titleLooksOperational) {
+            adjustment += 0.1;
+        }
+        if (titleLooksOutcomeLike) {
+            adjustment -= 0.16;
+        }
+    }
+
+    return Math.max(-0.34, Math.min(0.28, adjustment));
 }
 
 function rerankDocuments(params: {
@@ -275,6 +369,7 @@ function rerankDocuments(params: {
                 const titleAdjustment = computeTitleAdjustment(
                     query,
                     rerankDocs[index].ot_title,
+                    rerankDocs[index].publish_time,
                 );
                 const finalScore = clamp01(blendedScore + titleAdjustment);
 

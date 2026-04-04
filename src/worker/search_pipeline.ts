@@ -19,6 +19,7 @@ import {
     type Metadata,
     type ParsedQueryIntent,
     type QuerySignals,
+    type RejectTier,
     type RetrievalSignals,
     type ResponseDecision,
     type ResponseMode,
@@ -238,6 +239,8 @@ export type PipelineDecision = {
         | "display_threshold"
         | null;
     displayRejected: boolean;
+    rejectScore?: number;
+    rejectTier?: RejectTier | null;
 };
 
 export type PipelineTrace = {
@@ -295,6 +298,10 @@ type DocumentRerankResult = {
     documents: PipelineDocumentRecord[];
     stats: DocumentRerankStats;
 };
+
+function clamp01(value: number): number {
+    return Math.min(1, Math.max(0, value));
+}
 
 function nowMs(): number {
     if (typeof performance !== "undefined" && performance.now) {
@@ -438,7 +445,22 @@ function buildPipelineDecision(params: {
         rejectionReason:
             behavior === "reject" ? searchOutput.rejection?.reason || null : null,
         displayRejected: false,
+        rejectScore: searchOutput.responseDecision?.rejectScore,
+        rejectTier: searchOutput.responseDecision?.rejectTier ?? null,
     };
+}
+
+function deriveDisplayRejectScore(
+    topConfidence: number | null,
+    rejectThreshold: number,
+): number {
+    if (topConfidence === null) {
+        return 0.62;
+    }
+    const gapRatio = clamp01(
+        (rejectThreshold - topConfidence) / Math.max(rejectThreshold, 0.001),
+    );
+    return clamp01(0.5 + gapRatio * 0.18);
 }
 
 export function mergeCoarseMatchesIntoDocuments(
@@ -658,6 +680,14 @@ export async function executeSearchPipeline(params: {
                       reason: "display_threshold_reject",
                       displayRejected: true,
                       useWeakMatches: false,
+                      rejectScore: Math.max(
+                          retrievalDecision.rejectScore ?? 0,
+                          deriveDisplayRejectScore(
+                              displayStage.finalTopConfidence,
+                              preset.display.rejectThreshold,
+                          ),
+                      ),
+                      rejectTier: "boundary_uncertain",
                   }
                 : retrievalDecision;
 

@@ -9,6 +9,10 @@ export type AnswerSubtype =
     | null;
 export type RejectSubtype = "kb_absent" | "hard_reject" | null;
 export type PairRole = "positive" | "negative" | null;
+export type DbAbsentEvidenceClass =
+    | "strict_db_absent"
+    | "weak_neighbor_but_no_answer_anchor"
+    | null;
 
 export type AnswerRejectCase = {
     id: string;
@@ -21,6 +25,7 @@ export type AnswerRejectCase = {
     reject_subtype?: RejectSubtype;
     pair_id?: string | null;
     pair_role?: PairRole;
+    db_absent_evidence_class?: DbAbsentEvidenceClass;
     theme_family?: string;
     challenge_tags?: string[];
     source_family?: string;
@@ -64,6 +69,8 @@ type AnswerRejectManifestSourceKind =
     | "route_answer"
     | "route_hard_reject"
     | "kb_absent_mainline"
+    | "kb_absent_positive_only"
+    | "kb_absent_negative_only"
     | "pair_control_mainline";
 
 type AnswerRejectManifestSource = {
@@ -194,6 +201,24 @@ function toKbAbsentMainlineCases(
     return items.map((item) => toBehaviorCase(item, sourceFile, false));
 }
 
+function toKbAbsentPositiveOnlyCases(
+    items: LegacyBehaviorCase[],
+    sourceFile: string,
+): AnswerRejectCase[] {
+    return items
+        .filter((item) => item.expected_behavior === "direct_answer")
+        .map((item) => toBehaviorCase(item, sourceFile, false));
+}
+
+function toKbAbsentNegativeOnlyCases(
+    items: LegacyBehaviorCase[],
+    sourceFile: string,
+): AnswerRejectCase[] {
+    return items
+        .filter((item) => item.expected_behavior === "reject")
+        .map((item) => toBehaviorCase(item, sourceFile, false));
+}
+
 function toPairControlMainlineCases(
     items: LegacyBehaviorCase[],
     sourceFile: string,
@@ -234,6 +259,18 @@ function loadManifestSourceCases(
     }
     if (source.source_kind === "kb_absent_mainline") {
         return toKbAbsentMainlineCases(
+            readJsonFile<LegacyBehaviorCase[]>(resolvedSourceFile),
+            resolvedSourceFile,
+        );
+    }
+    if (source.source_kind === "kb_absent_positive_only") {
+        return toKbAbsentPositiveOnlyCases(
+            readJsonFile<LegacyBehaviorCase[]>(resolvedSourceFile),
+            resolvedSourceFile,
+        );
+    }
+    if (source.source_kind === "kb_absent_negative_only") {
+        return toKbAbsentNegativeOnlyCases(
             readJsonFile<LegacyBehaviorCase[]>(resolvedSourceFile),
             resolvedSourceFile,
         );

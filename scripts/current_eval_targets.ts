@@ -12,17 +12,27 @@ export const CURRENT_EVAL_DATASET_FILES = {
     // 历史 hard OOD，仅保留参考
     granularityExternalOodHard30:
         "../Backend/test/test_dataset_granularity/test_dataset_granularity_external_ood_holdout_30_reviewed_userized_v1.json",
-    // 当前唯一 behavior 主线
+    // 当前唯一 behavior 主线：未看过的 v4 frozen holdout
     answerRejectCurrent:
-        "../Backend/test/test_dataset_answer_reject/test_dataset_answer_reject_v1_holdout_reviewed.json",
-    answerRejectV1Dev:
-        "../Backend/test/test_dataset_answer_reject/test_dataset_answer_reject_v1_dev_reviewed.json",
-    answerRejectV1Holdout:
-        "../Backend/test/test_dataset_answer_reject/test_dataset_answer_reject_v1_holdout_reviewed.json",
-    answerRejectPairControlV1Holdout:
-        "../Backend/test/test_dataset_answer_reject/test_dataset_answer_reject_pair_control_v1_holdout_reviewed.json",
-    answerRejectHardRejectDiagV1:
-        "../Backend/test/test_dataset_answer_reject/test_dataset_answer_reject_hard_reject_diag_v1_reviewed.json",
+        "../Backend/test/test_dataset_answer_reject/test_dataset_answer_reject_v4_frozen_holdout_reviewed.json",
+    answerRejectV4FrozenHoldout:
+        "../Backend/test/test_dataset_answer_reject/test_dataset_answer_reject_v4_frozen_holdout_reviewed.json",
+    // v3 为上一轮调参与扩样后的已看过主线，保留回归参考
+    answerRejectV3Dev:
+        "../Backend/test/test_dataset_answer_reject/test_dataset_answer_reject_v3_dev_reviewed.json",
+    answerRejectV3Holdout:
+        "../Backend/test/test_dataset_answer_reject/test_dataset_answer_reject_v3_holdout_reviewed.json",
+    // 过渡 v2，仅保留追溯
+    answerRejectDbAbsentOnlyV2Dev:
+        "../Backend/test/test_dataset_answer_reject/test_dataset_answer_reject_db_absent_only_v2_dev_reviewed.json",
+    answerRejectDbAbsentOnlyV2Holdout:
+        "../Backend/test/test_dataset_answer_reject/test_dataset_answer_reject_db_absent_only_v2_holdout_reviewed.json",
+    answerRejectAnchoredIncompleteLegacyDiagV1:
+        "../Backend/test/test_dataset_answer_reject/test_dataset_answer_reject_anchored_incomplete_legacy_diag_v1_reviewed.json",
+    answerRejectPairControlLegacyDiagV1Holdout:
+        "../Backend/test/test_dataset_answer_reject/test_dataset_answer_reject_pair_control_legacy_diag_v1_holdout_reviewed.json",
+    answerRejectHardRejectLegacyDiagV1:
+        "../Backend/test/test_dataset_answer_reject/test_dataset_answer_reject_hard_reject_legacy_diag_v1_reviewed.json",
     // 历史停用 behavior / product 入口，仅保留追溯
     platformMixedDailyV12:
         "../Backend/test/test_dataset_platform_mixed/test_dataset_platform_mixed_daily_v1_2_reviewed.json",

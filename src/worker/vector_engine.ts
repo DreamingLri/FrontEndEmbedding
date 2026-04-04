@@ -53,11 +53,16 @@ export interface SearchResult {
 export interface SearchRejection {
     reason:
         | "low_topic_coverage"
-        | "low_consistency";
+        | "low_consistency"
+        | "invalid_input";
     topicIds: string[];
 }
 
 export type ResponseMode = "answer" | "reject";
+export type RejectTier =
+    | "invalid_input"
+    | "hard_reject"
+    | "boundary_uncertain";
 
 export interface QuerySignals {
     hasExplicitTopicOrIntent: boolean;
@@ -83,19 +88,30 @@ export interface RetrievalSignals {
     labeledTopicCount: number;
 }
 
+export interface EvidenceSignals {
+    topRoleTags: string[];
+    topCandidateCount: number;
+    strongRoleCount: number;
+    weakRoleCount: number;
+    strongRoleRatio: number;
+    weakOnly: boolean;
+    hasOperationalRoleEvidence: boolean;
+}
+
 export interface ResponseDecision {
     mode: ResponseMode;
     confidence: number;
     reason: string;
     preferLatestWithinTopic: boolean;
     useWeakMatches: boolean;
+    rejectScore?: number;
+    rejectTier?: RejectTier | null;
 }
-
-type ResponseModeScores = Record<ResponseMode, number>;
 
 export interface SearchRankDiagnostics {
     querySignals: QuerySignals;
     retrievalSignals: RetrievalSignals;
+    evidenceSignals: EvidenceSignals;
     explicitOutOfScopeOnly: boolean;
     inDomainEvidenceRejectLabel: string | null;
 }
@@ -174,6 +190,24 @@ const CURRENT_PROCESS_EVENT_TYPES = [
     "材料提交",
     "资格要求",
 ] as const;
+const STRONG_EVIDENCE_ROLE_TAGS: ReadonlySet<string> = new Set([
+    "condition",
+    "materials",
+    "email",
+    "procedure",
+    "application_stage",
+    "contact",
+    "location",
+]);
+const WEAK_EVIDENCE_ROLE_TAGS: ReadonlySet<string> = new Set([
+    "background",
+    "publish",
+    "post_outcome",
+    "thesis",
+    "reminder",
+]);
+const HARD_REJECT_SCORE_THRESHOLD = 0.68;
+const BOUNDARY_REJECT_SCORE_THRESHOLD = 0.5;
 export const QUERY_SCOPE_SPECIFICITY_TERMS = [
     "港澳台",
     "海外",
@@ -230,6 +264,10 @@ const INTENT_RULE_MAP: Map<string, IntentVectorItem> = new Map(
 
 const TOPIC_RULE_MAP: Map<string, (typeof CONFIG_TOPIC_CONFIGS)[number]> =
     new Map(CONFIG_TOPIC_CONFIGS.map((item) => [item.topic_id, item] as const));
+
+function clamp01(value: number): number {
+    return Math.min(1, Math.max(0, value));
+}
 
 function isOutOfScopeTopic(topicId: string): boolean {
     return TOPIC_RULE_MAP.get(topicId)?.scope === "out_of_scope";
@@ -592,12 +630,6 @@ type ScopeSpecificityStats = {
     totalTf: number;
 };
 
-type EvidenceCoverageRequirement = {
-    label: string;
-    requiredGroups: readonly (readonly string[])[];
-    requireIntentAlignment?: boolean;
-};
-
 function getMatchedSpecificityTf(
     querySpecificityTerms: string[],
     scopeSpecificityStats?: ScopeSpecificityStats,
@@ -628,181 +660,6 @@ function queryAsksRuleDocument(rawQuery: string): boolean {
 
 function queryAsksOutcomeDocument(rawQuery: string): boolean {
     return /(结果|公示|名单|递补|增补|拟录取|录取结果)/.test(rawQuery);
-}
-
-function buildEvidenceCoverageRequirement(
-    rawQuery: string,
-): EvidenceCoverageRequirement | undefined {
-    if (
-        /夏令营/.test(rawQuery) &&
-        /(录取优惠|优惠|优秀营员)/.test(rawQuery)
-    ) {
-        return {
-            label: "summer_camp_benefit",
-            requiredGroups: [["夏令营"], ["优惠", "优秀营员"]],
-            requireIntentAlignment: true,
-        };
-    }
-
-    if (
-        /夏令营/.test(rawQuery) &&
-        /(报名|申请|流程|步骤|怎么办|如何)/.test(rawQuery)
-    ) {
-        return {
-            label: "summer_camp_apply",
-            requiredGroups: [["夏令营"], ["报名", "申请"]],
-            requireIntentAlignment: true,
-        };
-    }
-
-    if (/港澳台/.test(rawQuery) && /调剂/.test(rawQuery)) {
-        return {
-            label: "hongkong_macau_taiwan_adjustment",
-            requiredGroups: [["港澳台"], ["调剂"]],
-            requireIntentAlignment: true,
-        };
-    }
-
-    if (/调剂/.test(rawQuery) && /缺额专业/.test(rawQuery)) {
-        return {
-            label: "adjustment_vacancy",
-            requiredGroups: [["调剂"], ["缺额", "缺额专业"]],
-            requireIntentAlignment: true,
-        };
-    }
-
-    if (
-        /调剂/.test(rawQuery) &&
-        /(报名|申请|流程|步骤|怎么办|如何)/.test(rawQuery)
-    ) {
-        return {
-            label: "adjustment_apply",
-            requiredGroups: [["调剂"], ["报名", "申请"]],
-            requireIntentAlignment: true,
-        };
-    }
-
-    if (
-        /外语类保送生/.test(rawQuery) &&
-        /(招生简章|简章|招生章程|章程)/.test(rawQuery)
-    ) {
-        return {
-            label: "foreign_language_recommend_brochure",
-            requiredGroups: [
-                ["外语类", "保送生"],
-                ["招生简章", "简章", "招生章程", "章程"],
-            ],
-        };
-    }
-
-    if (
-        /综合评价/.test(rawQuery) &&
-        /(招生简章|简章|招生章程|章程)/.test(rawQuery)
-    ) {
-        return {
-            label: "comprehensive_evaluation_brochure",
-            requiredGroups: [["综合评价"], ["招生简章", "简章", "招生章程", "章程"]],
-        };
-    }
-
-    if (
-        /选课/.test(rawQuery) &&
-        /补退选/.test(rawQuery) &&
-        /(时间|什么时候|何时|截止|流程|步骤)/.test(rawQuery)
-    ) {
-        return {
-            label: "course_add_drop",
-            requiredGroups: [["选课"], ["补退选", "退选"]],
-        };
-    }
-
-    if (
-        /转专业/.test(rawQuery) &&
-        /(报名|申请|流程|步骤|怎么办|如何)/.test(rawQuery)
-    ) {
-        return {
-            label: "major_transfer",
-            requiredGroups: [["转专业"], ["报名", "申请"]],
-        };
-    }
-
-    if (
-        /免修/.test(rawQuery) &&
-        /(报名|申请|流程|步骤|怎么办|如何)/.test(rawQuery)
-    ) {
-        return {
-            label: "course_exemption",
-            requiredGroups: [["免修"], ["报名", "申请"]],
-        };
-    }
-
-    return undefined;
-}
-
-function topDocumentSatisfiesEvidenceRequirement(
-    sortedRanking: SearchResult[],
-    docEvidenceStatsMap: Map<string, ScopeSpecificityStats>,
-    requirement: EvidenceCoverageRequirement,
-): boolean {
-    const topDoc = sortedRanking[0];
-    if (!topDoc) {
-        return false;
-    }
-
-    const stats = docEvidenceStatsMap.get(topDoc.otid);
-    if (!stats) {
-        return false;
-    }
-
-    return requirement.requiredGroups.every((group) =>
-        group.some((term) => (stats.termTf[term] || 0) > 0),
-    );
-}
-
-function shouldRejectForMissingInDomainEvidence(params: {
-    rawQuery: string;
-    queryIntent?: ParsedQueryIntent;
-    sortedRanking: SearchResult[];
-    docEvidenceStatsMap: Map<string, ScopeSpecificityStats>;
-    otidMap: Record<string, AggregatedDocScores>;
-}): { shouldReject: boolean; label?: string } {
-    const requirement = buildEvidenceCoverageRequirement(params.rawQuery);
-    if (!requirement) {
-        return { shouldReject: false };
-    }
-
-    const topDoc = params.sortedRanking[0];
-    if (
-        requirement.requireIntentAlignment &&
-        topDoc &&
-        (params.queryIntent?.intentIds.length || 0) > 0
-    ) {
-        const topDocIntentIds =
-            params.otidMap[topDoc.otid]?.intent_ids ||
-            params.otidMap[topDoc.otid]?.subtopic_ids ||
-            [];
-        if (!hasAnyOverlap(params.queryIntent?.intentIds || [], topDocIntentIds)) {
-            return {
-                shouldReject: true,
-                label: `${requirement.label}_intent_mismatch`,
-            };
-        }
-    }
-
-    if (
-        topDocumentSatisfiesEvidenceRequirement(
-            params.sortedRanking,
-            params.docEvidenceStatsMap,
-            requirement,
-        )
-    ) {
-        return { shouldReject: false };
-    }
-
-    return {
-        shouldReject: true,
-        label: requirement.label,
-    };
 }
 
 function createQueryIntentContext(
@@ -2168,159 +2025,218 @@ export function extractRetrievalSignals(
     };
 }
 
+export function extractEvidenceSignals(
+    sortedRanking: SearchResult[],
+    otidMap: Record<string, AggregatedDocScores>,
+): EvidenceSignals {
+    const topWindow = sortedRanking
+        .slice(0, 3)
+        .flatMap((item) =>
+            (otidMap[item.otid]?.kp_candidates || []).slice(
+                0,
+                DEFAULT_KP_ROLE_CANDIDATE_LIMIT,
+            ),
+        );
+
+    const topRoleTags = dedupe(
+        topWindow.flatMap((candidate) => candidate.kp_role_tags || []),
+    );
+    let strongRoleCount = 0;
+    let weakRoleCount = 0;
+
+    topRoleTags.forEach((tag) => {
+        if (STRONG_EVIDENCE_ROLE_TAGS.has(tag)) {
+            strongRoleCount += 1;
+        } else if (WEAK_EVIDENCE_ROLE_TAGS.has(tag)) {
+            weakRoleCount += 1;
+        }
+    });
+
+    const totalEvidenceRoleCount = strongRoleCount + weakRoleCount;
+
+    return {
+        topRoleTags,
+        topCandidateCount: topWindow.length,
+        strongRoleCount,
+        weakRoleCount,
+        strongRoleRatio:
+            totalEvidenceRoleCount > 0
+                ? strongRoleCount / totalEvidenceRoleCount
+                : 0,
+        weakOnly: strongRoleCount === 0 && weakRoleCount > 0,
+        hasOperationalRoleEvidence: hasAnyRoleEvidence(
+            topWindow,
+            Array.from(STRONG_EVIDENCE_ROLE_TAGS),
+        ),
+    };
+}
+
 export function classifyResponseMode(
     querySignals: QuerySignals,
     retrievalSignals: RetrievalSignals,
+    evidenceSignals: EvidenceSignals,
 ): ResponseDecision {
-    const scores: ResponseModeScores = {
-        answer: 0.5,
-        reject: 0,
-    };
-    const reasons = new Set<string>();
+    const tokenCount = querySignals.tokenCount || 0;
+    const invalidInput = tokenCount === 0;
 
-    if (querySignals.hasExplicitTopicOrIntent) {
-        scores.answer += 2.6;
-        scores.reject -= 1.3;
-        reasons.add("explicit_topic_or_intent");
+    if (invalidInput) {
+        return {
+            mode: "reject",
+            confidence: 0.98,
+            reason: "invalid_input",
+            preferLatestWithinTopic: false,
+            useWeakMatches: false,
+            rejectScore: 1,
+            rejectTier: "invalid_input",
+        };
     }
 
-    if (querySignals.hasStrongDetailAnchor) {
-        scores.answer += 3.0;
-        scores.reject -= 1.1;
-        reasons.add("strong_detail_anchor");
-    }
-
-    if (querySignals.hasExplicitYear) {
-        scores.answer += 0.8;
-        reasons.add("explicit_year");
-    }
-
-    if (querySignals.hasResultState) {
-        scores.answer += 0.55;
-        scores.reject -= 0.9;
-        reasons.add("result_state");
-    }
-
-    if (querySignals.hasGenericNextStep) {
-        scores.answer += 0.35;
-        scores.reject += 1.1;
-        reasons.add("generic_next_step");
-    }
-
-    if (querySignals.hasEntryLikeAnchor) {
-        scores.answer += 0.5;
-        scores.reject -= 0.25;
-        reasons.add("entry_like_anchor");
-    }
-
-    if (
-        querySignals.hasGenericNextStep &&
-        !querySignals.hasResultState &&
-        !querySignals.hasEntryLikeAnchor &&
-        !querySignals.hasStrongDetailAnchor
-    ) {
-        scores.reject += 1.6;
-        scores.answer -= 0.3;
-        reasons.add("empty_next_step_without_state");
-    }
-
-    if (
-        querySignals.hasResultState &&
-        querySignals.hasGenericNextStep &&
-        !querySignals.hasStrongDetailAnchor
-    ) {
-        scores.answer += 0.45;
-        scores.reject -= 0.2;
-        reasons.add("result_state_needs_specific_context");
-    }
-
-    if (
-        querySignals.hasResultState &&
-        querySignals.hasGenericNextStep &&
-        querySignals.hasStrongDetailAnchor
-    ) {
-        scores.answer += 1.0;
-        reasons.add("detail_anchor_overrides_generic_state");
-    }
-
-    if (
-        querySignals.hasExplicitYear &&
+    const noStructuredAnchor =
+        !querySignals.hasExplicitTopicOrIntent && !querySignals.hasExplicitYear;
+    const factStyleRisk =
+        noStructuredAnchor &&
         !querySignals.hasGenericNextStep &&
-        (querySignals.hasEntryLikeAnchor || querySignals.hasResultState)
-    ) {
-        scores.answer += 0.8;
-        reasons.add("time_anchor_supports_answer");
-    }
-
-    if (
-        !querySignals.hasExplicitTopicOrIntent &&
-        !querySignals.hasStrongDetailAnchor &&
-        !querySignals.hasEntryLikeAnchor
-    ) {
-        scores.reject += 0.45;
-        reasons.add("anchorless_query");
-    }
-
-    if ((querySignals.tokenCount || 0) === 0) {
-        scores.reject += 0.45;
-        scores.answer -= 0.15;
-        reasons.add("zero_sparse_token");
-    }
-
-    if (retrievalSignals.candidateCount === 0) {
-        scores.reject += 1.4;
-        scores.answer -= 0.7;
-        reasons.add("no_candidates");
-    }
-
-    if (retrievalSignals.labeledTopicCount === 0) {
-        scores.reject += 1.1;
-        scores.answer -= 0.4;
-        reasons.add("no_labeled_topics");
-    }
-
-    if (
-        retrievalSignals.distinctTopicCount >= 3 &&
-        retrievalSignals.dominantTopicRatio < 0.45
-    ) {
-        scores.reject += 1.15;
-        scores.answer -= 0.35;
-        reasons.add("low_topic_consistency");
-    }
-
-    if (retrievalSignals.top1Top2Gap >= 0.12) {
-        scores.answer += 0.35;
-        reasons.add("stable_top1_gap");
-    }
-
-    if (
-        retrievalSignals.labeledTopicCount >= 3 &&
-        retrievalSignals.distinctTopicCount <= 2 &&
-        retrievalSignals.dominantTopicRatio >= 0.5
-    ) {
-        scores.answer += 0.35;
-        reasons.add("stable_topic_cluster");
-    }
-
-    const rankedModes = Object.entries(scores)
-        .map(([mode, score]) => [mode as ResponseMode, score] as const)
-        .sort((a, b) => b[1] - a[1]);
-    const [mode, topScore] = rankedModes[0];
-    const secondScore = rankedModes[1]?.[1] ?? topScore;
-    const confidence = Math.max(
-        0.55,
-        Math.min(0.98, 0.62 + (topScore - secondScore) * 0.14),
+        !querySignals.hasResultState
+            ? 1
+            : 0;
+    const lowTokenRisk = tokenCount <= 1 ? 1 : tokenCount <= 3 ? 0.45 : 0;
+    const genericNextStepRisk =
+        querySignals.hasGenericNextStep && !querySignals.hasExplicitTopicOrIntent
+            ? 0.45
+            : 0;
+    const intentRisk = clamp01(
+        (noStructuredAnchor ? 0.72 : 0.16) +
+            lowTokenRisk * 0.14 +
+            genericNextStepRisk * 0.1 +
+            factStyleRisk * 0.14,
     );
+
+    const noCandidatesRisk = retrievalSignals.candidateCount === 0 ? 1 : 0;
+    const noLabeledRisk = retrievalSignals.labeledTopicCount === 0 ? 1 : 0;
+    const spreadRisk = clamp01(
+        (retrievalSignals.distinctTopicCount - 2) / 3,
+    );
+    const dominanceRisk = clamp01(
+        (0.55 - retrievalSignals.dominantTopicRatio) / 0.55,
+    );
+    const labelCoverageRisk = clamp01(
+        (3 - retrievalSignals.labeledTopicCount) / 3,
+    );
+    const gapRisk = clamp01((0.05 - retrievalSignals.top1Top2Gap) / 0.05);
+    const retrievalRisk =
+        noCandidatesRisk === 1
+            ? 1
+            : clamp01(
+                  0.32 * noLabeledRisk +
+                      0.22 * spreadRisk +
+                      0.2 * dominanceRisk +
+                      0.16 * labelCoverageRisk +
+                      0.1 * gapRisk,
+              );
+
+    const evidenceRisk = clamp01(
+        0.68 * (1 - evidenceSignals.strongRoleRatio) +
+            0.22 * (evidenceSignals.hasOperationalRoleEvidence ? 0 : 1) +
+            0.1 * (evidenceSignals.weakOnly ? 1 : 0),
+    );
+
+    const shortQueryRisk = clamp01((8 - querySignals.queryLength) / 8);
+    const ambiguityRisk = clamp01(
+        0.55 * (noStructuredAnchor ? 1 : 0) +
+            0.25 * shortQueryRisk +
+            0.1 * (querySignals.hasResultState && noStructuredAnchor ? 1 : 0) +
+            0.1 * factStyleRisk,
+    );
+    const genericProcessSafetyBonus =
+        querySignals.hasGenericNextStep &&
+        (querySignals.hasStrongDetailAnchor || querySignals.hasResultState)
+            ? 0.09
+            : 0;
+
+    const rejectScore = clamp01(
+        0.38 * intentRisk +
+            0.18 * retrievalRisk +
+            0.3 * evidenceRisk +
+            0.14 * ambiguityRisk -
+            (querySignals.hasExplicitTopicOrIntent ? 0.08 : 0) -
+            (querySignals.hasExplicitYear ? 0.03 : 0) -
+            genericProcessSafetyBonus,
+    );
+
+    let mode: ResponseMode = "answer";
+    let rejectTier: RejectTier | null = null;
+    if (rejectScore >= HARD_REJECT_SCORE_THRESHOLD) {
+        mode = "reject";
+        rejectTier = "hard_reject";
+    } else if (rejectScore >= BOUNDARY_REJECT_SCORE_THRESHOLD) {
+        mode = "reject";
+        rejectTier = "boundary_uncertain";
+    }
+
+    const reasonParts: string[] = [];
+    if (noStructuredAnchor) {
+        reasonParts.push("no_structured_anchor");
+    }
+    if (evidenceSignals.weakOnly) {
+        reasonParts.push("weak_only_role_evidence");
+    } else if (!evidenceSignals.hasOperationalRoleEvidence) {
+        reasonParts.push("no_operational_evidence");
+    }
+    if (noLabeledRisk === 1) {
+        reasonParts.push("no_labeled_topic_support");
+    } else if (spreadRisk >= 0.45 || dominanceRisk >= 0.45) {
+        reasonParts.push("topic_dispersion");
+    }
+    if (reasonParts.length === 0) {
+        reasonParts.push(
+            mode === "reject" ? "reject_score_guard" : "answer_score_pass",
+        );
+    }
+
+    let confidence: number;
+    if (mode === "reject" && rejectTier === "hard_reject") {
+        confidence = Math.max(
+            0.74,
+            Math.min(
+                0.98,
+                0.74 +
+                    (rejectScore - HARD_REJECT_SCORE_THRESHOLD) /
+                        (1 - HARD_REJECT_SCORE_THRESHOLD) *
+                        0.18,
+            ),
+        );
+    } else if (mode === "reject") {
+        confidence = Math.max(
+            0.58,
+            Math.min(
+                0.79,
+                0.58 +
+                    (rejectScore - BOUNDARY_REJECT_SCORE_THRESHOLD) /
+                        (HARD_REJECT_SCORE_THRESHOLD -
+                            BOUNDARY_REJECT_SCORE_THRESHOLD) *
+                        0.18,
+            ),
+        );
+    } else {
+        confidence = Math.max(
+            0.56,
+            Math.min(
+                0.92,
+                0.92 -
+                    (rejectScore / BOUNDARY_REJECT_SCORE_THRESHOLD) * 0.24,
+            ),
+        );
+    }
 
     return {
         mode,
         confidence,
-        reason:
-            Array.from(reasons).slice(0, 3).join("+") ||
-            "scored_response_mode",
+        reason: reasonParts.slice(0, 3).join("+"),
         preferLatestWithinTopic:
             querySignals.hasLatestPolicyState && !querySignals.hasExplicitYear,
-        useWeakMatches: false,
+        useWeakMatches: rejectTier === "hard_reject",
+        rejectScore,
+        rejectTier,
     };
 }
 
@@ -2373,7 +2289,6 @@ export function searchAndRank(params: {
         queryScopeHint,
         candidateIndices,
         scopeSpecificityWordIdToTerm,
-        directAnswerEvidenceWordIdToTerm,
         topHybridLimit = 1000,
         kpAggregationMode = "max",
         kpTopN = 3,
@@ -2419,7 +2334,6 @@ export function searchAndRank(params: {
     const lexicalBonusMap = new Map<string, number>();
     const yearHitMap = new Map<string, boolean>();
     const docScopeSpecificityStatsMap = new Map<string, ScopeSpecificityStats>();
-    const docDirectAnswerEvidenceStatsMap = new Map<string, ScopeSpecificityStats>();
 
     for (let localIndex = 0; localIndex < candidateCount; localIndex++) {
         const metaIndex = activeCandidateIndices
@@ -2465,20 +2379,6 @@ export function searchAndRank(params: {
                         (existing.termTf[specificityTerm] || 0) + tf;
                     existing.totalTf += tf;
                     docScopeSpecificityStatsMap.set(otid, existing);
-                }
-
-                const directAnswerEvidenceTerm =
-                    directAnswerEvidenceWordIdToTerm?.get(wordId);
-                if (directAnswerEvidenceTerm) {
-                    const existing =
-                        docDirectAnswerEvidenceStatsMap.get(otid) || {
-                            termTf: {},
-                            totalTf: 0,
-                        };
-                    existing.termTf[directAnswerEvidenceTerm] =
-                        (existing.termTf[directAnswerEvidenceTerm] || 0) + tf;
-                    existing.totalTf += tf;
-                    docDirectAnswerEvidenceStatsMap.set(otid, existing);
                 }
 
                 if (queryYearWordIds && queryYearWordIds.includes(wordId)) {
@@ -2693,27 +2593,23 @@ export function searchAndRank(params: {
         querySparse,
     );
     const retrievalSignals = extractRetrievalSignals(sortedRanking, otidMap);
+    const evidenceSignals = extractEvidenceSignals(sortedRanking, otidMap);
     const responseDecision = classifyResponseMode(
         querySignals,
         retrievalSignals,
+        evidenceSignals,
     );
 
     const explicitOutOfScopeOnly =
         (queryIntent?.intentIds.length || 0) === 0 &&
         hasOnlyOutOfScopeTopics(queryIntent?.topicIds || []);
 
-    const inDomainEvidenceReject = shouldRejectForMissingInDomainEvidence({
-        rawQuery: queryIntent?.rawQuery || "",
-        queryIntent,
-        sortedRanking,
-        docEvidenceStatsMap: docDirectAnswerEvidenceStatsMap,
-        otidMap,
-    });
     const diagnostics: SearchRankDiagnostics = {
         querySignals,
         retrievalSignals,
+        evidenceSignals,
         explicitOutOfScopeOnly,
-        inDomainEvidenceRejectLabel: inDomainEvidenceReject.label || null,
+        inDomainEvidenceRejectLabel: null,
     };
 
     if (explicitOutOfScopeOnly) {
@@ -2731,41 +2627,31 @@ export function searchAndRank(params: {
                 reason: "explicit_out_of_scope_topic",
                 preferLatestWithinTopic: false,
                 useWeakMatches: true,
-            },
-            diagnostics,
-        };
-    }
-
-    if (
-        responseDecision.mode === "answer" &&
-        inDomainEvidenceReject.shouldReject
-    ) {
-        return {
-            matches: [],
-            weakMatches: sortedRanking.slice(0, 5),
-            rejection: {
-                reason: "low_consistency",
-                topicIds: queryIntent?.topicIds || [],
-            },
-            responseDecision: {
-                ...responseDecision,
-                mode: "reject",
-                confidence: Math.max(responseDecision.confidence, 0.9),
-                reason: `missing_in_domain_evidence:${inDomainEvidenceReject.label || "unknown"}`,
-                preferLatestWithinTopic: false,
-                useWeakMatches: true,
+                rejectScore: Math.max(
+                    responseDecision.rejectScore || 0,
+                    HARD_REJECT_SCORE_THRESHOLD,
+                ),
+                rejectTier: "hard_reject",
             },
             diagnostics,
         };
     }
 
     if (responseDecision.mode === "reject") {
+        const rejectionReason: SearchRejection["reason"] =
+            responseDecision.rejectTier === "invalid_input"
+                ? "invalid_input"
+                : responseDecision.rejectTier === "hard_reject"
+                  ? "low_topic_coverage"
+                  : "low_consistency";
         return {
             matches: [],
-            weakMatches: [],
+            weakMatches: responseDecision.useWeakMatches
+                ? sortedRanking.slice(0, 5)
+                : [],
             rejection: {
-                reason: "low_consistency",
-                topicIds: [],
+                reason: rejectionReason,
+                topicIds: queryIntent?.topicIds || [],
             },
             responseDecision,
             diagnostics,

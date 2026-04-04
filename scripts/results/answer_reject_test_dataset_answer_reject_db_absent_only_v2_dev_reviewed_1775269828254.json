@@ -1,0 +1,1422 @@
+{
+  "generatedAt": "2026-04-04T02:30:28.253Z",
+  "datasetFile": "D:\\Project\\SuAsk\\SuAsk_Agent\\Backend\\test\\test_dataset_answer_reject\\test_dataset_answer_reject_db_absent_only_v2_dev_reviewed.json",
+  "datasetName": "test_dataset_answer_reject_db_absent_only_v2_dev_reviewed",
+  "total": 18,
+  "config": {
+    "pipelineVersion": "product_canonical_full_v1",
+    "preset": {
+      "name": "product_canonical_full_v1",
+      "retrieval": {
+        "weights": {
+          "Q": 0.3333333333333333,
+          "KP": 0.13333333333333333,
+          "OT": 0.5333333333333333
+        },
+        "topHybridLimit": 1000,
+        "kpAggregationMode": "max",
+        "kpTopN": 3,
+        "kpTailWeight": 0.35,
+        "lexicalBonusMode": "sum",
+        "kpRoleRerankMode": "feature",
+        "kpRoleDocWeight": 0.35,
+        "useQueryExpansion": true,
+        "useTopicPartition": true,
+        "minimalMode": false
+      },
+      "display": {
+        "rejectThreshold": 0.4,
+        "rerankBlendAlpha": 0.15,
+        "bestSentenceThreshold": 0.4,
+        "fetchMatchLimit": 15,
+        "fetchWeakMatchLimit": 10
+      }
+    },
+    "note": "当前报告直接调用统一 full pipeline，默认数据集固定为唯一的 answer_reject db_absent_only v2 holdout。 当前主线 dev v2：answer 继续保留已审核锚点样本；reject 仅来自 2026-04-04 手工重建的真 db_absent 集，不再沿用旧 kb_absent reject 口径。"
+  },
+  "summary": {
+    "total": 18,
+    "byExpectedBehavior": {
+      "answer": 10,
+      "reject": 8
+    },
+    "byPredictedBehavior": {
+      "answer": 9,
+      "reject": 9
+    },
+    "binaryBehaviorAccuracy": 0.9444444444444444,
+    "answerHitRate": 0.9,
+    "rejectRecall": 1,
+    "falseRejectRate": 0.1,
+    "unsafeAnswerRate": 0,
+    "answerDocHitRate": 0.3,
+    "pairCount": 0,
+    "pairConsistency": null
+  },
+  "caseReports": [
+    {
+      "id": "route_v2_batch1_0001",
+      "query": "我入围了综合评价录取，接下来要做什么？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_29bee8c1d48a4946",
+      "top_result_otid": "otid_b78d8162d15b4481",
+      "answer_doc_hit": false,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.013200000000000003,
+      "final_reject_score": 0.013200000000000003,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.8140726327896118,
+      "final_top_confidence": 0.8140726327896118,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "publish",
+        "background",
+        "post_outcome",
+        "materials",
+        "email"
+      ],
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 4192,
+      "query_intent": {
+        "years": [],
+        "topicIds": [
+          "undergraduate_admission"
+        ],
+        "intentIds": [],
+        "preferLatest": true,
+        "preferLatestStrong": true,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": true,
+          "hasLatestPolicyState": true,
+          "hasGenericNextStep": true
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_b78d8162d15b4481",
+          "score": 1.9984859722967483,
+          "best_kpid": "kpid_58ca7514f24946c6",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "background",
+            "post_outcome"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_8be68548ed504099",
+          "score": 1.8566940191066172,
+          "best_kpid": "kpid_842f67f02e444f1f",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "post_outcome",
+            "background"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_64c41c82baca43e4",
+          "score": 1.5513533210763317,
+          "best_kpid": "kpid_a6ff456660174727",
+          "top_role_tags": [
+            "background",
+            "materials",
+            "time_expression",
+            "email"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch1_0007",
+      "query": "我通过了初审，接下来要做什么？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_026bbae2756a4096",
+      "top_result_otid": "otid_c19ddd94e52346c1",
+      "answer_doc_hit": false,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.42337272727272734,
+      "final_reject_score": 0.42337272727272734,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.7582112222909927,
+      "final_top_confidence": 0.7582112222909927,
+      "evidence_top_role_tags": [
+        "materials",
+        "background"
+      ],
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": true,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": true
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_c19ddd94e52346c1",
+          "score": 1.6363292922836619,
+          "top_role_tags": []
+        },
+        {
+          "rank": 2,
+          "otid": "otid_fd6621f974774e1c",
+          "score": 1.472203160444047,
+          "best_kpid": "kpid_cbf33dac61254a6b",
+          "top_role_tags": [
+            "materials",
+            "background"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_07c96191f91e425a",
+          "score": 1.4319973096003924,
+          "top_role_tags": []
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch1_0010",
+      "query": "我参加了综合评价，接下来要做什么？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_395fb889a17b49fa",
+      "top_result_otid": "otid_8be68548ed504099",
+      "answer_doc_hit": false,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.2808,
+      "final_reject_score": 0.2808,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.7812535911798477,
+      "final_top_confidence": 0.7812535911798477,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "publish",
+        "background",
+        "post_outcome"
+      ],
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 4192,
+      "query_intent": {
+        "years": [],
+        "topicIds": [
+          "undergraduate_admission"
+        ],
+        "intentIds": [],
+        "preferLatest": true,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": true
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_8be68548ed504099",
+          "score": 2.7212722789579344,
+          "best_kpid": "kpid_424739db616f470e",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "background",
+            "post_outcome"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_b78d8162d15b4481",
+          "score": 2.4296689219257335,
+          "best_kpid": "kpid_c7ccedc4e16e4ea0",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "background",
+            "post_outcome"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_395fb889a17b49fa",
+          "score": 1.9375768176467352,
+          "best_kpid": "kpid_49bcc92debc646b1",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "background",
+            "post_outcome"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch1_0011",
+      "query": "综合评价录取的流程是怎样的？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_395fb889a17b49fa",
+      "top_result_otid": "otid_8be68548ed504099",
+      "answer_doc_hit": false,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.13379999999999997,
+      "final_reject_score": 0.13379999999999997,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.8061798483133316,
+      "final_top_confidence": 0.8061798483133316,
+      "evidence_top_role_tags": [
+        "background",
+        "time_expression",
+        "publish",
+        "post_outcome",
+        "materials",
+        "schedule"
+      ],
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 4192,
+      "query_intent": {
+        "years": [],
+        "topicIds": [
+          "undergraduate_admission"
+        ],
+        "intentIds": [],
+        "preferLatest": true,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": true,
+          "hasLatestPolicyState": true,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_8be68548ed504099",
+          "score": 2.771132641573891,
+          "best_kpid": "kpid_93d57508c98b4b7d",
+          "top_role_tags": [
+            "background",
+            "time_expression",
+            "publish",
+            "post_outcome"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_23801bcd14384525",
+          "score": 2.400545468657085,
+          "best_kpid": "kpid_a661d0677f604cd9",
+          "top_role_tags": [
+            "time_expression",
+            "materials",
+            "schedule",
+            "background"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_395fb889a17b49fa",
+          "score": 1.7860226498062208,
+          "best_kpid": "kpid_49bcc92debc646b1",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "post_outcome",
+            "background"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch1_0013",
+      "query": "综合评价录取名单公示后，接下来要做什么？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_25f8c20ce2194082",
+      "top_result_otid": "otid_8be68548ed504099",
+      "answer_doc_hit": false,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.04379999999999998,
+      "final_reject_score": 0.04379999999999998,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.8129849791526794,
+      "final_top_confidence": 0.8129849791526794,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "publish",
+        "post_outcome",
+        "background",
+        "announcement_period",
+        "email"
+      ],
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 4192,
+      "query_intent": {
+        "years": [],
+        "topicIds": [
+          "undergraduate_admission"
+        ],
+        "intentIds": [],
+        "preferLatest": true,
+        "preferLatestStrong": true,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": true,
+          "hasLatestPolicyState": true,
+          "hasGenericNextStep": true
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_8be68548ed504099",
+          "score": 2.0390553932987063,
+          "best_kpid": "kpid_842f67f02e444f1f",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "post_outcome",
+            "background"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_f536f4e1af9e43aa",
+          "score": 1.7205516671534036,
+          "best_kpid": "kpid_b1973a1246884750",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "background"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_9366d85ec4ba4471",
+          "score": 1.2708876908938933,
+          "best_kpid": "kpid_b3d6c0f9b9f24cbf",
+          "top_role_tags": [
+            "time_expression",
+            "announcement_period",
+            "email",
+            "publish",
+            "background"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch1_0016",
+      "query": "综合评价录取的后续流程是什么？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_8be68548ed504099",
+      "top_result_otid": "otid_8be68548ed504099",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.2808,
+      "final_reject_score": 0.2808,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.8100352481007576,
+      "final_top_confidence": 0.8100352481007576,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "publish",
+        "post_outcome",
+        "background"
+      ],
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 4192,
+      "query_intent": {
+        "years": [],
+        "topicIds": [
+          "undergraduate_admission"
+        ],
+        "intentIds": [],
+        "preferLatest": true,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": true,
+          "hasLatestPolicyState": true,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_8be68548ed504099",
+          "score": 3.071152269634865,
+          "best_kpid": "kpid_842f67f02e444f1f",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "post_outcome",
+            "background"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_395fb889a17b49fa",
+          "score": 1.9153825932288364,
+          "best_kpid": "kpid_98b2a9d3bf224910",
+          "top_role_tags": [
+            "publish",
+            "post_outcome",
+            "time_expression",
+            "background"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_b78d8162d15b4481",
+          "score": 1.3359329725420688,
+          "best_kpid": "kpid_c7ccedc4e16e4ea0",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "post_outcome",
+            "background"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "route_v2_batch1_0017",
+      "query": "我的成绩有问题怎么办？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": false,
+      "false_reject": true,
+      "unsafe_answer": false,
+      "expected_otid": "otid_8be68548ed504099",
+      "top_result_otid": null,
+      "answer_doc_hit": false,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": "low_topic_coverage",
+      "retrieval_reject_score": 0.69164,
+      "final_reject_score": 0.69164,
+      "retrieval_reject_tier": "hard_reject",
+      "final_reject_tier": "hard_reject",
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "publish",
+        "schedule",
+        "background"
+      ],
+      "weak_match_count": 5,
+      "match_count": 0,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": true
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_3bd3d86426934a8e",
+          "score": 2.512498727266883,
+          "best_kpid": "kpid_4d9938290c354cdb",
+          "top_role_tags": [
+            "time_expression",
+            "schedule",
+            "publish"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_f1b9c5657c3c4c90",
+          "score": 2.0744040985144485,
+          "best_kpid": "kpid_91a004217f724527",
+          "top_role_tags": [
+            "time_expression",
+            "schedule",
+            "publish",
+            "background"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_faeac0ecd9304bd1",
+          "score": 2.014415639003815,
+          "best_kpid": "kpid_303898cdfd8348e8",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "background"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "kb_absent_ai_0016",
+      "query": "研究生奖助金发放遇到问题应该向哪个部门投诉？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_b559ca9597eb4750",
+      "top_result_otid": "otid_d0d8258f19744c72",
+      "answer_doc_hit": false,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.13379999999999997,
+      "final_reject_score": 0.13379999999999997,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.8401003241539001,
+      "final_top_confidence": 0.8401003241539001,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "schedule",
+        "background",
+        "post_outcome",
+        "arrival",
+        "condition",
+        "distribution",
+        "deadline",
+        "publish"
+      ],
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 7083,
+      "query_intent": {
+        "years": [],
+        "topicIds": [
+          "student_funding"
+        ],
+        "intentIds": [],
+        "preferLatest": true,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_d0d8258f19744c72",
+          "score": 3.5677990393279475,
+          "best_kpid": "kpid_dbf7f4d171c441a2",
+          "top_role_tags": [
+            "time_expression",
+            "schedule",
+            "background",
+            "post_outcome"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_4ea8ed299783438b",
+          "score": 3.123170070231187,
+          "best_kpid": "kpid_500c964ade584160",
+          "top_role_tags": [
+            "time_expression",
+            "arrival",
+            "background",
+            "post_outcome",
+            "condition"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_b559ca9597eb4750",
+          "score": 2.9787397355925687,
+          "best_kpid": "kpid_b131e0f3bda54d87",
+          "top_role_tags": [
+            "time_expression",
+            "background",
+            "distribution",
+            "deadline",
+            "post_outcome",
+            "publish",
+            "arrival"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "kb_absent_ai_0021",
+      "query": "中山大学报考点2025年硕士研究生招生考试的现场确认时间和地点是什么？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_18390f7cb6784527",
+      "top_result_otid": "otid_18390f7cb6784527",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.0528,
+      "final_reject_score": 0.0528,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.9135087370872498,
+      "final_top_confidence": 0.9135087370872498,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "background",
+        "deadline",
+        "materials",
+        "procedure",
+        "email",
+        "reminder",
+        "schedule",
+        "publish",
+        "condition",
+        "post_outcome"
+      ],
+      "weak_match_count": 0,
+      "match_count": 34,
+      "candidate_count": 12032,
+      "query_intent": {
+        "years": [
+          2025
+        ],
+        "topicIds": [
+          "graduate_admission"
+        ],
+        "intentIds": [
+          "master_unified_exam"
+        ],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_18390f7cb6784527",
+          "score": 6.426043323988175,
+          "best_kpid": "kpid_f90b524229144776",
+          "top_role_tags": [
+            "time_expression",
+            "deadline",
+            "schedule",
+            "materials",
+            "procedure",
+            "background",
+            "email",
+            "reminder"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_8ee6bdcf13e741b8",
+          "score": 4.698083713205068,
+          "best_kpid": "kpid_54070a445ec148f4",
+          "top_role_tags": [
+            "time_expression",
+            "schedule",
+            "publish",
+            "background",
+            "condition",
+            "reminder"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_63a7acf7429240b8",
+          "score": 4.293297342244866,
+          "best_kpid": "kpid_59c429bbface4740",
+          "top_role_tags": [
+            "time_expression",
+            "schedule",
+            "deadline",
+            "materials",
+            "post_outcome",
+            "condition"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "kb_absent_ai_0027",
+      "query": "2026年全国硕士研究生招生考试中山大学报考点（代码4413）的现场确认时间是什么时候？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_8f77ee9e86c84c7d",
+      "top_result_otid": "otid_8f77ee9e86c84c7d",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.0528,
+      "final_reject_score": 0.0528,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.935373118519783,
+      "final_top_confidence": 0.935373118519783,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "background",
+        "email",
+        "reminder",
+        "materials",
+        "procedure",
+        "schedule",
+        "condition",
+        "publish",
+        "post_outcome",
+        "deadline"
+      ],
+      "weak_match_count": 0,
+      "match_count": 28,
+      "candidate_count": 12032,
+      "query_intent": {
+        "years": [
+          2026
+        ],
+        "topicIds": [
+          "graduate_admission"
+        ],
+        "intentIds": [
+          "master_unified_exam"
+        ],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_8f77ee9e86c84c7d",
+          "score": 5.756934915585345,
+          "best_kpid": "kpid_b186797bd66a4e5a",
+          "top_role_tags": [
+            "materials",
+            "procedure",
+            "time_expression",
+            "background",
+            "email",
+            "reminder"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_139b9801959d4db4",
+          "score": 4.90206673107686,
+          "best_kpid": "kpid_476166b526e04f05",
+          "top_role_tags": [
+            "time_expression",
+            "schedule",
+            "deadline",
+            "condition",
+            "materials",
+            "publish",
+            "post_outcome",
+            "email"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_7479616835454c16",
+          "score": 3.572838004342461,
+          "best_kpid": "kpid_daa4bb62894f432c",
+          "top_role_tags": [
+            "time_expression",
+            "schedule",
+            "deadline",
+            "materials",
+            "condition",
+            "publish",
+            "post_outcome"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "db_absent_true_dev_0001",
+      "query": "中大校车平时的发车时刻表在哪里看？",
+      "expected_behavior": "reject",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": null,
+      "top_result_otid": null,
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": "low_topic_coverage",
+      "retrieval_reject_score": 0.7540181818181817,
+      "final_reject_score": 0.7540181818181817,
+      "retrieval_reject_tier": "hard_reject",
+      "final_reject_tier": "hard_reject",
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "background"
+      ],
+      "weak_match_count": 5,
+      "match_count": 0,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_c1ea35c3c9c64cbf",
+          "score": 1.7310111981605554,
+          "best_kpid": "kpid_0d3744ce0e26446a",
+          "top_role_tags": []
+        },
+        {
+          "rank": 2,
+          "otid": "otid_1d0896a191814c1e",
+          "score": 1.4896899859069417,
+          "best_kpid": "kpid_a92d2f9d7b3440c0",
+          "top_role_tags": [
+            "time_expression",
+            "background"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_b524d869c7c24395",
+          "score": 1.3958504980330702,
+          "top_role_tags": []
+        }
+      ]
+    },
+    {
+      "id": "db_absent_true_dev_0002",
+      "query": "毕业生学位服要去哪里租借？",
+      "expected_behavior": "reject",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": null,
+      "top_result_otid": null,
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": "low_consistency",
+      "retrieval_reject_score": 0.57774,
+      "final_reject_score": 0.57774,
+      "retrieval_reject_tier": "boundary_uncertain",
+      "final_reject_tier": "boundary_uncertain",
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "materials",
+        "post_outcome",
+        "thesis",
+        "time_expression",
+        "reminder",
+        "background",
+        "procedure",
+        "deadline"
+      ],
+      "weak_match_count": 0,
+      "match_count": 0,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": []
+    },
+    {
+      "id": "db_absent_true_dev_0003",
+      "query": "学校自助洗衣房怎么充值使用？",
+      "expected_behavior": "reject",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": null,
+      "top_result_otid": null,
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": "low_consistency",
+      "retrieval_reject_score": 0.5702727272727273,
+      "final_reject_score": 0.5702727272727273,
+      "retrieval_reject_tier": "boundary_uncertain",
+      "final_reject_tier": "boundary_uncertain",
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "materials",
+        "distribution",
+        "publish",
+        "background",
+        "schedule"
+      ],
+      "weak_match_count": 0,
+      "match_count": 0,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": []
+    },
+    {
+      "id": "db_absent_true_dev_0004",
+      "query": "访客进校需要提前预约吗？",
+      "expected_behavior": "reject",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": null,
+      "top_result_otid": null,
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": "low_consistency",
+      "retrieval_reject_score": 0.5691090909090909,
+      "final_reject_score": 0.5691090909090909,
+      "retrieval_reject_tier": "boundary_uncertain",
+      "final_reject_tier": "boundary_uncertain",
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "materials",
+        "distribution",
+        "schedule",
+        "reminder"
+      ],
+      "weak_match_count": 0,
+      "match_count": 0,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": []
+    },
+    {
+      "id": "db_absent_true_dev_0005",
+      "query": "校园参观要在哪里预约？",
+      "expected_behavior": "reject",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": null,
+      "top_result_otid": null,
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": "low_consistency",
+      "retrieval_reject_score": 0.5691090909090909,
+      "final_reject_score": 0.5691090909090909,
+      "retrieval_reject_tier": "boundary_uncertain",
+      "final_reject_tier": "boundary_uncertain",
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "materials",
+        "distribution",
+        "schedule",
+        "post_outcome",
+        "condition",
+        "background",
+        "procedure",
+        "reminder"
+      ],
+      "weak_match_count": 0,
+      "match_count": 0,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": []
+    },
+    {
+      "id": "db_absent_true_dev_0006",
+      "query": "校内电动车充电桩怎么申请使用？",
+      "expected_behavior": "reject",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": null,
+      "top_result_otid": null,
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": "low_consistency",
+      "retrieval_reject_score": 0.5022727272727272,
+      "final_reject_score": 0.5022727272727272,
+      "retrieval_reject_tier": "boundary_uncertain",
+      "final_reject_tier": "boundary_uncertain",
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "schedule",
+        "deadline",
+        "materials",
+        "application_stage",
+        "thesis"
+      ],
+      "weak_match_count": 0,
+      "match_count": 0,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": []
+    },
+    {
+      "id": "db_absent_true_dev_0007",
+      "query": "我的门禁卡丢了，去哪里补办？",
+      "expected_behavior": "reject",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": null,
+      "top_result_otid": null,
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": "low_consistency",
+      "retrieval_reject_score": 0.6375036363636364,
+      "final_reject_score": 0.6375036363636364,
+      "retrieval_reject_tier": "boundary_uncertain",
+      "final_reject_tier": "boundary_uncertain",
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "schedule",
+        "reminder",
+        "post_outcome",
+        "materials",
+        "background"
+      ],
+      "weak_match_count": 0,
+      "match_count": 0,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": []
+    },
+    {
+      "id": "db_absent_true_dev_0008",
+      "query": "宿舍热水卡坏了去哪里补办？",
+      "expected_behavior": "reject",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": null,
+      "top_result_otid": null,
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": "low_consistency",
+      "retrieval_reject_score": 0.6006490909090909,
+      "final_reject_score": 0.6006490909090909,
+      "retrieval_reject_tier": "boundary_uncertain",
+      "final_reject_tier": "boundary_uncertain",
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "schedule",
+        "reminder",
+        "post_outcome",
+        "background",
+        "materials",
+        "email",
+        "publish"
+      ],
+      "weak_match_count": 0,
+      "match_count": 0,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": []
+    }
+  ]
+}

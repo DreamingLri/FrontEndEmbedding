@@ -1,0 +1,4727 @@
+{
+  "generatedAt": "2026-04-04T03:01:38.212Z",
+  "datasetFile": "D:\\Project\\SuAsk\\SuAsk_Agent\\Backend\\test\\test_dataset_answer_reject\\test_dataset_answer_reject_v3_holdout_reviewed.json",
+  "datasetName": "test_dataset_answer_reject_v3_holdout_reviewed",
+  "total": 54,
+  "config": {
+    "pipelineVersion": "product_canonical_full_v1",
+    "preset": {
+      "name": "product_canonical_full_v1",
+      "retrieval": {
+        "weights": {
+          "Q": 0.3333333333333333,
+          "KP": 0.13333333333333333,
+          "OT": 0.5333333333333333
+        },
+        "topHybridLimit": 1000,
+        "kpAggregationMode": "max",
+        "kpTopN": 3,
+        "kpTailWeight": 0.35,
+        "lexicalBonusMode": "sum",
+        "kpRoleRerankMode": "feature",
+        "kpRoleDocWeight": 0.35,
+        "useQueryExpansion": true,
+        "useTopicPartition": true,
+        "minimalMode": false
+      },
+      "display": {
+        "rejectThreshold": 0.4,
+        "rerankBlendAlpha": 0.15,
+        "bestSentenceThreshold": 0.4,
+        "fetchMatchLimit": 15,
+        "fetchWeakMatchLimit": 10
+      }
+    },
+    "note": "当前报告直接调用统一 full pipeline，默认数据集固定为完全重建的 answer_reject v3 holdout。"
+  },
+  "summary": {
+    "total": 54,
+    "byExpectedBehavior": {
+      "answer": 30,
+      "reject": 24
+    },
+    "byPredictedBehavior": {
+      "answer": 41,
+      "reject": 13
+    },
+    "binaryBehaviorAccuracy": 0.7962962962962963,
+    "answerHitRate": 1,
+    "rejectRecall": 0.5416666666666666,
+    "falseRejectRate": 0,
+    "unsafeAnswerRate": 0.4583333333333333,
+    "answerDocHitRate": 0.9666666666666667,
+    "pairCount": 0,
+    "pairConsistency": null
+  },
+  "caseReports": [
+    {
+      "id": "answer_reject_v3_holdout_answer_0001",
+      "query": "2025年外语类保送生面试具体是哪一天举行？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_17202809ac554122",
+      "top_result_otid": "otid_17202809ac554122",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.0528,
+      "final_reject_score": 0.0528,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.8583238929510116,
+      "final_top_confidence": 0.8583238929510116,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "deadline",
+        "materials",
+        "background",
+        "schedule",
+        "publish",
+        "announcement_period",
+        "email"
+      ],
+      "weak_match_count": 0,
+      "match_count": 25,
+      "candidate_count": 4192,
+      "query_intent": {
+        "years": [
+          2025
+        ],
+        "topicIds": [
+          "undergraduate_admission"
+        ],
+        "intentIds": [
+          "ug_recommend_admission"
+        ],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_17202809ac554122",
+          "score": 5.385516899836418,
+          "best_kpid": "kpid_ba39fb32f54249e8",
+          "top_role_tags": [
+            "time_expression",
+            "background",
+            "deadline",
+            "materials",
+            "schedule",
+            "publish"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_9366d85ec4ba4471",
+          "score": 4.263073072030841,
+          "best_kpid": "kpid_74d02e317a66465a",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "background",
+            "announcement_period",
+            "email"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_e8bfcc47185b4554",
+          "score": 2.522912987365918,
+          "best_kpid": "kpid_6872107822d94a38",
+          "top_role_tags": [
+            "time_expression",
+            "schedule",
+            "background"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_answer_0002",
+      "query": "2025年外语类保送生初审通过后，最晚哪天前去哪个网站打印准考证？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_17202809ac554122",
+      "top_result_otid": "otid_17202809ac554122",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.0528,
+      "final_reject_score": 0.0528,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.8494963079690934,
+      "final_top_confidence": 0.8494963079690934,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "deadline",
+        "materials",
+        "schedule",
+        "background",
+        "publish",
+        "announcement_period",
+        "email"
+      ],
+      "weak_match_count": 0,
+      "match_count": 25,
+      "candidate_count": 4192,
+      "query_intent": {
+        "years": [
+          2025
+        ],
+        "topicIds": [
+          "undergraduate_admission"
+        ],
+        "intentIds": [
+          "ug_recommend_admission"
+        ],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": true,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_17202809ac554122",
+          "score": 5.429056624888162,
+          "best_kpid": "kpid_2377799348a84ba9",
+          "top_role_tags": [
+            "time_expression",
+            "deadline",
+            "materials",
+            "schedule",
+            "background",
+            "publish"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_9366d85ec4ba4471",
+          "score": 3.8865013465740286,
+          "best_kpid": "kpid_74d02e317a66465a",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "background",
+            "announcement_period",
+            "email"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_23801bcd14384525",
+          "score": 3.41884893977063,
+          "best_kpid": "kpid_a661d0677f604cd9",
+          "top_role_tags": [
+            "time_expression",
+            "materials",
+            "background",
+            "schedule"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_answer_0003",
+      "query": "2025年外语类保送生面试报到地点具体在哪个校区、哪个地址？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_17202809ac554122",
+      "top_result_otid": "otid_17202809ac554122",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.0732,
+      "final_reject_score": 0.0732,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.8677961513400078,
+      "final_top_confidence": 0.8677961513400078,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "background",
+        "deadline",
+        "materials",
+        "schedule",
+        "publish",
+        "announcement_period",
+        "email",
+        "reminder"
+      ],
+      "weak_match_count": 0,
+      "match_count": 25,
+      "candidate_count": 4192,
+      "query_intent": {
+        "years": [
+          2025
+        ],
+        "topicIds": [
+          "undergraduate_admission"
+        ],
+        "intentIds": [
+          "ug_recommend_admission"
+        ],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_17202809ac554122",
+          "score": 6.298341231037332,
+          "best_kpid": "kpid_ba39fb32f54249e8",
+          "top_role_tags": [
+            "time_expression",
+            "deadline",
+            "materials",
+            "schedule",
+            "background",
+            "publish"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_9366d85ec4ba4471",
+          "score": 4.0809126923597745,
+          "best_kpid": "kpid_9a2b56259e9c48e2",
+          "top_role_tags": [
+            "time_expression",
+            "announcement_period",
+            "email",
+            "publish",
+            "background"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_e8bfcc47185b4554",
+          "score": 2.4007364662906836,
+          "best_kpid": "kpid_6872107822d94a38",
+          "top_role_tags": [
+            "time_expression",
+            "schedule",
+            "background",
+            "reminder"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_answer_0004",
+      "query": "2025年外语类保送生面试是几位专家面试一位考生？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_17202809ac554122",
+      "top_result_otid": "otid_17202809ac554122",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.0528,
+      "final_reject_score": 0.0528,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.8367780104279519,
+      "final_top_confidence": 0.8367780104279519,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "background",
+        "deadline",
+        "materials",
+        "schedule",
+        "publish",
+        "announcement_period",
+        "email"
+      ],
+      "weak_match_count": 0,
+      "match_count": 25,
+      "candidate_count": 4192,
+      "query_intent": {
+        "years": [
+          2025
+        ],
+        "topicIds": [
+          "undergraduate_admission"
+        ],
+        "intentIds": [
+          "ug_recommend_admission"
+        ],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_17202809ac554122",
+          "score": 5.427651279377068,
+          "best_kpid": "kpid_ba39fb32f54249e8",
+          "top_role_tags": [
+            "time_expression",
+            "background",
+            "deadline",
+            "materials",
+            "schedule",
+            "publish"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_9366d85ec4ba4471",
+          "score": 4.464017538315942,
+          "best_kpid": "kpid_74d02e317a66465a",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "background",
+            "announcement_period",
+            "email"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_e8bfcc47185b4554",
+          "score": 2.1665552034605575,
+          "best_kpid": "kpid_6872107822d94a38",
+          "top_role_tags": [
+            "time_expression",
+            "schedule",
+            "background"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_answer_0005",
+      "query": "2025年外语类保送生面试当天要从哪个校门进校，并出示哪些证件？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_17202809ac554122",
+      "top_result_otid": "otid_17202809ac554122",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.0868,
+      "final_reject_score": 0.0868,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.8762380316853523,
+      "final_top_confidence": 0.8762380316853523,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "deadline",
+        "materials",
+        "background",
+        "publish",
+        "schedule"
+      ],
+      "weak_match_count": 0,
+      "match_count": 25,
+      "candidate_count": 4192,
+      "query_intent": {
+        "years": [
+          2025
+        ],
+        "topicIds": [
+          "undergraduate_admission"
+        ],
+        "intentIds": [
+          "ug_recommend_admission"
+        ],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_17202809ac554122",
+          "score": 5.4501642679114894,
+          "best_kpid": "kpid_ba39fb32f54249e8",
+          "top_role_tags": [
+            "time_expression",
+            "deadline",
+            "materials",
+            "background",
+            "schedule",
+            "publish"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_9366d85ec4ba4471",
+          "score": 3.9047118582469658,
+          "best_kpid": "kpid_74d02e317a66465a",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "background"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_23801bcd14384525",
+          "score": 2.17191591586737,
+          "best_kpid": "kpid_ea47fcee29754082",
+          "top_role_tags": [
+            "time_expression",
+            "schedule",
+            "background",
+            "materials"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_answer_0006",
+      "query": "2024年广东综评录取名单公布后，录取考生可以通过哪两个官方渠道查询详细信息？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_25f8c20ce2194082",
+      "top_result_otid": "otid_25f8c20ce2194082",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.3340727272727273,
+      "final_reject_score": 0.3340727272727273,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.8922764644026756,
+      "final_top_confidence": 0.8922764644026756,
+      "evidence_top_role_tags": [
+        "publish",
+        "time_expression",
+        "background",
+        "post_outcome"
+      ],
+      "weak_match_count": 0,
+      "match_count": 46,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [
+          2024
+        ],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": true,
+          "hasLatestPolicyState": true,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_25f8c20ce2194082",
+          "score": 5.165669827582993,
+          "best_kpid": "kpid_28e9a2096372442c",
+          "top_role_tags": [
+            "publish",
+            "time_expression",
+            "background"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_994ec6fdfc174122",
+          "score": 2.678627274191996,
+          "best_kpid": "kpid_4bb52cc220c94486",
+          "top_role_tags": [
+            "publish",
+            "background",
+            "time_expression"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_395fb889a17b49fa",
+          "score": 2.553400152386398,
+          "best_kpid": "kpid_0fa411d575284ede",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "background",
+            "post_outcome"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_answer_0007",
+      "query": "2024年广东综评综合成绩的计算公式是什么？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_395fb889a17b49fa",
+      "top_result_otid": "otid_395fb889a17b49fa",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.1532,
+      "final_reject_score": 0.1532,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.8830368295311928,
+      "final_top_confidence": 0.8830368295311928,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "publish",
+        "background",
+        "post_outcome",
+        "materials",
+        "email"
+      ],
+      "weak_match_count": 0,
+      "match_count": 59,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [
+          2024
+        ],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_395fb889a17b49fa",
+          "score": 4.308207175308328,
+          "best_kpid": "kpid_0fa411d575284ede",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "background",
+            "post_outcome"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_2d77227bd2fa473c",
+          "score": 2.698977596047614,
+          "best_kpid": "kpid_1effe8285e1e4377",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "post_outcome",
+            "materials",
+            "email",
+            "background"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_1637de59ecdf419c",
+          "score": 2.2498879772157614,
+          "best_kpid": "kpid_55d00234efc94ad1",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "background"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_answer_0008",
+      "query": "2024年广东综评里，高考投档成绩和面试考核成绩各占多少权重？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_395fb889a17b49fa",
+      "top_result_otid": "otid_395fb889a17b49fa",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.1838,
+      "final_reject_score": 0.1838,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.9133403301239014,
+      "final_top_confidence": 0.9133403301239014,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "publish",
+        "background",
+        "post_outcome",
+        "materials"
+      ],
+      "weak_match_count": 0,
+      "match_count": 42,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [
+          2024
+        ],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_395fb889a17b49fa",
+          "score": 6.088013134654545,
+          "best_kpid": "kpid_6cf390b2d0b844d9",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "background",
+            "post_outcome"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_2d77227bd2fa473c",
+          "score": 2.8909626677968037,
+          "best_kpid": "kpid_4222dfcc49c14df7",
+          "top_role_tags": [
+            "background",
+            "time_expression",
+            "materials",
+            "publish",
+            "post_outcome"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_994ec6fdfc174122",
+          "score": 2.737131029372766,
+          "best_kpid": "kpid_759e5806bf274a64",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "background"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_answer_0009",
+      "query": "2024年广东综评预计从什么时候开始投档？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_395fb889a17b49fa",
+      "top_result_otid": "otid_395fb889a17b49fa",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.16967272727272728,
+      "final_reject_score": 0.16967272727272728,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.8631248086690902,
+      "final_top_confidence": 0.8631248086690902,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "background",
+        "publish",
+        "post_outcome",
+        "materials",
+        "email",
+        "deadline",
+        "schedule"
+      ],
+      "weak_match_count": 0,
+      "match_count": 70,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [
+          2024
+        ],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_395fb889a17b49fa",
+          "score": 4.8036479394392,
+          "best_kpid": "kpid_5c6c9e2e47964343",
+          "top_role_tags": [
+            "time_expression",
+            "background",
+            "publish",
+            "post_outcome"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_2d77227bd2fa473c",
+          "score": 2.3391872852323385,
+          "best_kpid": "kpid_9225412eac904c8b",
+          "top_role_tags": [
+            "time_expression",
+            "materials",
+            "email",
+            "background",
+            "publish",
+            "post_outcome"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_444d8fa2a8a54ec6",
+          "score": 2.3201341531544277,
+          "best_kpid": "kpid_2c7c4ba5c3114bb5",
+          "top_role_tags": [
+            "time_expression",
+            "deadline",
+            "schedule",
+            "materials",
+            "email"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_answer_0010",
+      "query": "填了2024年综评志愿但没入选，会不会影响后续本科批次录取？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_395fb889a17b49fa",
+      "top_result_otid": "otid_395fb889a17b49fa",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.19699999999999998,
+      "final_reject_score": 0.19699999999999998,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.850097207725048,
+      "final_top_confidence": 0.850097207725048,
+      "evidence_top_role_tags": [
+        "publish",
+        "post_outcome",
+        "time_expression",
+        "background",
+        "materials"
+      ],
+      "weak_match_count": 0,
+      "match_count": 58,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [
+          2024
+        ],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": true,
+          "hasLatestPolicyState": true,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_395fb889a17b49fa",
+          "score": 4.9552061206264595,
+          "best_kpid": "kpid_98b2a9d3bf224910",
+          "top_role_tags": [
+            "publish",
+            "post_outcome",
+            "time_expression",
+            "background"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_2d77227bd2fa473c",
+          "score": 2.4493122062352435,
+          "best_kpid": "kpid_24b87d7b333e4c47",
+          "top_role_tags": [
+            "materials",
+            "post_outcome",
+            "time_expression",
+            "publish",
+            "background"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_1637de59ecdf419c",
+          "score": 2.2439148537037847,
+          "best_kpid": "kpid_221047d3eec94d73",
+          "top_role_tags": [
+            "post_outcome",
+            "time_expression",
+            "publish",
+            "background"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_answer_0011",
+      "query": "2025年广东综评录取名单出来后，可以通过哪两个官方平台查录取信息？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_f536f4e1af9e43aa",
+      "top_result_otid": "otid_f536f4e1af9e43aa",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.18707272727272728,
+      "final_reject_score": 0.18707272727272728,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.8960327655076981,
+      "final_top_confidence": 0.8960327655076981,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "publish",
+        "background",
+        "announcement_period",
+        "email",
+        "post_outcome"
+      ],
+      "weak_match_count": 0,
+      "match_count": 60,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [
+          2025
+        ],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": true,
+          "hasLatestPolicyState": true,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_f536f4e1af9e43aa",
+          "score": 5.1745528870588835,
+          "best_kpid": "kpid_97a56750666a45a2",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "background"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_9366d85ec4ba4471",
+          "score": 3.2741430397291578,
+          "best_kpid": "kpid_f8a484a76ca5444e",
+          "top_role_tags": [
+            "publish",
+            "background",
+            "time_expression",
+            "announcement_period",
+            "email"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_6374df77359049f8",
+          "score": 2.5312264641448947,
+          "best_kpid": "kpid_cc8d90dd10754cdf",
+          "top_role_tags": [
+            "post_outcome",
+            "time_expression",
+            "announcement_period",
+            "email",
+            "publish",
+            "background"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_answer_0012",
+      "query": "2025年广东综评综合成绩怎么算？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_8be68548ed504099",
+      "top_result_otid": "otid_8be68548ed504099",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.18707272727272728,
+      "final_reject_score": 0.18707272727272728,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.8805643528699875,
+      "final_top_confidence": 0.8805643528699875,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "publish",
+        "background",
+        "post_outcome",
+        "schedule",
+        "email"
+      ],
+      "weak_match_count": 0,
+      "match_count": 54,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [
+          2025
+        ],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_8be68548ed504099",
+          "score": 5.130070680524804,
+          "best_kpid": "kpid_c645f22606de4300",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "background",
+            "post_outcome"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_5016e7c077f14008",
+          "score": 2.6485171007306523,
+          "best_kpid": "kpid_44ae6cb639b7436a",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "schedule"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_b751f09455b84a89",
+          "score": 2.6392633782503694,
+          "best_kpid": "kpid_ffdcc6ead0f84812",
+          "top_role_tags": [
+            "time_expression",
+            "post_outcome",
+            "publish",
+            "email"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_answer_0013",
+      "query": "2025年广东综评里，高考投档成绩和学校考核成绩分别占多少权重？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_8be68548ed504099",
+      "top_result_otid": "otid_8be68548ed504099",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.1838,
+      "final_reject_score": 0.1838,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.9003476366400719,
+      "final_top_confidence": 0.9003476366400719,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "publish",
+        "background",
+        "post_outcome",
+        "materials"
+      ],
+      "weak_match_count": 0,
+      "match_count": 57,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [
+          2025
+        ],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_8be68548ed504099",
+          "score": 5.417728360060474,
+          "best_kpid": "kpid_5c57fdbffb4f4851",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "background",
+            "post_outcome"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_64c41c82baca43e4",
+          "score": 3.218117447934367,
+          "best_kpid": "kpid_a6ff456660174727",
+          "top_role_tags": [
+            "background",
+            "materials",
+            "time_expression"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_9366d85ec4ba4471",
+          "score": 2.326092984852611,
+          "best_kpid": "kpid_9a2b56259e9c48e2",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "background"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_answer_0014",
+      "query": "2025年广东综评专业分配遵循什么原则？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_8be68548ed504099",
+      "top_result_otid": "otid_8be68548ed504099",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.3670181818181818,
+      "final_reject_score": 0.3670181818181818,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.8771126180887222,
+      "final_top_confidence": 0.8771126180887222,
+      "evidence_top_role_tags": [
+        "background",
+        "time_expression",
+        "publish"
+      ],
+      "weak_match_count": 0,
+      "match_count": 68,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [
+          2025
+        ],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_8be68548ed504099",
+          "score": 3.8740865178775556,
+          "best_kpid": "kpid_93d57508c98b4b7d",
+          "top_role_tags": [
+            "background",
+            "time_expression",
+            "publish"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_6010e10f0bd24934",
+          "score": 3.3424951547632715,
+          "best_kpid": "kpid_69b94187f84e4c63",
+          "top_role_tags": [
+            "background",
+            "time_expression",
+            "publish"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_f801613b0ec64544",
+          "score": 2.945761969116298,
+          "best_kpid": "kpid_d8ba92ea09e540d2",
+          "top_role_tags": [
+            "time_expression"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_answer_0015",
+      "query": "2025年广东综评获得考核资格的考生总人数是多少？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_8be68548ed504099",
+      "top_result_otid": "otid_8be68548ed504099",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.1700727272727273,
+      "final_reject_score": 0.1700727272727273,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.8752703502774238,
+      "final_top_confidence": 0.8752703502774238,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "publish",
+        "background",
+        "materials",
+        "schedule"
+      ],
+      "weak_match_count": 0,
+      "match_count": 59,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [
+          2025
+        ],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_8be68548ed504099",
+          "score": 4.094000974744856,
+          "best_kpid": "kpid_424739db616f470e",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "background"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_23801bcd14384525",
+          "score": 3.4230885445304935,
+          "best_kpid": "kpid_a661d0677f604cd9",
+          "top_role_tags": [
+            "time_expression",
+            "materials",
+            "schedule",
+            "background"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_2cf6f4e5e6b648a9",
+          "score": 3.0746120375732966,
+          "best_kpid": "kpid_b97d4c58021c4057",
+          "top_role_tags": [
+            "time_expression"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_reject_0001",
+      "query": "中大校内班车一般会在哪些站点上下车？",
+      "expected_behavior": "reject",
+      "db_absent_evidence_class": "strict_db_absent",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": null,
+      "top_result_otid": null,
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": "low_topic_coverage",
+      "retrieval_reject_score": 0.7474727272727273,
+      "final_reject_score": 0.7474727272727273,
+      "retrieval_reject_tier": "hard_reject",
+      "final_reject_tier": "hard_reject",
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "schedule",
+        "publish",
+        "background"
+      ],
+      "weak_match_count": 5,
+      "match_count": 0,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_fda8490f610f493a",
+          "score": 2.665642399474472,
+          "best_kpid": "kpid_29c2d59288f04e9b",
+          "top_role_tags": []
+        },
+        {
+          "rank": 2,
+          "otid": "otid_66d0b0a3af494257",
+          "score": 2.5526523847511093,
+          "best_kpid": "kpid_0dfb1e19ddec49b5",
+          "top_role_tags": []
+        },
+        {
+          "rank": 3,
+          "otid": "otid_e0254fb4fe794e2f",
+          "score": 2.166986134508637,
+          "best_kpid": "kpid_567dd1fc08a24f20",
+          "top_role_tags": [
+            "time_expression",
+            "schedule",
+            "publish",
+            "background"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "answer_reject_v3_holdout_reject_0002",
+      "query": "毕业学位服最迟要在什么时候还回去？",
+      "expected_behavior": "reject",
+      "db_absent_evidence_class": "weak_neighbor_but_no_answer_anchor",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": false,
+      "false_reject": false,
+      "unsafe_answer": true,
+      "expected_otid": null,
+      "top_result_otid": "otid_29d5fca1c0854c2c",
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.5343714285714285,
+      "final_reject_score": 0.5343714285714285,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.8332334339618683,
+      "final_top_confidence": 0.8332334339618683,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "deadline",
+        "background",
+        "post_outcome",
+        "thesis",
+        "procedure",
+        "materials",
+        "application_stage",
+        "reminder"
+      ],
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_29d5fca1c0854c2c",
+          "score": 3.2726763024175396,
+          "best_kpid": "kpid_3f3bf7bda1564c55",
+          "top_role_tags": [
+            "time_expression",
+            "deadline",
+            "background",
+            "post_outcome",
+            "thesis",
+            "procedure"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_5a4511192ee946c6",
+          "score": 2.927318116228183,
+          "best_kpid": "kpid_d3cf7ddf40e648f4",
+          "top_role_tags": [
+            "time_expression",
+            "application_stage",
+            "materials",
+            "reminder",
+            "thesis",
+            "background"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_9fd063879be24d9e",
+          "score": 2.6124449604164757,
+          "best_kpid": "kpid_269d91a4adbe47a7",
+          "top_role_tags": [
+            "time_expression",
+            "deadline",
+            "background",
+            "thesis"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_reject_0003",
+      "query": "新生报到那几天学校会安排接站吗？",
+      "expected_behavior": "reject",
+      "db_absent_evidence_class": "strict_db_absent",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": null,
+      "top_result_otid": null,
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": "low_topic_coverage",
+      "retrieval_reject_score": 0.7210727272727272,
+      "final_reject_score": 0.7210727272727272,
+      "retrieval_reject_tier": "hard_reject",
+      "final_reject_tier": "hard_reject",
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "background"
+      ],
+      "weak_match_count": 5,
+      "match_count": 0,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_07ec113e1dd745e1",
+          "score": 3.073026693884313,
+          "best_kpid": "kpid_38170790adfd4026",
+          "top_role_tags": [
+            "time_expression"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_3c8fbcf6bdb24c95",
+          "score": 2.765484379540242,
+          "best_kpid": "kpid_0707ff93c07e499a",
+          "top_role_tags": [
+            "time_expression",
+            "background"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_c243887db39d4c98",
+          "score": 2.293126369614134,
+          "best_kpid": "kpid_a13fc60104314b20",
+          "top_role_tags": [
+            "time_expression"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "answer_reject_v3_holdout_reject_0004",
+      "query": "校园里的共享单车通常允许停放在哪些区域？",
+      "expected_behavior": "reject",
+      "db_absent_evidence_class": "strict_db_absent",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": null,
+      "top_result_otid": null,
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": "low_topic_coverage",
+      "retrieval_reject_score": 0.7605636363636363,
+      "final_reject_score": 0.7605636363636363,
+      "retrieval_reject_tier": "hard_reject",
+      "final_reject_tier": "hard_reject",
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "background",
+        "reminder",
+        "post_outcome",
+        "publish"
+      ],
+      "weak_match_count": 5,
+      "match_count": 0,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_829975851a0045cb",
+          "score": 3.015160367842961,
+          "best_kpid": "kpid_4d779d9a8c5246a5",
+          "top_role_tags": [
+            "time_expression",
+            "background",
+            "reminder",
+            "post_outcome"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_fda8490f610f493a",
+          "score": 2.2990969476680223,
+          "best_kpid": "kpid_ccfadf0e10754a00",
+          "top_role_tags": []
+        },
+        {
+          "rank": 3,
+          "otid": "otid_7476223384934f21",
+          "score": 2.0743937337073373,
+          "best_kpid": "kpid_b81bb8b019ed4f74",
+          "top_role_tags": [
+            "background",
+            "reminder",
+            "post_outcome",
+            "publish"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "answer_reject_v3_holdout_reject_0005",
+      "query": "学生电动车进校前上牌要怎么走流程？",
+      "expected_behavior": "reject",
+      "db_absent_evidence_class": "strict_db_absent",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": null,
+      "top_result_otid": null,
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": "low_topic_coverage",
+      "retrieval_reject_score": 0.7341636363636364,
+      "final_reject_score": 0.7341636363636364,
+      "retrieval_reject_tier": "hard_reject",
+      "final_reject_tier": "hard_reject",
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "post_outcome",
+        "reminder",
+        "time_expression",
+        "background",
+        "publish"
+      ],
+      "weak_match_count": 5,
+      "match_count": 0,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_829975851a0045cb",
+          "score": 1.767986869011876,
+          "best_kpid": "kpid_23a82364d008474f",
+          "top_role_tags": [
+            "post_outcome",
+            "reminder",
+            "publish",
+            "background",
+            "time_expression"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_7476223384934f21",
+          "score": 1.3591892282384141,
+          "best_kpid": "kpid_b81bb8b019ed4f74",
+          "top_role_tags": [
+            "reminder",
+            "background",
+            "post_outcome",
+            "publish"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_ae96b4bddb694238",
+          "score": 1.2915406164126604,
+          "best_kpid": "kpid_dbf94141f2bf4f9b",
+          "top_role_tags": [
+            "reminder",
+            "post_outcome",
+            "time_expression",
+            "background"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "answer_reject_v3_holdout_reject_0006",
+      "query": "学校游泳馆平日晚上最晚开到几点？",
+      "expected_behavior": "reject",
+      "db_absent_evidence_class": "weak_neighbor_but_no_answer_anchor",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": null,
+      "top_result_otid": null,
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": "low_topic_coverage",
+      "retrieval_reject_score": 0.7487976601936175,
+      "final_reject_score": 0.7487976601936175,
+      "retrieval_reject_tier": "hard_reject",
+      "final_reject_tier": "hard_reject",
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "background"
+      ],
+      "weak_match_count": 5,
+      "match_count": 0,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_ac232bba2f5f4e09",
+          "score": 2.2582504142196513,
+          "best_kpid": "kpid_3dd96fd59a504ae2",
+          "top_role_tags": [
+            "time_expression",
+            "background"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_63a7acf7429240b8",
+          "score": 2.2576883592019223,
+          "top_role_tags": []
+        },
+        {
+          "rank": 3,
+          "otid": "otid_dd0c2e7b61014491",
+          "score": 2.15194019974036,
+          "best_kpid": "kpid_82e7456402ed4425",
+          "top_role_tags": [
+            "time_expression",
+            "background"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "answer_reject_v3_holdout_reject_0007",
+      "query": "校内健身房平时使用前要预约吗？",
+      "expected_behavior": "reject",
+      "db_absent_evidence_class": "strict_db_absent",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": null,
+      "top_result_otid": null,
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": "low_consistency",
+      "retrieval_reject_score": 0.567,
+      "final_reject_score": 0.567,
+      "retrieval_reject_tier": "boundary_uncertain",
+      "final_reject_tier": "boundary_uncertain",
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "materials",
+        "distribution",
+        "background",
+        "schedule",
+        "publish"
+      ],
+      "weak_match_count": 0,
+      "match_count": 0,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_reject_0008",
+      "query": "外来访客临时进校一般要怎么登记？",
+      "expected_behavior": "reject",
+      "db_absent_evidence_class": "weak_neighbor_but_no_answer_anchor",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": null,
+      "top_result_otid": null,
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": "low_consistency",
+      "retrieval_reject_score": 0.5983952801006995,
+      "final_reject_score": 0.5983952801006995,
+      "retrieval_reject_tier": "boundary_uncertain",
+      "final_reject_tier": "boundary_uncertain",
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "background",
+        "reminder",
+        "post_outcome",
+        "materials",
+        "thesis"
+      ],
+      "weak_match_count": 0,
+      "match_count": 0,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_reject_0009",
+      "query": "校园里哪些位置可以给汽车充电？",
+      "expected_behavior": "reject",
+      "db_absent_evidence_class": "weak_neighbor_but_no_answer_anchor",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": null,
+      "top_result_otid": null,
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": "low_topic_coverage",
+      "retrieval_reject_score": 0.7408181818181818,
+      "final_reject_score": 0.7408181818181818,
+      "retrieval_reject_tier": "hard_reject",
+      "final_reject_tier": "hard_reject",
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "background",
+        "reminder",
+        "post_outcome"
+      ],
+      "weak_match_count": 5,
+      "match_count": 0,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_4735fb66f1714769",
+          "score": 2.372005885225019,
+          "best_kpid": "kpid_3965b34c92c3412f",
+          "top_role_tags": []
+        },
+        {
+          "rank": 2,
+          "otid": "otid_829975851a0045cb",
+          "score": 2.3120883386892617,
+          "best_kpid": "kpid_4d779d9a8c5246a5",
+          "top_role_tags": [
+            "time_expression",
+            "background",
+            "reminder",
+            "post_outcome"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_66d0b0a3af494257",
+          "score": 2.0362125694587836,
+          "top_role_tags": []
+        }
+      ]
+    },
+    {
+      "id": "answer_reject_v3_holdout_reject_0010",
+      "query": "洗衣卡丢失以后要去哪里补卡？",
+      "expected_behavior": "reject",
+      "db_absent_evidence_class": "strict_db_absent",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": false,
+      "false_reject": false,
+      "unsafe_answer": true,
+      "expected_otid": null,
+      "top_result_otid": "otid_c19ddd94e52346c1",
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.5005582289130907,
+      "final_reject_score": 0.5005582289130907,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.66787790954113,
+      "final_top_confidence": 0.66787790954113,
+      "evidence_top_role_tags": [
+        "application_stage",
+        "materials",
+        "email",
+        "post_outcome",
+        "thesis",
+        "time_expression",
+        "schedule",
+        "condition",
+        "procedure",
+        "background"
+      ],
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_c19ddd94e52346c1",
+          "score": 2.396228766484122,
+          "best_kpid": "kpid_33492e2215dd4edc",
+          "top_role_tags": [
+            "time_expression",
+            "schedule",
+            "application_stage",
+            "condition",
+            "thesis",
+            "materials",
+            "email",
+            "post_outcome",
+            "procedure",
+            "background"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_c7dc0e8b08b445e6",
+          "score": 2.363612735687152,
+          "best_kpid": "kpid_60d2c30cd98f44b1",
+          "top_role_tags": [
+            "time_expression",
+            "schedule",
+            "application_stage",
+            "condition",
+            "thesis",
+            "materials",
+            "email",
+            "post_outcome",
+            "background"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_5c9fb358e9324bb6",
+          "score": 2.071618527803721,
+          "best_kpid": "kpid_d55d30640d064964",
+          "top_role_tags": [
+            "time_expression",
+            "schedule",
+            "application_stage",
+            "condition",
+            "thesis",
+            "materials",
+            "email",
+            "post_outcome",
+            "background"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_answer_0016",
+      "query": "2024年广东综评面试入围后，考生应在什么时候登录哪个系统打印准考证？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_9e0e777293cc4d35",
+      "top_result_otid": "otid_9e0e777293cc4d35",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.18000000000000002,
+      "final_reject_score": 0.18000000000000002,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.8990608736872673,
+      "final_top_confidence": 0.8990608736872673,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "materials",
+        "background",
+        "schedule",
+        "publish"
+      ],
+      "weak_match_count": 0,
+      "match_count": 44,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [
+          2024
+        ],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_9e0e777293cc4d35",
+          "score": 4.552320779405139,
+          "best_kpid": "kpid_597d5ce77d9d4038",
+          "top_role_tags": [
+            "time_expression",
+            "materials",
+            "schedule",
+            "background"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_1d0896a191814c1e",
+          "score": 3.9339554469358204,
+          "best_kpid": "kpid_2a1a41879f9a45d7",
+          "top_role_tags": [
+            "time_expression",
+            "background",
+            "publish"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_84df27f6b6114f27",
+          "score": 3.5813889361533042,
+          "best_kpid": "kpid_e7443c074ae5465f",
+          "top_role_tags": [
+            "time_expression",
+            "schedule"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_answer_0017",
+      "query": "2024年广东综评面试报到是哪一天，具体去哪里？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_9e0e777293cc4d35",
+      "top_result_otid": "otid_9e0e777293cc4d35",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.1838,
+      "final_reject_score": 0.1838,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.8773004040122032,
+      "final_top_confidence": 0.8773004040122032,
+      "evidence_top_role_tags": [
+        "background",
+        "time_expression",
+        "materials",
+        "schedule",
+        "post_outcome",
+        "publish"
+      ],
+      "weak_match_count": 0,
+      "match_count": 58,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [
+          2024
+        ],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_9e0e777293cc4d35",
+          "score": 3.63685609347348,
+          "best_kpid": "kpid_597d5ce77d9d4038",
+          "top_role_tags": [
+            "time_expression",
+            "materials",
+            "background"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_9660dcbd700e4367",
+          "score": 3.564413552936071,
+          "best_kpid": "kpid_95345830f3174db0",
+          "top_role_tags": [
+            "schedule",
+            "time_expression",
+            "background",
+            "materials",
+            "post_outcome"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_1d0896a191814c1e",
+          "score": 3.379147991899599,
+          "best_kpid": "kpid_8737527562d94c7a",
+          "top_role_tags": [
+            "time_expression",
+            "background",
+            "publish"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_answer_0018",
+      "query": "2024年广东综评面试采用什么形式，是不是5位专家面试1位考生？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_9e0e777293cc4d35",
+      "top_result_otid": "otid_9660dcbd700e4367",
+      "answer_doc_hit": false,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.19699999999999998,
+      "final_reject_score": 0.19699999999999998,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.839397007226944,
+      "final_top_confidence": 0.839397007226944,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "background",
+        "materials",
+        "post_outcome",
+        "schedule",
+        "publish"
+      ],
+      "weak_match_count": 0,
+      "match_count": 53,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [
+          2024
+        ],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_9660dcbd700e4367",
+          "score": 4.108551050056278,
+          "best_kpid": "kpid_c9d74c96da194113",
+          "top_role_tags": [
+            "time_expression",
+            "background",
+            "schedule",
+            "materials",
+            "post_outcome"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_9e0e777293cc4d35",
+          "score": 3.6299505750550267,
+          "best_kpid": "kpid_a9bbcb44ccb34d0f",
+          "top_role_tags": [
+            "schedule",
+            "time_expression",
+            "materials",
+            "background"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_1d0896a191814c1e",
+          "score": 3.2703313294918153,
+          "best_kpid": "kpid_40a065a2e1954afb",
+          "top_role_tags": [
+            "background",
+            "time_expression",
+            "publish"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_answer_0019",
+      "query": "2024年广东综评面试总共几分钟，分别包含哪些环节？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_9e0e777293cc4d35",
+      "top_result_otid": "otid_9e0e777293cc4d35",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.19699999999999998,
+      "final_reject_score": 0.19699999999999998,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.8662155374884606,
+      "final_top_confidence": 0.8662155374884606,
+      "evidence_top_role_tags": [
+        "schedule",
+        "time_expression",
+        "materials",
+        "background",
+        "publish",
+        "post_outcome"
+      ],
+      "weak_match_count": 0,
+      "match_count": 63,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [
+          2024
+        ],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_9e0e777293cc4d35",
+          "score": 4.055026258931548,
+          "best_kpid": "kpid_c3e27b9e2666459c",
+          "top_role_tags": [
+            "schedule",
+            "background",
+            "time_expression",
+            "materials"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_1d0896a191814c1e",
+          "score": 3.7526319280086007,
+          "best_kpid": "kpid_40a065a2e1954afb",
+          "top_role_tags": [
+            "background",
+            "time_expression",
+            "publish"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_9660dcbd700e4367",
+          "score": 3.6117244445921672,
+          "best_kpid": "kpid_95345830f3174db0",
+          "top_role_tags": [
+            "schedule",
+            "time_expression",
+            "background",
+            "materials",
+            "post_outcome"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_answer_0020",
+      "query": "2024年广东综评面试当天，送考人员能陪同入校吗？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_9e0e777293cc4d35",
+      "top_result_otid": "otid_9e0e777293cc4d35",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.18000000000000002,
+      "final_reject_score": 0.18000000000000002,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.885583832859993,
+      "final_top_confidence": 0.885583832859993,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "materials",
+        "schedule",
+        "background",
+        "post_outcome"
+      ],
+      "weak_match_count": 0,
+      "match_count": 46,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [
+          2024
+        ],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_9e0e777293cc4d35",
+          "score": 4.214314555270348,
+          "best_kpid": "kpid_597d5ce77d9d4038",
+          "top_role_tags": [
+            "time_expression",
+            "materials",
+            "schedule",
+            "background"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_1d0896a191814c1e",
+          "score": 3.2510218133417412,
+          "best_kpid": "kpid_9a171a0e14fd45d8",
+          "top_role_tags": [
+            "background",
+            "time_expression"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_9660dcbd700e4367",
+          "score": 2.948481111814869,
+          "best_kpid": "kpid_aab0d51855fe4e91",
+          "top_role_tags": [
+            "time_expression",
+            "materials",
+            "post_outcome",
+            "background",
+            "schedule"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_answer_0021",
+      "query": "2024年强基计划校测定在哪一天举行，包含哪些考核项目？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_1d0896a191814c1e",
+      "top_result_otid": "otid_1d0896a191814c1e",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.10379999999999998,
+      "final_reject_score": 0.10379999999999998,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.8366034731268883,
+      "final_top_confidence": 0.8366034731268883,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "publish",
+        "background",
+        "post_outcome",
+        "materials"
+      ],
+      "weak_match_count": 0,
+      "match_count": 22,
+      "candidate_count": 4192,
+      "query_intent": {
+        "years": [
+          2024
+        ],
+        "topicIds": [
+          "undergraduate_admission"
+        ],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_1d0896a191814c1e",
+          "score": 4.729168995081182,
+          "best_kpid": "kpid_0534f93bfff44138",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "background"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_1637de59ecdf419c",
+          "score": 2.304296282504278,
+          "best_kpid": "kpid_5d5bf453fe4544b2",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "background",
+            "post_outcome"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_9e0e777293cc4d35",
+          "score": 1.6868690977860272,
+          "best_kpid": "kpid_a67544d14f1547ae",
+          "top_role_tags": [
+            "background",
+            "time_expression",
+            "materials"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_answer_0022",
+      "query": "2024年强基计划考生最晚什么时候前打印准考证，入校要带什么证件？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_1d0896a191814c1e",
+      "top_result_otid": "otid_1d0896a191814c1e",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.1,
+      "final_reject_score": 0.1,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.8455599218606948,
+      "final_top_confidence": 0.8455599218606948,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "background",
+        "materials",
+        "schedule",
+        "post_outcome"
+      ],
+      "weak_match_count": 0,
+      "match_count": 20,
+      "candidate_count": 4192,
+      "query_intent": {
+        "years": [
+          2024
+        ],
+        "topicIds": [
+          "undergraduate_admission"
+        ],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_1d0896a191814c1e",
+          "score": 4.582155790929901,
+          "best_kpid": "kpid_2a1a41879f9a45d7",
+          "top_role_tags": [
+            "time_expression",
+            "background"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_9e0e777293cc4d35",
+          "score": 4.085096376831882,
+          "best_kpid": "kpid_597d5ce77d9d4038",
+          "top_role_tags": [
+            "time_expression",
+            "materials",
+            "schedule",
+            "background"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_9660dcbd700e4367",
+          "score": 3.271175627583275,
+          "best_kpid": "kpid_aab0d51855fe4e91",
+          "top_role_tags": [
+            "time_expression",
+            "materials",
+            "post_outcome",
+            "background"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_answer_0023",
+      "query": "2024年强基计划上午和下午面试分别几点到逸夫楼报到？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_1d0896a191814c1e",
+      "top_result_otid": "otid_1d0896a191814c1e",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.1,
+      "final_reject_score": 0.1,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.806162191927433,
+      "final_top_confidence": 0.806162191927433,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "background",
+        "schedule",
+        "materials",
+        "post_outcome"
+      ],
+      "weak_match_count": 0,
+      "match_count": 20,
+      "candidate_count": 4192,
+      "query_intent": {
+        "years": [
+          2024
+        ],
+        "topicIds": [
+          "undergraduate_admission"
+        ],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_1d0896a191814c1e",
+          "score": 4.786654258723413,
+          "best_kpid": "kpid_8737527562d94c7a",
+          "top_role_tags": [
+            "time_expression",
+            "background"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_9e0e777293cc4d35",
+          "score": 3.686508019408603,
+          "best_kpid": "kpid_c3e27b9e2666459c",
+          "top_role_tags": [
+            "schedule",
+            "background",
+            "time_expression"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_9660dcbd700e4367",
+          "score": 2.824326415421421,
+          "best_kpid": "kpid_95345830f3174db0",
+          "top_role_tags": [
+            "schedule",
+            "time_expression",
+            "background",
+            "materials",
+            "post_outcome"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_answer_0024",
+      "query": "2024年强基计划面试一轮几分钟，具体怎么分配时间？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_1d0896a191814c1e",
+      "top_result_otid": "otid_1d0896a191814c1e",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.1,
+      "final_reject_score": 0.1,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.791470305621624,
+      "final_top_confidence": 0.791470305621624,
+      "evidence_top_role_tags": [
+        "background",
+        "time_expression",
+        "schedule",
+        "materials",
+        "post_outcome"
+      ],
+      "weak_match_count": 0,
+      "match_count": 22,
+      "candidate_count": 4192,
+      "query_intent": {
+        "years": [
+          2024
+        ],
+        "topicIds": [
+          "undergraduate_admission"
+        ],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_1d0896a191814c1e",
+          "score": 4.686805660253226,
+          "best_kpid": "kpid_0534f93bfff44138",
+          "top_role_tags": [
+            "time_expression",
+            "background"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_9e0e777293cc4d35",
+          "score": 4.122038954811143,
+          "best_kpid": "kpid_c3e27b9e2666459c",
+          "top_role_tags": [
+            "schedule",
+            "background",
+            "time_expression"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_9660dcbd700e4367",
+          "score": 3.9020943036701707,
+          "best_kpid": "kpid_95345830f3174db0",
+          "top_role_tags": [
+            "schedule",
+            "time_expression",
+            "background",
+            "materials",
+            "post_outcome"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_answer_0025",
+      "query": "2024年强基计划体测在哪个时段、哪个地点进行？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_1d0896a191814c1e",
+      "top_result_otid": "otid_1d0896a191814c1e",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.264,
+      "final_reject_score": 0.264,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.8081211134791374,
+      "final_top_confidence": 0.8081211134791374,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "background",
+        "publish",
+        "post_outcome"
+      ],
+      "weak_match_count": 0,
+      "match_count": 23,
+      "candidate_count": 4192,
+      "query_intent": {
+        "years": [
+          2024
+        ],
+        "topicIds": [
+          "undergraduate_admission"
+        ],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_1d0896a191814c1e",
+          "score": 4.524085298000762,
+          "best_kpid": "kpid_0534f93bfff44138",
+          "top_role_tags": [
+            "time_expression",
+            "background"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_1637de59ecdf419c",
+          "score": 2.925043049916163,
+          "best_kpid": "kpid_9e0886aafc744296",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "background",
+            "post_outcome"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_9fc8c3cad7a4411e",
+          "score": 2.4330128254567955,
+          "best_kpid": "kpid_78ebf63504e94fbf",
+          "top_role_tags": [
+            "time_expression",
+            "publish"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_answer_0026",
+      "query": "2024年强基计划如果只参加面试没参加体测，还会被录取吗？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_1d0896a191814c1e",
+      "top_result_otid": "otid_1d0896a191814c1e",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.2508,
+      "final_reject_score": 0.2508,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.8245161443948745,
+      "final_top_confidence": 0.8245161443948745,
+      "evidence_top_role_tags": [
+        "background",
+        "time_expression",
+        "publish",
+        "post_outcome"
+      ],
+      "weak_match_count": 0,
+      "match_count": 22,
+      "candidate_count": 4192,
+      "query_intent": {
+        "years": [
+          2024
+        ],
+        "topicIds": [
+          "undergraduate_admission"
+        ],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": true,
+          "hasLatestPolicyState": true,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_1d0896a191814c1e",
+          "score": 4.203626369179799,
+          "best_kpid": "kpid_8737527562d94c7a",
+          "top_role_tags": [
+            "time_expression",
+            "background"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_1637de59ecdf419c",
+          "score": 3.937124627145361,
+          "best_kpid": "kpid_5d5bf453fe4544b2",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "background",
+            "post_outcome"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_395fb889a17b49fa",
+          "score": 3.0123956908473914,
+          "best_kpid": "kpid_49bcc92debc646b1",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "background",
+            "post_outcome"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_answer_0027",
+      "query": "2024年强基计划录取标准是哪天公布的，拟录取还需要满足什么条件？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_1637de59ecdf419c",
+      "top_result_otid": "otid_1637de59ecdf419c",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.10379999999999998,
+      "final_reject_score": 0.10379999999999998,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.8829254448413849,
+      "final_top_confidence": 0.8829254448413849,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "publish",
+        "background",
+        "post_outcome",
+        "announcement_period",
+        "email"
+      ],
+      "weak_match_count": 0,
+      "match_count": 21,
+      "candidate_count": 4192,
+      "query_intent": {
+        "years": [
+          2024
+        ],
+        "topicIds": [
+          "undergraduate_admission"
+        ],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": true,
+          "hasLatestPolicyState": true,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_1637de59ecdf419c",
+          "score": 4.664824576844323,
+          "best_kpid": "kpid_5d5bf453fe4544b2",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "background",
+            "post_outcome"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_1d0896a191814c1e",
+          "score": 3.017650466199361,
+          "best_kpid": "kpid_0534f93bfff44138",
+          "top_role_tags": [
+            "time_expression",
+            "background",
+            "publish"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_994ec6fdfc174122",
+          "score": 1.7663594511393217,
+          "best_kpid": "kpid_759e5806bf274a64",
+          "top_role_tags": [
+            "time_expression",
+            "announcement_period",
+            "email",
+            "background",
+            "publish"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_answer_0028",
+      "query": "2024年强基汉语言文学（古文字学）在浙江的录取综合成绩是多少？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_1637de59ecdf419c",
+      "top_result_otid": "otid_1637de59ecdf419c",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.344,
+      "final_reject_score": 0.344,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.831380121409893,
+      "final_top_confidence": 0.831380121409893,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "publish",
+        "background",
+        "post_outcome"
+      ],
+      "weak_match_count": 0,
+      "match_count": 47,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [
+          2024
+        ],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": true,
+          "hasLatestPolicyState": true,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_1637de59ecdf419c",
+          "score": 4.205575826196547,
+          "best_kpid": "kpid_760242d52a5b4f5a",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "background"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_1d0896a191814c1e",
+          "score": 2.893930348376241,
+          "best_kpid": "kpid_459140a466f24dd0",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "background"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_395fb889a17b49fa",
+          "score": 2.6173679028045513,
+          "best_kpid": "kpid_6cf390b2d0b844d9",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "post_outcome",
+            "background"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_answer_0029",
+      "query": "2024年强基里，广东考生报生物科学专业要达到多少综合成绩？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_1637de59ecdf419c",
+      "top_result_otid": "otid_1637de59ecdf419c",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.344,
+      "final_reject_score": 0.344,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.8799539536237717,
+      "final_top_confidence": 0.8799539536237717,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "publish",
+        "background",
+        "post_outcome"
+      ],
+      "weak_match_count": 0,
+      "match_count": 49,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [
+          2024
+        ],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_1637de59ecdf419c",
+          "score": 4.363529828074121,
+          "best_kpid": "kpid_55d00234efc94ad1",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "background"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_395fb889a17b49fa",
+          "score": 4.040392964305609,
+          "best_kpid": "kpid_5c6c9e2e47964343",
+          "top_role_tags": [
+            "time_expression",
+            "background",
+            "publish",
+            "post_outcome"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_1d0896a191814c1e",
+          "score": 2.1101622136984752,
+          "best_kpid": "kpid_459140a466f24dd0",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "background"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_answer_0030",
+      "query": "2024年强基如果没被正式录取，还能不能继续参加后续高考志愿录取？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_1637de59ecdf419c",
+      "top_result_otid": "otid_1637de59ecdf419c",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.1838,
+      "final_reject_score": 0.1838,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.8375497743487358,
+      "final_top_confidence": 0.8375497743487358,
+      "evidence_top_role_tags": [
+        "post_outcome",
+        "time_expression",
+        "publish",
+        "background",
+        "materials"
+      ],
+      "weak_match_count": 0,
+      "match_count": 60,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [
+          2024
+        ],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": true,
+          "hasLatestPolicyState": true,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_1637de59ecdf419c",
+          "score": 4.065995017160543,
+          "best_kpid": "kpid_221047d3eec94d73",
+          "top_role_tags": [
+            "post_outcome",
+            "time_expression",
+            "publish",
+            "background"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_395fb889a17b49fa",
+          "score": 2.9445748045916464,
+          "best_kpid": "kpid_98b2a9d3bf224910",
+          "top_role_tags": [
+            "publish",
+            "post_outcome",
+            "time_expression",
+            "background"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_2d77227bd2fa473c",
+          "score": 2.5638406427795473,
+          "best_kpid": "kpid_24b87d7b333e4c47",
+          "top_role_tags": [
+            "materials",
+            "post_outcome",
+            "time_expression",
+            "publish",
+            "background"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_reject_0011",
+      "query": "门禁卡失效以后要去哪儿恢复门禁权限？",
+      "expected_behavior": "reject",
+      "db_absent_evidence_class": "strict_db_absent",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": false,
+      "false_reject": false,
+      "unsafe_answer": true,
+      "expected_otid": null,
+      "top_result_otid": "otid_7d9f138aeeb74dac",
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.4178,
+      "final_reject_score": 0.4178,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.6765778593719005,
+      "final_top_confidence": 0.6765778593719005,
+      "evidence_top_role_tags": [
+        "email",
+        "materials"
+      ],
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_7d9f138aeeb74dac",
+          "score": 2.583511715307544,
+          "best_kpid": "kpid_b79b2413d6e04a1e",
+          "top_role_tags": [
+            "email"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_1d27e24124864812",
+          "score": 2.4636977051777778,
+          "best_kpid": "kpid_5c6fa71feb624097",
+          "top_role_tags": [
+            "email"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_2c2fffdc61b0465f",
+          "score": 1.4032747080161687,
+          "best_kpid": "kpid_5f756313a1ea4b07",
+          "top_role_tags": [
+            "materials"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_reject_0012",
+      "query": "学生食堂晚餐一般营业到几点？",
+      "expected_behavior": "reject",
+      "db_absent_evidence_class": "strict_db_absent",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": null,
+      "top_result_otid": null,
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": "low_topic_coverage",
+      "retrieval_reject_score": 0.68,
+      "final_reject_score": 0.68,
+      "retrieval_reject_tier": "hard_reject",
+      "final_reject_tier": "hard_reject",
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "background",
+        "reminder",
+        "post_outcome",
+        "time_expression",
+        "publish"
+      ],
+      "weak_match_count": 5,
+      "match_count": 0,
+      "candidate_count": 2541,
+      "query_intent": {
+        "years": [],
+        "topicIds": [
+          "dining_services"
+        ],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_ae96b4bddb694238",
+          "score": 2.4296482775466886,
+          "best_kpid": "kpid_d52fec97a5314713",
+          "top_role_tags": [
+            "reminder",
+            "post_outcome",
+            "background",
+            "time_expression"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_5be51e75bcee48bd",
+          "score": 2.2190784056268793,
+          "best_kpid": "kpid_994e3aa8e37c4919",
+          "top_role_tags": [
+            "post_outcome",
+            "reminder"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_7476223384934f21",
+          "score": 2.086822041519455,
+          "best_kpid": "kpid_0a32cc7d27c7441e",
+          "top_role_tags": [
+            "background",
+            "reminder",
+            "post_outcome",
+            "publish"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "answer_reject_v3_holdout_reject_0013",
+      "query": "校医院周末可以现场挂号吗？",
+      "expected_behavior": "reject",
+      "db_absent_evidence_class": "strict_db_absent",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": false,
+      "false_reject": false,
+      "unsafe_answer": true,
+      "expected_otid": null,
+      "top_result_otid": "otid_3bd3d86426934a8e",
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.5538,
+      "final_reject_score": 0.5538,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.7454712025821209,
+      "final_top_confidence": 0.7454712025821209,
+      "evidence_top_role_tags": [
+        "publish",
+        "post_outcome",
+        "time_expression",
+        "schedule",
+        "materials",
+        "background",
+        "thesis",
+        "condition"
+      ],
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_3bd3d86426934a8e",
+          "score": 2.5037159983216823,
+          "best_kpid": "kpid_7a32566990c24bc3",
+          "top_role_tags": [
+            "publish",
+            "post_outcome",
+            "time_expression"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_56f2668278df4a1c",
+          "score": 2.3956967112514276,
+          "best_kpid": "kpid_6200a056a5f74a2b",
+          "top_role_tags": [
+            "time_expression",
+            "schedule"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_d2e81434d6754411",
+          "score": 2.319209549911545,
+          "best_kpid": "kpid_232b196e24b24bc7",
+          "top_role_tags": [
+            "time_expression",
+            "condition",
+            "materials",
+            "background",
+            "thesis"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_reject_0014",
+      "query": "学校心理咨询第一次预约通常在哪个平台提交？",
+      "expected_behavior": "reject",
+      "db_absent_evidence_class": "strict_db_absent",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": false,
+      "false_reject": false,
+      "unsafe_answer": true,
+      "expected_otid": null,
+      "top_result_otid": "otid_4b20a5e30c194bbf",
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.5217012987012987,
+      "final_reject_score": 0.5217012987012987,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.7599608637392521,
+      "final_top_confidence": 0.7599608637392521,
+      "evidence_top_role_tags": [
+        "email",
+        "time_expression",
+        "publish",
+        "deadline",
+        "materials",
+        "procedure",
+        "post_outcome",
+        "thesis",
+        "application_stage"
+      ],
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_4b20a5e30c194bbf",
+          "score": 3.1071130669479934,
+          "best_kpid": "kpid_0ee56ef559e048f5",
+          "top_role_tags": [
+            "email",
+            "time_expression",
+            "publish"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_cb188698b7cc422c",
+          "score": 2.9621798227855543,
+          "best_kpid": "kpid_2293f9f34b944e9c",
+          "top_role_tags": [
+            "time_expression",
+            "deadline",
+            "materials",
+            "procedure"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_5c9fb358e9324bb6",
+          "score": 2.4848757997680497,
+          "best_kpid": "kpid_5f95b185dfbe46e8",
+          "top_role_tags": [
+            "materials",
+            "email",
+            "post_outcome",
+            "thesis",
+            "time_expression",
+            "application_stage"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_reject_0015",
+      "query": "宿舍空调遥控器坏了以后去哪里更换？",
+      "expected_behavior": "reject",
+      "db_absent_evidence_class": "strict_db_absent",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": false,
+      "false_reject": false,
+      "unsafe_answer": true,
+      "expected_otid": null,
+      "top_result_otid": "otid_fd269e7b2c434f07",
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.5362727272727272,
+      "final_reject_score": 0.5362727272727272,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.7513175688683986,
+      "final_top_confidence": 0.7513175688683986,
+      "evidence_top_role_tags": [
+        "background",
+        "time_expression",
+        "materials",
+        "email",
+        "publish",
+        "condition",
+        "reminder"
+      ],
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_fd269e7b2c434f07",
+          "score": 3.3191518410554797,
+          "best_kpid": "kpid_114a9bbcbdea4fa1",
+          "top_role_tags": [
+            "background",
+            "time_expression",
+            "materials",
+            "email",
+            "publish"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_1cc5b43210094104",
+          "score": 3.252329097196737,
+          "best_kpid": "kpid_f275bbff6c3d4780",
+          "top_role_tags": [
+            "condition",
+            "background",
+            "time_expression",
+            "publish",
+            "materials",
+            "email",
+            "reminder"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_7476223384934f21",
+          "score": 2.0065185071230327,
+          "best_kpid": "kpid_7a26d0b62ae84775",
+          "top_role_tags": []
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_reject_0016",
+      "query": "宿舍设施报修一般通过哪个系统提交工单？",
+      "expected_behavior": "reject",
+      "db_absent_evidence_class": "strict_db_absent",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": false,
+      "false_reject": false,
+      "unsafe_answer": true,
+      "expected_otid": null,
+      "top_result_otid": "otid_f86cd11add664a2c",
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.5158727272727273,
+      "final_reject_score": 0.5158727272727273,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.742405641078949,
+      "final_top_confidence": 0.742405641078949,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "deadline",
+        "schedule",
+        "materials",
+        "background",
+        "email",
+        "reminder",
+        "procedure"
+      ],
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_f86cd11add664a2c",
+          "score": 2.129035622454482,
+          "best_kpid": "kpid_e09bfaaa96134dd7",
+          "top_role_tags": [
+            "time_expression",
+            "deadline",
+            "schedule",
+            "materials",
+            "background"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_18390f7cb6784527",
+          "score": 1.9358724553684028,
+          "best_kpid": "kpid_d49f07489c6b4abd",
+          "top_role_tags": [
+            "materials",
+            "email",
+            "reminder",
+            "time_expression",
+            "deadline",
+            "schedule",
+            "procedure"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_9c03330f339d4f33",
+          "score": 1.7969073514390157,
+          "best_kpid": "kpid_d13f66d2148e422e",
+          "top_role_tags": [
+            "time_expression",
+            "deadline",
+            "schedule",
+            "materials"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_reject_0017",
+      "query": "失物招领信息平时在哪个平台发布？",
+      "expected_behavior": "reject",
+      "db_absent_evidence_class": "strict_db_absent",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": false,
+      "false_reject": false,
+      "unsafe_answer": true,
+      "expected_otid": null,
+      "top_result_otid": "otid_cb188698b7cc422c",
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.4858,
+      "final_reject_score": 0.4858,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.7165331460535527,
+      "final_top_confidence": 0.7165331460535527,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "deadline",
+        "materials",
+        "procedure",
+        "application_stage",
+        "email",
+        "post_outcome",
+        "thesis"
+      ],
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_cb188698b7cc422c",
+          "score": 2.8396510483980704,
+          "best_kpid": "kpid_2293f9f34b944e9c",
+          "top_role_tags": [
+            "time_expression",
+            "deadline",
+            "materials",
+            "procedure"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_c7dc0e8b08b445e6",
+          "score": 2.7494875730969572,
+          "best_kpid": "kpid_4de8509ea3564531",
+          "top_role_tags": [
+            "time_expression",
+            "application_stage",
+            "materials",
+            "email",
+            "post_outcome",
+            "thesis"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_3be934ddb5624284",
+          "score": 2.6452305786881456,
+          "best_kpid": "kpid_713be3c195e74095",
+          "top_role_tags": [
+            "time_expression",
+            "application_stage",
+            "materials",
+            "email",
+            "post_outcome",
+            "thesis"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_reject_0018",
+      "query": "新生宿舍分配结果一般什么时候可以查询？",
+      "expected_behavior": "reject",
+      "db_absent_evidence_class": "strict_db_absent",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": false,
+      "false_reject": false,
+      "unsafe_answer": true,
+      "expected_otid": null,
+      "top_result_otid": "otid_1cc5b43210094104",
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.550155261663687,
+      "final_reject_score": 0.550155261663687,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.829507999429502,
+      "final_top_confidence": 0.829507999429502,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "materials",
+        "email",
+        "publish",
+        "reminder",
+        "condition",
+        "background"
+      ],
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_0653973ae1784e7e",
+          "score": 2.316303431159378,
+          "top_role_tags": []
+        },
+        {
+          "rank": 2,
+          "otid": "otid_1cc5b43210094104",
+          "score": 2.313956935780731,
+          "best_kpid": "kpid_4354a18231374a97",
+          "top_role_tags": [
+            "time_expression",
+            "materials",
+            "email",
+            "publish",
+            "reminder",
+            "condition",
+            "background"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_fd269e7b2c434f07",
+          "score": 2.2755404412101363,
+          "best_kpid": "kpid_964395802cd34a17",
+          "top_role_tags": [
+            "time_expression",
+            "materials",
+            "email",
+            "publish",
+            "background"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_reject_0019",
+      "query": "访客车辆临时进校停车要不要提前申请？",
+      "expected_behavior": "reject",
+      "db_absent_evidence_class": "weak_neighbor_but_no_answer_anchor",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": null,
+      "top_result_otid": null,
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": "low_consistency",
+      "retrieval_reject_score": 0.5708,
+      "final_reject_score": 0.5708,
+      "retrieval_reject_tier": "boundary_uncertain",
+      "final_reject_tier": "boundary_uncertain",
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "publish",
+        "background",
+        "reminder",
+        "schedule",
+        "materials"
+      ],
+      "weak_match_count": 0,
+      "match_count": 0,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_reject_0020",
+      "query": "校园里汽车充电一般怎么收费？",
+      "expected_behavior": "reject",
+      "db_absent_evidence_class": "weak_neighbor_but_no_answer_anchor",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": null,
+      "top_result_otid": null,
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": "low_consistency",
+      "retrieval_reject_score": 0.6070181818181818,
+      "final_reject_score": 0.6070181818181818,
+      "retrieval_reject_tier": "boundary_uncertain",
+      "final_reject_tier": "boundary_uncertain",
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "materials",
+        "post_outcome",
+        "background",
+        "time_expression",
+        "reminder",
+        "schedule"
+      ],
+      "weak_match_count": 0,
+      "match_count": 0,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_reject_0021",
+      "query": "毕业拍照租学位服之前需要提前预约吗？",
+      "expected_behavior": "reject",
+      "db_absent_evidence_class": "weak_neighbor_but_no_answer_anchor",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": false,
+      "false_reject": false,
+      "unsafe_answer": true,
+      "expected_otid": null,
+      "top_result_otid": "otid_689fe94db6424593",
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.5230727272727272,
+      "final_reject_score": 0.5230727272727272,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.836650337278843,
+      "final_top_confidence": 0.836650337278843,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "materials",
+        "distribution",
+        "schedule",
+        "deadline",
+        "background",
+        "post_outcome",
+        "thesis",
+        "procedure",
+        "application_stage"
+      ],
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_689fe94db6424593",
+          "score": 3.1368682486549924,
+          "best_kpid": "kpid_9b51a08a5cca4874",
+          "top_role_tags": [
+            "time_expression",
+            "materials",
+            "distribution",
+            "schedule"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_29d5fca1c0854c2c",
+          "score": 3.0561672603023355,
+          "best_kpid": "kpid_376678da6a7549ac",
+          "top_role_tags": [
+            "time_expression",
+            "deadline",
+            "background",
+            "post_outcome",
+            "thesis",
+            "procedure"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_93db8141426b4dd3",
+          "score": 2.8775723705810305,
+          "best_kpid": "kpid_c1560959414044a8",
+          "top_role_tags": [
+            "time_expression",
+            "background",
+            "thesis",
+            "application_stage",
+            "materials"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_reject_0022",
+      "query": "团体来校园参观应该向哪个部门预约？",
+      "expected_behavior": "reject",
+      "db_absent_evidence_class": "weak_neighbor_but_no_answer_anchor",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": null,
+      "top_result_otid": null,
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": "low_consistency",
+      "retrieval_reject_score": 0.5899090909090909,
+      "final_reject_score": 0.5899090909090909,
+      "retrieval_reject_tier": "boundary_uncertain",
+      "final_reject_tier": "boundary_uncertain",
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "reminder",
+        "post_outcome",
+        "materials"
+      ],
+      "weak_match_count": 0,
+      "match_count": 0,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v3_holdout_reject_0023",
+      "query": "校内健身房如果想办月卡，一般去哪里办理？",
+      "expected_behavior": "reject",
+      "db_absent_evidence_class": "strict_db_absent",
+      "predicted_behavior": "reject",
+      "retrieval_behavior": "reject",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": null,
+      "top_result_otid": null,
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": "low_topic_coverage",
+      "retrieval_reject_score": 0.7473636363636362,
+      "final_reject_score": 0.7473636363636362,
+      "retrieval_reject_tier": "hard_reject",
+      "final_reject_tier": "hard_reject",
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "post_outcome"
+      ],
+      "weak_match_count": 5,
+      "match_count": 0,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [],
+      "top_weak_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_a871b72be7c14bb1",
+          "score": 2.932691925615946,
+          "best_kpid": "kpid_2fb9519646cc4d05",
+          "top_role_tags": []
+        },
+        {
+          "rank": 2,
+          "otid": "otid_9f27e1eb794a4eab",
+          "score": 2.442469597609318,
+          "best_kpid": "kpid_3b09f70c5d7b4586",
+          "top_role_tags": [
+            "post_outcome"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_e7c279c2d42f4293",
+          "score": 2.4053395282660093,
+          "best_kpid": "kpid_21d8c6ec182048fd",
+          "top_role_tags": []
+        }
+      ]
+    },
+    {
+      "id": "answer_reject_v3_holdout_reject_0024",
+      "query": "宿舍热水设备故障后应该联系哪里维修？",
+      "expected_behavior": "reject",
+      "db_absent_evidence_class": "weak_neighbor_but_no_answer_anchor",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": false,
+      "false_reject": false,
+      "unsafe_answer": true,
+      "expected_otid": null,
+      "top_result_otid": "otid_fd269e7b2c434f07",
+      "answer_doc_hit": null,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.5428181818181818,
+      "final_reject_score": 0.5428181818181818,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": 0.7630592554807663,
+      "final_top_confidence": 0.7630592554807663,
+      "evidence_top_role_tags": [
+        "background",
+        "time_expression",
+        "materials",
+        "email",
+        "publish",
+        "condition",
+        "reminder",
+        "schedule"
+      ],
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 18899,
+      "query_intent": {
+        "years": [],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_fd269e7b2c434f07",
+          "score": 3.0589486317732755,
+          "best_kpid": "kpid_5926ff4101f64473",
+          "top_role_tags": [
+            "background",
+            "time_expression",
+            "materials",
+            "email",
+            "publish"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_1cc5b43210094104",
+          "score": 2.922444875832771,
+          "best_kpid": "kpid_f275bbff6c3d4780",
+          "top_role_tags": [
+            "condition",
+            "background",
+            "time_expression",
+            "materials",
+            "email",
+            "publish",
+            "reminder"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_59692ec3fc384c64",
+          "score": 1.8237498588316248,
+          "best_kpid": "kpid_b4f61967a74b43ee",
+          "top_role_tags": [
+            "time_expression",
+            "schedule"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    }
+  ]
+}
