@@ -46,7 +46,6 @@ let metadataList: Metadata[] = [];
 let vectorMatrix: Int8Array | null = null;
 let globalBM25Stats: BM25Stats | null = null;
 let scopeSpecificityWordIdToTerm = new Map<number, string>();
-let directAnswerEvidenceWordIdToTerm = new Map<number, string>();
 let topicPartitionIndex: TopicPartitionIndex = {
     topicCandidateIndex: new Map<string, number[]>(),
     unlabeledCandidateIndices: [],
@@ -111,10 +110,7 @@ async function handleInit(payload: any, taskId?: string) {
         const vocabList: string[] = rawMetadata.vocab || [];
         vocabMap.clear();
         vocabList.forEach((word, index) => vocabMap.set(word, index));
-        ({
-            scopeSpecificityWordIdToTerm,
-            directAnswerEvidenceWordIdToTerm,
-        } = buildPipelineTermMaps(vocabMap));
+        ({ scopeSpecificityWordIdToTerm } = buildPipelineTermMaps(vocabMap));
         topicPartitionIndex = buildTopicPartitionIndex(metadataList);
 
         self.postMessage({ taskId, status: 'loading', message: '构建 BM25 统计...' });
@@ -178,7 +174,6 @@ async function handleSearch(query: string, taskId?: string) {
             fetchDocumentsFromApi(documentQuery, otids),
         termMaps: {
             scopeSpecificityWordIdToTerm,
-            directAnswerEvidenceWordIdToTerm,
         },
         preset: FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET,
         onStatus: (message) => {

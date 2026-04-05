@@ -16,6 +16,7 @@ import {
     type QConfusionMode,
 } from "../src/worker/vector_engine.ts";
 import { fmmTokenize } from "../src/worker/fmm_tokenize.ts";
+import { FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET } from "../src/worker/search_pipeline.ts";
 import {
     ACTIVE_MAIN_DB_VERSION,
     DEFAULT_QUERY_EMBED_BATCH_SIZE,
@@ -35,6 +36,10 @@ import {
     resolveBackendArticlesFile,
     resolveBackendKnowledgePointsFile,
 } from "./kb_version_paths.ts";
+import {
+    buildGranularityResultFileName,
+    resolveNamedDatasetProfile,
+} from "./result_naming.ts";
 import { updateCurrentResultRegistry } from "./result_registry.ts";
 
 type DatasetCase = EvalDatasetCase;
@@ -265,7 +270,8 @@ type ComboReport = {
 type Report = {
     generatedAt: string;
     mainDbVersion: string;
-    experimentTrack?: "default" | "minimal_first";
+    experimentTrack?: "default" | "minimal_first" | "frontend_runtime";
+    pipelinePresetName?: string;
     minimalBaselineMode?: boolean;
     minimalAddYear?: boolean;
     minimalAddPhase?: boolean;
@@ -298,6 +304,8 @@ type Report = {
     datasetMode: "split" | "single_file" | "named_group";
     datasetKey: string;
     datasetLabel: string;
+    datasetAlias?: string;
+    datasetDisplayName?: string;
     datasetGroups: Array<{
         key: string;
         label: string;
@@ -326,10 +334,41 @@ type Report = {
     combos: ComboReport[];
 };
 
+function parseCliDatasetTargetKey():
+    | GranularityDatasetTargetKey
+    | undefined {
+    const args = process.argv.slice(2);
+    for (let index = 0; index < args.length; index += 1) {
+        const current = args[index];
+        if (current === "--dataset") {
+            const next = args[index + 1];
+            if (next) {
+                return next as GranularityDatasetTargetKey;
+            }
+        }
+        if (current.startsWith("--dataset=")) {
+            const [, value] = current.split("=", 2);
+            if (value) {
+                return value as GranularityDatasetTargetKey;
+            }
+        }
+    }
+
+    const positional = args.find((item) => !item.startsWith("--"));
+    if (positional) {
+        return positional as GranularityDatasetTargetKey;
+    }
+
+    return undefined;
+}
+
 const DATASET_VERSION = process.env.SUASK_EVAL_DATASET_VERSION || "granularity";
 const DATASET_FILE = process.env.SUASK_EVAL_DATASET_FILE;
 const DATASET_TARGET_KEY = (
-    process.env.SUASK_EVAL_DATASET_TARGET || "main_bench_120"
+    process.env.SUASK_EVAL_DATASET_TARGET_KEY ||
+    process.env.SUASK_EVAL_DATASET_TARGET ||
+    parseCliDatasetTargetKey() ||
+    "main_bench_120"
 ) as GranularityDatasetTargetKey;
 const SINGLE_FILE_AS_ALL = process.env.SUASK_EVAL_SINGLE_FILE_AS_ALL !== "0";
 const DATASET_CONFIG = resolveEvalDatasetConfig({
@@ -338,6 +377,7 @@ const DATASET_CONFIG = resolveEvalDatasetConfig({
     singleFileAsAll: SINGLE_FILE_AS_ALL,
     datasetTargetKey: DATASET_TARGET_KEY,
 });
+const DATASET_PROFILE = resolveNamedDatasetProfile(DATASET_CONFIG.datasetKey);
 const LIMIT_PER_DATASET = Number.parseInt(
     process.env.SUASK_EVAL_LIMIT_PER_DATASET || "",
     10,
@@ -394,13 +434,23 @@ const SKIP_RESULT_REGISTRY_UPDATE =
 const EXPERIMENT_TRACK = (
     process.env.SUASK_EXPERIMENT_TRACK === "minimal_first"
         ? "minimal_first"
-        : "default"
-) as "default" | "minimal_first";
+        : process.env.SUASK_EXPERIMENT_TRACK === "frontend_runtime"
+          ? "frontend_runtime"
+          : process.env.SUASK_EXPERIMENT_TRACK === "default"
+            ? "default"
+            : "frontend_runtime"
+) as "default" | "minimal_first" | "frontend_runtime";
 const MINIMAL_BASELINE_MODE =
     process.env.SUASK_MINIMAL_BASELINE === "1" ||
-    EXPERIMENT_TRACK === "minimal_first";
-const MINIMAL_ADD_YEAR = process.env.SUASK_MINIMAL_ADD_YEAR === "1";
-const MINIMAL_ADD_PHASE = process.env.SUASK_MINIMAL_ADD_PHASE === "1";
+    EXPERIMENT_TRACK === "minimal_first" ||
+    EXPERIMENT_TRACK === "frontend_runtime";
+const MINIMAL_ADD_YEAR =
+    process.env.SUASK_MINIMAL_ADD_YEAR === "1" ||
+    EXPERIMENT_TRACK === "frontend_runtime" ||
+    FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval.enableExplicitYearFilter;
+const MINIMAL_ADD_PHASE =
+    EXPERIMENT_TRACK === "frontend_runtime" ||
+    process.env.SUASK_MINIMAL_ADD_PHASE === "1";
 const MINIMAL_ADD_ASPECT = process.env.SUASK_MINIMAL_ADD_ASPECT === "1";
 const MINIMAL_DISABLE_DOC_MULTI =
     process.env.SUASK_MINIMAL_DISABLE_DOC_MULTI === "1";
@@ -3573,6 +3623,7 @@ function formatSupportCoverageLine(metrics: SupportCoverageMetrics): string {
 async function main() {
     console.log("Loading evaluation engine...");
     console.log(`Active main DB version: ${ACTIVE_MAIN_DB_VERSION}`);
+    console.log(`Dataset target key: ${DATASET_TARGET_KEY}`);
     console.log(`Experiment track: ${EXPERIMENT_TRACK}`);
     console.log(`OT dense mode: ${OT_DENSE_MODE}`);
     console.log(`Minimal baseline mode: ${MINIMAL_BASELINE_MODE ? "on" : "off"}`);
@@ -3611,6 +3662,10 @@ async function main() {
         generatedAt: new Date().toISOString(),
         mainDbVersion: ACTIVE_MAIN_DB_VERSION,
         experimentTrack: EXPERIMENT_TRACK !== "default" ? EXPERIMENT_TRACK : undefined,
+        pipelinePresetName:
+            EXPERIMENT_TRACK === "frontend_runtime"
+                ? FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.name
+                : undefined,
         minimalBaselineMode: MINIMAL_BASELINE_MODE || undefined,
         minimalAddYear: MINIMAL_ADD_YEAR || undefined,
         minimalAddPhase: MINIMAL_ADD_PHASE || undefined,
@@ -3656,6 +3711,8 @@ async function main() {
         datasetMode: DATASET_CONFIG.datasetMode,
         datasetKey: DATASET_CONFIG.datasetKey,
         datasetLabel: DATASET_CONFIG.datasetLabel,
+        datasetAlias: DATASET_PROFILE.alias,
+        datasetDisplayName: DATASET_PROFILE.displayName,
         datasetGroups: DATASET_CONFIG.groups.map((group) => ({
             key: group.key,
             label: group.label,
@@ -3737,23 +3794,28 @@ async function main() {
 
     const outputPath = path.join(
         resultsDir,
-        `granularity_mix_${DATASET_CONFIG.datasetKey}_top${Number.isFinite(TOP_HYBRID_LIMIT) && TOP_HYBRID_LIMIT > 0 ? TOP_HYBRID_LIMIT : 1000}${formatExperimentTrackSlug()}_${MINIMAL_BASELINE_MODE ? "minimal" : KP_AGGREGATION_MODE === "max_plus_topn" ? `kpagg-top${Number.isFinite(KP_TOP_N) && KP_TOP_N > 0 ? KP_TOP_N : 3}-w${(Number.isFinite(KP_TAIL_WEIGHT) && KP_TAIL_WEIGHT >= 0 ? KP_TAIL_WEIGHT : 0.35).toFixed(2).replace(".", "")}` : "kpagg-max"}${formatMinimalAdditionsSlug()}_lex${LEXICAL_BONUS_MODE}${formatLexicalTypeMultiplierSlug()}_${formatOtDenseModeSlug()}${formatQueryStyleModeSlug()}${formatKpStyleModeSlug()}${formatQConfusionModeSlug()}${formatFusionModeSlug()}${formatFixedComboWeightsSlug()}${Number.isFinite(Q_PER_DOC_CAP) && Q_PER_DOC_CAP > 0 ? `_qcap${Q_PER_DOC_CAP}` : ""}${Number.isFinite(KP_PER_DOC_CAP) && KP_PER_DOC_CAP > 0 ? `_kpcap${KP_PER_DOC_CAP}` : ""}_onlinekprole${MINIMAL_BASELINE_MODE ? "off" : ONLINE_KP_ROLE_RERANK_MODE}${!MINIMAL_BASELINE_MODE && ONLINE_KP_ROLE_RERANK_MODE === "feature" ? `-w${(Number.isFinite(ONLINE_KP_ROLE_DOC_WEIGHT) && ONLINE_KP_ROLE_DOC_WEIGHT >= 0 ? ONLINE_KP_ROLE_DOC_WEIGHT : 0.35).toFixed(2).replace(".", "")}` : ""}_kprerank${MINIMAL_BASELINE_MODE ? "none" : KP_CANDIDATE_RERANK_MODE}_docrerank${MINIMAL_BASELINE_MODE ? "none" : formatDocPostRerankSlug()}_${Date.now()}.json`,
+        buildGranularityResultFileName(DATASET_CONFIG.datasetKey, Date.now()),
     );
     fs.writeFileSync(outputPath, JSON.stringify(report, null, 2), "utf-8");
     if (
         !SKIP_RESULT_REGISTRY_UPDATE &&
-        EXPERIMENT_TRACK === "default" &&
+        (EXPERIMENT_TRACK === "default" ||
+            EXPERIMENT_TRACK === "frontend_runtime") &&
         ACTIVE_MAIN_DB_VERSION === "main_v2_plus" &&
         OT_DENSE_MODE === "original"
     ) {
         updateCurrentResultRegistry({
             datasetName: DATASET_CONFIG.datasetKey,
+            datasetAlias: DATASET_PROFILE.alias,
+            datasetDisplayName: DATASET_PROFILE.displayName,
             datasetFile: DATASET_FILE || DATASET_CONFIG.allSources[0]?.path || "",
             outputPath,
             sourceScript: "eval_granularity_mix.ts",
             note: hasIndependentHoldout
                 ? "当前结果基于旧式 tune/holdout 分流口径导出。"
-                : `当前结果基于单冻结集入口 ${DATASET_CONFIG.datasetLabel} 导出，不再默认按 tune/holdout 切分。`,
+                : EXPERIMENT_TRACK === "frontend_runtime"
+                  ? `当前结果已对齐前端 runtime preset ${FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.name}，基于单冻结集入口 ${DATASET_CONFIG.datasetLabel} 导出。`
+                  : `当前结果基于单冻结集入口 ${DATASET_CONFIG.datasetLabel} 导出，不再默认按 tune/holdout 切分。`,
         });
     } else {
         console.log(

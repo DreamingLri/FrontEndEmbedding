@@ -7,7 +7,7 @@ import {
     type AnswerRejectCase,
 } from "./answer_reject_dataset.ts";
 import {
-    CANONICAL_PIPELINE_PRESET,
+    FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET,
     buildPipelineTermMaps,
     buildSearchPipelineQueryContext,
     resolvePipelinePresetByName,
@@ -21,6 +21,10 @@ import {
 } from "./frontend_eval_engine.ts";
 import { CURRENT_EVAL_DATASET_FILES } from "./current_eval_targets.ts";
 import { createLocalDocumentLoader } from "./local_document_provider.ts";
+import {
+    buildAnswerRejectResultFileName,
+    resolveNamedDatasetProfile,
+} from "./result_naming.ts";
 import { updateCurrentResultRegistry } from "./result_registry.ts";
 
 type CaseReport = {
@@ -101,6 +105,8 @@ type Report = {
     generatedAt: string;
     datasetFile: string;
     datasetName: string;
+    datasetAlias?: string;
+    datasetDisplayName?: string;
     total: number;
     config: {
         pipelineVersion: string;
@@ -119,10 +125,11 @@ const DATASET_FILE = path.resolve(
 const RESULTS_DIR = path.resolve(process.cwd(), "./scripts/results");
 const CURRENT_TIMESTAMP = Date.now() / 1000;
 const DEFAULT_REPORT_NOTE =
-    "当前报告直接调用统一 full pipeline，默认数据集固定为未看过的 answer_reject v4 frozen holdout。";
+    "当前报告默认对齐前端 runtime preset，数据集固定为未看过的 answer_reject v4 frozen holdout。";
 const REPORT_NOTE = process.env.SUASK_ANSWER_REJECT_NOTE || DEFAULT_REPORT_NOTE;
 const PIPELINE_PRESET_NAME =
-    process.env.SUASK_PIPELINE_PRESET || CANONICAL_PIPELINE_PRESET.name;
+    process.env.SUASK_PIPELINE_PRESET ||
+    FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.name;
 const EVAL_PRESET = resolvePipelinePresetByName(PIPELINE_PRESET_NAME);
 
 function safeRate(numerator: number, denominator: number): number {
@@ -255,6 +262,7 @@ function buildSummary(caseReports: CaseReport[]): Summary {
 
 async function main() {
     const datasetName = path.basename(DATASET_FILE, path.extname(DATASET_FILE));
+    const datasetProfile = resolveNamedDatasetProfile(datasetName);
     const { cases: testCases, datasetNote } = loadAnswerRejectDataset(DATASET_FILE);
 
     console.log(`Loading answer_reject dataset: ${DATASET_FILE}`);
@@ -415,6 +423,8 @@ async function main() {
         generatedAt: new Date().toISOString(),
         datasetFile: DATASET_FILE,
         datasetName,
+        datasetAlias: datasetProfile.alias,
+        datasetDisplayName: datasetProfile.displayName,
         total: caseReports.length,
         config: {
             pipelineVersion: EVAL_PRESET.name,
@@ -428,11 +438,13 @@ async function main() {
     fs.mkdirSync(RESULTS_DIR, { recursive: true });
     const outputPath = path.join(
         RESULTS_DIR,
-        `answer_reject_${datasetName}_${Date.now()}.json`,
+        buildAnswerRejectResultFileName(datasetName, Date.now()),
     );
     fs.writeFileSync(outputPath, JSON.stringify(report, null, 2), "utf-8");
     updateCurrentResultRegistry({
         datasetName,
+        datasetAlias: datasetProfile.alias,
+        datasetDisplayName: datasetProfile.displayName,
         datasetFile: DATASET_FILE,
         outputPath,
         sourceScript: "eval_answer_reject.ts",

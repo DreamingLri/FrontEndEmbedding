@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
+import { performance } from "perf_hooks";
 
 import {
     RRF_K,
@@ -11,7 +12,6 @@ import {
     type BM25Stats,
     type Metadata,
 } from "../src/worker/vector_engine.ts";
-import { getCandidateIndicesForQuery } from "../src/worker/topic_partition.ts";
 import { fmmTokenize } from "../src/worker/fmm_tokenize.ts";
 import {
     FRONTEND_MODEL_NAME,
@@ -24,7 +24,11 @@ import {
     embedQueries as embedFrontendQueries,
     loadFrontendEvalEngine,
 } from "./frontend_eval_engine.ts";
-import { resolveBackendArticlesFile } from "./kb_version_paths.ts";
+import { FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET } from "../src/worker/search_pipeline.ts";
+import {
+    buildStandardBaselinesResultFileName,
+    resolveNamedDatasetProfile,
+} from "./result_naming.ts";
 
 type DatasetCase = EvalDatasetCase & {
     id?: string;
@@ -57,6 +61,7 @@ type PerCaseResult = {
     id?: string;
     query: string;
     expected_otid: string;
+    elapsedMs: number;
     rank: number | null;
     hitAt1: boolean;
     reciprocalRank: number;
@@ -85,10 +90,6 @@ type MetricInterval = {
 type ModelFamily =
     | "sparse"
     | "dense"
-    | "hybrid"
-    | "passage"
-    | "sliding_window"
-    | "metadata_filter"
     | "structured";
 
 type ModelReport = {
@@ -96,6 +97,13 @@ type ModelReport = {
     family: ModelFamily;
     description: string;
     metrics: MetricSummary;
+    timing: {
+        avgMs: number;
+        p50Ms: number;
+        p95Ms: number;
+        maxMs: number;
+        totalMs: number;
+    };
     hitAt1Interval95: MetricInterval;
     mrrInterval95: MetricInterval;
     perCase: PerCaseResult[];
@@ -117,6 +125,8 @@ type PairwiseComparison = {
 type DatasetReport = {
     datasetKey: DatasetTargetKey;
     datasetLabel: string;
+    datasetAlias?: string;
+    datasetDisplayName?: string;
     datasetFile: string;
     caseCount: number;
     bestStandardBaseline: string;
@@ -129,15 +139,7 @@ type Report = {
     embeddingModel: string;
     bootstrapIterations: number;
     randomizationIterations: number;
-    slidingWindowConfig: {
-        windowSize: number;
-        overlap: number;
-        stride: number;
-        batchSize: number;
-        docCount: number;
-        windowCount: number;
-        missingDocCount: number;
-    };
+    timingNote: string;
     datasets: DatasetReport[];
 };
 
@@ -148,18 +150,6 @@ type CorpusView = {
     kpBm25Stats: BM25Stats;
     otIndices: number[];
     kpIndices: number[];
-};
-
-type BackendArticleRecord = {
-    otid?: string;
-    ot_text?: string;
-};
-
-type SlidingWindowCorpus = {
-    windowOtids: string[];
-    vectors: Float32Array[];
-    windowCountByOtid: Map<string, number>;
-    missingOtids: string[];
 };
 
 type ScoredMeta = {
@@ -183,18 +173,6 @@ const RANDOMIZATION_ITERATIONS = Number.parseInt(
     10,
 );
 const RNG_SEED = Number.parseInt(process.env.SUASK_RANDOM_SEED || "", 10);
-const SLIDING_WINDOW_SIZE = Number.parseInt(
-    process.env.SUASK_SLIDING_WINDOW_SIZE || "",
-    10,
-);
-const SLIDING_WINDOW_OVERLAP = Number.parseInt(
-    process.env.SUASK_SLIDING_WINDOW_OVERLAP || "",
-    10,
-);
-const SLIDING_WINDOW_BATCH_SIZE = Number.parseInt(
-    process.env.SUASK_SLIDING_WINDOW_BATCH_SIZE || "",
-    10,
-);
 
 const SAFE_TOP_MATCH_COUNT =
     Number.isFinite(TOP_MATCH_COUNT) && TOP_MATCH_COUNT > 0 ? TOP_MATCH_COUNT : 5;
@@ -208,22 +186,6 @@ const SAFE_RANDOMIZATION_ITERATIONS =
         : 10000;
 const SAFE_RANDOM_SEED =
     Number.isFinite(RNG_SEED) && RNG_SEED > 0 ? RNG_SEED : 20260331;
-const SAFE_SLIDING_WINDOW_SIZE =
-    Number.isFinite(SLIDING_WINDOW_SIZE) && SLIDING_WINDOW_SIZE >= 64
-        ? Math.floor(SLIDING_WINDOW_SIZE)
-        : 384;
-const SAFE_SLIDING_WINDOW_OVERLAP =
-    Number.isFinite(SLIDING_WINDOW_OVERLAP) && SLIDING_WINDOW_OVERLAP >= 0
-        ? Math.min(Math.floor(SLIDING_WINDOW_OVERLAP), SAFE_SLIDING_WINDOW_SIZE - 1)
-        : 128;
-const SAFE_SLIDING_WINDOW_STRIDE = Math.max(
-    1,
-    SAFE_SLIDING_WINDOW_SIZE - SAFE_SLIDING_WINDOW_OVERLAP,
-);
-const SAFE_SLIDING_WINDOW_BATCH_SIZE =
-    Number.isFinite(SLIDING_WINDOW_BATCH_SIZE) && SLIDING_WINDOW_BATCH_SIZE > 0
-        ? Math.floor(SLIDING_WINDOW_BATCH_SIZE)
-        : 16;
 
 function resolveDatasetTarget(key: DatasetTargetKey): DatasetTarget | null {
     try {
@@ -262,9 +224,7 @@ const STRUCTURED_KP_OT_WEIGHTS = {
 };
 
 const STRUCTURED_Q_KP_OT_WEIGHTS = {
-    Q: 0.3333333333333333,
-    KP: 0.13333333333333333,
-    OT: 0.5333333333333333,
+    ...FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval.weights,
 };
 
 let vocabMap = new Map<string, number>();
@@ -278,7 +238,6 @@ let topicPartitionIndex: Awaited<
 >["topicPartitionIndex"] | null = null;
 let extractor: Awaited<ReturnType<typeof loadFrontendEvalEngine>>["extractor"] | null =
     null;
-let slidingWindowCorpus: SlidingWindowCorpus | null = null;
 
 function parseDatasetTargets(raw: string): DatasetTarget[] {
     const requested = raw
@@ -357,6 +316,19 @@ function buildMetricSummary(perCase: readonly PerCaseResult[]): MetricSummary {
         hitAt3: (hitAt3Count / total) * 100,
         hitAt5: (hitAt5Count / total) * 100,
         mrr: reciprocalRankSum / total,
+    };
+}
+
+function buildTimingSummary(perCase: readonly PerCaseResult[]) {
+    const elapsedValues = perCase.map((item) => item.elapsedMs);
+    const sortedValues = sortNumeric([...elapsedValues]);
+    const totalMs = elapsedValues.reduce((sum, value) => sum + value, 0);
+    return {
+        avgMs: perCase.length > 0 ? totalMs / perCase.length : 0,
+        p50Ms: percentile(sortedValues, 0.5),
+        p95Ms: percentile(sortedValues, 0.95),
+        maxMs: sortedValues.length > 0 ? sortedValues[sortedValues.length - 1] : 0,
+        totalMs,
     };
 }
 
@@ -524,121 +496,6 @@ function dotVectorPair(queryVector: Float32Array, candidateVector: Float32Array)
     return score;
 }
 
-function loadBackendArticleRecords(): BackendArticleRecord[] {
-    const articlesPath = path.resolve(process.cwd(), resolveBackendArticlesFile());
-    return JSON.parse(fs.readFileSync(articlesPath, "utf-8")) as BackendArticleRecord[];
-}
-
-async function tokenizeTextWithoutSpecialTokens(text: string): Promise<number[]> {
-    if (!extractor) {
-        throw new Error("Extractor not initialized.");
-    }
-
-    const tokenizerOutput = await extractor.tokenizer(text, {
-        truncation: false,
-        add_special_tokens: false,
-    });
-    return Array.from(tokenizerOutput.input_ids.data).map((item) => Number(item));
-}
-
-function buildSlidingWindowTexts(
-    text: string,
-    tokenIds: number[],
-): string[] {
-    if (!extractor) {
-        throw new Error("Extractor not initialized.");
-    }
-
-    if (tokenIds.length <= SAFE_SLIDING_WINDOW_SIZE) {
-        return text.trim() ? [text] : [];
-    }
-
-    const windows: string[] = [];
-    for (
-        let start = 0;
-        start < tokenIds.length;
-        start += SAFE_SLIDING_WINDOW_STRIDE
-    ) {
-        const end = Math.min(start + SAFE_SLIDING_WINDOW_SIZE, tokenIds.length);
-        const windowIds = tokenIds.slice(start, end);
-        if (windowIds.length === 0) {
-            continue;
-        }
-
-        const decoded = extractor.tokenizer.decode(windowIds);
-        if (decoded.trim()) {
-            windows.push(decoded);
-        }
-
-        if (end >= tokenIds.length) {
-            break;
-        }
-    }
-
-    return windows.length > 0 ? windows : (text.trim() ? [text] : []);
-}
-
-async function buildSlidingWindowCorpus(): Promise<SlidingWindowCorpus> {
-    if (!corpusView || !extractor) {
-        throw new Error("Sliding window dependencies not initialized.");
-    }
-
-    const otidSet = new Set(corpusView.otMetadata.map((item) => item.id));
-    const windowTexts: string[] = [];
-    const windowOtids: string[] = [];
-    const windowCountByOtid = new Map<string, number>();
-    const articleRecords = loadBackendArticleRecords();
-
-    console.log(
-        `构建 OT 滑窗语料: window=${SAFE_SLIDING_WINDOW_SIZE}, overlap=${SAFE_SLIDING_WINDOW_OVERLAP}, stride=${SAFE_SLIDING_WINDOW_STRIDE}`,
-    );
-
-    for (const article of articleRecords) {
-        const otid = article.otid;
-        const otText = article.ot_text || "";
-        if (!otid || !otidSet.has(otid) || !otText.trim()) {
-            continue;
-        }
-
-        const tokenIds = await tokenizeTextWithoutSpecialTokens(otText);
-        const windows = buildSlidingWindowTexts(otText, tokenIds);
-        if (windows.length === 0) {
-            continue;
-        }
-
-        windowCountByOtid.set(otid, windows.length);
-        windows.forEach((windowText) => {
-            windowOtids.push(otid);
-            windowTexts.push(windowText);
-        });
-    }
-
-    const missingOtids = corpusView.otMetadata
-        .map((item) => item.id)
-        .filter((otid) => !windowCountByOtid.has(otid));
-
-    console.log(
-        `OT 滑窗构建完成: ${windowCountByOtid.size} 篇文档, ${windowTexts.length} 个窗口` +
-            (missingOtids.length > 0 ? `, 缺失 ${missingOtids.length} 篇` : ""),
-    );
-
-    const vectors = await embedFrontendQueries(extractor, windowTexts, dimensions, {
-        batchSize: SAFE_SLIDING_WINDOW_BATCH_SIZE,
-        onProgress: (done, total) => {
-            if (done === total || done === Math.min(total, SAFE_SLIDING_WINDOW_BATCH_SIZE)) {
-                console.log(`OT 滑窗向量化进度: ${done}/${total}`);
-            }
-        },
-    });
-
-    return {
-        windowOtids,
-        vectors,
-        windowCountByOtid,
-        missingOtids,
-    };
-}
-
 async function loadEngine() {
     const engine = await loadFrontendEvalEngine();
     vocabMap = engine.vocabMap;
@@ -649,7 +506,6 @@ async function loadEngine() {
     extractor = engine.extractor;
     corpusView = resolveCorpusView(metadataList);
     allMetadataBm25Stats = engine.bm25Stats;
-    slidingWindowCorpus = await buildSlidingWindowCorpus();
 }
 
 async function buildQueryCache(testCases: DatasetCase[]): Promise<QueryCacheItem[]> {
@@ -762,142 +618,6 @@ function buildDirectRanking(scored: readonly ScoredMeta[]): RankedDoc[] {
     }));
 }
 
-function buildRrfRanking(
-    dense: readonly ScoredMeta[],
-    sparse: readonly ScoredMeta[],
-): RankedDoc[] {
-    const scores = new Map<string, number>();
-
-    dense.forEach((item, index) => {
-        scores.set(item.meta.id, (scores.get(item.meta.id) || 0) + 1 / (RRF_K + index + 1));
-    });
-
-    sparse.forEach((item, index) => {
-        if (item.score <= 0) {
-            return;
-        }
-        scores.set(item.meta.id, (scores.get(item.meta.id) || 0) + 1 / (RRF_K + index + 1));
-    });
-
-    return dense
-        .map((item) => ({
-            otid: item.meta.id,
-            score: scores.get(item.meta.id) || 0,
-        }))
-        .sort((a, b) => b.score - a.score);
-}
-
-function filterOtMetadataByTopic(
-    queryIntent: ReturnType<typeof parseQueryIntent>,
-): Metadata[] {
-    if (!topicPartitionIndex) {
-        throw new Error("Topic partition index not initialized.");
-    }
-
-    const candidateIndices = getCandidateIndicesForQuery(
-        queryIntent,
-        topicPartitionIndex,
-    );
-    if (!candidateIndices || candidateIndices.length === 0) {
-        return corpusView?.otMetadata || [];
-    }
-
-    const allowedSet = new Set(candidateIndices);
-    const filtered = metadataList.filter(
-        (item, index) => item.type === "OT" && allowedSet.has(index),
-    );
-
-    return filtered.length > 0 ? filtered : corpusView?.otMetadata || [];
-}
-
-function buildPassageHybridRanking(query: QueryCacheItem): RankedDoc[] {
-    if (!corpusView) {
-        throw new Error("Corpus view not initialized.");
-    }
-
-    const scored = scoreDirectMetadata(
-        query,
-        corpusView.kpMetadata,
-        corpusView.kpBm25Stats,
-    );
-    const passageScores = new Map<string, { meta: Metadata; score: number }>();
-    const docScores = new Map<string, RankedDoc>();
-
-    scored.dense.forEach((item, index) => {
-        passageScores.set(item.meta.id, {
-            meta: item.meta,
-            score: (passageScores.get(item.meta.id)?.score || 0) + 1 / (RRF_K + index + 1),
-        });
-    });
-
-    scored.sparse.forEach((item, index) => {
-        if (item.score <= 0) {
-            return;
-        }
-        passageScores.set(item.meta.id, {
-            meta: item.meta,
-            score: (passageScores.get(item.meta.id)?.score || 0) + 1 / (RRF_K + index + 1),
-        });
-    });
-
-    passageScores.forEach(({ meta, score }) => {
-        const otid = meta.parent_otid;
-        const current = docScores.get(otid);
-        if (!current || score > current.score) {
-            docScores.set(otid, {
-                otid,
-                score,
-                best_kpid: meta.id,
-            });
-        }
-    });
-
-    return Array.from(docScores.values()).sort((a, b) => b.score - a.score);
-}
-
-function buildSlidingOtHybridRanking(query: QueryCacheItem): RankedDoc[] {
-    if (!corpusView || !slidingWindowCorpus) {
-        throw new Error("Sliding OT corpus not initialized.");
-    }
-
-    const docScores = new Map<string, number>();
-    const denseWindowScores = slidingWindowCorpus.windowOtids.map((otid, index) => ({
-        otid,
-        score: dotVectorPair(query.queryVector, slidingWindowCorpus.vectors[index]),
-    }));
-
-    denseWindowScores.sort((a, b) => b.score - a.score);
-    denseWindowScores.forEach((item, index) => {
-        const denseRrf = 1 / (RRF_K + index + 1);
-        const current = docScores.get(item.otid) || 0;
-        if (denseRrf > current) {
-            docScores.set(item.otid, denseRrf);
-        }
-    });
-
-    const sparseScored = scoreDirectMetadata(
-        query,
-        corpusView.otMetadata,
-        corpusView.otBm25Stats,
-    );
-    sparseScored.sparse.forEach((item, index) => {
-        if (item.score <= 0) {
-            return;
-        }
-        docScores.set(
-            item.meta.id,
-            (docScores.get(item.meta.id) || 0) + 1 / (RRF_K + index + 1),
-        );
-    });
-
-    return Array.from(docScores.entries())
-        .map(([otid, score]) => ({
-            otid,
-            score,
-        }))
-        .sort((a, b) => b.score - a.score);
-}
-
 function buildStructuredRanking(
     query: QueryCacheItem,
     weights: { Q: number; KP: number; OT: number },
@@ -935,10 +655,18 @@ function buildStructuredRanking(
         bm25Stats: filteredBm25Stats,
         weights,
         topHybridLimit: 1000,
-        kpAggregationMode: "max",
-        lexicalBonusMode: "sum",
-        kpRoleRerankMode: "feature",
-        kpRoleDocWeight: 0.35,
+        kpAggregationMode:
+            FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval.kpAggregationMode,
+        lexicalBonusMode:
+            FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval.lexicalBonusMode,
+        kpRoleRerankMode:
+            FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval.kpRoleRerankMode,
+        kpRoleDocWeight:
+            FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval.kpRoleDocWeight,
+        enableExplicitYearFilter:
+            FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval.enableExplicitYearFilter,
+        minimalMode:
+            FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval.minimalMode,
     });
 
     return result.matches.map((item) => ({
@@ -951,6 +679,7 @@ function buildStructuredRanking(
 function toPerCaseResult(
     query: QueryCacheItem,
     ranking: readonly RankedDoc[],
+    elapsedMs: number,
 ): PerCaseResult {
     const rankIndex = ranking.findIndex(
         (item) => item.otid === query.testCase.expected_otid,
@@ -960,6 +689,7 @@ function toPerCaseResult(
         id: query.testCase.id,
         query: query.testCase.query,
         expected_otid: query.testCase.expected_otid,
+        elapsedMs,
         rank,
         hitAt1: rank === 1,
         reciprocalRank: rank ? 1 / rank : 0,
@@ -971,6 +701,18 @@ function toPerCaseResult(
             best_kpid: item.best_kpid,
         })),
     };
+}
+
+function buildTimedPerCaseResults(
+    queryCache: readonly QueryCacheItem[],
+    buildRanking: (query: QueryCacheItem) => RankedDoc[],
+): PerCaseResult[] {
+    return queryCache.map((query) => {
+        const startedAt = performance.now();
+        const ranking = buildRanking(query);
+        const elapsedMs = performance.now() - startedAt;
+        return toPerCaseResult(query, ranking, elapsedMs);
+    });
 }
 
 function buildModelReport(
@@ -988,6 +730,7 @@ function buildModelReport(
         family,
         description,
         metrics,
+        timing: buildTimingSummary(perCase),
         hitAt1Interval95: bootstrapMetricInterval(
             hitAt1Values,
             SAFE_BOOTSTRAP_ITERATIONS,
@@ -1058,46 +801,28 @@ function buildDatasetReport(
         throw new Error("Corpus view not initialized.");
     }
 
-    const bm25OtPerCase = queryCache.map((query) => {
+    const bm25OtPerCase = buildTimedPerCaseResults(queryCache, (query) => {
         const scored = scoreDirectMetadata(query, corpusView.otMetadata, corpusView.otBm25Stats);
-        return toPerCaseResult(query, buildDirectRanking(scored.sparse));
+        return buildDirectRanking(scored.sparse);
     });
 
-    const denseOtPerCase = queryCache.map((query) => {
+    const denseOtPerCase = buildTimedPerCaseResults(queryCache, (query) => {
         const scored = scoreDirectMetadata(query, corpusView.otMetadata, corpusView.otBm25Stats);
-        return toPerCaseResult(query, buildDirectRanking(scored.dense));
+        return buildDirectRanking(scored.dense);
     });
 
-    const hybridOtPerCase = queryCache.map((query) => {
-        const scored = scoreDirectMetadata(query, corpusView.otMetadata, corpusView.otBm25Stats);
-        return toPerCaseResult(query, buildRrfRanking(scored.dense, scored.sparse));
-    });
-
-    const filteredHybridPerCase = queryCache.map((query) => {
-        const filteredMetadata = filterOtMetadataByTopic(query.queryIntent);
-        const filteredStats = buildBM25Stats(filteredMetadata);
-        const scored = scoreDirectMetadata(query, filteredMetadata, filteredStats);
-        return toPerCaseResult(query, buildRrfRanking(scored.dense, scored.sparse));
-    });
-
-    const passageHybridPerCase = queryCache.map((query) =>
-        toPerCaseResult(query, buildPassageHybridRanking(query)),
+    const structuredKpOtPerCase = buildTimedPerCaseResults(queryCache, (query) =>
+        buildStructuredRanking(query, STRUCTURED_KP_OT_WEIGHTS),
     );
 
-    const slidingOtHybridPerCase = queryCache.map((query) =>
-        toPerCaseResult(query, buildSlidingOtHybridRanking(query)),
-    );
-
-    const structuredKpOtPerCase = queryCache.map((query) =>
-        toPerCaseResult(query, buildStructuredRanking(query, STRUCTURED_KP_OT_WEIGHTS)),
-    );
-
-    const structuredFullPerCase = queryCache.map((query) =>
-        toPerCaseResult(
+    const structuredFullPerCase = buildTimedPerCaseResults(queryCache, (query) =>
+        buildStructuredRanking(
             query,
-            buildStructuredRanking(query, STRUCTURED_Q_KP_OT_WEIGHTS),
+            STRUCTURED_Q_KP_OT_WEIGHTS,
         ),
     );
+
+    const datasetProfile = resolveNamedDatasetProfile(target.datasetFile);
 
     const models: ModelReport[] = [
         buildModelReport(
@@ -1113,30 +838,6 @@ function buildDatasetReport(
             denseOtPerCase,
         ),
         buildModelReport(
-            "Hybrid-OT-RRF",
-            "hybrid",
-            "标准混合检索：OT 文档级 dense + BM25，经 RRF 融合。",
-            hybridOtPerCase,
-        ),
-        buildModelReport(
-            "Hybrid-OT-RRF+TopicFilter",
-            "metadata_filter",
-            "简单 metadata filter baseline：先按 topic 分区过滤，再执行 OT 文档级 RRF。",
-            filteredHybridPerCase,
-        ),
-        buildModelReport(
-            "Passage-KP-HybridMax",
-            "passage",
-            "passage-level baseline：在 KP 粒度上做 dense + BM25，再按 parent OT 聚合。",
-            passageHybridPerCase,
-        ),
-        buildModelReport(
-            "Sliding-OT-HybridMax",
-            "sliding_window",
-            `OT 滑窗 baseline：dense 分支按 token 窗口 ${SAFE_SLIDING_WINDOW_SIZE}/${SAFE_SLIDING_WINDOW_OVERLAP} 编码并按文档取 max，sparse 分支保留整文 BM25。`,
-            slidingOtHybridPerCase,
-        ),
-        buildModelReport(
             "Structured-KP+OT",
             "structured",
             "论文冻结主组合：Q=0, KP=0.2857, OT=0.7143。",
@@ -1145,7 +846,7 @@ function buildDatasetReport(
         buildModelReport(
             "Structured-Q+KP+OT",
             "structured",
-            "论文主集 top-line 组合：Q=0.3333, KP=0.1333, OT=0.5333。",
+            "前端 runtime 对齐主线：Q=0.3333, KP=0.3333, OT=0.3333。",
             structuredFullPerCase,
         ),
     ];
@@ -1161,6 +862,8 @@ function buildDatasetReport(
     return {
         datasetKey: target.key,
         datasetLabel: target.label,
+        datasetAlias: datasetProfile.alias,
+        datasetDisplayName: datasetProfile.displayName,
         datasetFile: target.datasetFile,
         caseCount: queryCache.length,
         bestStandardBaseline,
@@ -1175,7 +878,7 @@ function printDatasetSummary(report: DatasetReport) {
     );
     report.models.forEach((model) => {
         console.log(
-            `${model.label}: Hit@1=${model.metrics.hitAt1.toFixed(2)}% [${model.hitAt1Interval95.lower.toFixed(2)}, ${model.hitAt1Interval95.upper.toFixed(2)}] | MRR=${model.metrics.mrr.toFixed(4)} [${model.mrrInterval95.lower.toFixed(4)}, ${model.mrrInterval95.upper.toFixed(4)}]`,
+            `${model.label}: Hit@1=${model.metrics.hitAt1.toFixed(2)}% [${model.hitAt1Interval95.lower.toFixed(2)}, ${model.hitAt1Interval95.upper.toFixed(2)}] | MRR=${model.metrics.mrr.toFixed(4)} [${model.mrrInterval95.lower.toFixed(4)}, ${model.mrrInterval95.upper.toFixed(4)}] | avg=${model.timing.avgMs.toFixed(2)}ms | p50=${model.timing.p50Ms.toFixed(2)}ms | p95=${model.timing.p95Ms.toFixed(2)}ms`,
         );
     });
 
@@ -1216,15 +919,8 @@ async function main() {
         embeddingModel: FRONTEND_MODEL_NAME,
         bootstrapIterations: SAFE_BOOTSTRAP_ITERATIONS,
         randomizationIterations: SAFE_RANDOMIZATION_ITERATIONS,
-        slidingWindowConfig: {
-            windowSize: SAFE_SLIDING_WINDOW_SIZE,
-            overlap: SAFE_SLIDING_WINDOW_OVERLAP,
-            stride: SAFE_SLIDING_WINDOW_STRIDE,
-            batchSize: SAFE_SLIDING_WINDOW_BATCH_SIZE,
-            docCount: slidingWindowCorpus?.windowCountByOtid.size || 0,
-            windowCount: slidingWindowCorpus?.windowOtids.length || 0,
-            missingDocCount: slidingWindowCorpus?.missingOtids.length || 0,
-        },
+        timingNote:
+            "耗时统计仅覆盖每条 query 的检索/排序阶段，不含 query embedding、模型加载与结果写盘。",
         datasets: datasetReports,
     };
 
@@ -1232,7 +928,7 @@ async function main() {
     fs.mkdirSync(resultsDir, { recursive: true });
     const outputPath = path.resolve(
         resultsDir,
-        `granularity_standard_baselines_${Date.now()}.json`,
+        buildStandardBaselinesResultFileName(Date.now()),
     );
     fs.writeFileSync(outputPath, JSON.stringify(report, null, 2), "utf-8");
     console.log(`\nReport saved to ${outputPath}`);

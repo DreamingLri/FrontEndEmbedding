@@ -113,26 +113,26 @@ const GRANULARITY_DATASET_TARGETS: Record<
 > = {
     main_bench_120: {
         key: "main_bench_120",
-        label: "MainBench-120-UserizedV1",
+        label: "Main",
         role: "benchmark",
         primaryPath: CURRENT_EVAL_DATASET_FILES.granularityMain120,
     },
     in_domain_holdout_50: {
         key: "in_domain_holdout_50",
-        label: "InDomainHoldout-50-UserizedV1",
+        label: "InDomain",
         role: "in_domain_holdout",
         primaryPath: CURRENT_EVAL_DATASET_FILES.granularityInDomainHoldout50,
     },
     external_ood_50: {
         key: "external_ood_50",
-        label: "ExternalOOD-50-UserizedV1",
+        label: "ExtOOD",
         role: "external_ood_holdout",
         primaryPath: CURRENT_EVAL_DATASET_FILES.granularityExternalOod50,
     },
     external_ood_holdout_30: {
         key: "external_ood_holdout_30",
-        // 兼容保留旧 target key，但当前正式外域口径已切换为 external_ood_50。
-        label: "ExternalOOD-50-UserizedV1",
+        // 兼容保留旧 target key，但当前正式外域口径已切换为 external_matched_ood_v2。
+        label: "ExtHard",
         role: "external_ood_holdout",
         primaryPath: CURRENT_EVAL_DATASET_FILES.granularityExternalOodHoldout30,
     },

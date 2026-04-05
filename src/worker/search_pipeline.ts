@@ -7,7 +7,6 @@ import {
     type DocumentRerankStats,
 } from "./direct_answer_display.ts";
 import {
-    DIRECT_ANSWER_EVIDENCE_TERMS,
     getQuerySparse,
     parseQueryIntent,
     QUERY_SCOPE_SPECIFICITY_TERMS,
@@ -51,6 +50,7 @@ export type PipelinePreset = {
         useQueryExpansion: boolean;
         useTopicPartition: boolean;
         enableExplicitYearFilter: boolean;
+        enablePhaseAnchorBoost: boolean;
         minimalMode: boolean;
     };
     display: {
@@ -90,6 +90,7 @@ export const PAPER_FROZEN_MAIN_PIPELINE_PRESET: PipelinePreset = {
         useQueryExpansion: true,
         useTopicPartition: true,
         enableExplicitYearFilter: true,
+        enablePhaseAnchorBoost: false,
         minimalMode: false,
     },
     display: { ...DEFAULT_DISPLAY_CONFIG },
@@ -113,6 +114,7 @@ export const PRODUCT_CANONICAL_FULL_PIPELINE_PRESET: PipelinePreset = {
         useQueryExpansion: true,
         useTopicPartition: true,
         enableExplicitYearFilter: true,
+        enablePhaseAnchorBoost: false,
         minimalMode: false,
     },
     display: { ...DEFAULT_DISPLAY_CONFIG },
@@ -158,6 +160,7 @@ export const MINIMAL_BASELINE_PIPELINE_PRESET: PipelinePreset = {
         useQueryExpansion: false,
         useTopicPartition: false,
         enableExplicitYearFilter: false,
+        enablePhaseAnchorBoost: false,
         minimalMode: true,
     },
     display: { ...DEFAULT_DISPLAY_CONFIG },
@@ -168,6 +171,7 @@ export const FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET: PipelinePreset = {
     retrieval: {
         ...MINIMAL_BASELINE_PIPELINE_PRESET.retrieval,
         enableExplicitYearFilter: true,
+        enablePhaseAnchorBoost: true,
     },
     display: {
         ...DEFAULT_DISPLAY_CONFIG,
@@ -217,7 +221,6 @@ export function resolvePipelinePresetByName(
 
 export type PipelineTermMaps = {
     scopeSpecificityWordIdToTerm: Map<number, string>;
-    directAnswerEvidenceWordIdToTerm: Map<number, string>;
 };
 
 export type SearchPipelineQueryContext = {
@@ -385,17 +388,8 @@ export function buildPipelineTermMaps(
         }
     });
 
-    const directAnswerEvidenceWordIdToTerm = new Map<number, string>();
-    DIRECT_ANSWER_EVIDENCE_TERMS.forEach((term) => {
-        const wordId = vocabMap.get(term);
-        if (wordId !== undefined) {
-            directAnswerEvidenceWordIdToTerm.set(wordId, term);
-        }
-    });
-
     return {
         scopeSpecificityWordIdToTerm,
-        directAnswerEvidenceWordIdToTerm,
     };
 }
 
@@ -484,6 +478,149 @@ function deriveDisplayRejectScore(
     return clamp01(0.5 + gapRatio * 0.18);
 }
 
+type PhaseAnchor = {
+    half?: "上半年" | "下半年";
+    batch?: string;
+    stages: string[];
+};
+
+const PHASE_ANCHOR_DOC_WEIGHT = 0.35;
+const PHASE_STAGE_RULES: Array<{ stage: string; pattern: RegExp }> = [
+    { stage: "预报名", pattern: /预报名/ },
+    { stage: "报名通知", pattern: /报名通知|网上报名/ },
+    { stage: "工作方案", pattern: /工作方案/ },
+    { stage: "接收办法", pattern: /接收办法/ },
+    { stage: "实施办法", pattern: /实施办法/ },
+    { stage: "录取方案", pattern: /录取方案/ },
+    { stage: "招生简章", pattern: /招生简章/ },
+    { stage: "招生章程", pattern: /招生章程/ },
+    { stage: "综合考核", pattern: /综合考核/ },
+    { stage: "复试", pattern: /复试/ },
+    { stage: "调剂", pattern: /调剂/ },
+] as const;
+
+function normalizeBatchToken(token: string): string | undefined {
+    switch (token) {
+        case "1":
+        case "一":
+            return "1";
+        case "2":
+        case "二":
+            return "2";
+        case "3":
+        case "三":
+            return "3";
+        case "4":
+        case "四":
+            return "4";
+        default:
+            return undefined;
+    }
+}
+
+function extractPhaseAnchor(text: string): PhaseAnchor {
+    const normalized = text.replace(/\s+/g, "");
+    const halfMatch = normalized.match(/上半年|下半年/);
+    const batchMatch = normalized.match(/第?\s*([一二三四1234])\s*批/);
+
+    return {
+        half:
+            halfMatch?.[0] === "上半年" || halfMatch?.[0] === "下半年"
+                ? halfMatch[0]
+                : undefined,
+        batch: batchMatch?.[1]
+            ? normalizeBatchToken(batchMatch[1])
+            : undefined,
+        stages: PHASE_STAGE_RULES.filter((rule) => rule.pattern.test(normalized)).map(
+            (rule) => rule.stage,
+        ),
+    };
+}
+
+function hasExplicitPhaseAnchor(anchor: PhaseAnchor): boolean {
+    return Boolean(anchor.half || anchor.batch || anchor.stages.length > 0);
+}
+
+function computePhaseAnchorDocDelta(
+    query: string,
+    document: PipelineDocumentRecord,
+): number {
+    const queryPhase = extractPhaseAnchor(query);
+    if (!hasExplicitPhaseAnchor(queryPhase)) {
+        return 0;
+    }
+
+    const title = (document.ot_title || "").replace(/\s+/g, "");
+    if (!title) {
+        return -0.15;
+    }
+
+    const articlePhase = extractPhaseAnchor(title);
+    let delta = 0;
+
+    if (queryPhase.half) {
+        if (articlePhase.half === queryPhase.half) {
+            delta += 0.9;
+        } else if (articlePhase.half) {
+            delta -= 0.9;
+        } else {
+            delta -= 0.2;
+        }
+    }
+
+    if (queryPhase.batch) {
+        if (articlePhase.batch === queryPhase.batch) {
+            delta += 1.0;
+        } else if (articlePhase.batch) {
+            delta -= 1.0;
+        } else {
+            delta -= 0.2;
+        }
+    }
+
+    if (queryPhase.stages.length > 0) {
+        const hasExactStage = queryPhase.stages.some((stage) =>
+            articlePhase.stages.includes(stage),
+        );
+        if (hasExactStage) {
+            delta += 0.8;
+        } else if (articlePhase.stages.length > 0) {
+            delta -= 0.8;
+        } else {
+            delta -= 0.15;
+        }
+    }
+
+    return delta;
+}
+
+function applyPhaseAnchorBoostToDocuments(
+    query: string,
+    documents: PipelineDocumentRecord[],
+): PipelineDocumentRecord[] {
+    return [...documents]
+        .map((document) => {
+            const baseScore =
+                document.displayScore ?? document.coarseScore ?? document.score ?? 0;
+            const delta = computePhaseAnchorDocDelta(query, document);
+            const nextScore = baseScore + delta * PHASE_ANCHOR_DOC_WEIGHT;
+
+            return {
+                ...document,
+                score: nextScore,
+                coarseScore:
+                    (document.coarseScore ?? document.score ?? baseScore) +
+                    delta * PHASE_ANCHOR_DOC_WEIGHT,
+                displayScore: nextScore,
+            };
+        })
+        .sort(
+            (left, right) =>
+                (right.displayScore ?? right.score ?? 0) -
+                (left.displayScore ?? left.score ?? 0),
+        );
+}
+
 export function mergeCoarseMatchesIntoDocuments(
     documents: PipelineDocumentRecord[],
     coarseMatches: Array<{ otid: string; score: number; best_kpid?: string }>,
@@ -550,8 +687,6 @@ export function executeRetrievalStage(params: {
         candidateIndices: queryContext.candidateIndices,
         scopeSpecificityWordIdToTerm:
             termMaps?.scopeSpecificityWordIdToTerm,
-        directAnswerEvidenceWordIdToTerm:
-            termMaps?.directAnswerEvidenceWordIdToTerm,
         weights: preset.retrieval.weights,
         topHybridLimit: preset.retrieval.topHybridLimit,
         kpAggregationMode: preset.retrieval.kpAggregationMode,
@@ -674,13 +809,17 @@ export async function executeSearchPipeline(params: {
                         best_kpid: item.best_kpid,
                     })),
             );
+            const phaseAdjustedDocuments =
+                preset.retrieval.enablePhaseAnchorBoost
+                    ? applyPhaseAnchorBoostToDocuments(query, directDocuments)
+                    : directDocuments;
 
             onStatus?.("正在重排并提炼可信原话...");
             const rerankStartedAt = nowMs();
             const displayStage = await runDirectAnswerDisplayStage({
                 query,
                 queryVector,
-                documents: directDocuments,
+                documents: phaseAdjustedDocuments,
                 extractor,
                 dimensions,
                 preset,

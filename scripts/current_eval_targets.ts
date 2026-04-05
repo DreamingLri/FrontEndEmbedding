@@ -1,14 +1,14 @@
 export const CURRENT_EVAL_DATASET_FILES = {
     // 当前 granularity 主线
     granularityMain120:
-        "../Backend/test/test_dataset_granularity/test_dataset_granularity_main_120_reviewed_userized_v1.json",
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_main_benchmark_v2_reviewed_userized_v1.json",
     granularityInDomainHoldout50:
-        "../Backend/test/test_dataset_granularity/test_dataset_granularity_in_domain_holdout_50_reviewed_userized_v1.json",
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_in_domain_generalization_60_reviewed_userized_v1.json",
     granularityExternalOod50:
-        "../Backend/test/test_dataset_granularity/test_dataset_granularity_external_ood_50_reviewed_userized_v1.json",
-    // 兼容旧 target key，当前仍指向正式 external_ood_50
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_external_matched_ood_60_reviewed_userized_v1.json",
+    // 兼容旧 target key，当前正式外域口径已切到 external_matched_ood_v2。
     granularityExternalOodHoldout30:
-        "../Backend/test/test_dataset_granularity/test_dataset_granularity_external_ood_50_reviewed_userized_v1.json",
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_external_matched_ood_60_reviewed_userized_v1.json",
     // 历史 hard OOD，仅保留参考
     granularityExternalOodHard30:
         "../Backend/test/test_dataset_granularity/test_dataset_granularity_external_ood_holdout_30_reviewed_userized_v1.json",

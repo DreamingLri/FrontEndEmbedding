@@ -2579,20 +2579,13 @@ export function searchAndRank(params: {
     const explicitOutOfScopeOnly =
         (queryIntent?.intentIds.length || 0) === 0 &&
         hasOnlyOutOfScopeTopics(queryIntent?.topicIds || []);
-    const inDomainEvidenceReject = shouldRejectForMissingInDomainEvidence({
-        rawQuery: queryIntent?.rawQuery || "",
-        queryIntent,
-        sortedRanking,
-        docEvidenceStatsMap: docDirectAnswerEvidenceStatsMap,
-        otidMap,
-    });
 
     const diagnostics: SearchRankDiagnostics = {
         querySignals,
         retrievalSignals,
         evidenceSignals,
         explicitOutOfScopeOnly,
-        inDomainEvidenceRejectLabel: inDomainEvidenceReject.label || null,
+        inDomainEvidenceRejectLabel: null,
     };
 
     if (explicitOutOfScopeOnly) {
@@ -2615,34 +2608,6 @@ export function searchAndRank(params: {
                     HARD_REJECT_SCORE_THRESHOLD,
                 ),
                 rejectTier: "hard_reject",
-            },
-            diagnostics,
-        };
-    }
-
-    if (
-        responseDecision.mode === "answer" &&
-        inDomainEvidenceReject.shouldReject
-    ) {
-        return {
-            matches: [],
-            weakMatches: sortedRanking.slice(0, 5),
-            rejection: {
-                reason: "low_consistency",
-                topicIds: queryIntent?.topicIds || [],
-            },
-            responseDecision: {
-                ...responseDecision,
-                mode: "reject",
-                confidence: Math.max(responseDecision.confidence, 0.9),
-                reason: `missing_in_domain_evidence:${inDomainEvidenceReject.label || "unknown"}`,
-                preferLatestWithinTopic: false,
-                useWeakMatches: true,
-                rejectScore: Math.max(
-                    responseDecision.rejectScore || 0,
-                    BOUNDARY_REJECT_SCORE_THRESHOLD,
-                ),
-                rejectTier: "boundary_uncertain",
             },
             diagnostics,
         };

@@ -17,6 +17,8 @@ type ResultRegistryEntry = {
     slot: CurrentResultSlot;
     label: string;
     datasetName: string;
+    datasetAlias?: string;
+    datasetDisplayName?: string;
     datasetFile: string;
     resultFile: string;
     sourceScript: string;
@@ -31,15 +33,13 @@ type ResultRegistryFile = {
 };
 
 const SLOT_LABELS: Record<CurrentResultSlot, string> = {
-    granularity_main_bench_120_current: "主方法主结果 `main_bench_120`",
-    granularity_in_domain_holdout_50_current:
-        "同域泛化结果 `in_domain_holdout_50`",
-    granularity_external_ood_50_current: "跨域泛化结果 `external_ood_50`",
-    granularity_external_ood_holdout_30_current:
-        "内部 hard stress `external_ood_holdout_30`",
+    granularity_main_bench_120_current: "主方法主结果 `Main`",
+    granularity_in_domain_holdout_50_current: "同域泛化结果 `InDomain`",
+    granularity_external_ood_50_current: "跨域泛化结果 `ExtOOD`",
+    granularity_external_ood_holdout_30_current: "内部 hard stress `ExtHard`",
     granularity_main_106_current: "主方法主结果 `main_106`",
     granularity_holdout_v3_current: "外部泛化主结果 `holdout_v3`",
-    answer_reject_current: "唯一行为结果 `answer_reject_v4_frozen_holdout`",
+    answer_reject_current: "唯一行为结果 `AnswerReject`",
     platform_reject_kb_absent_v2_dev_current:
         "高风险拒答边界结果 `kb_absent_v2_dev`",
     platform_reject_kb_absent_v2_holdout_current:
@@ -59,12 +59,25 @@ const SLOT_BY_DATASET_NAME: Partial<Record<string, CurrentResultSlot>> = {
         "granularity_in_domain_holdout_50_current",
     test_dataset_granularity_external_ood_50_reviewed_userized_v1:
         "granularity_external_ood_50_current",
+    test_dataset_granularity_main_benchmark_v2_reviewed_userized_v1:
+        "granularity_main_bench_120_current",
+    test_dataset_granularity_in_domain_generalization_60_reviewed_userized_v1:
+        "granularity_in_domain_holdout_50_current",
+    test_dataset_granularity_external_matched_ood_60_reviewed_userized_v1:
+        "granularity_external_ood_50_current",
     test_dataset_granularity_external_ood_holdout_30_reviewed:
+        "granularity_external_ood_holdout_30_current",
+    test_dataset_granularity_external_ood_holdout_30_reviewed_userized_v1:
         "granularity_external_ood_holdout_30_current",
     test_dataset_granularity_main_106_reviewed:
         "granularity_main_106_current",
+    gran_main_v2: "granularity_main_bench_120_current",
+    gran_in_v2: "granularity_in_domain_holdout_50_current",
+    gran_ext_v2: "granularity_external_ood_50_current",
+    gran_ext_hard30: "granularity_external_ood_holdout_30_current",
     test_dataset_answer_reject_v4_frozen_holdout_reviewed:
         "answer_reject_current",
+    ar_v4: "answer_reject_current",
     test_dataset_platform_reject_kb_absent_v2_dev_reviewed:
         "platform_reject_kb_absent_v2_dev_current",
     test_dataset_platform_reject_kb_absent_v2_holdout_reviewed:
@@ -105,6 +118,8 @@ export function resolveCurrentResultSlot(
 
 export function updateCurrentResultRegistry(params: {
     datasetName: string;
+    datasetAlias?: string;
+    datasetDisplayName?: string;
     datasetFile: string;
     outputPath: string;
     sourceScript: string;
@@ -146,6 +161,8 @@ export function updateCurrentResultRegistry(params: {
         slot,
         label: SLOT_LABELS[slot],
         datasetName: params.datasetName,
+        datasetAlias: params.datasetAlias,
+        datasetDisplayName: params.datasetDisplayName,
         datasetFile: toForwardSlashes(
             path.relative(registryDir, path.resolve(process.cwd(), params.datasetFile)),
         ),
