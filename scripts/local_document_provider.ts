@@ -10,6 +10,11 @@ import {
     resolveBackendKnowledgePointsFile,
 } from "./kb_version_paths.ts";
 
+type ApiDocumentLoaderOptions = {
+    baseUrl?: string;
+    path?: string;
+};
+
 const ARTICLE_FILE = resolveBackendArticlesFile();
 const KNOWLEDGE_POINT_FILE = resolveBackendKnowledgePointsFile();
 
@@ -97,4 +102,56 @@ export function createLocalDocumentLoader(): PipelineDocumentLoader {
                 };
             })
             .filter(Boolean) as PipelineDocumentRecord[];
+}
+
+function normalizeApiBaseUrl(baseUrl?: string): string {
+    const resolvedBaseUrl = (baseUrl || "http://127.0.0.1:8000").trim();
+    return resolvedBaseUrl.endsWith("/")
+        ? resolvedBaseUrl.slice(0, -1)
+        : resolvedBaseUrl;
+}
+
+function normalizeApiPath(apiPath?: string): string {
+    const resolvedPath = (apiPath || "/api/get_answers").trim();
+    if (!resolvedPath) {
+        return "/api/get_answers";
+    }
+
+    return resolvedPath.startsWith("/") ? resolvedPath : `/${resolvedPath}`;
+}
+
+export function createApiDocumentLoader(
+    options: ApiDocumentLoaderOptions = {},
+): PipelineDocumentLoader {
+    const baseUrl = normalizeApiBaseUrl(options.baseUrl);
+    const apiPath = normalizeApiPath(options.path);
+    const endpoint = `${baseUrl}${apiPath}`;
+
+    return async ({ query, otids }) => {
+        if (otids.length === 0) {
+            return [];
+        }
+
+        const response = await fetch(endpoint, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                query,
+                otids,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error(
+                `HTTP document loader failed: ${response.status} ${response.statusText}`,
+            );
+        }
+
+        const payload = await response.json();
+        return Array.isArray(payload?.data)
+            ? (payload.data as PipelineDocumentRecord[])
+            : [];
+    };
 }

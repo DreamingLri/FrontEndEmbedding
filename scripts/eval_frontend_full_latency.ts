@@ -6,26 +6,23 @@ import {
     FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET,
     buildPipelineTermMaps,
     buildSearchPipelineQueryContext,
-    executeRetrievalStage,
-    mergeCoarseMatchesIntoDocuments,
+    executeSearchPipeline,
 } from "../src/worker/search_pipeline.ts";
-import { runDirectAnswerDisplayStage } from "../src/worker/direct_answer_display.ts";
 import {
     ACTIVE_MAIN_DB_VERSION,
     FRONTEND_METADATA_FILE,
     FRONTEND_VECTOR_FILE,
-    DEFAULT_QUERY_EMBED_BATCH_SIZE,
     loadDatasetSources,
     resolveEvalDatasetConfig,
     type EvalDatasetCase,
     type GranularityDatasetTargetKey,
     type OtidEvalMode,
 } from "./eval_shared.ts";
+import { loadFrontendEvalEngine } from "./frontend_eval_engine.ts";
 import {
-    embedQueries as embedFrontendQueries,
-    loadFrontendEvalEngine,
-} from "./frontend_eval_engine.ts";
-import { createLocalDocumentLoader } from "./local_document_provider.ts";
+    createApiDocumentLoader,
+    createLocalDocumentLoader,
+} from "./local_document_provider.ts";
 
 type DatasetCase = EvalDatasetCase;
 
@@ -36,54 +33,49 @@ type NormalizedOtidEvalTarget = {
     minGroupsToCover: number;
 };
 
-type ModeName = "coarse_only" | "current_ui";
-
 type CaseLatencyRecord = {
     id: string;
     query: string;
     dataset: string;
-    mode: ModeName;
+    behavior: "answer" | "reject";
     rank: number | null;
     hitAt1: boolean;
     hitAt5: boolean;
     mrr: number;
+    embedMs: number;
     searchMs: number;
     fetchMs: number;
-    rerankMs: number;
-    totalMs: number;
+    stageTotalMs: number;
+    endToEndMs: number;
     matchCount: number;
+    weakMatchCount: number;
     fetchedDocumentCount: number;
-    rerankedDocCount: number;
-    chunksScored: number;
-    displayRejected: boolean;
-    rescueAttempted: boolean;
-    rescueAccepted: boolean;
     topOtid: string | null;
 };
 
-type ModeSummary = {
-    mode: ModeName;
+type Summary = {
     totalCases: number;
+    answerRate: number;
+    rejectRate: number;
     hitAt1: number;
     hitAt5: number;
     mrr: number;
+    avgEmbedMs: number;
+    p50EmbedMs: number;
+    p95EmbedMs: number;
     avgSearchMs: number;
     p50SearchMs: number;
     p95SearchMs: number;
     avgFetchMs: number;
     p50FetchMs: number;
     p95FetchMs: number;
-    avgRerankMs: number;
-    p50RerankMs: number;
-    p95RerankMs: number;
-    avgTotalMs: number;
-    p50TotalMs: number;
-    p95TotalMs: number;
-    avgRerankedDocCount: number;
-    avgChunksScored: number;
-    displayRejectRate: number;
-    rescueAttemptRate: number;
-    rescueAcceptedRate: number;
+    avgStageTotalMs: number;
+    p50StageTotalMs: number;
+    p95StageTotalMs: number;
+    avgEndToEndMs: number;
+    p50EndToEndMs: number;
+    p95EndToEndMs: number;
+    avgFetchedDocumentCount: number;
 };
 
 type Report = {
@@ -98,19 +90,15 @@ type Report = {
     datasetTargetKey?: string;
     presetName: string;
     note: string;
-    queryEmbedBatchSize: number;
+    documentLoaderMode: "local" | "api";
+    documentLoaderLabel: string;
+    contentApiBaseUrl?: string;
+    contentApiPath?: string;
+    queryEmbedMode: "per_query";
     fetchMatchLimit: number;
+    fetchWeakMatchLimit: number;
     totalCases: number;
-    summaries: ModeSummary[];
-    deltas: {
-        hitAt1: number;
-        hitAt5: number;
-        mrr: number;
-        avgRerankMs: number;
-        avgTotalMs: number;
-        p95RerankMs: number;
-        p95TotalMs: number;
-    };
+    summary: Summary;
     caseReports: CaseLatencyRecord[];
 };
 
@@ -120,14 +108,17 @@ const DATASET_TARGET_KEY = process.env.SUASK_EVAL_DATASET_TARGET as
     | GranularityDatasetTargetKey
     | undefined;
 const SINGLE_FILE_AS_ALL = process.env.SUASK_EVAL_SINGLE_FILE_AS_ALL !== "0";
-const QUERY_EMBED_BATCH_SIZE = Number.parseInt(
-    process.env.SUASK_QUERY_EMBED_BATCH_SIZE || "",
-    10,
-);
 const LIMIT_PER_SOURCE = Number.parseInt(
     process.env.SUASK_EVAL_LIMIT_PER_SOURCE || "",
     10,
 );
+const DOCUMENT_LOADER_MODE =
+    (process.env.SUASK_DOCUMENT_LOADER_MODE || "local").trim().toLowerCase() ===
+    "api"
+        ? "api"
+        : "local";
+const CONTENT_API_BASE_URL = process.env.SUASK_CONTENT_API_BASE_URL?.trim();
+const CONTENT_API_PATH = process.env.SUASK_CONTENT_API_PATH?.trim();
 
 const DATASET_CONFIG = resolveEvalDatasetConfig({
     datasetVersion: DATASET_VERSION,
@@ -165,6 +156,49 @@ function round2(value: number): number {
     return Number(value.toFixed(2));
 }
 
+async function embedSingleQuery(
+    extractor: Awaited<ReturnType<typeof loadFrontendEvalEngine>>["extractor"],
+    query: string,
+): Promise<Float32Array> {
+    const output = await extractor(query, {
+        pooling: "mean",
+        normalize: true,
+        truncation: true,
+        max_length: 512,
+    } as any);
+
+    return new Float32Array(output.data as Float32Array);
+}
+
+function resolveDocumentLoader(): {
+    loader: ReturnType<typeof createLocalDocumentLoader>;
+    mode: "local" | "api";
+    label: string;
+    baseUrl?: string;
+    apiPath?: string;
+} {
+    if (DOCUMENT_LOADER_MODE === "api") {
+        const resolvedBaseUrl = CONTENT_API_BASE_URL || "http://127.0.0.1:8000";
+        const resolvedApiPath = CONTENT_API_PATH || "/api/get_answers";
+        return {
+            loader: createApiDocumentLoader({
+                baseUrl: resolvedBaseUrl,
+                path: resolvedApiPath,
+            }),
+            mode: "api",
+            label: `${resolvedBaseUrl}${resolvedApiPath.startsWith("/") ? resolvedApiPath : `/${resolvedApiPath}`}`,
+            baseUrl: resolvedBaseUrl,
+            apiPath: resolvedApiPath,
+        };
+    }
+
+    return {
+        loader: createLocalDocumentLoader(),
+        mode: "local",
+        label: "local_document_provider",
+    };
+}
+
 function parseRequiredOtidGroups(groups?: string[][]): string[][] {
     if (!Array.isArray(groups)) {
         return [];
@@ -187,7 +221,7 @@ function parseRequiredOtidGroups(groups?: string[][]): string[][] {
 }
 
 function getBestRankForOtidSet(
-    matches: readonly { otid: string }[],
+    matches: readonly { otid?: string }[],
     acceptableOtids: readonly string[],
 ): number {
     if (acceptableOtids.length === 0) {
@@ -195,7 +229,9 @@ function getBestRankForOtidSet(
     }
 
     const acceptableOtidSet = new Set(acceptableOtids);
-    const rankIndex = matches.findIndex((item) => acceptableOtidSet.has(item.otid));
+    const rankIndex = matches.findIndex(
+        (item) => item.otid && acceptableOtidSet.has(item.otid),
+    );
     return rankIndex === -1 ? Number.POSITIVE_INFINITY : rankIndex + 1;
 }
 
@@ -251,7 +287,7 @@ function resolveOtidEvalTarget(testCase: DatasetCase): NormalizedOtidEvalTarget 
 function computeCoverageDepth(
     requiredGroups: readonly string[][],
     minGroupsToCover: number,
-    matches: readonly { otid: string }[],
+    matches: readonly { otid?: string }[],
 ): number {
     if (requiredGroups.length === 0) {
         return Number.POSITIVE_INFINITY;
@@ -259,7 +295,9 @@ function computeCoverageDepth(
 
     const groupDepths = requiredGroups.map((group) => {
         const groupSet = new Set(group);
-        const rankIndex = matches.findIndex((match) => groupSet.has(match.otid));
+        const rankIndex = matches.findIndex(
+            (match) => match.otid && groupSet.has(match.otid),
+        );
         return rankIndex === -1 ? Number.POSITIVE_INFINITY : rankIndex + 1;
     });
 
@@ -277,7 +315,7 @@ function computeCoverageDepth(
 }
 
 function getRankForCase(
-    matches: readonly { otid: string }[],
+    matches: readonly { otid?: string }[],
     testCase: DatasetCase,
 ): number {
     const target = resolveOtidEvalTarget(testCase);
@@ -296,55 +334,48 @@ function rankToNullable(rank: number): number | null {
     return Number.isFinite(rank) ? rank : null;
 }
 
-function buildModeSummary(
-    mode: ModeName,
-    caseReports: CaseLatencyRecord[],
-): ModeSummary {
+function buildSummary(caseReports: CaseLatencyRecord[]): Summary {
     const totalCases = caseReports.length || 1;
+    const answerCount = caseReports.filter(
+        (item) => item.behavior === "answer",
+    ).length;
+    const rejectCount = caseReports.filter(
+        (item) => item.behavior === "reject",
+    ).length;
     const hitAt1 = caseReports.filter((item) => item.hitAt1).length;
     const hitAt5 = caseReports.filter((item) => item.hitAt5).length;
     const mrr = caseReports.reduce((sum, item) => sum + item.mrr, 0) / totalCases;
 
+    const embedMsList = caseReports.map((item) => item.embedMs);
     const searchMsList = caseReports.map((item) => item.searchMs);
     const fetchMsList = caseReports.map((item) => item.fetchMs);
-    const rerankMsList = caseReports.map((item) => item.rerankMs);
-    const totalMsList = caseReports.map((item) => item.totalMs);
+    const stageTotalMsList = caseReports.map((item) => item.stageTotalMs);
+    const endToEndMsList = caseReports.map((item) => item.endToEndMs);
 
     return {
-        mode,
         totalCases: caseReports.length,
+        answerRate: round2((answerCount / totalCases) * 100),
+        rejectRate: round2((rejectCount / totalCases) * 100),
         hitAt1: round2((hitAt1 / totalCases) * 100),
         hitAt5: round2((hitAt5 / totalCases) * 100),
         mrr: round4(mrr),
+        avgEmbedMs: round4(safeAvg(embedMsList)),
+        p50EmbedMs: round4(percentile(embedMsList, 0.5)),
+        p95EmbedMs: round4(percentile(embedMsList, 0.95)),
         avgSearchMs: round4(safeAvg(searchMsList)),
         p50SearchMs: round4(percentile(searchMsList, 0.5)),
         p95SearchMs: round4(percentile(searchMsList, 0.95)),
         avgFetchMs: round4(safeAvg(fetchMsList)),
         p50FetchMs: round4(percentile(fetchMsList, 0.5)),
         p95FetchMs: round4(percentile(fetchMsList, 0.95)),
-        avgRerankMs: round4(safeAvg(rerankMsList)),
-        p50RerankMs: round4(percentile(rerankMsList, 0.5)),
-        p95RerankMs: round4(percentile(rerankMsList, 0.95)),
-        avgTotalMs: round4(safeAvg(totalMsList)),
-        p50TotalMs: round4(percentile(totalMsList, 0.5)),
-        p95TotalMs: round4(percentile(totalMsList, 0.95)),
-        avgRerankedDocCount: round4(
-            safeAvg(caseReports.map((item) => item.rerankedDocCount)),
-        ),
-        avgChunksScored: round4(
-            safeAvg(caseReports.map((item) => item.chunksScored)),
-        ),
-        displayRejectRate: round2(
-            (caseReports.filter((item) => item.displayRejected).length / totalCases) *
-                100,
-        ),
-        rescueAttemptRate: round2(
-            (caseReports.filter((item) => item.rescueAttempted).length / totalCases) *
-                100,
-        ),
-        rescueAcceptedRate: round2(
-            (caseReports.filter((item) => item.rescueAccepted).length / totalCases) *
-                100,
+        avgStageTotalMs: round4(safeAvg(stageTotalMsList)),
+        p50StageTotalMs: round4(percentile(stageTotalMsList, 0.5)),
+        p95StageTotalMs: round4(percentile(stageTotalMsList, 0.95)),
+        avgEndToEndMs: round4(safeAvg(endToEndMsList)),
+        p50EndToEndMs: round4(percentile(endToEndMsList, 0.5)),
+        p95EndToEndMs: round4(percentile(endToEndMsList, 0.95)),
+        avgFetchedDocumentCount: round4(
+            safeAvg(caseReports.map((item) => item.fetchedDocumentCount)),
         ),
     };
 }
@@ -352,7 +383,8 @@ function buildModeSummary(
 async function main() {
     const engine = await loadFrontendEvalEngine();
     const termMaps = buildPipelineTermMaps(engine.vocabMap);
-    const documentLoader = createLocalDocumentLoader();
+    const documentLoaderConfig = resolveDocumentLoader();
+    const documentLoader = documentLoaderConfig.loader;
     const testCases = loadDatasetSources(DATASET_CONFIG.allSources, {
         limitPerSource:
             Number.isFinite(LIMIT_PER_SOURCE) && LIMIT_PER_SOURCE > 0
@@ -361,27 +393,18 @@ async function main() {
     });
 
     if (testCases.length === 0) {
-        throw new Error("当前评测集为空，无法执行 display rerank A/B。");
+        throw new Error("当前评测集为空，无法执行完整时延评测。");
     }
 
-    const queryVectors = await embedFrontendQueries(
-        engine.extractor,
-        testCases.map((item) => item.query),
-        engine.dimensions,
-        {
-            batchSize:
-                Number.isFinite(QUERY_EMBED_BATCH_SIZE) && QUERY_EMBED_BATCH_SIZE > 0
-                    ? QUERY_EMBED_BATCH_SIZE
-                    : DEFAULT_QUERY_EMBED_BATCH_SIZE,
-        },
-    );
-
-    const coarseOnlyReports: CaseLatencyRecord[] = [];
-    const currentUiReports: CaseLatencyRecord[] = [];
+    const caseReports: CaseLatencyRecord[] = [];
 
     for (let index = 0; index < testCases.length; index += 1) {
         const testCase = testCases[index];
-        const queryVector = queryVectors[index];
+
+        const embedStartedAt = performance.now();
+        const queryVector = await embedSingleQuery(engine.extractor, testCase.query);
+        const embedMs = performance.now() - embedStartedAt;
+
         const queryContext = buildSearchPipelineQueryContext(
             testCase.query,
             engine.vocabMap,
@@ -389,7 +412,7 @@ async function main() {
             FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET,
         );
 
-        const retrievalStage = executeRetrievalStage({
+        const pipelineResult = await executeSearchPipeline({
             query: testCase.query,
             queryVector,
             queryContext,
@@ -398,89 +421,35 @@ async function main() {
             dimensions: engine.dimensions,
             currentTimestamp: Date.now() / 1000,
             bm25Stats: engine.bm25Stats,
+            extractor: engine.extractor,
+            documentLoader,
             termMaps,
             preset: FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET,
         });
 
-        const coarseMatches = retrievalStage.searchOutput.matches
-            .slice(0, FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.display.fetchMatchLimit)
-            .map((item) => ({
-                otid: item.otid,
-                score: item.score,
-                best_kpid: item.best_kpid,
-            }));
+        const rank = getRankForCase(pipelineResult.results, testCase);
 
-        const fetchStartedAt = performance.now();
-        const fetchedDocuments = await documentLoader({
-            query: testCase.query,
-            otids: coarseMatches.map((item) => item.otid),
-        });
-        const fetchMs = performance.now() - fetchStartedAt;
-        const directDocuments = mergeCoarseMatchesIntoDocuments(
-            fetchedDocuments,
-            coarseMatches,
-        );
-
-        const coarseRank = getRankForCase(directDocuments, testCase);
-        coarseOnlyReports.push({
-            id: `${DATASET_CONFIG.datasetKey}:${index + 1}:coarse_only`,
+        caseReports.push({
+            id: `${DATASET_CONFIG.datasetKey}:${index + 1}`,
             query: testCase.query,
             dataset: testCase.dataset,
-            mode: "coarse_only",
-            rank: rankToNullable(coarseRank),
-            hitAt1: coarseRank === 1,
-            hitAt5: Number.isFinite(coarseRank) && coarseRank <= 5,
-            mrr: Number.isFinite(coarseRank) ? 1 / coarseRank : 0,
-            searchMs: retrievalStage.searchMs,
-            fetchMs,
-            rerankMs: 0,
-            totalMs: retrievalStage.searchMs + fetchMs,
-            matchCount: retrievalStage.searchOutput.matches.length,
-            fetchedDocumentCount: directDocuments.length,
-            rerankedDocCount: 0,
-            chunksScored: 0,
-            displayRejected: false,
-            rescueAttempted: false,
-            rescueAccepted: false,
-            topOtid: directDocuments[0]?.otid || null,
-        });
-
-        const rerankStartedAt = performance.now();
-        const displayStage = await runDirectAnswerDisplayStage({
-            query: testCase.query,
-            queryVector,
-            documents: directDocuments,
-            extractor: engine.extractor,
-            dimensions: engine.dimensions,
-            preset: FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET,
-            querySignals: retrievalStage.searchOutput.diagnostics?.querySignals,
-            retrievalSignals:
-                retrievalStage.searchOutput.diagnostics?.retrievalSignals,
-        });
-        const rerankMs = performance.now() - rerankStartedAt;
-        const currentUiRank = getRankForCase(displayStage.documents, testCase);
-
-        currentUiReports.push({
-            id: `${DATASET_CONFIG.datasetKey}:${index + 1}:current_ui`,
-            query: testCase.query,
-            dataset: testCase.dataset,
-            mode: "current_ui",
-            rank: rankToNullable(currentUiRank),
-            hitAt1: currentUiRank === 1,
-            hitAt5: Number.isFinite(currentUiRank) && currentUiRank <= 5,
-            mrr: Number.isFinite(currentUiRank) ? 1 / currentUiRank : 0,
-            searchMs: retrievalStage.searchMs,
-            fetchMs,
-            rerankMs,
-            totalMs: retrievalStage.searchMs + fetchMs + rerankMs,
-            matchCount: retrievalStage.searchOutput.matches.length,
-            fetchedDocumentCount: directDocuments.length,
-            rerankedDocCount: displayStage.stats.rerankedDocCount,
-            chunksScored: displayStage.stats.chunksScored,
-            displayRejected: displayStage.displayRejected,
-            rescueAttempted: displayStage.directAnswerRescue.attempted,
-            rescueAccepted: displayStage.directAnswerRescue.accepted,
-            topOtid: displayStage.documents[0]?.otid || null,
+            behavior: pipelineResult.finalDecision.behavior,
+            rank: rankToNullable(rank),
+            hitAt1: rank === 1,
+            hitAt5: Number.isFinite(rank) && rank <= 5,
+            mrr: Number.isFinite(rank) ? 1 / rank : 0,
+            embedMs,
+            searchMs: pipelineResult.trace.searchMs,
+            fetchMs: pipelineResult.trace.fetchMs,
+            stageTotalMs: pipelineResult.trace.totalMs,
+            endToEndMs: embedMs + pipelineResult.trace.totalMs,
+            matchCount: pipelineResult.trace.matchCount,
+            weakMatchCount: pipelineResult.trace.weakMatchCount,
+            fetchedDocumentCount: pipelineResult.trace.fetchedDocumentCount,
+            topOtid:
+                pipelineResult.results[0]?.otid ||
+                pipelineResult.weakResults[0]?.otid ||
+                null,
         });
 
         if ((index + 1) % 10 === 0 || index + 1 === testCases.length) {
@@ -490,8 +459,7 @@ async function main() {
         }
     }
 
-    const coarseSummary = buildModeSummary("coarse_only", coarseOnlyReports);
-    const currentSummary = buildModeSummary("current_ui", currentUiReports);
+    const summary = buildSummary(caseReports);
     const report: Report = {
         generatedAt: new Date().toISOString(),
         mainDbVersion: ACTIVE_MAIN_DB_VERSION,
@@ -503,46 +471,44 @@ async function main() {
         datasetLabel: DATASET_CONFIG.datasetLabel,
         datasetTargetKey: DATASET_TARGET_KEY,
         presetName: FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.name,
-        note: "真实展示 stage A/B：coarse_only 直接沿用 coarse 排序；current_ui 调用 runDirectAnswerDisplayStage，记录文档命中与 rerank/total 耗时。totalMs 不含 query embedding。",
-        queryEmbedBatchSize:
-            Number.isFinite(QUERY_EMBED_BATCH_SIZE) && QUERY_EMBED_BATCH_SIZE > 0
-                ? QUERY_EMBED_BATCH_SIZE
-                : DEFAULT_QUERY_EMBED_BATCH_SIZE,
+        note:
+            "正式完整时延：逐条查询执行 query embedding，并调用当前主链 executeSearchPipeline 统计 retrieval+fetch。当前主链不包含 display rerank、display threshold 或 direct answer rescue；endToEndMs = embedMs + pipeline trace totalMs。" +
+            (documentLoaderConfig.mode === "api"
+                ? " fetchMs 基于真实 HTTP /api/get_answers 抓文。"
+                : " fetchMs 基于本地 JSON 直读，不含 HTTP 往返。"),
+        documentLoaderMode: documentLoaderConfig.mode,
+        documentLoaderLabel: documentLoaderConfig.label,
+        contentApiBaseUrl: documentLoaderConfig.baseUrl,
+        contentApiPath: documentLoaderConfig.apiPath,
+        queryEmbedMode: "per_query",
         fetchMatchLimit: FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.display.fetchMatchLimit,
+        fetchWeakMatchLimit:
+            FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.display.fetchWeakMatchLimit,
         totalCases: testCases.length,
-        summaries: [coarseSummary, currentSummary],
-        deltas: {
-            hitAt1: round2(currentSummary.hitAt1 - coarseSummary.hitAt1),
-            hitAt5: round2(currentSummary.hitAt5 - coarseSummary.hitAt5),
-            mrr: round4(currentSummary.mrr - coarseSummary.mrr),
-            avgRerankMs: round4(currentSummary.avgRerankMs - coarseSummary.avgRerankMs),
-            avgTotalMs: round4(currentSummary.avgTotalMs - coarseSummary.avgTotalMs),
-            p95RerankMs: round4(currentSummary.p95RerankMs - coarseSummary.p95RerankMs),
-            p95TotalMs: round4(currentSummary.p95TotalMs - coarseSummary.p95TotalMs),
-        },
-        caseReports: [...coarseOnlyReports, ...currentUiReports],
+        summary,
+        caseReports,
     };
 
     const resultDir = path.resolve(process.cwd(), "scripts/results");
     fs.mkdirSync(resultDir, { recursive: true });
     const outputPath = path.join(
         resultDir,
-        `display_rerank_ab_${DATASET_CONFIG.datasetKey}_${Date.now()}.json`,
+        `frontend_full_latency_${documentLoaderConfig.mode}_${DATASET_CONFIG.datasetKey}_${Date.now()}.json`,
     );
     fs.writeFileSync(outputPath, JSON.stringify(report, null, 2), "utf-8");
 
-    console.log("\n===== Display Rerank A/B Summary =====");
+    console.log("\n===== Frontend Full Latency Summary =====");
     console.log(
         `Dataset: ${DATASET_CONFIG.datasetLabel} (${DATASET_CONFIG.datasetKey})`,
     );
     console.log(
-        `coarse_only | Hit@1=${coarseSummary.hitAt1.toFixed(2)}% | Hit@5=${coarseSummary.hitAt5.toFixed(2)}% | MRR=${coarseSummary.mrr.toFixed(4)} | avgTotalMs=${coarseSummary.avgTotalMs.toFixed(4)} | p95TotalMs=${coarseSummary.p95TotalMs.toFixed(4)}`,
+        `Document loader: ${documentLoaderConfig.mode} (${documentLoaderConfig.label})`,
     );
     console.log(
-        `current_ui  | Hit@1=${currentSummary.hitAt1.toFixed(2)}% | Hit@5=${currentSummary.hitAt5.toFixed(2)}% | MRR=${currentSummary.mrr.toFixed(4)} | avgRerankMs=${currentSummary.avgRerankMs.toFixed(4)} | p95RerankMs=${currentSummary.p95RerankMs.toFixed(4)} | avgTotalMs=${currentSummary.avgTotalMs.toFixed(4)} | p95TotalMs=${currentSummary.p95TotalMs.toFixed(4)}`,
+        `behavior    | answerRate=${summary.answerRate.toFixed(2)}% | rejectRate=${summary.rejectRate.toFixed(2)}% | Hit@1=${summary.hitAt1.toFixed(2)}% | Hit@5=${summary.hitAt5.toFixed(2)}% | MRR=${summary.mrr.toFixed(4)}`,
     );
     console.log(
-        `delta       | Hit@1=${report.deltas.hitAt1.toFixed(2)} | Hit@5=${report.deltas.hitAt5.toFixed(2)} | MRR=${report.deltas.mrr.toFixed(4)} | avgTotalMs=${report.deltas.avgTotalMs.toFixed(4)} | p95TotalMs=${report.deltas.p95TotalMs.toFixed(4)}`,
+        `latency     | avgEmbedMs=${summary.avgEmbedMs.toFixed(4)} | avgSearchMs=${summary.avgSearchMs.toFixed(4)} | avgFetchMs=${summary.avgFetchMs.toFixed(4)} | avgStageTotalMs=${summary.avgStageTotalMs.toFixed(4)} | avgEndToEndMs=${summary.avgEndToEndMs.toFixed(4)} | p95EndToEndMs=${summary.p95EndToEndMs.toFixed(4)}`,
     );
     console.log(`Report saved to ${outputPath}`);
 }

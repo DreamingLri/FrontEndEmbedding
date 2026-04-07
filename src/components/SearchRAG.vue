@@ -47,7 +47,6 @@ const errorMsg = ref<string | null>(null);
 const diagnosticLogs = ref<string[]>([]);
 const isWorkerReady = ref(false);
 
-const REJECTION_THRESHOLD = FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.display.rejectThreshold;
 const ORIGINAL_SNIPPET_THRESHOLD =
   FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.display.bestSentenceThreshold;
 const INDEX_CACHE_VERSION = '20260324-v3';
@@ -60,9 +59,6 @@ const hasCoverageRejection = computed(
 const hasConsistencyRejection = computed(
   () => rejectionInfo.value?.reason === 'low_consistency'
 );
-const hasDisplayThresholdReject = computed(
-  () => decisionInfo.value?.rejectionReason === 'display_threshold'
-);
 const isRejectDecision = computed(
   () => decisionInfo.value?.behavior === 'reject'
 );
@@ -72,8 +68,6 @@ const weakToggleLabel = computed(() =>
 const weakResultsTitle = computed(() => '弱相关结果');
 const rejectReasonLabel = computed(() => {
   switch (decisionInfo.value?.rejectionReason ?? rejectionInfo.value?.reason) {
-    case 'display_threshold':
-      return '展示阈值不足';
     case 'low_topic_coverage':
       return '主题覆盖不足';
     case 'low_consistency':
@@ -103,9 +97,6 @@ const rejectDescription = computed(() => {
   if (hasConsistencyRejection.value) {
     return '当前候选结果主题分散，或者证据只停留在弱相似层，系统拒绝输出不稳定答案。';
   }
-  if (hasDisplayThresholdReject.value) {
-    return `虽然召回到了候选文档，但 Top 1 原话匹配度没有达到 ${(REJECTION_THRESHOLD * 100).toFixed(0)}% 的展示阈值。`;
-  }
   return '当前问题没有达到可安全展示的直接回答条件，系统进入拒答模式。';
 });
 const emptyTitle = computed(() => {
@@ -115,10 +106,7 @@ const emptyTitle = computed(() => {
   if (hasConsistencyRejection.value) {
     return '当前查询未能形成稳定的主题结果，暂不展示不可靠答案。';
   }
-  if (hasDisplayThresholdReject.value) {
-    return '当前问题未达到可信展示阈值。';
-  }
-  return searchQuery.value.trim() ? '当前问题未达到可信展示阈值' : '输入关键词开始检索';
+  return searchQuery.value.trim() ? '当前问题未形成可信的直接答案' : '输入关键词开始检索';
 });
 const emptySubtitle = computed(() => {
   if (hasCoverageRejection.value) {
@@ -127,11 +115,8 @@ const emptySubtitle = computed(() => {
   if (hasConsistencyRejection.value) {
     return '当前结果主题分散或仅靠弱语义相似命中，因此系统选择拒答。';
   }
-  if (hasDisplayThresholdReject.value) {
-    return `Top 1 原话匹配度需不低于 ${(REJECTION_THRESHOLD * 100).toFixed(0)}%`;
-  }
   return searchQuery.value.trim()
-    ? `Top 1 原话匹配度需不低于 ${(REJECTION_THRESHOLD * 100).toFixed(0)}%`
+    ? '系统未能形成稳定且可直接展示的结果'
     : 'Top 1-3 展示原话，Top 4-10 展示紧凑列表';
 });
 
@@ -181,20 +166,11 @@ const emitTrace = (
     totalMs: string;
     searchMs: string;
     fetchMs?: string;
-    rerankMs?: string;
-    rerankedDocCount?: number;
-    chunksScored?: number;
-    rerankWindowReason?: string;
-    maxChunksPerDoc?: number;
-    chunkPlanReason?: string;
-    initialTopConfidence?: number | null;
-    topConfidence?: number | null;
     rejected?: boolean;
     rejection?: SearchRejection | null;
     weakResultsCount?: number;
     retrievalDecision?: WorkerDecision | null;
     decision?: WorkerDecision | null;
-    directAnswerRescue?: WorkerTrace['directAnswerRescue'];
     querySignals?: WorkerTrace['querySignals'];
     retrievalSignals?: WorkerTrace['retrievalSignals'];
   }
@@ -207,15 +183,6 @@ const emitTrace = (
       totalMs: opts.totalMs,
       searchMs: opts.searchMs,
       fetchMs: opts.fetchMs ?? '0.0',
-      rerankMs: opts.rerankMs ?? '0.0',
-      rerankedDocCount: opts.rerankedDocCount ?? 0,
-      chunksScored: opts.chunksScored ?? 0,
-      rerankWindowReason: opts.rerankWindowReason ?? '',
-      maxChunksPerDoc: opts.maxChunksPerDoc ?? 0,
-      chunkPlanReason: opts.chunkPlanReason ?? '',
-      initialTopConfidence: opts.initialTopConfidence ?? null,
-      rejectionThreshold: REJECTION_THRESHOLD,
-      topConfidence: opts.topConfidence ?? null,
       rejected: opts.rejected ?? false,
       rejection: opts.rejection ?? null,
       weakResultsCount: opts.weakResultsCount ?? 0,
@@ -223,7 +190,6 @@ const emitTrace = (
     decision: opts.decision ?? null,
     rejection: opts.rejection ?? null,
     weakResultsCount: opts.weakResultsCount ?? 0,
-    directAnswerRescue: opts.directAnswerRescue ?? null,
     querySignals: opts.querySignals ?? null,
     retrievalSignals: opts.retrievalSignals ?? null,
   });
@@ -380,20 +346,11 @@ const handleSearch = async () => {
       totalMs: Number(trace?.totalMs ?? 0).toFixed(1),
       searchMs: Number(trace?.searchMs ?? 0).toFixed(1),
       fetchMs: Number(trace?.fetchMs ?? 0).toFixed(1),
-      rerankMs: Number(trace?.rerankMs ?? 0).toFixed(1),
-      rerankedDocCount: trace?.rerankedDocCount,
-      chunksScored: trace?.chunksScored,
-      rerankWindowReason: trace?.rerankWindowReason,
-      maxChunksPerDoc: trace?.maxChunksPerDoc,
-      chunkPlanReason: trace?.chunkPlanReason,
-      initialTopConfidence: trace?.initialTopConfidence ?? null,
-      topConfidence: trace?.topConfidence ?? null,
       rejected: finalDecision?.behavior === 'reject',
       rejection,
       weakResultsCount: localWeakResults.length,
       retrievalDecision,
       decision: finalDecision,
-      directAnswerRescue: trace?.directAnswerRescue,
       querySignals: trace?.querySignals,
       retrievalSignals: trace?.retrievalSignals,
     });
@@ -404,24 +361,8 @@ const handleSearch = async () => {
       return;
     }
 
-    if (retrievalDecision && retrievalDecision.behavior !== finalDecision.behavior) {
-      logDiagnostic(
-        `展示阶段改写行为：${retrievalDecision.behavior} -> ${finalDecision.behavior}`
-      );
-    }
-
     if (finalDecision.behavior === 'reject') {
-      if (finalDecision.rejectionReason === 'display_threshold') {
-        statusMsg.value = `未达到展示阈值 ${(REJECTION_THRESHOLD * 100).toFixed(0)}%，已拒答`;
-        logDiagnostic(
-          `展示阶段拒答：初始 ${formatPercent(trace?.initialTopConfidence ?? 0)} / 最终 ${formatPercent(trace?.topConfidence ?? 0)}`
-        );
-        if (trace?.directAnswerRescue?.attempted) {
-          logDiagnostic(
-            `直答补救重排未保留：${trace.directAnswerRescue.reason || '补救后仍未通过阈值'}`
-          );
-        }
-      } else if (rejection?.reason === 'low_topic_coverage') {
+      if (rejection?.reason === 'low_topic_coverage') {
         statusMsg.value = '当前知识库暂无该主题的直接内容，已给出弱相关入口。';
         logDiagnostic('主题覆盖不足，已拒绝直接回答并保留弱相关入口');
       } else {
@@ -431,22 +372,7 @@ const handleSearch = async () => {
       return;
     }
 
-    if (trace?.directAnswerRescue?.attempted) {
-      if (trace.directAnswerRescue.succeeded) {
-        logDiagnostic(
-          `直答补救重排成功：${formatPercent(trace.directAnswerRescue.initialTopConfidence ?? 0)} -> ${formatPercent(trace.directAnswerRescue.rescueTopConfidence ?? 0)}`
-        );
-      } else {
-        logDiagnostic(
-          `直答补救重排未生效：${trace.directAnswerRescue.reason || '未满足保留条件'}`
-        );
-      }
-    }
-
     statusMsg.value = `找到 ${finalRender.length} 篇相关结果（总耗时 ${Number(trace?.totalMs ?? 0).toFixed(1)}ms）`;
-    if (trace?.directAnswerRescue?.succeeded) {
-      statusMsg.value = `找到 ${finalRender.length} 篇相关结果（经补救重排保留，耗时 ${Number(trace?.totalMs ?? 0).toFixed(1)}ms）`;
-    }
     logDiagnostic('统一链路已完成结果展示');
   } catch (e: any) {
     console.error(e);
@@ -549,15 +475,15 @@ const handleSearch = async () => {
           </div>
 
           <div class="min-w-[120px] rounded-2xl border border-white/8 bg-black/20 px-3 py-2 text-right">
-            <div class="text-[10px] uppercase tracking-[0.16em] text-slate-500">阈值</div>
+            <div class="text-[10px] uppercase tracking-[0.16em] text-slate-500">弱相关</div>
             <div class="mt-1 font-mono text-[13px] text-slate-100">
-              {{ (REJECTION_THRESHOLD * 100).toFixed(0) }}%
+              {{ weakResults.length }}
             </div>
             <div
               v-if="weakResults.length > 0"
               class="mt-2 text-[10px] text-slate-400"
             >
-              弱相关 {{ weakResults.length }} 条
+              可展开查看
             </div>
           </div>
         </div>

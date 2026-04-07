@@ -25,6 +25,7 @@ import {
     loadFrontendEvalEngine,
 } from "./frontend_eval_engine.ts";
 import { FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET } from "../src/worker/search_pipeline.ts";
+import { resolveBackendArticlesFile } from "./kb_version_paths.ts";
 import {
     buildStandardBaselinesResultFileName,
     resolveNamedDatasetProfile,
@@ -49,6 +50,7 @@ type QueryCacheItem = {
     querySparse: Record<number, number>;
     queryIntent: ReturnType<typeof parseQueryIntent>;
     queryYearWordIds: number[];
+    queryPhaseAnchor: PhaseAnchor;
 };
 
 type RankedDoc = {
@@ -157,9 +159,38 @@ type ScoredMeta = {
     score: number;
 };
 
+type PhaseLabel =
+    | "half_1"
+    | "half_2"
+    | "batch_1"
+    | "batch_2"
+    | "batch_3"
+    | "batch_4"
+    | "pre_apply"
+    | "apply_notice"
+    | "rule_plan"
+    | "brochure"
+    | "assessment"
+    | "retest"
+    | "adjustment";
+
+type PhaseAnchor = {
+    half?: Extract<PhaseLabel, "half_1" | "half_2">;
+    batch?: Extract<PhaseLabel, "batch_1" | "batch_2" | "batch_3" | "batch_4">;
+    stages: PhaseLabel[];
+};
+
+type NormalizedOtidEvalTarget = {
+    mode: NonNullable<DatasetCase["otid_eval_mode"]> | "single_expected";
+    acceptableOtids: string[];
+    requiredOtidGroups: string[][];
+    minGroupsToCover: number;
+};
+
 const BM25_K1 = 1.2;
 const BM25_B = 0.4;
 const CURRENT_TIMESTAMP = 0;
+const PHASE_ANCHOR_DOC_WEIGHT = 0.35;
 const TOP_MATCH_COUNT = Number.parseInt(
     process.env.SUASK_STANDARD_BASELINE_TOP_MATCHES || "",
     10,
@@ -226,6 +257,7 @@ const STRUCTURED_KP_OT_WEIGHTS = {
 const STRUCTURED_Q_KP_OT_WEIGHTS = {
     ...FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval.weights,
 };
+const ARTICLE_TEXTS_FILE = resolveBackendArticlesFile();
 
 let vocabMap = new Map<string, number>();
 let metadataList: Metadata[] = [];
@@ -238,6 +270,7 @@ let topicPartitionIndex: Awaited<
 >["topicPartitionIndex"] | null = null;
 let extractor: Awaited<ReturnType<typeof loadFrontendEvalEngine>>["extractor"] | null =
     null;
+let articlePhaseAnchorMap = new Map<string, PhaseAnchor>();
 
 function parseDatasetTargets(raw: string): DatasetTarget[] {
     const requested = raw
@@ -463,6 +496,284 @@ function compareMetrics(a: MetricSummary, b: MetricSummary): number {
     return b.hitAt3 - a.hitAt3;
 }
 
+function hasRegex(text: string, pattern: RegExp): boolean {
+    pattern.lastIndex = 0;
+    return pattern.test(text);
+}
+
+function dedupePhaseStages(stages: PhaseLabel[]): PhaseLabel[] {
+    return Array.from(new Set(stages));
+}
+
+function extractPhaseAnchor(text: string): PhaseAnchor {
+    const normalized = text.replace(/\s+/g, "");
+    let half: PhaseAnchor["half"];
+    let batch: PhaseAnchor["batch"];
+    const stages: PhaseLabel[] = [];
+
+    if (hasRegex(normalized, /上半年/)) {
+        half = "half_1";
+    } else if (hasRegex(normalized, /下半年/)) {
+        half = "half_2";
+    }
+
+    if (hasRegex(normalized, /第(?:一|1)批/)) {
+        batch = "batch_1";
+    } else if (hasRegex(normalized, /第(?:二|2)批/)) {
+        batch = "batch_2";
+    } else if (hasRegex(normalized, /第(?:三|3)批/)) {
+        batch = "batch_3";
+    } else if (hasRegex(normalized, /第(?:四|4)批/)) {
+        batch = "batch_4";
+    }
+
+    if (hasRegex(normalized, /预报名/)) {
+        stages.push("pre_apply");
+    } else if (
+        hasRegex(normalized, /(报名通知|报名公告|申请通知|申请公告|报名方式|申请方式)/)
+    ) {
+        stages.push("apply_notice");
+    }
+
+    if (hasRegex(normalized, /(工作方案|接收办法|实施办法|录取方案)/)) {
+        stages.push("rule_plan");
+    }
+
+    if (hasRegex(normalized, /(招生简章|简章|招生章程|章程)/)) {
+        stages.push("brochure");
+    }
+
+    if (hasRegex(normalized, /综合考核/)) {
+        stages.push("assessment");
+    }
+
+    if (hasRegex(normalized, /复试/)) {
+        stages.push("retest");
+    }
+
+    if (hasRegex(normalized, /调剂/)) {
+        stages.push("adjustment");
+    }
+
+    return {
+        half,
+        batch,
+        stages: dedupePhaseStages(stages),
+    };
+}
+
+function hasExplicitPhaseAnchor(anchor: PhaseAnchor): boolean {
+    return Boolean(anchor.half || anchor.batch || anchor.stages.length > 0);
+}
+
+function loadArticlePhaseAnchors(): Map<string, PhaseAnchor> {
+    const absolutePath = path.resolve(process.cwd(), ARTICLE_TEXTS_FILE);
+    if (!fs.existsSync(absolutePath)) {
+        return new Map<string, PhaseAnchor>();
+    }
+
+    const raw = JSON.parse(
+        fs.readFileSync(absolutePath, "utf-8"),
+    ) as Array<{
+        otid?: string;
+        ot_title?: string;
+    }>;
+
+    const result = new Map<string, PhaseAnchor>();
+    raw.forEach((item) => {
+        if (!item.otid) {
+            return;
+        }
+        result.set(item.otid, extractPhaseAnchor(item.ot_title || ""));
+    });
+    return result;
+}
+
+function computePhaseAnchorDocDelta(
+    queryPhase: PhaseAnchor,
+    articlePhase?: PhaseAnchor,
+): number {
+    if (!hasExplicitPhaseAnchor(queryPhase)) {
+        return 0;
+    }
+
+    if (!articlePhase) {
+        return -0.15;
+    }
+
+    let delta = 0;
+
+    if (queryPhase.half) {
+        if (articlePhase.half === queryPhase.half) {
+            delta += 0.9;
+        } else if (articlePhase.half) {
+            delta -= 0.9;
+        } else {
+            delta -= 0.2;
+        }
+    }
+
+    if (queryPhase.batch) {
+        if (articlePhase.batch === queryPhase.batch) {
+            delta += 1.0;
+        } else if (articlePhase.batch) {
+            delta -= 1.0;
+        } else {
+            delta -= 0.2;
+        }
+    }
+
+    if (queryPhase.stages.length > 0) {
+        const hasExactStage = queryPhase.stages.some((stage) =>
+            articlePhase.stages.includes(stage),
+        );
+        if (hasExactStage) {
+            delta += 0.8;
+        } else if (articlePhase.stages.length > 0) {
+            delta -= 0.8;
+        } else {
+            delta -= 0.15;
+        }
+    }
+
+    return delta;
+}
+
+function parseRequiredOtidGroups(groups?: string[][]): string[][] {
+    if (!Array.isArray(groups)) {
+        return [];
+    }
+
+    return groups
+        .map((group) =>
+            Array.isArray(group)
+                ? Array.from(
+                      new Set(
+                          group.filter(
+                              (item): item is string =>
+                                  typeof item === "string" && item.length > 0,
+                          ),
+                      ),
+                  )
+                : [],
+        )
+        .filter((group) => group.length > 0);
+}
+
+function resolveOtidEvalTarget(testCase: DatasetCase): NormalizedOtidEvalTarget {
+    const explicitRequiredGroups = parseRequiredOtidGroups(
+        testCase.required_otid_groups,
+    );
+    const acceptableOtids = Array.from(
+        new Set(
+            [
+                testCase.expected_otid,
+                ...(Array.isArray(testCase.acceptable_otids)
+                    ? testCase.acceptable_otids
+                    : []),
+            ].filter((item): item is string => typeof item === "string" && item.length > 0),
+        ),
+    );
+
+    const inferredMode =
+        testCase.otid_eval_mode ||
+        (explicitRequiredGroups.length > 0
+            ? "required_otid_groups"
+            : acceptableOtids.length > 1
+              ? "acceptable_otids"
+              : "single_expected");
+
+    const minGroupsCandidate = Number.isFinite(testCase.min_otid_groups_to_cover)
+        ? Math.max(1, Number(testCase.min_otid_groups_to_cover))
+        : explicitRequiredGroups.length > 0
+          ? explicitRequiredGroups.length
+          : acceptableOtids.length > 0
+            ? 1
+            : 0;
+
+    return {
+        mode: inferredMode,
+        acceptableOtids,
+        requiredOtidGroups:
+            inferredMode === "required_otid_groups" ? explicitRequiredGroups : [],
+        minGroupsToCover:
+            inferredMode === "required_otid_groups"
+                ? Math.min(
+                      minGroupsCandidate,
+                      Math.max(explicitRequiredGroups.length, 1),
+                  )
+                : minGroupsCandidate,
+    };
+}
+
+function getBestRankForOtidSet(
+    ranking: readonly RankedDoc[],
+    acceptableOtids: readonly string[],
+): number {
+    if (acceptableOtids.length === 0) {
+        return Number.POSITIVE_INFINITY;
+    }
+
+    const acceptableOtidSet = new Set(acceptableOtids);
+    const rankIndex = ranking.findIndex((item) => acceptableOtidSet.has(item.otid));
+    return rankIndex === -1 ? Number.POSITIVE_INFINITY : rankIndex + 1;
+}
+
+function getCoverageDepthForRequiredOtidGroups(
+    ranking: readonly RankedDoc[],
+    requiredGroups: readonly string[][],
+    minGroupsToCover: number,
+): number {
+    if (requiredGroups.length === 0 || minGroupsToCover <= 0) {
+        return Number.POSITIVE_INFINITY;
+    }
+
+    const covered = new Set<number>();
+    for (let index = 0; index < ranking.length; index++) {
+        const otid = ranking[index]?.otid;
+        if (!otid) {
+            continue;
+        }
+
+        requiredGroups.forEach((group, groupIndex) => {
+            if (!covered.has(groupIndex) && group.includes(otid)) {
+                covered.add(groupIndex);
+            }
+        });
+
+        if (covered.size >= minGroupsToCover) {
+            return index + 1;
+        }
+    }
+
+    return Number.POSITIVE_INFINITY;
+}
+
+function rerankStructuredMatchesForDocumentMetrics(
+    query: QueryCacheItem,
+    ranking: readonly RankedDoc[],
+): RankedDoc[] {
+    if (!FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval.enablePhaseAnchorBoost) {
+        return [...ranking];
+    }
+    if (!hasExplicitPhaseAnchor(query.queryPhaseAnchor)) {
+        return [...ranking];
+    }
+
+    return ranking
+        .map((item) => ({
+            ...item,
+            score:
+                item.score +
+                computePhaseAnchorDocDelta(
+                    query.queryPhaseAnchor,
+                    articlePhaseAnchorMap.get(item.otid),
+                ) *
+                    PHASE_ANCHOR_DOC_WEIGHT,
+        }))
+        .sort((a, b) => b.score - a.score);
+}
+
 function resolveCorpusView(metadata: readonly Metadata[]): CorpusView {
     const otMetadata = metadata.filter((item) => item.type === "OT");
     const kpMetadata = metadata.filter((item) => item.type === "KP");
@@ -506,6 +817,7 @@ async function loadEngine() {
     extractor = engine.extractor;
     corpusView = resolveCorpusView(metadataList);
     allMetadataBm25Stats = engine.bm25Stats;
+    articlePhaseAnchorMap = loadArticlePhaseAnchors();
 }
 
 async function buildQueryCache(testCases: DatasetCase[]): Promise<QueryCacheItem[]> {
@@ -520,7 +832,8 @@ async function buildQueryCache(testCases: DatasetCase[]): Promise<QueryCacheItem
     );
 
     return testCases.map((testCase, index) => {
-        const queryIntent = parseQueryIntent(testCase.query);
+        const referenceQueryText = testCase.source_query?.trim() || testCase.query;
+        const queryIntent = parseQueryIntent(referenceQueryText);
         const queryWords = Array.from(
             new Set(fmmTokenize(testCase.query, vocabMap)),
         );
@@ -537,6 +850,7 @@ async function buildQueryCache(testCases: DatasetCase[]): Promise<QueryCacheItem
             querySparse,
             queryIntent,
             queryYearWordIds,
+            queryPhaseAnchor: extractPhaseAnchor(referenceQueryText),
         };
     });
 }
@@ -657,6 +971,8 @@ function buildStructuredRanking(
         topHybridLimit: 1000,
         kpAggregationMode:
             FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval.kpAggregationMode,
+        kpTopN: FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval.kpTopN,
+        kpTailWeight: FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval.kpTailWeight,
         lexicalBonusMode:
             FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval.lexicalBonusMode,
         kpRoleRerankMode:
@@ -669,11 +985,14 @@ function buildStructuredRanking(
             FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval.minimalMode,
     });
 
-    return result.matches.map((item) => ({
-        otid: item.otid,
-        score: item.score,
-        best_kpid: item.best_kpid,
-    }));
+    return rerankStructuredMatchesForDocumentMetrics(
+        query,
+        result.matches.map((item) => ({
+            otid: item.otid,
+            score: item.score,
+            best_kpid: item.best_kpid,
+        })),
+    );
 }
 
 function toPerCaseResult(
@@ -681,10 +1000,16 @@ function toPerCaseResult(
     ranking: readonly RankedDoc[],
     elapsedMs: number,
 ): PerCaseResult {
-    const rankIndex = ranking.findIndex(
-        (item) => item.otid === query.testCase.expected_otid,
-    );
-    const rank = rankIndex === -1 ? null : rankIndex + 1;
+    const otidEvalTarget = resolveOtidEvalTarget(query.testCase);
+    const rankValue =
+        otidEvalTarget.mode === "required_otid_groups"
+            ? getCoverageDepthForRequiredOtidGroups(
+                  ranking,
+                  otidEvalTarget.requiredOtidGroups,
+                  otidEvalTarget.minGroupsToCover,
+              )
+            : getBestRankForOtidSet(ranking, otidEvalTarget.acceptableOtids);
+    const rank = Number.isFinite(rankValue) ? rankValue : null;
     return {
         id: query.testCase.id,
         query: query.testCase.query,

@@ -2,11 +2,6 @@ import type { FeatureExtractionPipeline } from "@huggingface/transformers";
 
 import { fmmTokenize } from "./fmm_tokenize.ts";
 import {
-    runDirectAnswerDisplayStage,
-    type DirectAnswerRescueTrace,
-    type DocumentRerankStats,
-} from "./direct_answer_display.ts";
-import {
     getQuerySparse,
     parseQueryIntent,
     QUERY_SCOPE_SPECIFICITY_TERMS,
@@ -258,11 +253,7 @@ export type PipelineDecision = {
     reason: string;
     preferLatestWithinTopic: boolean;
     useWeakMatches: boolean;
-    rejectionReason:
-        | SearchRejection["reason"]
-        | "display_threshold"
-        | null;
-    displayRejected: boolean;
+    rejectionReason: SearchRejection["reason"] | null;
     rejectScore?: number;
     rejectTier?: RejectTier | null;
 };
@@ -271,24 +262,14 @@ export type PipelineTrace = {
     totalMs: number;
     searchMs: number;
     fetchMs: number;
-    rerankMs: number;
     candidateCount: number;
     partitionUsed: boolean;
     partitionCandidateCount?: number;
     matchCount: number;
     weakMatchCount: number;
     fetchedDocumentCount: number;
-    rerankedDocCount: number;
-    chunksScored: number;
-    rerankWindowReason?: string;
-    maxChunksPerDoc?: number;
-    chunkPlanReason?: string;
-    initialTopConfidence?: number | null;
-    topConfidence?: number | null;
-    rejectionThreshold: number;
     querySignals?: QuerySignals;
     retrievalSignals?: RetrievalSignals;
-    directAnswerRescue?: DirectAnswerRescueTrace;
 };
 
 export type RetrievalStageResult = {
@@ -317,15 +298,6 @@ export type PipelineDocumentLoader = (params: {
     query: string;
     otids: string[];
 }) => Promise<PipelineDocumentRecord[]>;
-
-type DocumentRerankResult = {
-    documents: PipelineDocumentRecord[];
-    stats: DocumentRerankStats;
-};
-
-function clamp01(value: number): number {
-    return Math.min(1, Math.max(0, value));
-}
 
 function nowMs(): number {
     if (typeof performance !== "undefined" && performance.now) {
@@ -459,23 +431,9 @@ function buildPipelineDecision(params: {
                 searchOutput.weakMatches.length > 0),
         rejectionReason:
             behavior === "reject" ? searchOutput.rejection?.reason || null : null,
-        displayRejected: false,
         rejectScore: searchOutput.responseDecision?.rejectScore,
         rejectTier: searchOutput.responseDecision?.rejectTier ?? null,
     };
-}
-
-function deriveDisplayRejectScore(
-    topConfidence: number | null,
-    rejectThreshold: number,
-): number {
-    if (topConfidence === null) {
-        return 0.62;
-    }
-    const gapRatio = clamp01(
-        (rejectThreshold - topConfidence) / Math.max(rejectThreshold, 0.001),
-    );
-    return clamp01(0.5 + gapRatio * 0.18);
 }
 
 type PhaseAnchor = {
@@ -736,7 +694,7 @@ export async function executeSearchPipeline(params: {
         dimensions,
         currentTimestamp,
         bm25Stats,
-        extractor,
+        extractor: _extractor,
         documentLoader,
         termMaps,
         preset = CANONICAL_PIPELINE_PRESET,
@@ -775,18 +733,10 @@ export async function executeSearchPipeline(params: {
     const fetchIds = dedupe([...matchIds, ...weakMatchIds]);
 
     let fetchMs = 0;
-    let rerankMs = 0;
     let fetchedDocumentCount = 0;
     let results: PipelineDocumentRecord[] = [];
     let weakResults: PipelineDocumentRecord[] = [];
     let finalDecision: PipelineDecision = retrievalDecision;
-    let rerankStats: DocumentRerankResult["stats"] = {
-        rerankedDocCount: 0,
-        chunksScored: 0,
-        topConfidence: null,
-    };
-    let initialTopConfidence: number | null = null;
-    let directAnswerRescue: DirectAnswerRescueTrace | undefined;
 
     if (fetchIds.length > 0) {
         onStatus?.("正在请求原文数据...");
@@ -813,46 +763,7 @@ export async function executeSearchPipeline(params: {
                 preset.retrieval.enablePhaseAnchorBoost
                     ? applyPhaseAnchorBoostToDocuments(query, directDocuments)
                     : directDocuments;
-
-            onStatus?.("正在重排并提炼可信原话...");
-            const rerankStartedAt = nowMs();
-            const displayStage = await runDirectAnswerDisplayStage({
-                query,
-                queryVector,
-                documents: phaseAdjustedDocuments,
-                extractor,
-                dimensions,
-                preset,
-                querySignals: searchOutput.diagnostics?.querySignals,
-                retrievalSignals: searchOutput.diagnostics?.retrievalSignals,
-            });
-            rerankMs = nowMs() - rerankStartedAt;
-            rerankStats = displayStage.stats;
-            initialTopConfidence = displayStage.initialTopConfidence;
-            directAnswerRescue = displayStage.directAnswerRescue;
-
-            const displayRejected = displayStage.displayRejected;
-
-            finalDecision = displayRejected
-                ? {
-                      ...retrievalDecision,
-                      behavior: "reject",
-                      rejectionReason: "display_threshold",
-                      reason: "display_threshold_reject",
-                      displayRejected: true,
-                      useWeakMatches: false,
-                      rejectScore: Math.max(
-                          retrievalDecision.rejectScore ?? 0,
-                          deriveDisplayRejectScore(
-                              displayStage.finalTopConfidence,
-                              preset.display.rejectThreshold,
-                          ),
-                      ),
-                      rejectTier: "boundary_uncertain",
-                  }
-                : retrievalDecision;
-
-            results = displayRejected ? [] : displayStage.documents;
+            results = phaseAdjustedDocuments;
         }
 
         if (shouldFetchWeakResults) {
@@ -884,24 +795,14 @@ export async function executeSearchPipeline(params: {
             totalMs: nowMs() - pipelineStartedAt,
             searchMs: retrievalStage.searchMs,
             fetchMs,
-            rerankMs,
             candidateCount: retrievalStage.candidateCount,
             partitionUsed: Boolean(queryContext.candidateIndices),
             partitionCandidateCount: queryContext.candidateIndices?.length,
             matchCount: searchOutput.matches.length,
             weakMatchCount: searchOutput.weakMatches.length,
             fetchedDocumentCount,
-            rerankedDocCount: rerankStats.rerankedDocCount,
-            chunksScored: rerankStats.chunksScored,
-            rerankWindowReason: rerankStats.windowReason,
-            maxChunksPerDoc: rerankStats.maxChunksPerDoc,
-            chunkPlanReason: rerankStats.chunkPlanReason,
-            initialTopConfidence,
-            topConfidence: rerankStats.topConfidence,
-            rejectionThreshold: preset.display.rejectThreshold,
             querySignals: searchOutput.diagnostics?.querySignals,
             retrievalSignals: searchOutput.diagnostics?.retrievalSignals,
-            directAnswerRescue,
         },
     };
 }

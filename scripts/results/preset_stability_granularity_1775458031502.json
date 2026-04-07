@@ -1,0 +1,356 @@
+{
+  "generatedAt": "2026-04-06T06:47:11.502Z",
+  "note": "该报告用于在主 benchmark、同域泛化集与跨域 OOD 集上比较固定主配置的稳定性；排序优先看泛化集最差 Hit@1，再看泛化集平均 Hit@1，最后看主 benchmark。",
+  "datasets": [
+    {
+      "name": "main_bench_120",
+      "label": "Main",
+      "file": "D:\\Project\\SuAsk\\SuAsk_Agent\\Backend\\test\\test_dataset_granularity\\test_dataset_granularity_main_benchmark_v2_reviewed_userized_v1.json",
+      "isolateForRegistry": true
+    },
+    {
+      "name": "in_domain_holdout_50",
+      "label": "InDomain",
+      "file": "D:\\Project\\SuAsk\\SuAsk_Agent\\Backend\\test\\test_dataset_granularity\\test_dataset_granularity_in_domain_generalization_60_reviewed_userized_v1.json",
+      "isolateForRegistry": true
+    },
+    {
+      "name": "external_ood_50",
+      "label": "ExtOOD",
+      "file": "D:\\Project\\SuAsk\\SuAsk_Agent\\Backend\\test\\test_dataset_granularity\\test_dataset_granularity_external_matched_ood_60_reviewed_userized_v1.json",
+      "isolateForRegistry": true
+    }
+  ],
+  "probes": [
+    {
+      "presetName": "paper_frozen_main_v1",
+      "label": "论文主配置",
+      "comboLabel": "KP+OT",
+      "retrieval": {
+        "weights": {
+          "Q": 0,
+          "KP": 0.28571428571428575,
+          "OT": 0.7142857142857143
+        },
+        "topHybridLimit": 1000,
+        "kpAggregationMode": "max",
+        "kpTopN": 3,
+        "kpTailWeight": 0.35,
+        "lexicalBonusMode": "sum",
+        "kpRoleRerankMode": "feature",
+        "kpRoleDocWeight": 0.35,
+        "useQueryExpansion": true,
+        "useTopicPartition": true,
+        "enableExplicitYearFilter": true,
+        "enablePhaseAnchorBoost": false,
+        "minimalMode": false
+      },
+      "datasets": [
+        {
+          "datasetName": "main_bench_120",
+          "datasetLabel": "Main",
+          "outputPath": "D:/Project/SuAsk/SuAsk_Agent/FrontEnd/scripts/results/granularity_test_dataset_granularity_main_benchmark_v2_reviewed_userized_v1_preset_stability_20260406_1775456402466.json",
+          "comboLabel": "KP+OT",
+          "docHitAt1": 60,
+          "docMRR": 0.7312662800162802,
+          "kpidHitAt1": 38.63636363636363,
+          "kpidMRR": 0.4847624597624598
+        },
+        {
+          "datasetName": "in_domain_holdout_50",
+          "datasetLabel": "InDomain",
+          "outputPath": "D:/Project/SuAsk/SuAsk_Agent/FrontEnd/scripts/results/granularity_test_dataset_granularity_in_domain_generalization_60_reviewed_userized_v1_preset_stability_20260406_1775456549827.json",
+          "comboLabel": "KP+OT",
+          "docHitAt1": 63.33333333333333,
+          "docMRR": 0.7379503367003367,
+          "kpidHitAt1": 43.90243902439025,
+          "kpidMRR": 0.5323170731707317
+        },
+        {
+          "datasetName": "external_ood_50",
+          "datasetLabel": "ExtOOD",
+          "outputPath": "D:/Project/SuAsk/SuAsk_Agent/FrontEnd/scripts/results/granularity_test_dataset_granularity_external_matched_ood_60_reviewed_userized_v1_preset_stability_20260406_1775456664245.json",
+          "comboLabel": "KP+OT",
+          "docHitAt1": 51.66666666666667,
+          "docMRR": 0.6987820512820514,
+          "kpidHitAt1": 37.2093023255814,
+          "kpidMRR": 0.5085271317829457
+        }
+      ],
+      "aggregate": {
+        "benchmarkDocHitAt1": 60,
+        "benchmarkDocMRR": 0.7312662800162802,
+        "benchmarkKpidHitAt1": 38.63636363636363,
+        "benchmarkKpidMRR": 0.4847624597624598,
+        "generalizationAverageDocHitAt1": 57.5,
+        "generalizationAverageDocMRR": 0.7183661939911941,
+        "generalizationAverageKpidHitAt1": 40.555870674985826,
+        "generalizationAverageKpidMRR": 0.5204221024768387,
+        "generalizationWorstDocHitAt1": 51.66666666666667,
+        "generalizationWorstDocMRR": 0.6987820512820514,
+        "generalizationWorstKpidHitAt1": 37.2093023255814,
+        "generalizationWorstKpidMRR": 0.5085271317829457,
+        "generalizationDocHitAt1Range": 11.666666666666657,
+        "generalizationKpidHitAt1Range": 6.69313669880885
+      }
+    },
+    {
+      "presetName": "product_canonical_full_v1",
+      "label": "产品旧 canonical 配置",
+      "comboLabel": "Q+KP+OT",
+      "retrieval": {
+        "weights": {
+          "Q": 0.3333333333333333,
+          "KP": 0.13333333333333333,
+          "OT": 0.5333333333333333
+        },
+        "topHybridLimit": 1000,
+        "kpAggregationMode": "max",
+        "kpTopN": 3,
+        "kpTailWeight": 0.35,
+        "lexicalBonusMode": "sum",
+        "kpRoleRerankMode": "feature",
+        "kpRoleDocWeight": 0.35,
+        "useQueryExpansion": true,
+        "useTopicPartition": true,
+        "enableExplicitYearFilter": true,
+        "enablePhaseAnchorBoost": false,
+        "minimalMode": false
+      },
+      "datasets": [
+        {
+          "datasetName": "main_bench_120",
+          "datasetLabel": "Main",
+          "outputPath": "D:/Project/SuAsk/SuAsk_Agent/FrontEnd/scripts/results/granularity_test_dataset_granularity_main_benchmark_v2_reviewed_userized_v1_preset_stability_20260406_1775456879818.json",
+          "comboLabel": "Q+KP+OT",
+          "docHitAt1": 63.33333333333333,
+          "docMRR": 0.7656286075036075,
+          "kpidHitAt1": 40.909090909090914,
+          "kpidMRR": 0.5148674242424243
+        },
+        {
+          "datasetName": "in_domain_holdout_50",
+          "datasetLabel": "InDomain",
+          "outputPath": "D:/Project/SuAsk/SuAsk_Agent/FrontEnd/scripts/results/granularity_test_dataset_granularity_in_domain_generalization_60_reviewed_userized_v1_preset_stability_20260406_1775456990838.json",
+          "comboLabel": "Q+KP+OT",
+          "docHitAt1": 68.33333333333333,
+          "docMRR": 0.7837962962962963,
+          "kpidHitAt1": 51.21951219512195,
+          "kpidMRR": 0.5955284552845528
+        },
+        {
+          "datasetName": "external_ood_50",
+          "datasetLabel": "ExtOOD",
+          "outputPath": "D:/Project/SuAsk/SuAsk_Agent/FrontEnd/scripts/results/granularity_test_dataset_granularity_external_matched_ood_60_reviewed_userized_v1_preset_stability_20260406_1775457101498.json",
+          "comboLabel": "Q+KP+OT",
+          "docHitAt1": 61.66666666666667,
+          "docMRR": 0.7498809523809524,
+          "kpidHitAt1": 48.837209302325576,
+          "kpidMRR": 0.562015503875969
+        }
+      ],
+      "aggregate": {
+        "benchmarkDocHitAt1": 63.33333333333333,
+        "benchmarkDocMRR": 0.7656286075036075,
+        "benchmarkKpidHitAt1": 40.909090909090914,
+        "benchmarkKpidMRR": 0.5148674242424243,
+        "generalizationAverageDocHitAt1": 65,
+        "generalizationAverageDocMRR": 0.7668386243386244,
+        "generalizationAverageKpidHitAt1": 50.02836074872376,
+        "generalizationAverageKpidMRR": 0.5787719795802608,
+        "generalizationWorstDocHitAt1": 61.66666666666667,
+        "generalizationWorstDocMRR": 0.7498809523809524,
+        "generalizationWorstKpidHitAt1": 48.837209302325576,
+        "generalizationWorstKpidMRR": 0.562015503875969,
+        "generalizationDocHitAt1Range": 6.666666666666657,
+        "generalizationKpidHitAt1Range": 2.3823028927963747
+      }
+    },
+    {
+      "presetName": "paper_tail_top3_w020_v1",
+      "label": "论文主配置 + top3 tail0.20",
+      "comboLabel": "KP+OT",
+      "retrieval": {
+        "weights": {
+          "Q": 0,
+          "KP": 0.28571428571428575,
+          "OT": 0.7142857142857143
+        },
+        "topHybridLimit": 1000,
+        "kpAggregationMode": "max_plus_topn",
+        "kpTopN": 3,
+        "kpTailWeight": 0.2,
+        "lexicalBonusMode": "sum",
+        "kpRoleRerankMode": "feature",
+        "kpRoleDocWeight": 0.35,
+        "useQueryExpansion": true,
+        "useTopicPartition": true,
+        "enableExplicitYearFilter": true,
+        "enablePhaseAnchorBoost": false,
+        "minimalMode": false
+      },
+      "datasets": [
+        {
+          "datasetName": "main_bench_120",
+          "datasetLabel": "Main",
+          "outputPath": "D:/Project/SuAsk/SuAsk_Agent/FrontEnd/scripts/results/granularity_test_dataset_granularity_main_benchmark_v2_reviewed_userized_v1_preset_stability_20260406_1775457316038.json",
+          "comboLabel": "KP+OT",
+          "docHitAt1": 60.83333333333333,
+          "docMRR": 0.7357107244607247,
+          "kpidHitAt1": 39.77272727272727,
+          "kpidMRR": 0.4908230658230659
+        },
+        {
+          "datasetName": "in_domain_holdout_50",
+          "datasetLabel": "InDomain",
+          "outputPath": "D:/Project/SuAsk/SuAsk_Agent/FrontEnd/scripts/results/granularity_test_dataset_granularity_in_domain_generalization_60_reviewed_userized_v1_preset_stability_20260406_1775457429366.json",
+          "comboLabel": "KP+OT",
+          "docHitAt1": 63.33333333333333,
+          "docMRR": 0.7381818181818182,
+          "kpidHitAt1": 43.90243902439025,
+          "kpidMRR": 0.5323170731707317
+        },
+        {
+          "datasetName": "external_ood_50",
+          "datasetLabel": "ExtOOD",
+          "outputPath": "D:/Project/SuAsk/SuAsk_Agent/FrontEnd/scripts/results/granularity_test_dataset_granularity_external_matched_ood_60_reviewed_userized_v1_preset_stability_20260406_1775457549651.json",
+          "comboLabel": "KP+OT",
+          "docHitAt1": 53.333333333333336,
+          "docMRR": 0.7071153846153847,
+          "kpidHitAt1": 39.53488372093023,
+          "kpidMRR": 0.5201550387596899
+        }
+      ],
+      "aggregate": {
+        "benchmarkDocHitAt1": 60.83333333333333,
+        "benchmarkDocMRR": 0.7357107244607247,
+        "benchmarkKpidHitAt1": 39.77272727272727,
+        "benchmarkKpidMRR": 0.4908230658230659,
+        "generalizationAverageDocHitAt1": 58.33333333333333,
+        "generalizationAverageDocMRR": 0.7226486013986014,
+        "generalizationAverageKpidHitAt1": 41.718661372660236,
+        "generalizationAverageKpidMRR": 0.5262360559652108,
+        "generalizationWorstDocHitAt1": 53.333333333333336,
+        "generalizationWorstDocMRR": 0.7071153846153847,
+        "generalizationWorstKpidHitAt1": 39.53488372093023,
+        "generalizationWorstKpidMRR": 0.5201550387596899,
+        "generalizationDocHitAt1Range": 9.999999999999993,
+        "generalizationKpidHitAt1Range": 4.367555303460016
+      }
+    },
+    {
+      "presetName": "product_tail_top3_w020_v1",
+      "label": "产品旧 canonical + top3 tail0.20",
+      "comboLabel": "Q+KP+OT",
+      "retrieval": {
+        "weights": {
+          "Q": 0.3333333333333333,
+          "KP": 0.13333333333333333,
+          "OT": 0.5333333333333333
+        },
+        "topHybridLimit": 1000,
+        "kpAggregationMode": "max_plus_topn",
+        "kpTopN": 3,
+        "kpTailWeight": 0.2,
+        "lexicalBonusMode": "sum",
+        "kpRoleRerankMode": "feature",
+        "kpRoleDocWeight": 0.35,
+        "useQueryExpansion": true,
+        "useTopicPartition": true,
+        "enableExplicitYearFilter": true,
+        "enablePhaseAnchorBoost": false,
+        "minimalMode": false
+      },
+      "datasets": [
+        {
+          "datasetName": "main_bench_120",
+          "datasetLabel": "Main",
+          "outputPath": "D:/Project/SuAsk/SuAsk_Agent/FrontEnd/scripts/results/granularity_test_dataset_granularity_main_benchmark_v2_reviewed_userized_v1_preset_stability_20260406_1775457786776.json",
+          "comboLabel": "Q+KP+OT",
+          "docHitAt1": 65,
+          "docMRR": 0.7739619408369408,
+          "kpidHitAt1": 43.18181818181818,
+          "kpidMRR": 0.5262310606060606
+        },
+        {
+          "datasetName": "in_domain_holdout_50",
+          "datasetLabel": "InDomain",
+          "outputPath": "D:/Project/SuAsk/SuAsk_Agent/FrontEnd/scripts/results/granularity_test_dataset_granularity_in_domain_generalization_60_reviewed_userized_v1_preset_stability_20260406_1775457910115.json",
+          "comboLabel": "Q+KP+OT",
+          "docHitAt1": 68.33333333333333,
+          "docMRR": 0.7837962962962963,
+          "kpidHitAt1": 51.21951219512195,
+          "kpidMRR": 0.5955284552845528
+        },
+        {
+          "datasetName": "external_ood_50",
+          "datasetLabel": "ExtOOD",
+          "outputPath": "D:/Project/SuAsk/SuAsk_Agent/FrontEnd/scripts/results/granularity_test_dataset_granularity_external_matched_ood_60_reviewed_userized_v1_preset_stability_20260406_1775458031287.json",
+          "comboLabel": "Q+KP+OT",
+          "docHitAt1": 60,
+          "docMRR": 0.7415476190476191,
+          "kpidHitAt1": 46.51162790697674,
+          "kpidMRR": 0.5503875968992248
+        }
+      ],
+      "aggregate": {
+        "benchmarkDocHitAt1": 65,
+        "benchmarkDocMRR": 0.7739619408369408,
+        "benchmarkKpidHitAt1": 43.18181818181818,
+        "benchmarkKpidMRR": 0.5262310606060606,
+        "generalizationAverageDocHitAt1": 64.16666666666666,
+        "generalizationAverageDocMRR": 0.7626719576719577,
+        "generalizationAverageKpidHitAt1": 48.865570051049346,
+        "generalizationAverageKpidMRR": 0.5729580260918887,
+        "generalizationWorstDocHitAt1": 60,
+        "generalizationWorstDocMRR": 0.7415476190476191,
+        "generalizationWorstKpidHitAt1": 46.51162790697674,
+        "generalizationWorstKpidMRR": 0.5503875968992248,
+        "generalizationDocHitAt1Range": 8.333333333333329,
+        "generalizationKpidHitAt1Range": 4.707884288145209
+      }
+    }
+  ],
+  "ranking": [
+    {
+      "rank": 1,
+      "presetName": "product_canonical_full_v1",
+      "label": "产品旧 canonical 配置",
+      "comboLabel": "Q+KP+OT",
+      "generalizationWorstDocHitAt1": 61.66666666666667,
+      "generalizationAverageDocHitAt1": 65,
+      "benchmarkDocHitAt1": 63.33333333333333,
+      "generalizationAverageKpidHitAt1": 50.02836074872376
+    },
+    {
+      "rank": 2,
+      "presetName": "product_tail_top3_w020_v1",
+      "label": "产品旧 canonical + top3 tail0.20",
+      "comboLabel": "Q+KP+OT",
+      "generalizationWorstDocHitAt1": 60,
+      "generalizationAverageDocHitAt1": 64.16666666666666,
+      "benchmarkDocHitAt1": 65,
+      "generalizationAverageKpidHitAt1": 48.865570051049346
+    },
+    {
+      "rank": 3,
+      "presetName": "paper_tail_top3_w020_v1",
+      "label": "论文主配置 + top3 tail0.20",
+      "comboLabel": "KP+OT",
+      "generalizationWorstDocHitAt1": 53.333333333333336,
+      "generalizationAverageDocHitAt1": 58.33333333333333,
+      "benchmarkDocHitAt1": 60.83333333333333,
+      "generalizationAverageKpidHitAt1": 41.718661372660236
+    },
+    {
+      "rank": 4,
+      "presetName": "paper_frozen_main_v1",
+      "label": "论文主配置",
+      "comboLabel": "KP+OT",
+      "generalizationWorstDocHitAt1": 51.66666666666667,
+      "generalizationAverageDocHitAt1": 57.5,
+      "benchmarkDocHitAt1": 60,
+      "generalizationAverageKpidHitAt1": 40.555870674985826
+    }
+  ]
+}

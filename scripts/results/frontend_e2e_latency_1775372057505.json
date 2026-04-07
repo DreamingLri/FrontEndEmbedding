@@ -1,0 +1,94 @@
+{
+  "generatedAt": "2026-04-05T06:54:17.504Z",
+  "mainDbVersion": "main_v2_plus",
+  "embeddingModel": "DMetaSoul/Dmeta-embedding-zh-small",
+  "pipelinePresetName": "frontend_research_sync_v1",
+  "queryEmbedBatchSize": 16,
+  "coldSampleLimit": 1,
+  "currentTimestamp": 0,
+  "notes": {
+    "coreLatency": "warm core latency 仅覆盖 query 已完成预处理与 embedding 后的检索/排序主链。",
+    "warmEndToEnd": "warm end-to-end latency 覆盖 query 预处理、embedding 与检索/排序，不含文档抓取、展示重排与结果写盘。",
+    "coldStart": "cold-start latency 基于 fresh process 下的单 query 首次请求，覆盖 engine/model load、query 预处理、embedding 与检索/排序。"
+  },
+  "warmSessionLoadEngineMs": 568.9241999999999,
+  "datasets": [
+    {
+      "datasetKey": "main_bench_120",
+      "datasetLabel": "Main",
+      "datasetAlias": "gran_main_v2",
+      "caseCount": 120,
+      "coldSampleIndices": [
+        0
+      ],
+      "warm": {
+        "preprocess": {
+          "avgMs": 0.13659666666673995,
+          "p50Ms": 0.12490000000070722,
+          "p95Ms": 0.19180000000005748,
+          "minMs": 0.0625,
+          "maxMs": 0.998299999999972
+        },
+        "embed": {
+          "avgMs": 7.945204999999997,
+          "p50Ms": 7.680399999999281,
+          "p95Ms": 10.898300000000745,
+          "minMs": 4.664300000000367,
+          "maxMs": 16.81580000000008
+        },
+        "retrieval": {
+          "avgMs": 76.68377249999998,
+          "p50Ms": 75.4380999999994,
+          "p95Ms": 86.63550000000032,
+          "minMs": 56.46240000000034,
+          "maxMs": 143.15069999999992
+        },
+        "total": {
+          "avgMs": 84.76557416666667,
+          "p50Ms": 83.66640000000098,
+          "p95Ms": 93.77250000000004,
+          "minMs": 63.77720000000045,
+          "maxMs": 153.25
+        }
+      },
+      "coldStart": {
+        "sampleCount": 1,
+        "loadEngine": {
+          "avgMs": 571.2902,
+          "p50Ms": 571.2902,
+          "p95Ms": 571.2902,
+          "minMs": 571.2902,
+          "maxMs": 571.2902
+        },
+        "preprocess": {
+          "avgMs": 1.4145000000000891,
+          "p50Ms": 1.4145000000000891,
+          "p95Ms": 1.4145000000000891,
+          "minMs": 1.4145000000000891,
+          "maxMs": 1.4145000000000891
+        },
+        "embed": {
+          "avgMs": 16.49090000000001,
+          "p50Ms": 16.49090000000001,
+          "p95Ms": 16.49090000000001,
+          "minMs": 16.49090000000001,
+          "maxMs": 16.49090000000001
+        },
+        "retrieval": {
+          "avgMs": 81.72570000000019,
+          "p50Ms": 81.72570000000019,
+          "p95Ms": 81.72570000000019,
+          "minMs": 81.72570000000019,
+          "maxMs": 81.72570000000019
+        },
+        "total": {
+          "avgMs": 670.9213000000003,
+          "p50Ms": 670.9213000000003,
+          "p95Ms": 670.9213000000003,
+          "minMs": 670.9213000000003,
+          "maxMs": 670.9213000000003
+        }
+      }
+    }
+  ]
+}

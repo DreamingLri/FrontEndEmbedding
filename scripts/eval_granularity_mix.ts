@@ -262,6 +262,7 @@ type ComboReport = {
     groupBreakdowns: {
         supportPattern: Record<string, GroupMetricsReport>;
         preferredGranularity: Record<string, GroupMetricsReport>;
+        queryType: Record<string, GroupMetricsReport>;
     };
     caseDetails?: CaseDetail[];
     caseDetailsWeightMode?: "uniform" | "tuned";
@@ -389,7 +390,11 @@ const TOP_HYBRID_LIMIT = Number.parseInt(
 const KP_AGGREGATION_MODE = (
     process.env.SUASK_KP_AGG_MODE === "max_plus_topn"
         ? "max_plus_topn"
-        : "max"
+        : process.env.SUASK_KP_AGG_MODE === "mean"
+          ? "mean"
+          : process.env.SUASK_KP_AGG_MODE === "sum"
+            ? "sum"
+            : "max"
 ) as KPAggregationMode;
 const LEXICAL_BONUS_MODE = (
     process.env.SUASK_LEXICAL_BONUS_MODE === "max" ? "max" : "sum"
@@ -436,21 +441,27 @@ const EXPERIMENT_TRACK = (
         ? "minimal_first"
         : process.env.SUASK_EXPERIMENT_TRACK === "frontend_runtime"
           ? "frontend_runtime"
-          : process.env.SUASK_EXPERIMENT_TRACK === "default"
-            ? "default"
-            : "frontend_runtime"
+            : process.env.SUASK_EXPERIMENT_TRACK === "default"
+              ? "default"
+              : "frontend_runtime"
 ) as "default" | "minimal_first" | "frontend_runtime";
+const FORCE_DISABLE_MINIMAL_YEAR =
+    process.env.SUASK_FORCE_DISABLE_MINIMAL_YEAR === "1";
+const FORCE_DISABLE_MINIMAL_PHASE =
+    process.env.SUASK_FORCE_DISABLE_MINIMAL_PHASE === "1";
 const MINIMAL_BASELINE_MODE =
     process.env.SUASK_MINIMAL_BASELINE === "1" ||
     EXPERIMENT_TRACK === "minimal_first" ||
     EXPERIMENT_TRACK === "frontend_runtime";
 const MINIMAL_ADD_YEAR =
-    process.env.SUASK_MINIMAL_ADD_YEAR === "1" ||
-    EXPERIMENT_TRACK === "frontend_runtime" ||
-    FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval.enableExplicitYearFilter;
+    !FORCE_DISABLE_MINIMAL_YEAR &&
+    (process.env.SUASK_MINIMAL_ADD_YEAR === "1" ||
+        EXPERIMENT_TRACK === "frontend_runtime" ||
+        FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval.enableExplicitYearFilter);
 const MINIMAL_ADD_PHASE =
-    EXPERIMENT_TRACK === "frontend_runtime" ||
-    process.env.SUASK_MINIMAL_ADD_PHASE === "1";
+    !FORCE_DISABLE_MINIMAL_PHASE &&
+    (EXPERIMENT_TRACK === "frontend_runtime" ||
+        process.env.SUASK_MINIMAL_ADD_PHASE === "1");
 const MINIMAL_ADD_ASPECT = process.env.SUASK_MINIMAL_ADD_ASPECT === "1";
 const MINIMAL_DISABLE_DOC_MULTI =
     process.env.SUASK_MINIMAL_DISABLE_DOC_MULTI === "1";
@@ -3590,6 +3601,14 @@ function summarizeCombo(
                 uniformWeights,
                 bestCandidate.weights,
                 (item) => item.testCase.preferred_granularity,
+            ),
+            queryType: buildGroupBreakdown(
+                allCache,
+                filteredMetadata,
+                bm25Stats,
+                uniformWeights,
+                bestCandidate.weights,
+                (item) => item.testCase.query_type,
             ),
         },
         caseDetails,

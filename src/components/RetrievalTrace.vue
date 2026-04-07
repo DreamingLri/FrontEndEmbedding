@@ -2,11 +2,8 @@
 import {
   Activity,
   Clock,
-  Cpu,
   ExternalLink,
-  FileText,
   Layers,
-  ShieldAlert
 } from 'lucide-vue-next';
 import type {
   PipelineBehavior,
@@ -34,22 +31,12 @@ type TraceData = {
   decision?: TraceDecision | null;
   rejection?: TraceRejection | null;
   weakResultsCount?: number;
-  directAnswerRescue?: PipelineTrace['directAnswerRescue'] | null;
   querySignals?: PipelineTrace['querySignals'] | null;
   retrievalSignals?: PipelineTrace['retrievalSignals'] | null;
   stats?: {
     totalMs: string;
     searchMs: string;
     fetchMs: string;
-    rerankMs: string;
-    rerankedDocCount?: number;
-    chunksScored?: number;
-    rerankWindowReason?: string;
-    maxChunksPerDoc?: number;
-    chunkPlanReason?: string;
-    rejectionThreshold?: number;
-    initialTopConfidence?: number | null;
-    topConfidence?: number | null;
     rejected?: boolean;
   };
 };
@@ -83,15 +70,6 @@ const behaviorClass = (behavior?: PipelineBehavior | null) => {
   }
 };
 
-const decisionFlowLabel = () => {
-  const retrievalBehavior = props.traceData?.retrievalDecision?.behavior;
-  const finalBehavior = props.traceData?.decision?.behavior;
-  if (!retrievalBehavior || !finalBehavior || retrievalBehavior === finalBehavior) {
-    return '';
-  }
-  return `${behaviorLabel(retrievalBehavior)} -> ${behaviorLabel(finalBehavior)}`;
-};
-
 const rejectionReasonLabel = () => {
   const reason =
     props.traceData?.decision?.rejectionReason ??
@@ -99,8 +77,6 @@ const rejectionReasonLabel = () => {
     null;
 
   switch (reason) {
-    case 'display_threshold':
-      return '展示阈值不足';
     case 'low_topic_coverage':
       return '主题覆盖不足';
     case 'low_consistency':
@@ -123,21 +99,7 @@ const decisionSubtitle = () => {
       : '系统选择拒答，当前结果未达到稳定可展示条件。';
   }
 
-  return '系统已进入直接回答链路，并对候选文档完成展示前重排。';
-};
-
-const rescueSubtitle = () => {
-  const rescue = props.traceData?.directAnswerRescue;
-  if (!rescue?.attempted) {
-    return '';
-  }
-  if (rescue.succeeded) {
-    return '直答候选在首次展示评分偏低时，系统扩大了重排范围并成功保留答案。';
-  }
-  if (rescue.accepted) {
-    return '系统触发了补救重排，但补救后仍未达到最终保留条件。';
-  }
-  return rescue.reason || '当前直答候选未满足补救重排的触发条件。';
+  return '系统已进入直接回答链路，并返回抓取后的候选文档。';
 };
 </script>
 
@@ -172,22 +134,6 @@ const rescueSubtitle = () => {
           <div class="text-[8px] font-bold uppercase text-emerald-400">Fetch</div>
           <div class="text-xs font-mono font-bold text-emerald-300">{{ traceData.stats.fetchMs }}ms</div>
         </div>
-        <div class="rounded-lg border border-purple-500/20 bg-purple-500/10 p-2 text-center">
-          <div class="flex items-center justify-center gap-1 text-[8px] font-bold uppercase text-purple-400">
-            <Cpu class="h-2.5 w-2.5" />
-            Rerank
-          </div>
-          <div class="text-xs font-mono font-bold text-purple-300">{{ traceData.stats.rerankMs }}ms</div>
-          <div class="mt-1 text-[9px] text-purple-200/80">
-            {{ traceData.stats.rerankedDocCount ?? 0 }} 篇 / {{ traceData.stats.chunksScored ?? 0 }} chunks
-          </div>
-          <div class="mt-1 text-[9px] text-purple-200/70">
-            每篇上限 {{ traceData.stats.maxChunksPerDoc ?? 0 }} chunks
-          </div>
-          <div v-if="traceData.stats.rerankWindowReason" class="mt-1 text-[8px] uppercase tracking-[0.12em] text-purple-200/60">
-            {{ traceData.stats.rerankWindowReason }}
-          </div>
-        </div>
       </div>
 
       <div
@@ -218,10 +164,6 @@ const rescueSubtitle = () => {
         <div class="mt-2 text-[11px] leading-6 text-slate-400">
           {{ decisionSubtitle() }}
         </div>
-        <div v-if="decisionFlowLabel()" class="mt-2 text-[10px] text-slate-500">
-          展示阶段调整: {{ decisionFlowLabel() }}
-        </div>
-
         <div class="mt-3 flex flex-wrap gap-2 text-[10px]">
           <span
             v-if="traceData.decision.preferLatestWithinTopic"
@@ -240,63 +182,6 @@ const rescueSubtitle = () => {
             class="rounded-full border border-rose-400/20 bg-rose-400/10 px-2 py-0.5 text-rose-200"
           >
             {{ rejectionReasonLabel() }}
-          </span>
-        </div>
-      </div>
-
-      <div
-        v-if="traceData.stats && traceData.stats.topConfidence !== null && traceData.stats.topConfidence !== undefined"
-        class="rounded-xl border px-3 py-2 text-xs"
-        :class="traceData.stats.rejected ? 'border-amber-500/30 bg-amber-500/10 text-amber-200' : 'border-emerald-500/20 bg-emerald-500/10 text-emerald-200'"
-      >
-        <div class="flex items-center gap-2">
-          <ShieldAlert v-if="traceData.stats.rejected" class="h-4 w-4" />
-          <FileText v-else class="h-4 w-4" />
-          <span>{{ traceData.stats.rejected ? '本次查询未通过展示阈值' : '本次查询通过展示阈值' }}</span>
-        </div>
-        <div class="mt-1 text-[11px] opacity-80">
-          Top 1 原话匹配度: {{ formatPercent(traceData.stats.topConfidence || 0) }}
-          <span v-if="traceData.stats.rejectionThreshold !== undefined">
-            / 阈值: {{ formatPercent(traceData.stats.rejectionThreshold) }}
-          </span>
-        </div>
-        <div
-          v-if="traceData.stats.initialTopConfidence !== null && traceData.stats.initialTopConfidence !== undefined"
-          class="mt-1 text-[11px] opacity-70"
-        >
-          初始重排置信度: {{ formatPercent(traceData.stats.initialTopConfidence || 0) }}
-        </div>
-      </div>
-
-      <div
-        v-if="traceData.directAnswerRescue?.attempted"
-        class="rounded-xl border px-3 py-2 text-xs"
-        :class="traceData.directAnswerRescue.succeeded ? 'border-sky-500/25 bg-sky-500/10 text-sky-200' : 'border-white/10 bg-white/[0.03] text-slate-300'"
-      >
-        <div class="flex items-center justify-between gap-3">
-          <div class="flex items-center gap-2">
-            <Cpu class="h-4 w-4" />
-            <span>直答补救重排</span>
-          </div>
-          <span class="rounded-full border border-white/10 px-2 py-0.5 text-[10px]">
-            {{ traceData.directAnswerRescue.succeeded ? '已保留' : '未保留' }}
-          </span>
-        </div>
-        <div class="mt-1 text-[11px] opacity-80">
-          {{ rescueSubtitle() }}
-        </div>
-        <div class="mt-2 flex flex-wrap gap-2 text-[10px] opacity-80">
-          <span>
-            初始 {{ formatPercent(traceData.directAnswerRescue.initialTopConfidence || 0) }}
-          </span>
-          <span v-if="traceData.directAnswerRescue.rescueTopConfidence !== undefined">
-            补救后 {{ formatPercent(traceData.directAnswerRescue.rescueTopConfidence || 0) }}
-          </span>
-          <span v-if="traceData.directAnswerRescue.initialRerankDocCount !== undefined">
-            文档窗口 {{ traceData.directAnswerRescue.initialRerankDocCount }} -> {{ traceData.directAnswerRescue.rescueRerankDocCount ?? traceData.directAnswerRescue.initialRerankDocCount }}
-          </span>
-          <span v-if="traceData.directAnswerRescue.initialMaxChunksPerDoc !== undefined">
-            chunks/文档 {{ traceData.directAnswerRescue.initialMaxChunksPerDoc }} -> {{ traceData.directAnswerRescue.rescueMaxChunksPerDoc ?? traceData.directAnswerRescue.initialMaxChunksPerDoc }}
           </span>
         </div>
       </div>
@@ -371,13 +256,13 @@ const rescueSubtitle = () => {
               <div class="mb-1 flex items-center gap-2">
                 <span class="text-[10px] font-semibold text-slate-500">#{{ i + 1 }}</span>
                 <span class="rounded-full border border-white/8 px-2 py-0.5 text-[10px] text-slate-400">
-                  {{ isOriginalSnippet(res, traceData.stats?.rejectionThreshold ?? 0.4) ? '官方原话' : '相关要点' }}
+                  {{ isOriginalSnippet(res, 0.4) ? '官方原话' : '相关要点' }}
                 </span>
               </div>
               <div class="text-xs font-semibold text-slate-200">{{ res.ot_title || '未命名政策文档' }}</div>
             </div>
             <div class="text-right">
-              <div v-if="isOriginalSnippet(res, traceData.stats?.rejectionThreshold ?? 0.4)" class="text-[10px] font-mono text-slate-300">
+              <div v-if="isOriginalSnippet(res, 0.4)" class="text-[10px] font-mono text-slate-300">
                 {{ formatPercent(res.snippetScore ?? 0) }}
               </div>
               <div v-else class="text-[10px] font-mono text-slate-400">

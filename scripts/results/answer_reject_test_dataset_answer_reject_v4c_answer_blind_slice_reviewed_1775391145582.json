@@ -1,0 +1,1024 @@
+{
+  "generatedAt": "2026-04-05T12:12:25.581Z",
+  "datasetFile": "d:\\Project\\SuAsk\\SuAsk_Agent\\Backend\\test\\test_dataset_answer_reject\\test_dataset_answer_reject_v4c_answer_blind_slice_reviewed.json",
+  "datasetName": "test_dataset_answer_reject_v4c_answer_blind_slice_reviewed",
+  "datasetAlias": "test_dataset_answer_reject_v4c_answer_blind_slice_reviewed",
+  "datasetDisplayName": "test_dataset_answer_reject_v4c_answer_blind_slice_reviewed",
+  "total": 10,
+  "config": {
+    "pipelineVersion": "frontend_research_sync_v1",
+    "preset": {
+      "name": "frontend_research_sync_v1",
+      "retrieval": {
+        "weights": {
+          "Q": 0.3333333333333333,
+          "KP": 0.3333333333333333,
+          "OT": 0.3333333333333333
+        },
+        "topHybridLimit": 1000,
+        "kpAggregationMode": "max",
+        "kpTopN": 3,
+        "kpTailWeight": 0.35,
+        "lexicalBonusMode": "sum",
+        "kpRoleRerankMode": "off",
+        "kpRoleDocWeight": 0,
+        "useQueryExpansion": false,
+        "useTopicPartition": false,
+        "enableExplicitYearFilter": true,
+        "enablePhaseAnchorBoost": true,
+        "minimalMode": true
+      },
+      "display": {
+        "rejectThreshold": 0.4,
+        "rerankBlendAlpha": 0.15,
+        "bestSentenceThreshold": 0.4,
+        "fetchMatchLimit": 20,
+        "fetchWeakMatchLimit": 12,
+        "useYearPhaseTitleAdjustment": true
+      }
+    },
+    "note": "当前报告默认对齐前端 runtime preset，数据集固定为未看过的 answer_reject v4 frozen holdout。"
+  },
+  "summary": {
+    "total": 10,
+    "byExpectedBehavior": {
+      "answer": 10,
+      "reject": 0
+    },
+    "byPredictedBehavior": {
+      "answer": 10,
+      "reject": 0
+    },
+    "binaryBehaviorAccuracy": 1,
+    "answerHitRate": 1,
+    "rejectRecall": 0,
+    "falseRejectRate": 0,
+    "unsafeAnswerRate": 0,
+    "answerDocHitRate": 1,
+    "pairCount": 0,
+    "pairConsistency": null
+  },
+  "caseReports": [
+    {
+      "id": "answer_reject_v4c_blind_answer_0001",
+      "query": "在2017年博士研究生招生录取通知书邮寄地址校对系统中，登录用户名和密码是如何设置的？请说明用户名的具体格式和密码的来源。",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_220c45e00f4742eb",
+      "top_result_otid": "otid_220c45e00f4742eb",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.1,
+      "final_reject_score": 0.1,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "deadline",
+        "schedule",
+        "publish",
+        "procedure",
+        "reminder"
+      ],
+      "weak_match_count": 0,
+      "match_count": 22,
+      "candidate_count": 8431,
+      "query_intent": {
+        "years": [
+          2017
+        ],
+        "topicIds": [
+          "graduate_admission"
+        ],
+        "intentIds": [
+          "phd_general_exam"
+        ],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": true,
+          "hasLatestPolicyState": true,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_220c45e00f4742eb",
+          "score": 1.5257243961228781,
+          "best_kpid": "kpid_25a024f2fb594bb5",
+          "top_role_tags": [
+            "time_expression",
+            "deadline",
+            "schedule",
+            "publish",
+            "procedure"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_11d206557f2b4112",
+          "score": 1.0093716618759137,
+          "best_kpid": "kpid_4c6c9318457b48d4",
+          "top_role_tags": [
+            "time_expression",
+            "deadline",
+            "schedule",
+            "publish"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_59692ec3fc384c64",
+          "score": 0.5968933775934212,
+          "best_kpid": "kpid_7f4d94b066a44cb4",
+          "top_role_tags": [
+            "time_expression",
+            "reminder",
+            "schedule"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v4c_blind_answer_0002",
+      "query": "根据2017年6月23日中山大学研究生招生办公室的通知，录取通知书预计在什么时间寄出，采用什么邮寄方式？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_220c45e00f4742eb",
+      "top_result_otid": "otid_220c45e00f4742eb",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.018799999999999997,
+      "final_reject_score": 0.018799999999999997,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "deadline",
+        "schedule",
+        "publish",
+        "procedure",
+        "email"
+      ],
+      "weak_match_count": 0,
+      "match_count": 23,
+      "candidate_count": 8431,
+      "query_intent": {
+        "years": [
+          2017
+        ],
+        "topicIds": [
+          "graduate_admission"
+        ],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": true,
+          "hasLatestPolicyState": true,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_220c45e00f4742eb",
+          "score": 1.5393153064630145,
+          "best_kpid": "kpid_c95b6fc274364df0",
+          "top_role_tags": [
+            "time_expression",
+            "deadline",
+            "schedule",
+            "publish",
+            "procedure"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_11d206557f2b4112",
+          "score": 1.4100127281426666,
+          "best_kpid": "kpid_712202be8eec4cdb",
+          "top_role_tags": [
+            "time_expression",
+            "deadline",
+            "schedule",
+            "publish"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_4b20a5e30c194bbf",
+          "score": 0.45897484441512215,
+          "best_kpid": "kpid_9b971c42ce8a454a",
+          "top_role_tags": [
+            "time_expression",
+            "email",
+            "publish"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v4c_blind_answer_0003",
+      "query": "根据2018年国家建设高水平大学公派研究生项目的规定，什么是‘派出渠道’？具体包括哪两种类型，它们分别如何定义？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_7f07ed38fde74862",
+      "top_result_otid": "otid_7f07ed38fde74862",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.146,
+      "final_reject_score": 0.146,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "materials",
+        "publish",
+        "background",
+        "time_expression",
+        "deadline",
+        "application_stage",
+        "post_outcome",
+        "schedule",
+        "email"
+      ],
+      "weak_match_count": 0,
+      "match_count": 69,
+      "candidate_count": 16212,
+      "query_intent": {
+        "years": [
+          2018
+        ],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_7f07ed38fde74862",
+          "score": 1.5311563817446172,
+          "best_kpid": "kpid_ddff8485bab44a6b",
+          "top_role_tags": [
+            "materials",
+            "publish",
+            "background",
+            "time_expression",
+            "deadline"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_e395d2058f4543b5",
+          "score": 1.3945892210875257,
+          "best_kpid": "kpid_3eec9db4d0304ea9",
+          "top_role_tags": [
+            "time_expression",
+            "materials",
+            "application_stage",
+            "post_outcome",
+            "deadline",
+            "schedule"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_42791a5498da4c46",
+          "score": 1.2572890033959092,
+          "best_kpid": "kpid_265396f4c33b49b9",
+          "top_role_tags": [
+            "time_expression",
+            "materials",
+            "email",
+            "background"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v4c_blind_answer_0004",
+      "query": "根据2018年国家建设高水平大学公派研究生项目的规定，雅思、托福或WSK成绩的有效期是多久？申请时成绩必须在什么状态？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_7f07ed38fde74862",
+      "top_result_otid": "otid_7f07ed38fde74862",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.18327272727272728,
+      "final_reject_score": 0.18327272727272728,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "deadline",
+        "background",
+        "materials",
+        "email",
+        "reminder",
+        "post_outcome",
+        "thesis"
+      ],
+      "weak_match_count": 0,
+      "match_count": 69,
+      "candidate_count": 16212,
+      "query_intent": {
+        "years": [
+          2018
+        ],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_7f07ed38fde74862",
+          "score": 1.5115476024604935,
+          "best_kpid": "kpid_2a57937dd0d34f5d",
+          "top_role_tags": [
+            "time_expression",
+            "deadline",
+            "background"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_42791a5498da4c46",
+          "score": 1.1283942111899559,
+          "best_kpid": "kpid_265396f4c33b49b9",
+          "top_role_tags": [
+            "time_expression",
+            "materials",
+            "email",
+            "background"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_b6cbd904b2fe420a",
+          "score": 1.0617318716916146,
+          "best_kpid": "kpid_df5d97c6219e4660",
+          "top_role_tags": [
+            "time_expression",
+            "reminder",
+            "post_outcome",
+            "thesis"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v4c_blind_answer_0005",
+      "query": "根据2018年11月27日中山大学学位办的通知，校务系统允许学位申请人修改论文信息的具体开放时间段是什么？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_a21ba2f3cc7b4e3b",
+      "top_result_otid": "otid_a21ba2f3cc7b4e3b",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.14823209797594974,
+      "final_reject_score": 0.14823209797594974,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "thesis",
+        "publish",
+        "background",
+        "materials",
+        "reminder",
+        "post_outcome",
+        "application_stage",
+        "email",
+        "procedure"
+      ],
+      "weak_match_count": 0,
+      "match_count": 67,
+      "candidate_count": 16212,
+      "query_intent": {
+        "years": [
+          2018
+        ],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_a21ba2f3cc7b4e3b",
+          "score": 1.537489502176098,
+          "best_kpid": "kpid_ad03fe2fb60a47d2",
+          "top_role_tags": [
+            "time_expression",
+            "thesis",
+            "publish",
+            "background"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_a96d408ce35341e6",
+          "score": 1.498874959516699,
+          "best_kpid": "kpid_167d6a8d2a624468",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "thesis",
+            "background"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_c6b7b9e02e27422d",
+          "score": 0.8117214654847738,
+          "best_kpid": "kpid_fe7e9d78d83c415e",
+          "top_role_tags": [
+            "materials",
+            "background",
+            "reminder",
+            "post_outcome",
+            "thesis",
+            "time_expression",
+            "application_stage",
+            "email",
+            "procedure"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v4c_blind_answer_0006",
+      "query": "根据2018年11月27日发布的《关于允许学位申请人修改校务系统中论文信息的通知》，学位申请人修改论文信息的具体操作步骤是什么？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_a21ba2f3cc7b4e3b",
+      "top_result_otid": "otid_a21ba2f3cc7b4e3b",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.1668,
+      "final_reject_score": 0.1668,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "thesis",
+        "publish",
+        "background",
+        "application_stage",
+        "materials",
+        "deadline",
+        "reminder"
+      ],
+      "weak_match_count": 0,
+      "match_count": 57,
+      "candidate_count": 16212,
+      "query_intent": {
+        "years": [
+          2018
+        ],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_a21ba2f3cc7b4e3b",
+          "score": 1.5584418831284792,
+          "best_kpid": "kpid_705701606a4f4abc",
+          "top_role_tags": [
+            "time_expression",
+            "thesis",
+            "publish",
+            "background"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_a96d408ce35341e6",
+          "score": 1.4304063068473072,
+          "best_kpid": "kpid_51f62a16c5644786",
+          "top_role_tags": [
+            "time_expression",
+            "thesis",
+            "publish",
+            "background"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_7bf791b066634cfe",
+          "score": 0.8632232372224161,
+          "best_kpid": "kpid_45aa4d4a1fcd4882",
+          "top_role_tags": [
+            "time_expression",
+            "application_stage",
+            "materials",
+            "background",
+            "thesis",
+            "deadline",
+            "reminder"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v4c_blind_answer_0007",
+      "query": "根据中山大学研究生院于2019年9月4日发布的《关于申报2020年国家留学基金委-耶鲁大学生物医学世界学者项目奖学金的通知》，该校可推荐多少名候选人参加2020年度的奖学金遴选？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_f1c23bf453734125",
+      "top_result_otid": "otid_f1c23bf453734125",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.0732,
+      "final_reject_score": 0.0732,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "publish",
+        "background",
+        "materials",
+        "announcement_period",
+        "post_outcome",
+        "email"
+      ],
+      "weak_match_count": 0,
+      "match_count": 40,
+      "candidate_count": 6959,
+      "query_intent": {
+        "years": [
+          2019,
+          2020
+        ],
+        "topicIds": [
+          "student_funding"
+        ],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_f1c23bf453734125",
+          "score": 1.5686519788331696,
+          "best_kpid": "kpid_fcb4b4a9476e4891",
+          "top_role_tags": [
+            "time_expression",
+            "publish",
+            "background",
+            "materials"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_2fe09f8ebd1849ab",
+          "score": 0.5951057472441916,
+          "best_kpid": "kpid_395721516a764a23",
+          "top_role_tags": [
+            "announcement_period",
+            "materials",
+            "publish",
+            "background"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_4cdacf08cc8445ee",
+          "score": 0.5265486764828596,
+          "best_kpid": "kpid_4c1715bc615a4921",
+          "top_role_tags": [
+            "time_expression",
+            "background",
+            "post_outcome",
+            "announcement_period",
+            "email",
+            "publish"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v4c_blind_answer_0008",
+      "query": "根据2019年9月4日发布的《关于申报2020年国家留学基金委-耶鲁大学生物医学世界学者项目奖学金的通知》，申请人需在2019年10月8日前提交哪些材料至研究生院106办公室？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_f1c23bf453734125",
+      "top_result_otid": "otid_f1c23bf453734125",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.03822857142857143,
+      "final_reject_score": 0.03822857142857143,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "materials",
+        "publish",
+        "background",
+        "condition",
+        "schedule",
+        "email",
+        "deadline",
+        "post_outcome",
+        "application_stage"
+      ],
+      "weak_match_count": 0,
+      "match_count": 43,
+      "candidate_count": 6959,
+      "query_intent": {
+        "years": [
+          2019,
+          2020
+        ],
+        "topicIds": [
+          "student_funding"
+        ],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_f1c23bf453734125",
+          "score": 1.5743397251780618,
+          "best_kpid": "kpid_d29f596a8feb421d",
+          "top_role_tags": [
+            "time_expression",
+            "materials",
+            "publish",
+            "background",
+            "condition"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_5178ac4ea52c4766",
+          "score": 0.6785159049300997,
+          "best_kpid": "kpid_33d42c1a81684697",
+          "top_role_tags": [
+            "time_expression",
+            "schedule",
+            "materials",
+            "background",
+            "email",
+            "publish"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_106062c73a3d40ca",
+          "score": 0.6079392620570627,
+          "best_kpid": "kpid_369f9b7fbd4943d2",
+          "top_role_tags": [
+            "time_expression",
+            "deadline",
+            "schedule",
+            "materials",
+            "post_outcome",
+            "background",
+            "application_stage",
+            "publish"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v4c_blind_answer_0009",
+      "query": "一位中山大学在校研究生需要打印中英文成绩单，根据2018年的规定，他应该持什么证件、在什么设备上办理，并且需要满足什么系统状态条件？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_689fe94db6424593",
+      "top_result_otid": "otid_689fe94db6424593",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.16967272727272728,
+      "final_reject_score": 0.16967272727272728,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "materials",
+        "time_expression",
+        "publish",
+        "schedule",
+        "distribution",
+        "background",
+        "condition",
+        "post_outcome"
+      ],
+      "weak_match_count": 0,
+      "match_count": 72,
+      "candidate_count": 16212,
+      "query_intent": {
+        "years": [
+          2018
+        ],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_689fe94db6424593",
+          "score": 1.479745052746228,
+          "best_kpid": "kpid_706628699f7b45e4",
+          "top_role_tags": [
+            "materials",
+            "time_expression",
+            "publish",
+            "schedule",
+            "distribution",
+            "background"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_b60e0d139d624590",
+          "score": 1.027375269955582,
+          "best_kpid": "kpid_fcd97e4686334bbe",
+          "top_role_tags": [
+            "time_expression"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_fc38fe81167c42a1",
+          "score": 0.8403992143122578,
+          "best_kpid": "kpid_62d65f627bc847f8",
+          "top_role_tags": [
+            "condition",
+            "materials",
+            "post_outcome"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    },
+    {
+      "id": "answer_reject_v4c_blind_answer_0010",
+      "query": "根据2018年6月20日发布的《研究生院关于办理研究生成绩单等学业证明材料有关事项的公告》，自助打印终端在哪些校区设置，各自的办理时间和地点是什么？",
+      "expected_behavior": "answer",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "behavior_correct": true,
+      "false_reject": false,
+      "unsafe_answer": false,
+      "expected_otid": "otid_689fe94db6424593",
+      "top_result_otid": "otid_689fe94db6424593",
+      "answer_doc_hit": true,
+      "pair_id": null,
+      "pair_role": null,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.18276363636363638,
+      "final_reject_score": 0.18276363636363638,
+      "retrieval_reject_tier": null,
+      "final_reject_tier": null,
+      "initial_top_confidence": null,
+      "final_top_confidence": null,
+      "evidence_top_role_tags": [
+        "time_expression",
+        "materials",
+        "publish",
+        "distribution",
+        "deadline",
+        "background",
+        "schedule",
+        "email",
+        "post_outcome"
+      ],
+      "weak_match_count": 0,
+      "match_count": 75,
+      "candidate_count": 16212,
+      "query_intent": {
+        "years": [
+          2018
+        ],
+        "topicIds": [],
+        "intentIds": [],
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false
+        }
+      },
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_689fe94db6424593",
+          "score": 1.5698306247486578,
+          "best_kpid": "kpid_00d3d79fbfcd48c2",
+          "top_role_tags": [
+            "time_expression",
+            "materials",
+            "publish",
+            "distribution"
+          ]
+        },
+        {
+          "rank": 2,
+          "otid": "otid_29d5fca1c0854c2c",
+          "score": 0.6612653944828105,
+          "best_kpid": "kpid_a31b1b92a1c04542",
+          "top_role_tags": [
+            "materials",
+            "time_expression",
+            "deadline",
+            "background"
+          ]
+        },
+        {
+          "rank": 3,
+          "otid": "otid_42791a5498da4c46",
+          "score": 0.6401696153353273,
+          "best_kpid": "kpid_7b0378258f724a31",
+          "top_role_tags": [
+            "time_expression",
+            "schedule",
+            "materials",
+            "email",
+            "post_outcome"
+          ]
+        }
+      ],
+      "top_weak_matches": []
+    }
+  ]
+}

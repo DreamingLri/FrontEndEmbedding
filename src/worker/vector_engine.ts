@@ -146,7 +146,7 @@ export interface ParsedQueryIntent {
     signals: QuerySignals;
 }
 
-export type KPAggregationMode = "max" | "max_plus_topn";
+export type KPAggregationMode = "max" | "max_plus_topn" | "mean" | "sum";
 export type LexicalBonusMode = "sum" | "max";
 export type KPRoleRerankMode = "off" | "feature";
 export type FusionMode = "default" | "max_q_vs_kpot";
@@ -862,7 +862,12 @@ function computeBaseScore(
             ? topKpScores[0] +
               topKpScores.slice(1).reduce((sum, item) => sum + item, 0) *
                   kpTailWeight
-            : topKpScores[0] || 0;
+            : kpAggregationMode === "mean" && topKpScores.length > 0
+              ? topKpScores.reduce((sum, item) => sum + item, 0) /
+                topKpScores.length
+              : kpAggregationMode === "sum" && topKpScores.length > 0
+                ? topKpScores.reduce((sum, item) => sum + item, 0)
+                : topKpScores[0] || 0;
 
     const weightedQ = scores.max_q * weights.Q;
     const weightedKP = aggregatedKpScore * weights.KP;
@@ -2242,6 +2247,8 @@ export function searchAndRank(params: {
     kpLexicalMultiplier?: number;
     otLexicalMultiplier?: number;
     denseScoreOverrides?: ReadonlyMap<string, number>;
+    denseRrfWeight?: number;
+    sparseRrfWeight?: number;
     kpRoleRerankMode?: KPRoleRerankMode;
     kpRoleDocWeight?: number;
     otDenseScoreOverrides?: ReadonlyMap<string, number>;
@@ -2275,6 +2282,8 @@ export function searchAndRank(params: {
         kpLexicalMultiplier = 1.2,
         otLexicalMultiplier = 1.0,
         denseScoreOverrides,
+        denseRrfWeight = 100,
+        sparseRrfWeight = 120,
         kpRoleRerankMode = "off",
         kpRoleDocWeight = DEFAULT_KP_ROLE_DOC_WEIGHT,
         otDenseScoreOverrides,
@@ -2292,6 +2301,12 @@ export function searchAndRank(params: {
     const safeOtLexicalMultiplier = Number.isFinite(otLexicalMultiplier)
         ? otLexicalMultiplier
         : 1.0;
+    const safeDenseRrfWeight = Number.isFinite(denseRrfWeight)
+        ? denseRrfWeight
+        : 100;
+    const safeSparseRrfWeight = Number.isFinite(sparseRrfWeight)
+        ? sparseRrfWeight
+        : 120;
     const safeEnableExplicitYearFilter =
         typeof enableExplicitYearFilter === "boolean"
             ? enableExplicitYearFilter
@@ -2401,7 +2416,7 @@ export function searchAndRank(params: {
             ? activeCandidateIndices[denseOrder[rank]]
             : denseOrder[rank];
         const meta = metadata[metaIndex];
-        rrfScores.set(meta, (1 / (rank + RRF_K)) * 100);
+        rrfScores.set(meta, (1 / (rank + RRF_K)) * safeDenseRrfWeight);
     }
 
     if (querySparse) {
@@ -2415,7 +2430,10 @@ export function searchAndRank(params: {
                 : localIndex;
             const meta = metadata[metaIndex];
             const current = rrfScores.get(meta) || 0;
-            rrfScores.set(meta, current + (1.2 / (rank + RRF_K)) * 100);
+            rrfScores.set(
+                meta,
+                current + (1 / (rank + RRF_K)) * safeSparseRrfWeight,
+            );
         }
     }
 
