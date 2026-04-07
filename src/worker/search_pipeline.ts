@@ -91,6 +91,8 @@ export const PAPER_FROZEN_MAIN_PIPELINE_PRESET: PipelinePreset = {
     display: { ...DEFAULT_DISPLAY_CONFIG },
 };
 
+// Historical preset retained only for explicit compatibility / replay.
+// Do not use as the default runtime preset.
 export const PRODUCT_CANONICAL_FULL_PIPELINE_PRESET: PipelinePreset = {
     name: "product_canonical_full_v1",
     retrieval: {
@@ -188,7 +190,7 @@ export const PIPELINE_PRESET_REGISTRY = {
 export type PipelinePresetName = keyof typeof PIPELINE_PRESET_REGISTRY;
 
 export const CANONICAL_PIPELINE_PRESET =
-    PRODUCT_CANONICAL_FULL_PIPELINE_PRESET;
+    FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET;
 
 export function clonePipelinePreset(preset: PipelinePreset): PipelinePreset {
     return {

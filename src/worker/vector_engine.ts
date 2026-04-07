@@ -2075,22 +2075,20 @@ export function classifyResponseMode(
 
     const noStructuredAnchor =
         !querySignals.hasExplicitTopicOrIntent && !querySignals.hasExplicitYear;
-    const factStyleRisk =
-        noStructuredAnchor &&
-        !querySignals.hasGenericNextStep &&
-        !querySignals.hasResultState
-            ? 1
-            : 0;
     const lowTokenRisk = tokenCount <= 1 ? 1 : tokenCount <= 3 ? 0.45 : 0;
+    const shortQueryRisk = clamp01((8 - querySignals.queryLength) / 8);
     const genericNextStepRisk =
         querySignals.hasGenericNextStep && !querySignals.hasExplicitTopicOrIntent
             ? 0.45
             : 0;
+    const stateWithoutAnchorRisk =
+        querySignals.hasResultState && noStructuredAnchor ? 1 : 0;
     const intentRisk = clamp01(
-        (noStructuredAnchor ? 0.72 : 0.16) +
-            lowTokenRisk * 0.14 +
-            genericNextStepRisk * 0.1 +
-            factStyleRisk * 0.14,
+        0.58 * (noStructuredAnchor ? 1 : 0) +
+            0.16 * lowTokenRisk +
+            0.1 * genericNextStepRisk +
+            0.1 * shortQueryRisk +
+            0.06 * stateWithoutAnchorRisk,
     );
 
     const noCandidatesRisk = retrievalSignals.candidateCount === 0 ? 1 : 0;
@@ -2101,19 +2099,15 @@ export function classifyResponseMode(
     const dominanceRisk = clamp01(
         (0.55 - retrievalSignals.dominantTopicRatio) / 0.55,
     );
-    const labelCoverageRisk = clamp01(
-        (3 - retrievalSignals.labeledTopicCount) / 3,
-    );
+    const topicDispersionRisk = Math.max(spreadRisk, dominanceRisk);
     const gapRisk = clamp01((0.05 - retrievalSignals.top1Top2Gap) / 0.05);
     const retrievalRisk =
         noCandidatesRisk === 1
             ? 1
             : clamp01(
-                  0.32 * noLabeledRisk +
-                      0.22 * spreadRisk +
-                      0.2 * dominanceRisk +
-                      0.16 * labelCoverageRisk +
-                      0.1 * gapRisk,
+                  0.5 * noLabeledRisk +
+                      0.3 * topicDispersionRisk +
+                      0.2 * gapRisk,
               );
 
     const evidenceRisk = clamp01(
@@ -2122,13 +2116,6 @@ export function classifyResponseMode(
             0.1 * (evidenceSignals.weakOnly ? 1 : 0),
     );
 
-    const shortQueryRisk = clamp01((8 - querySignals.queryLength) / 8);
-    const ambiguityRisk = clamp01(
-        0.55 * (noStructuredAnchor ? 1 : 0) +
-            0.25 * shortQueryRisk +
-            0.1 * (querySignals.hasResultState && noStructuredAnchor ? 1 : 0) +
-            0.1 * factStyleRisk,
-    );
     const genericProcessSafetyBonus =
         querySignals.hasGenericNextStep &&
         (querySignals.hasStrongDetailAnchor || querySignals.hasResultState)
@@ -2136,10 +2123,9 @@ export function classifyResponseMode(
             : 0;
 
     const rejectScore = clamp01(
-        0.38 * intentRisk +
-            0.18 * retrievalRisk +
-            0.3 * evidenceRisk +
-            0.14 * ambiguityRisk -
+        0.4 * intentRisk +
+            0.25 * retrievalRisk +
+            0.35 * evidenceRisk -
             (querySignals.hasExplicitTopicOrIntent ? 0.08 : 0) -
             (querySignals.hasExplicitYear ? 0.03 : 0) -
             genericProcessSafetyBonus,
@@ -2166,7 +2152,7 @@ export function classifyResponseMode(
     }
     if (noLabeledRisk === 1) {
         reasonParts.push("no_labeled_topic_support");
-    } else if (spreadRisk >= 0.45 || dominanceRisk >= 0.45) {
+    } else if (topicDispersionRisk >= 0.45) {
         reasonParts.push("topic_dispersion");
     }
     if (reasonParts.length === 0) {

@@ -47,8 +47,6 @@ type CaseReport = {
     final_reject_score: number | null;
     retrieval_reject_tier: string | null;
     final_reject_tier: string | null;
-    initial_top_confidence: number | null;
-    final_top_confidence: number | null;
     evidence_top_role_tags: string[];
     weak_match_count: number;
     match_count: number;
@@ -285,6 +283,7 @@ async function main() {
             testCase.query,
             engine.vocabMap,
             engine.topicPartitionIndex,
+            EVAL_PRESET,
         );
         const pipelineResult = await executeSearchPipeline({
             query: testCase.query,
@@ -344,10 +343,6 @@ async function main() {
                 pipelineResult.retrievalDecision.rejectTier ?? null,
             final_reject_tier:
                 pipelineResult.finalDecision.rejectTier ?? null,
-            initial_top_confidence:
-                pipelineResult.trace.initialTopConfidence ?? null,
-            final_top_confidence:
-                pipelineResult.trace.topConfidence ?? null,
             evidence_top_role_tags:
                 pipelineResult.searchOutput.diagnostics?.evidenceSignals
                     ?.topRoleTags || [],

@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 
 import {
-    CANONICAL_PIPELINE_PRESET,
+    FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET,
     buildPipelineTermMaps,
     buildSearchPipelineQueryContext,
     resolvePipelinePresetByName,
@@ -112,7 +112,8 @@ const DEFAULT_REPORT_NOTE =
     "当前报告直接调用统一 full pipeline，默认数据集已固定为唯一的 answer_or_reject holdout。";
 const REPORT_NOTE = process.env.SUASK_ROUTE_NOTE || DEFAULT_REPORT_NOTE;
 const PIPELINE_PRESET_NAME =
-    process.env.SUASK_PIPELINE_PRESET || CANONICAL_PIPELINE_PRESET.name;
+    process.env.SUASK_PIPELINE_PRESET ||
+    FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.name;
 const EVAL_PRESET = resolvePipelinePresetByName(PIPELINE_PRESET_NAME);
 
 function safeRate(numerator: number, denominator: number): number {
@@ -203,6 +204,7 @@ async function main() {
             testCase.query,
             engine.vocabMap,
             engine.topicPartitionIndex,
+            EVAL_PRESET,
         );
         const pipelineResult = await executeSearchPipeline({
             query: testCase.query,

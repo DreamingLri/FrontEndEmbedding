@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 
 import {
-    CANONICAL_PIPELINE_PRESET,
+    FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET,
     buildPipelineTermMaps,
     buildSearchPipelineQueryContext,
     clonePipelinePreset,
@@ -75,12 +75,6 @@ type CaseReport = {
     weak_match_count: number;
     match_count: number;
     fetched_document_count: number;
-    initial_top_confidence: number | null;
-    final_top_confidence: number | null;
-    rescue_attempted: boolean;
-    rescue_accepted: boolean;
-    rescue_succeeded: boolean;
-    rescue_reason: string | null;
     retrieval_top1_top2_gap: number | null;
     retrieval_dominant_topic_ratio: number | null;
     query_has_explicit_topic_or_intent: boolean;
@@ -149,8 +143,6 @@ type Summary = {
     routeFamilyBehaviorAccuracy: RateSummary;
     rejectHitRate: RateSummary;
     unsafeAnswerRate: RateSummary;
-    directAnswerRescueAttemptRate: RateSummary;
-    directAnswerRescueSuccessRate: RateSummary;
     directAnswerDocHits: DocHitSummary;
     retrievalStageDocHits: DocHitSummary;
     complexDirectSubsetDocHits: DocHitSummary;
@@ -187,7 +179,8 @@ const RESULTS_PREFIX =
 const REPORT_NOTE =
     process.env.SUASK_PLATFORM_MIXED_NOTE || DEFAULT_REPORT_NOTE;
 const PIPELINE_PRESET_NAME =
-    process.env.SUASK_PIPELINE_PRESET || CANONICAL_PIPELINE_PRESET.name;
+    process.env.SUASK_PIPELINE_PRESET ||
+    FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.name;
 
 function parseThresholdOverride(): number | null {
     const raw = process.env.SUASK_PLATFORM_MIXED_REJECT_THRESHOLD;
@@ -444,14 +437,6 @@ function buildSummary(caseReports: CaseReport[]): Summary {
             routeFamily.filter((item) => item.unsafe_answer).length,
             routeFamily.length,
         ),
-        directAnswerRescueAttemptRate: buildRateSummary(
-            docTargetCases.filter((item) => item.rescue_attempted).length,
-            docTargetCases.length,
-        ),
-        directAnswerRescueSuccessRate: buildRateSummary(
-            docTargetCases.filter((item) => item.rescue_succeeded).length,
-            docTargetCases.length,
-        ),
         directAnswerDocHits: buildDocHitSummary(
             docTargetCases,
             "rendered_doc_rank",
@@ -496,6 +481,7 @@ async function main() {
             testCase.query,
             engine.vocabMap,
             engine.topicPartitionIndex,
+            EVAL_PRESET,
         );
         const pipelineResult = await executeSearchPipeline({
             query: testCase.query,
@@ -571,16 +557,6 @@ async function main() {
             weak_match_count: pipelineResult.trace.weakMatchCount,
             match_count: pipelineResult.trace.matchCount,
             fetched_document_count: pipelineResult.trace.fetchedDocumentCount,
-            initial_top_confidence: pipelineResult.trace.initialTopConfidence ?? null,
-            final_top_confidence: pipelineResult.trace.topConfidence ?? null,
-            rescue_attempted:
-                pipelineResult.trace.directAnswerRescue?.attempted ?? false,
-            rescue_accepted:
-                pipelineResult.trace.directAnswerRescue?.accepted ?? false,
-            rescue_succeeded:
-                pipelineResult.trace.directAnswerRescue?.succeeded ?? false,
-            rescue_reason:
-                pipelineResult.trace.directAnswerRescue?.reason ?? null,
             retrieval_top1_top2_gap:
                 pipelineResult.trace.retrievalSignals?.top1Top2Gap ?? null,
             retrieval_dominant_topic_ratio:
@@ -663,8 +639,6 @@ async function main() {
             `routeFamilyBehaviorAccuracy=${(report.summary.routeFamilyBehaviorAccuracy.rate * 100).toFixed(2)}%`,
             `rejectHitRate=${(report.summary.rejectHitRate.rate * 100).toFixed(2)}%`,
             `unsafeAnswerRate=${(report.summary.unsafeAnswerRate.rate * 100).toFixed(2)}%`,
-            `directAnswerRescueAttemptRate=${(report.summary.directAnswerRescueAttemptRate.rate * 100).toFixed(2)}%`,
-            `directAnswerRescueSuccessRate=${(report.summary.directAnswerRescueSuccessRate.rate * 100).toFixed(2)}%`,
             `directAnswerDocHit@1=${(report.summary.directAnswerDocHits.hitAt1Rate * 100).toFixed(2)}%`,
             `retrievalDocHit@1=${(report.summary.retrievalStageDocHits.hitAt1Rate * 100).toFixed(2)}%`,
             `complexDirectHit@1=${(report.summary.complexDirectSubsetDocHits.hitAt1Rate * 100).toFixed(2)}%`,

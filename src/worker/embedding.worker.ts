@@ -159,6 +159,7 @@ async function handleSearch(query: string, taskId?: string) {
         query,
         vocabMap,
         topicPartitionIndex,
+        FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET,
     );
     const searchResult = await executeSearchPipeline({
         query,

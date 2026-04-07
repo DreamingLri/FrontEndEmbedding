@@ -14,11 +14,6 @@ import type {
 import type { QuerySignals, RetrievalSignals } from "./vector_engine.ts";
 
 const NEAR_TIE_COARSE_WINDOW = 0.025;
-const DIRECT_ANSWER_RESCUE_MARGIN = 0.12;
-const MIN_RESCUE_CHUNK_LIMIT = 6;
-const MAX_RESCUE_CHUNK_LIMIT = 14;
-const MAX_RESCUE_RERANK_DOC_COUNT = 6;
-const RESCUE_ACCEPT_DELTA = 0.005;
 
 export type DocumentRerankStats = {
     rerankedDocCount: number;
@@ -573,120 +568,6 @@ function rerankDocuments(params: {
     })();
 }
 
-function buildDirectAnswerRescuePlan(params: {
-    documentCount: number;
-    initialTopConfidence: number;
-    rejectThreshold: number;
-    initialStats: DocumentRerankStats;
-    querySignals?: QuerySignals;
-    retrievalSignals?: RetrievalSignals;
-}): {
-    rerankDocCount?: number;
-    maxChunksPerDoc?: number;
-    blendAlpha?: number;
-    reason: string;
-} | null {
-    const {
-        documentCount,
-        initialTopConfidence,
-        rejectThreshold,
-        initialStats,
-        querySignals,
-        retrievalSignals,
-    } = params;
-
-    if (initialTopConfidence >= rejectThreshold) {
-        return null;
-    }
-
-    const thresholdGap = rejectThreshold - initialTopConfidence;
-    const strongAnchors =
-        querySignals?.hasExplicitTopicOrIntent ||
-        querySignals?.hasStrongDetailAnchor ||
-        querySignals?.hasExplicitYear;
-    const stableRetrieval =
-        (retrievalSignals?.top1Top2Gap ?? 0) >= 0.04 ||
-        ((retrievalSignals?.distinctTopicCount ?? 99) <= 2 &&
-            (retrievalSignals?.dominantTopicRatio ?? 0) >= 0.45);
-
-    if (!strongAnchors && !stableRetrieval) {
-        return null;
-    }
-
-    if (thresholdGap > DIRECT_ANSWER_RESCUE_MARGIN) {
-        return null;
-    }
-
-    const queryLength = querySignals?.queryLength ?? 999;
-    const isShortQuery = queryLength <= 14;
-    const isMediumQuery = queryLength <= 28;
-    const veryStableRetrieval =
-        (retrievalSignals?.top1Top2Gap ?? 0) >= 1.0 &&
-        (retrievalSignals?.dominantTopicRatio ?? 0) >= 0.75;
-    const docGrowth = querySignals?.hasStrongDetailAnchor
-          ? 6
-          : veryStableRetrieval
-            ? 4
-            : 3;
-    const nextRerankDocCount =
-        documentCount > (initialStats.rerankedDocCount ?? 0)
-            ? Math.min(
-                  documentCount,
-                  Math.max(
-                      Math.min(
-                          MAX_RESCUE_RERANK_DOC_COUNT,
-                          (initialStats.rerankedDocCount ?? 0) +
-                              docGrowth,
-                      ),
-                      3,
-                  ),
-              )
-            : undefined;
-    const chunkGrowth =
-        querySignals?.hasStrongDetailAnchor || queryLength > 24
-            ? 5
-            : veryStableRetrieval
-              ? 6
-              : 4;
-    const nextMaxChunksPerDoc = Math.min(
-        MAX_RESCUE_CHUNK_LIMIT,
-        Math.max(
-            (initialStats.maxChunksPerDoc ?? 0) + chunkGrowth,
-            MIN_RESCUE_CHUNK_LIMIT,
-        ),
-    );
-    let rescueBlendAlpha = initialStats.blendAlpha ?? 0.15;
-    if (thresholdGap <= 0.03 && stableRetrieval) {
-        rescueBlendAlpha = Math.max(rescueBlendAlpha, 0.24);
-    }
-    if (isMediumQuery && strongAnchors && stableRetrieval) {
-        rescueBlendAlpha = Math.max(rescueBlendAlpha, 0.28);
-    }
-    if (isShortQuery && strongAnchors && veryStableRetrieval) {
-        rescueBlendAlpha = Math.max(rescueBlendAlpha, 0.36);
-    }
-
-    if (
-        nextRerankDocCount === undefined &&
-        nextMaxChunksPerDoc <= (initialStats.maxChunksPerDoc ?? 0) &&
-        rescueBlendAlpha <= (initialStats.blendAlpha ?? 0)
-    ) {
-        return null;
-    }
-
-    const reasonParts: string[] = [];
-    if (thresholdGap <= 0.06) reasonParts.push("near_threshold");
-    if (strongAnchors) reasonParts.push("strong_anchor");
-    if (stableRetrieval) reasonParts.push("stable_retrieval");
-
-    return {
-        rerankDocCount: nextRerankDocCount,
-        maxChunksPerDoc: nextMaxChunksPerDoc,
-        blendAlpha: rescueBlendAlpha,
-        reason: reasonParts.join("+") || "direct_answer_rescue",
-    };
-}
-
 export async function runDirectAnswerDisplayStage(params: {
     query: string;
     queryVector: Float32Array;
@@ -704,11 +585,14 @@ export async function runDirectAnswerDisplayStage(params: {
         extractor,
         dimensions,
         preset,
-        querySignals,
-        retrievalSignals,
+        querySignals: _querySignals,
+        retrievalSignals: _retrievalSignals,
     } = params;
 
-    const initialResult = await rerankDocuments({
+    // The frontend pipeline is now single-stage reject only.
+    // Display stage keeps pure document rerank behavior and no longer
+    // performs secondary reject or rescue decisions.
+    const rerankResult = await rerankDocuments({
         query,
         queryVector,
         documents,
@@ -716,81 +600,19 @@ export async function runDirectAnswerDisplayStage(params: {
         dimensions,
         preset,
     });
-    const initialTopConfidence = initialResult.stats.topConfidence ?? null;
-    let selectedResult = initialResult;
-
-    const rescueTrace: DirectAnswerRescueTrace = {
-        attempted: false,
-        accepted: false,
-        succeeded: false,
-        initialTopConfidence,
-        initialRerankDocCount: initialResult.stats.rerankedDocCount,
-        initialMaxChunksPerDoc: initialResult.stats.maxChunksPerDoc,
-        initialBlendAlpha: initialResult.stats.blendAlpha,
-    };
-
-    const rescuePlan =
-        initialTopConfidence !== null
-            ? buildDirectAnswerRescuePlan({
-                  documentCount: documents.length,
-                  initialTopConfidence,
-                  rejectThreshold: preset.display.rejectThreshold,
-                  initialStats: initialResult.stats,
-                  querySignals,
-                  retrievalSignals,
-              })
-            : null;
-
-    if (rescuePlan) {
-        rescueTrace.attempted = true;
-        rescueTrace.reason = rescuePlan.reason;
-        rescueTrace.rescueRerankDocCount = rescuePlan.rerankDocCount;
-        rescueTrace.rescueMaxChunksPerDoc = rescuePlan.maxChunksPerDoc;
-        rescueTrace.rescueBlendAlpha = rescuePlan.blendAlpha;
-
-        const rescueResult = await rerankDocuments({
-            query,
-            queryVector,
-            documents,
-            extractor,
-            dimensions,
-            preset,
-            overrides: {
-                rerankDocCount: rescuePlan.rerankDocCount,
-                maxChunksPerDoc: rescuePlan.maxChunksPerDoc,
-                blendAlpha: rescuePlan.blendAlpha,
-                overrideReason: `rescue:${rescuePlan.reason}`,
-            },
-        });
-        rescueTrace.rescueTopConfidence = rescueResult.stats.topConfidence ?? null;
-
-        if (
-            (rescueResult.stats.topConfidence ?? -999) >=
-                preset.display.rejectThreshold ||
-            (rescueResult.stats.topConfidence ?? -999) >=
-                (initialTopConfidence ?? -999) + RESCUE_ACCEPT_DELTA
-        ) {
-            selectedResult = rescueResult;
-            rescueTrace.accepted = true;
-        }
-    }
-
-    const finalTopConfidence = selectedResult.stats.topConfidence ?? null;
-    const displayRejected =
-        selectedResult.documents.length > 0 &&
-        (finalTopConfidence ?? -999) < preset.display.rejectThreshold;
-
-    rescueTrace.succeeded =
-        rescueTrace.attempted &&
-        !displayRejected &&
-        (initialTopConfidence ?? -999) < preset.display.rejectThreshold;
+    const topConfidence = rerankResult.stats.topConfidence ?? null;
 
     return {
-        documents: selectedResult.documents,
-        stats: selectedResult.stats,
-        initialTopConfidence,
-        finalTopConfidence,
-        displayRejected,
-        directAnswerRescue: rescueTrace,
+        documents: rerankResult.documents,
+        stats: rerankResult.stats,
+        initialTopConfidence: topConfidence,
+        finalTopConfidence: topConfidence,
+        displayRejected: false,
+        directAnswerRescue: {
+            attempted: false,
+            accepted: false,
+            succeeded: false,
+            initialTopConfidence: topConfidence,
+        },
     };
 }
