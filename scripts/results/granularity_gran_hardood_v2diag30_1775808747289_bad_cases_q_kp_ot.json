@@ -1,0 +1,3904 @@
+{
+  "generatedAt": "2026-04-10T08:10:50.728Z",
+  "datasetVersion": "granularity",
+  "datasetKey": "test_dataset_granularity_hard_ood_v2_diag_top30",
+  "comboLabel": "Q+KP+OT",
+  "weightMode": "tuned",
+  "caseCount": 29,
+  "cases": [
+    {
+      "query": "如果一个学生想申请人工智能学院2022年博士项目 他需要经过哪些考核步骤",
+      "expected_otid": "otid_c5344a7fc3bc439a",
+      "otid_eval_mode": "required_otid_groups",
+      "acceptable_otids": [
+        "otid_c5344a7fc3bc439a"
+      ],
+      "required_otid_groups": [],
+      "min_otid_groups_to_cover": 1,
+      "kp_eval_mode": "aspect_coverage",
+      "acceptable_anchor_kpids": [
+        "kpid_75ae2113b59e44b7",
+        "kpid_33e8ab6cc3fd4b0f",
+        "kpid_a9478d1dcf2b40d4"
+      ],
+      "required_kpid_groups": [
+        [
+          "kpid_75ae2113b59e44b7"
+        ],
+        [
+          "kpid_33e8ab6cc3fd4b0f"
+        ],
+        [
+          "kpid_a9478d1dcf2b40d4"
+        ]
+      ],
+      "min_groups_to_cover": 3,
+      "dataset": "test_dataset_granularity_hard_ood_v2_diag_top30",
+      "query_type": "situational",
+      "query_scope": "procedure",
+      "preferred_granularity": "KP+OT",
+      "support_pattern": "multi_kp",
+      "granularity_sensitive": true,
+      "theme_family": "招生流程",
+      "source_dataset": "hardood_v2_diag_extvariantg_top30",
+      "source_seed_id": "ai_seed_otid_c5344a7fc3bc439a_02",
+      "challenge_tags": [
+        "跨部分整合",
+        "流程描述"
+      ],
+      "notes": "需要整合多个 KP 来回答流程问题。 2026-04-03 第二轮收缩：改为 required_otid_groups，需联合覆盖实施办法、综合考核通知、综合考核结果公示三篇流程文档。 HardOOD v2 diagnostic: selected from ext_variant_g by current runtime difficulty.",
+      "docRank": null,
+      "kpidRank": null,
+      "supportCoverageDepth": null,
+      "docCoverageDepth": null,
+      "docGroupsCoveredTop5": 0,
+      "docGroupsRequired": 0,
+      "docFullCoverTop5": false,
+      "docPartialCoverTop5": false,
+      "supportGroupsCoveredTop5": 0,
+      "supportGroupsRequired": 3,
+      "supportFullCoverTop5": false,
+      "supportPartialCoverTop5": false,
+      "docHitAt1": false,
+      "docHitAt5": false,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "failure_risk": "requires_multi_kp",
+      "failure_reasons": [
+        "必需文档组未能在前5内完成覆盖，优先表现为多文档召回或排序失败。",
+        "文档候选中未能稳定选出正确主证据 KP。",
+        "多重点样本当前仍先受文档级召回限制，尚未进入方面覆盖判定阶段。",
+        "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+      ],
+      "topDocMatchesSource": "matches",
+      "topDocMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_392eac0b27fa4b09",
+          "score": 1.183787497392245,
+          "best_kpid": "kpid_081fa6516435497f"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_8dcb848e9edd4fd2",
+          "score": 1.1370192307692306
+        },
+        {
+          "rank": 3,
+          "otid": "otid_bc7c8e0e968d4d56",
+          "score": 0.8636493658074913,
+          "best_kpid": "kpid_820fab3c5a1f498a"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_860f1ae2b71c4de9",
+          "score": 0.8309008274208536,
+          "best_kpid": "kpid_ee114acf02c54cb1"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_ed4b1cd55d9e4326",
+          "score": 0.8285769753445932
+        }
+      ],
+      "topKpidMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_392eac0b27fa4b09",
+          "best_kpid": "kpid_081fa6516435497f"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_8dcb848e9edd4fd2"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_bc7c8e0e968d4d56",
+          "best_kpid": "kpid_820fab3c5a1f498a"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_860f1ae2b71c4de9",
+          "best_kpid": "kpid_ee114acf02c54cb1"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_ed4b1cd55d9e4326"
+        }
+      ],
+      "expectedDocTopKpCandidates": []
+    },
+    {
+      "query": "我申请2021年中山大学人工智能学院博士，如果专家组面试中单科成绩被多数专家打低分，会被直接淘汰吗？",
+      "expected_otid": "otid_9911c0374cdd4ce4",
+      "otid_eval_mode": "single_expected",
+      "acceptable_otids": [
+        "otid_9911c0374cdd4ce4"
+      ],
+      "required_otid_groups": [],
+      "min_otid_groups_to_cover": 1,
+      "expected_kpid": "kpid_01070b9570494653",
+      "kp_eval_mode": "single_anchor",
+      "acceptable_anchor_kpids": [
+        "kpid_01070b9570494653"
+      ],
+      "required_kpid_groups": [],
+      "min_groups_to_cover": 1,
+      "dataset": "test_dataset_granularity_hard_ood_v2_diag_top30",
+      "query_type": "situational",
+      "query_scope": "eligibility_condition",
+      "preferred_granularity": "KP",
+      "support_pattern": "single_kp",
+      "granularity_sensitive": true,
+      "theme_family": "申请-考核制录取规则",
+      "source_dataset": "hardood_v2_diag_extvariantg_top30",
+      "source_seed_id": "ai_seed_otid_9911c0374cdd4ce4_02",
+      "challenge_tags": [
+        "eligibility_condition",
+        "single_kp",
+        "situational_query",
+        "pref_kp"
+      ],
+      "notes": "HardOOD v2 diagnostic: selected from ext_variant_g by current runtime difficulty.",
+      "docRank": null,
+      "kpidRank": null,
+      "supportCoverageDepth": null,
+      "docCoverageDepth": null,
+      "docGroupsCoveredTop5": 0,
+      "docGroupsRequired": 0,
+      "docFullCoverTop5": false,
+      "docPartialCoverTop5": false,
+      "supportGroupsCoveredTop5": 0,
+      "supportGroupsRequired": 0,
+      "supportFullCoverTop5": false,
+      "supportPartialCoverTop5": false,
+      "docHitAt1": false,
+      "docHitAt5": false,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "failure_risk": "document_miss",
+      "failure_reasons": [
+        "正确文档未进入前5，优先表现为文档级召回或排序失败。",
+        "文档候选中未能稳定选出正确主证据 KP。"
+      ],
+      "topDocMatchesSource": "matches",
+      "topDocMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_1fe8155fa2f64320",
+          "score": 1.4100109481554932,
+          "best_kpid": "kpid_a02dbe7b296944ba"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_77c43125dba648d2",
+          "score": 1.2016597507586693,
+          "best_kpid": "kpid_d0deb3e83f6946c8"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_06f7620140244798",
+          "score": 1.0174717463907386,
+          "best_kpid": "kpid_b8e58d7f69c142bf"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_10c83368275647b5",
+          "score": 1.0099873652923153,
+          "best_kpid": "kpid_05170c6019dc48ae"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_c1fa6db91e294a94",
+          "score": 0.40696495923991116,
+          "best_kpid": "kpid_3e56a932e48e4b8a"
+        }
+      ],
+      "topKpidMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_1fe8155fa2f64320",
+          "best_kpid": "kpid_a02dbe7b296944ba"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_77c43125dba648d2",
+          "best_kpid": "kpid_d0deb3e83f6946c8"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_06f7620140244798",
+          "best_kpid": "kpid_b8e58d7f69c142bf"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_10c83368275647b5",
+          "best_kpid": "kpid_05170c6019dc48ae"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_c1fa6db91e294a94",
+          "best_kpid": "kpid_3e56a932e48e4b8a"
+        }
+      ],
+      "expectedDocTopKpCandidates": []
+    },
+    {
+      "query": "在人工智能学院2022年博士申请中 要要什么条件和材料提交的截止日期都有哪些",
+      "expected_otid": "otid_5e4e1434da5748eb",
+      "otid_eval_mode": "single_expected",
+      "acceptable_otids": [
+        "otid_5e4e1434da5748eb"
+      ],
+      "required_otid_groups": [],
+      "min_otid_groups_to_cover": 1,
+      "kp_eval_mode": "aspect_coverage",
+      "acceptable_anchor_kpids": [
+        "kpid_79904ecf12d04839",
+        "kpid_b73d16e9aed644aa"
+      ],
+      "required_kpid_groups": [
+        [
+          "kpid_79904ecf12d04839"
+        ],
+        [
+          "kpid_b73d16e9aed644aa"
+        ]
+      ],
+      "min_groups_to_cover": 2,
+      "dataset": "test_dataset_granularity_hard_ood_v2_diag_top30",
+      "query_type": "situational",
+      "query_scope": "eligibility_condition",
+      "preferred_granularity": "KP+OT",
+      "support_pattern": "multi_kp",
+      "granularity_sensitive": true,
+      "theme_family": "博士研究生招生",
+      "source_dataset": "hardood_v2_diag_extvariantg_top30",
+      "source_seed_id": "ai_seed_otid_5e4e1434da5748eb_02",
+      "challenge_tags": [
+        "条件与时间整合"
+      ],
+      "notes": "需要结合申请条件和提交时间。 HardOOD v2 diagnostic: selected from ext_variant_g by current runtime difficulty.",
+      "docRank": 8,
+      "kpidRank": 8,
+      "supportCoverageDepth": 2,
+      "docCoverageDepth": 8,
+      "docGroupsCoveredTop5": 0,
+      "docGroupsRequired": 0,
+      "docFullCoverTop5": false,
+      "docPartialCoverTop5": false,
+      "supportGroupsCoveredTop5": 2,
+      "supportGroupsRequired": 2,
+      "supportFullCoverTop5": false,
+      "supportPartialCoverTop5": false,
+      "docHitAt1": false,
+      "docHitAt5": false,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "failure_risk": "requires_multi_kp",
+      "failure_reasons": [
+        "正确文档未进入前5，优先表现为文档级召回或排序失败。",
+        "文档候选中未能稳定选出正确主证据 KP。",
+        "多重点样本当前仍先受文档级召回限制，尚未进入方面覆盖判定阶段。",
+        "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+      ],
+      "topDocMatchesSource": "matches",
+      "topDocMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_9a910d57cebd4a10",
+          "score": 0.7643074161747005,
+          "best_kpid": "kpid_6fce57a8c5104473"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_bc7c8e0e968d4d56",
+          "score": 0.7613365425793731,
+          "best_kpid": "kpid_76f9d5c0262b4632"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_392eac0b27fa4b09",
+          "score": 0.7534525412809354,
+          "best_kpid": "kpid_a17b5df4d05c447b"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_c7828d5c12cc4c90",
+          "score": 0.7495897912138669,
+          "best_kpid": "kpid_060e551962de49df"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_2c221a5f38864ced",
+          "score": 0.7164179104477613
+        }
+      ],
+      "topKpidMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_9a910d57cebd4a10",
+          "best_kpid": "kpid_6fce57a8c5104473"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_bc7c8e0e968d4d56",
+          "best_kpid": "kpid_76f9d5c0262b4632"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_392eac0b27fa4b09",
+          "best_kpid": "kpid_a17b5df4d05c447b"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_c7828d5c12cc4c90",
+          "best_kpid": "kpid_060e551962de49df"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_2c221a5f38864ced"
+        }
+      ],
+      "expectedDocTopKpCandidates": [
+        {
+          "rank": 1,
+          "kpid": "kpid_79904ecf12d04839",
+          "rawScore": 1.4599066164216974,
+          "rerankedScore": 1.4599066164216974
+        },
+        {
+          "rank": 2,
+          "kpid": "kpid_b73d16e9aed644aa",
+          "rawScore": 0.4512378519105448,
+          "rerankedScore": 0.4512378519105448
+        }
+      ]
+    },
+    {
+      "query": "通过考核后 如何确保被人工智能学院2026年博士录取",
+      "expected_otid": "otid_1180b6d41c0e4ca7",
+      "otid_eval_mode": "single_expected",
+      "acceptable_otids": [
+        "otid_1180b6d41c0e4ca7"
+      ],
+      "required_otid_groups": [],
+      "min_otid_groups_to_cover": 1,
+      "kp_eval_mode": "ot_only",
+      "acceptable_anchor_kpids": [],
+      "required_kpid_groups": [],
+      "min_groups_to_cover": 0,
+      "dataset": "test_dataset_granularity_hard_ood_v2_diag_top30",
+      "query_type": "situational",
+      "query_scope": "procedure",
+      "preferred_granularity": "OT",
+      "support_pattern": "ot_required",
+      "granularity_sensitive": true,
+      "theme_family": "博士招生报考",
+      "source_dataset": "hardood_v2_diag_extvariantg_top30",
+      "source_seed_id": "ai_seed_otid_1180b6d41c0e4ca7_03",
+      "challenge_tags": [
+        "规则衔接",
+        "情境推理"
+      ],
+      "notes": "需要理解考核与录取规则的关联 HardOOD v2 diagnostic: selected from ext_variant_g by current runtime difficulty.",
+      "docRank": 7,
+      "kpidRank": null,
+      "supportCoverageDepth": null,
+      "docCoverageDepth": 7,
+      "docGroupsCoveredTop5": 0,
+      "docGroupsRequired": 0,
+      "docFullCoverTop5": false,
+      "docPartialCoverTop5": false,
+      "supportGroupsCoveredTop5": 0,
+      "supportGroupsRequired": 0,
+      "supportFullCoverTop5": false,
+      "supportPartialCoverTop5": false,
+      "docHitAt1": false,
+      "docHitAt5": false,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "failure_risk": "needs_ot_context",
+      "failure_reasons": [
+        "正确文档未进入前5，优先表现为文档级召回或排序失败。",
+        "该样本更依赖整篇通知上下文，适合补 ot_required 或 OT 邻近样本。"
+      ],
+      "topDocMatchesSource": "matches",
+      "topDocMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_c03d97fc09704546",
+          "score": 1.5860145058618824,
+          "best_kpid": "kpid_c8598bcecedc47a0"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_f38fd69ea2d64794",
+          "score": 1.4519878091866125,
+          "best_kpid": "kpid_6327783ef0e247ff"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_eb3d3855deb74340",
+          "score": 1.3546030154667268,
+          "best_kpid": "kpid_69f10b673a554b24"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_4b2b45a3a7f84940",
+          "score": 1.2998194624107933,
+          "best_kpid": "kpid_4571e90a78f8450d"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_42225868ea784bbf",
+          "score": 0.9601168232318305,
+          "best_kpid": "kpid_5d44223cacfc40db"
+        }
+      ],
+      "topKpidMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_c03d97fc09704546",
+          "best_kpid": "kpid_c8598bcecedc47a0"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_f38fd69ea2d64794",
+          "best_kpid": "kpid_6327783ef0e247ff"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_eb3d3855deb74340",
+          "best_kpid": "kpid_69f10b673a554b24"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_4b2b45a3a7f84940",
+          "best_kpid": "kpid_4571e90a78f8450d"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_42225868ea784bbf",
+          "best_kpid": "kpid_5d44223cacfc40db"
+        }
+      ],
+      "expectedDocTopKpCandidates": [
+        {
+          "rank": 1,
+          "kpid": "kpid_c9529f7cbbc946b8",
+          "rawScore": 1.2596391808041316,
+          "rerankedScore": 1.2596391808041316
+        },
+        {
+          "rank": 2,
+          "kpid": "kpid_72b3299a78cb44a5",
+          "rawScore": 1.1681403702680297,
+          "rerankedScore": 1.1681403702680297
+        }
+      ]
+    },
+    {
+      "query": "在人工智能学院2023年博士招生中 考生通过材料审核后 在考核报到时需要提供要准备什么材料",
+      "expected_otid": "otid_5f10b726aa1d4728",
+      "otid_eval_mode": "required_otid_groups",
+      "acceptable_otids": [
+        "otid_5f10b726aa1d4728"
+      ],
+      "required_otid_groups": [
+        [
+          "otid_5f10b726aa1d4728"
+        ],
+        [
+          "otid_dc2fbd2f88f7453b"
+        ]
+      ],
+      "min_otid_groups_to_cover": 2,
+      "kp_eval_mode": "aspect_coverage",
+      "acceptable_anchor_kpids": [
+        "kpid_5b5f80bbf4e249bf",
+        "kpid_c313bd3796bf46b4"
+      ],
+      "required_kpid_groups": [
+        [
+          "kpid_5b5f80bbf4e249bf"
+        ],
+        [
+          "kpid_c313bd3796bf46b4"
+        ]
+      ],
+      "min_groups_to_cover": 2,
+      "dataset": "test_dataset_granularity_hard_ood_v2_diag_top30",
+      "query_type": "standard",
+      "query_scope": "procedure",
+      "preferred_granularity": "KP+OT",
+      "support_pattern": "multi_kp",
+      "granularity_sensitive": true,
+      "theme_family": "博士招生实施办法",
+      "source_dataset": "hardood_v2_diag_extvariantg_top30",
+      "source_seed_id": "ai_seed_otid_5f10b726aa1d4728_02",
+      "challenge_tags": [
+        "多阶段流程"
+      ],
+      "notes": "结合材料审核和综合考核两个阶段的要求。；人工复核：acceptable_otids(expected, top1, top5)。 2026-04-03 第二轮收缩：仅保留两篇同题实施办法，进入综合考核名单不再作为可替代文档。 2026-04-04 round3 收紧：材料审核后报到材料题恢复为 required_otid_groups，需同时覆盖两篇同题实施办法。 HardOOD v2 diagnostic: selected from ext_variant_g by current runtime difficulty.",
+      "docRank": 5,
+      "kpidRank": null,
+      "supportCoverageDepth": 3,
+      "docCoverageDepth": 5,
+      "docGroupsCoveredTop5": 2,
+      "docGroupsRequired": 2,
+      "docFullCoverTop5": true,
+      "docPartialCoverTop5": true,
+      "supportGroupsCoveredTop5": 2,
+      "supportGroupsRequired": 2,
+      "supportFullCoverTop5": true,
+      "supportPartialCoverTop5": true,
+      "docHitAt1": false,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "failure_risk": "best_kpid_confusion",
+      "failure_reasons": [
+        "必需文档组进入前5但未能更早完成覆盖，存在多文档排序偏差。",
+        "文档候选中已覆盖部分必需通知，但仍未形成完整文档链。",
+        "文档候选中未能稳定选出正确主证据 KP。",
+        "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+      ],
+      "topDocMatchesSource": "matches",
+      "topDocMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_0f30eade3efc4803",
+          "score": 0.9910913289539367,
+          "best_kpid": "kpid_2b0f816523314ffb"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_5f10b726aa1d4728",
+          "score": 0.9293258236484845,
+          "best_kpid": "kpid_c67b75b015104827"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_2822fe40ab7e4534",
+          "score": 0.7010584204136344,
+          "best_kpid": "kpid_d0957e88687e43fa"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_e0c52921de884ef1",
+          "score": 0.7000275370698513,
+          "best_kpid": "kpid_d09f33db00c3427b"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_dc2fbd2f88f7453b",
+          "score": 0.6862495791471945,
+          "best_kpid": "kpid_52e7ec7e1d33472b"
+        }
+      ],
+      "topKpidMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_0f30eade3efc4803",
+          "best_kpid": "kpid_2b0f816523314ffb"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_5f10b726aa1d4728",
+          "best_kpid": "kpid_c67b75b015104827"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_2822fe40ab7e4534",
+          "best_kpid": "kpid_d0957e88687e43fa"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_e0c52921de884ef1",
+          "best_kpid": "kpid_d09f33db00c3427b"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_dc2fbd2f88f7453b",
+          "best_kpid": "kpid_52e7ec7e1d33472b"
+        }
+      ],
+      "expectedDocTopKpCandidates": [
+        {
+          "rank": 1,
+          "kpid": "kpid_c67b75b015104827",
+          "rawScore": 0.9917355371900827,
+          "rerankedScore": 0.9917355371900827
+        },
+        {
+          "rank": 2,
+          "kpid": "kpid_5b5f80bbf4e249bf",
+          "rawScore": 0.5194805194805194,
+          "rerankedScore": 0.5194805194805194
+        },
+        {
+          "rank": 3,
+          "kpid": "kpid_c313bd3796bf46b4",
+          "rawScore": 0.3614457831325301,
+          "rerankedScore": 0.3614457831325301
+        }
+      ]
+    },
+    {
+      "query": "中山大学人工智能学院2026年博士招生的整体政策和关键要求是什么？",
+      "expected_otid": "otid_1180b6d41c0e4ca7",
+      "otid_eval_mode": "single_expected",
+      "acceptable_otids": [
+        "otid_1180b6d41c0e4ca7"
+      ],
+      "required_otid_groups": [],
+      "min_otid_groups_to_cover": 1,
+      "kp_eval_mode": "ot_only",
+      "acceptable_anchor_kpids": [],
+      "required_kpid_groups": [],
+      "min_groups_to_cover": 0,
+      "dataset": "test_dataset_granularity_hard_ood_v2_diag_top30",
+      "query_type": "standard",
+      "query_scope": "policy_overview",
+      "preferred_granularity": "OT",
+      "support_pattern": "ot_required",
+      "granularity_sensitive": true,
+      "theme_family": "博士招生政策概览",
+      "source_dataset": "hardood_v2_diag_extvariantg_top30",
+      "source_seed_id": "ai_seed_otid_1180b6d41c0e4ca7_01",
+      "challenge_tags": [
+        "policy_overview",
+        "ot_required",
+        "standard_query",
+        "pref_ot"
+      ],
+      "notes": "HardOOD v2 diagnostic: selected from ext_variant_g by current runtime difficulty.",
+      "docRank": 4,
+      "kpidRank": null,
+      "supportCoverageDepth": null,
+      "docCoverageDepth": 4,
+      "docGroupsCoveredTop5": 0,
+      "docGroupsRequired": 0,
+      "docFullCoverTop5": false,
+      "docPartialCoverTop5": false,
+      "supportGroupsCoveredTop5": 0,
+      "supportGroupsRequired": 0,
+      "supportFullCoverTop5": false,
+      "supportPartialCoverTop5": false,
+      "docHitAt1": false,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "failure_risk": "needs_ot_context",
+      "failure_reasons": [
+        "正确文档进入前5但未到第1名，存在文档级排序偏差。",
+        "该样本更依赖整篇通知上下文，适合补 ot_required 或 OT 邻近样本。"
+      ],
+      "topDocMatchesSource": "matches",
+      "topDocMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_8fd3944fd7814ff5",
+          "score": 1.3765759403348143,
+          "best_kpid": "kpid_8d27b364d1f443ee"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_f38fd69ea2d64794",
+          "score": 1.306350797748647,
+          "best_kpid": "kpid_6327783ef0e247ff"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_cefdbe9b7cf34bdb",
+          "score": 1.1899362136451084,
+          "best_kpid": "kpid_681b9b6b66df47a4"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_1180b6d41c0e4ca7",
+          "score": 1.1188115822148446,
+          "best_kpid": "kpid_72b3299a78cb44a5"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_c03d97fc09704546",
+          "score": 1.0723782353818998,
+          "best_kpid": "kpid_c8598bcecedc47a0"
+        }
+      ],
+      "topKpidMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_8fd3944fd7814ff5",
+          "best_kpid": "kpid_8d27b364d1f443ee"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_f38fd69ea2d64794",
+          "best_kpid": "kpid_6327783ef0e247ff"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_cefdbe9b7cf34bdb",
+          "best_kpid": "kpid_681b9b6b66df47a4"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_1180b6d41c0e4ca7",
+          "best_kpid": "kpid_72b3299a78cb44a5"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_c03d97fc09704546",
+          "best_kpid": "kpid_c8598bcecedc47a0"
+        }
+      ],
+      "expectedDocTopKpCandidates": [
+        {
+          "rank": 1,
+          "kpid": "kpid_72b3299a78cb44a5",
+          "rawScore": 2.3976172747580042,
+          "rerankedScore": 2.3976172747580042
+        },
+        {
+          "rank": 2,
+          "kpid": "kpid_ade6c7c80fb34a09",
+          "rawScore": 0.21621621621621623,
+          "rerankedScore": 0.21621621621621623
+        }
+      ]
+    },
+    {
+      "query": "人工智能学院2023年博士招生中 材料审核公示和考核分别安排在什么时候",
+      "expected_otid": "otid_dc2fbd2f88f7453b",
+      "otid_eval_mode": "required_otid_groups",
+      "acceptable_otids": [
+        "otid_dc2fbd2f88f7453b"
+      ],
+      "required_otid_groups": [
+        [
+          "otid_dc2fbd2f88f7453b"
+        ],
+        [
+          "otid_0f30eade3efc4803"
+        ]
+      ],
+      "min_otid_groups_to_cover": 2,
+      "kp_eval_mode": "aspect_coverage",
+      "acceptable_anchor_kpids": [
+        "kpid_64164ade698a4751",
+        "kpid_7799b437f0664829"
+      ],
+      "required_kpid_groups": [
+        [
+          "kpid_64164ade698a4751"
+        ],
+        [
+          "kpid_7799b437f0664829"
+        ]
+      ],
+      "min_groups_to_cover": 2,
+      "dataset": "test_dataset_granularity_hard_ood_v2_diag_top30",
+      "query_type": "standard",
+      "query_scope": "time_location",
+      "preferred_granularity": "KP+OT",
+      "support_pattern": "multi_kp",
+      "granularity_sensitive": true,
+      "theme_family": "招生时间线",
+      "source_dataset": "hardood_v2_diag_extvariantg_top30",
+      "source_seed_id": "ai_seed_otid_dc2fbd2f88f7453b_03",
+      "challenge_tags": [
+        "跨KP时间整合"
+      ],
+      "notes": "需要结合两个KP的时间信息。；人工复核：acceptable_otids(expected, top1, top2, top3)。 2026-04-03 第二轮收缩：仅保留最接近题面的时间 sibling“进入综合考核考生名单”。 2026-04-04 round3 收紧：材料审核公示与考核时间双要素题恢复为 required_otid_groups。 HardOOD v2 diagnostic: selected from ext_variant_g by current runtime difficulty.",
+      "docRank": 4,
+      "kpidRank": null,
+      "supportCoverageDepth": null,
+      "docCoverageDepth": 4,
+      "docGroupsCoveredTop5": 2,
+      "docGroupsRequired": 2,
+      "docFullCoverTop5": true,
+      "docPartialCoverTop5": true,
+      "supportGroupsCoveredTop5": 1,
+      "supportGroupsRequired": 2,
+      "supportFullCoverTop5": false,
+      "supportPartialCoverTop5": true,
+      "docHitAt1": false,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "failure_risk": "partial_multi_kp_coverage",
+      "failure_reasons": [
+        "必需文档组进入前5但未能更早完成覆盖，存在多文档排序偏差。",
+        "文档候选中已覆盖部分必需通知，但仍未形成完整文档链。",
+        "文档候选中未能稳定选出正确主证据 KP。",
+        "正确文档命中后，仅覆盖了部分同等重要的证据方面。",
+        "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+      ],
+      "topDocMatchesSource": "matches",
+      "topDocMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_c495d5e1d55d4213",
+          "score": 1.699244864639472,
+          "best_kpid": "kpid_73d0c8465fe6405c"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_0f30eade3efc4803",
+          "score": 1.177044817374492,
+          "best_kpid": "kpid_2b0f816523314ffb"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_5f10b726aa1d4728",
+          "score": 1.0553428022030782,
+          "best_kpid": "kpid_54c229bf04724764"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_dc2fbd2f88f7453b",
+          "score": 0.9061887302432983,
+          "best_kpid": "kpid_642f8622768f4519"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_1d07d7c9f48e4090",
+          "score": 0.6430958360296471,
+          "best_kpid": "kpid_f076cb0187714e12"
+        }
+      ],
+      "topKpidMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_c495d5e1d55d4213",
+          "best_kpid": "kpid_73d0c8465fe6405c"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_0f30eade3efc4803",
+          "best_kpid": "kpid_2b0f816523314ffb"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_5f10b726aa1d4728",
+          "best_kpid": "kpid_54c229bf04724764"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_dc2fbd2f88f7453b",
+          "best_kpid": "kpid_642f8622768f4519"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_1d07d7c9f48e4090",
+          "best_kpid": "kpid_f076cb0187714e12"
+        }
+      ],
+      "expectedDocTopKpCandidates": [
+        {
+          "rank": 1,
+          "kpid": "kpid_642f8622768f4519",
+          "rawScore": 1.843779330482845,
+          "rerankedScore": 1.843779330482845
+        },
+        {
+          "rank": 2,
+          "kpid": "kpid_64164ade698a4751",
+          "rawScore": 1.5461098682575192,
+          "rerankedScore": 1.5461098682575192
+        },
+        {
+          "rank": 3,
+          "kpid": "kpid_d40e015da0ff4fbd",
+          "rawScore": 0.7344999557352376,
+          "rerankedScore": 0.7344999557352376
+        },
+        {
+          "rank": 4,
+          "kpid": "kpid_52e7ec7e1d33472b",
+          "rawScore": 0.4580152671755725,
+          "rerankedScore": 0.4580152671755725
+        }
+      ]
+    },
+    {
+      "query": "人工智能学院2023年博士招生的要要什么条件是什么 以及考核如何评分",
+      "expected_otid": "otid_84a37b294495492a",
+      "otid_eval_mode": "required_otid_groups",
+      "acceptable_otids": [
+        "otid_84a37b294495492a"
+      ],
+      "required_otid_groups": [
+        [
+          "otid_84a37b294495492a"
+        ],
+        [
+          "otid_dc2fbd2f88f7453b"
+        ]
+      ],
+      "min_otid_groups_to_cover": 2,
+      "kp_eval_mode": "aspect_coverage",
+      "acceptable_anchor_kpids": [
+        "kpid_d605c013b18144ab",
+        "kpid_a4765e054c9140a6"
+      ],
+      "required_kpid_groups": [
+        [
+          "kpid_d605c013b18144ab"
+        ],
+        [
+          "kpid_a4765e054c9140a6"
+        ]
+      ],
+      "min_groups_to_cover": 2,
+      "dataset": "test_dataset_granularity_hard_ood_v2_diag_top30",
+      "query_type": "standard",
+      "query_scope": "policy_overview",
+      "preferred_granularity": "KP+OT",
+      "support_pattern": "multi_kp",
+      "granularity_sensitive": true,
+      "theme_family": "博士招生政策",
+      "source_dataset": "hardood_v2_diag_extvariantg_top30",
+      "source_seed_id": "ai_seed_otid_84a37b294495492a_03",
+      "challenge_tags": [
+        "多KP整合",
+        "考核细节"
+      ],
+      "notes": "需要整合申请条件和考核评分两个KP。；人工复核：acceptable_otids(expected, top1, top2, top3)。 2026-04-03 第二轮收缩：仅保留招生简章与实施办法，名单和结果公示不再作为可替代文档。 2026-04-04 round3 收紧：条件+评分题恢复为 required_otid_groups，需同时覆盖招生简章与实施办法。 HardOOD v2 diagnostic: selected from ext_variant_g by current runtime difficulty.",
+      "docRank": 4,
+      "kpidRank": null,
+      "supportCoverageDepth": 4,
+      "docCoverageDepth": 4,
+      "docGroupsCoveredTop5": 2,
+      "docGroupsRequired": 2,
+      "docFullCoverTop5": true,
+      "docPartialCoverTop5": true,
+      "supportGroupsCoveredTop5": 2,
+      "supportGroupsRequired": 2,
+      "supportFullCoverTop5": true,
+      "supportPartialCoverTop5": true,
+      "docHitAt1": false,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "failure_risk": "best_kpid_confusion",
+      "failure_reasons": [
+        "必需文档组进入前5但未能更早完成覆盖，存在多文档排序偏差。",
+        "文档候选中已覆盖部分必需通知，但仍未形成完整文档链。",
+        "文档候选中未能稳定选出正确主证据 KP。",
+        "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+      ],
+      "topDocMatchesSource": "matches",
+      "topDocMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_0f30eade3efc4803",
+          "score": 1.248082332572394,
+          "best_kpid": "kpid_2b0f816523314ffb"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_c495d5e1d55d4213",
+          "score": 1.1259525796306336,
+          "best_kpid": "kpid_73d0c8465fe6405c"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_dc2fbd2f88f7453b",
+          "score": 0.8454766557679954,
+          "best_kpid": "kpid_d40e015da0ff4fbd"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_84a37b294495492a",
+          "score": 0.7777118715156588,
+          "best_kpid": "kpid_48dd250062c141c4"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_1d07d7c9f48e4090",
+          "score": 0.7430128606300304,
+          "best_kpid": "kpid_f076cb0187714e12"
+        }
+      ],
+      "topKpidMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_0f30eade3efc4803",
+          "best_kpid": "kpid_2b0f816523314ffb"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_c495d5e1d55d4213",
+          "best_kpid": "kpid_73d0c8465fe6405c"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_dc2fbd2f88f7453b",
+          "best_kpid": "kpid_d40e015da0ff4fbd"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_84a37b294495492a",
+          "best_kpid": "kpid_48dd250062c141c4"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_1d07d7c9f48e4090",
+          "best_kpid": "kpid_f076cb0187714e12"
+        }
+      ],
+      "expectedDocTopKpCandidates": [
+        {
+          "rank": 1,
+          "kpid": "kpid_48dd250062c141c4",
+          "rawScore": 2.100090521143153,
+          "rerankedScore": 2.100090521143153
+        },
+        {
+          "rank": 2,
+          "kpid": "kpid_d605c013b18144ab",
+          "rawScore": 1.0789070211916914,
+          "rerankedScore": 1.0789070211916914
+        },
+        {
+          "rank": 3,
+          "kpid": "kpid_e1eeecb9333d4ca1",
+          "rawScore": 0.5150214592274678,
+          "rerankedScore": 0.5150214592274678
+        },
+        {
+          "rank": 4,
+          "kpid": "kpid_a4765e054c9140a6",
+          "rawScore": 0.40999161481089197,
+          "rerankedScore": 0.40999161481089197
+        }
+      ]
+    },
+    {
+      "query": "作为一个应届硕士毕业生 如果我想申请人工智能学院2021年博士 需要满足哪些基本条件 并描述从预报名到录取的整个流程。",
+      "expected_otid": "otid_1fe8155fa2f64320",
+      "otid_eval_mode": "single_expected",
+      "acceptable_otids": [
+        "otid_1fe8155fa2f64320"
+      ],
+      "required_otid_groups": [],
+      "min_otid_groups_to_cover": 1,
+      "kp_eval_mode": "ot_only",
+      "acceptable_anchor_kpids": [],
+      "required_kpid_groups": [],
+      "min_groups_to_cover": 0,
+      "dataset": "test_dataset_granularity_hard_ood_v2_diag_top30",
+      "query_type": "situational",
+      "query_scope": "policy_overview",
+      "preferred_granularity": "OT",
+      "support_pattern": "ot_required",
+      "granularity_sensitive": true,
+      "theme_family": "博士招生",
+      "source_dataset": "hardood_v2_diag_extvariantg_top30",
+      "source_seed_id": "ai_seed_otid_1fe8155fa2f64320_03",
+      "challenge_tags": [
+        "综合概述",
+        "多部分整合"
+      ],
+      "notes": "情境查询，需要整个文档理解才能回答。 HardOOD v2 diagnostic: selected from ext_variant_g by current runtime difficulty.",
+      "docRank": 4,
+      "kpidRank": null,
+      "supportCoverageDepth": null,
+      "docCoverageDepth": 4,
+      "docGroupsCoveredTop5": 0,
+      "docGroupsRequired": 0,
+      "docFullCoverTop5": false,
+      "docPartialCoverTop5": false,
+      "supportGroupsCoveredTop5": 0,
+      "supportGroupsRequired": 0,
+      "supportFullCoverTop5": false,
+      "supportPartialCoverTop5": false,
+      "docHitAt1": false,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "failure_risk": "needs_ot_context",
+      "failure_reasons": [
+        "正确文档进入前5但未到第1名，存在文档级排序偏差。",
+        "该样本更依赖整篇通知上下文，适合补 ot_required 或 OT 邻近样本。"
+      ],
+      "topDocMatchesSource": "matches",
+      "topDocMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_6e85da455dd34af3",
+          "score": 1.3436999828498037
+        },
+        {
+          "rank": 2,
+          "otid": "otid_fcf3caca2aa340ca",
+          "score": 1.294326791371782,
+          "best_kpid": "kpid_04c07633548e41a1"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_7915cf0cb5a94687",
+          "score": 0.9874523974304894,
+          "best_kpid": "kpid_a3e7b4e25f1f4cb2"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_1fe8155fa2f64320",
+          "score": 0.8630325169623889,
+          "best_kpid": "kpid_2244415eff4045e0"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_d371dde33a814b26",
+          "score": 0.8620781521489849,
+          "best_kpid": "kpid_2648a609951d4367"
+        }
+      ],
+      "topKpidMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_6e85da455dd34af3"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_fcf3caca2aa340ca",
+          "best_kpid": "kpid_04c07633548e41a1"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_7915cf0cb5a94687",
+          "best_kpid": "kpid_a3e7b4e25f1f4cb2"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_1fe8155fa2f64320",
+          "best_kpid": "kpid_2244415eff4045e0"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_d371dde33a814b26",
+          "best_kpid": "kpid_2648a609951d4367"
+        }
+      ],
+      "expectedDocTopKpCandidates": [
+        {
+          "rank": 1,
+          "kpid": "kpid_2244415eff4045e0",
+          "rawScore": 1.9994224898935733,
+          "rerankedScore": 1.9994224898935733
+        }
+      ]
+    },
+    {
+      "query": "是一名2021年应届本科毕业生 想在报考点报名 整个流程包括哪些主要步骤",
+      "expected_otid": "otid_849070d708e0472f",
+      "otid_eval_mode": "single_expected",
+      "acceptable_otids": [
+        "otid_849070d708e0472f"
+      ],
+      "required_otid_groups": [],
+      "min_otid_groups_to_cover": 1,
+      "kp_eval_mode": "ot_only",
+      "acceptable_anchor_kpids": [],
+      "required_kpid_groups": [],
+      "min_groups_to_cover": 0,
+      "dataset": "test_dataset_granularity_hard_ood_v2_diag_top30",
+      "query_type": "situational",
+      "query_scope": "procedure",
+      "preferred_granularity": "OT",
+      "support_pattern": "ot_required",
+      "granularity_sensitive": true,
+      "theme_family": "报考流程",
+      "source_dataset": "hardood_v2_diag_extvariantg_top30",
+      "source_seed_id": "ai_seed_otid_849070d708e0472f_02",
+      "challenge_tags": [
+        "流程整合",
+        "多步骤"
+      ],
+      "notes": "情境式询问整个报名流程 HardOOD v2 diagnostic: selected from ext_variant_g by current runtime difficulty.",
+      "docRank": 4,
+      "kpidRank": null,
+      "supportCoverageDepth": null,
+      "docCoverageDepth": 4,
+      "docGroupsCoveredTop5": 0,
+      "docGroupsRequired": 0,
+      "docFullCoverTop5": false,
+      "docPartialCoverTop5": false,
+      "supportGroupsCoveredTop5": 0,
+      "supportGroupsRequired": 0,
+      "supportFullCoverTop5": false,
+      "supportPartialCoverTop5": false,
+      "docHitAt1": false,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "failure_risk": "needs_ot_context",
+      "failure_reasons": [
+        "正确文档进入前5但未到第1名，存在文档级排序偏差。",
+        "该样本更依赖整篇通知上下文，适合补 ot_required 或 OT 邻近样本。"
+      ],
+      "topDocMatchesSource": "matches",
+      "topDocMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_febe1ea123a14aa9",
+          "score": 1.3647626158818222,
+          "best_kpid": "kpid_60b6eb0105084829"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_e66299426ac34851",
+          "score": 1.2034105138108973,
+          "best_kpid": "kpid_900b26e1663f4bf3"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_3bb5095120fb432b",
+          "score": 1.1460007888392378,
+          "best_kpid": "kpid_7f492f4d7c36433b"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_849070d708e0472f",
+          "score": 0.9420130895734193,
+          "best_kpid": "kpid_11f65abd01fd465c"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_c1ea35c3c9c64cbf",
+          "score": 0.7244996636394214
+        }
+      ],
+      "topKpidMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_febe1ea123a14aa9",
+          "best_kpid": "kpid_60b6eb0105084829"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_e66299426ac34851",
+          "best_kpid": "kpid_900b26e1663f4bf3"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_3bb5095120fb432b",
+          "best_kpid": "kpid_7f492f4d7c36433b"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_849070d708e0472f",
+          "best_kpid": "kpid_11f65abd01fd465c"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_c1ea35c3c9c64cbf"
+        }
+      ],
+      "expectedDocTopKpCandidates": [
+        {
+          "rank": 1,
+          "kpid": "kpid_11f65abd01fd465c",
+          "rawScore": 1.802023516543615,
+          "rerankedScore": 1.802023516543615
+        }
+      ]
+    },
+    {
+      "query": "是应届本科生 想申请人工智能学院2021年推免 需要经过哪些流程",
+      "expected_otid": "otid_01b65cafe0894b9c",
+      "otid_eval_mode": "single_expected",
+      "acceptable_otids": [
+        "otid_01b65cafe0894b9c"
+      ],
+      "required_otid_groups": [],
+      "min_otid_groups_to_cover": 1,
+      "expected_kpid": "kpid_cab8c899074b4c03",
+      "kp_eval_mode": "aspect_coverage",
+      "acceptable_anchor_kpids": [
+        "kpid_cab8c899074b4c03",
+        "kpid_6ab4da1ac7494303",
+        "kpid_1757b0a627714507",
+        "kpid_65291e291191427f"
+      ],
+      "required_kpid_groups": [
+        [
+          "kpid_6ab4da1ac7494303"
+        ],
+        [
+          "kpid_1757b0a627714507"
+        ],
+        [
+          "kpid_65291e291191427f"
+        ],
+        [
+          "kpid_cab8c899074b4c03"
+        ]
+      ],
+      "min_groups_to_cover": 4,
+      "dataset": "test_dataset_granularity_hard_ood_v2_diag_top30",
+      "query_type": "situational",
+      "query_scope": "procedure",
+      "preferred_granularity": "KP+OT",
+      "support_pattern": "multi_kp",
+      "granularity_sensitive": true,
+      "theme_family": "推免流程",
+      "source_dataset": "hardood_v2_diag_extvariantg_top30",
+      "source_seed_id": "sai_seed_002",
+      "challenge_tags": [
+        "procedure",
+        "recommendation_exemption",
+        "situational_query",
+        "pref_kp_plus_ot"
+      ],
+      "notes": "初版种子导出，待人工复核。 2026-04-03 人工复核确认：该题同时问考核内容、成绩计算和录取原则，应维持 aspect_coverage。 HardOOD v2 diagnostic: selected from ext_variant_g by current runtime difficulty.",
+      "docRank": 3,
+      "kpidRank": 3,
+      "supportCoverageDepth": null,
+      "docCoverageDepth": 3,
+      "docGroupsCoveredTop5": 0,
+      "docGroupsRequired": 0,
+      "docFullCoverTop5": false,
+      "docPartialCoverTop5": false,
+      "supportGroupsCoveredTop5": 1,
+      "supportGroupsRequired": 4,
+      "supportFullCoverTop5": false,
+      "supportPartialCoverTop5": true,
+      "docHitAt1": false,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": true,
+      "failure_risk": "partial_multi_kp_coverage",
+      "failure_reasons": [
+        "正确文档进入前5但未到第1名，存在文档级排序偏差。",
+        "正确文档命中后，主证据 KP 选择仍不够准确。",
+        "正确文档命中后，仅覆盖了部分同等重要的证据方面。",
+        "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+      ],
+      "topDocMatchesSource": "matches",
+      "topDocMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_d371dde33a814b26",
+          "score": 1.0411483616515917,
+          "best_kpid": "kpid_2648a609951d4367"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_6e85da455dd34af3",
+          "score": 0.9272042861795646,
+          "best_kpid": "kpid_b167f103862043fe"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_01b65cafe0894b9c",
+          "score": 0.7721604994954641,
+          "best_kpid": "kpid_cab8c899074b4c03"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_fcf3caca2aa340ca",
+          "score": 0.6519573085397489,
+          "best_kpid": "kpid_04c07633548e41a1"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_1fe8155fa2f64320",
+          "score": 0.6511098179189775,
+          "best_kpid": "kpid_2244415eff4045e0"
+        }
+      ],
+      "topKpidMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_d371dde33a814b26",
+          "best_kpid": "kpid_2648a609951d4367"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_6e85da455dd34af3",
+          "best_kpid": "kpid_b167f103862043fe"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_01b65cafe0894b9c",
+          "best_kpid": "kpid_cab8c899074b4c03"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_fcf3caca2aa340ca",
+          "best_kpid": "kpid_04c07633548e41a1"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_1fe8155fa2f64320",
+          "best_kpid": "kpid_2244415eff4045e0"
+        }
+      ],
+      "expectedDocTopKpCandidates": [
+        {
+          "rank": 1,
+          "kpid": "kpid_cab8c899074b4c03",
+          "rawScore": 1.001643681847338,
+          "rerankedScore": 1.001643681847338
+        }
+      ]
+    },
+    {
+      "query": "2024年中山大学人工智能学院推免生申请和录取过程中的关键时间节点和系统操作截止时间是什么？",
+      "expected_otid": "otid_64fee3c7ad80452e",
+      "otid_eval_mode": "single_expected",
+      "acceptable_otids": [
+        "otid_64fee3c7ad80452e"
+      ],
+      "required_otid_groups": [],
+      "min_otid_groups_to_cover": 1,
+      "kp_eval_mode": "ot_only",
+      "acceptable_anchor_kpids": [],
+      "required_kpid_groups": [],
+      "min_groups_to_cover": 0,
+      "dataset": "test_dataset_granularity_hard_ood_v2_diag_top30",
+      "query_type": "standard",
+      "query_scope": "time_location",
+      "preferred_granularity": "OT",
+      "support_pattern": "ot_required",
+      "granularity_sensitive": true,
+      "theme_family": "推免生申请时间线",
+      "source_dataset": "hardood_v2_diag_extvariantg_top30",
+      "source_seed_id": "ai_seed_otid_64fee3c7ad80452e_02",
+      "challenge_tags": [
+        "time_location",
+        "ot_required",
+        "standard_query",
+        "pref_ot"
+      ],
+      "notes": "HardOOD v2 diagnostic: selected from ext_variant_g by current runtime difficulty.",
+      "docRank": 2,
+      "kpidRank": null,
+      "supportCoverageDepth": null,
+      "docCoverageDepth": 2,
+      "docGroupsCoveredTop5": 0,
+      "docGroupsRequired": 0,
+      "docFullCoverTop5": false,
+      "docPartialCoverTop5": false,
+      "supportGroupsCoveredTop5": 0,
+      "supportGroupsRequired": 0,
+      "supportFullCoverTop5": false,
+      "supportPartialCoverTop5": false,
+      "docHitAt1": false,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "failure_risk": "needs_ot_context",
+      "failure_reasons": [
+        "正确文档进入前5但未到第1名，存在文档级排序偏差。",
+        "该样本更依赖整篇通知上下文，适合补 ot_required 或 OT 邻近样本。"
+      ],
+      "topDocMatchesSource": "matches",
+      "topDocMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_697767196bdf46b2",
+          "score": 1.102384762535408,
+          "best_kpid": "kpid_e061993eadb740fe"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_64fee3c7ad80452e",
+          "score": 0.9412685266296797,
+          "best_kpid": "kpid_4c8eeee1331e4cee"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_aaf61717840641ab",
+          "score": 0.9219755469755468
+        },
+        {
+          "rank": 4,
+          "otid": "otid_7a5295e423c344e5",
+          "score": 0.8169538070453766,
+          "best_kpid": "kpid_2283d4bfb2e44277"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_db511e3324ad43f5",
+          "score": 0.7653526569315035,
+          "best_kpid": "kpid_114101df670348cd"
+        }
+      ],
+      "topKpidMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_697767196bdf46b2",
+          "best_kpid": "kpid_e061993eadb740fe"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_64fee3c7ad80452e",
+          "best_kpid": "kpid_4c8eeee1331e4cee"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_aaf61717840641ab"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_7a5295e423c344e5",
+          "best_kpid": "kpid_2283d4bfb2e44277"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_db511e3324ad43f5",
+          "best_kpid": "kpid_114101df670348cd"
+        }
+      ],
+      "expectedDocTopKpCandidates": [
+        {
+          "rank": 1,
+          "kpid": "kpid_4c8eeee1331e4cee",
+          "rawScore": 0.8275862068965517,
+          "rerankedScore": 0.8275862068965517
+        }
+      ]
+    },
+    {
+      "query": "AI学院2022年博士申请考核流程",
+      "expected_otid": "otid_392eac0b27fa4b09",
+      "otid_eval_mode": "single_expected",
+      "acceptable_otids": [
+        "otid_392eac0b27fa4b09"
+      ],
+      "required_otid_groups": [],
+      "min_otid_groups_to_cover": 1,
+      "kp_eval_mode": "ot_only",
+      "acceptable_anchor_kpids": [],
+      "required_kpid_groups": [],
+      "min_groups_to_cover": 0,
+      "dataset": "test_dataset_granularity_hard_ood_v2_diag_top30",
+      "query_type": "short_keyword",
+      "query_scope": "procedure",
+      "preferred_granularity": "OT",
+      "support_pattern": "ot_required",
+      "granularity_sensitive": true,
+      "theme_family": "招生考核",
+      "source_dataset": "hardood_v2_diag_extvariantg_top30",
+      "source_seed_id": "ai_seed_otid_392eac0b27fa4b09_03",
+      "challenge_tags": [
+        "流程概述",
+        "跨段整合"
+      ],
+      "notes": "需要整个文档的整合信息 HardOOD v2 diagnostic: selected from ext_variant_g by current runtime difficulty.",
+      "docRank": 5,
+      "kpidRank": null,
+      "supportCoverageDepth": null,
+      "docCoverageDepth": 5,
+      "docGroupsCoveredTop5": 0,
+      "docGroupsRequired": 0,
+      "docFullCoverTop5": false,
+      "docPartialCoverTop5": false,
+      "supportGroupsCoveredTop5": 0,
+      "supportGroupsRequired": 0,
+      "supportFullCoverTop5": false,
+      "supportPartialCoverTop5": false,
+      "docHitAt1": false,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "failure_risk": "needs_ot_context",
+      "failure_reasons": [
+        "正确文档进入前5但未到第1名，存在文档级排序偏差。",
+        "该样本更依赖整篇通知上下文，适合补 ot_required 或 OT 邻近样本。"
+      ],
+      "topDocMatchesSource": "matches",
+      "topDocMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_5e4e1434da5748eb",
+          "score": 0.9837875977658812,
+          "best_kpid": "kpid_b68388053329403d"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_860f1ae2b71c4de9",
+          "score": 0.9583074627822887,
+          "best_kpid": "kpid_ee114acf02c54cb1"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_dc2fbd2f88f7453b",
+          "score": 0.9244176716171366,
+          "best_kpid": "kpid_64164ade698a4751"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_b53a9170fcfe4d2e",
+          "score": 0.8610682252680806,
+          "best_kpid": "kpid_0194502bc5ff4689"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_392eac0b27fa4b09",
+          "score": 0.848584978037417,
+          "best_kpid": "kpid_a17b5df4d05c447b"
+        }
+      ],
+      "topKpidMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_5e4e1434da5748eb",
+          "best_kpid": "kpid_b68388053329403d"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_860f1ae2b71c4de9",
+          "best_kpid": "kpid_ee114acf02c54cb1"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_dc2fbd2f88f7453b",
+          "best_kpid": "kpid_64164ade698a4751"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_b53a9170fcfe4d2e",
+          "best_kpid": "kpid_0194502bc5ff4689"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_392eac0b27fa4b09",
+          "best_kpid": "kpid_a17b5df4d05c447b"
+        }
+      ],
+      "expectedDocTopKpCandidates": [
+        {
+          "rank": 1,
+          "kpid": "kpid_a17b5df4d05c447b",
+          "rawScore": 1.7205084072553953,
+          "rerankedScore": 1.7205084072553953
+        },
+        {
+          "rank": 2,
+          "kpid": "kpid_081fa6516435497f",
+          "rawScore": 0.7591293398093182,
+          "rerankedScore": 0.7591293398093182
+        },
+        {
+          "rank": 3,
+          "kpid": "kpid_7dbcd101e00d43fb",
+          "rawScore": 0.6029922833168866,
+          "rerankedScore": 0.6029922833168866
+        },
+        {
+          "rank": 4,
+          "kpid": "kpid_a78c13f3f8344df8",
+          "rawScore": 0.5405375089734387,
+          "rerankedScore": 0.5405375089734387
+        },
+        {
+          "rank": 5,
+          "kpid": "kpid_353549ccc4fb4f5b",
+          "rawScore": 0.45641331050398276,
+          "rerankedScore": 0.45641331050398276
+        }
+      ]
+    },
+    {
+      "query": "如果申请2023年人工智能学院博士但体检不合格，还会被录取吗？",
+      "expected_otid": "otid_dc2fbd2f88f7453b",
+      "otid_eval_mode": "single_expected",
+      "acceptable_otids": [
+        "otid_dc2fbd2f88f7453b"
+      ],
+      "required_otid_groups": [],
+      "min_otid_groups_to_cover": 1,
+      "expected_kpid": "kpid_52e7ec7e1d33472b",
+      "kp_eval_mode": "single_anchor",
+      "acceptable_anchor_kpids": [
+        "kpid_52e7ec7e1d33472b"
+      ],
+      "required_kpid_groups": [],
+      "min_groups_to_cover": 1,
+      "dataset": "test_dataset_granularity_hard_ood_v2_diag_top30",
+      "query_type": "situational",
+      "query_scope": "eligibility_condition",
+      "preferred_granularity": "KP",
+      "support_pattern": "single_kp",
+      "granularity_sensitive": true,
+      "theme_family": "博士录取否决条件",
+      "source_dataset": "hardood_v2_diag_extvariantg_top30",
+      "source_seed_id": "manual_seed_otid_dc2fbd2f88f7453b_01",
+      "challenge_tags": [
+        "eligibility_condition",
+        "single_kp",
+        "situational_query",
+        "pref_kp"
+      ],
+      "notes": "手工补记：条件否决型问法，明显比简单分数/日期题更难。 HardOOD v2 diagnostic: selected from ext_variant_g by current runtime difficulty.",
+      "docRank": 3,
+      "kpidRank": 3,
+      "supportCoverageDepth": null,
+      "docCoverageDepth": 3,
+      "docGroupsCoveredTop5": 0,
+      "docGroupsRequired": 0,
+      "docFullCoverTop5": false,
+      "docPartialCoverTop5": false,
+      "supportGroupsCoveredTop5": 0,
+      "supportGroupsRequired": 0,
+      "supportFullCoverTop5": false,
+      "supportPartialCoverTop5": false,
+      "docHitAt1": false,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": true,
+      "failure_risk": "best_kpid_confusion",
+      "failure_reasons": [
+        "正确文档进入前5但未到第1名，存在文档级排序偏差。",
+        "正确文档命中后，主证据 KP 选择仍不够准确。"
+      ],
+      "topDocMatchesSource": "matches",
+      "topDocMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_c03e584363934e90",
+          "score": 1.4041568491555467,
+          "best_kpid": "kpid_b0fe8c9db2f3486f"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_c495d5e1d55d4213",
+          "score": 1.319306237915753,
+          "best_kpid": "kpid_73d0c8465fe6405c"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_dc2fbd2f88f7453b",
+          "score": 1.276873383729188,
+          "best_kpid": "kpid_52e7ec7e1d33472b"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_5f10b726aa1d4728",
+          "score": 1.1313330180596617,
+          "best_kpid": "kpid_c67b75b015104827"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_1d07d7c9f48e4090",
+          "score": 0.8901900258102602,
+          "best_kpid": "kpid_f076cb0187714e12"
+        }
+      ],
+      "topKpidMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_c03e584363934e90",
+          "best_kpid": "kpid_b0fe8c9db2f3486f"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_c495d5e1d55d4213",
+          "best_kpid": "kpid_73d0c8465fe6405c"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_dc2fbd2f88f7453b",
+          "best_kpid": "kpid_52e7ec7e1d33472b"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_5f10b726aa1d4728",
+          "best_kpid": "kpid_c67b75b015104827"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_1d07d7c9f48e4090",
+          "best_kpid": "kpid_f076cb0187714e12"
+        }
+      ],
+      "expectedDocTopKpCandidates": [
+        {
+          "rank": 1,
+          "kpid": "kpid_52e7ec7e1d33472b",
+          "rawScore": 1.063201885559231,
+          "rerankedScore": 1.063201885559231
+        },
+        {
+          "rank": 2,
+          "kpid": "kpid_d40e015da0ff4fbd",
+          "rawScore": 0.9732090965334933,
+          "rerankedScore": 0.9732090965334933
+        }
+      ]
+    },
+    {
+      "query": "作为一名考生 如果我要参加人工智能学院2021年的调剂复试 从准备材料到完成面试的主要流程怎么走",
+      "expected_otid": "otid_c4270d3c6e9944fd",
+      "otid_eval_mode": "required_otid_groups",
+      "acceptable_otids": [
+        "otid_c4270d3c6e9944fd"
+      ],
+      "required_otid_groups": [
+        [
+          "otid_c4270d3c6e9944fd"
+        ],
+        [
+          "otid_a2f94115e88244d4"
+        ]
+      ],
+      "min_otid_groups_to_cover": 2,
+      "kp_eval_mode": "ot_only",
+      "acceptable_anchor_kpids": [],
+      "required_kpid_groups": [],
+      "min_groups_to_cover": 0,
+      "dataset": "test_dataset_granularity_hard_ood_v2_diag_top30",
+      "query_type": "situational",
+      "query_scope": "procedure",
+      "preferred_granularity": "OT",
+      "support_pattern": "ot_required",
+      "granularity_sensitive": true,
+      "theme_family": "调剂复试安排",
+      "source_dataset": "hardood_v2_diag_extvariantg_top30",
+      "source_seed_id": "ai_seed_otid_c4270d3c6e9944fd_03",
+      "challenge_tags": [
+        "procedural_flow",
+        "context_integration"
+      ],
+      "notes": "情境查询，需要整合全文流程信息；人工复核：acceptable_otids(expected, top2, top3)。 2026-04-03 第二轮收缩：仅保留调剂公告作为可接受 sibling，移除复试录取方案。 2026-04-04 round3 收紧：调剂复试全流程题恢复为 required_otid_groups，需同时覆盖调剂复试通知与调剂公告。 HardOOD v2 diagnostic: selected from ext_variant_g by current runtime difficulty.",
+      "docRank": 2,
+      "kpidRank": null,
+      "supportCoverageDepth": null,
+      "docCoverageDepth": 2,
+      "docGroupsCoveredTop5": 2,
+      "docGroupsRequired": 2,
+      "docFullCoverTop5": true,
+      "docPartialCoverTop5": true,
+      "supportGroupsCoveredTop5": 0,
+      "supportGroupsRequired": 0,
+      "supportFullCoverTop5": false,
+      "supportPartialCoverTop5": false,
+      "docHitAt1": false,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "failure_risk": "needs_ot_context",
+      "failure_reasons": [
+        "必需文档组进入前5但未能更早完成覆盖，存在多文档排序偏差。",
+        "文档候选中已覆盖部分必需通知，但仍未形成完整文档链。",
+        "该样本更依赖整篇通知上下文，适合补 ot_required 或 OT 邻近样本。"
+      ],
+      "topDocMatchesSource": "matches",
+      "topDocMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_c4270d3c6e9944fd",
+          "score": 1.693805642549485,
+          "best_kpid": "kpid_d70d143766284f79"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_a2f94115e88244d4",
+          "score": 1.5818671761389864,
+          "best_kpid": "kpid_3b20261ebd074023"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_c1fa6db91e294a94",
+          "score": 1.0161773826521596,
+          "best_kpid": "kpid_a62ea2d773314a8e"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_29dd671742524792",
+          "score": 0.6525495428418282,
+          "best_kpid": "kpid_b787292f3da94185"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_01b65cafe0894b9c",
+          "score": 0.5180111074408116,
+          "best_kpid": "kpid_cab8c899074b4c03"
+        }
+      ],
+      "topKpidMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_c4270d3c6e9944fd",
+          "best_kpid": "kpid_d70d143766284f79"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_a2f94115e88244d4",
+          "best_kpid": "kpid_3b20261ebd074023"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_c1fa6db91e294a94",
+          "best_kpid": "kpid_a62ea2d773314a8e"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_29dd671742524792",
+          "best_kpid": "kpid_b787292f3da94185"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_01b65cafe0894b9c",
+          "best_kpid": "kpid_cab8c899074b4c03"
+        }
+      ],
+      "expectedDocTopKpCandidates": [
+        {
+          "rank": 1,
+          "kpid": "kpid_d70d143766284f79",
+          "rawScore": 2.1045243999438545,
+          "rerankedScore": 2.1045243999438545
+        },
+        {
+          "rank": 2,
+          "kpid": "kpid_af197df57be9433a",
+          "rawScore": 1.6878029584846264,
+          "rerankedScore": 1.6878029584846264
+        },
+        {
+          "rank": 3,
+          "kpid": "kpid_24637160067740a8",
+          "rawScore": 1.5455835317317173,
+          "rerankedScore": 1.5455835317317173
+        },
+        {
+          "rank": 4,
+          "kpid": "kpid_da164126eff345df",
+          "rawScore": 1.4588538117949883,
+          "rerankedScore": 1.4588538117949883
+        },
+        {
+          "rank": 5,
+          "kpid": "kpid_caca750ca0224d3a",
+          "rawScore": 1.4229414724132148,
+          "rerankedScore": 1.4229414724132148
+        }
+      ]
+    },
+    {
+      "query": "想申请2022年人工智能学院夏令营 需要准备要准备什么材料以及什么时候提交",
+      "expected_otid": "otid_c7828d5c12cc4c90",
+      "otid_eval_mode": "single_expected",
+      "acceptable_otids": [
+        "otid_c7828d5c12cc4c90"
+      ],
+      "required_otid_groups": [],
+      "min_otid_groups_to_cover": 1,
+      "kp_eval_mode": "aspect_coverage",
+      "acceptable_anchor_kpids": [
+        "kpid_060e551962de49df",
+        "kpid_f811959d47824b88"
+      ],
+      "required_kpid_groups": [
+        [
+          "kpid_060e551962de49df"
+        ],
+        [
+          "kpid_f811959d47824b88"
+        ]
+      ],
+      "min_groups_to_cover": 2,
+      "dataset": "test_dataset_granularity_hard_ood_v2_diag_top30",
+      "query_type": "situational",
+      "query_scope": "procedure",
+      "preferred_granularity": "KP+OT",
+      "support_pattern": "multi_kp",
+      "granularity_sensitive": true,
+      "theme_family": "申请流程",
+      "source_dataset": "hardood_v2_diag_extvariantg_top30",
+      "source_seed_id": "ai_seed_otid_c7828d5c12cc4c90_02",
+      "challenge_tags": [
+        "多KP整合",
+        "时间与材料"
+      ],
+      "notes": "需要结合材料和截止时间两个KP。 2026-04-03 第二轮收缩：撤销 acceptable_otids，恢复 single_expected，仅保留夏令营报名通知。 HardOOD v2 diagnostic: selected from ext_variant_g by current runtime difficulty.",
+      "docRank": 2,
+      "kpidRank": null,
+      "supportCoverageDepth": 3,
+      "docCoverageDepth": 2,
+      "docGroupsCoveredTop5": 0,
+      "docGroupsRequired": 0,
+      "docFullCoverTop5": false,
+      "docPartialCoverTop5": false,
+      "supportGroupsCoveredTop5": 2,
+      "supportGroupsRequired": 2,
+      "supportFullCoverTop5": true,
+      "supportPartialCoverTop5": true,
+      "docHitAt1": false,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "failure_risk": "best_kpid_confusion",
+      "failure_reasons": [
+        "正确文档进入前5但未到第1名，存在文档级排序偏差。",
+        "文档候选中未能稳定选出正确主证据 KP。",
+        "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+      ],
+      "topDocMatchesSource": "matches",
+      "topDocMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_cf0fb6da0f1a4b18",
+          "score": 1.1003470271850233,
+          "best_kpid": "kpid_be5b2834fc694ad9"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_c7828d5c12cc4c90",
+          "score": 1.036440447563139,
+          "best_kpid": "kpid_edf852240d504dae"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_392eac0b27fa4b09",
+          "score": 0.7643286370751905
+        },
+        {
+          "rank": 4,
+          "otid": "otid_81112559b6b240f2",
+          "score": 0.7449849189621804,
+          "best_kpid": "kpid_0ce4691f1eb24d8e"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_2c221a5f38864ced",
+          "score": 0.7272922298022053
+        }
+      ],
+      "topKpidMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_cf0fb6da0f1a4b18",
+          "best_kpid": "kpid_be5b2834fc694ad9"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_c7828d5c12cc4c90",
+          "best_kpid": "kpid_edf852240d504dae"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_392eac0b27fa4b09"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_81112559b6b240f2",
+          "best_kpid": "kpid_0ce4691f1eb24d8e"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_2c221a5f38864ced"
+        }
+      ],
+      "expectedDocTopKpCandidates": [
+        {
+          "rank": 1,
+          "kpid": "kpid_edf852240d504dae",
+          "rawScore": 1.7348036409614453,
+          "rerankedScore": 1.7348036409614453
+        },
+        {
+          "rank": 2,
+          "kpid": "kpid_060e551962de49df",
+          "rawScore": 1.4719082446808511,
+          "rerankedScore": 1.4719082446808511
+        },
+        {
+          "rank": 3,
+          "kpid": "kpid_f811959d47824b88",
+          "rawScore": 0.706431368342005,
+          "rerankedScore": 0.706431368342005
+        },
+        {
+          "rank": 4,
+          "kpid": "kpid_6283706ba84d48d3",
+          "rawScore": 0.3553857041755131,
+          "rerankedScore": 0.3553857041755131
+        }
+      ]
+    },
+    {
+      "query": "2024人工智能夏令营报名资格 排名要求",
+      "expected_otid": "otid_444d8fa2a8a54ec6",
+      "otid_eval_mode": "single_expected",
+      "acceptable_otids": [
+        "otid_444d8fa2a8a54ec6"
+      ],
+      "required_otid_groups": [],
+      "min_otid_groups_to_cover": 1,
+      "expected_kpid": "kpid_32e9e977eb154f51",
+      "kp_eval_mode": "single_anchor",
+      "acceptable_anchor_kpids": [
+        "kpid_32e9e977eb154f51"
+      ],
+      "required_kpid_groups": [],
+      "min_groups_to_cover": 1,
+      "dataset": "test_dataset_granularity_hard_ood_v2_diag_top30",
+      "query_type": "short_keyword",
+      "query_scope": "eligibility_condition",
+      "preferred_granularity": "KP",
+      "support_pattern": "single_kp",
+      "granularity_sensitive": true,
+      "theme_family": "夏令营资格门槛",
+      "source_dataset": "hardood_v2_diag_extvariantg_top30",
+      "source_seed_id": "manual_seed_otid_444d8fa2a8a54ec6_01",
+      "challenge_tags": [
+        "eligibility_condition",
+        "single_kp",
+        "short_query",
+        "pref_kp"
+      ],
+      "notes": "手工补记：同为 short_keyword，但比原外域分数/电话直取题更接近资格判断。 2026-04-06 temp_variant_c: 排名门槛短问法。 HardOOD v2 diagnostic: selected from ext_variant_g by current runtime difficulty.",
+      "docRank": 2,
+      "kpidRank": null,
+      "supportCoverageDepth": null,
+      "docCoverageDepth": 2,
+      "docGroupsCoveredTop5": 0,
+      "docGroupsRequired": 0,
+      "docFullCoverTop5": false,
+      "docPartialCoverTop5": false,
+      "supportGroupsCoveredTop5": 0,
+      "supportGroupsRequired": 0,
+      "supportFullCoverTop5": false,
+      "supportPartialCoverTop5": false,
+      "docHitAt1": false,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "failure_risk": "best_kpid_confusion",
+      "failure_reasons": [
+        "正确文档进入前5但未到第1名，存在文档级排序偏差。",
+        "文档候选中未能稳定选出正确主证据 KP。"
+      ],
+      "topDocMatchesSource": "matches",
+      "topDocMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_ccebe408485d4e4b",
+          "score": 1.3348884906305913,
+          "best_kpid": "kpid_8f3018e81ca44a7c"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_444d8fa2a8a54ec6",
+          "score": 1.1031305120000774,
+          "best_kpid": "kpid_19567a53b7cb479e"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_c79e15cfe7c848e3",
+          "score": 0.726848574115494,
+          "best_kpid": "kpid_eb8b17c59a98479c"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_697767196bdf46b2",
+          "score": 0.712237769906325,
+          "best_kpid": "kpid_e061993eadb740fe"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_2d31ea40a9df404b",
+          "score": 0.6530333551792353,
+          "best_kpid": "kpid_6c1a003f07fb47ae"
+        }
+      ],
+      "topKpidMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_ccebe408485d4e4b",
+          "best_kpid": "kpid_8f3018e81ca44a7c"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_444d8fa2a8a54ec6",
+          "best_kpid": "kpid_19567a53b7cb479e"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_c79e15cfe7c848e3",
+          "best_kpid": "kpid_eb8b17c59a98479c"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_697767196bdf46b2",
+          "best_kpid": "kpid_e061993eadb740fe"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_2d31ea40a9df404b",
+          "best_kpid": "kpid_6c1a003f07fb47ae"
+        }
+      ],
+      "expectedDocTopKpCandidates": [
+        {
+          "rank": 1,
+          "kpid": "kpid_19567a53b7cb479e",
+          "rawScore": 1.8661338661338662,
+          "rerankedScore": 1.8661338661338662
+        },
+        {
+          "rank": 2,
+          "kpid": "kpid_a041c873bd694a3b",
+          "rawScore": 1.5869736324281778,
+          "rerankedScore": 1.5869736324281778
+        },
+        {
+          "rank": 3,
+          "kpid": "kpid_32e9e977eb154f51",
+          "rawScore": 1.4607237422771404,
+          "rerankedScore": 1.4607237422771404
+        },
+        {
+          "rank": 4,
+          "kpid": "kpid_2374f979fd1c4129",
+          "rawScore": 1.1984153185869924,
+          "rerankedScore": 1.1984153185869924
+        },
+        {
+          "rank": 5,
+          "kpid": "kpid_2c7c4ba5c3114bb5",
+          "rawScore": 1.1954960648015165,
+          "rerankedScore": 1.1954960648015165
+        }
+      ]
+    },
+    {
+      "query": "中山大学人工智能学院2024年推荐免试研究生的整体申请政策和主要要求有哪些？",
+      "expected_otid": "otid_64fee3c7ad80452e",
+      "otid_eval_mode": "single_expected",
+      "acceptable_otids": [
+        "otid_64fee3c7ad80452e"
+      ],
+      "required_otid_groups": [],
+      "min_otid_groups_to_cover": 1,
+      "kp_eval_mode": "ot_only",
+      "acceptable_anchor_kpids": [],
+      "required_kpid_groups": [],
+      "min_groups_to_cover": 0,
+      "dataset": "test_dataset_granularity_hard_ood_v2_diag_top30",
+      "query_type": "standard",
+      "query_scope": "policy_overview",
+      "preferred_granularity": "OT",
+      "support_pattern": "ot_required",
+      "granularity_sensitive": true,
+      "theme_family": "推免生申请政策概览",
+      "source_dataset": "hardood_v2_diag_extvariantg_top30",
+      "source_seed_id": "ai_seed_otid_64fee3c7ad80452e_01",
+      "challenge_tags": [
+        "policy_overview",
+        "ot_required",
+        "standard_query",
+        "pref_ot"
+      ],
+      "notes": "HardOOD v2 diagnostic: selected from ext_variant_g by current runtime difficulty.",
+      "docRank": 2,
+      "kpidRank": null,
+      "supportCoverageDepth": null,
+      "docCoverageDepth": 2,
+      "docGroupsCoveredTop5": 0,
+      "docGroupsRequired": 0,
+      "docFullCoverTop5": false,
+      "docPartialCoverTop5": false,
+      "supportGroupsCoveredTop5": 0,
+      "supportGroupsRequired": 0,
+      "supportFullCoverTop5": false,
+      "supportPartialCoverTop5": false,
+      "docHitAt1": false,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "failure_risk": "needs_ot_context",
+      "failure_reasons": [
+        "正确文档进入前5但未到第1名，存在文档级排序偏差。",
+        "该样本更依赖整篇通知上下文，适合补 ot_required 或 OT 邻近样本。"
+      ],
+      "topDocMatchesSource": "matches",
+      "topDocMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_697767196bdf46b2",
+          "score": 1.2847689944464136,
+          "best_kpid": "kpid_1c89612ccaf943bb"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_64fee3c7ad80452e",
+          "score": 1.1077100366732584,
+          "best_kpid": "kpid_0c934bf42f4c4eee"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_1c14b6043fd645c8",
+          "score": 1.0127879322323765,
+          "best_kpid": "kpid_b943642bdaa64ded"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_f3ee1947f40e4b18",
+          "score": 0.7830217641071087,
+          "best_kpid": "kpid_a8b0421d25904028"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_61e44e3f9f6548de",
+          "score": 0.774900964186534,
+          "best_kpid": "kpid_8ac4a6ad6eb84145"
+        }
+      ],
+      "topKpidMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_697767196bdf46b2",
+          "best_kpid": "kpid_1c89612ccaf943bb"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_64fee3c7ad80452e",
+          "best_kpid": "kpid_0c934bf42f4c4eee"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_1c14b6043fd645c8",
+          "best_kpid": "kpid_b943642bdaa64ded"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_f3ee1947f40e4b18",
+          "best_kpid": "kpid_a8b0421d25904028"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_61e44e3f9f6548de",
+          "best_kpid": "kpid_8ac4a6ad6eb84145"
+        }
+      ],
+      "expectedDocTopKpCandidates": [
+        {
+          "rank": 1,
+          "kpid": "kpid_0c934bf42f4c4eee",
+          "rawScore": 0.4297932562146197,
+          "rerankedScore": 0.4297932562146197
+        },
+        {
+          "rank": 2,
+          "kpid": "kpid_80afcb0f74564be4",
+          "rawScore": 0.24487105444141277,
+          "rerankedScore": 0.24487105444141277
+        }
+      ]
+    },
+    {
+      "query": "人工智能学院2023年夏令营的举办日期是什么时候",
+      "expected_otid": "otid_2f90c6af5fd44b44",
+      "otid_eval_mode": "single_expected",
+      "acceptable_otids": [
+        "otid_2f90c6af5fd44b44"
+      ],
+      "required_otid_groups": [],
+      "min_otid_groups_to_cover": 1,
+      "expected_kpid": "kpid_ae543286784c4d7a",
+      "kp_eval_mode": "single_anchor",
+      "acceptable_anchor_kpids": [
+        "kpid_ae543286784c4d7a"
+      ],
+      "required_kpid_groups": [],
+      "min_groups_to_cover": 1,
+      "dataset": "test_dataset_granularity_hard_ood_v2_diag_top30",
+      "query_type": "standard",
+      "query_scope": "time_location",
+      "preferred_granularity": "KP",
+      "support_pattern": "single_kp",
+      "granularity_sensitive": true,
+      "theme_family": "夏令营入营通知",
+      "source_dataset": "hardood_v2_diag_extvariantg_top30",
+      "source_seed_id": "ai_seed_otid_2f90c6af5fd44b44_01",
+      "challenge_tags": [
+        "时间查询"
+      ],
+      "notes": "直接查询夏令营举办日期，基于单一KP。；人工复核：acceptable_otids(expected, top1)。 2026-04-04 round3 收紧：时间点单事实题改回 single_expected，不再接受 sibling 文档替代命中。 HardOOD v2 diagnostic: selected from ext_variant_g by current runtime difficulty.",
+      "docRank": 2,
+      "kpidRank": 2,
+      "supportCoverageDepth": null,
+      "docCoverageDepth": 2,
+      "docGroupsCoveredTop5": 0,
+      "docGroupsRequired": 0,
+      "docFullCoverTop5": false,
+      "docPartialCoverTop5": false,
+      "supportGroupsCoveredTop5": 0,
+      "supportGroupsRequired": 0,
+      "supportFullCoverTop5": false,
+      "supportPartialCoverTop5": false,
+      "docHitAt1": false,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": true,
+      "failure_risk": "best_kpid_confusion",
+      "failure_reasons": [
+        "正确文档进入前5但未到第1名，存在文档级排序偏差。",
+        "正确文档命中后，主证据 KP 选择仍不够准确。"
+      ],
+      "topDocMatchesSource": "matches",
+      "topDocMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_7229bb63ab97456a",
+          "score": 1.4732959104360945,
+          "best_kpid": "kpid_3e67de51d64c48f1"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_2f90c6af5fd44b44",
+          "score": 1.3732229427908662,
+          "best_kpid": "kpid_ae543286784c4d7a"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_326c8ee61f8b4162",
+          "score": 0.8700042584263127,
+          "best_kpid": "kpid_1119eeec36004b25"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_025aaa1d3da84981",
+          "score": 0.7522716403634624
+        },
+        {
+          "rank": 5,
+          "otid": "otid_46b7578040384d16",
+          "score": 0.6839030090563832
+        }
+      ],
+      "topKpidMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_7229bb63ab97456a",
+          "best_kpid": "kpid_3e67de51d64c48f1"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_2f90c6af5fd44b44",
+          "best_kpid": "kpid_ae543286784c4d7a"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_326c8ee61f8b4162",
+          "best_kpid": "kpid_1119eeec36004b25"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_025aaa1d3da84981"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_46b7578040384d16"
+        }
+      ],
+      "expectedDocTopKpCandidates": [
+        {
+          "rank": 1,
+          "kpid": "kpid_ae543286784c4d7a",
+          "rawScore": 3.375663818979451,
+          "rerankedScore": 3.375663818979451
+        },
+        {
+          "rank": 2,
+          "kpid": "kpid_27b6e154135549c8",
+          "rawScore": 2.3623623623623624,
+          "rerankedScore": 2.3623623623623624
+        },
+        {
+          "rank": 3,
+          "kpid": "kpid_0b564f5a12d04e28",
+          "rawScore": 0.9019175666740137,
+          "rerankedScore": 0.9019175666740137
+        }
+      ]
+    },
+    {
+      "query": "如果本科期间受过处分，还能申请中山大学人工智能学院2024年推荐免试预报名吗？",
+      "expected_otid": "otid_697767196bdf46b2",
+      "otid_eval_mode": "single_expected",
+      "acceptable_otids": [
+        "otid_697767196bdf46b2"
+      ],
+      "required_otid_groups": [],
+      "min_otid_groups_to_cover": 1,
+      "expected_kpid": "kpid_1c89612ccaf943bb",
+      "kp_eval_mode": "single_anchor",
+      "acceptable_anchor_kpids": [
+        "kpid_1c89612ccaf943bb"
+      ],
+      "required_kpid_groups": [],
+      "min_groups_to_cover": 1,
+      "dataset": "test_dataset_granularity_hard_ood_v2_diag_top30",
+      "query_type": "situational",
+      "query_scope": "eligibility_condition",
+      "preferred_granularity": "KP",
+      "support_pattern": "single_kp",
+      "granularity_sensitive": true,
+      "theme_family": "预推免资格条件",
+      "source_dataset": "hardood_v2_diag_extvariantg_top30",
+      "source_seed_id": "manual_seed_otid_697767196bdf46b2_01",
+      "challenge_tags": [
+        "eligibility_condition",
+        "single_kp",
+        "situational_query",
+        "pref_kp"
+      ],
+      "notes": "手工补记：比时间/分数直取题更难，属于资格边界问法。 HardOOD v2 diagnostic: selected from ext_variant_g by current runtime difficulty.",
+      "docRank": 2,
+      "kpidRank": 2,
+      "supportCoverageDepth": null,
+      "docCoverageDepth": 2,
+      "docGroupsCoveredTop5": 0,
+      "docGroupsRequired": 0,
+      "docFullCoverTop5": false,
+      "docPartialCoverTop5": false,
+      "supportGroupsCoveredTop5": 0,
+      "supportGroupsRequired": 0,
+      "supportFullCoverTop5": false,
+      "supportPartialCoverTop5": false,
+      "docHitAt1": false,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": true,
+      "failure_risk": "best_kpid_confusion",
+      "failure_reasons": [
+        "正确文档进入前5但未到第1名，存在文档级排序偏差。",
+        "正确文档命中后，主证据 KP 选择仍不够准确。"
+      ],
+      "topDocMatchesSource": "matches",
+      "topDocMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_61e44e3f9f6548de",
+          "score": 1.2271652144558602,
+          "best_kpid": "kpid_8ac4a6ad6eb84145"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_697767196bdf46b2",
+          "score": 1.0600026483570786,
+          "best_kpid": "kpid_1c89612ccaf943bb"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_189bc24102e2423a",
+          "score": 0.9145152813904531,
+          "best_kpid": "kpid_1cbeeaeb29a4454a"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_64fee3c7ad80452e",
+          "score": 0.5702301588524248,
+          "best_kpid": "kpid_0c934bf42f4c4eee"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_027393e8a6f64ec3",
+          "score": 0.5605956130119816,
+          "best_kpid": "kpid_31f91bbc37614220"
+        }
+      ],
+      "topKpidMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_61e44e3f9f6548de",
+          "best_kpid": "kpid_8ac4a6ad6eb84145"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_697767196bdf46b2",
+          "best_kpid": "kpid_1c89612ccaf943bb"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_189bc24102e2423a",
+          "best_kpid": "kpid_1cbeeaeb29a4454a"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_64fee3c7ad80452e",
+          "best_kpid": "kpid_0c934bf42f4c4eee"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_027393e8a6f64ec3",
+          "best_kpid": "kpid_31f91bbc37614220"
+        }
+      ],
+      "expectedDocTopKpCandidates": [
+        {
+          "rank": 1,
+          "kpid": "kpid_1c89612ccaf943bb",
+          "rawScore": 1.6216216216216217,
+          "rerankedScore": 1.6216216216216217
+        },
+        {
+          "rank": 2,
+          "kpid": "kpid_ead07a270b2a46e9",
+          "rawScore": 0.4,
+          "rerankedScore": 0.4
+        },
+        {
+          "rank": 3,
+          "kpid": "kpid_e061993eadb740fe",
+          "rawScore": 0.36858392443676724,
+          "rerankedScore": 0.36858392443676724
+        }
+      ]
+    },
+    {
+      "query": "请概述人工智能学院2024年夏令营的活动目的、学院规划和激励政策。",
+      "expected_otid": "otid_444d8fa2a8a54ec6",
+      "otid_eval_mode": "single_expected",
+      "acceptable_otids": [
+        "otid_444d8fa2a8a54ec6"
+      ],
+      "required_otid_groups": [],
+      "min_otid_groups_to_cover": 1,
+      "kp_eval_mode": "ot_only",
+      "acceptable_anchor_kpids": [],
+      "required_kpid_groups": [],
+      "min_groups_to_cover": 0,
+      "dataset": "test_dataset_granularity_hard_ood_v2_diag_top30",
+      "query_type": "standard",
+      "query_scope": "policy_overview",
+      "preferred_granularity": "OT",
+      "support_pattern": "ot_required",
+      "granularity_sensitive": true,
+      "theme_family": "夏令营综合概述",
+      "source_dataset": "hardood_v2_diag_extvariantg_top30",
+      "source_seed_id": "ai_seed_otid_444d8fa2a8a54ec6_03",
+      "challenge_tags": [
+        "全文整合",
+        "多部分",
+        "复杂查询"
+      ],
+      "notes": "需要跨多个KP和OT的整体理解。 2026-04-03 第二轮收缩：撤销 acceptable_otids，恢复 single_expected，仅保留夏令营报名通知。 HardOOD v2 diagnostic: selected from ext_variant_g by current runtime difficulty.",
+      "docRank": 2,
+      "kpidRank": null,
+      "supportCoverageDepth": null,
+      "docCoverageDepth": 2,
+      "docGroupsCoveredTop5": 0,
+      "docGroupsRequired": 0,
+      "docFullCoverTop5": false,
+      "docPartialCoverTop5": false,
+      "supportGroupsCoveredTop5": 0,
+      "supportGroupsRequired": 0,
+      "supportFullCoverTop5": false,
+      "supportPartialCoverTop5": false,
+      "docHitAt1": false,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "failure_risk": "needs_ot_context",
+      "failure_reasons": [
+        "正确文档进入前5但未到第1名，存在文档级排序偏差。",
+        "该样本更依赖整篇通知上下文，适合补 ot_required 或 OT 邻近样本。"
+      ],
+      "topDocMatchesSource": "matches",
+      "topDocMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_ccebe408485d4e4b",
+          "score": 1.2796062726443973,
+          "best_kpid": "kpid_8f3018e81ca44a7c"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_444d8fa2a8a54ec6",
+          "score": 1.2246276899140531,
+          "best_kpid": "kpid_02392096304840e8"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_55c5131d829e4a00",
+          "score": 0.7957847733092627,
+          "best_kpid": "kpid_338e4713c8bc4bda"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_656f7a8ec44e4fac",
+          "score": 0.7464892601434644,
+          "best_kpid": "kpid_e6d4f092c7644704"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_d9a92add41454352",
+          "score": 0.6764368670140876,
+          "best_kpid": "kpid_c082ccc997c645b3"
+        }
+      ],
+      "topKpidMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_ccebe408485d4e4b",
+          "best_kpid": "kpid_8f3018e81ca44a7c"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_444d8fa2a8a54ec6",
+          "best_kpid": "kpid_02392096304840e8"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_55c5131d829e4a00",
+          "best_kpid": "kpid_338e4713c8bc4bda"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_656f7a8ec44e4fac",
+          "best_kpid": "kpid_e6d4f092c7644704"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_d9a92add41454352",
+          "best_kpid": "kpid_c082ccc997c645b3"
+        }
+      ],
+      "expectedDocTopKpCandidates": [
+        {
+          "rank": 1,
+          "kpid": "kpid_02392096304840e8",
+          "rawScore": 2.9021558872305144,
+          "rerankedScore": 2.9021558872305144
+        },
+        {
+          "rank": 2,
+          "kpid": "kpid_2374f979fd1c4129",
+          "rawScore": 2.021847805961859,
+          "rerankedScore": 2.021847805961859
+        },
+        {
+          "rank": 3,
+          "kpid": "kpid_a041c873bd694a3b",
+          "rawScore": 1.4841269841269842,
+          "rerankedScore": 1.4841269841269842
+        },
+        {
+          "rank": 4,
+          "kpid": "kpid_19567a53b7cb479e",
+          "rawScore": 1.1352213801356204,
+          "rerankedScore": 1.1352213801356204
+        },
+        {
+          "rank": 5,
+          "kpid": "kpid_f0be1629d04d4f7d",
+          "rawScore": 0.7387914230019492,
+          "rerankedScore": 0.7387914230019492
+        }
+      ]
+    },
+    {
+      "query": "是一名本科生 想申请人工智能学院2021年的直博生 需要满足哪些额外条件并准备什么特殊材料",
+      "expected_otid": "otid_6e85da455dd34af3",
+      "otid_eval_mode": "acceptable_otids",
+      "acceptable_otids": [
+        "otid_6e85da455dd34af3",
+        "otid_fcf3caca2aa340ca"
+      ],
+      "required_otid_groups": [],
+      "min_otid_groups_to_cover": 1,
+      "kp_eval_mode": "aspect_coverage",
+      "acceptable_anchor_kpids": [
+        "kpid_eebc6d2141ac4188",
+        "kpid_3601e6ca00494c7a"
+      ],
+      "required_kpid_groups": [
+        [
+          "kpid_eebc6d2141ac4188"
+        ],
+        [
+          "kpid_3601e6ca00494c7a"
+        ]
+      ],
+      "min_groups_to_cover": 2,
+      "dataset": "test_dataset_granularity_hard_ood_v2_diag_top30",
+      "query_type": "situational",
+      "query_scope": "procedure",
+      "preferred_granularity": "KP+OT",
+      "support_pattern": "multi_kp",
+      "granularity_sensitive": true,
+      "theme_family": "直博生申请要求",
+      "source_dataset": "hardood_v2_diag_extvariantg_top30",
+      "source_seed_id": "ai_seed_otid_6e85da455dd34af3_02",
+      "challenge_tags": [
+        "多条件整合",
+        "情境查询"
+      ],
+      "notes": "直博生额外条件和材料的整合查询，需要多个KP。；人工复核：acceptable_otids(expected, top2)。 HardOOD v2 diagnostic: selected from ext_variant_g by current runtime difficulty.",
+      "docRank": 1,
+      "kpidRank": null,
+      "supportCoverageDepth": null,
+      "docCoverageDepth": 1,
+      "docGroupsCoveredTop5": 0,
+      "docGroupsRequired": 0,
+      "docFullCoverTop5": false,
+      "docPartialCoverTop5": false,
+      "supportGroupsCoveredTop5": 0,
+      "supportGroupsRequired": 2,
+      "supportFullCoverTop5": false,
+      "supportPartialCoverTop5": false,
+      "docHitAt1": true,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "failure_risk": "multi_kp_aspect_miss",
+      "failure_reasons": [
+        "文档候选中未能稳定选出正确主证据 KP。",
+        "正确文档命中后，前5个 KP 候选仍未覆盖任何必需证据方面。",
+        "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+      ],
+      "topDocMatchesSource": "matches",
+      "topDocMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_6e85da455dd34af3",
+          "score": 1.3455465915769815
+        },
+        {
+          "rank": 2,
+          "otid": "otid_fcf3caca2aa340ca",
+          "score": 1.2826045165290498
+        },
+        {
+          "rank": 3,
+          "otid": "otid_70b617c59a044b46",
+          "score": 0.8637390440046986
+        },
+        {
+          "rank": 4,
+          "otid": "otid_7915cf0cb5a94687",
+          "score": 0.8501786772674902
+        },
+        {
+          "rank": 5,
+          "otid": "otid_01b65cafe0894b9c",
+          "score": 0.6978411659262723
+        }
+      ],
+      "topKpidMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_6e85da455dd34af3"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_fcf3caca2aa340ca"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_70b617c59a044b46"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_7915cf0cb5a94687"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_01b65cafe0894b9c"
+        }
+      ],
+      "expectedDocTopKpCandidates": []
+    },
+    {
+      "query": "2025年人工智能学院硕士复试的完整流程包括哪些步骤？",
+      "expected_otid": "otid_bacada41bba74749",
+      "otid_eval_mode": "single_expected",
+      "acceptable_otids": [
+        "otid_bacada41bba74749"
+      ],
+      "required_otid_groups": [],
+      "min_otid_groups_to_cover": 1,
+      "kp_eval_mode": "aspect_coverage",
+      "acceptable_anchor_kpids": [
+        "kpid_0b1a17e2d4c3491e",
+        "kpid_367935519f5d464e"
+      ],
+      "required_kpid_groups": [
+        [
+          "kpid_0b1a17e2d4c3491e"
+        ],
+        [
+          "kpid_367935519f5d464e"
+        ]
+      ],
+      "min_groups_to_cover": 2,
+      "dataset": "test_dataset_granularity_hard_ood_v2_diag_top30",
+      "query_type": "standard",
+      "query_scope": "procedure",
+      "preferred_granularity": "Q+KP",
+      "support_pattern": "multi_kp",
+      "granularity_sensitive": true,
+      "theme_family": "复试流程",
+      "source_dataset": "hardood_v2_diag_extvariantg_top30",
+      "source_seed_id": "ai_seed_otid_bacada41bba74749_01",
+      "challenge_tags": [
+        "procedure",
+        "multi_kp",
+        "standard_query",
+        "pref_q_plus_kp"
+      ],
+      "notes": "HardOOD v2 diagnostic: selected from ext_variant_g by current runtime difficulty.",
+      "docRank": 1,
+      "kpidRank": null,
+      "supportCoverageDepth": null,
+      "docCoverageDepth": 1,
+      "docGroupsCoveredTop5": 0,
+      "docGroupsRequired": 0,
+      "docFullCoverTop5": false,
+      "docPartialCoverTop5": false,
+      "supportGroupsCoveredTop5": 1,
+      "supportGroupsRequired": 2,
+      "supportFullCoverTop5": false,
+      "supportPartialCoverTop5": true,
+      "docHitAt1": true,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "failure_risk": "partial_multi_kp_coverage",
+      "failure_reasons": [
+        "文档候选中未能稳定选出正确主证据 KP。",
+        "正确文档命中后，仅覆盖了部分同等重要的证据方面。",
+        "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+      ],
+      "topDocMatchesSource": "matches",
+      "topDocMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_bacada41bba74749",
+          "score": 1.6104681964205618,
+          "best_kpid": "kpid_8019ca61c4d64f7e"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_6c5b2af52b1d4df5",
+          "score": 1.4881051349402825,
+          "best_kpid": "kpid_02517d7c32c8474e"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_ed940aabc9c24803",
+          "score": 0.9810388726291357,
+          "best_kpid": "kpid_97e0cfdd84e345b3"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_82fe535421c6472c",
+          "score": 0.9790478684376083,
+          "best_kpid": "kpid_c264127c102a48fb"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_a555af8a126c4703",
+          "score": 0.9784116632975066,
+          "best_kpid": "kpid_81ce6f82ca094037"
+        }
+      ],
+      "topKpidMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_bacada41bba74749",
+          "best_kpid": "kpid_8019ca61c4d64f7e"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_6c5b2af52b1d4df5",
+          "best_kpid": "kpid_02517d7c32c8474e"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_ed940aabc9c24803",
+          "best_kpid": "kpid_97e0cfdd84e345b3"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_82fe535421c6472c",
+          "best_kpid": "kpid_c264127c102a48fb"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_a555af8a126c4703",
+          "best_kpid": "kpid_81ce6f82ca094037"
+        }
+      ],
+      "expectedDocTopKpCandidates": [
+        {
+          "rank": 1,
+          "kpid": "kpid_8019ca61c4d64f7e",
+          "rawScore": 0.36974338578474863,
+          "rerankedScore": 0.36974338578474863
+        },
+        {
+          "rank": 2,
+          "kpid": "kpid_265083ab822641bd",
+          "rawScore": 0.3123342878354014,
+          "rerankedScore": 0.3123342878354014
+        },
+        {
+          "rank": 3,
+          "kpid": "kpid_cf09ccb0de784179",
+          "rawScore": 0.2898550724637681,
+          "rerankedScore": 0.2898550724637681
+        },
+        {
+          "rank": 4,
+          "kpid": "kpid_0b1a17e2d4c3491e",
+          "rawScore": 0.23509167016552796,
+          "rerankedScore": 0.23509167016552796
+        }
+      ]
+    },
+    {
+      "query": "人工智能学院2026年博士招生的报考流程包括哪些主要步骤",
+      "expected_otid": "otid_1180b6d41c0e4ca7",
+      "otid_eval_mode": "single_expected",
+      "acceptable_otids": [
+        "otid_1180b6d41c0e4ca7"
+      ],
+      "required_otid_groups": [],
+      "min_otid_groups_to_cover": 1,
+      "kp_eval_mode": "aspect_coverage",
+      "acceptable_anchor_kpids": [
+        "kpid_f99f33fa77cd46f9",
+        "kpid_d1d68348e9794f6e",
+        "kpid_5708e3e6cda840a9"
+      ],
+      "required_kpid_groups": [
+        [
+          "kpid_f99f33fa77cd46f9"
+        ],
+        [
+          "kpid_d1d68348e9794f6e"
+        ],
+        [
+          "kpid_5708e3e6cda840a9"
+        ]
+      ],
+      "min_groups_to_cover": 3,
+      "dataset": "test_dataset_granularity_hard_ood_v2_diag_top30",
+      "query_type": "standard",
+      "query_scope": "procedure",
+      "preferred_granularity": "KP+OT",
+      "support_pattern": "multi_kp",
+      "granularity_sensitive": true,
+      "theme_family": "博士招生报考",
+      "source_dataset": "hardood_v2_diag_extvariantg_top30",
+      "source_seed_id": "ai_seed_otid_1180b6d41c0e4ca7_02",
+      "challenge_tags": [
+        "多步骤整合",
+        "流程理解"
+      ],
+      "notes": "需要整合多个知识点的流程查询 HardOOD v2 diagnostic: selected from ext_variant_g by current runtime difficulty.",
+      "docRank": 1,
+      "kpidRank": null,
+      "supportCoverageDepth": null,
+      "docCoverageDepth": 1,
+      "docGroupsCoveredTop5": 0,
+      "docGroupsRequired": 0,
+      "docFullCoverTop5": false,
+      "docPartialCoverTop5": false,
+      "supportGroupsCoveredTop5": 2,
+      "supportGroupsRequired": 3,
+      "supportFullCoverTop5": false,
+      "supportPartialCoverTop5": true,
+      "docHitAt1": true,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "failure_risk": "partial_multi_kp_coverage",
+      "failure_reasons": [
+        "文档候选中未能稳定选出正确主证据 KP。",
+        "正确文档命中后，仅覆盖了部分同等重要的证据方面。",
+        "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+      ],
+      "topDocMatchesSource": "matches",
+      "topDocMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_1180b6d41c0e4ca7",
+          "score": 1.299121072049087,
+          "best_kpid": "kpid_72b3299a78cb44a5"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_f38fd69ea2d64794",
+          "score": 1.2503834499690059,
+          "best_kpid": "kpid_6327783ef0e247ff"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_40565beb38cf45c5",
+          "score": 1.0008779264695304,
+          "best_kpid": "kpid_8010becd465e40c3"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_c03d97fc09704546",
+          "score": 0.9785924718097239,
+          "best_kpid": "kpid_c8598bcecedc47a0"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_42225868ea784bbf",
+          "score": 0.9664265500128005,
+          "best_kpid": "kpid_5d44223cacfc40db"
+        }
+      ],
+      "topKpidMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_1180b6d41c0e4ca7",
+          "best_kpid": "kpid_72b3299a78cb44a5"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_f38fd69ea2d64794",
+          "best_kpid": "kpid_6327783ef0e247ff"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_40565beb38cf45c5",
+          "best_kpid": "kpid_8010becd465e40c3"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_c03d97fc09704546",
+          "best_kpid": "kpid_c8598bcecedc47a0"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_42225868ea784bbf",
+          "best_kpid": "kpid_5d44223cacfc40db"
+        }
+      ],
+      "expectedDocTopKpCandidates": [
+        {
+          "rank": 1,
+          "kpid": "kpid_72b3299a78cb44a5",
+          "rawScore": 1.967723221349085,
+          "rerankedScore": 1.967723221349085
+        },
+        {
+          "rank": 2,
+          "kpid": "kpid_ade6c7c80fb34a09",
+          "rawScore": 0.8495879797742417,
+          "rerankedScore": 0.8495879797742417
+        },
+        {
+          "rank": 3,
+          "kpid": "kpid_f99f33fa77cd46f9",
+          "rawScore": 0.6731575423932612,
+          "rerankedScore": 0.6731575423932612
+        },
+        {
+          "rank": 4,
+          "kpid": "kpid_c9529f7cbbc946b8",
+          "rawScore": 0.6300700723984533,
+          "rerankedScore": 0.6300700723984533
+        },
+        {
+          "rank": 5,
+          "kpid": "kpid_d1d68348e9794f6e",
+          "rawScore": 0.2922194611024398,
+          "rerankedScore": 0.2922194611024398
+        }
+      ]
+    },
+    {
+      "query": "申请中山大学人工智能学院2023年夏令营需要哪些资格条件和申请材料？",
+      "expected_otid": "otid_7229bb63ab97456a",
+      "otid_eval_mode": "single_expected",
+      "acceptable_otids": [
+        "otid_7229bb63ab97456a"
+      ],
+      "required_otid_groups": [],
+      "min_otid_groups_to_cover": 1,
+      "kp_eval_mode": "aspect_coverage",
+      "acceptable_anchor_kpids": [
+        "kpid_079fdadcb96a44be",
+        "kpid_294e647613834764"
+      ],
+      "required_kpid_groups": [
+        [
+          "kpid_079fdadcb96a44be"
+        ],
+        [
+          "kpid_294e647613834764"
+        ]
+      ],
+      "min_groups_to_cover": 2,
+      "dataset": "test_dataset_granularity_hard_ood_v2_diag_top30",
+      "query_type": "standard",
+      "query_scope": "eligibility_condition",
+      "preferred_granularity": "KP",
+      "support_pattern": "multi_kp",
+      "granularity_sensitive": true,
+      "theme_family": "夏令营申请要求",
+      "source_dataset": "hardood_v2_diag_extvariantg_top30",
+      "source_seed_id": "ai_seed_otid_7229bb63ab97456a_01",
+      "challenge_tags": [
+        "eligibility_condition",
+        "multi_kp",
+        "standard_query",
+        "pref_kp"
+      ],
+      "notes": "资格+材料双要素，multi_kp 明确。 HardOOD v2 diagnostic: selected from ext_variant_g by current runtime difficulty.",
+      "docRank": 1,
+      "kpidRank": null,
+      "supportCoverageDepth": null,
+      "docCoverageDepth": 1,
+      "docGroupsCoveredTop5": 0,
+      "docGroupsRequired": 0,
+      "docFullCoverTop5": false,
+      "docPartialCoverTop5": false,
+      "supportGroupsCoveredTop5": 1,
+      "supportGroupsRequired": 2,
+      "supportFullCoverTop5": false,
+      "supportPartialCoverTop5": true,
+      "docHitAt1": true,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "failure_risk": "partial_multi_kp_coverage",
+      "failure_reasons": [
+        "文档候选中未能稳定选出正确主证据 KP。",
+        "正确文档命中后，仅覆盖了部分同等重要的证据方面。",
+        "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+      ],
+      "topDocMatchesSource": "matches",
+      "topDocMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_7229bb63ab97456a",
+          "score": 1.4578886693017128,
+          "best_kpid": "kpid_033d9f4dc672416d"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_eada182ca6104c99",
+          "score": 0.9576900049891901,
+          "best_kpid": "kpid_384144f00ea84a26"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_dc2fbd2f88f7453b",
+          "score": 0.9061495244864115
+        },
+        {
+          "rank": 4,
+          "otid": "otid_84a37b294495492a",
+          "score": 0.8235178402825049,
+          "best_kpid": "kpid_48dd250062c141c4"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_2f90c6af5fd44b44",
+          "score": 0.6372290400471438,
+          "best_kpid": "kpid_27b6e154135549c8"
+        }
+      ],
+      "topKpidMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_7229bb63ab97456a",
+          "best_kpid": "kpid_033d9f4dc672416d"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_eada182ca6104c99",
+          "best_kpid": "kpid_384144f00ea84a26"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_dc2fbd2f88f7453b"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_84a37b294495492a",
+          "best_kpid": "kpid_48dd250062c141c4"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_2f90c6af5fd44b44",
+          "best_kpid": "kpid_27b6e154135549c8"
+        }
+      ],
+      "expectedDocTopKpCandidates": [
+        {
+          "rank": 1,
+          "kpid": "kpid_033d9f4dc672416d",
+          "rawScore": 1.5434782608695652,
+          "rerankedScore": 1.5434782608695652
+        },
+        {
+          "rank": 2,
+          "kpid": "kpid_294e647613834764",
+          "rawScore": 1.4684369045423813,
+          "rerankedScore": 1.4684369045423813
+        },
+        {
+          "rank": 3,
+          "kpid": "kpid_3e67de51d64c48f1",
+          "rawScore": 1.2445189219382766,
+          "rerankedScore": 1.2445189219382766
+        },
+        {
+          "rank": 4,
+          "kpid": "kpid_3a9fc3b5880b4cd6",
+          "rawScore": 0.6642967494815347,
+          "rerankedScore": 0.6642967494815347
+        },
+        {
+          "rank": 5,
+          "kpid": "kpid_5854111c03d24275",
+          "rawScore": 0.5692461366707797,
+          "rerankedScore": 0.5692461366707797
+        }
+      ]
+    },
+    {
+      "query": "作为一名应届本科毕业生 如果想申请人工智能学院2024年的直博推免生 我需要满足哪些基本条件并提交哪些特殊材料",
+      "expected_otid": "otid_64fee3c7ad80452e",
+      "otid_eval_mode": "single_expected",
+      "acceptable_otids": [
+        "otid_64fee3c7ad80452e"
+      ],
+      "required_otid_groups": [],
+      "min_otid_groups_to_cover": 1,
+      "kp_eval_mode": "aspect_coverage",
+      "acceptable_anchor_kpids": [
+        "kpid_0c934bf42f4c4eee",
+        "kpid_80afcb0f74564be4"
+      ],
+      "required_kpid_groups": [
+        [
+          "kpid_0c934bf42f4c4eee"
+        ],
+        [
+          "kpid_80afcb0f74564be4"
+        ]
+      ],
+      "min_groups_to_cover": 2,
+      "dataset": "test_dataset_granularity_hard_ood_v2_diag_top30",
+      "query_type": "situational",
+      "query_scope": "eligibility_condition",
+      "preferred_granularity": "KP+OT",
+      "support_pattern": "multi_kp",
+      "granularity_sensitive": true,
+      "theme_family": "研究生招生政策",
+      "source_dataset": "hardood_v2_diag_extvariantg_top30",
+      "source_seed_id": "ai_seed_otid_64fee3c7ad80452e_03",
+      "challenge_tags": [
+        "多条件整合",
+        "直博申请"
+      ],
+      "notes": "整合基本条件和直博生额外材料要求。 HardOOD v2 diagnostic: selected from ext_variant_g by current runtime difficulty.",
+      "docRank": 1,
+      "kpidRank": 1,
+      "supportCoverageDepth": null,
+      "docCoverageDepth": 1,
+      "docGroupsCoveredTop5": 0,
+      "docGroupsRequired": 0,
+      "docFullCoverTop5": false,
+      "docPartialCoverTop5": false,
+      "supportGroupsCoveredTop5": 1,
+      "supportGroupsRequired": 2,
+      "supportFullCoverTop5": false,
+      "supportPartialCoverTop5": true,
+      "docHitAt1": true,
+      "docHitAt5": true,
+      "kpidHitAt1": true,
+      "kpidHitAt5": true,
+      "failure_risk": "partial_multi_kp_coverage",
+      "failure_reasons": [
+        "正确文档命中后，仅覆盖了部分同等重要的证据方面。",
+        "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+      ],
+      "topDocMatchesSource": "matches",
+      "topDocMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_64fee3c7ad80452e",
+          "score": 1.3708784747622016,
+          "best_kpid": "kpid_0c934bf42f4c4eee"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_fd6621f974774e1c",
+          "score": 1.2631700023004369
+        },
+        {
+          "rank": 3,
+          "otid": "otid_f3ee1947f40e4b18",
+          "score": 1.1486062549363936,
+          "best_kpid": "kpid_570ce8160b834d68"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_61e44e3f9f6548de",
+          "score": 0.8792991596734783,
+          "best_kpid": "kpid_0be4217539b34435"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_54fc4d3ca3a94536",
+          "score": 0.8370415523722442
+        }
+      ],
+      "topKpidMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_64fee3c7ad80452e",
+          "best_kpid": "kpid_0c934bf42f4c4eee"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_fd6621f974774e1c"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_f3ee1947f40e4b18",
+          "best_kpid": "kpid_570ce8160b834d68"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_61e44e3f9f6548de",
+          "best_kpid": "kpid_0be4217539b34435"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_54fc4d3ca3a94536"
+        }
+      ],
+      "expectedDocTopKpCandidates": [
+        {
+          "rank": 1,
+          "kpid": "kpid_0c934bf42f4c4eee",
+          "rawScore": 1.502698328887548,
+          "rerankedScore": 1.502698328887548
+        }
+      ]
+    },
+    {
+      "query": "想申请人工智能学院2022年直博生推免 除了基本材料外 还需要特别注意哪些额外要求和材料",
+      "expected_otid": "otid_81112559b6b240f2",
+      "otid_eval_mode": "single_expected",
+      "acceptable_otids": [
+        "otid_81112559b6b240f2"
+      ],
+      "required_otid_groups": [],
+      "min_otid_groups_to_cover": 1,
+      "kp_eval_mode": "aspect_coverage",
+      "acceptable_anchor_kpids": [
+        "kpid_17d9ebedb7f849e6",
+        "kpid_0ce4691f1eb24d8e"
+      ],
+      "required_kpid_groups": [
+        [
+          "kpid_17d9ebedb7f849e6"
+        ],
+        [
+          "kpid_0ce4691f1eb24d8e"
+        ]
+      ],
+      "min_groups_to_cover": 2,
+      "dataset": "test_dataset_granularity_hard_ood_v2_diag_top30",
+      "query_type": "situational",
+      "query_scope": "procedure",
+      "preferred_granularity": "KP+OT",
+      "support_pattern": "multi_kp",
+      "granularity_sensitive": true,
+      "theme_family": "推免研究生报名",
+      "source_dataset": "hardood_v2_diag_extvariantg_top30",
+      "source_seed_id": "ai_seed_otid_81112559b6b240f2_02",
+      "challenge_tags": [
+        "资格整合",
+        "材料细节"
+      ],
+      "notes": "情境查询，需整合多个KP的申请要求 HardOOD v2 diagnostic: selected from ext_variant_g by current runtime difficulty.",
+      "docRank": 1,
+      "kpidRank": 1,
+      "supportCoverageDepth": null,
+      "docCoverageDepth": 1,
+      "docGroupsCoveredTop5": 0,
+      "docGroupsRequired": 0,
+      "docFullCoverTop5": false,
+      "docPartialCoverTop5": false,
+      "supportGroupsCoveredTop5": 1,
+      "supportGroupsRequired": 2,
+      "supportFullCoverTop5": false,
+      "supportPartialCoverTop5": true,
+      "docHitAt1": true,
+      "docHitAt5": true,
+      "kpidHitAt1": true,
+      "kpidHitAt5": true,
+      "failure_risk": "partial_multi_kp_coverage",
+      "failure_reasons": [
+        "正确文档命中后，仅覆盖了部分同等重要的证据方面。",
+        "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+      ],
+      "topDocMatchesSource": "matches",
+      "topDocMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_81112559b6b240f2",
+          "score": 1.4008108041729406,
+          "best_kpid": "kpid_0ce4691f1eb24d8e"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_2c221a5f38864ced",
+          "score": 0.6894409937888198
+        },
+        {
+          "rank": 3,
+          "otid": "otid_ca3a4c98f51f48e8",
+          "score": 0.6508586509876753,
+          "best_kpid": "kpid_65a33b7ae39943a8"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_659cfd8833ee4369",
+          "score": 0.6401072584497884,
+          "best_kpid": "kpid_462770ce37ac4bb5"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_392eac0b27fa4b09",
+          "score": 0.627743271221532
+        }
+      ],
+      "topKpidMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_81112559b6b240f2",
+          "best_kpid": "kpid_0ce4691f1eb24d8e"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_2c221a5f38864ced"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_ca3a4c98f51f48e8",
+          "best_kpid": "kpid_65a33b7ae39943a8"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_659cfd8833ee4369",
+          "best_kpid": "kpid_462770ce37ac4bb5"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_392eac0b27fa4b09"
+        }
+      ],
+      "expectedDocTopKpCandidates": [
+        {
+          "rank": 1,
+          "kpid": "kpid_0ce4691f1eb24d8e",
+          "rawScore": 0.5256682112097175,
+          "rerankedScore": 0.5256682112097175
+        },
+        {
+          "rank": 2,
+          "kpid": "kpid_b7a4fc45d30441c6",
+          "rawScore": 0.449438202247191,
+          "rerankedScore": 0.449438202247191
+        },
+        {
+          "rank": 3,
+          "kpid": "kpid_32a5784e259f49e3",
+          "rawScore": 0.2912621359223301,
+          "rerankedScore": 0.2912621359223301
+        }
+      ]
+    },
+    {
+      "query": "申请人工智能学院2024年博士 需要准备哪些推荐信和提交哪些纸质材料",
+      "expected_otid": "otid_f0baf746fd75421e",
+      "otid_eval_mode": "single_expected",
+      "acceptable_otids": [
+        "otid_f0baf746fd75421e"
+      ],
+      "required_otid_groups": [],
+      "min_otid_groups_to_cover": 1,
+      "kp_eval_mode": "aspect_coverage",
+      "acceptable_anchor_kpids": [
+        "kpid_9b0b633eb4354385",
+        "kpid_69002c70a59c4fba"
+      ],
+      "required_kpid_groups": [
+        [
+          "kpid_9b0b633eb4354385"
+        ],
+        [
+          "kpid_69002c70a59c4fba"
+        ]
+      ],
+      "min_groups_to_cover": 2,
+      "dataset": "test_dataset_granularity_hard_ood_v2_diag_top30",
+      "query_type": "situational",
+      "query_scope": "procedure",
+      "preferred_granularity": "KP+OT",
+      "support_pattern": "multi_kp",
+      "granularity_sensitive": true,
+      "theme_family": "申请材料",
+      "source_dataset": "hardood_v2_diag_extvariantg_top30",
+      "source_seed_id": "ai_seed_otid_f0baf746fd75421e_02",
+      "challenge_tags": [
+        "多部分整合",
+        "材料清单"
+      ],
+      "notes": "查询申请所需的推荐信和材料细节。 HardOOD v2 diagnostic: selected from ext_variant_g by current runtime difficulty.",
+      "docRank": 1,
+      "kpidRank": 1,
+      "supportCoverageDepth": null,
+      "docCoverageDepth": 1,
+      "docGroupsCoveredTop5": 0,
+      "docGroupsRequired": 0,
+      "docFullCoverTop5": false,
+      "docPartialCoverTop5": false,
+      "supportGroupsCoveredTop5": 1,
+      "supportGroupsRequired": 2,
+      "supportFullCoverTop5": false,
+      "supportPartialCoverTop5": true,
+      "docHitAt1": true,
+      "docHitAt5": true,
+      "kpidHitAt1": true,
+      "kpidHitAt5": true,
+      "failure_risk": "partial_multi_kp_coverage",
+      "failure_reasons": [
+        "正确文档命中后，仅覆盖了部分同等重要的证据方面。",
+        "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+      ],
+      "topDocMatchesSource": "matches",
+      "topDocMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_f0baf746fd75421e",
+          "score": 1.1100701454012054,
+          "best_kpid": "kpid_69002c70a59c4fba"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_68999cb6f0a3468d",
+          "score": 1.0337496483361603,
+          "best_kpid": "kpid_f60eec02e4b24f0e"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_88804cb412b84a0f",
+          "score": 0.8366545893719806,
+          "best_kpid": "kpid_8617415fc9d1463e"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_189bc24102e2423a",
+          "score": 0.8131493783001192
+        },
+        {
+          "rank": 5,
+          "otid": "otid_43d49d8e09054fe3",
+          "score": 0.7979353219263357,
+          "best_kpid": "kpid_bd99d863c6d74825"
+        }
+      ],
+      "topKpidMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_f0baf746fd75421e",
+          "best_kpid": "kpid_69002c70a59c4fba"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_68999cb6f0a3468d",
+          "best_kpid": "kpid_f60eec02e4b24f0e"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_88804cb412b84a0f",
+          "best_kpid": "kpid_8617415fc9d1463e"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_189bc24102e2423a"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_43d49d8e09054fe3",
+          "best_kpid": "kpid_bd99d863c6d74825"
+        }
+      ],
+      "expectedDocTopKpCandidates": [
+        {
+          "rank": 1,
+          "kpid": "kpid_69002c70a59c4fba",
+          "rawScore": 0.839244466270166,
+          "rerankedScore": 0.839244466270166
+        },
+        {
+          "rank": 2,
+          "kpid": "kpid_99c98849c49e4f07",
+          "rawScore": 0.24449019699592905,
+          "rerankedScore": 0.24449019699592905
+        }
+      ]
+    },
+    {
+      "query": "2022年-鹏城实验室联合培养博士专项计划考核的流程怎么走是怎样的",
+      "expected_otid": "otid_b5047e817198431e",
+      "otid_eval_mode": "single_expected",
+      "acceptable_otids": [
+        "otid_b5047e817198431e"
+      ],
+      "required_otid_groups": [],
+      "min_otid_groups_to_cover": 1,
+      "kp_eval_mode": "aspect_coverage",
+      "acceptable_anchor_kpids": [
+        "kpid_27b4d96508a446ec",
+        "kpid_9c98fa0f949c4c41"
+      ],
+      "required_kpid_groups": [
+        [
+          "kpid_27b4d96508a446ec"
+        ],
+        [
+          "kpid_9c98fa0f949c4c41"
+        ]
+      ],
+      "min_groups_to_cover": 2,
+      "dataset": "test_dataset_granularity_hard_ood_v2_diag_top30",
+      "query_type": "standard",
+      "query_scope": "procedure",
+      "preferred_granularity": "KP+OT",
+      "support_pattern": "multi_kp",
+      "granularity_sensitive": true,
+      "theme_family": "博士招生考核",
+      "source_dataset": "hardood_v2_diag_extvariantg_top30",
+      "source_seed_id": "ai_seed_otid_b5047e817198431e_02",
+      "challenge_tags": [
+        "流程整合"
+      ],
+      "notes": "需要整合多个部分描述考核流程 HardOOD v2 diagnostic: selected from ext_variant_g by current runtime difficulty.",
+      "docRank": 1,
+      "kpidRank": null,
+      "supportCoverageDepth": 4,
+      "docCoverageDepth": 1,
+      "docGroupsCoveredTop5": 0,
+      "docGroupsRequired": 0,
+      "docFullCoverTop5": false,
+      "docPartialCoverTop5": false,
+      "supportGroupsCoveredTop5": 2,
+      "supportGroupsRequired": 2,
+      "supportFullCoverTop5": true,
+      "supportPartialCoverTop5": true,
+      "docHitAt1": true,
+      "docHitAt5": true,
+      "kpidHitAt1": false,
+      "kpidHitAt5": false,
+      "failure_risk": "best_kpid_confusion",
+      "failure_reasons": [
+        "文档候选中未能稳定选出正确主证据 KP。",
+        "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+      ],
+      "topDocMatchesSource": "matches",
+      "topDocMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_b5047e817198431e",
+          "score": 1.7656632285585336,
+          "best_kpid": "kpid_937f1ea18d2e4c9c"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_392eac0b27fa4b09",
+          "score": 0.6777811361804601,
+          "best_kpid": "kpid_a17b5df4d05c447b"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_fe078e0584fe4b77",
+          "score": 0.6087711415237735,
+          "best_kpid": "kpid_96609403c80446f6"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_860f1ae2b71c4de9",
+          "score": 0.49469967230921585,
+          "best_kpid": "kpid_e9dc07ad4de14960"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_8dcb848e9edd4fd2",
+          "score": 0.3497026042578744,
+          "best_kpid": "kpid_97bb8ec9b35a486d"
+        }
+      ],
+      "topKpidMatches": [
+        {
+          "rank": 1,
+          "otid": "otid_b5047e817198431e",
+          "best_kpid": "kpid_937f1ea18d2e4c9c"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_392eac0b27fa4b09",
+          "best_kpid": "kpid_a17b5df4d05c447b"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_fe078e0584fe4b77",
+          "best_kpid": "kpid_96609403c80446f6"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_860f1ae2b71c4de9",
+          "best_kpid": "kpid_e9dc07ad4de14960"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_8dcb848e9edd4fd2",
+          "best_kpid": "kpid_97bb8ec9b35a486d"
+        }
+      ],
+      "expectedDocTopKpCandidates": [
+        {
+          "rank": 1,
+          "kpid": "kpid_937f1ea18d2e4c9c",
+          "rawScore": 2.4219409282700424,
+          "rerankedScore": 2.4219409282700424
+        },
+        {
+          "rank": 2,
+          "kpid": "kpid_27b4d96508a446ec",
+          "rawScore": 1.9846199349304938,
+          "rerankedScore": 1.9846199349304938
+        },
+        {
+          "rank": 3,
+          "kpid": "kpid_7a2ce6ef10ac4b27",
+          "rawScore": 1.348618459729571,
+          "rerankedScore": 1.348618459729571
+        },
+        {
+          "rank": 4,
+          "kpid": "kpid_9c98fa0f949c4c41",
+          "rawScore": 0.9443001443001443,
+          "rerankedScore": 0.9443001443001443
+        }
+      ]
+    }
+  ]
+}

@@ -12,6 +12,8 @@ export const CURRENT_EVAL_DATASET_FILES = {
     // 历史 hard OOD，仅保留参考
     granularityExternalOodHard30:
         "../Backend/test/test_dataset_granularity/test_dataset_granularity_external_ood_holdout_30_reviewed_userized_v1.json",
+    granularityHardOodV2DiagTop30:
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_hard_ood_v2_diag_top30.json",
     // 当前唯一 behavior 主线：未看过的 v4 frozen holdout
     answerRejectCurrent:
         "../Backend/test/test_dataset_answer_reject/test_dataset_answer_reject_v4_frozen_holdout_reviewed.json",

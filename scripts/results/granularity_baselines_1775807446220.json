@@ -1,0 +1,4943 @@
+{
+  "generatedAt": "2026-04-10T07:50:46.219Z",
+  "embeddingModel": "DMetaSoul/Dmeta-embedding-zh-small",
+  "bootstrapIterations": 10000,
+  "randomizationIterations": 10000,
+  "timingNote": "耗时统计仅覆盖每条 query 的检索/排序阶段，不含 query embedding、模型加载与结果写盘。",
+  "datasets": [
+    {
+      "datasetKey": "external_ood_hard_30",
+      "datasetLabel": "HardOOD",
+      "datasetAlias": "gran_ext_hard30",
+      "datasetDisplayName": "ExtHard",
+      "datasetFile": "../Backend/test/test_dataset_granularity/test_dataset_granularity_external_ood_holdout_30_reviewed_userized_v1.json",
+      "caseCount": 30,
+      "bestStandardBaseline": "BM25-OT",
+      "models": [
+        {
+          "label": "BM25-OT",
+          "family": "sparse",
+          "description": "经典稀疏检索：仅在 OT 文档上执行 BM25。",
+          "metrics": {
+            "total": 30,
+            "hitAt1": 33.33333333333333,
+            "hitAt3": 66.66666666666666,
+            "hitAt5": 76.66666666666667,
+            "mrr": 0.5317658730158731
+          },
+          "timing": {
+            "avgMs": 11.536266666666643,
+            "p50Ms": 11.861300000000028,
+            "p95Ms": 14.867570000000018,
+            "maxMs": 15.7179000000001,
+            "totalMs": 346.0879999999993
+          },
+          "hitAt1Interval95": {
+            "lower": 16.666666666666664,
+            "upper": 50
+          },
+          "mrrInterval95": {
+            "lower": 0.404969742063492,
+            "upper": 0.66103373015873
+          },
+          "perCase": [
+            {
+              "id": "ood30_001",
+              "query": "2021年人工智能学院夏令营什么时候报名 报名对象和要准备要准备什么材料都有哪些",
+              "expected_otid": "otid_9cf3ef26730b4cb4",
+              "elapsedMs": 15.715099999999893,
+              "rank": 2,
+              "hitAt1": false,
+              "reciprocalRank": 0.5,
+              "top1Otid": "otid_7f07ed38fde74862",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_7f07ed38fde74862",
+                  "score": 22.273080484603778
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_9cf3ef26730b4cb4",
+                  "score": 16.427473795828842
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_81112559b6b240f2",
+                  "score": 15.022357003667961
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_368788a742004738",
+                  "score": 13.762062219101256
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_444d8fa2a8a54ec6",
+                  "score": 13.521886947657256
+                }
+              ]
+            },
+            {
+              "id": "ood30_002",
+              "query": "是应届本科生 想申请人工智能学院2021年推免 需要经过哪些流程",
+              "expected_otid": "otid_01b65cafe0894b9c",
+              "elapsedMs": 15.7179000000001,
+              "rank": 21,
+              "hitAt1": false,
+              "reciprocalRank": 0.047619047619047616,
+              "top1Otid": "otid_07571807121c4472",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_07571807121c4472",
+                  "score": 16.880742241487077
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_7229bb63ab97456a",
+                  "score": 16.643162487681685
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_444d8fa2a8a54ec6",
+                  "score": 16.5707365681281
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_7f07ed38fde74862",
+                  "score": 16.173928237644763
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_81112559b6b240f2",
+                  "score": 15.73670696806309
+                }
+              ]
+            },
+            {
+              "id": "ood30_003",
+              "query": "2022年人工智能学院夏令营的怎么弄和活动安排是什么",
+              "expected_otid": "otid_c7828d5c12cc4c90",
+              "elapsedMs": 10.66740000000027,
+              "rank": 2,
+              "hitAt1": false,
+              "reciprocalRank": 0.5,
+              "top1Otid": "otid_cf0fb6da0f1a4b18",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_cf0fb6da0f1a4b18",
+                  "score": 18.11945688443043
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_c7828d5c12cc4c90",
+                  "score": 17.268223215158667
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_da09cc50e7bc46df",
+                  "score": 16.592124376573537
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_9cf3ef26730b4cb4",
+                  "score": 16.56943589812535
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_444d8fa2a8a54ec6",
+                  "score": 14.60852669693167
+                }
+              ]
+            },
+            {
+              "id": "ood30_004",
+              "query": "人工智能学院2022年免试生接收办法中 是否接收直博生、要要什么条件和考核要求都有哪些",
+              "expected_otid": "otid_ca3a4c98f51f48e8",
+              "elapsedMs": 12.079400000000078,
+              "rank": 8,
+              "hitAt1": false,
+              "reciprocalRank": 0.125,
+              "top1Otid": "otid_7f07ed38fde74862",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_7f07ed38fde74862",
+                  "score": 27.980657281285765
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_81112559b6b240f2",
+                  "score": 20.33948907888764
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_9c03330f339d4f33",
+                  "score": 19.537707219042822
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_5d30aea8c4a64cce",
+                  "score": 19.481674450114717
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_f86cd11add664a2c",
+                  "score": 18.831964891356474
+                }
+              ]
+            },
+            {
+              "id": "ood30_005",
+              "query": "2023年人工智能学院夏令营报名需要满足要什么条件并提交要准备什么材料",
+              "expected_otid": "otid_7229bb63ab97456a",
+              "elapsedMs": 13.831700000000183,
+              "rank": 2,
+              "hitAt1": false,
+              "reciprocalRank": 0.5,
+              "top1Otid": "otid_7f07ed38fde74862",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_7f07ed38fde74862",
+                  "score": 19.833267218589317
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_7229bb63ab97456a",
+                  "score": 17.659877670170957
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_f97bb7b9f0ed48bd",
+                  "score": 17.156835994174187
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_c7828d5c12cc4c90",
+                  "score": 16.426669508106418
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_2f90c6af5fd44b44",
+                  "score": 15.510796156360348
+                }
+              ]
+            },
+            {
+              "id": "ood30_006",
+              "query": "想申请人工智能学院2023年推免预报名 什么时候开始、怎么弄",
+              "expected_otid": "otid_eada182ca6104c99",
+              "elapsedMs": 11.906399999999849,
+              "rank": 12,
+              "hitAt1": false,
+              "reciprocalRank": 0.08333333333333333,
+              "top1Otid": "otid_7229bb63ab97456a",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_7229bb63ab97456a",
+                  "score": 16.579441240357543
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_f97bb7b9f0ed48bd",
+                  "score": 16.398848743051953
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_7f07ed38fde74862",
+                  "score": 15.076475358469203
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_da09cc50e7bc46df",
+                  "score": 15.046889259115394
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_84a37b294495492a",
+                  "score": 14.347012505836908
+                }
+              ]
+            },
+            {
+              "id": "ood30_007",
+              "query": "人工智能学院2024年推免接收办法的整体要求是什么",
+              "expected_otid": "otid_64fee3c7ad80452e",
+              "elapsedMs": 10.702999999999975,
+              "rank": 7,
+              "hitAt1": false,
+              "reciprocalRank": 0.14285714285714285,
+              "top1Otid": "otid_f3ee1947f40e4b18",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_f3ee1947f40e4b18",
+                  "score": 14.08186248877136
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_3770fb6348d24f6b",
+                  "score": 13.823891127203321
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_9c03330f339d4f33",
+                  "score": 13.677825289417648
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_ca3a4c98f51f48e8",
+                  "score": 13.274363279167336
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_7f07ed38fde74862",
+                  "score": 13.190991455620496
+                }
+              ]
+            },
+            {
+              "id": "ood30_008",
+              "query": "人工智能学院2025推免接收办法 要要什么条件 材料",
+              "expected_otid": "otid_3770fb6348d24f6b",
+              "elapsedMs": 13.026100000000042,
+              "rank": 2,
+              "hitAt1": false,
+              "reciprocalRank": 0.5,
+              "top1Otid": "otid_9c03330f339d4f33",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_9c03330f339d4f33",
+                  "score": 17.891946053849697
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_3770fb6348d24f6b",
+                  "score": 16.38122016704783
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_f672cc42a5a04134",
+                  "score": 15.850859123798765
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_d2e81434d6754411",
+                  "score": 15.605234338730574
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_7479616835454c16",
+                  "score": 15.266836150161414
+                }
+              ]
+            },
+            {
+              "id": "ood30_009",
+              "query": "2021年全国硕士报名考试报考点代码是多少 适用哪些考生",
+              "expected_otid": "otid_849070d708e0472f",
+              "elapsedMs": 10.820400000000063,
+              "rank": 16,
+              "hitAt1": false,
+              "reciprocalRank": 0.0625,
+              "top1Otid": "otid_1ef327d38b174afb",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_1ef327d38b174afb",
+                  "score": 16.887226387981173
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_c15c87e71b5b49b0",
+                  "score": 15.817970468098412
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_a2f94115e88244d4",
+                  "score": 15.128976174297097
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_63a7acf7429240b8",
+                  "score": 14.90351923108223
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_b9b1fa013e3d48e9",
+                  "score": 14.611159937697353
+                }
+              ]
+            },
+            {
+              "id": "ood30_010",
+              "query": "人工智能学院2021年硕士能不能调剂 调剂申请需要注意什么",
+              "expected_otid": "otid_a2f94115e88244d4",
+              "elapsedMs": 11.816200000000208,
+              "rank": 2,
+              "hitAt1": false,
+              "reciprocalRank": 0.5,
+              "top1Otid": "otid_7f07ed38fde74862",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_7f07ed38fde74862",
+                  "score": 16.844130575247
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_a2f94115e88244d4",
+                  "score": 16.45606801000077
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_c4270d3c6e9944fd",
+                  "score": 14.126695816238982
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_1fe8155fa2f64320",
+                  "score": 12.974578255537535
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_06f7620140244798",
+                  "score": 11.444923596553755
+                }
+              ]
+            },
+            {
+              "id": "ood30_011",
+              "query": "2021年人工智能学院硕士复试要求中 复试形式和总成绩计算方式是什么",
+              "expected_otid": "otid_c1fa6db91e294a94",
+              "elapsedMs": 13.279199999999946,
+              "rank": 3,
+              "hitAt1": false,
+              "reciprocalRank": 0.3333333333333333,
+              "top1Otid": "otid_52ffc460a3284f93",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_52ffc460a3284f93",
+                  "score": 18.02792526327262
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_bacada41bba74749",
+                  "score": 17.66851733057438
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_c1fa6db91e294a94",
+                  "score": 17.486869149333284
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_54fc4d3ca3a94536",
+                  "score": 17.19440947345841
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_7893d1be905b4266",
+                  "score": 16.524212905020033
+                }
+              ]
+            },
+            {
+              "id": "ood30_012",
+              "query": "2022年人工智能学院硕士复试的考核内容、成绩计算和录取原则都有哪些",
+              "expected_otid": "otid_7893d1be905b4266",
+              "elapsedMs": 13.788900000000012,
+              "rank": 3,
+              "hitAt1": false,
+              "reciprocalRank": 0.3333333333333333,
+              "top1Otid": "otid_52ffc460a3284f93",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_52ffc460a3284f93",
+                  "score": 18.5585024474292
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_bacada41bba74749",
+                  "score": 18.338069422546226
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_7893d1be905b4266",
+                  "score": 17.574485875943537
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_54fc4d3ca3a94536",
+                  "score": 17.106157211007204
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_7f07ed38fde74862",
+                  "score": 16.88502959153914
+                }
+              ]
+            },
+            {
+              "id": "ood30_013",
+              "query": "如果参加人工智能学院2023年硕士复试 资格审查材料和现场报到流程怎么走",
+              "expected_otid": "otid_c03e584363934e90",
+              "elapsedMs": 8.97059999999965,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_c03e584363934e90",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_c03e584363934e90",
+                  "score": 22.34319557992793
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_54fc4d3ca3a94536",
+                  "score": 19.919857708835043
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_52ffc460a3284f93",
+                  "score": 19.818914058688023
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_bacada41bba74749",
+                  "score": 19.592095419309377
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_7893d1be905b4266",
+                  "score": 19.03044536881121
+                }
+              ]
+            },
+            {
+              "id": "ood30_014",
+              "query": "2024年人工智能学院硕士复试的报到安排和复试成绩权重怎么规定",
+              "expected_otid": "otid_54fc4d3ca3a94536",
+              "elapsedMs": 11.597999999999956,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_54fc4d3ca3a94536",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_54fc4d3ca3a94536",
+                  "score": 15.624043901822505
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_1e743544c32142f1",
+                  "score": 13.866362891949683
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_06f7620140244798",
+                  "score": 13.372924712216646
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_994207bb2a0740a1",
+                  "score": 13.107931714527528
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_3770fb6348d24f6b",
+                  "score": 12.969318130446869
+                }
+              ]
+            },
+            {
+              "id": "ood30_015",
+              "query": "2025年人工智能学院硕士复试要求的完整要求是什么",
+              "expected_otid": "otid_bacada41bba74749",
+              "elapsedMs": 12.33829999999989,
+              "rank": 8,
+              "hitAt1": false,
+              "reciprocalRank": 0.125,
+              "top1Otid": "otid_82fe535421c6472c",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_82fe535421c6472c",
+                  "score": 12.771618835168347
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_2cf6f4e5e6b648a9",
+                  "score": 12.528716655030612
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_8c93e52cc4314e6c",
+                  "score": 12.287381376201445
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_c03d97fc09704546",
+                  "score": 12.237215393851168
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_9c03330f339d4f33",
+                  "score": 12.086570937712352
+                }
+              ]
+            },
+            {
+              "id": "ood30_016",
+              "query": "2026硕士复试要求 要准备要准备什么材料 考核要求",
+              "expected_otid": "otid_52ffc460a3284f93",
+              "elapsedMs": 9.6891999999998,
+              "rank": 2,
+              "hitAt1": false,
+              "reciprocalRank": 0.5,
+              "top1Otid": "otid_1ae107c08e73431e",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_1ae107c08e73431e",
+                  "score": 13.485760195196685
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_52ffc460a3284f93",
+                  "score": 13.449827015149586
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_7479616835454c16",
+                  "score": 13.26766213278933
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_f97bb7b9f0ed48bd",
+                  "score": 12.968930406376423
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_7f07ed38fde74862",
+                  "score": 12.900892575248397
+                }
+              ]
+            },
+            {
+              "id": "ood30_017",
+              "query": "人工智能学院2021年博士申请考核制招生的要要什么条件和材料要求是什么",
+              "expected_otid": "otid_1fe8155fa2f64320",
+              "elapsedMs": 11.955899999999929,
+              "rank": 6,
+              "hitAt1": false,
+              "reciprocalRank": 0.16666666666666666,
+              "top1Otid": "otid_06f7620140244798",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_06f7620140244798",
+                  "score": 16.69909032502599
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_c5344a7fc3bc439a",
+                  "score": 15.675555744813344
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_9911c0374cdd4ce4",
+                  "score": 14.958574452481399
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_dc2fbd2f88f7453b",
+                  "score": 13.62555119472589
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_5f10b726aa1d4728",
+                  "score": 13.62555119472589
+                }
+              ]
+            },
+            {
+              "id": "ood30_018",
+              "query": "2021年人工智能学院博士申请考核制的实施办法里 考核流程和录取规则怎么安排",
+              "expected_otid": "otid_9911c0374cdd4ce4",
+              "elapsedMs": 9.074999999999818,
+              "rank": 5,
+              "hitAt1": false,
+              "reciprocalRank": 0.2,
+              "top1Otid": "otid_06f7620140244798",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_06f7620140244798",
+                  "score": 21.338220019168162
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_392eac0b27fa4b09",
+                  "score": 19.440221477696053
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_b5047e817198431e",
+                  "score": 18.95461757376192
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_c5344a7fc3bc439a",
+                  "score": 16.083753333882434
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_9911c0374cdd4ce4",
+                  "score": 15.350250190585133
+                }
+              ]
+            },
+            {
+              "id": "ood30_019",
+              "query": "-鹏城实验室联合培养博士专项计划的考核怎么安排",
+              "expected_otid": "otid_b5047e817198431e",
+              "elapsedMs": 11.209399999999732,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_b5047e817198431e",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_b5047e817198431e",
+                  "score": 29.42522726287181
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_903e35dbd70b496d",
+                  "score": 28.58473397097088
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_ae46d4b5d6e74990",
+                  "score": 28.454491529024924
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_c79e15cfe7c848e3",
+                  "score": 20.460826625490053
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_fe078e0584fe4b77",
+                  "score": 19.40325715494546
+                }
+              ]
+            },
+            {
+              "id": "ood30_020",
+              "query": "2022年人工智能学院博士申请考核招生要求中 报名时间、申请资格和材料都有哪些要求",
+              "expected_otid": "otid_5e4e1434da5748eb",
+              "elapsedMs": 9.437600000000202,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_5e4e1434da5748eb",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_5e4e1434da5748eb",
+                  "score": 16.77340610421736
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_84a37b294495492a",
+                  "score": 16.69734060515956
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_b5047e817198431e",
+                  "score": 16.35887397068569
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_392eac0b27fa4b09",
+                  "score": 15.397407670420977
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_81112559b6b240f2",
+                  "score": 15.252122213248184
+                }
+              ]
+            },
+            {
+              "id": "ood30_021",
+              "query": "人工智能学院2023年博士申请考核制实施办法中 考核总成绩如何使用 哪些情形不予录取",
+              "expected_otid": "otid_dc2fbd2f88f7453b",
+              "elapsedMs": 8.827299999999923,
+              "rank": 4,
+              "hitAt1": false,
+              "reciprocalRank": 0.25,
+              "top1Otid": "otid_84a37b294495492a",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_84a37b294495492a",
+                  "score": 23.837086501767175
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_06f7620140244798",
+                  "score": 23.2605445239265
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_b5047e817198431e",
+                  "score": 21.21185609022172
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_dc2fbd2f88f7453b",
+                  "score": 21.14452510882209
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_5f10b726aa1d4728",
+                  "score": 21.14452510882209
+                }
+              ]
+            },
+            {
+              "id": "ood30_022",
+              "query": "报考人工智能学院2024年博士 需要满足要什么条件 并在2023年11月27日前提交哪些要准备要准备什么材料",
+              "expected_otid": "otid_f0baf746fd75421e",
+              "elapsedMs": 12.158699999999953,
+              "rank": 2,
+              "hitAt1": false,
+              "reciprocalRank": 0.5,
+              "top1Otid": "otid_7f07ed38fde74862",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_7f07ed38fde74862",
+                  "score": 29.615799823063277
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_f0baf746fd75421e",
+                  "score": 22.989572214605236
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_1e743544c32142f1",
+                  "score": 20.169321851568874
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_1180b6d41c0e4ca7",
+                  "score": 19.76729939403631
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_84a37b294495492a",
+                  "score": 19.368312960687238
+                }
+              ]
+            },
+            {
+              "id": "ood30_023",
+              "query": "2025年人工智能学院博士招生要求中 预报名、网上报名和考核分别怎么安排",
+              "expected_otid": "otid_1e743544c32142f1",
+              "elapsedMs": 8.753600000000006,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_1e743544c32142f1",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_1e743544c32142f1",
+                  "score": 22.552988578888975
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_5e4e1434da5748eb",
+                  "score": 20.18508403266397
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_84a37b294495492a",
+                  "score": 20.06767670049212
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_1fe8155fa2f64320",
+                  "score": 19.94779389343194
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_f0baf746fd75421e",
+                  "score": 19.7349098973938
+                }
+              ]
+            },
+            {
+              "id": "ood30_024",
+              "query": "如果报考2025年人工智能学院博士申请考核制 改报志愿是否允许 怎么弄理",
+              "expected_otid": "otid_69ad2834eb564017",
+              "elapsedMs": 9.754599999999755,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_69ad2834eb564017",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_69ad2834eb564017",
+                  "score": 24.183875071375482
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_d2c7f1cd37464fbf",
+                  "score": 20.89173247842739
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_b8a98fa84f504d63",
+                  "score": 20.856053157388803
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_1180b6d41c0e4ca7",
+                  "score": 20.01708496709248
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_1e743544c32142f1",
+                  "score": 19.00974480632686
+                }
+              ]
+            },
+            {
+              "id": "ood30_025",
+              "query": "2026年人工智能学院博士招生要求的最新报名条件和时间怎么安排是什么",
+              "expected_otid": "otid_1180b6d41c0e4ca7",
+              "elapsedMs": 12.484799999999723,
+              "rank": 3,
+              "hitAt1": false,
+              "reciprocalRank": 0.3333333333333333,
+              "top1Otid": "otid_ae46d4b5d6e74990",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_ae46d4b5d6e74990",
+                  "score": 16.112076927468735
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_9c03330f339d4f33",
+                  "score": 15.465127791357313
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_1180b6d41c0e4ca7",
+                  "score": 15.339185586279028
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_da09cc50e7bc46df",
+                  "score": 14.215525797156573
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_8fd3944fd7814ff5",
+                  "score": 13.755903315633484
+                }
+              ]
+            },
+            {
+              "id": "ood30_026",
+              "query": "2026年人工智能学院博士调剂公告中 要要什么条件、流程和批次安排都有哪些要求",
+              "expected_otid": "otid_8fd3944fd7814ff5",
+              "elapsedMs": 9.202700000000277,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_8fd3944fd7814ff5",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_8fd3944fd7814ff5",
+                  "score": 20.25416276305068
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_7f07ed38fde74862",
+                  "score": 19.524899390878886
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_7479616835454c16",
+                  "score": 16.32611938171009
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_eb3d3855deb74340",
+                  "score": 16.022607211230316
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_40565beb38cf45c5",
+                  "score": 14.234947646498515
+                }
+              ]
+            },
+            {
+              "id": "ood30_027",
+              "query": "人工智能学院科研团队秘书岗位的职责、招聘条件和怎么弄是什么",
+              "expected_otid": "otid_69b895a0ab0c40ea",
+              "elapsedMs": 10.000999999999749,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_69b895a0ab0c40ea",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_69b895a0ab0c40ea",
+                  "score": 31.253531789338094
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_ddc82e31ec8748a7",
+                  "score": 20.11309239316493
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_fec2d17303a94eb3",
+                  "score": 17.49729888863474
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_da09cc50e7bc46df",
+                  "score": 15.213573396907993
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_b5047e817198431e",
+                  "score": 14.450431521333178
+                }
+              ]
+            },
+            {
+              "id": "ood30_028",
+              "query": "逸仙博士后项目的要要什么条件和待遇支持政策都有哪些",
+              "expected_otid": "otid_55c5131d829e4a00",
+              "elapsedMs": 12.585500000000138,
+              "rank": 4,
+              "hitAt1": false,
+              "reciprocalRank": 0.25,
+              "top1Otid": "otid_98f334aa60cb4f06",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_98f334aa60cb4f06",
+                  "score": 30.567211159135063
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_ddc82e31ec8748a7",
+                  "score": 30.43656719401288
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_906af0c4c6e541c2",
+                  "score": 29.83181005001551
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_55c5131d829e4a00",
+                  "score": 28.46782678607397
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_7f07ed38fde74862",
+                  "score": 24.755889714473618
+                }
+              ]
+            },
+            {
+              "id": "ood30_029",
+              "query": "2025年度海外优青依托人工智能学院申报 申请对象条件和学院重点支持研究方向是什么",
+              "expected_otid": "otid_8406d7042b9f4fbf",
+              "elapsedMs": 12.196600000000217,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_8406d7042b9f4fbf",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_8406d7042b9f4fbf",
+                  "score": 44.30203878944771
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_ec69af96c3754e3d",
+                  "score": 35.43440616342248
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_c75a4fe532dc47ee",
+                  "score": 34.24710153939323
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_fec2d17303a94eb3",
+                  "score": 31.005884098554795
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_906af0c4c6e541c2",
+                  "score": 26.68921342711374
+                }
+              ]
+            },
+            {
+              "id": "ood30_030",
+              "query": "人工智能学院2020-2021学年家庭经济困难学生认定需要提交要准备什么材料 流程怎么走",
+              "expected_otid": "otid_5c5176fae0a54caf",
+              "elapsedMs": 12.497499999999945,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_5c5176fae0a54caf",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_5c5176fae0a54caf",
+                  "score": 35.04502779472511
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_b10c556221fb4746",
+                  "score": 30.938920668520172
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_adca877b5b1c4857",
+                  "score": 30.415961201789035
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_9a72545adb084d1d",
+                  "score": 28.93387618645654
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_59692ec3fc384c64",
+                  "score": 28.704850579481423
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Dense-OT",
+          "family": "dense",
+          "description": "语义检索：仅在 OT 文档上执行向量相似度排序。",
+          "metrics": {
+            "total": 30,
+            "hitAt1": 26.666666666666668,
+            "hitAt3": 36.666666666666664,
+            "hitAt5": 56.666666666666664,
+            "mrr": 0.39397036796124024
+          },
+          "timing": {
+            "avgMs": 8.284323333333381,
+            "p50Ms": 7.6161500000000615,
+            "p95Ms": 12.665289999999889,
+            "maxMs": 13.78020000000015,
+            "totalMs": 248.5297000000014
+          },
+          "hitAt1Interval95": {
+            "lower": 13.333333333333334,
+            "upper": 43.333333333333336
+          },
+          "mrrInterval95": {
+            "lower": 0.2638671778272437,
+            "upper": 0.533433377896613
+          },
+          "perCase": [
+            {
+              "id": "ood30_001",
+              "query": "2021年人工智能学院夏令营什么时候报名 报名对象和要准备要准备什么材料都有哪些",
+              "expected_otid": "otid_9cf3ef26730b4cb4",
+              "elapsedMs": 10.716300000000047,
+              "rank": 5,
+              "hitAt1": false,
+              "reciprocalRank": 0.2,
+              "top1Otid": "otid_ccebe408485d4e4b",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_ccebe408485d4e4b",
+                  "score": 0.5992185432153723
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_cf0fb6da0f1a4b18",
+                  "score": 0.5412654683521138
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_659cfd8833ee4369",
+                  "score": 0.5411415552535669
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_2f90c6af5fd44b44",
+                  "score": 0.5245917081779617
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_9cf3ef26730b4cb4",
+                  "score": 0.5229428263452021
+                }
+              ]
+            },
+            {
+              "id": "ood30_002",
+              "query": "是应届本科生 想申请人工智能学院2021年推免 需要经过哪些流程",
+              "expected_otid": "otid_01b65cafe0894b9c",
+              "elapsedMs": 13.78020000000015,
+              "rank": 15,
+              "hitAt1": false,
+              "reciprocalRank": 0.06666666666666667,
+              "top1Otid": "otid_659cfd8833ee4369",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_659cfd8833ee4369",
+                  "score": 0.6060518340200716
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_3770fb6348d24f6b",
+                  "score": 0.581724859504313
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_538c64bb37164663",
+                  "score": 0.5730555287706475
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_6e85da455dd34af3",
+                  "score": 0.5614698237911403
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_fcf3caca2aa340ca",
+                  "score": 0.5614698237911403
+                }
+              ]
+            },
+            {
+              "id": "ood30_003",
+              "query": "2022年人工智能学院夏令营的怎么弄和活动安排是什么",
+              "expected_otid": "otid_c7828d5c12cc4c90",
+              "elapsedMs": 12.97479999999996,
+              "rank": 4,
+              "hitAt1": false,
+              "reciprocalRank": 0.25,
+              "top1Otid": "otid_ccebe408485d4e4b",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_ccebe408485d4e4b",
+                  "score": 0.6002338384855005
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_cf0fb6da0f1a4b18",
+                  "score": 0.5829695551352112
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_130ba93d3a5a4995",
+                  "score": 0.562284988871389
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_c7828d5c12cc4c90",
+                  "score": 0.5582305148292944
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_444d8fa2a8a54ec6",
+                  "score": 0.5496315499304115
+                }
+              ]
+            },
+            {
+              "id": "ood30_004",
+              "query": "人工智能学院2022年免试生接收办法中 是否接收直博生、要要什么条件和考核要求都有哪些",
+              "expected_otid": "otid_ca3a4c98f51f48e8",
+              "elapsedMs": 9.746999999999844,
+              "rank": 9,
+              "hitAt1": false,
+              "reciprocalRank": 0.1111111111111111,
+              "top1Otid": "otid_a197d7d56a914cf0",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_a197d7d56a914cf0",
+                  "score": 0.6448485545177582
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_3770fb6348d24f6b",
+                  "score": 0.6387729711282905
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_6e85da455dd34af3",
+                  "score": 0.6213281379266957
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_fcf3caca2aa340ca",
+                  "score": 0.6213281379266957
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_64fee3c7ad80452e",
+                  "score": 0.6160704167680845
+                }
+              ]
+            },
+            {
+              "id": "ood30_005",
+              "query": "2023年人工智能学院夏令营报名需要满足要什么条件并提交要准备什么材料",
+              "expected_otid": "otid_7229bb63ab97456a",
+              "elapsedMs": 12.286999999999807,
+              "rank": 6,
+              "hitAt1": false,
+              "reciprocalRank": 0.16666666666666666,
+              "top1Otid": "otid_ccebe408485d4e4b",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_ccebe408485d4e4b",
+                  "score": 0.5290994671586674
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_2f90c6af5fd44b44",
+                  "score": 0.5039898069463014
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_f97bb7b9f0ed48bd",
+                  "score": 0.4954661561917653
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_cf0fb6da0f1a4b18",
+                  "score": 0.4934032874092816
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_d6b2e4f0900b4984",
+                  "score": 0.4867474135493957
+                }
+              ]
+            },
+            {
+              "id": "ood30_006",
+              "query": "想申请人工智能学院2023年推免预报名 什么时候开始、怎么弄",
+              "expected_otid": "otid_eada182ca6104c99",
+              "elapsedMs": 11.08540000000039,
+              "rank": 120,
+              "hitAt1": false,
+              "reciprocalRank": 0.008333333333333333,
+              "top1Otid": "otid_659cfd8833ee4369",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_659cfd8833ee4369",
+                  "score": 0.6362930947945312
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_ccebe408485d4e4b",
+                  "score": 0.5944095742666063
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_8c93e52cc4314e6c",
+                  "score": 0.5681259522365882
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_ca3a4c98f51f48e8",
+                  "score": 0.5606877973732429
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_2f90c6af5fd44b44",
+                  "score": 0.5542775600558446
+                }
+              ]
+            },
+            {
+              "id": "ood30_007",
+              "query": "人工智能学院2024年推免接收办法的整体要求是什么",
+              "expected_otid": "otid_64fee3c7ad80452e",
+              "elapsedMs": 7.816499999999905,
+              "rank": 70,
+              "hitAt1": false,
+              "reciprocalRank": 0.014285714285714285,
+              "top1Otid": "otid_ccebe408485d4e4b",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_ccebe408485d4e4b",
+                  "score": 0.6006493281128304
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_3770fb6348d24f6b",
+                  "score": 0.5560617461394581
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_c5344a7fc3bc439a",
+                  "score": 0.5346253899360632
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_67d3c146cf8c48b8",
+                  "score": 0.5340247209253998
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_6010e10f0bd24934",
+                  "score": 0.533839548907011
+                }
+              ]
+            },
+            {
+              "id": "ood30_008",
+              "query": "人工智能学院2025推免接收办法 要要什么条件 材料",
+              "expected_otid": "otid_3770fb6348d24f6b",
+              "elapsedMs": 7.869899999999689,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_3770fb6348d24f6b",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_3770fb6348d24f6b",
+                  "score": 0.5376858266830845
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_659cfd8833ee4369",
+                  "score": 0.5096732421552789
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_6e85da455dd34af3",
+                  "score": 0.5091813202589033
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_fcf3caca2aa340ca",
+                  "score": 0.5091813202589033
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_c5344a7fc3bc439a",
+                  "score": 0.49889541447291696
+                }
+              ]
+            },
+            {
+              "id": "ood30_009",
+              "query": "2021年全国硕士报名考试报考点代码是多少 适用哪些考生",
+              "expected_otid": "otid_849070d708e0472f",
+              "elapsedMs": 8.463800000000447,
+              "rank": 2,
+              "hitAt1": false,
+              "reciprocalRank": 0.5,
+              "top1Otid": "otid_3bb5095120fb432b",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_3bb5095120fb432b",
+                  "score": 0.658288928143374
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_849070d708e0472f",
+                  "score": 0.6171146526773886
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_139b9801959d4db4",
+                  "score": 0.6113177751395915
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_63a7acf7429240b8",
+                  "score": 0.6096324924807154
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_06710b412753461e",
+                  "score": 0.6093464918114215
+                }
+              ]
+            },
+            {
+              "id": "ood30_010",
+              "query": "人工智能学院2021年硕士能不能调剂 调剂申请需要注意什么",
+              "expected_otid": "otid_a2f94115e88244d4",
+              "elapsedMs": 7.71309999999994,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_a2f94115e88244d4",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_a2f94115e88244d4",
+                  "score": 0.6415429044404116
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_4b2b45a3a7f84940",
+                  "score": 0.6329072037969238
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_eb3d3855deb74340",
+                  "score": 0.5851132727947866
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_8fd3944fd7814ff5",
+                  "score": 0.5806489889302081
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_c4270d3c6e9944fd",
+                  "score": 0.5608569703353844
+                }
+              ]
+            },
+            {
+              "id": "ood30_011",
+              "query": "2021年人工智能学院硕士复试要求中 复试形式和总成绩计算方式是什么",
+              "expected_otid": "otid_c1fa6db91e294a94",
+              "elapsedMs": 8.454699999999775,
+              "rank": 5,
+              "hitAt1": false,
+              "reciprocalRank": 0.2,
+              "top1Otid": "otid_2875f7b8cd70429c",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_2875f7b8cd70429c",
+                  "score": 0.5687460828943485
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_54fc4d3ca3a94536",
+                  "score": 0.5661783495906997
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_42225868ea784bbf",
+                  "score": 0.5617068879930639
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_eae8392d216d48ea",
+                  "score": 0.5583728275716286
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_c1fa6db91e294a94",
+                  "score": 0.5577780393016637
+                }
+              ]
+            },
+            {
+              "id": "ood30_012",
+              "query": "2022年人工智能学院硕士复试的考核内容、成绩计算和录取原则都有哪些",
+              "expected_otid": "otid_7893d1be905b4266",
+              "elapsedMs": 8.423800000000028,
+              "rank": 6,
+              "hitAt1": false,
+              "reciprocalRank": 0.16666666666666666,
+              "top1Otid": "otid_eae8392d216d48ea",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_eae8392d216d48ea",
+                  "score": 0.641331688810461
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_a2f94115e88244d4",
+                  "score": 0.6270705376765295
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_54fc4d3ca3a94536",
+                  "score": 0.616870721420022
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_6c5b2af52b1d4df5",
+                  "score": 0.606333783804154
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_42225868ea784bbf",
+                  "score": 0.6048739844723582
+                }
+              ]
+            },
+            {
+              "id": "ood30_013",
+              "query": "如果参加人工智能学院2023年硕士复试 资格审查材料和现场报到流程怎么走",
+              "expected_otid": "otid_c03e584363934e90",
+              "elapsedMs": 7.647900000000391,
+              "rank": 17,
+              "hitAt1": false,
+              "reciprocalRank": 0.058823529411764705,
+              "top1Otid": "otid_ea15885c1d214bb4",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_ea15885c1d214bb4",
+                  "score": 0.6419740861206833
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_659cfd8833ee4369",
+                  "score": 0.6419482923581084
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_4b2b45a3a7f84940",
+                  "score": 0.6167669842818653
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_0f30eade3efc4803",
+                  "score": 0.6161158534550552
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_392eac0b27fa4b09",
+                  "score": 0.6111661927420395
+                }
+              ]
+            },
+            {
+              "id": "ood30_014",
+              "query": "2024年人工智能学院硕士复试的报到安排和复试成绩权重怎么规定",
+              "expected_otid": "otid_54fc4d3ca3a94536",
+              "elapsedMs": 8.63740000000007,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_54fc4d3ca3a94536",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_54fc4d3ca3a94536",
+                  "score": 0.6164857135169806
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_2875f7b8cd70429c",
+                  "score": 0.611566237866851
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_a555af8a126c4703",
+                  "score": 0.5926025576630641
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_1d07d7c9f48e4090",
+                  "score": 0.5911272979906219
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_4b2b45a3a7f84940",
+                  "score": 0.5893052671293741
+                }
+              ]
+            },
+            {
+              "id": "ood30_015",
+              "query": "2025年人工智能学院硕士复试要求的完整要求是什么",
+              "expected_otid": "otid_bacada41bba74749",
+              "elapsedMs": 7.270400000000336,
+              "rank": 11,
+              "hitAt1": false,
+              "reciprocalRank": 0.09090909090909091,
+              "top1Otid": "otid_fd99e3167f2849d0",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_fd99e3167f2849d0",
+                  "score": 0.5795386704489754
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_a2f94115e88244d4",
+                  "score": 0.5734476564697323
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_ed940aabc9c24803",
+                  "score": 0.5513588880695127
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_1e743544c32142f1",
+                  "score": 0.5410842336822447
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_401c4896f5614967",
+                  "score": 0.5339910445622817
+                }
+              ]
+            },
+            {
+              "id": "ood30_016",
+              "query": "2026硕士复试要求 要准备要准备什么材料 考核要求",
+              "expected_otid": "otid_52ffc460a3284f93",
+              "elapsedMs": 7.4310999999997875,
+              "rank": 4,
+              "hitAt1": false,
+              "reciprocalRank": 0.25,
+              "top1Otid": "otid_1ae107c08e73431e",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_1ae107c08e73431e",
+                  "score": 0.5625929535024068
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_a2f94115e88244d4",
+                  "score": 0.550192171102226
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_ed940aabc9c24803",
+                  "score": 0.5443172897075381
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_52ffc460a3284f93",
+                  "score": 0.5411121519401609
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_44c68315287642c2",
+                  "score": 0.5307764495553835
+                }
+              ]
+            },
+            {
+              "id": "ood30_017",
+              "query": "人工智能学院2021年博士申请考核制招生的要要什么条件和材料要求是什么",
+              "expected_otid": "otid_1fe8155fa2f64320",
+              "elapsedMs": 8.098300000000108,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_1fe8155fa2f64320",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_1fe8155fa2f64320",
+                  "score": 0.637323641926883
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_06f7620140244798",
+                  "score": 0.6276590152380807
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_0f30eade3efc4803",
+                  "score": 0.6130641328703688
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_c5344a7fc3bc439a",
+                  "score": 0.6021887035790767
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_392eac0b27fa4b09",
+                  "score": 0.5982551531591395
+                }
+              ]
+            },
+            {
+              "id": "ood30_018",
+              "query": "2021年人工智能学院博士申请考核制的实施办法里 考核流程和录取规则怎么安排",
+              "expected_otid": "otid_9911c0374cdd4ce4",
+              "elapsedMs": 6.186699999999746,
+              "rank": 4,
+              "hitAt1": false,
+              "reciprocalRank": 0.25,
+              "top1Otid": "otid_06f7620140244798",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_06f7620140244798",
+                  "score": 0.6249383074956091
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_c5344a7fc3bc439a",
+                  "score": 0.6221677373463327
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_392eac0b27fa4b09",
+                  "score": 0.619769497924243
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_9911c0374cdd4ce4",
+                  "score": 0.6180355134122311
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_dc2fbd2f88f7453b",
+                  "score": 0.6178197652256363
+                }
+              ]
+            },
+            {
+              "id": "ood30_019",
+              "query": "-鹏城实验室联合培养博士专项计划的考核怎么安排",
+              "expected_otid": "otid_b5047e817198431e",
+              "elapsedMs": 7.563900000000103,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_b5047e817198431e",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_b5047e817198431e",
+                  "score": 0.6874432333367821
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_ae46d4b5d6e74990",
+                  "score": 0.6513029324134428
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_a17a9d52e4724e0c",
+                  "score": 0.6057517828687173
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_392eac0b27fa4b09",
+                  "score": 0.5961875534631266
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_06f7620140244798",
+                  "score": 0.5955807501292154
+                }
+              ]
+            },
+            {
+              "id": "ood30_020",
+              "query": "2022年人工智能学院博士申请考核招生要求中 报名时间、申请资格和材料都有哪些要求",
+              "expected_otid": "otid_5e4e1434da5748eb",
+              "elapsedMs": 6.509200000000419,
+              "rank": 3,
+              "hitAt1": false,
+              "reciprocalRank": 0.3333333333333333,
+              "top1Otid": "otid_392eac0b27fa4b09",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_392eac0b27fa4b09",
+                  "score": 0.6721246335650721
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_0f30eade3efc4803",
+                  "score": 0.6713499092553195
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_5e4e1434da5748eb",
+                  "score": 0.6667753531615418
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_b5047e817198431e",
+                  "score": 0.6621929774158878
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_06f7620140244798",
+                  "score": 0.6586646831936726
+                }
+              ]
+            },
+            {
+              "id": "ood30_021",
+              "query": "人工智能学院2023年博士申请考核制实施办法中 考核总成绩如何使用 哪些情形不予录取",
+              "expected_otid": "otid_dc2fbd2f88f7453b",
+              "elapsedMs": 6.958000000000084,
+              "rank": 5,
+              "hitAt1": false,
+              "reciprocalRank": 0.2,
+              "top1Otid": "otid_c495d5e1d55d4213",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_c495d5e1d55d4213",
+                  "score": 0.682253065261398
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_860f1ae2b71c4de9",
+                  "score": 0.6435145949182602
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_c5344a7fc3bc439a",
+                  "score": 0.6199225185298399
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_0f30eade3efc4803",
+                  "score": 0.616409838922662
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_dc2fbd2f88f7453b",
+                  "score": 0.6156598527539876
+                }
+              ]
+            },
+            {
+              "id": "ood30_022",
+              "query": "报考人工智能学院2024年博士 需要满足要什么条件 并在2023年11月27日前提交哪些要准备要准备什么材料",
+              "expected_otid": "otid_f0baf746fd75421e",
+              "elapsedMs": 7.417699999999968,
+              "rank": 8,
+              "hitAt1": false,
+              "reciprocalRank": 0.125,
+              "top1Otid": "otid_1fe8155fa2f64320",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_1fe8155fa2f64320",
+                  "score": 0.6246398650573458
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_0f30eade3efc4803",
+                  "score": 0.622005417912384
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_06f7620140244798",
+                  "score": 0.6169660196749606
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_b5047e817198431e",
+                  "score": 0.6070383350365468
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_392eac0b27fa4b09",
+                  "score": 0.6067614238524008
+                }
+              ]
+            },
+            {
+              "id": "ood30_023",
+              "query": "2025年人工智能学院博士招生要求中 预报名、网上报名和考核分别怎么安排",
+              "expected_otid": "otid_1e743544c32142f1",
+              "elapsedMs": 6.26720000000023,
+              "rank": 13,
+              "hitAt1": false,
+              "reciprocalRank": 0.07692307692307693,
+              "top1Otid": "otid_0f30eade3efc4803",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_0f30eade3efc4803",
+                  "score": 0.6411546699784173
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_06f7620140244798",
+                  "score": 0.6262842148298139
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_392eac0b27fa4b09",
+                  "score": 0.6251014963109895
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_1d07d7c9f48e4090",
+                  "score": 0.6147953162679184
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_b5047e817198431e",
+                  "score": 0.6054894983560613
+                }
+              ]
+            },
+            {
+              "id": "ood30_024",
+              "query": "如果报考2025年人工智能学院博士申请考核制 改报志愿是否允许 怎么弄理",
+              "expected_otid": "otid_69ad2834eb564017",
+              "elapsedMs": 6.458300000000236,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_69ad2834eb564017",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_69ad2834eb564017",
+                  "score": 0.7040920042766281
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_1d07d7c9f48e4090",
+                  "score": 0.6386901586209819
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_c495d5e1d55d4213",
+                  "score": 0.6245288656139918
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_b8a98fa84f504d63",
+                  "score": 0.6212450571363007
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_d2c7f1cd37464fbf",
+                  "score": 0.6179953951842433
+                }
+              ]
+            },
+            {
+              "id": "ood30_025",
+              "query": "2026年人工智能学院博士招生要求的最新报名条件和时间怎么安排是什么",
+              "expected_otid": "otid_1180b6d41c0e4ca7",
+              "elapsedMs": 7.584399999999732,
+              "rank": 11,
+              "hitAt1": false,
+              "reciprocalRank": 0.09090909090909091,
+              "top1Otid": "otid_0f30eade3efc4803",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_0f30eade3efc4803",
+                  "score": 0.6494458685577063
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_659cfd8833ee4369",
+                  "score": 0.641753906417516
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_1d07d7c9f48e4090",
+                  "score": 0.6150924797948276
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_06f7620140244798",
+                  "score": 0.6142783184865697
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_4b2b45a3a7f84940",
+                  "score": 0.6134660218101832
+                }
+              ]
+            },
+            {
+              "id": "ood30_026",
+              "query": "2026年人工智能学院博士调剂公告中 要要什么条件、流程和批次安排都有哪些要求",
+              "expected_otid": "otid_8fd3944fd7814ff5",
+              "elapsedMs": 5.5516999999999825,
+              "rank": 2,
+              "hitAt1": false,
+              "reciprocalRank": 0.5,
+              "top1Otid": "otid_4b2b45a3a7f84940",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_4b2b45a3a7f84940",
+                  "score": 0.6093754973115718
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_8fd3944fd7814ff5",
+                  "score": 0.6067431584514343
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_a2f94115e88244d4",
+                  "score": 0.5771867594424384
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_eb3d3855deb74340",
+                  "score": 0.5771192669344869
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_c5344a7fc3bc439a",
+                  "score": 0.5645919641432976
+                }
+              ]
+            },
+            {
+              "id": "ood30_027",
+              "query": "人工智能学院科研团队秘书岗位的职责、招聘条件和怎么弄是什么",
+              "expected_otid": "otid_69b895a0ab0c40ea",
+              "elapsedMs": 7.380700000000161,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_69b895a0ab0c40ea",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_69b895a0ab0c40ea",
+                  "score": 0.6049962326794565
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_fbcafa75ba9f468e",
+                  "score": 0.5315895940161169
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_c5344a7fc3bc439a",
+                  "score": 0.5127182862215477
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_dc2fbd2f88f7453b",
+                  "score": 0.512202300757479
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_5f10b726aa1d4728",
+                  "score": 0.512202300757479
+                }
+              ]
+            },
+            {
+              "id": "ood30_028",
+              "query": "逸仙博士后项目的要要什么条件和待遇支持政策都有哪些",
+              "expected_otid": "otid_55c5131d829e4a00",
+              "elapsedMs": 7.449399999999969,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_55c5131d829e4a00",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_55c5131d829e4a00",
+                  "score": 0.7041841777851464
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_906af0c4c6e541c2",
+                  "score": 0.6962739752234302
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_98f334aa60cb4f06",
+                  "score": 0.6860160406741527
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_5178ac4ea52c4766",
+                  "score": 0.5874046528469448
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_fec2d17303a94eb3",
+                  "score": 0.5766203469434263
+                }
+              ]
+            },
+            {
+              "id": "ood30_029",
+              "query": "2025年度海外优青依托人工智能学院申报 申请对象条件和学院重点支持研究方向是什么",
+              "expected_otid": "otid_8406d7042b9f4fbf",
+              "elapsedMs": 7.373900000000049,
+              "rank": 29,
+              "hitAt1": false,
+              "reciprocalRank": 0.034482758620689655,
+              "top1Otid": "otid_fec2d17303a94eb3",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_fec2d17303a94eb3",
+                  "score": 0.6214745974708303
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_70b617c59a044b46",
+                  "score": 0.6178310105481695
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_ec69af96c3754e3d",
+                  "score": 0.614450961106675
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_9725ed38e84f4bb9",
+                  "score": 0.598262879249608
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_106062c73a3d40ca",
+                  "score": 0.5982526326547187
+                }
+              ]
+            },
+            {
+              "id": "ood30_030",
+              "query": "人工智能学院2020-2021学年家庭经济困难学生认定需要提交要准备什么材料 流程怎么走",
+              "expected_otid": "otid_5c5176fae0a54caf",
+              "elapsedMs": 7.411000000000058,
+              "rank": 8,
+              "hitAt1": false,
+              "reciprocalRank": 0.125,
+              "top1Otid": "otid_f97bb7b9f0ed48bd",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_f97bb7b9f0ed48bd",
+                  "score": 0.5411637293281247
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_3912909c5f1449bd",
+                  "score": 0.5223909261425123
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_58f55e16a4794114",
+                  "score": 0.5179602957979828
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_39afa5909d6a4750",
+                  "score": 0.5157387591397983
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_ea15885c1d214bb4",
+                  "score": 0.5155218688134978
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Structured-KP+OT",
+          "family": "structured",
+          "description": "论文冻结主组合：Q=0, KP=0.2857, OT=0.7143。",
+          "metrics": {
+            "total": 30,
+            "hitAt1": 63.33333333333333,
+            "hitAt3": 96.66666666666667,
+            "hitAt5": 96.66666666666667,
+            "mrr": 0.7888888888888889
+          },
+          "timing": {
+            "avgMs": 58.07864666666669,
+            "p50Ms": 55.93509999999992,
+            "p95Ms": 72.98980999999995,
+            "maxMs": 80.27449999999999,
+            "totalMs": 1742.3594000000007
+          },
+          "hitAt1Interval95": {
+            "lower": 46.666666666666664,
+            "upper": 80
+          },
+          "mrrInterval95": {
+            "lower": 0.6833333333333332,
+            "upper": 0.8888888888888888
+          },
+          "perCase": [
+            {
+              "id": "ood30_001",
+              "query": "2021年人工智能学院夏令营什么时候报名 报名对象和要准备要准备什么材料都有哪些",
+              "expected_otid": "otid_9cf3ef26730b4cb4",
+              "elapsedMs": 80.27449999999999,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_9cf3ef26730b4cb4",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_9cf3ef26730b4cb4",
+                  "score": 2.1842818522255447,
+                  "best_kpid": "kpid_13e2de93a2bb46fa"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_06f7620140244798",
+                  "score": 1.3995252245998249,
+                  "best_kpid": "kpid_158a1aebb51b4a51"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_14ff3c5f13ac4c49",
+                  "score": 1.3725637042174972,
+                  "best_kpid": "kpid_618ef3d5515341ed"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_1fe8155fa2f64320",
+                  "score": 1.2776014600846373,
+                  "best_kpid": "kpid_2ea8d10115a04b44"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_c4270d3c6e9944fd",
+                  "score": 1.1985445513423887,
+                  "best_kpid": "kpid_caca750ca0224d3a"
+                }
+              ]
+            },
+            {
+              "id": "ood30_002",
+              "query": "是应届本科生 想申请人工智能学院2021年推免 需要经过哪些流程",
+              "expected_otid": "otid_01b65cafe0894b9c",
+              "elapsedMs": 51.77449999999999,
+              "rank": 3,
+              "hitAt1": false,
+              "reciprocalRank": 0.3333333333333333,
+              "top1Otid": "otid_d371dde33a814b26",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_d371dde33a814b26",
+                  "score": 1.665354338306051,
+                  "best_kpid": "kpid_2648a609951d4367"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_7915cf0cb5a94687",
+                  "score": 1.4606280501263962,
+                  "best_kpid": "kpid_8f2213f71bdc4583"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_01b65cafe0894b9c",
+                  "score": 1.3168233887478105,
+                  "best_kpid": "kpid_cab8c899074b4c03"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_6e85da455dd34af3",
+                  "score": 1.3100305977370903,
+                  "best_kpid": "kpid_cf6670e6ad1e4c78"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_9cf3ef26730b4cb4",
+                  "score": 1.3061564123647846,
+                  "best_kpid": "kpid_d0b86c09108c4337"
+                }
+              ]
+            },
+            {
+              "id": "ood30_003",
+              "query": "2022年人工智能学院夏令营的怎么弄和活动安排是什么",
+              "expected_otid": "otid_c7828d5c12cc4c90",
+              "elapsedMs": 48.34190000000035,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_c7828d5c12cc4c90",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_c7828d5c12cc4c90",
+                  "score": 2.759833515649767,
+                  "best_kpid": "kpid_edf852240d504dae"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_cf0fb6da0f1a4b18",
+                  "score": 2.615061179552405,
+                  "best_kpid": "kpid_8037e195ef444bc2"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_659cfd8833ee4369",
+                  "score": 1.5562449998722885,
+                  "best_kpid": "kpid_b5a039b9194c43f7"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_368788a742004738",
+                  "score": 1.1061380483167589,
+                  "best_kpid": "kpid_618d57a5f1e3433b"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_10644c71240a4a58",
+                  "score": 1.0608032985059705,
+                  "best_kpid": "kpid_c28253b810924d93"
+                }
+              ]
+            },
+            {
+              "id": "ood30_004",
+              "query": "人工智能学院2022年免试生接收办法中 是否接收直博生、要要什么条件和考核要求都有哪些",
+              "expected_otid": "otid_ca3a4c98f51f48e8",
+              "elapsedMs": 53.322400000000016,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_ca3a4c98f51f48e8",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_ca3a4c98f51f48e8",
+                  "score": 2.418823857988943,
+                  "best_kpid": "kpid_65a33b7ae39943a8"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_dc2fbd2f88f7453b",
+                  "score": 2.0759110739812496,
+                  "best_kpid": "kpid_d40e015da0ff4fbd"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_5f10b726aa1d4728",
+                  "score": 2.043549700761609,
+                  "best_kpid": "kpid_7327e216102040e7"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_b5047e817198431e",
+                  "score": 1.4053585358093215,
+                  "best_kpid": "kpid_937f1ea18d2e4c9c"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_07571807121c4472",
+                  "score": 1.3072376163944563,
+                  "best_kpid": "kpid_bfe38f7d450e4aa5"
+                }
+              ]
+            },
+            {
+              "id": "ood30_005",
+              "query": "2023年人工智能学院夏令营报名需要满足要什么条件并提交要准备什么材料",
+              "expected_otid": "otid_7229bb63ab97456a",
+              "elapsedMs": 71.4090000000001,
+              "rank": 2,
+              "hitAt1": false,
+              "reciprocalRank": 0.5,
+              "top1Otid": "otid_f97bb7b9f0ed48bd",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_f97bb7b9f0ed48bd",
+                  "score": 2.105051704383242,
+                  "best_kpid": "kpid_3f6b87fc11fa46a2"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_7229bb63ab97456a",
+                  "score": 2.05162973267382,
+                  "best_kpid": "kpid_033d9f4dc672416d"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_2f90c6af5fd44b44",
+                  "score": 2.045815103313882,
+                  "best_kpid": "kpid_27b6e154135549c8"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_84a37b294495492a",
+                  "score": 1.7221404207962505,
+                  "best_kpid": "kpid_d605c013b18144ab"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_eada182ca6104c99",
+                  "score": 1.4342686382249699,
+                  "best_kpid": "kpid_384144f00ea84a26"
+                }
+              ]
+            },
+            {
+              "id": "ood30_006",
+              "query": "想申请人工智能学院2023年推免预报名 什么时候开始、怎么弄",
+              "expected_otid": "otid_eada182ca6104c99",
+              "elapsedMs": 59.71129999999994,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_eada182ca6104c99",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_eada182ca6104c99",
+                  "score": 1.7378179756751184,
+                  "best_kpid": "kpid_1db678d8bc5046e7"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_f97bb7b9f0ed48bd",
+                  "score": 1.725203336227704,
+                  "best_kpid": "kpid_a34617c6d9194844"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_7229bb63ab97456a",
+                  "score": 1.5401781243666328,
+                  "best_kpid": "kpid_9b88999e914441c9"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_84a37b294495492a",
+                  "score": 1.392008205842792,
+                  "best_kpid": "kpid_a7ede2d90d56476b"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_9e15810343ea44ca",
+                  "score": 1.0002363770030949,
+                  "best_kpid": "kpid_132580dcda464d02"
+                }
+              ]
+            },
+            {
+              "id": "ood30_007",
+              "query": "人工智能学院2024年推免接收办法的整体要求是什么",
+              "expected_otid": "otid_64fee3c7ad80452e",
+              "elapsedMs": 53.29750000000013,
+              "rank": 3,
+              "hitAt1": false,
+              "reciprocalRank": 0.3333333333333333,
+              "top1Otid": "otid_f3ee1947f40e4b18",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_f3ee1947f40e4b18",
+                  "score": 2.36164123332747,
+                  "best_kpid": "kpid_a8b0421d25904028"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_ccebe408485d4e4b",
+                  "score": 1.7962466738521317,
+                  "best_kpid": "kpid_8f3018e81ca44a7c"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_64fee3c7ad80452e",
+                  "score": 1.7956599058024085,
+                  "best_kpid": "kpid_18835be8da5942c6"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_444d8fa2a8a54ec6",
+                  "score": 1.3627144305998262,
+                  "best_kpid": "kpid_2374f979fd1c4129"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_54fc4d3ca3a94536",
+                  "score": 1.209796292917635,
+                  "best_kpid": "kpid_2efcc9f22a1447ee"
+                }
+              ]
+            },
+            {
+              "id": "ood30_008",
+              "query": "人工智能学院2025推免接收办法 要要什么条件 材料",
+              "expected_otid": "otid_3770fb6348d24f6b",
+              "elapsedMs": 52.47119999999995,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_3770fb6348d24f6b",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_3770fb6348d24f6b",
+                  "score": 2.752444633704203,
+                  "best_kpid": "kpid_17cc6ec8e1c54d88"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_f672cc42a5a04134",
+                  "score": 1.79290563601705,
+                  "best_kpid": "kpid_3f0f3250cdfa4eaf"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_5d30aea8c4a64cce",
+                  "score": 1.2794432549469545,
+                  "best_kpid": "kpid_daf7f2b75c82481b"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_82fe535421c6472c",
+                  "score": 1.228089285018782,
+                  "best_kpid": "kpid_d6a66c4fb9304c0a"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_538c64bb37164663",
+                  "score": 1.2025034506556247,
+                  "best_kpid": "kpid_be0fb3c6fb1540bd"
+                }
+              ]
+            },
+            {
+              "id": "ood30_009",
+              "query": "2021年全国硕士报名考试报考点代码是多少 适用哪些考生",
+              "expected_otid": "otid_849070d708e0472f",
+              "elapsedMs": 59.225700000000415,
+              "rank": 2,
+              "hitAt1": false,
+              "reciprocalRank": 0.5,
+              "top1Otid": "otid_3bb5095120fb432b",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_3bb5095120fb432b",
+                  "score": 2.8571280502250653,
+                  "best_kpid": "kpid_391e9ea0c3164a8b"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_849070d708e0472f",
+                  "score": 2.1362090595675483,
+                  "best_kpid": "kpid_bf805537cff94d3c"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_a2f94115e88244d4",
+                  "score": 1.7984188318273553,
+                  "best_kpid": "kpid_338b4e382d0242d7"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_e66299426ac34851",
+                  "score": 1.5366587738217516,
+                  "best_kpid": "kpid_e12fd5971b594222"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_febe1ea123a14aa9",
+                  "score": 1.3388926263963072,
+                  "best_kpid": "kpid_ebc6afb881c04321"
+                }
+              ]
+            },
+            {
+              "id": "ood30_010",
+              "query": "人工智能学院2021年硕士能不能调剂 调剂申请需要注意什么",
+              "expected_otid": "otid_a2f94115e88244d4",
+              "elapsedMs": 58.80899999999974,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_a2f94115e88244d4",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_a2f94115e88244d4",
+                  "score": 3.2184829200497402,
+                  "best_kpid": "kpid_338b4e382d0242d7"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_c4270d3c6e9944fd",
+                  "score": 2.770870127921371,
+                  "best_kpid": "kpid_da164126eff345df"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_1fe8155fa2f64320",
+                  "score": 1.6045555063810246,
+                  "best_kpid": "kpid_2244415eff4045e0"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_29dd671742524792",
+                  "score": 1.3838319498536582,
+                  "best_kpid": "kpid_b787292f3da94185"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_06f7620140244798",
+                  "score": 1.322459053051866,
+                  "best_kpid": "kpid_158a1aebb51b4a51"
+                }
+              ]
+            },
+            {
+              "id": "ood30_011",
+              "query": "2021年人工智能学院硕士复试要求中 复试形式和总成绩计算方式是什么",
+              "expected_otid": "otid_c1fa6db91e294a94",
+              "elapsedMs": 55.22199999999975,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_c1fa6db91e294a94",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_c1fa6db91e294a94",
+                  "score": 2.732515015015015,
+                  "best_kpid": "kpid_3e56a932e48e4b8a"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_29dd671742524792",
+                  "score": 2.290066693344004,
+                  "best_kpid": "kpid_2bf623934eac4d0c"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_c4270d3c6e9944fd",
+                  "score": 2.231694576955745,
+                  "best_kpid": "kpid_da164126eff345df"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_01b65cafe0894b9c",
+                  "score": 1.7741871921182268,
+                  "best_kpid": "kpid_6ab4da1ac7494303"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_06f7620140244798",
+                  "score": 1.7163245802808176,
+                  "best_kpid": "kpid_158a1aebb51b4a51"
+                }
+              ]
+            },
+            {
+              "id": "ood30_012",
+              "query": "2022年人工智能学院硕士复试的考核内容、成绩计算和录取原则都有哪些",
+              "expected_otid": "otid_7893d1be905b4266",
+              "elapsedMs": 56.01459999999997,
+              "rank": 2,
+              "hitAt1": false,
+              "reciprocalRank": 0.5,
+              "top1Otid": "otid_eae8392d216d48ea",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_eae8392d216d48ea",
+                  "score": 2.8238972690525483,
+                  "best_kpid": "kpid_c1604e824c76441c"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_7893d1be905b4266",
+                  "score": 2.6587420692182593,
+                  "best_kpid": "kpid_f5d26a6984b34360"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_dcfe8d5d21b24255",
+                  "score": 1.4220594923352285,
+                  "best_kpid": "kpid_17177c987f994169"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_860f1ae2b71c4de9",
+                  "score": 1.2411825519746422,
+                  "best_kpid": "kpid_e9dc07ad4de14960"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_cf0fb6da0f1a4b18",
+                  "score": 1.22464652981344,
+                  "best_kpid": "kpid_dfbc59b52e054879"
+                }
+              ]
+            },
+            {
+              "id": "ood30_013",
+              "query": "如果参加人工智能学院2023年硕士复试 资格审查材料和现场报到流程怎么走",
+              "expected_otid": "otid_c03e584363934e90",
+              "elapsedMs": 54.43109999999979,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_c03e584363934e90",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_c03e584363934e90",
+                  "score": 2.234914985175062,
+                  "best_kpid": "kpid_38b120104d8c4854"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_dc2fbd2f88f7453b",
+                  "score": 1.189140989729225,
+                  "best_kpid": "kpid_64164ade698a4751"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_467c753a650543da",
+                  "score": 1.1452387770302144,
+                  "best_kpid": "kpid_1ea7d7e016d64f66"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_7229bb63ab97456a",
+                  "score": 1.083344632424477,
+                  "best_kpid": "kpid_033d9f4dc672416d"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_29bee8c1d48a4946",
+                  "score": 0.9541476141189571,
+                  "best_kpid": "kpid_1083fcfde7cb46bf"
+                }
+              ]
+            },
+            {
+              "id": "ood30_014",
+              "query": "2024年人工智能学院硕士复试的报到安排和复试成绩权重怎么规定",
+              "expected_otid": "otid_54fc4d3ca3a94536",
+              "elapsedMs": 56.27890000000025,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_54fc4d3ca3a94536",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_54fc4d3ca3a94536",
+                  "score": 2.9795938509837696,
+                  "best_kpid": "kpid_e46b39a2bc3f49d6"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_2875f7b8cd70429c",
+                  "score": 2.657949377949378,
+                  "best_kpid": "kpid_34c28ec20fd24423"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_db511e3324ad43f5",
+                  "score": 1.8523502517890273,
+                  "best_kpid": "kpid_2386b8733e19443c"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_2db2c0c0349745ea",
+                  "score": 1.4783284203394056,
+                  "best_kpid": "kpid_8c7b6b4e4f5f439a"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_ccebe408485d4e4b",
+                  "score": 1.3289250187358532,
+                  "best_kpid": "kpid_3a50ac9e84c34400"
+                }
+              ]
+            },
+            {
+              "id": "ood30_015",
+              "query": "2025年人工智能学院硕士复试要求的完整要求是什么",
+              "expected_otid": "otid_bacada41bba74749",
+              "elapsedMs": 64.25900000000001,
+              "rank": 2,
+              "hitAt1": false,
+              "reciprocalRank": 0.5,
+              "top1Otid": "otid_6c5b2af52b1d4df5",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_6c5b2af52b1d4df5",
+                  "score": 2.308524957170549,
+                  "best_kpid": "kpid_02517d7c32c8474e"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_bacada41bba74749",
+                  "score": 2.1550144213928375,
+                  "best_kpid": "kpid_265083ab822641bd"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_ed940aabc9c24803",
+                  "score": 2.1103269305280374,
+                  "best_kpid": "kpid_7d3f8a1dcb06440e"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_3eaad7074d4a4dc9",
+                  "score": 2.0275474187310976,
+                  "best_kpid": "kpid_edf4fed384a84f13"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_beb149b3688b4f4c",
+                  "score": 2.0039215636170438,
+                  "best_kpid": "kpid_bcc1e23617d74178"
+                }
+              ]
+            },
+            {
+              "id": "ood30_016",
+              "query": "2026硕士复试要求 要准备要准备什么材料 考核要求",
+              "expected_otid": "otid_52ffc460a3284f93",
+              "elapsedMs": 66.7819999999997,
+              "rank": 2,
+              "hitAt1": false,
+              "reciprocalRank": 0.5,
+              "top1Otid": "otid_1ae107c08e73431e",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_1ae107c08e73431e",
+                  "score": 2.678515769944341,
+                  "best_kpid": "kpid_6df5d76fd292421a"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_52ffc460a3284f93",
+                  "score": 2.3293812750538794,
+                  "best_kpid": "kpid_1705b878f04c4cff"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_42225868ea784bbf",
+                  "score": 1.8497069152722543,
+                  "best_kpid": "kpid_90213a0a806247e1"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_d2e81434d6754411",
+                  "score": 1.3266081422304628,
+                  "best_kpid": "kpid_d7a01208d9f34d0d"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_7479616835454c16",
+                  "score": 1.3099718060513907,
+                  "best_kpid": "kpid_a5fd0bfb2e4f4955"
+                }
+              ]
+            },
+            {
+              "id": "ood30_017",
+              "query": "人工智能学院2021年博士申请考核制招生的要要什么条件和材料要求是什么",
+              "expected_otid": "otid_1fe8155fa2f64320",
+              "elapsedMs": 74.28319999999985,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_1fe8155fa2f64320",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_1fe8155fa2f64320",
+                  "score": 2.78145016452686,
+                  "best_kpid": "kpid_2244415eff4045e0"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_06f7620140244798",
+                  "score": 2.726023737705038,
+                  "best_kpid": "kpid_158a1aebb51b4a51"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_6e85da455dd34af3",
+                  "score": 1.6042864749733758,
+                  "best_kpid": "kpid_eebc6d2141ac4188"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_fcf3caca2aa340ca",
+                  "score": 1.5862278091662845,
+                  "best_kpid": "kpid_0c0d1287eea64abb"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_77c43125dba648d2",
+                  "score": 1.3149724722657226,
+                  "best_kpid": "kpid_d0deb3e83f6946c8"
+                }
+              ]
+            },
+            {
+              "id": "ood30_018",
+              "query": "2021年人工智能学院博士申请考核制的实施办法里 考核流程和录取规则怎么安排",
+              "expected_otid": "otid_9911c0374cdd4ce4",
+              "elapsedMs": 61.27629999999999,
+              "rank": null,
+              "hitAt1": false,
+              "reciprocalRank": 0,
+              "top1Otid": "otid_06f7620140244798",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_06f7620140244798",
+                  "score": 2.352951697425382,
+                  "best_kpid": "kpid_158a1aebb51b4a51"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_77c43125dba648d2",
+                  "score": 1.8606005110570598,
+                  "best_kpid": "kpid_d0deb3e83f6946c8"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_10c83368275647b5",
+                  "score": 1.675391156462585,
+                  "best_kpid": "kpid_05170c6019dc48ae"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_1fe8155fa2f64320",
+                  "score": 1.4958181847860155,
+                  "best_kpid": "kpid_2244415eff4045e0"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_abb3158a1c2747c6",
+                  "score": 1.141423382082484,
+                  "best_kpid": "kpid_a625ac32b72d4b1b"
+                }
+              ]
+            },
+            {
+              "id": "ood30_019",
+              "query": "-鹏城实验室联合培养博士专项计划的考核怎么安排",
+              "expected_otid": "otid_b5047e817198431e",
+              "elapsedMs": 52.56870000000026,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_b5047e817198431e",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_b5047e817198431e",
+                  "score": 3.2078279617858074,
+                  "best_kpid": "kpid_937f1ea18d2e4c9c"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_ae46d4b5d6e74990",
+                  "score": 2.489307017754223,
+                  "best_kpid": "kpid_d1f197c06803411f"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_903e35dbd70b496d",
+                  "score": 1.9196588958163912,
+                  "best_kpid": "kpid_c60cfecad5394865"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_c79e15cfe7c848e3",
+                  "score": 1.9193730330476797,
+                  "best_kpid": "kpid_eb8b17c59a98479c"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_2d31ea40a9df404b",
+                  "score": 1.7585534376981153,
+                  "best_kpid": "kpid_e996fc530e9b4803"
+                }
+              ]
+            },
+            {
+              "id": "ood30_020",
+              "query": "2022年人工智能学院博士申请考核招生要求中 报名时间、申请资格和材料都有哪些要求",
+              "expected_otid": "otid_5e4e1434da5748eb",
+              "elapsedMs": 54.223199999999906,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_5e4e1434da5748eb",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_5e4e1434da5748eb",
+                  "score": 2.9540385681591155,
+                  "best_kpid": "kpid_79904ecf12d04839"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_b5047e817198431e",
+                  "score": 2.1472952853093905,
+                  "best_kpid": "kpid_937f1ea18d2e4c9c"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_392eac0b27fa4b09",
+                  "score": 2.1315764609142307,
+                  "best_kpid": "kpid_081fa6516435497f"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_dc2fbd2f88f7453b",
+                  "score": 1.69055799442079,
+                  "best_kpid": "kpid_64164ade698a4751"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_b53a9170fcfe4d2e",
+                  "score": 1.6782106876711969,
+                  "best_kpid": "kpid_0194502bc5ff4689"
+                }
+              ]
+            },
+            {
+              "id": "ood30_021",
+              "query": "人工智能学院2023年博士申请考核制实施办法中 考核总成绩如何使用 哪些情形不予录取",
+              "expected_otid": "otid_dc2fbd2f88f7453b",
+              "elapsedMs": 54.53739999999971,
+              "rank": 2,
+              "hitAt1": false,
+              "reciprocalRank": 0.5,
+              "top1Otid": "otid_c495d5e1d55d4213",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_c495d5e1d55d4213",
+                  "score": 2.9475361292892095,
+                  "best_kpid": "kpid_73d0c8465fe6405c"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_dc2fbd2f88f7453b",
+                  "score": 2.706688390974105,
+                  "best_kpid": "kpid_52e7ec7e1d33472b"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_1d07d7c9f48e4090",
+                  "score": 2.404270680375361,
+                  "best_kpid": "kpid_f076cb0187714e12"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_0f30eade3efc4803",
+                  "score": 1.943088775661684,
+                  "best_kpid": "kpid_2b0f816523314ffb"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_84a37b294495492a",
+                  "score": 1.7802155197743434,
+                  "best_kpid": "kpid_48dd250062c141c4"
+                }
+              ]
+            },
+            {
+              "id": "ood30_022",
+              "query": "报考人工智能学院2024年博士 需要满足要什么条件 并在2023年11月27日前提交哪些要准备要准备什么材料",
+              "expected_otid": "otid_f0baf746fd75421e",
+              "elapsedMs": 61.43190000000004,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_f0baf746fd75421e",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_f0baf746fd75421e",
+                  "score": 2.105863342785921,
+                  "best_kpid": "kpid_69002c70a59c4fba"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_84a37b294495492a",
+                  "score": 2.017974208211372,
+                  "best_kpid": "kpid_d605c013b18144ab"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_f97bb7b9f0ed48bd",
+                  "score": 1.8521197611673341,
+                  "best_kpid": "kpid_b339807f48f64680"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_a206a52bfb3f46aa",
+                  "score": 1.6350750372762002,
+                  "best_kpid": "kpid_9f5dc6200a58475a"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_b9b1fa013e3d48e9",
+                  "score": 1.5022646918299094,
+                  "best_kpid": "kpid_9b63a7c3ea264239"
+                }
+              ]
+            },
+            {
+              "id": "ood30_023",
+              "query": "2025年人工智能学院博士招生要求中 预报名、网上报名和考核分别怎么安排",
+              "expected_otid": "otid_1e743544c32142f1",
+              "elapsedMs": 56.8747000000003,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_1e743544c32142f1",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_1e743544c32142f1",
+                  "score": 2.4761574964225472,
+                  "best_kpid": "kpid_6a3184e232c34801"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_401c4896f5614967",
+                  "score": 2.1481130684855274,
+                  "best_kpid": "kpid_04094d91f9d54dfe"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_8ee6bdcf13e741b8",
+                  "score": 1.7653133916203774,
+                  "best_kpid": "kpid_54070a445ec148f4"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_5d30aea8c4a64cce",
+                  "score": 1.6393101387858322,
+                  "best_kpid": "kpid_daf7f2b75c82481b"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_69ad2834eb564017",
+                  "score": 1.6307298136645965,
+                  "best_kpid": "kpid_adfb87c373fc4a5b"
+                }
+              ]
+            },
+            {
+              "id": "ood30_024",
+              "query": "如果报考2025年人工智能学院博士申请考核制 改报志愿是否允许 怎么弄理",
+              "expected_otid": "otid_69ad2834eb564017",
+              "elapsedMs": 59.99290000000019,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_69ad2834eb564017",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_69ad2834eb564017",
+                  "score": 2.9633099141295864,
+                  "best_kpid": "kpid_fb43689e20ba4e45"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_d2c7f1cd37464fbf",
+                  "score": 2.4082009981033154,
+                  "best_kpid": "kpid_0b52c6fc9eef4ca1"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_b8a98fa84f504d63",
+                  "score": 2.4020045429844736,
+                  "best_kpid": "kpid_cdd676e2d8e542c1"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_15996476fc324e33",
+                  "score": 2.148806564098119,
+                  "best_kpid": "kpid_9451b20d077f4828"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_32f33b04286b4f12",
+                  "score": 2.0230800012312615,
+                  "best_kpid": "kpid_c7e29bb1da224a36"
+                }
+              ]
+            },
+            {
+              "id": "ood30_025",
+              "query": "2026年人工智能学院博士招生要求的最新报名条件和时间怎么安排是什么",
+              "expected_otid": "otid_1180b6d41c0e4ca7",
+              "elapsedMs": 60.00550000000021,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_1180b6d41c0e4ca7",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_1180b6d41c0e4ca7",
+                  "score": 2.3531208758966744,
+                  "best_kpid": "kpid_72b3299a78cb44a5"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_8fd3944fd7814ff5",
+                  "score": 1.9530829102586857,
+                  "best_kpid": "kpid_06bae225da7a4fb8"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_ae46d4b5d6e74990",
+                  "score": 1.9501304266947346,
+                  "best_kpid": "kpid_53230507f99c472c"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_c03d97fc09704546",
+                  "score": 1.8426910344557401,
+                  "best_kpid": "kpid_dc9289c28ce44dd8"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_cefdbe9b7cf34bdb",
+                  "score": 1.5640464047933569,
+                  "best_kpid": "kpid_681b9b6b66df47a4"
+                }
+              ]
+            },
+            {
+              "id": "ood30_026",
+              "query": "2026年人工智能学院博士调剂公告中 要要什么条件、流程和批次安排都有哪些要求",
+              "expected_otid": "otid_8fd3944fd7814ff5",
+              "elapsedMs": 52.88659999999982,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_8fd3944fd7814ff5",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_8fd3944fd7814ff5",
+                  "score": 3.0915274160154946,
+                  "best_kpid": "kpid_6e3b013f3bed429c"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_4b2b45a3a7f84940",
+                  "score": 2.7400030827677315,
+                  "best_kpid": "kpid_4571e90a78f8450d"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_eb3d3855deb74340",
+                  "score": 2.6958999665439944,
+                  "best_kpid": "kpid_69f10b673a554b24"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_c03d97fc09704546",
+                  "score": 1.5463886041437689,
+                  "best_kpid": "kpid_dc9289c28ce44dd8"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_097b17ffece641a7",
+                  "score": 1.4493418955673725,
+                  "best_kpid": "kpid_e6c97801cea847b3"
+                }
+              ]
+            },
+            {
+              "id": "ood30_027",
+              "query": "人工智能学院科研团队秘书岗位的职责、招聘条件和怎么弄是什么",
+              "expected_otid": "otid_69b895a0ab0c40ea",
+              "elapsedMs": 55.85559999999987,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_69b895a0ab0c40ea",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_69b895a0ab0c40ea",
+                  "score": 2.845094884948515,
+                  "best_kpid": "kpid_566c89b2703f4c7b"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_fbcafa75ba9f468e",
+                  "score": 2.3370158895158895,
+                  "best_kpid": "kpid_9d6acafbdcce4889"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_af18ceedf37d44bb",
+                  "score": 2.2148846112034852,
+                  "best_kpid": "kpid_13558543096142df"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_33a5558a3b214bde",
+                  "score": 2.172653359292244,
+                  "best_kpid": "kpid_8651a375284a4cad"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_b9b8116d57a8493e",
+                  "score": 2.130913618345125,
+                  "best_kpid": "kpid_285192cec86147f4"
+                }
+              ]
+            },
+            {
+              "id": "ood30_028",
+              "query": "逸仙博士后项目的要要什么条件和待遇支持政策都有哪些",
+              "expected_otid": "otid_55c5131d829e4a00",
+              "elapsedMs": 53.6228000000001,
+              "rank": 2,
+              "hitAt1": false,
+              "reciprocalRank": 0.5,
+              "top1Otid": "otid_98f334aa60cb4f06",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_98f334aa60cb4f06",
+                  "score": 2.6753175988049405,
+                  "best_kpid": "kpid_f08cadca25d34d09"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_55c5131d829e4a00",
+                  "score": 2.6595250419008183,
+                  "best_kpid": "kpid_c53d192c47c4423f"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_906af0c4c6e541c2",
+                  "score": 2.655061891936685,
+                  "best_kpid": "kpid_8df5da891616430e"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_fec2d17303a94eb3",
+                  "score": 1.9757042265172347,
+                  "best_kpid": "kpid_b25e0c3d7fce42bf"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_5178ac4ea52c4766",
+                  "score": 1.8670964550862381,
+                  "best_kpid": "kpid_39071d6fa3f7430d"
+                }
+              ]
+            },
+            {
+              "id": "ood30_029",
+              "query": "2025年度海外优青依托人工智能学院申报 申请对象条件和学院重点支持研究方向是什么",
+              "expected_otid": "otid_8406d7042b9f4fbf",
+              "elapsedMs": 52.527900000000045,
+              "rank": 2,
+              "hitAt1": false,
+              "reciprocalRank": 0.5,
+              "top1Otid": "otid_fec2d17303a94eb3",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_fec2d17303a94eb3",
+                  "score": 2.5719154794785046,
+                  "best_kpid": "kpid_bcd13de6373f4c80"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_8406d7042b9f4fbf",
+                  "score": 1.9434213236494609,
+                  "best_kpid": "kpid_8308c9d7341446d5"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_1e743544c32142f1",
+                  "score": 1.688557113703607,
+                  "best_kpid": "kpid_649e20d1ca1d4ed4"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_906af0c4c6e541c2",
+                  "score": 1.6383769423776813,
+                  "best_kpid": "kpid_d5de3d67bdc14dcd"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_3770fb6348d24f6b",
+                  "score": 1.035605538567397,
+                  "best_kpid": "kpid_c8829478a3184372"
+                }
+              ]
+            },
+            {
+              "id": "ood30_030",
+              "query": "人工智能学院2020-2021学年家庭经济困难学生认定需要提交要准备什么材料 流程怎么走",
+              "expected_otid": "otid_5c5176fae0a54caf",
+              "elapsedMs": 50.64810000000034,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_5c5176fae0a54caf",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_5c5176fae0a54caf",
+                  "score": 1.9884763503771596,
+                  "best_kpid": "kpid_cab73c29967b486b"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_adca877b5b1c4857",
+                  "score": 1.8610289750815916,
+                  "best_kpid": "kpid_0e687964028e4b87"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_6819da91f4a34ef6",
+                  "score": 1.8354746865433031,
+                  "best_kpid": "kpid_5305dd12db444bb1"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_3912909c5f1449bd",
+                  "score": 1.7682358332930972,
+                  "best_kpid": "kpid_5aea9f61615c4275"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_39afa5909d6a4750",
+                  "score": 1.7632475671583467,
+                  "best_kpid": "kpid_a0a76fa26b884a07"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Structured-Q+KP+OT",
+          "family": "structured",
+          "description": "前端 runtime 对齐主线：Q=0.3333, KP=0.3333, OT=0.3333。",
+          "metrics": {
+            "total": 30,
+            "hitAt1": 83.33333333333334,
+            "hitAt3": 93.33333333333333,
+            "hitAt5": 96.66666666666667,
+            "mrr": 0.8805555555555554
+          },
+          "timing": {
+            "avgMs": 92.29798333333346,
+            "p50Ms": 86.55614999999943,
+            "p95Ms": 118.50079499999997,
+            "maxMs": 149.9967999999999,
+            "totalMs": 2768.939500000004
+          },
+          "hitAt1Interval95": {
+            "lower": 70,
+            "upper": 96.66666666666667
+          },
+          "mrrInterval95": {
+            "lower": 0.7722222222222223,
+            "upper": 0.9666666666666667
+          },
+          "perCase": [
+            {
+              "id": "ood30_001",
+              "query": "2021年人工智能学院夏令营什么时候报名 报名对象和要准备要准备什么材料都有哪些",
+              "expected_otid": "otid_9cf3ef26730b4cb4",
+              "elapsedMs": 149.9967999999999,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_9cf3ef26730b4cb4",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_9cf3ef26730b4cb4",
+                  "score": 1.3773731050228843,
+                  "best_kpid": "kpid_13e2de93a2bb46fa"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_6e85da455dd34af3",
+                  "score": 0.8481040568814922
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_a2f94115e88244d4",
+                  "score": 0.825254482136812,
+                  "best_kpid": "kpid_fcfbf4bbd3b44a6b"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_fcf3caca2aa340ca",
+                  "score": 0.7353006003384314
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_02d8157232244d06",
+                  "score": 0.676923076923077
+                }
+              ]
+            },
+            {
+              "id": "ood30_002",
+              "query": "是应届本科生 想申请人工智能学院2021年推免 需要经过哪些流程",
+              "expected_otid": "otid_01b65cafe0894b9c",
+              "elapsedMs": 118.09109999999964,
+              "rank": 3,
+              "hitAt1": false,
+              "reciprocalRank": 0.3333333333333333,
+              "top1Otid": "otid_d371dde33a814b26",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_d371dde33a814b26",
+                  "score": 1.0619656088765834,
+                  "best_kpid": "kpid_2648a609951d4367"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_6e85da455dd34af3",
+                  "score": 0.9281824631210449,
+                  "best_kpid": "kpid_b167f103862043fe"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_01b65cafe0894b9c",
+                  "score": 0.7886599497489493,
+                  "best_kpid": "kpid_cab8c899074b4c03"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_1fe8155fa2f64320",
+                  "score": 0.6820871886756109,
+                  "best_kpid": "kpid_2244415eff4045e0"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_fcf3caca2aa340ca",
+                  "score": 0.6516153767440711,
+                  "best_kpid": "kpid_04c07633548e41a1"
+                }
+              ]
+            },
+            {
+              "id": "ood30_003",
+              "query": "2022年人工智能学院夏令营的怎么弄和活动安排是什么",
+              "expected_otid": "otid_c7828d5c12cc4c90",
+              "elapsedMs": 83.59730000000036,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_c7828d5c12cc4c90",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_c7828d5c12cc4c90",
+                  "score": 1.7147957946424996,
+                  "best_kpid": "kpid_edf852240d504dae"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_cf0fb6da0f1a4b18",
+                  "score": 1.3974874539979927,
+                  "best_kpid": "kpid_8037e195ef444bc2"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_659cfd8833ee4369",
+                  "score": 0.6809601925221501,
+                  "best_kpid": "kpid_b5a039b9194c43f7"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_8c27fc74819145d9",
+                  "score": 0.4135688192494641
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_b5047e817198431e",
+                  "score": 0.36023405972558514,
+                  "best_kpid": "kpid_54834c84d7d0492e"
+                }
+              ]
+            },
+            {
+              "id": "ood30_004",
+              "query": "人工智能学院2022年免试生接收办法中 是否接收直博生、要要什么条件和考核要求都有哪些",
+              "expected_otid": "otid_ca3a4c98f51f48e8",
+              "elapsedMs": 87.30319999999938,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_ca3a4c98f51f48e8",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_ca3a4c98f51f48e8",
+                  "score": 1.7588367247679892,
+                  "best_kpid": "kpid_65a33b7ae39943a8"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_dc2fbd2f88f7453b",
+                  "score": 0.9645642718442691,
+                  "best_kpid": "kpid_d40e015da0ff4fbd"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_07571807121c4472",
+                  "score": 0.9241501268736959,
+                  "best_kpid": "kpid_29da13e4acb34ca7"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_5f10b726aa1d4728",
+                  "score": 0.8580008405309354,
+                  "best_kpid": "kpid_7327e216102040e7"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_81112559b6b240f2",
+                  "score": 0.6844918386024259,
+                  "best_kpid": "kpid_0ce4691f1eb24d8e"
+                }
+              ]
+            },
+            {
+              "id": "ood30_005",
+              "query": "2023年人工智能学院夏令营报名需要满足要什么条件并提交要准备什么材料",
+              "expected_otid": "otid_7229bb63ab97456a",
+              "elapsedMs": 85.53530000000046,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_7229bb63ab97456a",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_7229bb63ab97456a",
+                  "score": 1.3601541899562242,
+                  "best_kpid": "kpid_033d9f4dc672416d"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_84a37b294495492a",
+                  "score": 1.0345717252937734,
+                  "best_kpid": "kpid_d605c013b18144ab"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_eada182ca6104c99",
+                  "score": 0.9796430110856502,
+                  "best_kpid": "kpid_384144f00ea84a26"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_c03e584363934e90",
+                  "score": 0.8980440350212627,
+                  "best_kpid": "kpid_38b120104d8c4854"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_b9b8116d57a8493e",
+                  "score": 0.786661590202424
+                }
+              ]
+            },
+            {
+              "id": "ood30_006",
+              "query": "想申请人工智能学院2023年推免预报名 什么时候开始、怎么弄",
+              "expected_otid": "otid_eada182ca6104c99",
+              "elapsedMs": 96.5635999999995,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_eada182ca6104c99",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_eada182ca6104c99",
+                  "score": 1.1853857944882615,
+                  "best_kpid": "kpid_1db678d8bc5046e7"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_e0c52921de884ef1",
+                  "score": 0.6069592665286105,
+                  "best_kpid": "kpid_df28b929252e4ec2"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_7229bb63ab97456a",
+                  "score": 0.5849943310657597,
+                  "best_kpid": "kpid_9b88999e914441c9"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_3be934ddb5624284",
+                  "score": 0.4952313113039909
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_c7dc0e8b08b445e6",
+                  "score": 0.4832824963487249
+                }
+              ]
+            },
+            {
+              "id": "ood30_007",
+              "query": "人工智能学院2024年推免接收办法的整体要求是什么",
+              "expected_otid": "otid_64fee3c7ad80452e",
+              "elapsedMs": 91.9984999999997,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_64fee3c7ad80452e",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_64fee3c7ad80452e",
+                  "score": 1.451277432571741,
+                  "best_kpid": "kpid_18835be8da5942c6"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_f3ee1947f40e4b18",
+                  "score": 1.2578001850472222,
+                  "best_kpid": "kpid_a8b0421d25904028"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_54fc4d3ca3a94536",
+                  "score": 0.6012555833513046,
+                  "best_kpid": "kpid_2efcc9f22a1447ee"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_656f7a8ec44e4fac",
+                  "score": 0.5502067817648386
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_205d5ce2a02e4f4d",
+                  "score": 0.4574733385997828
+                }
+              ]
+            },
+            {
+              "id": "ood30_008",
+              "query": "人工智能学院2025推免接收办法 要要什么条件 材料",
+              "expected_otid": "otid_3770fb6348d24f6b",
+              "elapsedMs": 118.83600000000024,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_3770fb6348d24f6b",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_3770fb6348d24f6b",
+                  "score": 1.6127533411029134,
+                  "best_kpid": "kpid_17cc6ec8e1c54d88"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_f672cc42a5a04134",
+                  "score": 0.8337653428442902,
+                  "best_kpid": "kpid_3f0f3250cdfa4eaf"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_5d30aea8c4a64cce",
+                  "score": 0.6230570203820729,
+                  "best_kpid": "kpid_daf7f2b75c82481b"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_82fe535421c6472c",
+                  "score": 0.5877092194764317,
+                  "best_kpid": "kpid_d6a66c4fb9304c0a"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_1435d9cf85914ea7",
+                  "score": 0.5701859283039058
+                }
+              ]
+            },
+            {
+              "id": "ood30_009",
+              "query": "2021年全国硕士报名考试报考点代码是多少 适用哪些考生",
+              "expected_otid": "otid_849070d708e0472f",
+              "elapsedMs": 92.52920000000086,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_849070d708e0472f",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_849070d708e0472f",
+                  "score": 1.2112254027079852,
+                  "best_kpid": "kpid_11f65abd01fd465c"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_3bb5095120fb432b",
+                  "score": 1.093088406764603,
+                  "best_kpid": "kpid_391e9ea0c3164a8b"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_e66299426ac34851",
+                  "score": 0.6296200022181231,
+                  "best_kpid": "kpid_900b26e1663f4bf3"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_febe1ea123a14aa9",
+                  "score": 0.5386173192320793,
+                  "best_kpid": "kpid_60b6eb0105084829"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_29dd671742524792",
+                  "score": 0.5090662529565191,
+                  "best_kpid": "kpid_2bf623934eac4d0c"
+                }
+              ]
+            },
+            {
+              "id": "ood30_010",
+              "query": "人工智能学院2021年硕士能不能调剂 调剂申请需要注意什么",
+              "expected_otid": "otid_a2f94115e88244d4",
+              "elapsedMs": 92.08570000000054,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_a2f94115e88244d4",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_a2f94115e88244d4",
+                  "score": 1.6936530470454079,
+                  "best_kpid": "kpid_338b4e382d0242d7"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_c4270d3c6e9944fd",
+                  "score": 1.6566046038950233,
+                  "best_kpid": "kpid_da164126eff345df"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_1fe8155fa2f64320",
+                  "score": 0.9482115248267107,
+                  "best_kpid": "kpid_2244415eff4045e0"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_01b65cafe0894b9c",
+                  "score": 0.8640690039537751,
+                  "best_kpid": "kpid_3e485c8d24504842"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_0f6e5f14259148ad",
+                  "score": 0.47098921631432844
+                }
+              ]
+            },
+            {
+              "id": "ood30_011",
+              "query": "2021年人工智能学院硕士复试要求中 复试形式和总成绩计算方式是什么",
+              "expected_otid": "otid_c1fa6db91e294a94",
+              "elapsedMs": 97.04569999999967,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_c1fa6db91e294a94",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_c1fa6db91e294a94",
+                  "score": 1.689716767982897,
+                  "best_kpid": "kpid_5a27a2d3224e4331"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_c4270d3c6e9944fd",
+                  "score": 1.5754784209522794,
+                  "best_kpid": "kpid_da164126eff345df"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_29dd671742524792",
+                  "score": 1.2920878918046266,
+                  "best_kpid": "kpid_2bf623934eac4d0c"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_77c43125dba648d2",
+                  "score": 0.9971443957017094,
+                  "best_kpid": "kpid_604a3fa158e341c2"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_01b65cafe0894b9c",
+                  "score": 0.8747299776259903,
+                  "best_kpid": "kpid_65291e291191427f"
+                }
+              ]
+            },
+            {
+              "id": "ood30_012",
+              "query": "2022年人工智能学院硕士复试的考核内容、成绩计算和录取原则都有哪些",
+              "expected_otid": "otid_7893d1be905b4266",
+              "elapsedMs": 92.85850000000028,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_7893d1be905b4266",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_7893d1be905b4266",
+                  "score": 1.7181794354815383,
+                  "best_kpid": "kpid_733911bb9c554506"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_eae8392d216d48ea",
+                  "score": 1.185120450853777,
+                  "best_kpid": "kpid_c1604e824c76441c"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_d21d1c0e20b649d7",
+                  "score": 0.6221590000192134,
+                  "best_kpid": "kpid_0222c0041074440d"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_1d2eede876d34da0",
+                  "score": 0.5851027551905799,
+                  "best_kpid": "kpid_055f587fcbd04f18"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_dcfe8d5d21b24255",
+                  "score": 0.5686958572143678,
+                  "best_kpid": "kpid_17177c987f994169"
+                }
+              ]
+            },
+            {
+              "id": "ood30_013",
+              "query": "如果参加人工智能学院2023年硕士复试 资格审查材料和现场报到流程怎么走",
+              "expected_otid": "otid_c03e584363934e90",
+              "elapsedMs": 84.27610000000004,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_c03e584363934e90",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_c03e584363934e90",
+                  "score": 1.5088533379670255,
+                  "best_kpid": "kpid_38b120104d8c4854"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_624cf6538fff4424",
+                  "score": 0.4503600409217006,
+                  "best_kpid": "kpid_8bda6f589c344d1e"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_dc2fbd2f88f7453b",
+                  "score": 0.42781856870827745,
+                  "best_kpid": "kpid_64164ade698a4751"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_e0c52921de884ef1",
+                  "score": 0.4226606771882394,
+                  "best_kpid": "kpid_d09f33db00c3427b"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_69b787d802014e94",
+                  "score": 0.3718021719646619
+                }
+              ]
+            },
+            {
+              "id": "ood30_014",
+              "query": "2024年人工智能学院硕士复试的报到安排和复试成绩权重怎么规定",
+              "expected_otid": "otid_54fc4d3ca3a94536",
+              "elapsedMs": 83.8104000000003,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_54fc4d3ca3a94536",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_54fc4d3ca3a94536",
+                  "score": 1.6426880290287937,
+                  "best_kpid": "kpid_e46b39a2bc3f49d6"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_2875f7b8cd70429c",
+                  "score": 1.269609741757788,
+                  "best_kpid": "kpid_34c28ec20fd24423"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_db511e3324ad43f5",
+                  "score": 0.9568320134210782,
+                  "best_kpid": "kpid_2386b8733e19443c"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_395fb889a17b49fa",
+                  "score": 0.684995101199732,
+                  "best_kpid": "kpid_5c6c9e2e47964343"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_2db2c0c0349745ea",
+                  "score": 0.6365231992667719,
+                  "best_kpid": "kpid_8c7b6b4e4f5f439a"
+                }
+              ]
+            },
+            {
+              "id": "ood30_015",
+              "query": "2025年人工智能学院硕士复试要求的完整要求是什么",
+              "expected_otid": "otid_bacada41bba74749",
+              "elapsedMs": 83.61080000000038,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_bacada41bba74749",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_bacada41bba74749",
+                  "score": 1.437716627472918,
+                  "best_kpid": "kpid_265083ab822641bd"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_6c5b2af52b1d4df5",
+                  "score": 1.2032169509565378,
+                  "best_kpid": "kpid_02517d7c32c8474e"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_ed940aabc9c24803",
+                  "score": 1.1725991803713094,
+                  "best_kpid": "kpid_63d3efd1a6534c6d"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_de298a32eff04279",
+                  "score": 0.9950901544532895,
+                  "best_kpid": "kpid_abe8a759c9ee4c0a"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_beb149b3688b4f4c",
+                  "score": 0.7980820979679075,
+                  "best_kpid": "kpid_bcc1e23617d74178"
+                }
+              ]
+            },
+            {
+              "id": "ood30_016",
+              "query": "2026硕士复试要求 要准备要准备什么材料 考核要求",
+              "expected_otid": "otid_52ffc460a3284f93",
+              "elapsedMs": 82.11050000000068,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_52ffc460a3284f93",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_52ffc460a3284f93",
+                  "score": 1.619125002446435,
+                  "best_kpid": "kpid_d26f71918dde4025"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_1ae107c08e73431e",
+                  "score": 1.1419337403036882,
+                  "best_kpid": "kpid_6df5d76fd292421a"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_42225868ea784bbf",
+                  "score": 1.111279621548324,
+                  "best_kpid": "kpid_90213a0a806247e1"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_d2e81434d6754411",
+                  "score": 0.7230187747035572,
+                  "best_kpid": "kpid_d7a01208d9f34d0d"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_faeac0ecd9304bd1",
+                  "score": 0.7147185680716385,
+                  "best_kpid": "kpid_282050a357f14476"
+                }
+              ]
+            },
+            {
+              "id": "ood30_017",
+              "query": "人工智能学院2021年博士申请考核制招生的要要什么条件和材料要求是什么",
+              "expected_otid": "otid_1fe8155fa2f64320",
+              "elapsedMs": 83.52250000000004,
+              "rank": 4,
+              "hitAt1": false,
+              "reciprocalRank": 0.25,
+              "top1Otid": "otid_06f7620140244798",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_06f7620140244798",
+                  "score": 1.2843106045915127,
+                  "best_kpid": "kpid_158a1aebb51b4a51"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_7915cf0cb5a94687",
+                  "score": 1.0418719791913897,
+                  "best_kpid": "kpid_85644100de2341ca"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_6e85da455dd34af3",
+                  "score": 1.0217428625778875
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_1fe8155fa2f64320",
+                  "score": 0.9250283182556888,
+                  "best_kpid": "kpid_2244415eff4045e0"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_9cf3ef26730b4cb4",
+                  "score": 0.7741434407725427,
+                  "best_kpid": "kpid_13e2de93a2bb46fa"
+                }
+              ]
+            },
+            {
+              "id": "ood30_018",
+              "query": "2021年人工智能学院博士申请考核制的实施办法里 考核流程和录取规则怎么安排",
+              "expected_otid": "otid_9911c0374cdd4ce4",
+              "elapsedMs": 85.80909999999949,
+              "rank": null,
+              "hitAt1": false,
+              "reciprocalRank": 0,
+              "top1Otid": "otid_01b65cafe0894b9c",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_01b65cafe0894b9c",
+                  "score": 0.9960323291098949,
+                  "best_kpid": "kpid_71163384609c4915"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_10c83368275647b5",
+                  "score": 0.9134411343567768,
+                  "best_kpid": "kpid_05170c6019dc48ae"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_77c43125dba648d2",
+                  "score": 0.6541441141397919,
+                  "best_kpid": "kpid_d0deb3e83f6946c8"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_06f7620140244798",
+                  "score": 0.6092955649909284,
+                  "best_kpid": "kpid_158a1aebb51b4a51"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_c1fa6db91e294a94",
+                  "score": 0.39103508344274185
+                }
+              ]
+            },
+            {
+              "id": "ood30_019",
+              "query": "-鹏城实验室联合培养博士专项计划的考核怎么安排",
+              "expected_otid": "otid_b5047e817198431e",
+              "elapsedMs": 96.39990000000034,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_b5047e817198431e",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_b5047e817198431e",
+                  "score": 1.7788370758139322,
+                  "best_kpid": "kpid_937f1ea18d2e4c9c"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_903e35dbd70b496d",
+                  "score": 1.0944479017533222,
+                  "best_kpid": "kpid_c60cfecad5394865"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_2d31ea40a9df404b",
+                  "score": 1.0705041458331186,
+                  "best_kpid": "kpid_e996fc530e9b4803"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_ae46d4b5d6e74990",
+                  "score": 1.0045768442881078,
+                  "best_kpid": "kpid_46533026685e4ee1"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_c03d97fc09704546",
+                  "score": 0.887911047336845,
+                  "best_kpid": "kpid_6b7252e8159348a1"
+                }
+              ]
+            },
+            {
+              "id": "ood30_020",
+              "query": "2022年人工智能学院博士申请考核招生要求中 报名时间、申请资格和材料都有哪些要求",
+              "expected_otid": "otid_5e4e1434da5748eb",
+              "elapsedMs": 91.9926000000005,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_5e4e1434da5748eb",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_5e4e1434da5748eb",
+                  "score": 1.1384281634630062,
+                  "best_kpid": "kpid_79904ecf12d04839"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_dc2fbd2f88f7453b",
+                  "score": 0.8238791240194512,
+                  "best_kpid": "kpid_64164ade698a4751"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_2c221a5f38864ced",
+                  "score": 0.7741878011915324,
+                  "best_kpid": "kpid_0a557aeedbb64940"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_b53a9170fcfe4d2e",
+                  "score": 0.7060219822909037,
+                  "best_kpid": "kpid_0194502bc5ff4689"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_392eac0b27fa4b09",
+                  "score": 0.6933102704543757,
+                  "best_kpid": "kpid_081fa6516435497f"
+                }
+              ]
+            },
+            {
+              "id": "ood30_021",
+              "query": "人工智能学院2023年博士申请考核制实施办法中 考核总成绩如何使用 哪些情形不予录取",
+              "expected_otid": "otid_dc2fbd2f88f7453b",
+              "elapsedMs": 113.29660000000058,
+              "rank": 2,
+              "hitAt1": false,
+              "reciprocalRank": 0.5,
+              "top1Otid": "otid_5f10b726aa1d4728",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_5f10b726aa1d4728",
+                  "score": 1.6974320863348082,
+                  "best_kpid": "kpid_c67b75b015104827"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_dc2fbd2f88f7453b",
+                  "score": 1.636936811712626,
+                  "best_kpid": "kpid_52e7ec7e1d33472b"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_c495d5e1d55d4213",
+                  "score": 1.3230518922302454,
+                  "best_kpid": "kpid_73d0c8465fe6405c"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_c03e584363934e90",
+                  "score": 1.0867129967696088,
+                  "best_kpid": "kpid_9d04033025194272"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_1d07d7c9f48e4090",
+                  "score": 0.7535751468581255,
+                  "best_kpid": "kpid_f076cb0187714e12"
+                }
+              ]
+            },
+            {
+              "id": "ood30_022",
+              "query": "报考人工智能学院2024年博士 需要满足要什么条件 并在2023年11月27日前提交哪些要准备要准备什么材料",
+              "expected_otid": "otid_f0baf746fd75421e",
+              "elapsedMs": 87.90799999999945,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_f0baf746fd75421e",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_f0baf746fd75421e",
+                  "score": 1.3822848590555101,
+                  "best_kpid": "kpid_69002c70a59c4fba"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_84a37b294495492a",
+                  "score": 1.2989400705363154,
+                  "best_kpid": "kpid_d605c013b18144ab"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_a206a52bfb3f46aa",
+                  "score": 1.0754784887415922,
+                  "best_kpid": "kpid_9f5dc6200a58475a"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_c03e584363934e90",
+                  "score": 0.9112489440796063,
+                  "best_kpid": "kpid_38b120104d8c4854"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_61e44e3f9f6548de",
+                  "score": 0.9033816425120772
+                }
+              ]
+            },
+            {
+              "id": "ood30_023",
+              "query": "2025年人工智能学院博士招生要求中 预报名、网上报名和考核分别怎么安排",
+              "expected_otid": "otid_1e743544c32142f1",
+              "elapsedMs": 96.27750000000015,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_1e743544c32142f1",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_1e743544c32142f1",
+                  "score": 1.3360230263948816,
+                  "best_kpid": "kpid_6a3184e232c34801"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_401c4896f5614967",
+                  "score": 1.299614745811284,
+                  "best_kpid": "kpid_04094d91f9d54dfe"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_8ee6bdcf13e741b8",
+                  "score": 1.1381497190082128,
+                  "best_kpid": "kpid_54070a445ec148f4"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_5d30aea8c4a64cce",
+                  "score": 0.7755402658463721,
+                  "best_kpid": "kpid_daf7f2b75c82481b"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_9a0576424d284199",
+                  "score": 0.7452438863066,
+                  "best_kpid": "kpid_d72853bd031247e8"
+                }
+              ]
+            },
+            {
+              "id": "ood30_024",
+              "query": "如果报考2025年人工智能学院博士申请考核制 改报志愿是否允许 怎么弄理",
+              "expected_otid": "otid_69ad2834eb564017",
+              "elapsedMs": 81.22010000000046,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_69ad2834eb564017",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_69ad2834eb564017",
+                  "score": 1.4544187361408927,
+                  "best_kpid": "kpid_fb43689e20ba4e45"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_d2c7f1cd37464fbf",
+                  "score": 1.2506246764081461,
+                  "best_kpid": "kpid_0b52c6fc9eef4ca1"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_b8a98fa84f504d63",
+                  "score": 1.1418474344273704,
+                  "best_kpid": "kpid_cdd676e2d8e542c1"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_15996476fc324e33",
+                  "score": 1.0189531944538572,
+                  "best_kpid": "kpid_9451b20d077f4828"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_32f33b04286b4f12",
+                  "score": 0.9783343213179292,
+                  "best_kpid": "kpid_c7e29bb1da224a36"
+                }
+              ]
+            },
+            {
+              "id": "ood30_025",
+              "query": "2026年人工智能学院博士招生要求的最新报名条件和时间怎么安排是什么",
+              "expected_otid": "otid_1180b6d41c0e4ca7",
+              "elapsedMs": 83.20940000000064,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_1180b6d41c0e4ca7",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_1180b6d41c0e4ca7",
+                  "score": 1.454572859674029,
+                  "best_kpid": "kpid_72b3299a78cb44a5"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_7479616835454c16",
+                  "score": 0.9745469755469756,
+                  "best_kpid": "kpid_daa4bb62894f432c"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_c03d97fc09704546",
+                  "score": 0.9624104077766191,
+                  "best_kpid": "kpid_dc9289c28ce44dd8"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_ae46d4b5d6e74990",
+                  "score": 0.9438848644357472,
+                  "best_kpid": "kpid_53230507f99c472c"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_4b2b45a3a7f84940",
+                  "score": 0.9240861268738987,
+                  "best_kpid": "kpid_4571e90a78f8450d"
+                }
+              ]
+            },
+            {
+              "id": "ood30_026",
+              "query": "2026年人工智能学院博士调剂公告中 要要什么条件、流程和批次安排都有哪些要求",
+              "expected_otid": "otid_8fd3944fd7814ff5",
+              "elapsedMs": 79.13130000000001,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_8fd3944fd7814ff5",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_8fd3944fd7814ff5",
+                  "score": 1.7432928147653433,
+                  "best_kpid": "kpid_8d27b364d1f443ee"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_4b2b45a3a7f84940",
+                  "score": 1.4708293695388714,
+                  "best_kpid": "kpid_4571e90a78f8450d"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_eb3d3855deb74340",
+                  "score": 1.2093349612709186,
+                  "best_kpid": "kpid_69f10b673a554b24"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_42225868ea784bbf",
+                  "score": 0.8232121708386895,
+                  "best_kpid": "kpid_5d44223cacfc40db"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_097b17ffece641a7",
+                  "score": 0.5016828433381348,
+                  "best_kpid": "kpid_e6c97801cea847b3"
+                }
+              ]
+            },
+            {
+              "id": "ood30_027",
+              "query": "人工智能学院科研团队秘书岗位的职责、招聘条件和怎么弄是什么",
+              "expected_otid": "otid_69b895a0ab0c40ea",
+              "elapsedMs": 84.15610000000015,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_69b895a0ab0c40ea",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_69b895a0ab0c40ea",
+                  "score": 1.4216717213491405,
+                  "best_kpid": "kpid_566c89b2703f4c7b"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_8406d7042b9f4fbf",
+                  "score": 0.9488951456422978,
+                  "best_kpid": "kpid_8308c9d7341446d5"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_c75a4fe532dc47ee",
+                  "score": 0.8305334249188605,
+                  "best_kpid": "kpid_71ee039c87274e45"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_d23cd8bd933e4d4b",
+                  "score": 0.7415950673226215,
+                  "best_kpid": "kpid_e0590507dc95427a"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_fec2d17303a94eb3",
+                  "score": 0.7132354520085744,
+                  "best_kpid": "kpid_b25e0c3d7fce42bf"
+                }
+              ]
+            },
+            {
+              "id": "ood30_028",
+              "query": "逸仙博士后项目的要要什么条件和待遇支持政策都有哪些",
+              "expected_otid": "otid_55c5131d829e4a00",
+              "elapsedMs": 82.39779999999973,
+              "rank": 3,
+              "hitAt1": false,
+              "reciprocalRank": 0.3333333333333333,
+              "top1Otid": "otid_906af0c4c6e541c2",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_906af0c4c6e541c2",
+                  "score": 1.4923318584927272,
+                  "best_kpid": "kpid_0d24d6c9a2774af7"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_98f334aa60cb4f06",
+                  "score": 1.4423927999747672,
+                  "best_kpid": "kpid_f08cadca25d34d09"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_55c5131d829e4a00",
+                  "score": 1.2657444759204188,
+                  "best_kpid": "kpid_c53d192c47c4423f"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_ddc82e31ec8748a7",
+                  "score": 1.1650064890159308,
+                  "best_kpid": "kpid_89bb02ce967a4dbd"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_6f4f7c3232be46da",
+                  "score": 0.7594996735188406,
+                  "best_kpid": "kpid_fbf84c7e3ac748cf"
+                }
+              ]
+            },
+            {
+              "id": "ood30_029",
+              "query": "2025年度海外优青依托人工智能学院申报 申请对象条件和学院重点支持研究方向是什么",
+              "expected_otid": "otid_8406d7042b9f4fbf",
+              "elapsedMs": 84.42990000000009,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_8406d7042b9f4fbf",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_8406d7042b9f4fbf",
+                  "score": 1.3900315278976447,
+                  "best_kpid": "kpid_8308c9d7341446d5"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_fec2d17303a94eb3",
+                  "score": 1.2184464733004152,
+                  "best_kpid": "kpid_bcd13de6373f4c80"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_906af0c4c6e541c2",
+                  "score": 0.6566602599799256,
+                  "best_kpid": "kpid_d5de3d67bdc14dcd"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_130ba93d3a5a4995",
+                  "score": 0.6099132882864847,
+                  "best_kpid": "kpid_bf4ced0039704f6f"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_5d30aea8c4a64cce",
+                  "score": 0.6028476957804761,
+                  "best_kpid": "kpid_2601f18b1539463e"
+                }
+              ]
+            },
+            {
+              "id": "ood30_030",
+              "query": "人工智能学院2020-2021学年家庭经济困难学生认定需要提交要准备什么材料 流程怎么走",
+              "expected_otid": "otid_5c5176fae0a54caf",
+              "elapsedMs": 78.94000000000051,
+              "rank": 1,
+              "hitAt1": true,
+              "reciprocalRank": 1,
+              "top1Otid": "otid_5c5176fae0a54caf",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_5c5176fae0a54caf",
+                  "score": 1.4462443291931515,
+                  "best_kpid": "kpid_cab73c29967b486b"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_adca877b5b1c4857",
+                  "score": 1.2737889490410441,
+                  "best_kpid": "kpid_0e687964028e4b87"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_58f55e16a4794114",
+                  "score": 0.8418718986662646,
+                  "best_kpid": "kpid_dfd6b201822e4571"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_39afa5909d6a4750",
+                  "score": 0.841527831035233,
+                  "best_kpid": "kpid_a0a76fa26b884a07"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_6819da91f4a34ef6",
+                  "score": 0.8180108974721662,
+                  "best_kpid": "kpid_9bd0aad61edd42c1"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "pairwiseComparisons": [
+        {
+          "challenger": "Structured-KP+OT",
+          "baseline": "BM25-OT",
+          "hitAt1": {
+            "observedDelta": 30,
+            "interval95": {
+              "lower": 10,
+              "upper": 50
+            },
+            "randomizationPValue": 0.0096990300969903
+          },
+          "mrr": {
+            "observedDelta": 0.2571230158730158,
+            "interval95": {
+              "lower": 0.13753968253968255,
+              "upper": 0.3757787698412697
+            },
+            "randomizationPValue": 0.0004999500049995
+          }
+        },
+        {
+          "challenger": "Structured-KP+OT",
+          "baseline": "Dense-OT",
+          "hitAt1": {
+            "observedDelta": 36.666666666666664,
+            "interval95": {
+              "lower": 16.666666666666664,
+              "upper": 56.666666666666664
+            },
+            "randomizationPValue": 0.0031996800319968005
+          },
+          "mrr": {
+            "observedDelta": 0.3949185209276486,
+            "interval95": {
+              "lower": 0.2477225934187142,
+              "upper": 0.5385920092040782
+            },
+            "randomizationPValue": 0.00009999000099990002
+          }
+        },
+        {
+          "challenger": "Structured-Q+KP+OT",
+          "baseline": "BM25-OT",
+          "hitAt1": {
+            "observedDelta": 50,
+            "interval95": {
+              "lower": 33.33333333333333,
+              "upper": 66.66666666666666
+            },
+            "randomizationPValue": 0.00009999000099990002
+          },
+          "mrr": {
+            "observedDelta": 0.34878968253968234,
+            "interval95": {
+              "lower": 0.2256279761904763,
+              "upper": 0.4755029761904761
+            },
+            "randomizationPValue": 0.00009999000099990002
+          }
+        },
+        {
+          "challenger": "Structured-Q+KP+OT",
+          "baseline": "Dense-OT",
+          "hitAt1": {
+            "observedDelta": 56.666666666666664,
+            "interval95": {
+              "lower": 33.33333333333333,
+              "upper": 76.66666666666667
+            },
+            "randomizationPValue": 0.0004999500049995
+          },
+          "mrr": {
+            "observedDelta": 0.4865851875943152,
+            "interval95": {
+              "lower": 0.3084305606777717,
+              "upper": 0.6551842688151003
+            },
+            "randomizationPValue": 0.00009999000099990002
+          }
+        }
+      ]
+    }
+  ]
+}
