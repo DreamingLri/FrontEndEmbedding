@@ -142,6 +142,10 @@ type Report = {
     bootstrapIterations: number;
     randomizationIterations: number;
     timingNote: string;
+    runtimePresetRetrieval: {
+        qConfusionMode: string;
+        qConfusionWeight: number;
+    };
     datasets: DatasetReport[];
 };
 
@@ -982,6 +986,10 @@ function buildStructuredRanking(
             FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval.kpRoleRerankMode,
         kpRoleDocWeight:
             FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval.kpRoleDocWeight,
+        qConfusionMode:
+            FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval.qConfusionMode,
+        qConfusionWeight:
+            FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval.qConfusionWeight,
         enableExplicitYearFilter:
             FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval.enableExplicitYearFilter,
         minimalMode:
@@ -1249,6 +1257,12 @@ async function main() {
         randomizationIterations: SAFE_RANDOMIZATION_ITERATIONS,
         timingNote:
             "耗时统计仅覆盖每条 query 的检索/排序阶段，不含 query embedding、模型加载与结果写盘。",
+        runtimePresetRetrieval: {
+            qConfusionMode:
+                FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval.qConfusionMode,
+            qConfusionWeight:
+                FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval.qConfusionWeight,
+        },
         datasets: datasetReports,
     };
 

@@ -71,6 +71,8 @@ type Report = {
     mainDbVersion: string;
     embeddingModel: string;
     pipelinePresetName: string;
+    qConfusionMode: string;
+    qConfusionWeight: number;
     queryEmbedBatchSize: number;
     coldSampleLimit: number;
     currentTimestamp: number;
@@ -279,6 +281,10 @@ async function measureWarmQuery(
             FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval.kpRoleRerankMode,
         kpRoleDocWeight:
             FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval.kpRoleDocWeight,
+        qConfusionMode:
+            FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval.qConfusionMode,
+        qConfusionWeight:
+            FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval.qConfusionWeight,
         enableExplicitYearFilter:
             FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval.enableExplicitYearFilter,
         minimalMode:
@@ -491,6 +497,10 @@ async function main() {
         mainDbVersion: ACTIVE_MAIN_DB_VERSION,
         embeddingModel: FRONTEND_MODEL_NAME,
         pipelinePresetName: FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.name,
+        qConfusionMode:
+            FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval.qConfusionMode,
+        qConfusionWeight:
+            FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval.qConfusionWeight,
         queryEmbedBatchSize: DEFAULT_QUERY_EMBED_BATCH_SIZE,
         coldSampleLimit,
         currentTimestamp: CURRENT_TIMESTAMP,

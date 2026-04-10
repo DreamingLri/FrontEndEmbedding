@@ -2440,7 +2440,8 @@ export function searchAndRank(params: {
         applyScoreToAggregatedDocScores(otidMap[otid], meta, score);
     }
 
-    const finalRanking: SearchResult[] = [];
+    const decisionRanking: SearchResult[] = [];
+    const outputRanking: SearchResult[] = [];
     const candidateTargetYears = Object.values(otidMap)
         .map((scores) => scores.target_year)
         .filter((year): year is number => typeof year === "number");
@@ -2510,7 +2511,15 @@ export function searchAndRank(params: {
             continue;
         }
 
-        const finalScore = computeBaseScore(scores, weights, {
+        const decisionScore = computeBaseScore(scores, weights, {
+            kpAggregationMode,
+            kpTopN,
+            kpTailWeight,
+            fusionMode,
+            qConfusionMode: "off",
+            qConfusionWeight,
+        });
+        const outputScore = computeBaseScore(scores, weights, {
             kpAggregationMode,
             kpTopN,
             kpTailWeight,
@@ -2546,16 +2555,32 @@ export function searchAndRank(params: {
                   scopeSpecificityStats: docScopeSpecificityStatsMap.get(otid),
                   latestFocusedSpecificityTimestamp,
               });
-
-        finalRanking.push({
+        const baseDocScoreDelta =
+            kpRoleSelection.docScoreDelta * kpRoleDocWeight;
+        const rankingItem = {
             otid,
-            score: finalScore * boost + kpRoleSelection.docScoreDelta * kpRoleDocWeight,
+            score: 0,
             best_kpid: kpRoleSelection.bestKpid,
             kp_candidates: kpRoleSelection.orderedCandidates.slice(0, 5),
+        };
+
+        decisionRanking.push({
+            ...rankingItem,
+            score: decisionScore * boost + baseDocScoreDelta,
+        });
+        outputRanking.push({
+            ...rankingItem,
+            score: outputScore * boost + baseDocScoreDelta,
         });
     }
 
-    const sortedRanking = finalRanking.sort((a, b) => b.score - a.score);
+    const sortedDecisionRanking = decisionRanking.sort(
+        (a, b) => b.score - a.score,
+    );
+    const sortedOutputRanking =
+        effectiveQConfusionMode === "off"
+            ? sortedDecisionRanking
+            : outputRanking.sort((a, b) => b.score - a.score);
     const defaultQuerySignals: QuerySignals = {
         hasExplicitTopicOrIntent: false,
         hasExplicitYear: false,
@@ -2572,8 +2597,14 @@ export function searchAndRank(params: {
         queryIntent?.signals || defaultQuerySignals,
         querySparse,
     );
-    const retrievalSignals = extractRetrievalSignals(sortedRanking, otidMap);
-    const evidenceSignals = extractEvidenceSignals(sortedRanking, otidMap);
+    const retrievalSignals = extractRetrievalSignals(
+        sortedDecisionRanking,
+        otidMap,
+    );
+    const evidenceSignals = extractEvidenceSignals(
+        sortedDecisionRanking,
+        otidMap,
+    );
     const responseDecision = classifyResponseMode(
         querySignals,
         retrievalSignals,
@@ -2595,7 +2626,7 @@ export function searchAndRank(params: {
     if (explicitOutOfScopeOnly) {
         return {
             matches: [],
-            weakMatches: sortedRanking.slice(0, 5),
+            weakMatches: sortedDecisionRanking.slice(0, 5),
             rejection: {
                 reason: "low_topic_coverage",
                 topicIds: queryIntent?.topicIds || [],
@@ -2627,7 +2658,7 @@ export function searchAndRank(params: {
         return {
             matches: [],
             weakMatches: responseDecision.useWeakMatches
-                ? sortedRanking.slice(0, 5)
+                ? sortedDecisionRanking.slice(0, 5)
                 : [],
             rejection: {
                 reason: rejectionReason,
@@ -2639,7 +2670,7 @@ export function searchAndRank(params: {
     }
 
     return {
-        matches: sortedRanking.slice(0, 100),
+        matches: sortedOutputRanking.slice(0, 100),
         weakMatches: [],
         responseDecision,
         diagnostics,

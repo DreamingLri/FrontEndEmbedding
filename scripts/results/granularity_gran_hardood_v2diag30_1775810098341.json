@@ -1,0 +1,5921 @@
+{
+  "generatedAt": "2026-04-10T08:33:24.618Z",
+  "mainDbVersion": "main_v2_plus",
+  "experimentTrack": "frontend_runtime",
+  "pipelinePresetName": "frontend_research_sync_v1",
+  "minimalBaselineMode": true,
+  "minimalAddYear": true,
+  "minimalAddPhase": true,
+  "fixedComboWeights": {
+    "Q+KP+OT": {
+      "Q": 0.3333333333333333,
+      "KP": 0.3333333333333333,
+      "OT": 0.3333333333333333
+    }
+  },
+  "otDenseMode": "original",
+  "qConfusionMode": "consensus_no_year",
+  "queryStyleMode": "original",
+  "kpStyleMode": "original",
+  "lexicalTypeMultipliers": {
+    "Q": 1.5,
+    "KP": 1.2,
+    "OT": 1
+  },
+  "datasetVersion": "granularity",
+  "datasetMode": "named_group",
+  "datasetKey": "test_dataset_granularity_hard_ood_v2_diag_top30",
+  "datasetLabel": "HardOODv2Diag",
+  "datasetAlias": "gran_hardood_v2diag30",
+  "datasetDisplayName": "HardOODv2Diag",
+  "datasetGroups": [
+    {
+      "key": "hard_ood_v2_diag_top30",
+      "label": "HardOODv2Diag",
+      "role": "external_ood_holdout",
+      "sourceCount": 1,
+      "resolvedFromFallback": false
+    }
+  ],
+  "topHybridLimit": 1000,
+  "kpAggregationMode": "max",
+  "kpTopN": 3,
+  "kpTailWeight": 0.35,
+  "lexicalBonusMode": "sum",
+  "onlineKpRoleRerankMode": "off",
+  "onlineKpRoleDocWeight": 0.35,
+  "kpCandidateRerankMode": "none",
+  "docPostRerankMode": "none",
+  "docPostRerankWeight": 0.35,
+  "weightSteps": [
+    0.2,
+    0.5,
+    0.8
+  ],
+  "datasetSizes": {
+    "tune": {
+      "test_dataset_granularity_hard_ood_v2_diag_top30": 30
+    },
+    "holdout": {},
+    "combined": {
+      "test_dataset_granularity_hard_ood_v2_diag_top30": 30
+    }
+  },
+  "globalMetadataTypeCounts": {
+    "Q": 14935,
+    "KP": 3359,
+    "OT": 605
+  },
+  "combos": [
+    {
+      "label": "Q",
+      "allowedTypes": [
+        "Q"
+      ],
+      "metadataCount": 14935,
+      "metadataTypeCounts": {
+        "Q": 14935,
+        "KP": 0,
+        "OT": 0
+      },
+      "uniform": {
+        "weights": {
+          "Q": 1,
+          "KP": 0,
+          "OT": 0
+        },
+        "combined": {
+          "total": 30,
+          "hitAt1": 26.666666666666668,
+          "hitAt3": 76.66666666666667,
+          "hitAt5": 86.66666666666667,
+          "mrr": 0.5197619047619048
+        },
+        "kpidCombined": {
+          "applicable": 21,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 8,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 8,
+          "docHitAt5Total": 18,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 18
+        },
+        "supportCoverageCombined": {
+          "applicable": 15,
+          "docHitAt1Total": 7,
+          "docHitAt5Total": 13,
+          "docHitAt1FullCoverAt3": 0,
+          "docHitAt1FullCoverAt5": 0,
+          "docHitAt5FullCoverAt5": 0,
+          "partialCoverAt5": 0,
+          "avgCoveredGroupsAt5": 0,
+          "avgCoverageRatioAt5": 0
+        },
+        "metricsByDataset": {
+          "test_dataset_granularity_hard_ood_v2_diag_top30": {
+            "total": 30,
+            "hitAt1": 26.666666666666668,
+            "hitAt3": 76.66666666666667,
+            "hitAt5": 86.66666666666667,
+            "mrr": 0.5197619047619048
+          }
+        }
+      },
+      "tuned": {
+        "selectionMode": "single_frozen_set",
+        "candidateCount": 1,
+        "bestWeights": {
+          "Q": 1,
+          "KP": 0,
+          "OT": 0
+        },
+        "tuneCombined": {
+          "total": 30,
+          "hitAt1": 26.666666666666668,
+          "hitAt3": 76.66666666666667,
+          "hitAt5": 86.66666666666667,
+          "mrr": 0.5197619047619048
+        },
+        "kpidTuneCombined": {
+          "applicable": 21,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 8,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 8,
+          "docHitAt5Total": 18,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 18
+        },
+        "supportCoverageTuneCombined": {
+          "applicable": 15,
+          "docHitAt1Total": 7,
+          "docHitAt5Total": 13,
+          "docHitAt1FullCoverAt3": 0,
+          "docHitAt1FullCoverAt5": 0,
+          "docHitAt5FullCoverAt5": 0,
+          "partialCoverAt5": 0,
+          "avgCoveredGroupsAt5": 0,
+          "avgCoverageRatioAt5": 0
+        },
+        "holdoutCombined": {
+          "total": 30,
+          "hitAt1": 26.666666666666668,
+          "hitAt3": 76.66666666666667,
+          "hitAt5": 86.66666666666667,
+          "mrr": 0.5197619047619048
+        },
+        "kpidHoldoutCombined": {
+          "applicable": 21,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 8,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 8,
+          "docHitAt5Total": 18,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 18
+        },
+        "supportCoverageHoldoutCombined": {
+          "applicable": 15,
+          "docHitAt1Total": 7,
+          "docHitAt5Total": 13,
+          "docHitAt1FullCoverAt3": 0,
+          "docHitAt1FullCoverAt5": 0,
+          "docHitAt5FullCoverAt5": 0,
+          "partialCoverAt5": 0,
+          "avgCoveredGroupsAt5": 0,
+          "avgCoverageRatioAt5": 0
+        },
+        "combinedCombined": {
+          "total": 30,
+          "hitAt1": 26.666666666666668,
+          "hitAt3": 76.66666666666667,
+          "hitAt5": 86.66666666666667,
+          "mrr": 0.5197619047619048
+        },
+        "kpidCombinedCombined": {
+          "applicable": 21,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 8,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 8,
+          "docHitAt5Total": 18,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 18
+        },
+        "supportCoverageCombinedCombined": {
+          "applicable": 15,
+          "docHitAt1Total": 7,
+          "docHitAt5Total": 13,
+          "docHitAt1FullCoverAt3": 0,
+          "docHitAt1FullCoverAt5": 0,
+          "docHitAt5FullCoverAt5": 0,
+          "partialCoverAt5": 0,
+          "avgCoveredGroupsAt5": 0,
+          "avgCoverageRatioAt5": 0
+        },
+        "topTuneCandidates": [
+          {
+            "weights": {
+              "Q": 1,
+              "KP": 0,
+              "OT": 0
+            },
+            "combined": {
+              "total": 30,
+              "hitAt1": 26.666666666666668,
+              "hitAt3": 76.66666666666667,
+              "hitAt5": 86.66666666666667,
+              "mrr": 0.5197619047619048
+            }
+          }
+        ]
+      },
+      "groupBreakdowns": {
+        "supportPattern": {
+          "multi_kp": {
+            "total": 15,
+            "uniform": {
+              "total": 15,
+              "hitAt1": 46.666666666666664,
+              "hitAt3": 80,
+              "hitAt5": 86.66666666666667,
+              "mrr": 0.6333333333333333
+            },
+            "tunedCombined": {
+              "total": 15,
+              "hitAt1": 46.666666666666664,
+              "hitAt3": 80,
+              "hitAt5": 86.66666666666667,
+              "mrr": 0.6333333333333333
+            },
+            "kpidUniform": {
+              "applicable": 15,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 7,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 7,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 13
+            },
+            "kpidTunedCombined": {
+              "applicable": 15,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 7,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 7,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 13
+            },
+            "supportCoverageUniform": {
+              "applicable": 15,
+              "docHitAt1Total": 7,
+              "docHitAt5Total": 13,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 15,
+              "docHitAt1Total": 7,
+              "docHitAt5Total": 13,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          },
+          "ot_required": {
+            "total": 9,
+            "uniform": {
+              "total": 9,
+              "hitAt1": 0,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 88.88888888888889,
+              "mrr": 0.38068783068783074
+            },
+            "tunedCombined": {
+              "total": 9,
+              "hitAt1": 0,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 88.88888888888889,
+              "mrr": 0.38068783068783074
+            },
+            "kpidUniform": {
+              "applicable": 0,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 0,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 0
+            },
+            "kpidTunedCombined": {
+              "applicable": 0,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 0,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 0
+            },
+            "supportCoverageUniform": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          },
+          "single_kp": {
+            "total": 6,
+            "uniform": {
+              "total": 6,
+              "hitAt1": 16.666666666666664,
+              "hitAt3": 83.33333333333334,
+              "hitAt5": 83.33333333333334,
+              "mrr": 0.4444444444444444
+            },
+            "tunedCombined": {
+              "total": 6,
+              "hitAt1": 16.666666666666664,
+              "hitAt3": 83.33333333333334,
+              "hitAt5": 83.33333333333334,
+              "mrr": 0.4444444444444444
+            },
+            "kpidUniform": {
+              "applicable": 6,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 5,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 5
+            },
+            "kpidTunedCombined": {
+              "applicable": 6,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 5,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 5
+            },
+            "supportCoverageUniform": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          }
+        },
+        "preferredGranularity": {
+          "KP": {
+            "total": 7,
+            "uniform": {
+              "total": 7,
+              "hitAt1": 28.57142857142857,
+              "hitAt3": 85.71428571428571,
+              "hitAt5": 85.71428571428571,
+              "mrr": 0.5238095238095238
+            },
+            "tunedCombined": {
+              "total": 7,
+              "hitAt1": 28.57142857142857,
+              "hitAt3": 85.71428571428571,
+              "hitAt5": 85.71428571428571,
+              "mrr": 0.5238095238095238
+            },
+            "kpidUniform": {
+              "applicable": 7,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 2,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 6,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 6
+            },
+            "kpidTunedCombined": {
+              "applicable": 7,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 2,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 6,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 6
+            },
+            "supportCoverageUniform": {
+              "applicable": 1,
+              "docHitAt1Total": 1,
+              "docHitAt5Total": 1,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 1,
+              "docHitAt1Total": 1,
+              "docHitAt5Total": 1,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          },
+          "KP+OT": {
+            "total": 13,
+            "uniform": {
+              "total": 13,
+              "hitAt1": 38.46153846153847,
+              "hitAt3": 76.92307692307693,
+              "hitAt5": 84.61538461538461,
+              "mrr": 0.5769230769230769
+            },
+            "tunedCombined": {
+              "total": 13,
+              "hitAt1": 38.46153846153847,
+              "hitAt3": 76.92307692307693,
+              "hitAt5": 84.61538461538461,
+              "mrr": 0.5769230769230769
+            },
+            "kpidUniform": {
+              "applicable": 13,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 5,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 5,
+              "docHitAt5Total": 11,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 11
+            },
+            "kpidTunedCombined": {
+              "applicable": 13,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 5,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 5,
+              "docHitAt5Total": 11,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 11
+            },
+            "supportCoverageUniform": {
+              "applicable": 13,
+              "docHitAt1Total": 5,
+              "docHitAt5Total": 11,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 13,
+              "docHitAt1Total": 5,
+              "docHitAt5Total": 11,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          },
+          "OT": {
+            "total": 9,
+            "uniform": {
+              "total": 9,
+              "hitAt1": 0,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 88.88888888888889,
+              "mrr": 0.38068783068783074
+            },
+            "tunedCombined": {
+              "total": 9,
+              "hitAt1": 0,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 88.88888888888889,
+              "mrr": 0.38068783068783074
+            },
+            "kpidUniform": {
+              "applicable": 0,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 0,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 0
+            },
+            "kpidTunedCombined": {
+              "applicable": 0,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 0,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 0
+            },
+            "supportCoverageUniform": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          },
+          "Q+KP": {
+            "total": 1,
+            "uniform": {
+              "total": 1,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "tunedCombined": {
+              "total": 1,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "kpidUniform": {
+              "applicable": 1,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 1
+            },
+            "kpidTunedCombined": {
+              "applicable": 1,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 1
+            },
+            "supportCoverageUniform": {
+              "applicable": 1,
+              "docHitAt1Total": 1,
+              "docHitAt5Total": 1,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 1,
+              "docHitAt1Total": 1,
+              "docHitAt5Total": 1,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          }
+        },
+        "queryType": {
+          "short_keyword": {
+            "total": 3,
+            "uniform": {
+              "total": 3,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 0.5555555555555555
+            },
+            "tunedCombined": {
+              "total": 3,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 0.5555555555555555
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 2
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 2
+            },
+            "supportCoverageUniform": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          },
+          "situational": {
+            "total": 15,
+            "uniform": {
+              "total": 15,
+              "hitAt1": 20,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 73.33333333333333,
+              "mrr": 0.44285714285714284
+            },
+            "tunedCombined": {
+              "total": 15,
+              "hitAt1": 20,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 73.33333333333333,
+              "mrr": 0.44285714285714284
+            },
+            "kpidUniform": {
+              "applicable": 11,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 8
+            },
+            "kpidTunedCombined": {
+              "applicable": 11,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 8
+            },
+            "supportCoverageUniform": {
+              "applicable": 8,
+              "docHitAt1Total": 3,
+              "docHitAt5Total": 6,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 8,
+              "docHitAt1Total": 3,
+              "docHitAt5Total": 6,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          },
+          "standard": {
+            "total": 12,
+            "uniform": {
+              "total": 12,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 83.33333333333334,
+              "hitAt5": 100,
+              "mrr": 0.6069444444444444
+            },
+            "tunedCombined": {
+              "total": 12,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 83.33333333333334,
+              "hitAt5": 100,
+              "mrr": 0.6069444444444444
+            },
+            "kpidUniform": {
+              "applicable": 8,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 4,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 8
+            },
+            "kpidTunedCombined": {
+              "applicable": 8,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 4,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 8
+            },
+            "supportCoverageUniform": {
+              "applicable": 7,
+              "docHitAt1Total": 4,
+              "docHitAt5Total": 7,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 7,
+              "docHitAt1Total": 4,
+              "docHitAt5Total": 7,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "label": "KP",
+      "allowedTypes": [
+        "KP"
+      ],
+      "metadataCount": 3359,
+      "metadataTypeCounts": {
+        "Q": 0,
+        "KP": 3359,
+        "OT": 0
+      },
+      "uniform": {
+        "weights": {
+          "Q": 0,
+          "KP": 1,
+          "OT": 0
+        },
+        "combined": {
+          "total": 30,
+          "hitAt1": 23.333333333333332,
+          "hitAt3": 56.666666666666664,
+          "hitAt5": 66.66666666666666,
+          "mrr": 0.4163888888888889
+        },
+        "kpidCombined": {
+          "applicable": 21,
+          "hitAt1": 23.809523809523807,
+          "hitAt3": 38.095238095238095,
+          "hitAt5": 42.857142857142854,
+          "mrr": 0.3178210678210678,
+          "docHitAt1Total": 6,
+          "docHitAt1CorrectKpid": 5,
+          "docHitAt1WrongKpid": 1,
+          "docHitAt5Total": 14,
+          "docHitAt5CorrectKpid": 9,
+          "docHitAt5WrongKpid": 5
+        },
+        "supportCoverageCombined": {
+          "applicable": 15,
+          "docHitAt1Total": 4,
+          "docHitAt5Total": 9,
+          "docHitAt1FullCoverAt3": 13.333333333333334,
+          "docHitAt1FullCoverAt5": 20,
+          "docHitAt5FullCoverAt5": 40,
+          "partialCoverAt5": 60,
+          "avgCoveredGroupsAt5": 1.1333333333333333,
+          "avgCoverageRatioAt5": 0.5166666666666667
+        },
+        "metricsByDataset": {
+          "test_dataset_granularity_hard_ood_v2_diag_top30": {
+            "total": 30,
+            "hitAt1": 23.333333333333332,
+            "hitAt3": 56.666666666666664,
+            "hitAt5": 66.66666666666666,
+            "mrr": 0.4163888888888889
+          }
+        }
+      },
+      "tuned": {
+        "selectionMode": "single_frozen_set",
+        "candidateCount": 1,
+        "bestWeights": {
+          "Q": 0,
+          "KP": 1,
+          "OT": 0
+        },
+        "tuneCombined": {
+          "total": 30,
+          "hitAt1": 23.333333333333332,
+          "hitAt3": 56.666666666666664,
+          "hitAt5": 66.66666666666666,
+          "mrr": 0.4163888888888889
+        },
+        "kpidTuneCombined": {
+          "applicable": 21,
+          "hitAt1": 23.809523809523807,
+          "hitAt3": 38.095238095238095,
+          "hitAt5": 42.857142857142854,
+          "mrr": 0.3178210678210678,
+          "docHitAt1Total": 6,
+          "docHitAt1CorrectKpid": 5,
+          "docHitAt1WrongKpid": 1,
+          "docHitAt5Total": 14,
+          "docHitAt5CorrectKpid": 9,
+          "docHitAt5WrongKpid": 5
+        },
+        "supportCoverageTuneCombined": {
+          "applicable": 15,
+          "docHitAt1Total": 4,
+          "docHitAt5Total": 9,
+          "docHitAt1FullCoverAt3": 13.333333333333334,
+          "docHitAt1FullCoverAt5": 20,
+          "docHitAt5FullCoverAt5": 40,
+          "partialCoverAt5": 60,
+          "avgCoveredGroupsAt5": 1.1333333333333333,
+          "avgCoverageRatioAt5": 0.5166666666666667
+        },
+        "holdoutCombined": {
+          "total": 30,
+          "hitAt1": 23.333333333333332,
+          "hitAt3": 56.666666666666664,
+          "hitAt5": 66.66666666666666,
+          "mrr": 0.4163888888888889
+        },
+        "kpidHoldoutCombined": {
+          "applicable": 21,
+          "hitAt1": 23.809523809523807,
+          "hitAt3": 38.095238095238095,
+          "hitAt5": 42.857142857142854,
+          "mrr": 0.3178210678210678,
+          "docHitAt1Total": 6,
+          "docHitAt1CorrectKpid": 5,
+          "docHitAt1WrongKpid": 1,
+          "docHitAt5Total": 14,
+          "docHitAt5CorrectKpid": 9,
+          "docHitAt5WrongKpid": 5
+        },
+        "supportCoverageHoldoutCombined": {
+          "applicable": 15,
+          "docHitAt1Total": 4,
+          "docHitAt5Total": 9,
+          "docHitAt1FullCoverAt3": 13.333333333333334,
+          "docHitAt1FullCoverAt5": 20,
+          "docHitAt5FullCoverAt5": 40,
+          "partialCoverAt5": 60,
+          "avgCoveredGroupsAt5": 1.1333333333333333,
+          "avgCoverageRatioAt5": 0.5166666666666667
+        },
+        "combinedCombined": {
+          "total": 30,
+          "hitAt1": 23.333333333333332,
+          "hitAt3": 56.666666666666664,
+          "hitAt5": 66.66666666666666,
+          "mrr": 0.4163888888888889
+        },
+        "kpidCombinedCombined": {
+          "applicable": 21,
+          "hitAt1": 23.809523809523807,
+          "hitAt3": 38.095238095238095,
+          "hitAt5": 42.857142857142854,
+          "mrr": 0.3178210678210678,
+          "docHitAt1Total": 6,
+          "docHitAt1CorrectKpid": 5,
+          "docHitAt1WrongKpid": 1,
+          "docHitAt5Total": 14,
+          "docHitAt5CorrectKpid": 9,
+          "docHitAt5WrongKpid": 5
+        },
+        "supportCoverageCombinedCombined": {
+          "applicable": 15,
+          "docHitAt1Total": 4,
+          "docHitAt5Total": 9,
+          "docHitAt1FullCoverAt3": 13.333333333333334,
+          "docHitAt1FullCoverAt5": 20,
+          "docHitAt5FullCoverAt5": 40,
+          "partialCoverAt5": 60,
+          "avgCoveredGroupsAt5": 1.1333333333333333,
+          "avgCoverageRatioAt5": 0.5166666666666667
+        },
+        "topTuneCandidates": [
+          {
+            "weights": {
+              "Q": 0,
+              "KP": 1,
+              "OT": 0
+            },
+            "combined": {
+              "total": 30,
+              "hitAt1": 23.333333333333332,
+              "hitAt3": 56.666666666666664,
+              "hitAt5": 66.66666666666666,
+              "mrr": 0.4163888888888889
+            }
+          }
+        ]
+      },
+      "groupBreakdowns": {
+        "supportPattern": {
+          "multi_kp": {
+            "total": 15,
+            "uniform": {
+              "total": 15,
+              "hitAt1": 26.666666666666668,
+              "hitAt3": 53.333333333333336,
+              "hitAt5": 60,
+              "mrr": 0.41777777777777775
+            },
+            "tunedCombined": {
+              "total": 15,
+              "hitAt1": 26.666666666666668,
+              "hitAt3": 53.333333333333336,
+              "hitAt5": 60,
+              "mrr": 0.41777777777777775
+            },
+            "kpidUniform": {
+              "applicable": 15,
+              "hitAt1": 20,
+              "hitAt3": 40,
+              "hitAt5": 40,
+              "mrr": 0.2949494949494949,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 3,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 9,
+              "docHitAt5CorrectKpid": 6,
+              "docHitAt5WrongKpid": 3
+            },
+            "kpidTunedCombined": {
+              "applicable": 15,
+              "hitAt1": 20,
+              "hitAt3": 40,
+              "hitAt5": 40,
+              "mrr": 0.2949494949494949,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 3,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 9,
+              "docHitAt5CorrectKpid": 6,
+              "docHitAt5WrongKpid": 3
+            },
+            "supportCoverageUniform": {
+              "applicable": 15,
+              "docHitAt1Total": 4,
+              "docHitAt5Total": 9,
+              "docHitAt1FullCoverAt3": 13.333333333333334,
+              "docHitAt1FullCoverAt5": 20,
+              "docHitAt5FullCoverAt5": 40,
+              "partialCoverAt5": 60,
+              "avgCoveredGroupsAt5": 1.1333333333333333,
+              "avgCoverageRatioAt5": 0.5166666666666667
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 15,
+              "docHitAt1Total": 4,
+              "docHitAt5Total": 9,
+              "docHitAt1FullCoverAt3": 13.333333333333334,
+              "docHitAt1FullCoverAt5": 20,
+              "docHitAt5FullCoverAt5": 40,
+              "partialCoverAt5": 60,
+              "avgCoveredGroupsAt5": 1.1333333333333333,
+              "avgCoverageRatioAt5": 0.5166666666666667
+            }
+          },
+          "ot_required": {
+            "total": 9,
+            "uniform": {
+              "total": 9,
+              "hitAt1": 11.11111111111111,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 66.66666666666666,
+              "mrr": 0.3638888888888889
+            },
+            "tunedCombined": {
+              "total": 9,
+              "hitAt1": 11.11111111111111,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 66.66666666666666,
+              "mrr": 0.3638888888888889
+            },
+            "kpidUniform": {
+              "applicable": 0,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 0,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 0
+            },
+            "kpidTunedCombined": {
+              "applicable": 0,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 0,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 0
+            },
+            "supportCoverageUniform": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          },
+          "single_kp": {
+            "total": 6,
+            "uniform": {
+              "total": 6,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 50,
+              "hitAt5": 83.33333333333334,
+              "mrr": 0.4916666666666667
+            },
+            "tunedCombined": {
+              "total": 6,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 50,
+              "hitAt5": 83.33333333333334,
+              "mrr": 0.4916666666666667
+            },
+            "kpidUniform": {
+              "applicable": 6,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 33.33333333333333,
+              "hitAt5": 50,
+              "mrr": 0.375,
+              "docHitAt1Total": 2,
+              "docHitAt1CorrectKpid": 2,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 5,
+              "docHitAt5CorrectKpid": 3,
+              "docHitAt5WrongKpid": 2
+            },
+            "kpidTunedCombined": {
+              "applicable": 6,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 33.33333333333333,
+              "hitAt5": 50,
+              "mrr": 0.375,
+              "docHitAt1Total": 2,
+              "docHitAt1CorrectKpid": 2,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 5,
+              "docHitAt5CorrectKpid": 3,
+              "docHitAt5WrongKpid": 2
+            },
+            "supportCoverageUniform": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          }
+        },
+        "preferredGranularity": {
+          "KP": {
+            "total": 7,
+            "uniform": {
+              "total": 7,
+              "hitAt1": 42.857142857142854,
+              "hitAt3": 57.14285714285714,
+              "hitAt5": 85.71428571428571,
+              "mrr": 0.5642857142857143
+            },
+            "tunedCombined": {
+              "total": 7,
+              "hitAt1": 42.857142857142854,
+              "hitAt3": 57.14285714285714,
+              "hitAt5": 85.71428571428571,
+              "mrr": 0.5642857142857143
+            },
+            "kpidUniform": {
+              "applicable": 7,
+              "hitAt1": 28.57142857142857,
+              "hitAt3": 28.57142857142857,
+              "hitAt5": 42.857142857142854,
+              "mrr": 0.32142857142857145,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 2,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 6,
+              "docHitAt5CorrectKpid": 3,
+              "docHitAt5WrongKpid": 3
+            },
+            "kpidTunedCombined": {
+              "applicable": 7,
+              "hitAt1": 28.57142857142857,
+              "hitAt3": 28.57142857142857,
+              "hitAt5": 42.857142857142854,
+              "mrr": 0.32142857142857145,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 2,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 6,
+              "docHitAt5CorrectKpid": 3,
+              "docHitAt5WrongKpid": 3
+            },
+            "supportCoverageUniform": {
+              "applicable": 1,
+              "docHitAt1Total": 1,
+              "docHitAt5Total": 1,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 100,
+              "avgCoveredGroupsAt5": 1,
+              "avgCoverageRatioAt5": 0.5
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 1,
+              "docHitAt1Total": 1,
+              "docHitAt5Total": 1,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 100,
+              "avgCoveredGroupsAt5": 1,
+              "avgCoverageRatioAt5": 0.5
+            }
+          },
+          "KP+OT": {
+            "total": 13,
+            "uniform": {
+              "total": 13,
+              "hitAt1": 23.076923076923077,
+              "hitAt3": 53.84615384615385,
+              "hitAt5": 61.53846153846154,
+              "mrr": 0.39871794871794874
+            },
+            "tunedCombined": {
+              "total": 13,
+              "hitAt1": 23.076923076923077,
+              "hitAt3": 53.84615384615385,
+              "hitAt5": 61.53846153846154,
+              "mrr": 0.39871794871794874
+            },
+            "kpidUniform": {
+              "applicable": 13,
+              "hitAt1": 23.076923076923077,
+              "hitAt3": 46.15384615384615,
+              "hitAt5": 46.15384615384615,
+              "mrr": 0.3403263403263403,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 3,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 6,
+              "docHitAt5WrongKpid": 2
+            },
+            "kpidTunedCombined": {
+              "applicable": 13,
+              "hitAt1": 23.076923076923077,
+              "hitAt3": 46.15384615384615,
+              "hitAt5": 46.15384615384615,
+              "mrr": 0.3403263403263403,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 3,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 6,
+              "docHitAt5WrongKpid": 2
+            },
+            "supportCoverageUniform": {
+              "applicable": 13,
+              "docHitAt1Total": 3,
+              "docHitAt5Total": 8,
+              "docHitAt1FullCoverAt3": 15.384615384615385,
+              "docHitAt1FullCoverAt5": 23.076923076923077,
+              "docHitAt5FullCoverAt5": 46.15384615384615,
+              "partialCoverAt5": 61.53846153846154,
+              "avgCoveredGroupsAt5": 1.2307692307692308,
+              "avgCoverageRatioAt5": 0.5576923076923077
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 13,
+              "docHitAt1Total": 3,
+              "docHitAt5Total": 8,
+              "docHitAt1FullCoverAt3": 15.384615384615385,
+              "docHitAt1FullCoverAt5": 23.076923076923077,
+              "docHitAt5FullCoverAt5": 46.15384615384615,
+              "partialCoverAt5": 61.53846153846154,
+              "avgCoveredGroupsAt5": 1.2307692307692308,
+              "avgCoverageRatioAt5": 0.5576923076923077
+            }
+          },
+          "OT": {
+            "total": 9,
+            "uniform": {
+              "total": 9,
+              "hitAt1": 11.11111111111111,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 66.66666666666666,
+              "mrr": 0.3638888888888889
+            },
+            "tunedCombined": {
+              "total": 9,
+              "hitAt1": 11.11111111111111,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 66.66666666666666,
+              "mrr": 0.3638888888888889
+            },
+            "kpidUniform": {
+              "applicable": 0,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 0,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 0
+            },
+            "kpidTunedCombined": {
+              "applicable": 0,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 0,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 0
+            },
+            "supportCoverageUniform": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          },
+          "Q+KP": {
+            "total": 1,
+            "uniform": {
+              "total": 1,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0.08333333333333333
+            },
+            "tunedCombined": {
+              "total": 1,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0.08333333333333333
+            },
+            "kpidUniform": {
+              "applicable": 1,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 0,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 0
+            },
+            "kpidTunedCombined": {
+              "applicable": 1,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 0,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 0
+            },
+            "supportCoverageUniform": {
+              "applicable": 1,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 1,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          }
+        },
+        "queryType": {
+          "short_keyword": {
+            "total": 3,
+            "uniform": {
+              "total": 3,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 0.611111111111111
+            },
+            "tunedCombined": {
+              "total": 3,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 0.611111111111111
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 1
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 1
+            },
+            "supportCoverageUniform": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          },
+          "situational": {
+            "total": 15,
+            "uniform": {
+              "total": 15,
+              "hitAt1": 13.333333333333334,
+              "hitAt3": 53.333333333333336,
+              "hitAt5": 66.66666666666666,
+              "mrr": 0.35611111111111104
+            },
+            "tunedCombined": {
+              "total": 15,
+              "hitAt1": 13.333333333333334,
+              "hitAt3": 53.333333333333336,
+              "hitAt5": 66.66666666666666,
+              "mrr": 0.35611111111111104
+            },
+            "kpidUniform": {
+              "applicable": 11,
+              "hitAt1": 18.181818181818183,
+              "hitAt3": 45.45454545454545,
+              "hitAt5": 54.54545454545454,
+              "mrr": 0.33402203856749313,
+              "docHitAt1Total": 2,
+              "docHitAt1CorrectKpid": 2,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 7,
+              "docHitAt5CorrectKpid": 6,
+              "docHitAt5WrongKpid": 1
+            },
+            "kpidTunedCombined": {
+              "applicable": 11,
+              "hitAt1": 18.181818181818183,
+              "hitAt3": 45.45454545454545,
+              "hitAt5": 54.54545454545454,
+              "mrr": 0.33402203856749313,
+              "docHitAt1Total": 2,
+              "docHitAt1CorrectKpid": 2,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 7,
+              "docHitAt5CorrectKpid": 6,
+              "docHitAt5WrongKpid": 1
+            },
+            "supportCoverageUniform": {
+              "applicable": 8,
+              "docHitAt1Total": 2,
+              "docHitAt5Total": 5,
+              "docHitAt1FullCoverAt3": 25,
+              "docHitAt1FullCoverAt5": 25,
+              "docHitAt5FullCoverAt5": 50,
+              "partialCoverAt5": 62.5,
+              "avgCoveredGroupsAt5": 1.375,
+              "avgCoverageRatioAt5": 0.59375
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 8,
+              "docHitAt1Total": 2,
+              "docHitAt5Total": 5,
+              "docHitAt1FullCoverAt3": 25,
+              "docHitAt1FullCoverAt5": 25,
+              "docHitAt5FullCoverAt5": 50,
+              "partialCoverAt5": 62.5,
+              "avgCoveredGroupsAt5": 1.375,
+              "avgCoverageRatioAt5": 0.59375
+            }
+          },
+          "standard": {
+            "total": 12,
+            "uniform": {
+              "total": 12,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 50,
+              "hitAt5": 58.333333333333336,
+              "mrr": 0.44305555555555554
+            },
+            "tunedCombined": {
+              "total": 12,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 50,
+              "hitAt5": 58.333333333333336,
+              "mrr": 0.44305555555555554
+            },
+            "kpidUniform": {
+              "applicable": 8,
+              "hitAt1": 25,
+              "hitAt3": 25,
+              "hitAt5": 25,
+              "mrr": 0.25,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 2,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 5,
+              "docHitAt5CorrectKpid": 2,
+              "docHitAt5WrongKpid": 3
+            },
+            "kpidTunedCombined": {
+              "applicable": 8,
+              "hitAt1": 25,
+              "hitAt3": 25,
+              "hitAt5": 25,
+              "mrr": 0.25,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 2,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 5,
+              "docHitAt5CorrectKpid": 2,
+              "docHitAt5WrongKpid": 3
+            },
+            "supportCoverageUniform": {
+              "applicable": 7,
+              "docHitAt1Total": 2,
+              "docHitAt5Total": 4,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 14.285714285714285,
+              "docHitAt5FullCoverAt5": 28.57142857142857,
+              "partialCoverAt5": 57.14285714285714,
+              "avgCoveredGroupsAt5": 0.8571428571428571,
+              "avgCoverageRatioAt5": 0.42857142857142855
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 7,
+              "docHitAt1Total": 2,
+              "docHitAt5Total": 4,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 14.285714285714285,
+              "docHitAt5FullCoverAt5": 28.57142857142857,
+              "partialCoverAt5": 57.14285714285714,
+              "avgCoveredGroupsAt5": 0.8571428571428571,
+              "avgCoverageRatioAt5": 0.42857142857142855
+            }
+          }
+        }
+      }
+    },
+    {
+      "label": "OT",
+      "allowedTypes": [
+        "OT"
+      ],
+      "metadataCount": 605,
+      "metadataTypeCounts": {
+        "Q": 0,
+        "KP": 0,
+        "OT": 605
+      },
+      "uniform": {
+        "weights": {
+          "Q": 0,
+          "KP": 0,
+          "OT": 1
+        },
+        "combined": {
+          "total": 30,
+          "hitAt1": 36.666666666666664,
+          "hitAt3": 66.66666666666666,
+          "hitAt5": 76.66666666666667,
+          "mrr": 0.5258974358974359
+        },
+        "kpidCombined": {
+          "applicable": 21,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 8,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 8,
+          "docHitAt5Total": 15,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 15
+        },
+        "supportCoverageCombined": {
+          "applicable": 15,
+          "docHitAt1Total": 5,
+          "docHitAt5Total": 11,
+          "docHitAt1FullCoverAt3": 0,
+          "docHitAt1FullCoverAt5": 0,
+          "docHitAt5FullCoverAt5": 0,
+          "partialCoverAt5": 0,
+          "avgCoveredGroupsAt5": 0,
+          "avgCoverageRatioAt5": 0
+        },
+        "metricsByDataset": {
+          "test_dataset_granularity_hard_ood_v2_diag_top30": {
+            "total": 30,
+            "hitAt1": 36.666666666666664,
+            "hitAt3": 66.66666666666666,
+            "hitAt5": 76.66666666666667,
+            "mrr": 0.5258974358974359
+          }
+        }
+      },
+      "tuned": {
+        "selectionMode": "single_frozen_set",
+        "candidateCount": 1,
+        "bestWeights": {
+          "Q": 0,
+          "KP": 0,
+          "OT": 1
+        },
+        "tuneCombined": {
+          "total": 30,
+          "hitAt1": 36.666666666666664,
+          "hitAt3": 66.66666666666666,
+          "hitAt5": 76.66666666666667,
+          "mrr": 0.5258974358974359
+        },
+        "kpidTuneCombined": {
+          "applicable": 21,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 8,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 8,
+          "docHitAt5Total": 15,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 15
+        },
+        "supportCoverageTuneCombined": {
+          "applicable": 15,
+          "docHitAt1Total": 5,
+          "docHitAt5Total": 11,
+          "docHitAt1FullCoverAt3": 0,
+          "docHitAt1FullCoverAt5": 0,
+          "docHitAt5FullCoverAt5": 0,
+          "partialCoverAt5": 0,
+          "avgCoveredGroupsAt5": 0,
+          "avgCoverageRatioAt5": 0
+        },
+        "holdoutCombined": {
+          "total": 30,
+          "hitAt1": 36.666666666666664,
+          "hitAt3": 66.66666666666666,
+          "hitAt5": 76.66666666666667,
+          "mrr": 0.5258974358974359
+        },
+        "kpidHoldoutCombined": {
+          "applicable": 21,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 8,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 8,
+          "docHitAt5Total": 15,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 15
+        },
+        "supportCoverageHoldoutCombined": {
+          "applicable": 15,
+          "docHitAt1Total": 5,
+          "docHitAt5Total": 11,
+          "docHitAt1FullCoverAt3": 0,
+          "docHitAt1FullCoverAt5": 0,
+          "docHitAt5FullCoverAt5": 0,
+          "partialCoverAt5": 0,
+          "avgCoveredGroupsAt5": 0,
+          "avgCoverageRatioAt5": 0
+        },
+        "combinedCombined": {
+          "total": 30,
+          "hitAt1": 36.666666666666664,
+          "hitAt3": 66.66666666666666,
+          "hitAt5": 76.66666666666667,
+          "mrr": 0.5258974358974359
+        },
+        "kpidCombinedCombined": {
+          "applicable": 21,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 8,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 8,
+          "docHitAt5Total": 15,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 15
+        },
+        "supportCoverageCombinedCombined": {
+          "applicable": 15,
+          "docHitAt1Total": 5,
+          "docHitAt5Total": 11,
+          "docHitAt1FullCoverAt3": 0,
+          "docHitAt1FullCoverAt5": 0,
+          "docHitAt5FullCoverAt5": 0,
+          "partialCoverAt5": 0,
+          "avgCoveredGroupsAt5": 0,
+          "avgCoverageRatioAt5": 0
+        },
+        "topTuneCandidates": [
+          {
+            "weights": {
+              "Q": 0,
+              "KP": 0,
+              "OT": 1
+            },
+            "combined": {
+              "total": 30,
+              "hitAt1": 36.666666666666664,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 76.66666666666667,
+              "mrr": 0.5258974358974359
+            }
+          }
+        ]
+      },
+      "groupBreakdowns": {
+        "supportPattern": {
+          "multi_kp": {
+            "total": 15,
+            "uniform": {
+              "total": 15,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 60,
+              "hitAt5": 73.33333333333333,
+              "mrr": 0.47777777777777775
+            },
+            "tunedCombined": {
+              "total": 15,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 60,
+              "hitAt5": 73.33333333333333,
+              "mrr": 0.47777777777777775
+            },
+            "kpidUniform": {
+              "applicable": 15,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 5,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 5,
+              "docHitAt5Total": 11,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 11
+            },
+            "kpidTunedCombined": {
+              "applicable": 15,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 5,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 5,
+              "docHitAt5Total": 11,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 11
+            },
+            "supportCoverageUniform": {
+              "applicable": 15,
+              "docHitAt1Total": 5,
+              "docHitAt5Total": 11,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 15,
+              "docHitAt1Total": 5,
+              "docHitAt5Total": 11,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          },
+          "ot_required": {
+            "total": 9,
+            "uniform": {
+              "total": 9,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 77.77777777777779,
+              "hitAt5": 88.88888888888889,
+              "mrr": 0.5678062678062679
+            },
+            "tunedCombined": {
+              "total": 9,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 77.77777777777779,
+              "hitAt5": 88.88888888888889,
+              "mrr": 0.5678062678062679
+            },
+            "kpidUniform": {
+              "applicable": 0,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 0,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 0
+            },
+            "kpidTunedCombined": {
+              "applicable": 0,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 0,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 0
+            },
+            "supportCoverageUniform": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          },
+          "single_kp": {
+            "total": 6,
+            "uniform": {
+              "total": 6,
+              "hitAt1": 50,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 66.66666666666666,
+              "mrr": 0.5833333333333334
+            },
+            "tunedCombined": {
+              "total": 6,
+              "hitAt1": 50,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 66.66666666666666,
+              "mrr": 0.5833333333333334
+            },
+            "kpidUniform": {
+              "applicable": 6,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 4,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 4
+            },
+            "kpidTunedCombined": {
+              "applicable": 6,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 4,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 4
+            },
+            "supportCoverageUniform": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          }
+        },
+        "preferredGranularity": {
+          "KP": {
+            "total": 7,
+            "uniform": {
+              "total": 7,
+              "hitAt1": 57.14285714285714,
+              "hitAt3": 71.42857142857143,
+              "hitAt5": 71.42857142857143,
+              "mrr": 0.6428571428571429
+            },
+            "tunedCombined": {
+              "total": 7,
+              "hitAt1": 57.14285714285714,
+              "hitAt3": 71.42857142857143,
+              "hitAt5": 71.42857142857143,
+              "mrr": 0.6428571428571429
+            },
+            "kpidUniform": {
+              "applicable": 7,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 4,
+              "docHitAt5Total": 5,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 5
+            },
+            "kpidTunedCombined": {
+              "applicable": 7,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 4,
+              "docHitAt5Total": 5,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 5
+            },
+            "supportCoverageUniform": {
+              "applicable": 1,
+              "docHitAt1Total": 1,
+              "docHitAt5Total": 1,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 1,
+              "docHitAt1Total": 1,
+              "docHitAt5Total": 1,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          },
+          "KP+OT": {
+            "total": 13,
+            "uniform": {
+              "total": 13,
+              "hitAt1": 23.076923076923077,
+              "hitAt3": 53.84615384615385,
+              "hitAt5": 69.23076923076923,
+              "mrr": 0.3974358974358974
+            },
+            "tunedCombined": {
+              "total": 13,
+              "hitAt1": 23.076923076923077,
+              "hitAt3": 53.84615384615385,
+              "hitAt5": 69.23076923076923,
+              "mrr": 0.3974358974358974
+            },
+            "kpidUniform": {
+              "applicable": 13,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 9,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 9
+            },
+            "kpidTunedCombined": {
+              "applicable": 13,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 9,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 9
+            },
+            "supportCoverageUniform": {
+              "applicable": 13,
+              "docHitAt1Total": 3,
+              "docHitAt5Total": 9,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 13,
+              "docHitAt1Total": 3,
+              "docHitAt5Total": 9,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          },
+          "OT": {
+            "total": 9,
+            "uniform": {
+              "total": 9,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 77.77777777777779,
+              "hitAt5": 88.88888888888889,
+              "mrr": 0.5678062678062679
+            },
+            "tunedCombined": {
+              "total": 9,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 77.77777777777779,
+              "hitAt5": 88.88888888888889,
+              "mrr": 0.5678062678062679
+            },
+            "kpidUniform": {
+              "applicable": 0,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 0,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 0
+            },
+            "kpidTunedCombined": {
+              "applicable": 0,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 0,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 0
+            },
+            "supportCoverageUniform": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          },
+          "Q+KP": {
+            "total": 1,
+            "uniform": {
+              "total": 1,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "tunedCombined": {
+              "total": 1,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "kpidUniform": {
+              "applicable": 1,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 1
+            },
+            "kpidTunedCombined": {
+              "applicable": 1,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 1
+            },
+            "supportCoverageUniform": {
+              "applicable": 1,
+              "docHitAt1Total": 1,
+              "docHitAt5Total": 1,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 1,
+              "docHitAt1Total": 1,
+              "docHitAt5Total": 1,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          }
+        },
+        "queryType": {
+          "short_keyword": {
+            "total": 3,
+            "uniform": {
+              "total": 3,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "tunedCombined": {
+              "total": 3,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 2,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 2
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 2,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 2
+            },
+            "supportCoverageUniform": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          },
+          "situational": {
+            "total": 15,
+            "uniform": {
+              "total": 15,
+              "hitAt1": 26.666666666666668,
+              "hitAt3": 60,
+              "hitAt5": 80,
+              "mrr": 0.45777777777777773
+            },
+            "tunedCombined": {
+              "total": 15,
+              "hitAt1": 26.666666666666668,
+              "hitAt3": 60,
+              "hitAt5": 80,
+              "mrr": 0.45777777777777773
+            },
+            "kpidUniform": {
+              "applicable": 11,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 8
+            },
+            "kpidTunedCombined": {
+              "applicable": 11,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 8
+            },
+            "supportCoverageUniform": {
+              "applicable": 8,
+              "docHitAt1Total": 2,
+              "docHitAt5Total": 7,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 8,
+              "docHitAt1Total": 2,
+              "docHitAt5Total": 7,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          },
+          "standard": {
+            "total": 12,
+            "uniform": {
+              "total": 12,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 66.66666666666666,
+              "mrr": 0.49252136752136755
+            },
+            "tunedCombined": {
+              "total": 12,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 66.66666666666666,
+              "mrr": 0.49252136752136755
+            },
+            "kpidUniform": {
+              "applicable": 8,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 5,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 5
+            },
+            "kpidTunedCombined": {
+              "applicable": 8,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 5,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 5
+            },
+            "supportCoverageUniform": {
+              "applicable": 7,
+              "docHitAt1Total": 3,
+              "docHitAt5Total": 4,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 7,
+              "docHitAt1Total": 3,
+              "docHitAt5Total": 4,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "label": "Q+KP",
+      "allowedTypes": [
+        "Q",
+        "KP"
+      ],
+      "metadataCount": 18294,
+      "metadataTypeCounts": {
+        "Q": 14935,
+        "KP": 3359,
+        "OT": 0
+      },
+      "uniform": {
+        "weights": {
+          "Q": 0.5,
+          "KP": 0.5,
+          "OT": 0
+        },
+        "combined": {
+          "total": 30,
+          "hitAt1": 26.666666666666668,
+          "hitAt3": 66.66666666666666,
+          "hitAt5": 86.66666666666667,
+          "mrr": 0.5075396825396825
+        },
+        "kpidCombined": {
+          "applicable": 21,
+          "hitAt1": 9.523809523809524,
+          "hitAt3": 28.57142857142857,
+          "hitAt5": 28.57142857142857,
+          "mrr": 0.1865079365079365,
+          "docHitAt1Total": 8,
+          "docHitAt1CorrectKpid": 2,
+          "docHitAt1WrongKpid": 6,
+          "docHitAt5Total": 18,
+          "docHitAt5CorrectKpid": 6,
+          "docHitAt5WrongKpid": 12
+        },
+        "supportCoverageCombined": {
+          "applicable": 15,
+          "docHitAt1Total": 8,
+          "docHitAt5Total": 13,
+          "docHitAt1FullCoverAt3": 0,
+          "docHitAt1FullCoverAt5": 6.666666666666667,
+          "docHitAt5FullCoverAt5": 26.666666666666668,
+          "partialCoverAt5": 73.33333333333333,
+          "avgCoveredGroupsAt5": 1.0666666666666667,
+          "avgCoverageRatioAt5": 0.49444444444444446
+        },
+        "metricsByDataset": {
+          "test_dataset_granularity_hard_ood_v2_diag_top30": {
+            "total": 30,
+            "hitAt1": 26.666666666666668,
+            "hitAt3": 66.66666666666666,
+            "hitAt5": 86.66666666666667,
+            "mrr": 0.5075396825396825
+          }
+        }
+      },
+      "tuned": {
+        "selectionMode": "single_frozen_set",
+        "candidateCount": 1,
+        "bestWeights": {
+          "Q": 0.5,
+          "KP": 0.5,
+          "OT": 0
+        },
+        "tuneCombined": {
+          "total": 30,
+          "hitAt1": 26.666666666666668,
+          "hitAt3": 66.66666666666666,
+          "hitAt5": 86.66666666666667,
+          "mrr": 0.5075396825396825
+        },
+        "kpidTuneCombined": {
+          "applicable": 21,
+          "hitAt1": 9.523809523809524,
+          "hitAt3": 28.57142857142857,
+          "hitAt5": 28.57142857142857,
+          "mrr": 0.1865079365079365,
+          "docHitAt1Total": 8,
+          "docHitAt1CorrectKpid": 2,
+          "docHitAt1WrongKpid": 6,
+          "docHitAt5Total": 18,
+          "docHitAt5CorrectKpid": 6,
+          "docHitAt5WrongKpid": 12
+        },
+        "supportCoverageTuneCombined": {
+          "applicable": 15,
+          "docHitAt1Total": 8,
+          "docHitAt5Total": 13,
+          "docHitAt1FullCoverAt3": 0,
+          "docHitAt1FullCoverAt5": 6.666666666666667,
+          "docHitAt5FullCoverAt5": 26.666666666666668,
+          "partialCoverAt5": 73.33333333333333,
+          "avgCoveredGroupsAt5": 1.0666666666666667,
+          "avgCoverageRatioAt5": 0.49444444444444446
+        },
+        "holdoutCombined": {
+          "total": 30,
+          "hitAt1": 26.666666666666668,
+          "hitAt3": 66.66666666666666,
+          "hitAt5": 86.66666666666667,
+          "mrr": 0.5075396825396825
+        },
+        "kpidHoldoutCombined": {
+          "applicable": 21,
+          "hitAt1": 9.523809523809524,
+          "hitAt3": 28.57142857142857,
+          "hitAt5": 28.57142857142857,
+          "mrr": 0.1865079365079365,
+          "docHitAt1Total": 8,
+          "docHitAt1CorrectKpid": 2,
+          "docHitAt1WrongKpid": 6,
+          "docHitAt5Total": 18,
+          "docHitAt5CorrectKpid": 6,
+          "docHitAt5WrongKpid": 12
+        },
+        "supportCoverageHoldoutCombined": {
+          "applicable": 15,
+          "docHitAt1Total": 8,
+          "docHitAt5Total": 13,
+          "docHitAt1FullCoverAt3": 0,
+          "docHitAt1FullCoverAt5": 6.666666666666667,
+          "docHitAt5FullCoverAt5": 26.666666666666668,
+          "partialCoverAt5": 73.33333333333333,
+          "avgCoveredGroupsAt5": 1.0666666666666667,
+          "avgCoverageRatioAt5": 0.49444444444444446
+        },
+        "combinedCombined": {
+          "total": 30,
+          "hitAt1": 26.666666666666668,
+          "hitAt3": 66.66666666666666,
+          "hitAt5": 86.66666666666667,
+          "mrr": 0.5075396825396825
+        },
+        "kpidCombinedCombined": {
+          "applicable": 21,
+          "hitAt1": 9.523809523809524,
+          "hitAt3": 28.57142857142857,
+          "hitAt5": 28.57142857142857,
+          "mrr": 0.1865079365079365,
+          "docHitAt1Total": 8,
+          "docHitAt1CorrectKpid": 2,
+          "docHitAt1WrongKpid": 6,
+          "docHitAt5Total": 18,
+          "docHitAt5CorrectKpid": 6,
+          "docHitAt5WrongKpid": 12
+        },
+        "supportCoverageCombinedCombined": {
+          "applicable": 15,
+          "docHitAt1Total": 8,
+          "docHitAt5Total": 13,
+          "docHitAt1FullCoverAt3": 0,
+          "docHitAt1FullCoverAt5": 6.666666666666667,
+          "docHitAt5FullCoverAt5": 26.666666666666668,
+          "partialCoverAt5": 73.33333333333333,
+          "avgCoveredGroupsAt5": 1.0666666666666667,
+          "avgCoverageRatioAt5": 0.49444444444444446
+        },
+        "topTuneCandidates": [
+          {
+            "weights": {
+              "Q": 0.5,
+              "KP": 0.5,
+              "OT": 0
+            },
+            "combined": {
+              "total": 30,
+              "hitAt1": 26.666666666666668,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 86.66666666666667,
+              "mrr": 0.5075396825396825
+            }
+          }
+        ]
+      },
+      "groupBreakdowns": {
+        "supportPattern": {
+          "multi_kp": {
+            "total": 15,
+            "uniform": {
+              "total": 15,
+              "hitAt1": 53.333333333333336,
+              "hitAt3": 73.33333333333333,
+              "hitAt5": 86.66666666666667,
+              "mrr": 0.65
+            },
+            "tunedCombined": {
+              "total": 15,
+              "hitAt1": 53.333333333333336,
+              "hitAt3": 73.33333333333333,
+              "hitAt5": 86.66666666666667,
+              "mrr": 0.65
+            },
+            "kpidUniform": {
+              "applicable": 15,
+              "hitAt1": 13.333333333333334,
+              "hitAt3": 20,
+              "hitAt5": 20,
+              "mrr": 0.1611111111111111,
+              "docHitAt1Total": 8,
+              "docHitAt1CorrectKpid": 2,
+              "docHitAt1WrongKpid": 6,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 3,
+              "docHitAt5WrongKpid": 10
+            },
+            "kpidTunedCombined": {
+              "applicable": 15,
+              "hitAt1": 13.333333333333334,
+              "hitAt3": 20,
+              "hitAt5": 20,
+              "mrr": 0.1611111111111111,
+              "docHitAt1Total": 8,
+              "docHitAt1CorrectKpid": 2,
+              "docHitAt1WrongKpid": 6,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 3,
+              "docHitAt5WrongKpid": 10
+            },
+            "supportCoverageUniform": {
+              "applicable": 15,
+              "docHitAt1Total": 8,
+              "docHitAt5Total": 13,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 6.666666666666667,
+              "docHitAt5FullCoverAt5": 26.666666666666668,
+              "partialCoverAt5": 73.33333333333333,
+              "avgCoveredGroupsAt5": 1.0666666666666667,
+              "avgCoverageRatioAt5": 0.49444444444444446
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 15,
+              "docHitAt1Total": 8,
+              "docHitAt5Total": 13,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 6.666666666666667,
+              "docHitAt5FullCoverAt5": 26.666666666666668,
+              "partialCoverAt5": 73.33333333333333,
+              "avgCoveredGroupsAt5": 1.0666666666666667,
+              "avgCoverageRatioAt5": 0.49444444444444446
+            }
+          },
+          "ot_required": {
+            "total": 9,
+            "uniform": {
+              "total": 9,
+              "hitAt1": 0,
+              "hitAt3": 44.44444444444444,
+              "hitAt5": 88.88888888888889,
+              "mrr": 0.3492063492063492
+            },
+            "tunedCombined": {
+              "total": 9,
+              "hitAt1": 0,
+              "hitAt3": 44.44444444444444,
+              "hitAt5": 88.88888888888889,
+              "mrr": 0.3492063492063492
+            },
+            "kpidUniform": {
+              "applicable": 0,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 0,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 0
+            },
+            "kpidTunedCombined": {
+              "applicable": 0,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 0,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 0
+            },
+            "supportCoverageUniform": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          },
+          "single_kp": {
+            "total": 6,
+            "uniform": {
+              "total": 6,
+              "hitAt1": 0,
+              "hitAt3": 83.33333333333334,
+              "hitAt5": 83.33333333333334,
+              "mrr": 0.38888888888888884
+            },
+            "tunedCombined": {
+              "total": 6,
+              "hitAt1": 0,
+              "hitAt3": 83.33333333333334,
+              "hitAt5": 83.33333333333334,
+              "mrr": 0.38888888888888884
+            },
+            "kpidUniform": {
+              "applicable": 6,
+              "hitAt1": 0,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.25,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 5,
+              "docHitAt5CorrectKpid": 3,
+              "docHitAt5WrongKpid": 2
+            },
+            "kpidTunedCombined": {
+              "applicable": 6,
+              "hitAt1": 0,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.25,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 5,
+              "docHitAt5CorrectKpid": 3,
+              "docHitAt5WrongKpid": 2
+            },
+            "supportCoverageUniform": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          }
+        },
+        "preferredGranularity": {
+          "KP": {
+            "total": 7,
+            "uniform": {
+              "total": 7,
+              "hitAt1": 14.285714285714285,
+              "hitAt3": 85.71428571428571,
+              "hitAt5": 85.71428571428571,
+              "mrr": 0.47619047619047616
+            },
+            "tunedCombined": {
+              "total": 7,
+              "hitAt1": 14.285714285714285,
+              "hitAt3": 85.71428571428571,
+              "hitAt5": 85.71428571428571,
+              "mrr": 0.47619047619047616
+            },
+            "kpidUniform": {
+              "applicable": 7,
+              "hitAt1": 0,
+              "hitAt3": 42.857142857142854,
+              "hitAt5": 42.857142857142854,
+              "mrr": 0.21428571428571427,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 6,
+              "docHitAt5CorrectKpid": 3,
+              "docHitAt5WrongKpid": 3
+            },
+            "kpidTunedCombined": {
+              "applicable": 7,
+              "hitAt1": 0,
+              "hitAt3": 42.857142857142854,
+              "hitAt5": 42.857142857142854,
+              "mrr": 0.21428571428571427,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 6,
+              "docHitAt5CorrectKpid": 3,
+              "docHitAt5WrongKpid": 3
+            },
+            "supportCoverageUniform": {
+              "applicable": 1,
+              "docHitAt1Total": 1,
+              "docHitAt5Total": 1,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 100,
+              "avgCoveredGroupsAt5": 1,
+              "avgCoverageRatioAt5": 0.5
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 1,
+              "docHitAt1Total": 1,
+              "docHitAt5Total": 1,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 100,
+              "avgCoveredGroupsAt5": 1,
+              "avgCoverageRatioAt5": 0.5
+            }
+          },
+          "KP+OT": {
+            "total": 13,
+            "uniform": {
+              "total": 13,
+              "hitAt1": 46.15384615384615,
+              "hitAt3": 69.23076923076923,
+              "hitAt5": 84.61538461538461,
+              "mrr": 0.5961538461538461
+            },
+            "tunedCombined": {
+              "total": 13,
+              "hitAt1": 46.15384615384615,
+              "hitAt3": 69.23076923076923,
+              "hitAt5": 84.61538461538461,
+              "mrr": 0.5961538461538461
+            },
+            "kpidUniform": {
+              "applicable": 13,
+              "hitAt1": 15.384615384615385,
+              "hitAt3": 23.076923076923077,
+              "hitAt5": 23.076923076923077,
+              "mrr": 0.18589743589743588,
+              "docHitAt1Total": 6,
+              "docHitAt1CorrectKpid": 2,
+              "docHitAt1WrongKpid": 4,
+              "docHitAt5Total": 11,
+              "docHitAt5CorrectKpid": 3,
+              "docHitAt5WrongKpid": 8
+            },
+            "kpidTunedCombined": {
+              "applicable": 13,
+              "hitAt1": 15.384615384615385,
+              "hitAt3": 23.076923076923077,
+              "hitAt5": 23.076923076923077,
+              "mrr": 0.18589743589743588,
+              "docHitAt1Total": 6,
+              "docHitAt1CorrectKpid": 2,
+              "docHitAt1WrongKpid": 4,
+              "docHitAt5Total": 11,
+              "docHitAt5CorrectKpid": 3,
+              "docHitAt5WrongKpid": 8
+            },
+            "supportCoverageUniform": {
+              "applicable": 13,
+              "docHitAt1Total": 6,
+              "docHitAt5Total": 11,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 7.6923076923076925,
+              "docHitAt5FullCoverAt5": 30.76923076923077,
+              "partialCoverAt5": 76.92307692307693,
+              "avgCoveredGroupsAt5": 1.1538461538461537,
+              "avgCoverageRatioAt5": 0.532051282051282
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 13,
+              "docHitAt1Total": 6,
+              "docHitAt5Total": 11,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 7.6923076923076925,
+              "docHitAt5FullCoverAt5": 30.76923076923077,
+              "partialCoverAt5": 76.92307692307693,
+              "avgCoveredGroupsAt5": 1.1538461538461537,
+              "avgCoverageRatioAt5": 0.532051282051282
+            }
+          },
+          "OT": {
+            "total": 9,
+            "uniform": {
+              "total": 9,
+              "hitAt1": 0,
+              "hitAt3": 44.44444444444444,
+              "hitAt5": 88.88888888888889,
+              "mrr": 0.3492063492063492
+            },
+            "tunedCombined": {
+              "total": 9,
+              "hitAt1": 0,
+              "hitAt3": 44.44444444444444,
+              "hitAt5": 88.88888888888889,
+              "mrr": 0.3492063492063492
+            },
+            "kpidUniform": {
+              "applicable": 0,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 0,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 0
+            },
+            "kpidTunedCombined": {
+              "applicable": 0,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 0,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 0
+            },
+            "supportCoverageUniform": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          },
+          "Q+KP": {
+            "total": 1,
+            "uniform": {
+              "total": 1,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "tunedCombined": {
+              "total": 1,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "kpidUniform": {
+              "applicable": 1,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 1
+            },
+            "kpidTunedCombined": {
+              "applicable": 1,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 1
+            },
+            "supportCoverageUniform": {
+              "applicable": 1,
+              "docHitAt1Total": 1,
+              "docHitAt5Total": 1,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 1,
+              "docHitAt1Total": 1,
+              "docHitAt5Total": 1,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          }
+        },
+        "queryType": {
+          "short_keyword": {
+            "total": 3,
+            "uniform": {
+              "total": 3,
+              "hitAt1": 0,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 100,
+              "mrr": 0.4166666666666667
+            },
+            "tunedCombined": {
+              "total": 3,
+              "hitAt1": 0,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 100,
+              "mrr": 0.4166666666666667
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.25,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 1
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.25,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 1
+            },
+            "supportCoverageUniform": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          },
+          "situational": {
+            "total": 15,
+            "uniform": {
+              "total": 15,
+              "hitAt1": 26.666666666666668,
+              "hitAt3": 60,
+              "hitAt5": 73.33333333333333,
+              "mrr": 0.4595238095238095
+            },
+            "tunedCombined": {
+              "total": 15,
+              "hitAt1": 26.666666666666668,
+              "hitAt3": 60,
+              "hitAt5": 73.33333333333333,
+              "mrr": 0.4595238095238095
+            },
+            "kpidUniform": {
+              "applicable": 11,
+              "hitAt1": 18.181818181818183,
+              "hitAt3": 36.36363636363637,
+              "hitAt5": 36.36363636363637,
+              "mrr": 0.26515151515151514,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 2,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 4,
+              "docHitAt5WrongKpid": 4
+            },
+            "kpidTunedCombined": {
+              "applicable": 11,
+              "hitAt1": 18.181818181818183,
+              "hitAt3": 36.36363636363637,
+              "hitAt5": 36.36363636363637,
+              "mrr": 0.26515151515151514,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 2,
+              "docHitAt1WrongKpid": 2,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 4,
+              "docHitAt5WrongKpid": 4
+            },
+            "supportCoverageUniform": {
+              "applicable": 8,
+              "docHitAt1Total": 4,
+              "docHitAt5Total": 6,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 12.5,
+              "partialCoverAt5": 62.5,
+              "avgCoveredGroupsAt5": 0.75,
+              "avgCoverageRatioAt5": 0.34375
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 8,
+              "docHitAt1Total": 4,
+              "docHitAt5Total": 6,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 12.5,
+              "partialCoverAt5": 62.5,
+              "avgCoveredGroupsAt5": 0.75,
+              "avgCoverageRatioAt5": 0.34375
+            }
+          },
+          "standard": {
+            "total": 12,
+            "uniform": {
+              "total": 12,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 75,
+              "hitAt5": 100,
+              "mrr": 0.5902777777777778
+            },
+            "tunedCombined": {
+              "total": 12,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 75,
+              "hitAt5": 100,
+              "mrr": 0.5902777777777778
+            },
+            "kpidUniform": {
+              "applicable": 8,
+              "hitAt1": 0,
+              "hitAt3": 12.5,
+              "hitAt5": 12.5,
+              "mrr": 0.0625,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 4,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 7
+            },
+            "kpidTunedCombined": {
+              "applicable": 8,
+              "hitAt1": 0,
+              "hitAt3": 12.5,
+              "hitAt5": 12.5,
+              "mrr": 0.0625,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 4,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 7
+            },
+            "supportCoverageUniform": {
+              "applicable": 7,
+              "docHitAt1Total": 4,
+              "docHitAt5Total": 7,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 14.285714285714285,
+              "docHitAt5FullCoverAt5": 42.857142857142854,
+              "partialCoverAt5": 85.71428571428571,
+              "avgCoveredGroupsAt5": 1.4285714285714286,
+              "avgCoverageRatioAt5": 0.6666666666666666
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 7,
+              "docHitAt1Total": 4,
+              "docHitAt5Total": 7,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 14.285714285714285,
+              "docHitAt5FullCoverAt5": 42.857142857142854,
+              "partialCoverAt5": 85.71428571428571,
+              "avgCoveredGroupsAt5": 1.4285714285714286,
+              "avgCoverageRatioAt5": 0.6666666666666666
+            }
+          }
+        }
+      }
+    },
+    {
+      "label": "Q+OT",
+      "allowedTypes": [
+        "Q",
+        "OT"
+      ],
+      "metadataCount": 15540,
+      "metadataTypeCounts": {
+        "Q": 14935,
+        "KP": 0,
+        "OT": 605
+      },
+      "uniform": {
+        "weights": {
+          "Q": 0.5,
+          "KP": 0,
+          "OT": 0.5
+        },
+        "combined": {
+          "total": 30,
+          "hitAt1": 26.666666666666668,
+          "hitAt3": 76.66666666666667,
+          "hitAt5": 86.66666666666667,
+          "mrr": 0.5197619047619048
+        },
+        "kpidCombined": {
+          "applicable": 21,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 8,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 8,
+          "docHitAt5Total": 18,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 18
+        },
+        "supportCoverageCombined": {
+          "applicable": 15,
+          "docHitAt1Total": 8,
+          "docHitAt5Total": 13,
+          "docHitAt1FullCoverAt3": 0,
+          "docHitAt1FullCoverAt5": 0,
+          "docHitAt5FullCoverAt5": 0,
+          "partialCoverAt5": 0,
+          "avgCoveredGroupsAt5": 0,
+          "avgCoverageRatioAt5": 0
+        },
+        "metricsByDataset": {
+          "test_dataset_granularity_hard_ood_v2_diag_top30": {
+            "total": 30,
+            "hitAt1": 26.666666666666668,
+            "hitAt3": 76.66666666666667,
+            "hitAt5": 86.66666666666667,
+            "mrr": 0.5197619047619048
+          }
+        }
+      },
+      "tuned": {
+        "selectionMode": "single_frozen_set",
+        "candidateCount": 1,
+        "bestWeights": {
+          "Q": 0.5,
+          "KP": 0,
+          "OT": 0.5
+        },
+        "tuneCombined": {
+          "total": 30,
+          "hitAt1": 26.666666666666668,
+          "hitAt3": 76.66666666666667,
+          "hitAt5": 86.66666666666667,
+          "mrr": 0.5197619047619048
+        },
+        "kpidTuneCombined": {
+          "applicable": 21,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 8,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 8,
+          "docHitAt5Total": 18,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 18
+        },
+        "supportCoverageTuneCombined": {
+          "applicable": 15,
+          "docHitAt1Total": 8,
+          "docHitAt5Total": 13,
+          "docHitAt1FullCoverAt3": 0,
+          "docHitAt1FullCoverAt5": 0,
+          "docHitAt5FullCoverAt5": 0,
+          "partialCoverAt5": 0,
+          "avgCoveredGroupsAt5": 0,
+          "avgCoverageRatioAt5": 0
+        },
+        "holdoutCombined": {
+          "total": 30,
+          "hitAt1": 26.666666666666668,
+          "hitAt3": 76.66666666666667,
+          "hitAt5": 86.66666666666667,
+          "mrr": 0.5197619047619048
+        },
+        "kpidHoldoutCombined": {
+          "applicable": 21,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 8,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 8,
+          "docHitAt5Total": 18,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 18
+        },
+        "supportCoverageHoldoutCombined": {
+          "applicable": 15,
+          "docHitAt1Total": 8,
+          "docHitAt5Total": 13,
+          "docHitAt1FullCoverAt3": 0,
+          "docHitAt1FullCoverAt5": 0,
+          "docHitAt5FullCoverAt5": 0,
+          "partialCoverAt5": 0,
+          "avgCoveredGroupsAt5": 0,
+          "avgCoverageRatioAt5": 0
+        },
+        "combinedCombined": {
+          "total": 30,
+          "hitAt1": 26.666666666666668,
+          "hitAt3": 76.66666666666667,
+          "hitAt5": 86.66666666666667,
+          "mrr": 0.5197619047619048
+        },
+        "kpidCombinedCombined": {
+          "applicable": 21,
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "hitAt5": 0,
+          "mrr": 0,
+          "docHitAt1Total": 8,
+          "docHitAt1CorrectKpid": 0,
+          "docHitAt1WrongKpid": 8,
+          "docHitAt5Total": 18,
+          "docHitAt5CorrectKpid": 0,
+          "docHitAt5WrongKpid": 18
+        },
+        "supportCoverageCombinedCombined": {
+          "applicable": 15,
+          "docHitAt1Total": 8,
+          "docHitAt5Total": 13,
+          "docHitAt1FullCoverAt3": 0,
+          "docHitAt1FullCoverAt5": 0,
+          "docHitAt5FullCoverAt5": 0,
+          "partialCoverAt5": 0,
+          "avgCoveredGroupsAt5": 0,
+          "avgCoverageRatioAt5": 0
+        },
+        "topTuneCandidates": [
+          {
+            "weights": {
+              "Q": 0.5,
+              "KP": 0,
+              "OT": 0.5
+            },
+            "combined": {
+              "total": 30,
+              "hitAt1": 26.666666666666668,
+              "hitAt3": 76.66666666666667,
+              "hitAt5": 86.66666666666667,
+              "mrr": 0.5197619047619048
+            }
+          }
+        ]
+      },
+      "groupBreakdowns": {
+        "supportPattern": {
+          "multi_kp": {
+            "total": 15,
+            "uniform": {
+              "total": 15,
+              "hitAt1": 53.333333333333336,
+              "hitAt3": 80,
+              "hitAt5": 86.66666666666667,
+              "mrr": 0.6666666666666666
+            },
+            "tunedCombined": {
+              "total": 15,
+              "hitAt1": 53.333333333333336,
+              "hitAt3": 80,
+              "hitAt5": 86.66666666666667,
+              "mrr": 0.6666666666666666
+            },
+            "kpidUniform": {
+              "applicable": 15,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 8,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 8,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 13
+            },
+            "kpidTunedCombined": {
+              "applicable": 15,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 8,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 8,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 13
+            },
+            "supportCoverageUniform": {
+              "applicable": 15,
+              "docHitAt1Total": 8,
+              "docHitAt5Total": 13,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 15,
+              "docHitAt1Total": 8,
+              "docHitAt5Total": 13,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          },
+          "ot_required": {
+            "total": 9,
+            "uniform": {
+              "total": 9,
+              "hitAt1": 0,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 88.88888888888889,
+              "mrr": 0.36216931216931214
+            },
+            "tunedCombined": {
+              "total": 9,
+              "hitAt1": 0,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 88.88888888888889,
+              "mrr": 0.36216931216931214
+            },
+            "kpidUniform": {
+              "applicable": 0,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 0,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 0
+            },
+            "kpidTunedCombined": {
+              "applicable": 0,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 0,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 0
+            },
+            "supportCoverageUniform": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          },
+          "single_kp": {
+            "total": 6,
+            "uniform": {
+              "total": 6,
+              "hitAt1": 0,
+              "hitAt3": 83.33333333333334,
+              "hitAt5": 83.33333333333334,
+              "mrr": 0.38888888888888884
+            },
+            "tunedCombined": {
+              "total": 6,
+              "hitAt1": 0,
+              "hitAt3": 83.33333333333334,
+              "hitAt5": 83.33333333333334,
+              "mrr": 0.38888888888888884
+            },
+            "kpidUniform": {
+              "applicable": 6,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 5,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 5
+            },
+            "kpidTunedCombined": {
+              "applicable": 6,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 5,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 5
+            },
+            "supportCoverageUniform": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          }
+        },
+        "preferredGranularity": {
+          "KP": {
+            "total": 7,
+            "uniform": {
+              "total": 7,
+              "hitAt1": 14.285714285714285,
+              "hitAt3": 85.71428571428571,
+              "hitAt5": 85.71428571428571,
+              "mrr": 0.47619047619047616
+            },
+            "tunedCombined": {
+              "total": 7,
+              "hitAt1": 14.285714285714285,
+              "hitAt3": 85.71428571428571,
+              "hitAt5": 85.71428571428571,
+              "mrr": 0.47619047619047616
+            },
+            "kpidUniform": {
+              "applicable": 7,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 6,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 6
+            },
+            "kpidTunedCombined": {
+              "applicable": 7,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 6,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 6
+            },
+            "supportCoverageUniform": {
+              "applicable": 1,
+              "docHitAt1Total": 1,
+              "docHitAt5Total": 1,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 1,
+              "docHitAt1Total": 1,
+              "docHitAt5Total": 1,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          },
+          "KP+OT": {
+            "total": 13,
+            "uniform": {
+              "total": 13,
+              "hitAt1": 46.15384615384615,
+              "hitAt3": 76.92307692307693,
+              "hitAt5": 84.61538461538461,
+              "mrr": 0.6153846153846154
+            },
+            "tunedCombined": {
+              "total": 13,
+              "hitAt1": 46.15384615384615,
+              "hitAt3": 76.92307692307693,
+              "hitAt5": 84.61538461538461,
+              "mrr": 0.6153846153846154
+            },
+            "kpidUniform": {
+              "applicable": 13,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 6,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 6,
+              "docHitAt5Total": 11,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 11
+            },
+            "kpidTunedCombined": {
+              "applicable": 13,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 6,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 6,
+              "docHitAt5Total": 11,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 11
+            },
+            "supportCoverageUniform": {
+              "applicable": 13,
+              "docHitAt1Total": 6,
+              "docHitAt5Total": 11,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 13,
+              "docHitAt1Total": 6,
+              "docHitAt5Total": 11,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          },
+          "OT": {
+            "total": 9,
+            "uniform": {
+              "total": 9,
+              "hitAt1": 0,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 88.88888888888889,
+              "mrr": 0.36216931216931214
+            },
+            "tunedCombined": {
+              "total": 9,
+              "hitAt1": 0,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 88.88888888888889,
+              "mrr": 0.36216931216931214
+            },
+            "kpidUniform": {
+              "applicable": 0,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 0,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 0
+            },
+            "kpidTunedCombined": {
+              "applicable": 0,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 0,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 0
+            },
+            "supportCoverageUniform": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          },
+          "Q+KP": {
+            "total": 1,
+            "uniform": {
+              "total": 1,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "tunedCombined": {
+              "total": 1,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "kpidUniform": {
+              "applicable": 1,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 1
+            },
+            "kpidTunedCombined": {
+              "applicable": 1,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 1
+            },
+            "supportCoverageUniform": {
+              "applicable": 1,
+              "docHitAt1Total": 1,
+              "docHitAt5Total": 1,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 1,
+              "docHitAt1Total": 1,
+              "docHitAt5Total": 1,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          }
+        },
+        "queryType": {
+          "short_keyword": {
+            "total": 3,
+            "uniform": {
+              "total": 3,
+              "hitAt1": 0,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 0.4444444444444444
+            },
+            "tunedCombined": {
+              "total": 3,
+              "hitAt1": 0,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 0.4444444444444444
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 2
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 2
+            },
+            "supportCoverageUniform": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          },
+          "situational": {
+            "total": 15,
+            "uniform": {
+              "total": 15,
+              "hitAt1": 26.666666666666668,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 73.33333333333333,
+              "mrr": 0.47619047619047616
+            },
+            "tunedCombined": {
+              "total": 15,
+              "hitAt1": 26.666666666666668,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 73.33333333333333,
+              "mrr": 0.47619047619047616
+            },
+            "kpidUniform": {
+              "applicable": 11,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 4,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 8
+            },
+            "kpidTunedCombined": {
+              "applicable": 11,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 4,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 8
+            },
+            "supportCoverageUniform": {
+              "applicable": 8,
+              "docHitAt1Total": 4,
+              "docHitAt5Total": 6,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 8,
+              "docHitAt1Total": 4,
+              "docHitAt5Total": 6,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          },
+          "standard": {
+            "total": 12,
+            "uniform": {
+              "total": 12,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 83.33333333333334,
+              "hitAt5": 100,
+              "mrr": 0.5930555555555556
+            },
+            "tunedCombined": {
+              "total": 12,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 83.33333333333334,
+              "hitAt5": 100,
+              "mrr": 0.5930555555555556
+            },
+            "kpidUniform": {
+              "applicable": 8,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 4,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 8
+            },
+            "kpidTunedCombined": {
+              "applicable": 8,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 4,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 8
+            },
+            "supportCoverageUniform": {
+              "applicable": 7,
+              "docHitAt1Total": 4,
+              "docHitAt5Total": 7,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 7,
+              "docHitAt1Total": 4,
+              "docHitAt5Total": 7,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "label": "KP+OT",
+      "allowedTypes": [
+        "KP",
+        "OT"
+      ],
+      "metadataCount": 3964,
+      "metadataTypeCounts": {
+        "Q": 0,
+        "KP": 3359,
+        "OT": 605
+      },
+      "uniform": {
+        "weights": {
+          "Q": 0,
+          "KP": 0.5,
+          "OT": 0.5
+        },
+        "combined": {
+          "total": 30,
+          "hitAt1": 36.666666666666664,
+          "hitAt3": 63.33333333333333,
+          "hitAt5": 80,
+          "mrr": 0.5316830065359477
+        },
+        "kpidCombined": {
+          "applicable": 21,
+          "hitAt1": 33.33333333333333,
+          "hitAt3": 47.61904761904761,
+          "hitAt5": 47.61904761904761,
+          "mrr": 0.40476190476190477,
+          "docHitAt1Total": 8,
+          "docHitAt1CorrectKpid": 7,
+          "docHitAt1WrongKpid": 1,
+          "docHitAt5Total": 17,
+          "docHitAt5CorrectKpid": 10,
+          "docHitAt5WrongKpid": 7
+        },
+        "supportCoverageCombined": {
+          "applicable": 15,
+          "docHitAt1Total": 5,
+          "docHitAt5Total": 12,
+          "docHitAt1FullCoverAt3": 13.333333333333334,
+          "docHitAt1FullCoverAt5": 20,
+          "docHitAt5FullCoverAt5": 46.666666666666664,
+          "partialCoverAt5": 80,
+          "avgCoveredGroupsAt5": 1.4666666666666666,
+          "avgCoverageRatioAt5": 0.6611111111111112
+        },
+        "metricsByDataset": {
+          "test_dataset_granularity_hard_ood_v2_diag_top30": {
+            "total": 30,
+            "hitAt1": 36.666666666666664,
+            "hitAt3": 63.33333333333333,
+            "hitAt5": 80,
+            "mrr": 0.5316830065359477
+          }
+        }
+      },
+      "tuned": {
+        "selectionMode": "single_frozen_set",
+        "candidateCount": 1,
+        "bestWeights": {
+          "Q": 0,
+          "KP": 0.5,
+          "OT": 0.5
+        },
+        "tuneCombined": {
+          "total": 30,
+          "hitAt1": 36.666666666666664,
+          "hitAt3": 63.33333333333333,
+          "hitAt5": 80,
+          "mrr": 0.5316830065359477
+        },
+        "kpidTuneCombined": {
+          "applicable": 21,
+          "hitAt1": 33.33333333333333,
+          "hitAt3": 47.61904761904761,
+          "hitAt5": 47.61904761904761,
+          "mrr": 0.40476190476190477,
+          "docHitAt1Total": 8,
+          "docHitAt1CorrectKpid": 7,
+          "docHitAt1WrongKpid": 1,
+          "docHitAt5Total": 17,
+          "docHitAt5CorrectKpid": 10,
+          "docHitAt5WrongKpid": 7
+        },
+        "supportCoverageTuneCombined": {
+          "applicable": 15,
+          "docHitAt1Total": 5,
+          "docHitAt5Total": 12,
+          "docHitAt1FullCoverAt3": 13.333333333333334,
+          "docHitAt1FullCoverAt5": 20,
+          "docHitAt5FullCoverAt5": 46.666666666666664,
+          "partialCoverAt5": 80,
+          "avgCoveredGroupsAt5": 1.4666666666666666,
+          "avgCoverageRatioAt5": 0.6611111111111112
+        },
+        "holdoutCombined": {
+          "total": 30,
+          "hitAt1": 36.666666666666664,
+          "hitAt3": 63.33333333333333,
+          "hitAt5": 80,
+          "mrr": 0.5316830065359477
+        },
+        "kpidHoldoutCombined": {
+          "applicable": 21,
+          "hitAt1": 33.33333333333333,
+          "hitAt3": 47.61904761904761,
+          "hitAt5": 47.61904761904761,
+          "mrr": 0.40476190476190477,
+          "docHitAt1Total": 8,
+          "docHitAt1CorrectKpid": 7,
+          "docHitAt1WrongKpid": 1,
+          "docHitAt5Total": 17,
+          "docHitAt5CorrectKpid": 10,
+          "docHitAt5WrongKpid": 7
+        },
+        "supportCoverageHoldoutCombined": {
+          "applicable": 15,
+          "docHitAt1Total": 5,
+          "docHitAt5Total": 12,
+          "docHitAt1FullCoverAt3": 13.333333333333334,
+          "docHitAt1FullCoverAt5": 20,
+          "docHitAt5FullCoverAt5": 46.666666666666664,
+          "partialCoverAt5": 80,
+          "avgCoveredGroupsAt5": 1.4666666666666666,
+          "avgCoverageRatioAt5": 0.6611111111111112
+        },
+        "combinedCombined": {
+          "total": 30,
+          "hitAt1": 36.666666666666664,
+          "hitAt3": 63.33333333333333,
+          "hitAt5": 80,
+          "mrr": 0.5316830065359477
+        },
+        "kpidCombinedCombined": {
+          "applicable": 21,
+          "hitAt1": 33.33333333333333,
+          "hitAt3": 47.61904761904761,
+          "hitAt5": 47.61904761904761,
+          "mrr": 0.40476190476190477,
+          "docHitAt1Total": 8,
+          "docHitAt1CorrectKpid": 7,
+          "docHitAt1WrongKpid": 1,
+          "docHitAt5Total": 17,
+          "docHitAt5CorrectKpid": 10,
+          "docHitAt5WrongKpid": 7
+        },
+        "supportCoverageCombinedCombined": {
+          "applicable": 15,
+          "docHitAt1Total": 5,
+          "docHitAt5Total": 12,
+          "docHitAt1FullCoverAt3": 13.333333333333334,
+          "docHitAt1FullCoverAt5": 20,
+          "docHitAt5FullCoverAt5": 46.666666666666664,
+          "partialCoverAt5": 80,
+          "avgCoveredGroupsAt5": 1.4666666666666666,
+          "avgCoverageRatioAt5": 0.6611111111111112
+        },
+        "topTuneCandidates": [
+          {
+            "weights": {
+              "Q": 0,
+              "KP": 0.5,
+              "OT": 0.5
+            },
+            "combined": {
+              "total": 30,
+              "hitAt1": 36.666666666666664,
+              "hitAt3": 63.33333333333333,
+              "hitAt5": 80,
+              "mrr": 0.5316830065359477
+            }
+          }
+        ]
+      },
+      "groupBreakdowns": {
+        "supportPattern": {
+          "multi_kp": {
+            "total": 15,
+            "uniform": {
+              "total": 15,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 53.333333333333336,
+              "hitAt5": 80,
+              "mrr": 0.49333333333333335
+            },
+            "tunedCombined": {
+              "total": 15,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 53.333333333333336,
+              "hitAt5": 80,
+              "mrr": 0.49333333333333335
+            },
+            "kpidUniform": {
+              "applicable": 15,
+              "hitAt1": 26.666666666666668,
+              "hitAt3": 46.666666666666664,
+              "hitAt5": 46.666666666666664,
+              "mrr": 0.36666666666666664,
+              "docHitAt1Total": 5,
+              "docHitAt1CorrectKpid": 4,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 12,
+              "docHitAt5CorrectKpid": 7,
+              "docHitAt5WrongKpid": 5
+            },
+            "kpidTunedCombined": {
+              "applicable": 15,
+              "hitAt1": 26.666666666666668,
+              "hitAt3": 46.666666666666664,
+              "hitAt5": 46.666666666666664,
+              "mrr": 0.36666666666666664,
+              "docHitAt1Total": 5,
+              "docHitAt1CorrectKpid": 4,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 12,
+              "docHitAt5CorrectKpid": 7,
+              "docHitAt5WrongKpid": 5
+            },
+            "supportCoverageUniform": {
+              "applicable": 15,
+              "docHitAt1Total": 5,
+              "docHitAt5Total": 12,
+              "docHitAt1FullCoverAt3": 13.333333333333334,
+              "docHitAt1FullCoverAt5": 20,
+              "docHitAt5FullCoverAt5": 46.666666666666664,
+              "partialCoverAt5": 80,
+              "avgCoveredGroupsAt5": 1.4666666666666666,
+              "avgCoverageRatioAt5": 0.6611111111111112
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 15,
+              "docHitAt1Total": 5,
+              "docHitAt5Total": 12,
+              "docHitAt1FullCoverAt3": 13.333333333333334,
+              "docHitAt1FullCoverAt5": 20,
+              "docHitAt5FullCoverAt5": 46.666666666666664,
+              "partialCoverAt5": 80,
+              "avgCoveredGroupsAt5": 1.4666666666666666,
+              "avgCoverageRatioAt5": 0.6611111111111112
+            }
+          },
+          "ot_required": {
+            "total": 9,
+            "uniform": {
+              "total": 9,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 77.77777777777779,
+              "hitAt5": 77.77777777777779,
+              "mrr": 0.5389433551198257
+            },
+            "tunedCombined": {
+              "total": 9,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 77.77777777777779,
+              "hitAt5": 77.77777777777779,
+              "mrr": 0.5389433551198257
+            },
+            "kpidUniform": {
+              "applicable": 0,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 0,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 0
+            },
+            "kpidTunedCombined": {
+              "applicable": 0,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 0,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 0
+            },
+            "supportCoverageUniform": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          },
+          "single_kp": {
+            "total": 6,
+            "uniform": {
+              "total": 6,
+              "hitAt1": 50,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 83.33333333333334,
+              "mrr": 0.6166666666666667
+            },
+            "tunedCombined": {
+              "total": 6,
+              "hitAt1": 50,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 83.33333333333334,
+              "mrr": 0.6166666666666667
+            },
+            "kpidUniform": {
+              "applicable": 6,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 3,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 5,
+              "docHitAt5CorrectKpid": 3,
+              "docHitAt5WrongKpid": 2
+            },
+            "kpidTunedCombined": {
+              "applicable": 6,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 3,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 5,
+              "docHitAt5CorrectKpid": 3,
+              "docHitAt5WrongKpid": 2
+            },
+            "supportCoverageUniform": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          }
+        },
+        "preferredGranularity": {
+          "KP": {
+            "total": 7,
+            "uniform": {
+              "total": 7,
+              "hitAt1": 57.14285714285714,
+              "hitAt3": 71.42857142857143,
+              "hitAt5": 85.71428571428571,
+              "mrr": 0.6714285714285715
+            },
+            "tunedCombined": {
+              "total": 7,
+              "hitAt1": 57.14285714285714,
+              "hitAt3": 71.42857142857143,
+              "hitAt5": 85.71428571428571,
+              "mrr": 0.6714285714285715
+            },
+            "kpidUniform": {
+              "applicable": 7,
+              "hitAt1": 42.857142857142854,
+              "hitAt3": 42.857142857142854,
+              "hitAt5": 42.857142857142854,
+              "mrr": 0.42857142857142855,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 3,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 6,
+              "docHitAt5CorrectKpid": 3,
+              "docHitAt5WrongKpid": 3
+            },
+            "kpidTunedCombined": {
+              "applicable": 7,
+              "hitAt1": 42.857142857142854,
+              "hitAt3": 42.857142857142854,
+              "hitAt5": 42.857142857142854,
+              "mrr": 0.42857142857142855,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 3,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 6,
+              "docHitAt5CorrectKpid": 3,
+              "docHitAt5WrongKpid": 3
+            },
+            "supportCoverageUniform": {
+              "applicable": 1,
+              "docHitAt1Total": 1,
+              "docHitAt5Total": 1,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 100,
+              "avgCoveredGroupsAt5": 1,
+              "avgCoverageRatioAt5": 0.5
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 1,
+              "docHitAt1Total": 1,
+              "docHitAt5Total": 1,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 100,
+              "avgCoveredGroupsAt5": 1,
+              "avgCoverageRatioAt5": 0.5
+            }
+          },
+          "KP+OT": {
+            "total": 13,
+            "uniform": {
+              "total": 13,
+              "hitAt1": 30.76923076923077,
+              "hitAt3": 53.84615384615385,
+              "hitAt5": 76.92307692307693,
+              "mrr": 0.4769230769230769
+            },
+            "tunedCombined": {
+              "total": 13,
+              "hitAt1": 30.76923076923077,
+              "hitAt3": 53.84615384615385,
+              "hitAt5": 76.92307692307693,
+              "mrr": 0.4769230769230769
+            },
+            "kpidUniform": {
+              "applicable": 13,
+              "hitAt1": 30.76923076923077,
+              "hitAt3": 53.84615384615385,
+              "hitAt5": 53.84615384615385,
+              "mrr": 0.4230769230769231,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 4,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 10,
+              "docHitAt5CorrectKpid": 7,
+              "docHitAt5WrongKpid": 3
+            },
+            "kpidTunedCombined": {
+              "applicable": 13,
+              "hitAt1": 30.76923076923077,
+              "hitAt3": 53.84615384615385,
+              "hitAt5": 53.84615384615385,
+              "mrr": 0.4230769230769231,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 4,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 10,
+              "docHitAt5CorrectKpid": 7,
+              "docHitAt5WrongKpid": 3
+            },
+            "supportCoverageUniform": {
+              "applicable": 13,
+              "docHitAt1Total": 4,
+              "docHitAt5Total": 10,
+              "docHitAt1FullCoverAt3": 15.384615384615385,
+              "docHitAt1FullCoverAt5": 23.076923076923077,
+              "docHitAt5FullCoverAt5": 46.15384615384615,
+              "partialCoverAt5": 76.92307692307693,
+              "avgCoveredGroupsAt5": 1.4615384615384615,
+              "avgCoverageRatioAt5": 0.6474358974358976
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 13,
+              "docHitAt1Total": 4,
+              "docHitAt5Total": 10,
+              "docHitAt1FullCoverAt3": 15.384615384615385,
+              "docHitAt1FullCoverAt5": 23.076923076923077,
+              "docHitAt5FullCoverAt5": 46.15384615384615,
+              "partialCoverAt5": 76.92307692307693,
+              "avgCoveredGroupsAt5": 1.4615384615384615,
+              "avgCoverageRatioAt5": 0.6474358974358976
+            }
+          },
+          "OT": {
+            "total": 9,
+            "uniform": {
+              "total": 9,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 77.77777777777779,
+              "hitAt5": 77.77777777777779,
+              "mrr": 0.5389433551198257
+            },
+            "tunedCombined": {
+              "total": 9,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 77.77777777777779,
+              "hitAt5": 77.77777777777779,
+              "mrr": 0.5389433551198257
+            },
+            "kpidUniform": {
+              "applicable": 0,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 0,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 0
+            },
+            "kpidTunedCombined": {
+              "applicable": 0,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 0,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 0
+            },
+            "supportCoverageUniform": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          },
+          "Q+KP": {
+            "total": 1,
+            "uniform": {
+              "total": 1,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 100,
+              "mrr": 0.2
+            },
+            "tunedCombined": {
+              "total": 1,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 100,
+              "mrr": 0.2
+            },
+            "kpidUniform": {
+              "applicable": 1,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 1
+            },
+            "kpidTunedCombined": {
+              "applicable": 1,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 1
+            },
+            "supportCoverageUniform": {
+              "applicable": 1,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 1,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 100,
+              "partialCoverAt5": 100,
+              "avgCoveredGroupsAt5": 2,
+              "avgCoverageRatioAt5": 1
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 1,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 1,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 100,
+              "partialCoverAt5": 100,
+              "avgCoveredGroupsAt5": 2,
+              "avgCoverageRatioAt5": 1
+            }
+          }
+        },
+        "queryType": {
+          "short_keyword": {
+            "total": 3,
+            "uniform": {
+              "total": 3,
+              "hitAt1": 66.66666666666666,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 0.8333333333333334
+            },
+            "tunedCombined": {
+              "total": 3,
+              "hitAt1": 66.66666666666666,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 0.8333333333333334
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 1
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 1
+            },
+            "supportCoverageUniform": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          },
+          "situational": {
+            "total": 15,
+            "uniform": {
+              "total": 15,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 73.33333333333333,
+              "mrr": 0.5105555555555557
+            },
+            "tunedCombined": {
+              "total": 15,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 73.33333333333333,
+              "mrr": 0.5105555555555557
+            },
+            "kpidUniform": {
+              "applicable": 11,
+              "hitAt1": 36.36363636363637,
+              "hitAt3": 63.63636363636363,
+              "hitAt5": 63.63636363636363,
+              "mrr": 0.5,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 4,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 7,
+              "docHitAt5WrongKpid": 1
+            },
+            "kpidTunedCombined": {
+              "applicable": 11,
+              "hitAt1": 36.36363636363637,
+              "hitAt3": 63.63636363636363,
+              "hitAt5": 63.63636363636363,
+              "mrr": 0.5,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 4,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 7,
+              "docHitAt5WrongKpid": 1
+            },
+            "supportCoverageUniform": {
+              "applicable": 8,
+              "docHitAt1Total": 3,
+              "docHitAt5Total": 6,
+              "docHitAt1FullCoverAt3": 25,
+              "docHitAt1FullCoverAt5": 25,
+              "docHitAt5FullCoverAt5": 50,
+              "partialCoverAt5": 75,
+              "avgCoveredGroupsAt5": 1.5,
+              "avgCoverageRatioAt5": 0.65625
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 8,
+              "docHitAt1Total": 3,
+              "docHitAt5Total": 6,
+              "docHitAt1FullCoverAt3": 25,
+              "docHitAt1FullCoverAt5": 25,
+              "docHitAt5FullCoverAt5": 50,
+              "partialCoverAt5": 75,
+              "avgCoveredGroupsAt5": 1.5,
+              "avgCoverageRatioAt5": 0.65625
+            }
+          },
+          "standard": {
+            "total": 12,
+            "uniform": {
+              "total": 12,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 50,
+              "hitAt5": 83.33333333333334,
+              "mrr": 0.4826797385620915
+            },
+            "tunedCombined": {
+              "total": 12,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 50,
+              "hitAt5": 83.33333333333334,
+              "mrr": 0.4826797385620915
+            },
+            "kpidUniform": {
+              "applicable": 8,
+              "hitAt1": 25,
+              "hitAt3": 25,
+              "hitAt5": 25,
+              "mrr": 0.25,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 2,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 7,
+              "docHitAt5CorrectKpid": 2,
+              "docHitAt5WrongKpid": 5
+            },
+            "kpidTunedCombined": {
+              "applicable": 8,
+              "hitAt1": 25,
+              "hitAt3": 25,
+              "hitAt5": 25,
+              "mrr": 0.25,
+              "docHitAt1Total": 3,
+              "docHitAt1CorrectKpid": 2,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 7,
+              "docHitAt5CorrectKpid": 2,
+              "docHitAt5WrongKpid": 5
+            },
+            "supportCoverageUniform": {
+              "applicable": 7,
+              "docHitAt1Total": 2,
+              "docHitAt5Total": 6,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 14.285714285714285,
+              "docHitAt5FullCoverAt5": 42.857142857142854,
+              "partialCoverAt5": 85.71428571428571,
+              "avgCoveredGroupsAt5": 1.4285714285714286,
+              "avgCoverageRatioAt5": 0.6666666666666666
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 7,
+              "docHitAt1Total": 2,
+              "docHitAt5Total": 6,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 14.285714285714285,
+              "docHitAt5FullCoverAt5": 42.857142857142854,
+              "partialCoverAt5": 85.71428571428571,
+              "avgCoveredGroupsAt5": 1.4285714285714286,
+              "avgCoverageRatioAt5": 0.6666666666666666
+            }
+          }
+        }
+      }
+    },
+    {
+      "label": "Q+KP+OT",
+      "allowedTypes": [
+        "Q",
+        "KP",
+        "OT"
+      ],
+      "metadataCount": 18899,
+      "metadataTypeCounts": {
+        "Q": 14935,
+        "KP": 3359,
+        "OT": 605
+      },
+      "uniform": {
+        "weights": {
+          "Q": 0.3333333333333333,
+          "KP": 0.3333333333333333,
+          "OT": 0.3333333333333333
+        },
+        "combined": {
+          "total": 30,
+          "hitAt1": 30,
+          "hitAt3": 63.33333333333333,
+          "hitAt5": 86.66666666666667,
+          "mrr": 0.519484126984127
+        },
+        "kpidCombined": {
+          "applicable": 21,
+          "hitAt1": 19.047619047619047,
+          "hitAt3": 38.095238095238095,
+          "hitAt5": 38.095238095238095,
+          "mrr": 0.27579365079365076,
+          "docHitAt1Total": 9,
+          "docHitAt1CorrectKpid": 4,
+          "docHitAt1WrongKpid": 5,
+          "docHitAt5Total": 18,
+          "docHitAt5CorrectKpid": 8,
+          "docHitAt5WrongKpid": 10
+        },
+        "supportCoverageCombined": {
+          "applicable": 15,
+          "docHitAt1Total": 8,
+          "docHitAt5Total": 13,
+          "docHitAt1FullCoverAt3": 0,
+          "docHitAt1FullCoverAt5": 6.666666666666667,
+          "docHitAt5FullCoverAt5": 26.666666666666668,
+          "partialCoverAt5": 80,
+          "avgCoveredGroupsAt5": 1.1333333333333333,
+          "avgCoverageRatioAt5": 0.5277777777777778
+        },
+        "metricsByDataset": {
+          "test_dataset_granularity_hard_ood_v2_diag_top30": {
+            "total": 30,
+            "hitAt1": 30,
+            "hitAt3": 63.33333333333333,
+            "hitAt5": 86.66666666666667,
+            "mrr": 0.519484126984127
+          }
+        }
+      },
+      "tuned": {
+        "selectionMode": "single_frozen_set",
+        "candidateCount": 1,
+        "bestWeights": {
+          "Q": 0.3333333333333333,
+          "KP": 0.3333333333333333,
+          "OT": 0.3333333333333333
+        },
+        "tuneCombined": {
+          "total": 30,
+          "hitAt1": 30,
+          "hitAt3": 63.33333333333333,
+          "hitAt5": 86.66666666666667,
+          "mrr": 0.519484126984127
+        },
+        "kpidTuneCombined": {
+          "applicable": 21,
+          "hitAt1": 19.047619047619047,
+          "hitAt3": 38.095238095238095,
+          "hitAt5": 38.095238095238095,
+          "mrr": 0.27579365079365076,
+          "docHitAt1Total": 9,
+          "docHitAt1CorrectKpid": 4,
+          "docHitAt1WrongKpid": 5,
+          "docHitAt5Total": 18,
+          "docHitAt5CorrectKpid": 8,
+          "docHitAt5WrongKpid": 10
+        },
+        "supportCoverageTuneCombined": {
+          "applicable": 15,
+          "docHitAt1Total": 8,
+          "docHitAt5Total": 13,
+          "docHitAt1FullCoverAt3": 0,
+          "docHitAt1FullCoverAt5": 6.666666666666667,
+          "docHitAt5FullCoverAt5": 26.666666666666668,
+          "partialCoverAt5": 80,
+          "avgCoveredGroupsAt5": 1.1333333333333333,
+          "avgCoverageRatioAt5": 0.5277777777777778
+        },
+        "holdoutCombined": {
+          "total": 30,
+          "hitAt1": 30,
+          "hitAt3": 63.33333333333333,
+          "hitAt5": 86.66666666666667,
+          "mrr": 0.519484126984127
+        },
+        "kpidHoldoutCombined": {
+          "applicable": 21,
+          "hitAt1": 19.047619047619047,
+          "hitAt3": 38.095238095238095,
+          "hitAt5": 38.095238095238095,
+          "mrr": 0.27579365079365076,
+          "docHitAt1Total": 9,
+          "docHitAt1CorrectKpid": 4,
+          "docHitAt1WrongKpid": 5,
+          "docHitAt5Total": 18,
+          "docHitAt5CorrectKpid": 8,
+          "docHitAt5WrongKpid": 10
+        },
+        "supportCoverageHoldoutCombined": {
+          "applicable": 15,
+          "docHitAt1Total": 8,
+          "docHitAt5Total": 13,
+          "docHitAt1FullCoverAt3": 0,
+          "docHitAt1FullCoverAt5": 6.666666666666667,
+          "docHitAt5FullCoverAt5": 26.666666666666668,
+          "partialCoverAt5": 80,
+          "avgCoveredGroupsAt5": 1.1333333333333333,
+          "avgCoverageRatioAt5": 0.5277777777777778
+        },
+        "combinedCombined": {
+          "total": 30,
+          "hitAt1": 30,
+          "hitAt3": 63.33333333333333,
+          "hitAt5": 86.66666666666667,
+          "mrr": 0.519484126984127
+        },
+        "kpidCombinedCombined": {
+          "applicable": 21,
+          "hitAt1": 19.047619047619047,
+          "hitAt3": 38.095238095238095,
+          "hitAt5": 38.095238095238095,
+          "mrr": 0.27579365079365076,
+          "docHitAt1Total": 9,
+          "docHitAt1CorrectKpid": 4,
+          "docHitAt1WrongKpid": 5,
+          "docHitAt5Total": 18,
+          "docHitAt5CorrectKpid": 8,
+          "docHitAt5WrongKpid": 10
+        },
+        "supportCoverageCombinedCombined": {
+          "applicable": 15,
+          "docHitAt1Total": 8,
+          "docHitAt5Total": 13,
+          "docHitAt1FullCoverAt3": 0,
+          "docHitAt1FullCoverAt5": 6.666666666666667,
+          "docHitAt5FullCoverAt5": 26.666666666666668,
+          "partialCoverAt5": 80,
+          "avgCoveredGroupsAt5": 1.1333333333333333,
+          "avgCoverageRatioAt5": 0.5277777777777778
+        },
+        "topTuneCandidates": [
+          {
+            "weights": {
+              "Q": 0.3333333333333333,
+              "KP": 0.3333333333333333,
+              "OT": 0.3333333333333333
+            },
+            "combined": {
+              "total": 30,
+              "hitAt1": 30,
+              "hitAt3": 63.33333333333333,
+              "hitAt5": 86.66666666666667,
+              "mrr": 0.519484126984127
+            }
+          }
+        ]
+      },
+      "groupBreakdowns": {
+        "supportPattern": {
+          "multi_kp": {
+            "total": 15,
+            "uniform": {
+              "total": 15,
+              "hitAt1": 53.333333333333336,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 86.66666666666667,
+              "mrr": 0.6438888888888888
+            },
+            "tunedCombined": {
+              "total": 15,
+              "hitAt1": 53.333333333333336,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 86.66666666666667,
+              "mrr": 0.6438888888888888
+            },
+            "kpidUniform": {
+              "applicable": 15,
+              "hitAt1": 20,
+              "hitAt3": 26.666666666666668,
+              "hitAt5": 26.666666666666668,
+              "mrr": 0.23055555555555554,
+              "docHitAt1Total": 8,
+              "docHitAt1CorrectKpid": 3,
+              "docHitAt1WrongKpid": 5,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 4,
+              "docHitAt5WrongKpid": 9
+            },
+            "kpidTunedCombined": {
+              "applicable": 15,
+              "hitAt1": 20,
+              "hitAt3": 26.666666666666668,
+              "hitAt5": 26.666666666666668,
+              "mrr": 0.23055555555555554,
+              "docHitAt1Total": 8,
+              "docHitAt1CorrectKpid": 3,
+              "docHitAt1WrongKpid": 5,
+              "docHitAt5Total": 13,
+              "docHitAt5CorrectKpid": 4,
+              "docHitAt5WrongKpid": 9
+            },
+            "supportCoverageUniform": {
+              "applicable": 15,
+              "docHitAt1Total": 8,
+              "docHitAt5Total": 13,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 6.666666666666667,
+              "docHitAt5FullCoverAt5": 26.666666666666668,
+              "partialCoverAt5": 80,
+              "avgCoveredGroupsAt5": 1.1333333333333333,
+              "avgCoverageRatioAt5": 0.5277777777777778
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 15,
+              "docHitAt1Total": 8,
+              "docHitAt5Total": 13,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 6.666666666666667,
+              "docHitAt5FullCoverAt5": 26.666666666666668,
+              "partialCoverAt5": 80,
+              "avgCoveredGroupsAt5": 1.1333333333333333,
+              "avgCoverageRatioAt5": 0.5277777777777778
+            }
+          },
+          "ot_required": {
+            "total": 9,
+            "uniform": {
+              "total": 9,
+              "hitAt1": 0,
+              "hitAt3": 44.44444444444444,
+              "hitAt5": 88.88888888888889,
+              "mrr": 0.3436507936507936
+            },
+            "tunedCombined": {
+              "total": 9,
+              "hitAt1": 0,
+              "hitAt3": 44.44444444444444,
+              "hitAt5": 88.88888888888889,
+              "mrr": 0.3436507936507936
+            },
+            "kpidUniform": {
+              "applicable": 0,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 0,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 0
+            },
+            "kpidTunedCombined": {
+              "applicable": 0,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 0,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 0
+            },
+            "supportCoverageUniform": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          },
+          "single_kp": {
+            "total": 6,
+            "uniform": {
+              "total": 6,
+              "hitAt1": 16.666666666666664,
+              "hitAt3": 83.33333333333334,
+              "hitAt5": 83.33333333333334,
+              "mrr": 0.47222222222222215
+            },
+            "tunedCombined": {
+              "total": 6,
+              "hitAt1": 16.666666666666664,
+              "hitAt3": 83.33333333333334,
+              "hitAt5": 83.33333333333334,
+              "mrr": 0.47222222222222215
+            },
+            "kpidUniform": {
+              "applicable": 6,
+              "hitAt1": 16.666666666666664,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 66.66666666666666,
+              "mrr": 0.38888888888888884,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 5,
+              "docHitAt5CorrectKpid": 4,
+              "docHitAt5WrongKpid": 1
+            },
+            "kpidTunedCombined": {
+              "applicable": 6,
+              "hitAt1": 16.666666666666664,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 66.66666666666666,
+              "mrr": 0.38888888888888884,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 5,
+              "docHitAt5CorrectKpid": 4,
+              "docHitAt5WrongKpid": 1
+            },
+            "supportCoverageUniform": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          }
+        },
+        "preferredGranularity": {
+          "KP": {
+            "total": 7,
+            "uniform": {
+              "total": 7,
+              "hitAt1": 28.57142857142857,
+              "hitAt3": 85.71428571428571,
+              "hitAt5": 85.71428571428571,
+              "mrr": 0.5476190476190476
+            },
+            "tunedCombined": {
+              "total": 7,
+              "hitAt1": 28.57142857142857,
+              "hitAt3": 85.71428571428571,
+              "hitAt5": 85.71428571428571,
+              "mrr": 0.5476190476190476
+            },
+            "kpidUniform": {
+              "applicable": 7,
+              "hitAt1": 14.285714285714285,
+              "hitAt3": 57.14285714285714,
+              "hitAt5": 57.14285714285714,
+              "mrr": 0.3333333333333333,
+              "docHitAt1Total": 2,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 6,
+              "docHitAt5CorrectKpid": 4,
+              "docHitAt5WrongKpid": 2
+            },
+            "kpidTunedCombined": {
+              "applicable": 7,
+              "hitAt1": 14.285714285714285,
+              "hitAt3": 57.14285714285714,
+              "hitAt5": 57.14285714285714,
+              "mrr": 0.3333333333333333,
+              "docHitAt1Total": 2,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 6,
+              "docHitAt5CorrectKpid": 4,
+              "docHitAt5WrongKpid": 2
+            },
+            "supportCoverageUniform": {
+              "applicable": 1,
+              "docHitAt1Total": 1,
+              "docHitAt5Total": 1,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 100,
+              "avgCoveredGroupsAt5": 1,
+              "avgCoverageRatioAt5": 0.5
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 1,
+              "docHitAt1Total": 1,
+              "docHitAt5Total": 1,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 100,
+              "avgCoveredGroupsAt5": 1,
+              "avgCoverageRatioAt5": 0.5
+            }
+          },
+          "KP+OT": {
+            "total": 13,
+            "uniform": {
+              "total": 13,
+              "hitAt1": 46.15384615384615,
+              "hitAt3": 61.53846153846154,
+              "hitAt5": 84.61538461538461,
+              "mrr": 0.5891025641025641
+            },
+            "tunedCombined": {
+              "total": 13,
+              "hitAt1": 46.15384615384615,
+              "hitAt3": 61.53846153846154,
+              "hitAt5": 84.61538461538461,
+              "mrr": 0.5891025641025641
+            },
+            "kpidUniform": {
+              "applicable": 13,
+              "hitAt1": 23.076923076923077,
+              "hitAt3": 30.76923076923077,
+              "hitAt5": 30.76923076923077,
+              "mrr": 0.266025641025641,
+              "docHitAt1Total": 6,
+              "docHitAt1CorrectKpid": 3,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 11,
+              "docHitAt5CorrectKpid": 4,
+              "docHitAt5WrongKpid": 7
+            },
+            "kpidTunedCombined": {
+              "applicable": 13,
+              "hitAt1": 23.076923076923077,
+              "hitAt3": 30.76923076923077,
+              "hitAt5": 30.76923076923077,
+              "mrr": 0.266025641025641,
+              "docHitAt1Total": 6,
+              "docHitAt1CorrectKpid": 3,
+              "docHitAt1WrongKpid": 3,
+              "docHitAt5Total": 11,
+              "docHitAt5CorrectKpid": 4,
+              "docHitAt5WrongKpid": 7
+            },
+            "supportCoverageUniform": {
+              "applicable": 13,
+              "docHitAt1Total": 6,
+              "docHitAt5Total": 11,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 7.6923076923076925,
+              "docHitAt5FullCoverAt5": 30.76923076923077,
+              "partialCoverAt5": 76.92307692307693,
+              "avgCoveredGroupsAt5": 1.1538461538461537,
+              "avgCoverageRatioAt5": 0.532051282051282
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 13,
+              "docHitAt1Total": 6,
+              "docHitAt5Total": 11,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 7.6923076923076925,
+              "docHitAt5FullCoverAt5": 30.76923076923077,
+              "partialCoverAt5": 76.92307692307693,
+              "avgCoveredGroupsAt5": 1.1538461538461537,
+              "avgCoverageRatioAt5": 0.532051282051282
+            }
+          },
+          "OT": {
+            "total": 9,
+            "uniform": {
+              "total": 9,
+              "hitAt1": 0,
+              "hitAt3": 44.44444444444444,
+              "hitAt5": 88.88888888888889,
+              "mrr": 0.3436507936507936
+            },
+            "tunedCombined": {
+              "total": 9,
+              "hitAt1": 0,
+              "hitAt3": 44.44444444444444,
+              "hitAt5": 88.88888888888889,
+              "mrr": 0.3436507936507936
+            },
+            "kpidUniform": {
+              "applicable": 0,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 0,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 0
+            },
+            "kpidTunedCombined": {
+              "applicable": 0,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 0,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 0,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 0
+            },
+            "supportCoverageUniform": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          },
+          "Q+KP": {
+            "total": 1,
+            "uniform": {
+              "total": 1,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "tunedCombined": {
+              "total": 1,
+              "hitAt1": 100,
+              "hitAt3": 100,
+              "hitAt5": 100,
+              "mrr": 1
+            },
+            "kpidUniform": {
+              "applicable": 1,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 1
+            },
+            "kpidTunedCombined": {
+              "applicable": 1,
+              "hitAt1": 0,
+              "hitAt3": 0,
+              "hitAt5": 0,
+              "mrr": 0,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 1,
+              "docHitAt5CorrectKpid": 0,
+              "docHitAt5WrongKpid": 1
+            },
+            "supportCoverageUniform": {
+              "applicable": 1,
+              "docHitAt1Total": 1,
+              "docHitAt5Total": 1,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 100,
+              "avgCoveredGroupsAt5": 1,
+              "avgCoverageRatioAt5": 0.5
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 1,
+              "docHitAt1Total": 1,
+              "docHitAt5Total": 1,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 100,
+              "avgCoveredGroupsAt5": 1,
+              "avgCoverageRatioAt5": 0.5
+            }
+          }
+        },
+        "queryType": {
+          "short_keyword": {
+            "total": 3,
+            "uniform": {
+              "total": 3,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 100,
+              "mrr": 0.5666666666666667
+            },
+            "tunedCombined": {
+              "total": 3,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 100,
+              "mrr": 0.5666666666666667
+            },
+            "kpidUniform": {
+              "applicable": 2,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 1
+            },
+            "kpidTunedCombined": {
+              "applicable": 2,
+              "hitAt1": 50,
+              "hitAt3": 50,
+              "hitAt5": 50,
+              "mrr": 0.5,
+              "docHitAt1Total": 1,
+              "docHitAt1CorrectKpid": 1,
+              "docHitAt1WrongKpid": 0,
+              "docHitAt5Total": 2,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 1
+            },
+            "supportCoverageUniform": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 0,
+              "docHitAt1Total": 0,
+              "docHitAt5Total": 0,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 0,
+              "partialCoverAt5": 0,
+              "avgCoveredGroupsAt5": 0,
+              "avgCoverageRatioAt5": 0
+            }
+          },
+          "situational": {
+            "total": 15,
+            "uniform": {
+              "total": 15,
+              "hitAt1": 26.666666666666668,
+              "hitAt3": 60,
+              "hitAt5": 73.33333333333333,
+              "mrr": 0.46230158730158727
+            },
+            "tunedCombined": {
+              "total": 15,
+              "hitAt1": 26.666666666666668,
+              "hitAt3": 60,
+              "hitAt5": 73.33333333333333,
+              "mrr": 0.46230158730158727
+            },
+            "kpidUniform": {
+              "applicable": 11,
+              "hitAt1": 27.27272727272727,
+              "hitAt3": 54.54545454545454,
+              "hitAt5": 54.54545454545454,
+              "mrr": 0.3901515151515151,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 3,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 6,
+              "docHitAt5WrongKpid": 2
+            },
+            "kpidTunedCombined": {
+              "applicable": 11,
+              "hitAt1": 27.27272727272727,
+              "hitAt3": 54.54545454545454,
+              "hitAt5": 54.54545454545454,
+              "mrr": 0.3901515151515151,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 3,
+              "docHitAt1WrongKpid": 1,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 6,
+              "docHitAt5WrongKpid": 2
+            },
+            "supportCoverageUniform": {
+              "applicable": 8,
+              "docHitAt1Total": 4,
+              "docHitAt5Total": 6,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 12.5,
+              "partialCoverAt5": 62.5,
+              "avgCoveredGroupsAt5": 0.75,
+              "avgCoverageRatioAt5": 0.34375
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 8,
+              "docHitAt1Total": 4,
+              "docHitAt5Total": 6,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 0,
+              "docHitAt5FullCoverAt5": 12.5,
+              "partialCoverAt5": 62.5,
+              "avgCoveredGroupsAt5": 0.75,
+              "avgCoverageRatioAt5": 0.34375
+            }
+          },
+          "standard": {
+            "total": 12,
+            "uniform": {
+              "total": 12,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 100,
+              "mrr": 0.5791666666666667
+            },
+            "tunedCombined": {
+              "total": 12,
+              "hitAt1": 33.33333333333333,
+              "hitAt3": 66.66666666666666,
+              "hitAt5": 100,
+              "mrr": 0.5791666666666667
+            },
+            "kpidUniform": {
+              "applicable": 8,
+              "hitAt1": 0,
+              "hitAt3": 12.5,
+              "hitAt5": 12.5,
+              "mrr": 0.0625,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 4,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 7
+            },
+            "kpidTunedCombined": {
+              "applicable": 8,
+              "hitAt1": 0,
+              "hitAt3": 12.5,
+              "hitAt5": 12.5,
+              "mrr": 0.0625,
+              "docHitAt1Total": 4,
+              "docHitAt1CorrectKpid": 0,
+              "docHitAt1WrongKpid": 4,
+              "docHitAt5Total": 8,
+              "docHitAt5CorrectKpid": 1,
+              "docHitAt5WrongKpid": 7
+            },
+            "supportCoverageUniform": {
+              "applicable": 7,
+              "docHitAt1Total": 4,
+              "docHitAt5Total": 7,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 14.285714285714285,
+              "docHitAt5FullCoverAt5": 42.857142857142854,
+              "partialCoverAt5": 100,
+              "avgCoveredGroupsAt5": 1.5714285714285714,
+              "avgCoverageRatioAt5": 0.738095238095238
+            },
+            "supportCoverageTunedCombined": {
+              "applicable": 7,
+              "docHitAt1Total": 4,
+              "docHitAt5Total": 7,
+              "docHitAt1FullCoverAt3": 0,
+              "docHitAt1FullCoverAt5": 14.285714285714285,
+              "docHitAt5FullCoverAt5": 42.857142857142854,
+              "partialCoverAt5": 100,
+              "avgCoveredGroupsAt5": 1.5714285714285714,
+              "avgCoverageRatioAt5": 0.738095238095238
+            }
+          }
+        }
+      }
+    }
+  ]
+}

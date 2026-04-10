@@ -12,6 +12,7 @@ import {
     type LexicalBonusMode,
     type Metadata,
     type ParsedQueryIntent,
+    type QConfusionMode,
     type QuerySignals,
     type RejectTier,
     type RetrievalSignals,
@@ -42,6 +43,8 @@ export type PipelinePreset = {
         lexicalBonusMode: LexicalBonusMode;
         kpRoleRerankMode: KPRoleRerankMode;
         kpRoleDocWeight: number;
+        qConfusionMode: QConfusionMode;
+        qConfusionWeight: number;
         useQueryExpansion: boolean;
         useTopicPartition: boolean;
         enableExplicitYearFilter: boolean;
@@ -82,6 +85,8 @@ export const PAPER_FROZEN_MAIN_PIPELINE_PRESET: PipelinePreset = {
         lexicalBonusMode: "sum",
         kpRoleRerankMode: "feature",
         kpRoleDocWeight: 0.35,
+        qConfusionMode: "off",
+        qConfusionWeight: 0.2,
         useQueryExpansion: true,
         useTopicPartition: true,
         enableExplicitYearFilter: true,
@@ -108,6 +113,8 @@ export const PRODUCT_CANONICAL_FULL_PIPELINE_PRESET: PipelinePreset = {
         lexicalBonusMode: "sum",
         kpRoleRerankMode: "feature",
         kpRoleDocWeight: 0.35,
+        qConfusionMode: "off",
+        qConfusionWeight: 0.2,
         useQueryExpansion: true,
         useTopicPartition: true,
         enableExplicitYearFilter: true,
@@ -154,6 +161,8 @@ export const MINIMAL_BASELINE_PIPELINE_PRESET: PipelinePreset = {
         lexicalBonusMode: "sum",
         kpRoleRerankMode: "off",
         kpRoleDocWeight: 0,
+        qConfusionMode: "off",
+        qConfusionWeight: 0.2,
         useQueryExpansion: false,
         useTopicPartition: false,
         enableExplicitYearFilter: false,
@@ -167,6 +176,8 @@ export const FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET: PipelinePreset = {
     name: "frontend_research_sync_v1",
     retrieval: {
         ...MINIMAL_BASELINE_PIPELINE_PRESET.retrieval,
+        qConfusionMode: "combined",
+        qConfusionWeight: 0.2,
         enableExplicitYearFilter: true,
         enablePhaseAnchorBoost: true,
     },
@@ -445,6 +456,7 @@ type PhaseAnchor = {
 };
 
 const PHASE_ANCHOR_DOC_WEIGHT = 0.35;
+const TITLE_INTENT_DOC_WEIGHT = 0.28;
 const PHASE_STAGE_RULES: Array<{ stage: string; pattern: RegExp }> = [
     { stage: "预报名", pattern: /预报名/ },
     { stage: "报名通知", pattern: /报名通知|网上报名/ },
@@ -458,6 +470,104 @@ const PHASE_STAGE_RULES: Array<{ stage: string; pattern: RegExp }> = [
     { stage: "复试", pattern: /复试/ },
     { stage: "调剂", pattern: /调剂/ },
 ] as const;
+const TITLE_RULE_DOC_PATTERN =
+    /(招生简章|招生章程|实施细则|实施办法|接收办法|工作方案|录取方案|章程|简章)/;
+const TITLE_PROCESS_NOTICE_PATTERN =
+    /(活动报名通知|报名通知|预报名|综合考核通知|复试通知|考核通知|考核安排|申请通知|报名安排)/;
+const TITLE_OUTCOME_PATTERN =
+    /(结果公示|录取结果|拟录取|公示|名单|递补|增补|入营通知)/;
+
+function normalizePatternText(text: string): string {
+    return text.replace(/\s+/g, "");
+}
+
+function queryAsksOutcomeLikeTitle(query: string): boolean {
+    return /结果|公示|名单|拟录取|递补|增补|录取结果|入营/.test(query);
+}
+
+function queryAsksProcedureLikeTitle(query: string): boolean {
+    return /流程|步骤|环节|程序|过程|考核步骤|需要经过|怎么申请|如何申请|怎么报名|如何报名|关键时间节点|时间节点|时间安排|什么时候|何时|截止日期|截止时间|系统操作|报到/.test(
+        query,
+    );
+}
+
+function queryAsksRequirementLikeTitle(query: string): boolean {
+    return /条件|要求|资格|材料|评分|怎么评分|如何评分|关键要求|整体政策|政策|规则/.test(
+        query,
+    );
+}
+
+function queryAsksEventDateLikeTitle(query: string): boolean {
+    return /举办日期|举办时间|举行时间|活动时间|什么时候举办|何时举办|哪天举办/.test(
+        query,
+    );
+}
+
+function computeTitleIntentDocDelta(
+    query: string,
+    document: PipelineDocumentRecord,
+): number {
+    const normalizedQuery = normalizePatternText(query);
+    const normalizedTitle = normalizePatternText(document.ot_title || "");
+    if (!normalizedTitle) {
+        return 0;
+    }
+
+    const asksOutcomeLikeTitle = queryAsksOutcomeLikeTitle(normalizedQuery);
+    const asksProcedureLikeTitle = queryAsksProcedureLikeTitle(normalizedQuery);
+    const asksRequirementLikeTitle =
+        queryAsksRequirementLikeTitle(normalizedQuery);
+    const asksEventDateLikeTitle =
+        queryAsksEventDateLikeTitle(normalizedQuery);
+    const isRuleDocTitle = TITLE_RULE_DOC_PATTERN.test(normalizedTitle);
+    const isProcessNoticeTitle =
+        TITLE_PROCESS_NOTICE_PATTERN.test(normalizedTitle);
+    const isOutcomeTitle = TITLE_OUTCOME_PATTERN.test(normalizedTitle);
+
+    let delta = 0;
+
+    if (!asksOutcomeLikeTitle && isOutcomeTitle) {
+        delta -= 0.95;
+    }
+    if ((asksProcedureLikeTitle || asksRequirementLikeTitle) && isRuleDocTitle) {
+        delta += asksProcedureLikeTitle && asksRequirementLikeTitle ? 0.95 : 0.75;
+    }
+    if (asksProcedureLikeTitle && isProcessNoticeTitle) {
+        delta += 0.55;
+    }
+
+    if (/夏令营/.test(normalizedQuery)) {
+        if (!asksEventDateLikeTitle && /活动报名通知|报名通知/.test(normalizedTitle)) {
+            delta += 0.45;
+        }
+        if (!asksOutcomeLikeTitle && /入营通知/.test(normalizedTitle)) {
+            delta -= 0.45;
+        }
+        if (asksEventDateLikeTitle && /入营通知|活动通知/.test(normalizedTitle)) {
+            delta += 0.55;
+        }
+    }
+
+    if (/推免/.test(normalizedQuery) && /接收办法|工作方案/.test(normalizedTitle)) {
+        delta += 0.45;
+    }
+
+    if (
+        /博士/.test(normalizedQuery) &&
+        /实施办法|招生简章|综合考核通知/.test(normalizedTitle)
+    ) {
+        delta += 0.25;
+    }
+
+    if (
+        /关键时间节点|时间节点|截止日期|截止时间|系统操作/.test(normalizedQuery) &&
+        /报名通知|综合考核通知|复试通知/.test(normalizedTitle)
+    ) {
+        delta += 0.4;
+    }
+
+    return delta;
+}
 
 function normalizeBatchToken(token: string): string | undefined {
     switch (token) {
@@ -581,6 +691,33 @@ function applyPhaseAnchorBoostToDocuments(
         );
 }
 
+function applyTitleIntentBoostToDocuments(
+    query: string,
+    documents: PipelineDocumentRecord[],
+): PipelineDocumentRecord[] {
+    return [...documents]
+        .map((document) => {
+            const baseScore =
+                document.displayScore ?? document.coarseScore ?? document.score ?? 0;
+            const delta = computeTitleIntentDocDelta(query, document);
+            const nextScore = baseScore + delta * TITLE_INTENT_DOC_WEIGHT;
+
+            return {
+                ...document,
+                score: nextScore,
+                coarseScore:
+                    (document.coarseScore ?? document.score ?? baseScore) +
+                    delta * TITLE_INTENT_DOC_WEIGHT,
+                displayScore: nextScore,
+            };
+        })
+        .sort(
+            (left, right) =>
+                (right.displayScore ?? right.score ?? 0) -
+                (left.displayScore ?? left.score ?? 0),
+        );
+}
+
 export function mergeCoarseMatchesIntoDocuments(
     documents: PipelineDocumentRecord[],
     coarseMatches: Array<{ otid: string; score: number; best_kpid?: string }>,
@@ -655,6 +792,8 @@ export function executeRetrievalStage(params: {
         lexicalBonusMode: preset.retrieval.lexicalBonusMode,
         kpRoleRerankMode: preset.retrieval.kpRoleRerankMode,
         kpRoleDocWeight: preset.retrieval.kpRoleDocWeight,
+        qConfusionMode: preset.retrieval.qConfusionMode,
+        qConfusionWeight: preset.retrieval.qConfusionWeight,
         enableExplicitYearFilter: preset.retrieval.enableExplicitYearFilter,
         minimalMode: preset.retrieval.minimalMode,
     });
@@ -765,7 +904,11 @@ export async function executeSearchPipeline(params: {
                 preset.retrieval.enablePhaseAnchorBoost
                     ? applyPhaseAnchorBoostToDocuments(query, directDocuments)
                     : directDocuments;
-            results = phaseAdjustedDocuments;
+            const titleAdjustedDocuments =
+                preset.display.useYearPhaseTitleAdjustment
+                    ? applyTitleIntentBoostToDocuments(query, phaseAdjustedDocuments)
+                    : phaseAdjustedDocuments;
+            results = titleAdjustedDocuments;
         }
 
         if (shouldFetchWeakResults) {
