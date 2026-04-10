@@ -457,6 +457,8 @@ type PhaseAnchor = {
 
 const PHASE_ANCHOR_DOC_WEIGHT = 0.35;
 const TITLE_INTENT_DOC_WEIGHT = 0.28;
+const TITLE_COVERAGE_DOC_WEIGHT = 0.18;
+const TITLE_DIVERSITY_DUPLICATE_PENALTY = 0.34;
 const PHASE_STAGE_RULES: Array<{ stage: string; pattern: RegExp }> = [
     { stage: "预报名", pattern: /预报名/ },
     { stage: "报名通知", pattern: /报名通知|网上报名/ },
@@ -476,6 +478,46 @@ const TITLE_PROCESS_NOTICE_PATTERN =
     /(活动报名通知|报名通知|预报名|综合考核通知|复试通知|考核通知|考核安排|申请通知|报名安排)/;
 const TITLE_OUTCOME_PATTERN =
     /(结果公示|录取结果|拟录取|公示|名单|递补|增补|入营通知)/;
+const TITLE_AI_SCHOOL_PATTERN = /人工智能学院/;
+const TITLE_OTHER_PROGRAM_PATTERN =
+    /(软件工程学院|海洋工程与技术学院|附属医院|广州实验室|鹏城实验室|大湾区大学|鹏城国家实验室)/;
+const TITLE_PREAPPLY_PATTERN = /预报名/;
+const TITLE_TRANSFER_PATTERN = /调剂/;
+const TITLE_CANDIDATE_LIST_PATTERN =
+    /进入综合考核考生名单|综合考核考生名单|进入综合考核名单/;
+const TITLE_REVIEW_RESULT_PATTERN =
+    /(复试结果|综合考核结果|结果公示|拟录取|录取结果|公示|名单)/;
+const TITLE_SUMMER_CAMP_PATTERN = /夏令营/;
+const TITLE_TUIMIAN_PATTERN = /推免|推荐免试/;
+const TITLE_DOCTORAL_PATTERN = /博士/;
+const TITLE_MASTER_PATTERN = /硕士/;
+const TITLE_SYSTEM_NOTICE_PATTERN = /录取通知书|邮寄地址校对/;
+const QUERY_ASPECT_RULES = [
+    {
+        query: /条件|资格|要求/,
+        doc: /条件|资格|要求|申请人基本条件|报考条件|身体健康/,
+    },
+    {
+        query: /材料|提交|准备什么材料/,
+        doc: /材料|提交|成绩单|证明|推荐信|纸质版/,
+    },
+    {
+        query: /时间|日期|什么时候|何时|截止/,
+        doc: /时间|日期|截止|月|日|24:00|开通|关闭/,
+    },
+    {
+        query: /系统|报名功能|录取功能|操作/,
+        doc: /系统|报名功能|录取功能|确认|注册|填报/,
+    },
+    {
+        query: /流程|步骤|经过哪些|过程|程序|考核/,
+        doc: /流程|步骤|考核|审核|报名|录取|复试/,
+    },
+    {
+        query: /评分|打分|成绩|单科/,
+        doc: /评分|成绩|总成绩|单科|综合考核成绩/,
+    },
+] as const;
 
 function normalizePatternText(text: string): string {
     return text.replace(/\s+/g, "");
@@ -503,6 +545,48 @@ function queryAsksEventDateLikeTitle(query: string): boolean {
     );
 }
 
+function queryAsksPolicyOverviewLikeTitle(query: string): boolean {
+    return /整体政策|主要要求|关键要求|政策|总体要求/.test(query);
+}
+
+function queryAsksSystemTimelineLikeTitle(query: string): boolean {
+    return /关键时间节点|时间节点|截止时间|截止日期|系统操作|报名功能|录取功能|服务系统/.test(
+        query,
+    );
+}
+
+function queryNeedsCoverageLikeTitle(query: string): boolean {
+    return /分别|以及|并描述|整个流程|申请和录取过程|从预报名到录取|从准备材料到完成面试|条件.*评分|条件.*材料|材料.*时间|申请.*录取过程/.test(
+        query,
+    );
+}
+
+function getDocumentEvidenceText(document: PipelineDocumentRecord): string {
+    const parts: string[] = [];
+    if (document.ot_title) {
+        parts.push(document.ot_title);
+    }
+    if (Array.isArray(document.kps)) {
+        const bestKp = document.kps.find((item) => item.kpid === document.best_kpid);
+        if (bestKp?.kp_text) {
+            parts.push(bestKp.kp_text);
+        }
+        document.kps
+            .filter((item) => item.kpid !== document.best_kpid && item.kp_text)
+            .slice(0, 4)
+            .forEach((item) => {
+                if (item.kp_text) {
+                    parts.push(item.kp_text);
+                }
+            });
+    }
+    return normalizePatternText(parts.join(" "));
+}
+
+function normalizeTitleDedupKey(title: string): string {
+    return normalizePatternText(title).replace(/20\d{2}年/g, "");
+}
+
 function computeTitleIntentDocDelta(
     query: string,
     document: PipelineDocumentRecord,
@@ -519,10 +603,41 @@ function computeTitleIntentDocDelta(
         queryAsksRequirementLikeTitle(normalizedQuery);
     const asksEventDateLikeTitle =
         queryAsksEventDateLikeTitle(normalizedQuery);
+    const asksPolicyOverviewLikeTitle =
+        queryAsksPolicyOverviewLikeTitle(normalizedQuery);
+    const asksSystemTimelineLikeTitle =
+        queryAsksSystemTimelineLikeTitle(normalizedQuery);
     const isRuleDocTitle = TITLE_RULE_DOC_PATTERN.test(normalizedTitle);
     const isProcessNoticeTitle =
         TITLE_PROCESS_NOTICE_PATTERN.test(normalizedTitle);
     const isOutcomeTitle = TITLE_OUTCOME_PATTERN.test(normalizedTitle);
+    const isAiSchoolTitle = TITLE_AI_SCHOOL_PATTERN.test(normalizedTitle);
+    const isOtherProgramTitle =
+        TITLE_OTHER_PROGRAM_PATTERN.test(normalizedTitle);
+    const isPreapplyTitle = TITLE_PREAPPLY_PATTERN.test(normalizedTitle);
+    const isTransferTitle = TITLE_TRANSFER_PATTERN.test(normalizedTitle);
+    const isCandidateListTitle =
+        TITLE_CANDIDATE_LIST_PATTERN.test(normalizedTitle);
+    const isReviewResultTitle =
+        TITLE_REVIEW_RESULT_PATTERN.test(normalizedTitle);
+    const isSummerCampTitle = TITLE_SUMMER_CAMP_PATTERN.test(normalizedTitle);
+    const isTuimianTitle = TITLE_TUIMIAN_PATTERN.test(normalizedTitle);
+    const isDoctoralTitle = TITLE_DOCTORAL_PATTERN.test(normalizedTitle);
+    const isMasterOnlyTitle =
+        TITLE_MASTER_PATTERN.test(normalizedTitle) &&
+        !isDoctoralTitle &&
+        !isTuimianTitle;
+    const isSystemNoticeTitle =
+        TITLE_SYSTEM_NOTICE_PATTERN.test(normalizedTitle);
+    const mentionsAiSchool = /人工智能学院|AI学院/.test(normalizedQuery);
+    const mentionsDoctoral = /博士/.test(normalizedQuery);
+    const mentionsTuimian = /推免|推荐免试/.test(normalizedQuery);
+    const mentionsSummerCamp = /夏令营/.test(normalizedQuery);
+    const mentionsTransfer = /调剂/.test(normalizedQuery);
+    const asksPostOutcomeAdmission =
+        /通过考核后|还会被录取吗|确保.*录取|被.*录取/.test(normalizedQuery);
+    const asksMaterialReviewTiming =
+        /材料审核.*公示|通过材料审核/.test(normalizedQuery);
 
     let delta = 0;
 
@@ -536,36 +651,157 @@ function computeTitleIntentDocDelta(
         delta += 0.55;
     }
 
-    if (/夏令营/.test(normalizedQuery)) {
+    if (mentionsAiSchool) {
+        if (isAiSchoolTitle) {
+            delta += 0.45;
+        } else if (isOtherProgramTitle) {
+            delta -= 0.9;
+        } else if (/学院/.test(normalizedTitle)) {
+            delta -= 0.55;
+        } else {
+            delta -= 0.2;
+        }
+    }
+
+    if (mentionsDoctoral) {
+        if (isMasterOnlyTitle) {
+            delta -= 0.95;
+        } else if (isDoctoralTitle) {
+            delta += 0.2;
+        }
+    }
+
+    if (mentionsTuimian) {
+        if (isTuimianTitle) {
+            delta += 0.45;
+        }
+        if (isDoctoralTitle && !isTuimianTitle) {
+            delta -= 0.6;
+        }
+    }
+
+    if (mentionsSummerCamp) {
+        if (isSummerCampTitle) {
+            delta += 0.35;
+        }
         if (!asksEventDateLikeTitle && /活动报名通知|报名通知/.test(normalizedTitle)) {
             delta += 0.45;
         }
-        if (!asksOutcomeLikeTitle && /入营通知/.test(normalizedTitle)) {
+        if (
+            !asksOutcomeLikeTitle &&
+            !asksEventDateLikeTitle &&
+            /入营通知/.test(normalizedTitle)
+        ) {
             delta -= 0.45;
         }
         if (asksEventDateLikeTitle && /入营通知|活动通知/.test(normalizedTitle)) {
-            delta += 0.55;
+            delta += 0.95;
+        }
+        if (
+            asksEventDateLikeTitle &&
+            !/报名/.test(normalizedQuery) &&
+            /活动报名通知|报名通知/.test(normalizedTitle)
+        ) {
+            delta -= 0.45;
+        }
+        if (
+            !isSummerCampTitle &&
+            (isDoctoralTitle || isTuimianTitle || isMasterOnlyTitle)
+        ) {
+            delta -= 0.65;
         }
     }
 
-    if (/推免/.test(normalizedQuery) && /接收办法|工作方案/.test(normalizedTitle)) {
+    if (mentionsTuimian && /接收办法|工作方案/.test(normalizedTitle)) {
         delta += 0.45;
     }
 
-    if (
-        /博士/.test(normalizedQuery) &&
-        /实施办法|招生简章|综合考核通知/.test(normalizedTitle)
-    ) {
+    if (mentionsDoctoral && /实施办法|招生简章|综合考核通知/.test(normalizedTitle)) {
         delta += 0.25;
     }
 
-    if (
-        /关键时间节点|时间节点|截止日期|截止时间|系统操作/.test(normalizedQuery) &&
+    if (asksPolicyOverviewLikeTitle) {
+        if (/招生简章|接收办法|实施办法/.test(normalizedTitle)) {
+            delta += 0.55;
+        }
+        if (isPreapplyTitle) {
+            delta -= 0.45;
+        }
+        if (isTransferTitle && !mentionsTransfer) {
+            delta -= 0.65;
+        }
+        if (isReviewResultTitle && !asksOutcomeLikeTitle) {
+            delta -= 0.55;
+        }
+    }
+
+    if (asksSystemTimelineLikeTitle) {
+        if (/接收办法|实施办法/.test(normalizedTitle)) {
+            delta += 0.45;
+        }
+        if (isPreapplyTitle && /录取过程|系统操作/.test(normalizedQuery)) {
+            delta -= 0.2;
+        }
+        if (isSystemNoticeTitle) {
+            delta -= 0.55;
+        }
+    } else if (
+        /关键时间节点|时间节点|截止日期|截止时间/.test(normalizedQuery) &&
         /报名通知|综合考核通知|复试通知/.test(normalizedTitle)
     ) {
         delta += 0.4;
     }
 
+    if (asksPostOutcomeAdmission) {
+        if (/招生简章|实施办法/.test(normalizedTitle)) {
+            delta += 0.4;
+        }
+        if (isReviewResultTitle) {
+            delta -= 0.55;
+        }
+    }
+
+    if (asksMaterialReviewTiming) {
+        if (isCandidateListTitle) {
+            delta += 0.8;
+        }
+        if (/综合考核结果/.test(normalizedTitle)) {
+            delta -= 0.35;
+        }
+    }
+
+    return delta;
+}
+
+function computeCoverageDocDelta(
+    query: string,
+    document: PipelineDocumentRecord,
+): number {
+    const normalizedQuery = normalizePatternText(query);
+    const requestedAspects = QUERY_ASPECT_RULES.filter((rule) =>
+        rule.query.test(normalizedQuery),
+    );
+    if (requestedAspects.length < 2) {
+        return 0;
+    }
+
+    const evidenceText = getDocumentEvidenceText(document);
+    if (!evidenceText) {
+        return -0.35;
+    }
+
+    const coveredCount = requestedAspects.filter((rule) =>
+        rule.doc.test(evidenceText),
+    ).length;
+
+    if (coveredCount === 0) {
+        return -0.4;
+    }
+
+    let delta = Math.min(coveredCount, 3) * 0.2;
+    if (coveredCount === requestedAspects.length) {
+        delta += 0.2;
+    }
     return delta;
 }
 
@@ -716,6 +952,70 @@ function applyTitleIntentBoostToDocuments(
                 (right.displayScore ?? right.score ?? 0) -
                 (left.displayScore ?? left.score ?? 0),
         );
+}
+
+function applyCoverageBoostToDocuments(
+    query: string,
+    documents: PipelineDocumentRecord[],
+): PipelineDocumentRecord[] {
+    const scoredDocuments = [...documents]
+        .map((document) => {
+            const baseScore =
+                document.displayScore ?? document.coarseScore ?? document.score ?? 0;
+            const delta = computeCoverageDocDelta(query, document);
+            const nextScore = baseScore + delta * TITLE_COVERAGE_DOC_WEIGHT;
+
+            return {
+                ...document,
+                score: nextScore,
+                displayScore: nextScore,
+            };
+        })
+        .sort(
+            (left, right) =>
+                (right.displayScore ?? right.score ?? 0) -
+                (left.displayScore ?? left.score ?? 0),
+        );
+
+    if (!queryNeedsCoverageLikeTitle(normalizePatternText(query))) {
+        return scoredDocuments;
+    }
+
+    const remaining = [...scoredDocuments];
+    const selected: PipelineDocumentRecord[] = [];
+    const seenTitleKeys = new Map<string, number>();
+
+    while (remaining.length > 0) {
+        let bestIndex = 0;
+        let bestAdjustedScore = Number.NEGATIVE_INFINITY;
+
+        remaining.forEach((candidate, index) => {
+            const baseScore =
+                candidate.displayScore ?? candidate.coarseScore ?? candidate.score ?? 0;
+            const titleKey = normalizeTitleDedupKey(candidate.ot_title || "");
+            const seenCount = titleKey ? (seenTitleKeys.get(titleKey) ?? 0) : 0;
+            const adjustedScore =
+                baseScore - seenCount * TITLE_DIVERSITY_DUPLICATE_PENALTY;
+
+            if (adjustedScore > bestAdjustedScore) {
+                bestAdjustedScore = adjustedScore;
+                bestIndex = index;
+            }
+        });
+
+        const chosen = remaining.splice(bestIndex, 1)[0];
+        const titleKey = normalizeTitleDedupKey(chosen.ot_title || "");
+        if (titleKey) {
+            seenTitleKeys.set(titleKey, (seenTitleKeys.get(titleKey) ?? 0) + 1);
+        }
+        selected.push({
+            ...chosen,
+            score: bestAdjustedScore,
+            displayScore: bestAdjustedScore,
+        });
+    }
+
+    return selected;
 }
 
 export function mergeCoarseMatchesIntoDocuments(
@@ -908,7 +1208,11 @@ export async function executeSearchPipeline(params: {
                 preset.display.useYearPhaseTitleAdjustment
                     ? applyTitleIntentBoostToDocuments(query, phaseAdjustedDocuments)
                     : phaseAdjustedDocuments;
-            results = titleAdjustedDocuments;
+            const coverageAdjustedDocuments =
+                preset.display.useYearPhaseTitleAdjustment
+                    ? applyCoverageBoostToDocuments(query, titleAdjustedDocuments)
+                    : titleAdjustedDocuments;
+            results = coverageAdjustedDocuments;
         }
 
         if (shouldFetchWeakResults) {
