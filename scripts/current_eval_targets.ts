@@ -4,14 +4,24 @@ export const CURRENT_EVAL_DATASET_FILES = {
         "../Backend/test/test_dataset_granularity/test_dataset_granularity_main_benchmark_v2_reviewed_userized_v1.json",
     granularityInDomainHoldout50:
         "../Backend/test/test_dataset_granularity/test_dataset_granularity_in_domain_generalization_60_reviewed_userized_v1.json",
-    granularityExternalOod50:
+    // 当前论文口径：blind aligned 外域集作为正式 ExtOOD；旧 matched 外域集单列保留
+    granularityExtOodBlind60:
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_aligned_ext_ood_blind_60_draft_v1.json",
+    granularityMatchedExtOod60:
         "../Backend/test/test_dataset_granularity/test_dataset_granularity_external_matched_ood_60_reviewed_userized_v1.json",
-    // 兼容旧 target key，当前正式外域口径已切到 external_matched_ood_v2。
+    granularityHardOodBlind30:
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_hard_ood_blind_30_draft_v1.json",
+    granularityLegacyExternalOodHard30:
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_external_ood_holdout_30_reviewed_userized_v1.json",
+    // 兼容旧 target key：external_ood_50 现在映射到正式 blind ExtOOD。
+    granularityExternalOod50:
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_aligned_ext_ood_blind_60_draft_v1.json",
+    // 兼容旧 target key：historical external_ood_holdout_30 过去已被借用为 matched external 入口，这里保留该映射。
     granularityExternalOodHoldout30:
         "../Backend/test/test_dataset_granularity/test_dataset_granularity_external_matched_ood_60_reviewed_userized_v1.json",
-    // 历史 hard OOD，仅保留参考
+    // 兼容旧 target key：external_ood_hard_30 现在映射到正式 blind HardOOD。
     granularityExternalOodHard30:
-        "../Backend/test/test_dataset_granularity/test_dataset_granularity_external_ood_holdout_30_reviewed_userized_v1.json",
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_hard_ood_blind_30_draft_v1.json",
     granularityHardOodV2DiagTop30:
         "../Backend/test/test_dataset_granularity/test_dataset_granularity_hard_ood_v2_diag_top30.json",
     // 当前唯一 behavior 主线：未看过的 v4 frozen holdout
@@ -19,6 +29,22 @@ export const CURRENT_EVAL_DATASET_FILES = {
         "../Backend/test/test_dataset_answer_reject/test_dataset_answer_reject_v4_frozen_holdout_reviewed.json",
     answerRejectV4FrozenHoldout:
         "../Backend/test/test_dataset_answer_reject/test_dataset_answer_reject_v4_frozen_holdout_reviewed.json",
+    answerRejectV5ExpandedDraft:
+        "../Backend/test/test_dataset_answer_reject/test_dataset_answer_reject_v5_expanded_draft.json",
+    answerRejectV5ExpandedFrozenV1:
+        "../Backend/test/test_dataset_answer_reject/test_dataset_answer_reject_v5_expanded_frozen_v1.json",
+    answerRejectV6Combined80Draft:
+        "../Backend/test/test_dataset_answer_reject/test_dataset_answer_reject_v6_80_combined_manifest.json",
+    answerQualityBlindProvisionalV1:
+        "../Backend/test/test_dataset_answer_quality/test_dataset_answer_quality_blind_provisional_v1.json",
+    answerQualityBlindV1:
+        "../Backend/test/test_dataset_answer_quality/test_dataset_answer_quality_blind_reviewed_v1.json",
+    answerQualityBlindV2:
+        "../Backend/test/test_dataset_answer_quality/test_dataset_answer_quality_blind_reviewed_v2.json",
+    answerQualityBlindV3Reviewed100:
+        "../Backend/test/test_dataset_answer_quality/test_dataset_answer_quality_blind_v3_100_reviewed_v1.json",
+    answerQualityBlindV3Frozen100:
+        "../Backend/test/test_dataset_answer_quality/test_dataset_answer_quality_blind_v3_100_frozen_v1.json",
     // v3 为上一轮调参与扩样后的已看过主线，保留回归参考
     answerRejectV3Dev:
         "../Backend/test/test_dataset_answer_reject/test_dataset_answer_reject_v3_dev_reviewed.json",

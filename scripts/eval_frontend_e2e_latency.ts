@@ -93,7 +93,7 @@ const DEFAULT_COLD_SAMPLE_LIMIT = Number.parseInt(
 const OFFICIAL_DATASET_KEYS: GranularityDatasetTargetKey[] = [
     "main_bench_120",
     "in_domain_holdout_50",
-    "external_ood_50",
+    "ext_ood_blind_60",
 ];
 
 function nowMs(): number {

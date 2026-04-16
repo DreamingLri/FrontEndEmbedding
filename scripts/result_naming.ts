@@ -31,29 +31,62 @@ const DATASET_PROFILE_MAP: Record<string, NamedDatasetProfile> = {
         alias: "gran_in_v2",
         displayName: "InDomain",
     },
-    external_ood_50: {
+    ext_ood_blind_60: {
+        canonicalName:
+            "test_dataset_granularity_aligned_ext_ood_blind_60_draft_v1",
+        alias: "gran_ext_blind60",
+        displayName: "ExtOOD",
+    },
+    test_dataset_granularity_aligned_ext_ood_blind_60_draft_v1: {
+        canonicalName:
+            "test_dataset_granularity_aligned_ext_ood_blind_60_draft_v1",
+        alias: "gran_ext_blind60",
+        displayName: "ExtOOD",
+    },
+    matched_ext_ood_60: {
         canonicalName:
             "test_dataset_granularity_external_matched_ood_60_reviewed_userized_v1",
-        alias: "gran_ext_v2",
+        alias: "gran_matched_ext60",
+        displayName: "MatchedExtOOD",
+    },
+    external_ood_50: {
+        canonicalName:
+            "test_dataset_granularity_aligned_ext_ood_blind_60_draft_v1",
+        alias: "gran_ext_blind60",
         displayName: "ExtOOD",
     },
     test_dataset_granularity_external_matched_ood_60_reviewed_userized_v1: {
         canonicalName:
             "test_dataset_granularity_external_matched_ood_60_reviewed_userized_v1",
-        alias: "gran_ext_v2",
-        displayName: "ExtOOD",
+        alias: "gran_matched_ext60",
+        displayName: "MatchedExtOOD",
+    },
+    hard_ood_blind_30: {
+        canonicalName: "test_dataset_granularity_hard_ood_blind_30_draft_v1",
+        alias: "gran_hardood_blind30",
+        displayName: "HardOOD",
+    },
+    test_dataset_granularity_hard_ood_blind_30_draft_v1: {
+        canonicalName: "test_dataset_granularity_hard_ood_blind_30_draft_v1",
+        alias: "gran_hardood_blind30",
+        displayName: "HardOOD",
     },
     external_ood_holdout_30: {
         canonicalName:
-            "test_dataset_granularity_external_ood_holdout_30_reviewed_userized_v1",
-        alias: "gran_ext_hard30",
-        displayName: "ExtHard",
+            "test_dataset_granularity_external_matched_ood_60_reviewed_userized_v1",
+        alias: "gran_matched_ext60",
+        displayName: "MatchedExtOOD",
     },
     external_ood_hard_30: {
+        canonicalName: "test_dataset_granularity_hard_ood_blind_30_draft_v1",
+        alias: "gran_hardood_blind30",
+        displayName: "HardOOD",
+    },
+    legacy_external_ood_hard_30: {
         canonicalName:
             "test_dataset_granularity_external_ood_holdout_30_reviewed_userized_v1",
-        alias: "gran_ext_hard30",
-        displayName: "HardOOD",
+        alias: "gran_legacy_hard30",
+        displayName: "LegacyHardOOD30",
     },
     hard_ood_v2_diag_top30: {
         canonicalName: "test_dataset_granularity_hard_ood_v2_diag_top30",
@@ -68,8 +101,8 @@ const DATASET_PROFILE_MAP: Record<string, NamedDatasetProfile> = {
     test_dataset_granularity_external_ood_holdout_30_reviewed_userized_v1: {
         canonicalName:
             "test_dataset_granularity_external_ood_holdout_30_reviewed_userized_v1",
-        alias: "gran_ext_hard30",
-        displayName: "ExtHard",
+        alias: "gran_legacy_hard30",
+        displayName: "LegacyHardOOD30",
     },
     test_dataset_granularity_main_120_reviewed_userized_v1: {
         canonicalName: "test_dataset_granularity_main_120_reviewed_userized_v1",
@@ -92,6 +125,46 @@ const DATASET_PROFILE_MAP: Record<string, NamedDatasetProfile> = {
         canonicalName: "test_dataset_answer_reject_v4_frozen_holdout_reviewed",
         alias: "ar_v4",
         displayName: "AnswerReject",
+    },
+    test_dataset_answer_reject_v5_expanded_draft: {
+        canonicalName: "test_dataset_answer_reject_v5_expanded_draft",
+        alias: "ar_v5_expanded_draft",
+        displayName: "AnswerRejectExpandedDraft",
+    },
+    test_dataset_answer_reject_v5_expanded_frozen_v1: {
+        canonicalName: "test_dataset_answer_reject_v5_expanded_frozen_v1",
+        alias: "ar_v5_expanded_frozen_v1",
+        displayName: "AnswerRejectFrozen",
+    },
+    test_dataset_answer_reject_v6_80_combined_manifest: {
+        canonicalName: "test_dataset_answer_reject_v6_80_combined_manifest",
+        alias: "ar_v6_80_combined",
+        displayName: "AnswerReject80Draft",
+    },
+    test_dataset_answer_quality_blind_reviewed_v1: {
+        canonicalName: "test_dataset_answer_quality_blind_reviewed_v1",
+        alias: "aq_blind_v1",
+        displayName: "AnswerQualityBlind",
+    },
+    test_dataset_answer_quality_blind_reviewed_v2: {
+        canonicalName: "test_dataset_answer_quality_blind_reviewed_v2",
+        alias: "aq_blind_v2",
+        displayName: "AnswerQualityBlindV2",
+    },
+    test_dataset_answer_quality_blind_provisional_v1: {
+        canonicalName: "test_dataset_answer_quality_blind_provisional_v1",
+        alias: "aq_blind_prov_v1",
+        displayName: "AnswerQualityBlindProv",
+    },
+    test_dataset_answer_quality_blind_v3_100_reviewed_v1: {
+        canonicalName: "test_dataset_answer_quality_blind_v3_100_reviewed_v1",
+        alias: "aq_blind_v3_100_reviewed_v1",
+        displayName: "AnswerQualityBlind100Reviewed",
+    },
+    test_dataset_answer_quality_blind_v3_100_frozen_v1: {
+        canonicalName: "test_dataset_answer_quality_blind_v3_100_frozen_v1",
+        alias: "aq_blind_v3_100_frozen_v1",
+        displayName: "AnswerQualityBlind100Frozen",
     },
 };
 
@@ -126,6 +199,13 @@ export function buildAnswerRejectResultFileName(
     timestamp: number,
 ): string {
     return `answer_reject_${resolveNamedDatasetProfile(datasetIdentity).alias}_${timestamp}.json`;
+}
+
+export function buildAnswerQualityResultFileName(
+    datasetIdentity: string,
+    timestamp: number,
+): string {
+    return `answer_quality_${resolveNamedDatasetProfile(datasetIdentity).alias}_${timestamp}.json`;
 }
 
 export function buildStandardBaselinesResultFileName(timestamp: number): string {

@@ -5,6 +5,8 @@ export type CurrentResultSlot =
     | "granularity_main_bench_120_current"
     | "granularity_in_domain_holdout_50_current"
     | "granularity_external_ood_50_current"
+    | "granularity_matched_ext_ood_60_current"
+    | "granularity_hard_ood_blind_30_current"
     | "granularity_external_ood_holdout_30_current"
     | "granularity_main_106_current"
     | "granularity_holdout_v3_current"
@@ -36,6 +38,9 @@ const SLOT_LABELS: Record<CurrentResultSlot, string> = {
     granularity_main_bench_120_current: "主方法主结果 `Main`",
     granularity_in_domain_holdout_50_current: "同域泛化结果 `InDomain`",
     granularity_external_ood_50_current: "跨域泛化结果 `ExtOOD`",
+    granularity_matched_ext_ood_60_current:
+        "对照外域结果 `MatchedExtOOD`",
+    granularity_hard_ood_blind_30_current: "最难外域结果 `HardOOD`",
     granularity_external_ood_holdout_30_current: "内部 hard stress `ExtHard`",
     granularity_main_106_current: "主方法主结果 `main_106`",
     granularity_holdout_v3_current: "外部泛化主结果 `holdout_v3`",
@@ -63,8 +68,12 @@ const SLOT_BY_DATASET_NAME: Partial<Record<string, CurrentResultSlot>> = {
         "granularity_main_bench_120_current",
     test_dataset_granularity_in_domain_generalization_60_reviewed_userized_v1:
         "granularity_in_domain_holdout_50_current",
-    test_dataset_granularity_external_matched_ood_60_reviewed_userized_v1:
+    test_dataset_granularity_aligned_ext_ood_blind_60_draft_v1:
         "granularity_external_ood_50_current",
+    test_dataset_granularity_external_matched_ood_60_reviewed_userized_v1:
+        "granularity_matched_ext_ood_60_current",
+    test_dataset_granularity_hard_ood_blind_30_draft_v1:
+        "granularity_hard_ood_blind_30_current",
     test_dataset_granularity_external_ood_holdout_30_reviewed:
         "granularity_external_ood_holdout_30_current",
     test_dataset_granularity_external_ood_holdout_30_reviewed_userized_v1:
@@ -73,8 +82,12 @@ const SLOT_BY_DATASET_NAME: Partial<Record<string, CurrentResultSlot>> = {
         "granularity_main_106_current",
     gran_main_v2: "granularity_main_bench_120_current",
     gran_in_v2: "granularity_in_domain_holdout_50_current",
-    gran_ext_v2: "granularity_external_ood_50_current",
+    gran_ext_blind60: "granularity_external_ood_50_current",
+    gran_matched_ext60: "granularity_matched_ext_ood_60_current",
+    gran_hardood_blind30: "granularity_hard_ood_blind_30_current",
+    gran_ext_v2: "granularity_matched_ext_ood_60_current",
     gran_ext_hard30: "granularity_external_ood_holdout_30_current",
+    gran_legacy_hard30: "granularity_external_ood_holdout_30_current",
     test_dataset_answer_reject_v4_frozen_holdout_reviewed:
         "answer_reject_current",
     ar_v4: "answer_reject_current",

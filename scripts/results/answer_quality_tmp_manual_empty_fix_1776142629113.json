@@ -1,0 +1,461 @@
+{
+  "generatedAt": "2026-04-14T04:57:09.112Z",
+  "datasetFile": "D:\\Project\\SuAsk\\SuAsk_Agent\\Backend\\test\\test_dataset_answer_quality\\_tmp_manual_empty_fix.json",
+  "datasetName": "_tmp_manual_empty_fix",
+  "datasetAlias": "tmp_manual_empty_fix",
+  "datasetDisplayName": "_tmp_manual_empty_fix",
+  "total": 4,
+  "config": {
+    "pipelineVersion": "frontend_research_sync_v1",
+    "preset": {
+      "name": "frontend_research_sync_v1",
+      "retrieval": {
+        "weights": {
+          "Q": 0.3333333333333333,
+          "KP": 0.3333333333333333,
+          "OT": 0.3333333333333333
+        },
+        "topHybridLimit": 1000,
+        "kpAggregationMode": "max",
+        "kpTopN": 3,
+        "kpTailWeight": 0.35,
+        "lexicalBonusMode": "sum",
+        "kpRoleRerankMode": "off",
+        "kpRoleDocWeight": 0,
+        "qConfusionMode": "combined",
+        "qConfusionWeight": 0.2,
+        "useQueryExpansion": false,
+        "useTopicPartition": false,
+        "enableExplicitYearFilter": true,
+        "enablePhaseAnchorBoost": true,
+        "minimalMode": true
+      },
+      "display": {
+        "rejectThreshold": 0.4,
+        "rerankBlendAlpha": 0.15,
+        "bestSentenceThreshold": 0.4,
+        "fetchMatchLimit": 20,
+        "fetchWeakMatchLimit": 12,
+        "useYearPhaseTitleAdjustment": true
+      }
+    },
+    "note": "当前报告面向 answer-only blind 集，关注回答正确率与潜在误导率；默认入口为 provisional AnswerQuality-blind。 AnswerQuality-blind 仅评估应答侧：关注回答正确率与潜在误导率，不混入 reject 主线。"
+  },
+  "summary": {
+    "total": 4,
+    "answered": 4,
+    "answerRate": 1,
+    "falseReject": 0,
+    "falseRejectRate": 0,
+    "correctAt1": 4,
+    "correctAt1Rate": 1,
+    "correctAt3": 4,
+    "correctAt3Rate": 1,
+    "correctAt5": 4,
+    "correctAt5Rate": 1,
+    "retrievalDocHitAt1": 4,
+    "retrievalDocHitAt1Rate": 1,
+    "potentiallyMisleading": 0,
+    "potentiallyMisleadingRate": 0,
+    "byPredictedBehavior": {
+      "answer": 4,
+      "reject": 0
+    },
+    "byQueryScope": {
+      "procedure": {
+        "total": 1,
+        "answerRate": 1,
+        "correctAt1Rate": 1,
+        "correctAt3Rate": 1,
+        "correctAt5Rate": 1,
+        "falseRejectRate": 0,
+        "potentiallyMisleadingRate": 0
+      },
+      "fact_detail": {
+        "total": 1,
+        "answerRate": 1,
+        "correctAt1Rate": 1,
+        "correctAt3Rate": 1,
+        "correctAt5Rate": 1,
+        "falseRejectRate": 0,
+        "potentiallyMisleadingRate": 0
+      },
+      "time_location": {
+        "total": 1,
+        "answerRate": 1,
+        "correctAt1Rate": 1,
+        "correctAt3Rate": 1,
+        "correctAt5Rate": 1,
+        "falseRejectRate": 0,
+        "potentiallyMisleadingRate": 0
+      },
+      "eligibility_condition": {
+        "total": 1,
+        "answerRate": 1,
+        "correctAt1Rate": 1,
+        "correctAt3Rate": 1,
+        "correctAt5Rate": 1,
+        "falseRejectRate": 0,
+        "potentiallyMisleadingRate": 0
+      }
+    },
+    "byQueryType": {
+      "standard": {
+        "total": 3,
+        "answerRate": 1,
+        "correctAt1Rate": 1,
+        "correctAt3Rate": 1,
+        "correctAt5Rate": 1,
+        "falseRejectRate": 0,
+        "potentiallyMisleadingRate": 0
+      },
+      "situational": {
+        "total": 1,
+        "answerRate": 1,
+        "correctAt1Rate": 1,
+        "correctAt3Rate": 1,
+        "correctAt5Rate": 1,
+        "falseRejectRate": 0,
+        "potentiallyMisleadingRate": 0
+      }
+    }
+  },
+  "caseReports": [
+    {
+      "id": "aq_blind_seed_0011",
+      "query": "中山大学人工智能学院2024年夏令营通知里说，营员最终录取人数怎么确定？",
+      "query_type": "standard",
+      "query_scope": "procedure",
+      "theme_family": "summer_camp",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": false,
+      "expected_otid": "otid_444d8fa2a8a54ec6",
+      "top_result_otid": "otid_444d8fa2a8a54ec6",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": 1,
+      "doc_hit_at_1": true,
+      "doc_hit_at_3": true,
+      "doc_hit_at_5": true,
+      "retrieval_doc_hit_at_1": true,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.04866666666666668,
+      "final_reject_score": 0.04866666666666668,
+      "weak_match_count": 0,
+      "match_count": 47,
+      "candidate_count": 18899,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_444d8fa2a8a54ec6",
+          "score": 1.2876707690897289,
+          "best_kpid": "kpid_a041c873bd694a3b"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_ccebe408485d4e4b",
+          "score": 1.1993702908971797,
+          "best_kpid": "kpid_8f3018e81ca44a7c"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_fd6621f974774e1c",
+          "score": 0.6578679098679099,
+          "best_kpid": "kpid_b4f3a4d7b7f74c53"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_b3ee840c319f48d2",
+          "score": 0.579823302410687,
+          "best_kpid": "kpid_981a36617e884100"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_697767196bdf46b2",
+          "score": 0.4411467412772914,
+          "best_kpid": "kpid_e061993eadb740fe"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_444d8fa2a8a54ec6",
+          "displayScore": 1.637670769089729
+        },
+        {
+          "rank": 2,
+          "otid": "otid_ccebe408485d4e4b",
+          "displayScore": 1.0313702908971798
+        },
+        {
+          "rank": 3,
+          "otid": "otid_fd6621f974774e1c",
+          "displayScore": 0.44786790986790986
+        },
+        {
+          "rank": 4,
+          "otid": "otid_697767196bdf46b2",
+          "displayScore": 0.3851467412772914
+        },
+        {
+          "rank": 5,
+          "otid": "otid_2875f7b8cd70429c",
+          "displayScore": 0.37736582130793855
+        }
+      ]
+    },
+    {
+      "id": "aq_blind_seed_0016",
+      "query": "中山大学2023年广东省综合评价面试里，自我介绍最多几分钟？",
+      "query_type": "standard",
+      "query_scope": "fact_detail",
+      "theme_family": "comprehensive_evaluation",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": false,
+      "expected_otid": "otid_b64bdb78a2854fdc",
+      "top_result_otid": "otid_b64bdb78a2854fdc",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": 1,
+      "doc_hit_at_1": true,
+      "doc_hit_at_3": true,
+      "doc_hit_at_5": true,
+      "retrieval_doc_hit_at_1": true,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.09349999999999999,
+      "final_reject_score": 0.09349999999999999,
+      "weak_match_count": 0,
+      "match_count": 35,
+      "candidate_count": 18899,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_b64bdb78a2854fdc",
+          "score": 1.2533389042998269,
+          "best_kpid": "kpid_1864f5d93e9741f1"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_29bee8c1d48a4946",
+          "score": 0.9779037064512732,
+          "best_kpid": "kpid_a551a2d481af4298"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_fbb4d0d85ec140b9",
+          "score": 0.9680241050812981,
+          "best_kpid": "kpid_96a0f706b9f64628"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_92e6bf026e144ebd",
+          "score": 0.6481453074362423,
+          "best_kpid": "kpid_7a16a71c282f48fc"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_84a37b294495492a",
+          "score": 0.6122846708869637,
+          "best_kpid": "kpid_a4765e054c9140a6"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_b64bdb78a2854fdc",
+          "displayScore": 0.9873389042998268
+        },
+        {
+          "rank": 2,
+          "otid": "otid_29bee8c1d48a4946",
+          "displayScore": 0.9779037064512732
+        },
+        {
+          "rank": 3,
+          "otid": "otid_fbb4d0d85ec140b9",
+          "displayScore": 0.9680241050812981
+        },
+        {
+          "rank": 4,
+          "otid": "otid_92e6bf026e144ebd",
+          "displayScore": 0.6481453074362423
+        },
+        {
+          "rank": 5,
+          "otid": "otid_84a37b294495492a",
+          "displayScore": 0.6122846708869637
+        }
+      ]
+    },
+    {
+      "id": "aq_blind_seed_0045",
+      "query": "2017年博士生导师短期出国交流项目实施办法里，如果交流访问时间少于四周，会有什么后果？",
+      "query_type": "situational",
+      "query_scope": "time_location",
+      "theme_family": "doctoral",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": false,
+      "expected_otid": "otid_54b219a502b14e2a",
+      "top_result_otid": "otid_54b219a502b14e2a",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": 1,
+      "doc_hit_at_1": true,
+      "doc_hit_at_3": true,
+      "doc_hit_at_5": true,
+      "retrieval_doc_hit_at_1": true,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.12866666666666668,
+      "final_reject_score": 0.12866666666666668,
+      "weak_match_count": 0,
+      "match_count": 38,
+      "candidate_count": 18899,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_54b219a502b14e2a",
+          "score": 1.447437759939203,
+          "best_kpid": "kpid_b33b9ff29a6b4ad9"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_fb11f16dc2564248",
+          "score": 0.9764077051995339,
+          "best_kpid": "kpid_5474d5ee1f964991"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_a437e6ddbf7e4cad",
+          "score": 0.7761191642825286,
+          "best_kpid": "kpid_42c20c02722d4922"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_6f4f7c3232be46da",
+          "score": 0.5983342781869438,
+          "best_kpid": "kpid_8b96015a5b8a4209"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_784b354d2f6e407d",
+          "score": 0.554582689912941,
+          "best_kpid": "kpid_7058e87abf034afd"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_54b219a502b14e2a",
+          "displayScore": 1.8534377599392031
+        },
+        {
+          "rank": 2,
+          "otid": "otid_fb11f16dc2564248",
+          "displayScore": 0.979907705199534
+        },
+        {
+          "rank": 3,
+          "otid": "otid_6f4f7c3232be46da",
+          "displayScore": 0.6018342781869439
+        },
+        {
+          "rank": 4,
+          "otid": "otid_a437e6ddbf7e4cad",
+          "displayScore": 0.5136191642825285
+        },
+        {
+          "rank": 5,
+          "otid": "otid_784b354d2f6e407d",
+          "displayScore": 0.502082689912941
+        }
+      ]
+    },
+    {
+      "id": "aq_blind_seed_0049",
+      "query": "中山大学2026年外语类保送生面试考核安排里，3月7日报到时考生需要注意哪些要求？",
+      "query_type": "standard",
+      "query_scope": "eligibility_condition",
+      "theme_family": "recommended_student",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": false,
+      "expected_otid": "otid_026bbae2756a4096",
+      "top_result_otid": "otid_026bbae2756a4096",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": 1,
+      "doc_hit_at_1": true,
+      "doc_hit_at_3": true,
+      "doc_hit_at_5": true,
+      "retrieval_doc_hit_at_1": true,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.09349999999999999,
+      "final_reject_score": 0.09349999999999999,
+      "weak_match_count": 0,
+      "match_count": 31,
+      "candidate_count": 18899,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_026bbae2756a4096",
+          "score": 1.2710014477876839,
+          "best_kpid": "kpid_1a828f571bab42ab"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_52ffc460a3284f93",
+          "score": 0.3750173885576849,
+          "best_kpid": "kpid_d26f71918dde4025"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_faeac0ecd9304bd1",
+          "score": 0.3465869950824634,
+          "best_kpid": "kpid_282050a357f14476"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_f38fd69ea2d64794",
+          "score": 0.32750950498054376,
+          "best_kpid": "kpid_6327783ef0e247ff"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_0aee6cb0df774649",
+          "score": 0.3253733659855852,
+          "best_kpid": "kpid_eab44658ebc94bb7"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_026bbae2756a4096",
+          "displayScore": 1.5330014477876839
+        },
+        {
+          "rank": 2,
+          "otid": "otid_52ffc460a3284f93",
+          "displayScore": 0.7490173885576848
+        },
+        {
+          "rank": 3,
+          "otid": "otid_1180b6d41c0e4ca7",
+          "displayScore": 0.6943804755962734
+        },
+        {
+          "rank": 4,
+          "otid": "otid_7479616835454c16",
+          "displayScore": 0.6897210976158344
+        },
+        {
+          "rank": 5,
+          "otid": "otid_a197d7d56a914cf0",
+          "displayScore": 0.6846180103724658
+        }
+      ]
+    }
+  ]
+}

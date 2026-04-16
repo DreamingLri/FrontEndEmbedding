@@ -78,6 +78,10 @@ export type EvalDatasetConfig = {
 export type GranularityDatasetTargetKey =
     | "main_bench_120"
     | "in_domain_holdout_50"
+    | "ext_ood_blind_60"
+    | "matched_ext_ood_60"
+    | "hard_ood_blind_30"
+    | "legacy_external_ood_hard_30"
     | "external_ood_50"
     | "external_ood_holdout_30"
     | "external_ood_hard_30"
@@ -125,21 +129,47 @@ const GRANULARITY_DATASET_TARGETS: Record<
         role: "in_domain_holdout",
         primaryPath: CURRENT_EVAL_DATASET_FILES.granularityInDomainHoldout50,
     },
+    ext_ood_blind_60: {
+        key: "ext_ood_blind_60",
+        label: "ExtOOD",
+        role: "external_ood_holdout",
+        primaryPath: CURRENT_EVAL_DATASET_FILES.granularityExtOodBlind60,
+    },
+    matched_ext_ood_60: {
+        key: "matched_ext_ood_60",
+        label: "MatchedExtOOD",
+        role: "external_ood_holdout",
+        primaryPath: CURRENT_EVAL_DATASET_FILES.granularityMatchedExtOod60,
+    },
+    hard_ood_blind_30: {
+        key: "hard_ood_blind_30",
+        label: "HardOOD",
+        role: "external_ood_holdout",
+        primaryPath: CURRENT_EVAL_DATASET_FILES.granularityHardOodBlind30,
+    },
+    legacy_external_ood_hard_30: {
+        key: "legacy_external_ood_hard_30",
+        label: "LegacyHardOOD30",
+        role: "legacy_holdout",
+        primaryPath: CURRENT_EVAL_DATASET_FILES.granularityLegacyExternalOodHard30,
+    },
     external_ood_50: {
         key: "external_ood_50",
+        // 兼容旧 key，但当前论文口径下该入口已切到 blind ExtOOD。
         label: "ExtOOD",
         role: "external_ood_holdout",
         primaryPath: CURRENT_EVAL_DATASET_FILES.granularityExternalOod50,
     },
     external_ood_holdout_30: {
         key: "external_ood_holdout_30",
-        // 兼容保留旧 target key，但当前正式外域口径已切换为 external_matched_ood_v2。
-        label: "ExtHard",
+        // 历史兼容入口：external_ood_holdout_30 曾被借用为 matched external 入口。
+        label: "MatchedExtOOD",
         role: "external_ood_holdout",
         primaryPath: CURRENT_EVAL_DATASET_FILES.granularityExternalOodHoldout30,
     },
     external_ood_hard_30: {
         key: "external_ood_hard_30",
+        // 兼容旧 key，但当前论文口径下该入口已切到 blind HardOOD。
         label: "HardOOD",
         role: "external_ood_holdout",
         primaryPath: CURRENT_EVAL_DATASET_FILES.granularityExternalOodHard30,
@@ -399,8 +429,9 @@ export function listAvailableGranularityDatasetTargets(
     keys: readonly GranularityDatasetTargetKey[] = [
         "main_bench_120",
         "in_domain_holdout_50",
-        "external_ood_50",
-        "external_ood_hard_30",
+        "ext_ood_blind_60",
+        "matched_ext_ood_60",
+        "hard_ood_blind_30",
         "hard_ood_v2_diag_top30",
     ],
 ): ResolvedGranularityDatasetTarget[] {

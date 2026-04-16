@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-10T10:00:32.316Z",
+  "updatedAt": "2026-04-16T08:59:48.827Z",
   "entries": {
     "granularity_main_bench_120_current": {
       "slot": "granularity_main_bench_120_current",
@@ -8,10 +8,10 @@
       "datasetAlias": "gran_main_v2",
       "datasetDisplayName": "Main",
       "datasetFile": "../../../../Backend/test/test_dataset_granularity/test_dataset_granularity_main_benchmark_v2_reviewed_userized_v1.json",
-      "resultFile": "../granularity_gran_main_v2_1775456163403.json",
+      "resultFile": "../granularity_gran_main_v2_1776329988825.json",
       "sourceScript": "../../eval_granularity_mix.ts",
       "managedByScript": true,
-      "updatedAt": "2026-04-06T07:08:00.000Z",
+      "updatedAt": "2026-04-16T08:59:48.827Z",
       "note": "当前结果已对齐前端 runtime preset frontend_research_sync_v1，基于单冻结集入口 Main 导出。"
     },
     "granularity_in_domain_holdout_50_current": {
@@ -21,24 +21,24 @@
       "datasetAlias": "gran_in_v2",
       "datasetDisplayName": "InDomain",
       "datasetFile": "../../../../Backend/test/test_dataset_granularity/test_dataset_granularity_in_domain_generalization_60_reviewed_userized_v1.json",
-      "resultFile": "../granularity_gran_in_v2_1775470782459.json",
+      "resultFile": "../granularity_gran_in_v2_1776329688867.json",
       "sourceScript": "../../eval_granularity_mix.ts",
       "managedByScript": true,
-      "updatedAt": "2026-04-06T10:19:42.463Z",
+      "updatedAt": "2026-04-16T08:54:48.870Z",
       "note": "当前结果已对齐前端 runtime preset frontend_research_sync_v1，基于单冻结集入口 InDomain 导出。"
     },
     "granularity_external_ood_50_current": {
       "slot": "granularity_external_ood_50_current",
       "label": "跨域泛化结果 `ExtOOD`",
-      "datasetName": "test_dataset_granularity_external_matched_ood_60_reviewed_userized_v1",
-      "datasetAlias": "gran_ext_v2",
+      "datasetName": "test_dataset_granularity_aligned_ext_ood_blind_60_draft_v1",
+      "datasetAlias": "gran_ext_blind60",
       "datasetDisplayName": "ExtOOD",
-      "datasetFile": "../../../../Backend/test/test_dataset_granularity/test_dataset_granularity_external_matched_ood_60_reviewed_userized_v1.json",
-      "resultFile": "../granularity_gran_ext_v2_1775465050861.json",
+      "datasetFile": "../../../../Backend/test/test_dataset_granularity/test_dataset_granularity_aligned_ext_ood_blind_60_draft_v1.json",
+      "resultFile": "../granularity_gran_ext_blind60_1776329691075.json",
       "sourceScript": "../../eval_granularity_mix.ts",
       "managedByScript": true,
-      "updatedAt": "2026-04-06T08:44:10.863Z",
-      "note": "当前结果已对齐前端 runtime preset frontend_research_sync_v1，基于单冻结集入口 ExtOOD 导出；2026-04-06 在前一轮 0033->ext_fill_03_0003 难度统一化替换基础上，又对 ai_saiood_0072 与 external_matched_ood_v2_ext_r5_manual_0003 做了问法去直取化微调。"
+      "updatedAt": "2026-04-16T08:54:51.078Z",
+      "note": "当前结果已对齐前端 runtime preset frontend_research_sync_v1，基于单冻结集入口 ExtOOD 导出。"
     },
     "answer_reject_current": {
       "slot": "answer_reject_current",
@@ -47,11 +47,24 @@
       "datasetAlias": "ar_v4",
       "datasetDisplayName": "AnswerReject",
       "datasetFile": "../../../../Backend/test/test_dataset_answer_reject/test_dataset_answer_reject_v4_frozen_holdout_reviewed.json",
-      "resultFile": "../answer_reject_ar_v4_1775815232313.json",
+      "resultFile": "../answer_reject_ar_v4_1776313778930.json",
       "sourceScript": "../../eval_answer_reject.ts",
       "managedByScript": true,
-      "updatedAt": "2026-04-10T10:00:32.316Z",
+      "updatedAt": "2026-04-16T04:29:38.935Z",
       "note": "当前稳定入口只保留未看过的单一 answer_reject v4 frozen holdout 主线。"
+    },
+    "granularity_hard_ood_blind_30_current": {
+      "slot": "granularity_hard_ood_blind_30_current",
+      "label": "最难外域结果 `HardOOD`",
+      "datasetName": "test_dataset_granularity_hard_ood_blind_30_draft_v1",
+      "datasetAlias": "gran_hardood_blind30",
+      "datasetDisplayName": "HardOOD",
+      "datasetFile": "../../../../Backend/test/test_dataset_granularity/test_dataset_granularity_hard_ood_blind_30_draft_v1.json",
+      "resultFile": "../granularity_gran_hardood_blind30_1776329627520.json",
+      "sourceScript": "../../eval_granularity_mix.ts",
+      "managedByScript": true,
+      "updatedAt": "2026-04-16T08:53:47.523Z",
+      "note": "当前结果已对齐前端 runtime preset frontend_research_sync_v1，基于单冻结集入口 HardOOD 导出。"
     }
   }
 }

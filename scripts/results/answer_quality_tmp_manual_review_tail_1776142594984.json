@@ -1,0 +1,434 @@
+{
+  "generatedAt": "2026-04-14T04:56:34.983Z",
+  "datasetFile": "D:\\Project\\SuAsk\\SuAsk_Agent\\Backend\\test\\test_dataset_answer_quality\\_tmp_manual_review_tail.json",
+  "datasetName": "_tmp_manual_review_tail",
+  "datasetAlias": "tmp_manual_review_tail",
+  "datasetDisplayName": "_tmp_manual_review_tail",
+  "total": 4,
+  "config": {
+    "pipelineVersion": "frontend_research_sync_v1",
+    "preset": {
+      "name": "frontend_research_sync_v1",
+      "retrieval": {
+        "weights": {
+          "Q": 0.3333333333333333,
+          "KP": 0.3333333333333333,
+          "OT": 0.3333333333333333
+        },
+        "topHybridLimit": 1000,
+        "kpAggregationMode": "max",
+        "kpTopN": 3,
+        "kpTailWeight": 0.35,
+        "lexicalBonusMode": "sum",
+        "kpRoleRerankMode": "off",
+        "kpRoleDocWeight": 0,
+        "qConfusionMode": "combined",
+        "qConfusionWeight": 0.2,
+        "useQueryExpansion": false,
+        "useTopicPartition": false,
+        "enableExplicitYearFilter": true,
+        "enablePhaseAnchorBoost": true,
+        "minimalMode": true
+      },
+      "display": {
+        "rejectThreshold": 0.4,
+        "rerankBlendAlpha": 0.15,
+        "bestSentenceThreshold": 0.4,
+        "fetchMatchLimit": 20,
+        "fetchWeakMatchLimit": 12,
+        "useYearPhaseTitleAdjustment": true
+      }
+    },
+    "note": "当前报告面向 answer-only blind 集，关注回答正确率与潜在误导率；默认入口为 provisional AnswerQuality-blind。 AnswerQuality-blind 仅评估应答侧：关注回答正确率与潜在误导率，不混入 reject 主线。"
+  },
+  "summary": {
+    "total": 4,
+    "answered": 4,
+    "answerRate": 1,
+    "falseReject": 0,
+    "falseRejectRate": 0,
+    "correctAt1": 4,
+    "correctAt1Rate": 1,
+    "correctAt3": 4,
+    "correctAt3Rate": 1,
+    "correctAt5": 4,
+    "correctAt5Rate": 1,
+    "retrievalDocHitAt1": 4,
+    "retrievalDocHitAt1Rate": 1,
+    "potentiallyMisleading": 0,
+    "potentiallyMisleadingRate": 0,
+    "byPredictedBehavior": {
+      "answer": 4,
+      "reject": 0
+    },
+    "byQueryScope": {
+      "procedure": {
+        "total": 2,
+        "answerRate": 1,
+        "correctAt1Rate": 1,
+        "correctAt3Rate": 1,
+        "correctAt5Rate": 1,
+        "falseRejectRate": 0,
+        "potentiallyMisleadingRate": 0
+      },
+      "time_location": {
+        "total": 2,
+        "answerRate": 1,
+        "correctAt1Rate": 1,
+        "correctAt3Rate": 1,
+        "correctAt5Rate": 1,
+        "falseRejectRate": 0,
+        "potentiallyMisleadingRate": 0
+      }
+    },
+    "byQueryType": {
+      "standard": {
+        "total": 4,
+        "answerRate": 1,
+        "correctAt1Rate": 1,
+        "correctAt3Rate": 1,
+        "correctAt5Rate": 1,
+        "falseRejectRate": 0,
+        "potentiallyMisleadingRate": 0
+      }
+    }
+  },
+  "caseReports": [
+    {
+      "id": "aq_blind_seed_0004",
+      "query": "中山大学人工智能学院2025年推荐免试研究生接收办法里，复试考核的评分组成是什么，最终复试成绩怎么确定？",
+      "query_type": "standard",
+      "query_scope": "procedure",
+      "theme_family": "tuimian",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": false,
+      "expected_otid": "otid_3770fb6348d24f6b",
+      "top_result_otid": "otid_3770fb6348d24f6b",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": 1,
+      "doc_hit_at_1": true,
+      "doc_hit_at_3": true,
+      "doc_hit_at_5": true,
+      "retrieval_doc_hit_at_1": true,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.03280000000000001,
+      "final_reject_score": 0.03280000000000001,
+      "weak_match_count": 0,
+      "match_count": 47,
+      "candidate_count": 18899,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_3770fb6348d24f6b",
+          "score": 1.127860882373683,
+          "best_kpid": "kpid_f472e38b5e8c45bc"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_f672cc42a5a04134",
+          "score": 0.7048290361350631,
+          "best_kpid": "kpid_26005ff7e1fd4889"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_ed940aabc9c24803",
+          "score": 0.654558977536898,
+          "best_kpid": "kpid_63d3efd1a6534c6d"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_1e743544c32142f1",
+          "score": 0.6300500019555227,
+          "best_kpid": "kpid_b5c55bed18a64825"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_5d30aea8c4a64cce",
+          "score": 0.6100007485101833,
+          "best_kpid": "kpid_daf7f2b75c82481b"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_3770fb6348d24f6b",
+          "displayScore": 2.103860882373683
+        },
+        {
+          "rank": 2,
+          "otid": "otid_bacada41bba74749",
+          "displayScore": 1.328421476319058
+        },
+        {
+          "rank": 3,
+          "otid": "otid_ed940aabc9c24803",
+          "displayScore": 1.000558977536898
+        },
+        {
+          "rank": 4,
+          "otid": "otid_6c5b2af52b1d4df5",
+          "displayScore": 0.9963224358147803
+        },
+        {
+          "rank": 5,
+          "otid": "otid_f672cc42a5a04134",
+          "displayScore": 0.8303290361350631
+        }
+      ]
+    },
+    {
+      "id": "aq_blind_seed_0017",
+      "query": "中山大学2022年接收推荐免试研究生办法里，申请人通过教育部推免服务系统完成报名一般要经过哪些环节？",
+      "query_type": "standard",
+      "query_scope": "procedure",
+      "theme_family": "tuimian",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": false,
+      "expected_otid": "otid_07571807121c4472",
+      "top_result_otid": "otid_07571807121c4472",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": 1,
+      "doc_hit_at_1": true,
+      "doc_hit_at_3": true,
+      "doc_hit_at_5": true,
+      "retrieval_doc_hit_at_1": true,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.03399999999999999,
+      "final_reject_score": 0.03399999999999999,
+      "weak_match_count": 0,
+      "match_count": 47,
+      "candidate_count": 18899,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_07571807121c4472",
+          "score": 1.2972748911280945,
+          "best_kpid": "kpid_a1af65b2277644e4"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_1ef327d38b174afb",
+          "score": 0.8491098518108525,
+          "best_kpid": "kpid_3c9fe5fcaa33476e"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_ca3a4c98f51f48e8",
+          "score": 0.7703674301321359,
+          "best_kpid": "kpid_65a33b7ae39943a8"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_81112559b6b240f2",
+          "score": 0.6758810253482234,
+          "best_kpid": "kpid_0ce4691f1eb24d8e"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_659cfd8833ee4369",
+          "score": 0.4135330616346854,
+          "best_kpid": "kpid_b5a039b9194c43f7"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_07571807121c4472",
+          "displayScore": 1.5312748911280947
+        },
+        {
+          "rank": 2,
+          "otid": "otid_ca3a4c98f51f48e8",
+          "displayScore": 1.340367430132136
+        },
+        {
+          "rank": 3,
+          "otid": "otid_1ef327d38b174afb",
+          "displayScore": 1.1671098518108527
+        },
+        {
+          "rank": 4,
+          "otid": "otid_81112559b6b240f2",
+          "displayScore": 1.0638810253482234
+        },
+        {
+          "rank": 5,
+          "otid": "otid_659cfd8833ee4369",
+          "displayScore": 0.6755330616346854
+        }
+      ]
+    },
+    {
+      "id": "aq_blind_seed_0039",
+      "query": "中山大学关于公布2022年广东省综合评价招生考核入围标准和名单的通知里，考生什么时候能获知准考证信息和面试安排？",
+      "query_type": "standard",
+      "query_scope": "time_location",
+      "theme_family": "comprehensive_evaluation",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": false,
+      "expected_otid": "otid_ccb3b891b8f64953",
+      "top_result_otid": "otid_ccb3b891b8f64953",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": 1,
+      "doc_hit_at_1": true,
+      "doc_hit_at_3": true,
+      "doc_hit_at_5": true,
+      "retrieval_doc_hit_at_1": true,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.23999999999999996,
+      "final_reject_score": 0.23999999999999996,
+      "weak_match_count": 0,
+      "match_count": 42,
+      "candidate_count": 18899,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_ccb3b891b8f64953",
+          "score": 1.2385071210167053,
+          "best_kpid": "kpid_629e221957874e86"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_83b704957347492c",
+          "score": 1.0508081051185914,
+          "best_kpid": "kpid_e507361251d84ebb"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_c7119778b7984e16",
+          "score": 0.8539844068067918,
+          "best_kpid": "kpid_f4aebb2f31a44760"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_36cce6f8f00c4d59",
+          "score": 0.7562330022648291,
+          "best_kpid": "kpid_4931ea7c0a0e4ea3"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_681df4bddf9c4ecb",
+          "score": 0.4506171679630848,
+          "best_kpid": "kpid_27a7f84e33244c36"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_ccb3b891b8f64953",
+          "displayScore": 1.3465071210167054
+        },
+        {
+          "rank": 2,
+          "otid": "otid_83b704957347492c",
+          "displayScore": 1.3128081051185916
+        },
+        {
+          "rank": 3,
+          "otid": "otid_c7119778b7984e16",
+          "displayScore": 0.9619844068067918
+        },
+        {
+          "rank": 4,
+          "otid": "otid_36cce6f8f00c4d59",
+          "displayScore": 0.8642330022648291
+        },
+        {
+          "rank": 5,
+          "otid": "otid_681df4bddf9c4ecb",
+          "displayScore": 0.7126171679630848
+        }
+      ]
+    },
+    {
+      "id": "aq_blind_seed_0059",
+      "query": "中山大学人工智能学院预推免通知里提到，学院培养人工智能人才主要依托哪些科研平台和学科优势？",
+      "query_type": "standard",
+      "query_scope": "time_location",
+      "theme_family": "tuimian",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": false,
+      "expected_otid": "otid_6e85da455dd34af3",
+      "top_result_otid": "otid_6e85da455dd34af3",
+      "retrieval_doc_rank": 1,
+      "rendered_doc_rank": 1,
+      "doc_hit_at_1": true,
+      "doc_hit_at_3": true,
+      "doc_hit_at_5": true,
+      "retrieval_doc_hit_at_1": true,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.29654741717851285,
+      "final_reject_score": 0.29654741717851285,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 18899,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_6e85da455dd34af3",
+          "score": 1.29386154239179,
+          "best_kpid": "kpid_a4915ea8c3f84294"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_fcf3caca2aa340ca",
+          "score": 1.2735252821085123,
+          "best_kpid": "kpid_c4844a2417d54f46"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_c5344a7fc3bc439a",
+          "score": 1.2392363286029817,
+          "best_kpid": "kpid_91def70e17e84f20"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_dc2fbd2f88f7453b",
+          "score": 1.0497727741129845,
+          "best_kpid": "kpid_d5f19e79c96e4349"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_1e743544c32142f1",
+          "score": 1.0356051554173828,
+          "best_kpid": "kpid_1ebbc83821f14bc3"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_6e85da455dd34af3",
+          "displayScore": 1.54586154239179
+        },
+        {
+          "rank": 2,
+          "otid": "otid_fcf3caca2aa340ca",
+          "displayScore": 1.5255252821085123
+        },
+        {
+          "rank": 3,
+          "otid": "otid_c5344a7fc3bc439a",
+          "displayScore": 1.1972363286029817
+        },
+        {
+          "rank": 4,
+          "otid": "otid_81112559b6b240f2",
+          "displayScore": 1.076356218937358
+        },
+        {
+          "rank": 5,
+          "otid": "otid_eada182ca6104c99",
+          "displayScore": 1.059574205242884
+        }
+      ]
+    }
+  ]
+}
