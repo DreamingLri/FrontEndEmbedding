@@ -86,7 +86,16 @@ export type GranularityDatasetTargetKey =
     | "external_ood_holdout_30"
     | "external_ood_hard_30"
     | "hard_ood_v2_diag_top30"
-    | "structure_dev_40";
+    | "structure_dev_40"
+    | "ladder_main_balanced_80"
+    | "ladder_generalization_hard_60"
+    | "ladder_structure_stress_40"
+    | "ladder_main_balanced_120"
+    | "ladder_generalization_hard_80"
+    | "ladder_structure_stress_60"
+    | "ladder_main_balanced_150"
+    | "ladder_generalization_hard_100"
+    | "ladder_structure_stress_80";
 
 type GranularityDatasetTargetDefinition = {
     key: GranularityDatasetTargetKey;
@@ -186,6 +195,60 @@ const GRANULARITY_DATASET_TARGETS: Record<
         label: "StructureDev40",
         role: "adhoc",
         primaryPath: CURRENT_EVAL_DATASET_FILES.granularityStructureDev40,
+    },
+    ladder_main_balanced_80: {
+        key: "ladder_main_balanced_80",
+        label: "MainBalanced80",
+        role: "adhoc",
+        primaryPath: CURRENT_EVAL_DATASET_FILES.granularityLadderMainBalanced80,
+    },
+    ladder_generalization_hard_60: {
+        key: "ladder_generalization_hard_60",
+        label: "GeneralizationHard60",
+        role: "adhoc",
+        primaryPath: CURRENT_EVAL_DATASET_FILES.granularityLadderGeneralizationHard60,
+    },
+    ladder_structure_stress_40: {
+        key: "ladder_structure_stress_40",
+        label: "StructureStress40",
+        role: "adhoc",
+        primaryPath: CURRENT_EVAL_DATASET_FILES.granularityLadderStructureStress40,
+    },
+    ladder_main_balanced_120: {
+        key: "ladder_main_balanced_120",
+        label: "MainBalanced120",
+        role: "adhoc",
+        primaryPath: CURRENT_EVAL_DATASET_FILES.granularityLadderMainBalanced120,
+    },
+    ladder_generalization_hard_80: {
+        key: "ladder_generalization_hard_80",
+        label: "GeneralizationHard80",
+        role: "adhoc",
+        primaryPath: CURRENT_EVAL_DATASET_FILES.granularityLadderGeneralizationHard80,
+    },
+    ladder_structure_stress_60: {
+        key: "ladder_structure_stress_60",
+        label: "StructureStress60",
+        role: "adhoc",
+        primaryPath: CURRENT_EVAL_DATASET_FILES.granularityLadderStructureStress60,
+    },
+    ladder_main_balanced_150: {
+        key: "ladder_main_balanced_150",
+        label: "MainBalanced150",
+        role: "adhoc",
+        primaryPath: CURRENT_EVAL_DATASET_FILES.granularityLadderMainBalanced150,
+    },
+    ladder_generalization_hard_100: {
+        key: "ladder_generalization_hard_100",
+        label: "GeneralizationHard100",
+        role: "adhoc",
+        primaryPath: CURRENT_EVAL_DATASET_FILES.granularityLadderGeneralizationHard100,
+    },
+    ladder_structure_stress_80: {
+        key: "ladder_structure_stress_80",
+        label: "StructureStress80",
+        role: "adhoc",
+        primaryPath: CURRENT_EVAL_DATASET_FILES.granularityLadderStructureStress80,
     },
 };
 
@@ -441,6 +504,15 @@ export function listAvailableGranularityDatasetTargets(
         "hard_ood_blind_30",
         "hard_ood_v2_diag_top30",
         "structure_dev_40",
+        "ladder_main_balanced_80",
+        "ladder_generalization_hard_60",
+        "ladder_structure_stress_40",
+        "ladder_main_balanced_120",
+        "ladder_generalization_hard_80",
+        "ladder_structure_stress_60",
+        "ladder_main_balanced_150",
+        "ladder_generalization_hard_100",
+        "ladder_structure_stress_80",
     ],
 ): ResolvedGranularityDatasetTarget[] {
     return keys.flatMap((key) => {

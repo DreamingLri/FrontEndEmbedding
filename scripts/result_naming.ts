@@ -103,6 +103,245 @@ const DATASET_PROFILE_MAP: Record<string, NamedDatasetProfile> = {
         alias: "gran_structure_dev40",
         displayName: "StructureDev40",
     },
+    ladder_main_balanced_80: {
+        canonicalName: "test_dataset_granularity_ladder_main_balanced_80_draft_v2",
+        alias: "gran_ladder_main80",
+        displayName: "MainBalanced80",
+    },
+    test_dataset_granularity_ladder_main_balanced_80_draft_v2: {
+        canonicalName: "test_dataset_granularity_ladder_main_balanced_80_draft_v2",
+        alias: "gran_ladder_main80",
+        displayName: "MainBalanced80",
+    },
+    test_dataset_granularity_ladder_main_balanced_80_draft_v1: {
+        canonicalName: "test_dataset_granularity_ladder_main_balanced_80_draft_v1",
+        alias: "gran_ladder_main80",
+        displayName: "MainBalanced80",
+    },
+    ladder_generalization_hard_60: {
+        canonicalName:
+            "test_dataset_granularity_ladder_generalization_hard_60_draft_v2",
+        alias: "gran_ladder_genhard60",
+        displayName: "GeneralizationHard60",
+    },
+    test_dataset_granularity_ladder_generalization_hard_60_draft_v2: {
+        canonicalName:
+            "test_dataset_granularity_ladder_generalization_hard_60_draft_v2",
+        alias: "gran_ladder_genhard60",
+        displayName: "GeneralizationHard60",
+    },
+    test_dataset_granularity_ladder_generalization_hard_60_draft_v1: {
+        canonicalName:
+            "test_dataset_granularity_ladder_generalization_hard_60_draft_v1",
+        alias: "gran_ladder_genhard60",
+        displayName: "GeneralizationHard60",
+    },
+    ladder_structure_stress_40: {
+        canonicalName:
+            "test_dataset_granularity_ladder_structure_stress_40_draft_v2",
+        alias: "gran_ladder_stress40",
+        displayName: "StructureStress40",
+    },
+    test_dataset_granularity_ladder_structure_stress_40_draft_v2: {
+        canonicalName:
+            "test_dataset_granularity_ladder_structure_stress_40_draft_v2",
+        alias: "gran_ladder_stress40",
+        displayName: "StructureStress40",
+    },
+    test_dataset_granularity_ladder_structure_stress_40_draft_v1: {
+        canonicalName:
+            "test_dataset_granularity_ladder_structure_stress_40_draft_v1",
+        alias: "gran_ladder_stress40",
+        displayName: "StructureStress40",
+    },
+    ladder_main_balanced_120: {
+        canonicalName: "test_dataset_granularity_ladder_main_balanced_120_draft_v3",
+        alias: "gran_ladder_main120",
+        displayName: "MainBalanced120",
+    },
+    test_dataset_granularity_ladder_main_balanced_120_draft_v3: {
+        canonicalName: "test_dataset_granularity_ladder_main_balanced_120_draft_v3",
+        alias: "gran_ladder_main120",
+        displayName: "MainBalanced120",
+    },
+    ladder_generalization_hard_80: {
+        canonicalName:
+            "test_dataset_granularity_ladder_generalization_hard_80_draft_v3",
+        alias: "gran_ladder_genhard80",
+        displayName: "GeneralizationHard80",
+    },
+    test_dataset_granularity_ladder_generalization_hard_80_draft_v3: {
+        canonicalName:
+            "test_dataset_granularity_ladder_generalization_hard_80_draft_v3",
+        alias: "gran_ladder_genhard80",
+        displayName: "GeneralizationHard80",
+    },
+    ladder_structure_stress_60: {
+        canonicalName:
+            "test_dataset_granularity_ladder_structure_stress_60_draft_v6",
+        alias: "gran_ladder_stress60",
+        displayName: "StructureStress60",
+    },
+    test_dataset_granularity_ladder_structure_stress_60_draft_v7: {
+        canonicalName:
+            "test_dataset_granularity_ladder_structure_stress_60_draft_v7",
+        alias: "gran_ladder_stress60",
+        displayName: "StructureStress60",
+    },
+    test_dataset_granularity_ladder_structure_stress_60_draft_v6: {
+        canonicalName:
+            "test_dataset_granularity_ladder_structure_stress_60_draft_v6",
+        alias: "gran_ladder_stress60",
+        displayName: "StructureStress60",
+    },
+    test_dataset_granularity_ladder_structure_stress_60_draft_v3: {
+        canonicalName:
+            "test_dataset_granularity_ladder_structure_stress_60_draft_v3",
+        alias: "gran_ladder_stress60",
+        displayName: "StructureStress60",
+    },
+    ladder_main_balanced_150: {
+        canonicalName: "test_dataset_granularity_ladder_main_balanced_150_frozen_v1",
+        alias: "gran_ladder_main150",
+        displayName: "MainBalanced150",
+    },
+    test_dataset_granularity_ladder_main_balanced_150_frozen_v1: {
+        canonicalName: "test_dataset_granularity_ladder_main_balanced_150_frozen_v1",
+        alias: "gran_ladder_main150",
+        displayName: "MainBalanced150",
+    },
+    test_dataset_granularity_ladder_main_balanced_150_reviewed_candidate_v1: {
+        canonicalName:
+            "test_dataset_granularity_ladder_main_balanced_150_reviewed_candidate_v1",
+        alias: "gran_ladder_main150",
+        displayName: "MainBalanced150",
+    },
+    test_dataset_granularity_ladder_main_balanced_150_draft_v9: {
+        canonicalName: "test_dataset_granularity_ladder_main_balanced_150_draft_v9",
+        alias: "gran_ladder_main150",
+        displayName: "MainBalanced150",
+    },
+    test_dataset_granularity_ladder_main_balanced_150_draft_v8: {
+        canonicalName: "test_dataset_granularity_ladder_main_balanced_150_draft_v8",
+        alias: "gran_ladder_main150",
+        displayName: "MainBalanced150",
+    },
+    test_dataset_granularity_ladder_main_balanced_150_draft_v7: {
+        canonicalName: "test_dataset_granularity_ladder_main_balanced_150_draft_v7",
+        alias: "gran_ladder_main150",
+        displayName: "MainBalanced150",
+    },
+    test_dataset_granularity_ladder_main_balanced_150_draft_v6: {
+        canonicalName: "test_dataset_granularity_ladder_main_balanced_150_draft_v6",
+        alias: "gran_ladder_main150",
+        displayName: "MainBalanced150",
+    },
+    test_dataset_granularity_ladder_main_balanced_150_draft_v5: {
+        canonicalName: "test_dataset_granularity_ladder_main_balanced_150_draft_v5",
+        alias: "gran_ladder_main150",
+        displayName: "MainBalanced150",
+    },
+    test_dataset_granularity_ladder_main_balanced_150_draft_v4: {
+        canonicalName: "test_dataset_granularity_ladder_main_balanced_150_draft_v4",
+        alias: "gran_ladder_main150",
+        displayName: "MainBalanced150",
+    },
+    ladder_generalization_hard_100: {
+        canonicalName:
+            "test_dataset_granularity_ladder_generalization_hard_100_frozen_v1",
+        alias: "gran_ladder_genhard100",
+        displayName: "GeneralizationHard100",
+    },
+    test_dataset_granularity_ladder_generalization_hard_100_frozen_v1: {
+        canonicalName:
+            "test_dataset_granularity_ladder_generalization_hard_100_frozen_v1",
+        alias: "gran_ladder_genhard100",
+        displayName: "GeneralizationHard100",
+    },
+    test_dataset_granularity_ladder_generalization_hard_100_reviewed_candidate_v1: {
+        canonicalName:
+            "test_dataset_granularity_ladder_generalization_hard_100_reviewed_candidate_v1",
+        alias: "gran_ladder_genhard100",
+        displayName: "GeneralizationHard100",
+    },
+    test_dataset_granularity_ladder_generalization_hard_100_draft_v9: {
+        canonicalName:
+            "test_dataset_granularity_ladder_generalization_hard_100_draft_v9",
+        alias: "gran_ladder_genhard100",
+        displayName: "GeneralizationHard100",
+    },
+    test_dataset_granularity_ladder_generalization_hard_100_draft_v8: {
+        canonicalName:
+            "test_dataset_granularity_ladder_generalization_hard_100_draft_v8",
+        alias: "gran_ladder_genhard100",
+        displayName: "GeneralizationHard100",
+    },
+    test_dataset_granularity_ladder_generalization_hard_100_draft_v7: {
+        canonicalName:
+            "test_dataset_granularity_ladder_generalization_hard_100_draft_v7",
+        alias: "gran_ladder_genhard100",
+        displayName: "GeneralizationHard100",
+    },
+    test_dataset_granularity_ladder_generalization_hard_100_draft_v6: {
+        canonicalName:
+            "test_dataset_granularity_ladder_generalization_hard_100_draft_v6",
+        alias: "gran_ladder_genhard100",
+        displayName: "GeneralizationHard100",
+    },
+    test_dataset_granularity_ladder_generalization_hard_100_draft_v5: {
+        canonicalName:
+            "test_dataset_granularity_ladder_generalization_hard_100_draft_v5",
+        alias: "gran_ladder_genhard100",
+        displayName: "GeneralizationHard100",
+    },
+    test_dataset_granularity_ladder_generalization_hard_100_draft_v4: {
+        canonicalName:
+            "test_dataset_granularity_ladder_generalization_hard_100_draft_v4",
+        alias: "gran_ladder_genhard100",
+        displayName: "GeneralizationHard100",
+    },
+    ladder_structure_stress_80: {
+        canonicalName:
+            "test_dataset_granularity_ladder_structure_stress_80_frozen_v1",
+        alias: "gran_ladder_stress80",
+        displayName: "StructureStress80",
+    },
+    test_dataset_granularity_ladder_structure_stress_80_frozen_v1: {
+        canonicalName:
+            "test_dataset_granularity_ladder_structure_stress_80_frozen_v1",
+        alias: "gran_ladder_stress80",
+        displayName: "StructureStress80",
+    },
+    test_dataset_granularity_ladder_structure_stress_80_reviewed_candidate_v1: {
+        canonicalName:
+            "test_dataset_granularity_ladder_structure_stress_80_reviewed_candidate_v1",
+        alias: "gran_ladder_stress80",
+        displayName: "StructureStress80",
+    },
+    test_dataset_granularity_ladder_structure_stress_80_draft_v9: {
+        canonicalName:
+            "test_dataset_granularity_ladder_structure_stress_80_draft_v9",
+        alias: "gran_ladder_stress80",
+        displayName: "StructureStress80",
+    },
+    test_dataset_granularity_ladder_structure_stress_80_draft_v8: {
+        canonicalName:
+            "test_dataset_granularity_ladder_structure_stress_80_draft_v8",
+        alias: "gran_ladder_stress80",
+        displayName: "StructureStress80",
+    },
+    test_dataset_granularity_ladder_structure_stress_80_draft_v5: {
+        canonicalName:
+            "test_dataset_granularity_ladder_structure_stress_80_draft_v5",
+        alias: "gran_ladder_stress80",
+        displayName: "StructureStress80",
+    },
+    test_dataset_granularity_ladder_structure_stress_80_draft_v4: {
+        canonicalName:
+            "test_dataset_granularity_ladder_structure_stress_80_draft_v4",
+        alias: "gran_ladder_stress80",
+        displayName: "StructureStress80",
+    },
     test_dataset_granularity_structure_dev_40_draft_v1: {
         canonicalName: "test_dataset_granularity_structure_dev_40_draft_v1",
         alias: "gran_structure_dev40",

@@ -26,6 +26,24 @@ export const CURRENT_EVAL_DATASET_FILES = {
         "../Backend/test/test_dataset_granularity/test_dataset_granularity_hard_ood_v2_diag_top30.json",
     granularityStructureDev40:
         "../Backend/test/test_dataset_granularity/test_dataset_granularity_structure_dev_40_draft_v1.json",
+    granularityLadderMainBalanced80:
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_ladder_main_balanced_80_draft_v2.json",
+    granularityLadderGeneralizationHard60:
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_ladder_generalization_hard_60_draft_v2.json",
+    granularityLadderStructureStress40:
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_ladder_structure_stress_40_draft_v2.json",
+    granularityLadderMainBalanced120:
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_ladder_main_balanced_120_draft_v3.json",
+    granularityLadderGeneralizationHard80:
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_ladder_generalization_hard_80_draft_v3.json",
+    granularityLadderStructureStress60:
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_ladder_structure_stress_60_draft_v6.json",
+    granularityLadderMainBalanced150:
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_ladder_main_balanced_150_frozen_v1.json",
+    granularityLadderGeneralizationHard100:
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_ladder_generalization_hard_100_frozen_v1.json",
+    granularityLadderStructureStress80:
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_ladder_structure_stress_80_frozen_v1.json",
     // 当前唯一 behavior 主线：未看过的 v4 frozen holdout
     answerRejectCurrent:
         "../Backend/test/test_dataset_answer_reject/test_dataset_answer_reject_v4_frozen_holdout_reviewed.json",

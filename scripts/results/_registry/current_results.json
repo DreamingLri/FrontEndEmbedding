@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-16T08:59:48.827Z",
+  "updatedAt": "2026-04-17T08:25:04.561Z",
   "entries": {
     "granularity_main_bench_120_current": {
       "slot": "granularity_main_bench_120_current",
@@ -39,6 +39,45 @@
       "managedByScript": true,
       "updatedAt": "2026-04-16T08:54:51.078Z",
       "note": "当前结果已对齐前端 runtime preset frontend_research_sync_v1，基于单冻结集入口 ExtOOD 导出。"
+    },
+    "granularity_ladder_main_balanced_150_current": {
+      "slot": "granularity_ladder_main_balanced_150_current",
+      "label": "统一难度梯级 `MainBalanced150`",
+      "datasetName": "test_dataset_granularity_ladder_main_balanced_150_frozen_v1",
+      "datasetAlias": "gran_ladder_main150",
+      "datasetDisplayName": "MainBalanced150",
+      "datasetFile": "../../../../Backend/test/test_dataset_granularity/test_dataset_granularity_ladder_main_balanced_150_frozen_v1.json",
+      "resultFile": "../granularity_baselines_1776414304562.json",
+      "sourceScript": "../../eval_granularity_standard_baselines.ts",
+      "managedByScript": false,
+      "updatedAt": "2026-04-17T08:25:04.561Z",
+      "note": "统一难度梯级 frozen_v1 主表第一层；与 GeneralizationHard100、StructureStress80 共用同一 standard-baselines 结果文件。"
+    },
+    "granularity_ladder_generalization_hard_100_current": {
+      "slot": "granularity_ladder_generalization_hard_100_current",
+      "label": "统一难度梯级 `GeneralizationHard100`",
+      "datasetName": "test_dataset_granularity_ladder_generalization_hard_100_frozen_v1",
+      "datasetAlias": "gran_ladder_genhard100",
+      "datasetDisplayName": "GeneralizationHard100",
+      "datasetFile": "../../../../Backend/test/test_dataset_granularity/test_dataset_granularity_ladder_generalization_hard_100_frozen_v1.json",
+      "resultFile": "../granularity_baselines_1776414304562.json",
+      "sourceScript": "../../eval_granularity_standard_baselines.ts",
+      "managedByScript": false,
+      "updatedAt": "2026-04-17T08:25:04.561Z",
+      "note": "统一难度梯级 frozen_v1 主表第二层；与 MainBalanced150、StructureStress80 共用同一 standard-baselines 结果文件。"
+    },
+    "granularity_ladder_structure_stress_80_current": {
+      "slot": "granularity_ladder_structure_stress_80_current",
+      "label": "统一难度梯级 `StructureStress80`",
+      "datasetName": "test_dataset_granularity_ladder_structure_stress_80_frozen_v1",
+      "datasetAlias": "gran_ladder_stress80",
+      "datasetDisplayName": "StructureStress80",
+      "datasetFile": "../../../../Backend/test/test_dataset_granularity/test_dataset_granularity_ladder_structure_stress_80_frozen_v1.json",
+      "resultFile": "../granularity_baselines_1776414304562.json",
+      "sourceScript": "../../eval_granularity_standard_baselines.ts",
+      "managedByScript": false,
+      "updatedAt": "2026-04-17T08:25:04.561Z",
+      "note": "统一难度梯级 frozen_v1 主表第三层；cross-doc coverage 仍为独立诊断，不进入普通 Hit@1 主表。"
     },
     "answer_reject_current": {
       "slot": "answer_reject_current",

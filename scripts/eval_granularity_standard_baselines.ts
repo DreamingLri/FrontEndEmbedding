@@ -257,7 +257,18 @@ const AVAILABLE_DATASET_TARGETS = (
 ).filter((item): item is DatasetTarget => Boolean(item));
 
 const OPTIONAL_DATASET_TARGETS = (
-    [resolveDatasetTarget("structure_dev_40")] as Array<DatasetTarget | null>
+    [
+        resolveDatasetTarget("structure_dev_40"),
+        resolveDatasetTarget("ladder_main_balanced_80"),
+        resolveDatasetTarget("ladder_generalization_hard_60"),
+        resolveDatasetTarget("ladder_structure_stress_40"),
+        resolveDatasetTarget("ladder_main_balanced_120"),
+        resolveDatasetTarget("ladder_generalization_hard_80"),
+        resolveDatasetTarget("ladder_structure_stress_60"),
+        resolveDatasetTarget("ladder_main_balanced_150"),
+        resolveDatasetTarget("ladder_generalization_hard_100"),
+        resolveDatasetTarget("ladder_structure_stress_80"),
+    ] as Array<DatasetTarget | null>
 ).filter((item): item is DatasetTarget => Boolean(item));
 
 const DATASET_TARGETS = Object.fromEntries(
