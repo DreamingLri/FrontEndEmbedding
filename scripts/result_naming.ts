@@ -312,6 +312,18 @@ const DATASET_PROFILE_MAP: Record<string, NamedDatasetProfile> = {
         alias: "gran_ladder_stress80",
         displayName: "StructureStress80",
     },
+    ladder_cross_doc_coverage_diag_18: {
+        canonicalName:
+            "test_dataset_granularity_ladder_cross_doc_coverage_diag_18_frozen_v1",
+        alias: "gran_ladder_crossdoc18",
+        displayName: "CrossDocCoverage18",
+    },
+    test_dataset_granularity_ladder_cross_doc_coverage_diag_18_frozen_v1: {
+        canonicalName:
+            "test_dataset_granularity_ladder_cross_doc_coverage_diag_18_frozen_v1",
+        alias: "gran_ladder_crossdoc18",
+        displayName: "CrossDocCoverage18",
+    },
     test_dataset_granularity_ladder_structure_stress_80_reviewed_candidate_v1: {
         canonicalName:
             "test_dataset_granularity_ladder_structure_stress_80_reviewed_candidate_v1",
@@ -385,10 +397,20 @@ const DATASET_PROFILE_MAP: Record<string, NamedDatasetProfile> = {
         alias: "ar_v5_expanded_frozen_v1",
         displayName: "AnswerRejectFrozen",
     },
+    test_dataset_answer_reject_v6_80_frozen_v1: {
+        canonicalName: "test_dataset_answer_reject_v6_80_frozen_v1",
+        alias: "ar_v6_80_frozen_v1",
+        displayName: "AnswerReject80",
+    },
     test_dataset_answer_reject_v6_80_combined_manifest: {
         canonicalName: "test_dataset_answer_reject_v6_80_combined_manifest",
         alias: "ar_v6_80_combined",
         displayName: "AnswerReject80Draft",
+    },
+    test_dataset_answer_reject_mixed_long_tail_59_derived_v1: {
+        canonicalName: "test_dataset_answer_reject_mixed_long_tail_59_derived_v1",
+        alias: "ar_mixed_longtail59",
+        displayName: "AnswerRejectMixedLongTail59",
     },
     test_dataset_answer_quality_blind_reviewed_v1: {
         canonicalName: "test_dataset_answer_quality_blind_reviewed_v1",
@@ -414,6 +436,11 @@ const DATASET_PROFILE_MAP: Record<string, NamedDatasetProfile> = {
         canonicalName: "test_dataset_answer_quality_blind_v3_100_frozen_v1",
         alias: "aq_blind_v3_100_frozen_v1",
         displayName: "AnswerQualityBlind100Frozen",
+    },
+    test_dataset_answer_quality_ext_ood_blind_60_derived_v1: {
+        canonicalName: "test_dataset_answer_quality_ext_ood_blind_60_derived_v1",
+        alias: "aq_ext_blind60",
+        displayName: "AnswerQualityExtBlind60",
     },
 };
 

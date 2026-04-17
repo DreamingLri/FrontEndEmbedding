@@ -1,0 +1,3066 @@
+{
+  "generatedAt": "2026-04-17T13:13:13.382Z",
+  "embeddingModel": "DMetaSoul/Dmeta-embedding-zh-small",
+  "bootstrapIterations": 10000,
+  "randomizationIterations": 10000,
+  "timingNote": "耗时统计仅覆盖每条 query 的检索/排序阶段，不含 query embedding、模型加载与结果写盘。",
+  "runtimePresetRetrieval": {
+    "qConfusionMode": "combined",
+    "qConfusionWeight": 0.2
+  },
+  "datasets": [
+    {
+      "datasetKey": "ladder_cross_doc_coverage_diag_18",
+      "datasetLabel": "CrossDocCoverage18",
+      "datasetAlias": "gran_ladder_crossdoc18",
+      "datasetDisplayName": "CrossDocCoverage18",
+      "datasetFile": "../Backend/test/test_dataset_granularity/test_dataset_granularity_ladder_cross_doc_coverage_diag_18_frozen_v1.json",
+      "caseCount": 18,
+      "bestStandardBaseline": "Dense-OT",
+      "models": [
+        {
+          "label": "BM25-OT",
+          "family": "sparse",
+          "description": "经典稀疏检索：仅在 OT 文档上执行 BM25。",
+          "metrics": {
+            "total": 18,
+            "hitAt1": 0,
+            "hitAt3": 5.555555555555555,
+            "hitAt5": 11.11111111111111,
+            "mrr": 0.05676717527785191
+          },
+          "timing": {
+            "avgMs": 8.184855555555524,
+            "p50Ms": 7.888699999999972,
+            "p95Ms": 10.18511999999998,
+            "maxMs": 12.849700000000212,
+            "totalMs": 147.32739999999944
+          },
+          "hitAt1Interval95": {
+            "lower": 0,
+            "upper": 0
+          },
+          "mrrInterval95": {
+            "lower": 0.01353237727486038,
+            "upper": 0.12078790926311636
+          },
+          "perCase": [
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0001",
+              "query": "如果只说该学院综合评价，需要同时确认“获得入围资格的考生应在哪一天通过什么系统打印准考证”，以及“考生应通过哪个平台查看材料审核结果”，应分别依据哪两份通知？",
+              "expected_otid": "otid_29bee8c1d48a4946",
+              "elapsedMs": 12.849700000000212,
+              "rank": 93,
+              "hitAt1": false,
+              "reciprocalRank": 0.010752688172043012,
+              "top1Otid": "otid_7f07ed38fde74862",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_7f07ed38fde74862",
+                  "score": 26.954819688416755
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_f432dc1f6535443f",
+                  "score": 26.94187031493651
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_bacada41bba74749",
+                  "score": 26.07985609127627
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_52ffc460a3284f93",
+                  "score": 25.34747913857396
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_c15c87e71b5b49b0",
+                  "score": 24.985535927791783
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0002",
+              "query": "如果只说该学院综合评价，需要同时确认“获得入围资格的考生应在哪一天登录哪个网站打印准考证”，以及“考生应在何时登录哪个平台查看材料审核结果”，应分别依据哪两份通知？",
+              "expected_otid": "otid_9e0e777293cc4d35",
+              "elapsedMs": 8.613399999999956,
+              "rank": 70,
+              "hitAt1": false,
+              "reciprocalRank": 0.014285714285714285,
+              "top1Otid": "otid_f432dc1f6535443f",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_f432dc1f6535443f",
+                  "score": 25.643763887274336
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_bacada41bba74749",
+                  "score": 25.362581699503597
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_59692ec3fc384c64",
+                  "score": 24.823823943757105
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_52ffc460a3284f93",
+                  "score": 24.63165862371858
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_7479616835454c16",
+                  "score": 23.99643509776541
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0003",
+              "query": "如果只说该学院综合评价，需要同时确认“获得入围资格的考生应在哪一天通过什么系统打印准考证”，以及“该校在确定各专业组考核入围人选时，遵循什么比例原则”，应分别依据哪两份通知？",
+              "expected_otid": "otid_29bee8c1d48a4946",
+              "elapsedMs": 8.244599999999991,
+              "rank": 41,
+              "hitAt1": false,
+              "reciprocalRank": 0.024390243902439025,
+              "top1Otid": "otid_ccb3b891b8f64953",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_ccb3b891b8f64953",
+                  "score": 34.83329670707912
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_b64bdb78a2854fdc",
+                  "score": 33.98613501130652
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_5d70ffdc13ea473c",
+                  "score": 33.897849973663156
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_7f07ed38fde74862",
+                  "score": 32.87136539445721
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_36cce6f8f00c4d59",
+                  "score": 31.747787964825946
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0004",
+              "query": "如果只说该学院综合评价，需要同时确认“获得入围资格的考生应在哪一天登录哪个网站打印准考证”，以及“各专业组考核入围人选是按照什么比例原则确定的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_9e0e777293cc4d35",
+              "elapsedMs": 9.03819999999996,
+              "rank": 29,
+              "hitAt1": false,
+              "reciprocalRank": 0.034482758620689655,
+              "top1Otid": "otid_ccb3b891b8f64953",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_ccb3b891b8f64953",
+                  "score": 37.447523818991215
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_b64bdb78a2854fdc",
+                  "score": 36.6003621232186
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_5d70ffdc13ea473c",
+                  "score": 36.51207708557524
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_b78d8162d15b4481",
+                  "score": 34.142254596842896
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_36cce6f8f00c4d59",
+                  "score": 31.19858945391351
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0005",
+              "query": "如果只说该学院博士招生，需要同时确认“广州实验室作为呼吸系统疾病及其防控领域的新型科研事业单位，其未来定位是什么”，以及“进入综合考核的考生名单是如何排序的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_7933bd21608a41dd",
+              "elapsedMs": 7.523999999999887,
+              "rank": 158,
+              "hitAt1": false,
+              "reciprocalRank": 0.006329113924050633,
+              "top1Otid": "otid_57fa7965fa92417a",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_57fa7965fa92417a",
+                  "score": 56.0577580172994
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_fe078e0584fe4b77",
+                  "score": 52.82285554594652
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_7933bd21608a41dd",
+                  "score": 49.86547211278211
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_6258d4af76df4ee7",
+                  "score": 48.61082170531364
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_7f07ed38fde74862",
+                  "score": 33.418959674267434
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0006",
+              "query": "如果只说该学院综合评价，需要同时确认“入围考生必须在什么日期参加远程视频面试”，以及“考生应如何查看自己的初审结果”，应分别依据哪两份通知？",
+              "expected_otid": "otid_83b704957347492c",
+              "elapsedMs": 7.014499999999998,
+              "rank": 13,
+              "hitAt1": false,
+              "reciprocalRank": 0.07692307692307693,
+              "top1Otid": "otid_83b704957347492c",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_83b704957347492c",
+                  "score": 34.620986821589874
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_7f07ed38fde74862",
+                  "score": 30.230724430468605
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_392eac0b27fa4b09",
+                  "score": 29.94965906837676
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_b5047e817198431e",
+                  "score": 29.580535523851307
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_681df4bddf9c4ecb",
+                  "score": 27.553578339798406
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0007",
+              "query": "如果只说该学院综合评价，需要同时确认“入围考生必须在什么日期参加远程视频面试”，以及“各专业组考核入围人选是按照什么比例原则确定的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_83b704957347492c",
+              "elapsedMs": 7.380200000000059,
+              "rank": 4,
+              "hitAt1": false,
+              "reciprocalRank": 0.25,
+              "top1Otid": "otid_ccb3b891b8f64953",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_ccb3b891b8f64953",
+                  "score": 38.82504589522854
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_b64bdb78a2854fdc",
+                  "score": 35.83476636921926
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_5d70ffdc13ea473c",
+                  "score": 35.7464813315759
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_83b704957347492c",
+                  "score": 33.68790073441456
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_b78d8162d15b4481",
+                  "score": 33.376658842843554
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0008",
+              "query": "如果只说该学院博士招生，需要同时确认“该计划旨在服务国家创新驱动发展战略，具体如何助力粤港澳大湾区和深圳中国特色先行示范区建设”，以及“进入综合考核的考生名单是如何排序的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_903e35dbd70b496d",
+              "elapsedMs": 8.208199999999806,
+              "rank": 136,
+              "hitAt1": false,
+              "reciprocalRank": 0.007352941176470588,
+              "top1Otid": "otid_903e35dbd70b496d",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_903e35dbd70b496d",
+                  "score": 58.62008329840074
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_ae46d4b5d6e74990",
+                  "score": 53.62150347869487
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_80529bdd365b4138",
+                  "score": 41.823529660448884
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_1180b6d41c0e4ca7",
+                  "score": 38.3057077973652
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_81112559b6b240f2",
+                  "score": 38.224803269232126
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0009",
+              "query": "如果只说该学院博士招生，需要同时确认“除哪个学院外，所有招生单位都实行“申请-考核”制”，以及“进入综合考核的考生名单是如何排序的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_0dd779fc00e845e3",
+              "elapsedMs": 6.804300000000012,
+              "rank": 218,
+              "hitAt1": false,
+              "reciprocalRank": 0.0045871559633027525,
+              "top1Otid": "otid_bacada41bba74749",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_bacada41bba74749",
+                  "score": 25.24185221803199
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_52ffc460a3284f93",
+                  "score": 25.155721220116984
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_1180b6d41c0e4ca7",
+                  "score": 25.03569652955377
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_cefdbe9b7cf34bdb",
+                  "score": 23.792823970828113
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_54fc4d3ca3a94536",
+                  "score": 23.587607499090318
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0010",
+              "query": "如果只说该学院博士招生，需要同时确认“港澳地区考生报名时需持有哪些身份证件”，以及“进入综合考核的考生名单是如何排序的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_467c753a650543da",
+              "elapsedMs": 6.714099999999917,
+              "rank": 87,
+              "hitAt1": false,
+              "reciprocalRank": 0.011494252873563218,
+              "top1Otid": "otid_7f07ed38fde74862",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_7f07ed38fde74862",
+                  "score": 26.839943489388844
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_1ae107c08e73431e",
+                  "score": 24.913720935722253
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_1180b6d41c0e4ca7",
+                  "score": 23.959448568960074
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_bacada41bba74749",
+                  "score": 22.95713300774245
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_ee3035722c4b481e",
+                  "score": 22.73772213209634
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0011",
+              "query": "如果只说该学院博士招生，需要同时确认“该学院成立于哪一天？学院位于哪个校区”，以及“进入综合考核的考生名单是如何排序的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_dc2fbd2f88f7453b",
+              "elapsedMs": 7.089899999999943,
+              "rank": 101,
+              "hitAt1": false,
+              "reciprocalRank": 0.009900990099009901,
+              "top1Otid": "otid_06f7620140244798",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_06f7620140244798",
+                  "score": 28.13496734284539
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_1180b6d41c0e4ca7",
+                  "score": 26.39560117305162
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_44984069cc2b4f1f",
+                  "score": 26.305164656166745
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_dc2fbd2f88f7453b",
+                  "score": 23.97472801239745
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_5f10b726aa1d4728",
+                  "score": 23.97472801239745
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0012",
+              "query": "如果只说该学院博士招生，需要同时确认“该学院成立于何时，位于哪个校区”，以及“进入综合考核的考生名单是如何排序的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_5f10b726aa1d4728",
+              "elapsedMs": 7.12519999999995,
+              "rank": 83,
+              "hitAt1": false,
+              "reciprocalRank": 0.012048192771084338,
+              "top1Otid": "otid_06f7620140244798",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_06f7620140244798",
+                  "score": 26.15971040344445
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_1180b6d41c0e4ca7",
+                  "score": 24.4469130855951
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_44984069cc2b4f1f",
+                  "score": 24.255522692222783
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_bacada41bba74749",
+                  "score": 22.302918706926718
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_52ffc460a3284f93",
+                  "score": 22.036669441405778
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0013",
+              "query": "如果只说该学院博士招生，需要同时确认“该学院成立于何时，其发展理念和依托的科研平台与学科优势是什么”，以及“进入综合考核的考生名单是如何排序的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_84a37b294495492a",
+              "elapsedMs": 8.324499999999944,
+              "rank": 102,
+              "hitAt1": false,
+              "reciprocalRank": 0.00980392156862745,
+              "top1Otid": "otid_06f7620140244798",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_06f7620140244798",
+                  "score": 33.74314184478125
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_9911c0374cdd4ce4",
+                  "score": 33.16648939124334
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_c5344a7fc3bc439a",
+                  "score": 32.989610089265
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_dc2fbd2f88f7453b",
+                  "score": 32.83407204308021
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_5f10b726aa1d4728",
+                  "score": 32.83407204308021
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0014",
+              "query": "如果只说该学院综合评价，需要同时确认“获得入围资格的考生应在哪一天通过什么系统打印准考证”，以及“该校公示的2023年广东省综合评价录取名单是基于哪些上级部门的要求制定的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_29bee8c1d48a4946",
+              "elapsedMs": 7.399400000000014,
+              "rank": 168,
+              "hitAt1": false,
+              "reciprocalRank": 0.005952380952380952,
+              "top1Otid": "otid_7f07ed38fde74862",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_7f07ed38fde74862",
+                  "score": 40.50609349254803
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_52ffc460a3284f93",
+                  "score": 32.07248272953056
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_c03e584363934e90",
+                  "score": 30.341220266008687
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_bacada41bba74749",
+                  "score": 28.632346927641684
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_54fc4d3ca3a94536",
+                  "score": 26.927946842708664
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0015",
+              "query": "如果只说该学院综合评价，需要同时确认“获得入围资格的考生应在哪一天登录哪个网站打印准考证”，以及“该校公示2024年广东省综合评价录取名单是基于哪些上级部门的要求”，应分别依据哪两份通知？",
+              "expected_otid": "otid_9e0e777293cc4d35",
+              "elapsedMs": 8.820099999999911,
+              "rank": 168,
+              "hitAt1": false,
+              "reciprocalRank": 0.005952380952380952,
+              "top1Otid": "otid_52ffc460a3284f93",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_52ffc460a3284f93",
+                  "score": 29.867276032281843
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_7f07ed38fde74862",
+                  "score": 29.72802180373722
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_54fc4d3ca3a94536",
+                  "score": 27.900552569337176
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_bacada41bba74749",
+                  "score": 26.350880085454268
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_8ee6bdcf13e741b8",
+                  "score": 26.08551221595594
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0016",
+              "query": "如果只说该学院综合评价，需要同时确认“获得该校2025年广东省综合评价招生考核入围资格的考生，从2025年7月6日起，应通过哪个网站打印准考证”，以及“录取考生可以通过哪些官方平台查询录取详细信息”，应分别依据哪两份通知？",
+              "expected_otid": "otid_23801bcd14384525",
+              "elapsedMs": 8.892999999999802,
+              "rank": 37,
+              "hitAt1": false,
+              "reciprocalRank": 0.02702702702702703,
+              "top1Otid": "otid_7f07ed38fde74862",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_7f07ed38fde74862",
+                  "score": 35.40948076595748
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_bacada41bba74749",
+                  "score": 34.13488598510694
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_7479616835454c16",
+                  "score": 32.782406062870834
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_8ee6bdcf13e741b8",
+                  "score": 30.546838038073215
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_23801bcd14384525",
+                  "score": 30.300162804336146
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0017",
+              "query": "如果只说该学院综合评价，需要同时确认“获得该校2025年广东省综合评价招生考核入围资格的考生，从2025年7月6日起，应通过哪个网站打印准考证”，以及“各专业组的考核入围分数线是多少”，应分别依据哪两份通知？",
+              "expected_otid": "otid_23801bcd14384525",
+              "elapsedMs": 9.714899999999943,
+              "rank": 2,
+              "hitAt1": false,
+              "reciprocalRank": 0.5,
+              "top1Otid": "otid_b78d8162d15b4481",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_b78d8162d15b4481",
+                  "score": 35.20985898832165
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_23801bcd14384525",
+                  "score": 35.091365198899204
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_ccb3b891b8f64953",
+                  "score": 33.42868306943028
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_bacada41bba74749",
+                  "score": 33.00205208222518
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_b64bdb78a2854fdc",
+                  "score": 32.08753806521295
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0018",
+              "query": "如果只说该学院博士调剂，需要同时确认“人工智能学院在2026年2月4日发布的关于2026年“申请-考核”制博士研究生调剂的通知中，公示了哪些具体信息”，以及“因学校追加招生指标，哪些考生有资格申请调剂”，应分别依据哪两份通知？",
+              "expected_otid": "otid_4b2b45a3a7f84940",
+              "elapsedMs": 7.569200000000137,
+              "rank": 95,
+              "hitAt1": false,
+              "reciprocalRank": 0.010526315789473684,
+              "top1Otid": "otid_8fd3944fd7814ff5",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_8fd3944fd7814ff5",
+                  "score": 32.76957853179197
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_7479616835454c16",
+                  "score": 30.750550663697265
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_52ffc460a3284f93",
+                  "score": 30.48387981771229
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_80529bdd365b4138",
+                  "score": 27.529582029659608
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_1180b6d41c0e4ca7",
+                  "score": 27.4551880811912
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Dense-OT",
+          "family": "dense",
+          "description": "语义检索：仅在 OT 文档上执行向量相似度排序。",
+          "metrics": {
+            "total": 18,
+            "hitAt1": 0,
+            "hitAt3": 0,
+            "hitAt5": 5.555555555555555,
+            "mrr": 0.07673851576607854
+          },
+          "timing": {
+            "avgMs": 7.720383333333327,
+            "p50Ms": 7.5137999999999465,
+            "p95Ms": 9.456685000000128,
+            "maxMs": 10.354199999999992,
+            "totalMs": 138.9668999999999
+          },
+          "hitAt1Interval95": {
+            "lower": 0,
+            "upper": 0
+          },
+          "mrrInterval95": {
+            "lower": 0.0534665625641879,
+            "upper": 0.10455019325679045
+          },
+          "perCase": [
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0001",
+              "query": "如果只说该学院综合评价，需要同时确认“获得入围资格的考生应在哪一天通过什么系统打印准考证”，以及“考生应通过哪个平台查看材料审核结果”，应分别依据哪两份通知？",
+              "expected_otid": "otid_29bee8c1d48a4946",
+              "elapsedMs": 6.692199999999957,
+              "rank": 10,
+              "hitAt1": false,
+              "reciprocalRank": 0.1,
+              "top1Otid": "otid_23801bcd14384525",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_23801bcd14384525",
+                  "score": 0.6947475324634518
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_b78d8162d15b4481",
+                  "score": 0.6823005714365259
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_9e0e777293cc4d35",
+                  "score": 0.6752502111352178
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_29bee8c1d48a4946",
+                  "score": 0.6731591048819678
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_5d70ffdc13ea473c",
+                  "score": 0.6704052535826421
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0002",
+              "query": "如果只说该学院综合评价，需要同时确认“获得入围资格的考生应在哪一天登录哪个网站打印准考证”，以及“考生应在何时登录哪个平台查看材料审核结果”，应分别依据哪两份通知？",
+              "expected_otid": "otid_9e0e777293cc4d35",
+              "elapsedMs": 9.298300000000154,
+              "rank": 7,
+              "hitAt1": false,
+              "reciprocalRank": 0.14285714285714285,
+              "top1Otid": "otid_23801bcd14384525",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_23801bcd14384525",
+                  "score": 0.7211655295698814
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_9e0e777293cc4d35",
+                  "score": 0.6951670651368278
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_b78d8162d15b4481",
+                  "score": 0.6947768271782484
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_29bee8c1d48a4946",
+                  "score": 0.6942588940380586
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_559896ca74b944bd",
+                  "score": 0.6861962980323056
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0003",
+              "query": "如果只说该学院综合评价，需要同时确认“获得入围资格的考生应在哪一天通过什么系统打印准考证”，以及“该校在确定各专业组考核入围人选时，遵循什么比例原则”，应分别依据哪两份通知？",
+              "expected_otid": "otid_29bee8c1d48a4946",
+              "elapsedMs": 10.354199999999992,
+              "rank": 8,
+              "hitAt1": false,
+              "reciprocalRank": 0.125,
+              "top1Otid": "otid_b78d8162d15b4481",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_b78d8162d15b4481",
+                  "score": 0.6819602556012395
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_5d70ffdc13ea473c",
+                  "score": 0.6687415086084701
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_23801bcd14384525",
+                  "score": 0.661513868858457
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_b64bdb78a2854fdc",
+                  "score": 0.6586082854368627
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_ccb3b891b8f64953",
+                  "score": 0.6525199436627149
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0004",
+              "query": "如果只说该学院综合评价，需要同时确认“获得入围资格的考生应在哪一天登录哪个网站打印准考证”，以及“各专业组考核入围人选是按照什么比例原则确定的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_9e0e777293cc4d35",
+              "elapsedMs": 8.239299999999957,
+              "rank": 14,
+              "hitAt1": false,
+              "reciprocalRank": 0.07142857142857142,
+              "top1Otid": "otid_b78d8162d15b4481",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_b78d8162d15b4481",
+                  "score": 0.7139792904622905
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_5d70ffdc13ea473c",
+                  "score": 0.7004840202649942
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_b64bdb78a2854fdc",
+                  "score": 0.6887996596275575
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_559896ca74b944bd",
+                  "score": 0.6845989666793875
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_ccb3b891b8f64953",
+                  "score": 0.6836241286625437
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0005",
+              "query": "如果只说该学院博士招生，需要同时确认“广州实验室作为呼吸系统疾病及其防控领域的新型科研事业单位，其未来定位是什么”，以及“进入综合考核的考生名单是如何排序的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_7933bd21608a41dd",
+              "elapsedMs": 7.061500000000024,
+              "rank": 8,
+              "hitAt1": false,
+              "reciprocalRank": 0.125,
+              "top1Otid": "otid_7933bd21608a41dd",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_7933bd21608a41dd",
+                  "score": 0.7608391015985237
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_fe078e0584fe4b77",
+                  "score": 0.7499076182952605
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_57fa7965fa92417a",
+                  "score": 0.7373786555255257
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_6258d4af76df4ee7",
+                  "score": 0.7357127075816319
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_06f7620140244798",
+                  "score": 0.7036622109579864
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0006",
+              "query": "如果只说该学院综合评价，需要同时确认“入围考生必须在什么日期参加远程视频面试”，以及“考生应如何查看自己的初审结果”，应分别依据哪两份通知？",
+              "expected_otid": "otid_83b704957347492c",
+              "elapsedMs": 6.787900000000036,
+              "rank": 37,
+              "hitAt1": false,
+              "reciprocalRank": 0.02702702702702703,
+              "top1Otid": "otid_b78d8162d15b4481",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_b78d8162d15b4481",
+                  "score": 0.6470224530468535
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_395fb889a17b49fa",
+                  "score": 0.6390966084221105
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_9e0e777293cc4d35",
+                  "score": 0.6377201448667094
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_23801bcd14384525",
+                  "score": 0.6362816757802209
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_5d70ffdc13ea473c",
+                  "score": 0.6358850898610273
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0007",
+              "query": "如果只说该学院综合评价，需要同时确认“入围考生必须在什么日期参加远程视频面试”，以及“各专业组考核入围人选是按照什么比例原则确定的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_83b704957347492c",
+              "elapsedMs": 6.667899999999918,
+              "rank": 21,
+              "hitAt1": false,
+              "reciprocalRank": 0.047619047619047616,
+              "top1Otid": "otid_b78d8162d15b4481",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_b78d8162d15b4481",
+                  "score": 0.6726279395273628
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_5d70ffdc13ea473c",
+                  "score": 0.6634482528013834
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_b64bdb78a2854fdc",
+                  "score": 0.6521935015962413
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_395fb889a17b49fa",
+                  "score": 0.6507915824622151
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_9e0e777293cc4d35",
+                  "score": 0.6369075097843254
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0008",
+              "query": "如果只说该学院博士招生，需要同时确认“该计划旨在服务国家创新驱动发展战略，具体如何助力粤港澳大湾区和深圳中国特色先行示范区建设”，以及“进入综合考核的考生名单是如何排序的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_903e35dbd70b496d",
+              "elapsedMs": 8.546999999999798,
+              "rank": 27,
+              "hitAt1": false,
+              "reciprocalRank": 0.037037037037037035,
+              "top1Otid": "otid_ae46d4b5d6e74990",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_ae46d4b5d6e74990",
+                  "score": 0.7595908611092775
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_d1f00d21d0544a1b",
+                  "score": 0.7518886350570331
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_4cba34c1f79f4910",
+                  "score": 0.7505844413803485
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_ce6e1e0401d146e3",
+                  "score": 0.7438326057508958
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_130b61ecfb1e428e",
+                  "score": 0.7421904210256676
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0009",
+              "query": "如果只说该学院博士招生，需要同时确认“除哪个学院外，所有招生单位都实行“申请-考核”制”，以及“进入综合考核的考生名单是如何排序的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_0dd779fc00e845e3",
+              "elapsedMs": 6.414300000000139,
+              "rank": 27,
+              "hitAt1": false,
+              "reciprocalRank": 0.037037037037037035,
+              "top1Otid": "otid_b5047e817198431e",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_b5047e817198431e",
+                  "score": 0.6875978081684064
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_8c27fc74819145d9",
+                  "score": 0.6856024701248083
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_06f7620140244798",
+                  "score": 0.6834395525595077
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_130b61ecfb1e428e",
+                  "score": 0.6829938928227801
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_82c9966124154ddc",
+                  "score": 0.6816522726649777
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0010",
+              "query": "如果只说该学院博士招生，需要同时确认“港澳地区考生报名时需持有哪些身份证件”，以及“进入综合考核的考生名单是如何排序的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_467c753a650543da",
+              "elapsedMs": 7.21550000000002,
+              "rank": 11,
+              "hitAt1": false,
+              "reciprocalRank": 0.09090909090909091,
+              "top1Otid": "otid_ee3035722c4b481e",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_ee3035722c4b481e",
+                  "score": 0.7106333906642939
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_467c753a650543da",
+                  "score": 0.7070545582028069
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_f331d70dd0f24b85",
+                  "score": 0.7064703576163192
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_2c221a5f38864ced",
+                  "score": 0.699677414176674
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_7f07ed38fde74862",
+                  "score": 0.6965245181373187
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0011",
+              "query": "如果只说该学院博士招生，需要同时确认“该学院成立于哪一天？学院位于哪个校区”，以及“进入综合考核的考生名单是如何排序的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_dc2fbd2f88f7453b",
+              "elapsedMs": 7.003099999999904,
+              "rank": 38,
+              "hitAt1": false,
+              "reciprocalRank": 0.02631578947368421,
+              "top1Otid": "otid_4b2b45a3a7f84940",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_4b2b45a3a7f84940",
+                  "score": 0.6708259239426968
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_8c27fc74819145d9",
+                  "score": 0.6667036855069717
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_130b61ecfb1e428e",
+                  "score": 0.6650290911636503
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_a206a52bfb3f46aa",
+                  "score": 0.6563110507580404
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_7e097cbd3c524853",
+                  "score": 0.6554620082614706
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0012",
+              "query": "如果只说该学院博士招生，需要同时确认“该学院成立于何时，位于哪个校区”，以及“进入综合考核的考生名单是如何排序的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_5f10b726aa1d4728",
+              "elapsedMs": 8.640499999999975,
+              "rank": 32,
+              "hitAt1": false,
+              "reciprocalRank": 0.03125,
+              "top1Otid": "otid_130b61ecfb1e428e",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_130b61ecfb1e428e",
+                  "score": 0.681401150628755
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_8c27fc74819145d9",
+                  "score": 0.67939642784467
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_d1f00d21d0544a1b",
+                  "score": 0.669410342471248
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_a206a52bfb3f46aa",
+                  "score": 0.6649611628988684
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_7f07ed38fde74862",
+                  "score": 0.6638048572006785
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0013",
+              "query": "如果只说该学院博士招生，需要同时确认“该学院成立于何时，其发展理念和依托的科研平台与学科优势是什么”，以及“进入综合考核的考生名单是如何排序的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_84a37b294495492a",
+              "elapsedMs": 7.812099999999873,
+              "rank": 91,
+              "hitAt1": false,
+              "reciprocalRank": 0.01098901098901099,
+              "top1Otid": "otid_7f07ed38fde74862",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_7f07ed38fde74862",
+                  "score": 0.687628534050438
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_130b61ecfb1e428e",
+                  "score": 0.6800649656012113
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_82c9966124154ddc",
+                  "score": 0.6776622692476402
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_8c27fc74819145d9",
+                  "score": 0.6743145659000953
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_4b2b45a3a7f84940",
+                  "score": 0.6733514661663086
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0014",
+              "query": "如果只说该学院综合评价，需要同时确认“获得入围资格的考生应在哪一天通过什么系统打印准考证”，以及“该校公示的2023年广东省综合评价录取名单是基于哪些上级部门的要求制定的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_29bee8c1d48a4946",
+              "elapsedMs": 8.08219999999983,
+              "rank": 17,
+              "hitAt1": false,
+              "reciprocalRank": 0.058823529411764705,
+              "top1Otid": "otid_1c11811a02604c36",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_1c11811a02604c36",
+                  "score": 0.8095732035725627
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_fbb4d0d85ec140b9",
+                  "score": 0.7956958446634692
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_8be68548ed504099",
+                  "score": 0.7955213913178232
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_f536f4e1af9e43aa",
+                  "score": 0.7931859063670255
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_395fb889a17b49fa",
+                  "score": 0.7920549460473391
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0015",
+              "query": "如果只说该学院综合评价，需要同时确认“获得入围资格的考生应在哪一天登录哪个网站打印准考证”，以及“该校公示2024年广东省综合评价录取名单是基于哪些上级部门的要求”，应分别依据哪两份通知？",
+              "expected_otid": "otid_9e0e777293cc4d35",
+              "elapsedMs": 7.97380000000021,
+              "rank": 15,
+              "hitAt1": false,
+              "reciprocalRank": 0.06666666666666667,
+              "top1Otid": "otid_25f8c20ce2194082",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_25f8c20ce2194082",
+                  "score": 0.8057715936977201
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_395fb889a17b49fa",
+                  "score": 0.798043757959199
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_8be68548ed504099",
+                  "score": 0.7881529157040558
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_5d70ffdc13ea473c",
+                  "score": 0.7871066708759643
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_f536f4e1af9e43aa",
+                  "score": 0.7861637560574372
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0016",
+              "query": "如果只说该学院综合评价，需要同时确认“获得该校2025年广东省综合评价招生考核入围资格的考生，从2025年7月6日起，应通过哪个网站打印准考证”，以及“录取考生可以通过哪些官方平台查询录取详细信息”，应分别依据哪两份通知？",
+              "expected_otid": "otid_23801bcd14384525",
+              "elapsedMs": 8.851400000000012,
+              "rank": 15,
+              "hitAt1": false,
+              "reciprocalRank": 0.06666666666666667,
+              "top1Otid": "otid_f536f4e1af9e43aa",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_f536f4e1af9e43aa",
+                  "score": 0.8416188735711654
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_8be68548ed504099",
+                  "score": 0.8214937998569682
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_25f8c20ce2194082",
+                  "score": 0.8155148484018316
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_1c11811a02604c36",
+                  "score": 0.8093718345388601
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_395fb889a17b49fa",
+                  "score": 0.7995161819731426
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0017",
+              "query": "如果只说该学院综合评价，需要同时确认“获得该校2025年广东省综合评价招生考核入围资格的考生，从2025年7月6日起，应通过哪个网站打印准考证”，以及“各专业组的考核入围分数线是多少”，应分别依据哪两份通知？",
+              "expected_otid": "otid_23801bcd14384525",
+              "elapsedMs": 6.844299999999976,
+              "rank": 15,
+              "hitAt1": false,
+              "reciprocalRank": 0.06666666666666667,
+              "top1Otid": "otid_8be68548ed504099",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_8be68548ed504099",
+                  "score": 0.8287702135494319
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_f536f4e1af9e43aa",
+                  "score": 0.8170090423817908
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_b78d8162d15b4481",
+                  "score": 0.8168862256845949
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_395fb889a17b49fa",
+                  "score": 0.8057806778665761
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_fbb4d0d85ec140b9",
+                  "score": 0.8010021824332626
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0018",
+              "query": "如果只说该学院博士调剂，需要同时确认“人工智能学院在2026年2月4日发布的关于2026年“申请-考核”制博士研究生调剂的通知中，公示了哪些具体信息”，以及“因学校追加招生指标，哪些考生有资格申请调剂”，应分别依据哪两份通知？",
+              "expected_otid": "otid_4b2b45a3a7f84940",
+              "elapsedMs": 6.4814000000001215,
+              "rank": 4,
+              "hitAt1": false,
+              "reciprocalRank": 0.25,
+              "top1Otid": "otid_4b2b45a3a7f84940",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_4b2b45a3a7f84940",
+                  "score": 0.7780233725570987
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_eb3d3855deb74340",
+                  "score": 0.7352145715496887
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_1d07d7c9f48e4090",
+                  "score": 0.7264011870336174
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_8fd3944fd7814ff5",
+                  "score": 0.7177882058883641
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_b53a9170fcfe4d2e",
+                  "score": 0.7046525572306891
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Structured-KP+OT",
+          "family": "structured",
+          "description": "论文冻结主组合：Q=0, KP=0.2857, OT=0.7143。",
+          "metrics": {
+            "total": 18,
+            "hitAt1": 0,
+            "hitAt3": 44.44444444444444,
+            "hitAt5": 88.88888888888889,
+            "mrr": 0.2919973544973545
+          },
+          "timing": {
+            "avgMs": 38.69717222222231,
+            "p50Ms": 36.48194999999987,
+            "p95Ms": 49.95792000000023,
+            "maxMs": 58.58440000000019,
+            "totalMs": 696.5491000000015
+          },
+          "hitAt1Interval95": {
+            "lower": 0,
+            "upper": 0
+          },
+          "mrrInterval95": {
+            "lower": 0.23306878306878312,
+            "upper": 0.35311177248677245
+          },
+          "perCase": [
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0001",
+              "query": "如果只说该学院综合评价，需要同时确认“获得入围资格的考生应在哪一天通过什么系统打印准考证”，以及“考生应通过哪个平台查看材料审核结果”，应分别依据哪两份通知？",
+              "expected_otid": "otid_29bee8c1d48a4946",
+              "elapsedMs": 58.58440000000019,
+              "rank": 4,
+              "hitAt1": false,
+              "reciprocalRank": 0.25,
+              "top1Otid": "otid_2822fe40ab7e4534",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_2822fe40ab7e4534",
+                  "score": 1.8935914254777544,
+                  "best_kpid": "kpid_d0957e88687e43fa"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_aa024784667d4f5a",
+                  "score": 1.482758221350476,
+                  "best_kpid": "kpid_91a32706835145b1"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_c03e584363934e90",
+                  "score": 1.2523552197877748,
+                  "best_kpid": "kpid_9d04033025194272"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_29bee8c1d48a4946",
+                  "score": 1.2463812092235014,
+                  "best_kpid": "kpid_7821d864dcd14f39"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_903e35dbd70b496d",
+                  "score": 1.0832439220349384,
+                  "best_kpid": "kpid_c60cfecad5394865"
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0002",
+              "query": "如果只说该学院综合评价，需要同时确认“获得入围资格的考生应在哪一天登录哪个网站打印准考证”，以及“考生应在何时登录哪个平台查看材料审核结果”，应分别依据哪两份通知？",
+              "expected_otid": "otid_9e0e777293cc4d35",
+              "elapsedMs": 48.43560000000025,
+              "rank": 2,
+              "hitAt1": false,
+              "reciprocalRank": 0.5,
+              "top1Otid": "otid_2d77227bd2fa473c",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_2d77227bd2fa473c",
+                  "score": 1.872784976059389,
+                  "best_kpid": "kpid_2a3a74c241ae4a2d"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_9e0e777293cc4d35",
+                  "score": 1.6534996655670007,
+                  "best_kpid": "kpid_597d5ce77d9d4038"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_1d0896a191814c1e",
+                  "score": 1.374214621478003,
+                  "best_kpid": "kpid_2a1a41879f9a45d7"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_b9b1fa013e3d48e9",
+                  "score": 1.256314167592363,
+                  "best_kpid": "kpid_f95f56f490c14eaf"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_a206a52bfb3f46aa",
+                  "score": 1.09083540130269,
+                  "best_kpid": "kpid_88470e67dcae4080"
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0003",
+              "query": "如果只说该学院综合评价，需要同时确认“获得入围资格的考生应在哪一天通过什么系统打印准考证”，以及“该校在确定各专业组考核入围人选时，遵循什么比例原则”，应分别依据哪两份通知？",
+              "expected_otid": "otid_29bee8c1d48a4946",
+              "elapsedMs": 38.152700000000095,
+              "rank": 3,
+              "hitAt1": false,
+              "reciprocalRank": 0.3333333333333333,
+              "top1Otid": "otid_b64bdb78a2854fdc",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_b64bdb78a2854fdc",
+                  "score": 2.1402720757724896,
+                  "best_kpid": "kpid_2db72c7202444cdf"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_2822fe40ab7e4534",
+                  "score": 1.8489581996267446,
+                  "best_kpid": "kpid_2b568453cdd44982"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_29bee8c1d48a4946",
+                  "score": 1.6172328634474782,
+                  "best_kpid": "kpid_7821d864dcd14f39"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_c03e584363934e90",
+                  "score": 1.145168071301503,
+                  "best_kpid": "kpid_9d04033025194272"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_fbb4d0d85ec140b9",
+                  "score": 1.075468757455836,
+                  "best_kpid": "kpid_6533f75e98ec4b66"
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0004",
+              "query": "如果只说该学院综合评价，需要同时确认“获得入围资格的考生应在哪一天登录哪个网站打印准考证”，以及“各专业组考核入围人选是按照什么比例原则确定的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_9e0e777293cc4d35",
+              "elapsedMs": 37.93510000000015,
+              "rank": 3,
+              "hitAt1": false,
+              "reciprocalRank": 0.3333333333333333,
+              "top1Otid": "otid_5d70ffdc13ea473c",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_5d70ffdc13ea473c",
+                  "score": 2.414279563620464,
+                  "best_kpid": "kpid_9c6d2088725640ab"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_2d77227bd2fa473c",
+                  "score": 1.9411281023141234,
+                  "best_kpid": "kpid_4222dfcc49c14df7"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_9e0e777293cc4d35",
+                  "score": 1.7215303215303215,
+                  "best_kpid": "kpid_597d5ce77d9d4038"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_395fb889a17b49fa",
+                  "score": 1.1569613220685828,
+                  "best_kpid": "kpid_49bcc92debc646b1"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_54fc4d3ca3a94536",
+                  "score": 1.0890645548686815,
+                  "best_kpid": "kpid_c2b8b4cddc934e3a"
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0005",
+              "query": "如果只说该学院博士招生，需要同时确认“广州实验室作为呼吸系统疾病及其防控领域的新型科研事业单位，其未来定位是什么”，以及“进入综合考核的考生名单是如何排序的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_7933bd21608a41dd",
+              "elapsedMs": 41.9695999999999,
+              "rank": 5,
+              "hitAt1": false,
+              "reciprocalRank": 0.2,
+              "top1Otid": "otid_fe078e0584fe4b77",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_fe078e0584fe4b77",
+                  "score": 3.1275893089476225,
+                  "best_kpid": "kpid_733a00f758e54594"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_7933bd21608a41dd",
+                  "score": 3.1226333383697207,
+                  "best_kpid": "kpid_6ea8fe137fbd4aa6"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_b5047e817198431e",
+                  "score": 2.275116427362079,
+                  "best_kpid": "kpid_937f1ea18d2e4c9c"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_392eac0b27fa4b09",
+                  "score": 1.8699594008539087,
+                  "best_kpid": "kpid_081fa6516435497f"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_0f30eade3efc4803",
+                  "score": 1.8137776113464952,
+                  "best_kpid": "kpid_2b0f816523314ffb"
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0006",
+              "query": "如果只说该学院综合评价，需要同时确认“入围考生必须在什么日期参加远程视频面试”，以及“考生应如何查看自己的初审结果”，应分别依据哪两份通知？",
+              "expected_otid": "otid_83b704957347492c",
+              "elapsedMs": 34.57020000000011,
+              "rank": 2,
+              "hitAt1": false,
+              "reciprocalRank": 0.5,
+              "top1Otid": "otid_83b704957347492c",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_83b704957347492c",
+                  "score": 1.7882684829847255,
+                  "best_kpid": "kpid_6317936acbc54158"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_36cce6f8f00c4d59",
+                  "score": 1.6717525900696304,
+                  "best_kpid": "kpid_4931ea7c0a0e4ea3"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_5b55d2b085754e96",
+                  "score": 1.668156285926642,
+                  "best_kpid": "kpid_b3d6bdbf6b7440f1"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_681df4bddf9c4ecb",
+                  "score": 1.65945721272563,
+                  "best_kpid": "kpid_4a7ed66ebb464524"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_ccb3b891b8f64953",
+                  "score": 1.5251899550155568,
+                  "best_kpid": "kpid_ae1357d2e0a14449"
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0007",
+              "query": "如果只说该学院综合评价，需要同时确认“入围考生必须在什么日期参加远程视频面试”，以及“各专业组考核入围人选是按照什么比例原则确定的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_83b704957347492c",
+              "elapsedMs": 35.160699999999906,
+              "rank": 2,
+              "hitAt1": false,
+              "reciprocalRank": 0.5,
+              "top1Otid": "otid_ccb3b891b8f64953",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_ccb3b891b8f64953",
+                  "score": 2.1091742482116813,
+                  "best_kpid": "kpid_629e221957874e86"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_83b704957347492c",
+                  "score": 1.7759703548691104,
+                  "best_kpid": "kpid_e507361251d84ebb"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_36cce6f8f00c4d59",
+                  "score": 1.6786762864732594,
+                  "best_kpid": "kpid_1132e66900d649a0"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_681df4bddf9c4ecb",
+                  "score": 1.4717175968540257,
+                  "best_kpid": "kpid_27a7f84e33244c36"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_5b55d2b085754e96",
+                  "score": 1.4472304322380114,
+                  "best_kpid": "kpid_b3d6bdbf6b7440f1"
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0008",
+              "query": "如果只说该学院博士招生，需要同时确认“该计划旨在服务国家创新驱动发展战略，具体如何助力粤港澳大湾区和深圳中国特色先行示范区建设”，以及“进入综合考核的考生名单是如何排序的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_903e35dbd70b496d",
+              "elapsedMs": 36.46419999999989,
+              "rank": 8,
+              "hitAt1": false,
+              "reciprocalRank": 0.125,
+              "top1Otid": "otid_903e35dbd70b496d",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_903e35dbd70b496d",
+                  "score": 2.8912236014054957,
+                  "best_kpid": "kpid_4fadd2f0e1da4d2d"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_b5047e817198431e",
+                  "score": 2.108791587746607,
+                  "best_kpid": "kpid_937f1ea18d2e4c9c"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_84a37b294495492a",
+                  "score": 1.8677863130113275,
+                  "best_kpid": "kpid_a4765e054c9140a6"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_130b61ecfb1e428e",
+                  "score": 1.866063620812229,
+                  "best_kpid": "kpid_365d0d76902d4813"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_dc2fbd2f88f7453b",
+                  "score": 1.7599398654229785,
+                  "best_kpid": "kpid_d40e015da0ff4fbd"
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0009",
+              "query": "如果只说该学院博士招生，需要同时确认“除哪个学院外，所有招生单位都实行“申请-考核”制”，以及“进入综合考核的考生名单是如何排序的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_0dd779fc00e845e3",
+              "elapsedMs": 36.49969999999985,
+              "rank": 21,
+              "hitAt1": false,
+              "reciprocalRank": 0.047619047619047616,
+              "top1Otid": "otid_b5047e817198431e",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_b5047e817198431e",
+                  "score": 2.1934901167694947,
+                  "best_kpid": "kpid_937f1ea18d2e4c9c"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_392eac0b27fa4b09",
+                  "score": 2.03245995964955,
+                  "best_kpid": "kpid_081fa6516435497f"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_903e35dbd70b496d",
+                  "score": 1.692715470803706,
+                  "best_kpid": "kpid_c60cfecad5394865"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_d2b18bcf0b2b453b",
+                  "score": 1.6035885628614266,
+                  "best_kpid": "kpid_2bce93850ed34797"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_dc2fbd2f88f7453b",
+                  "score": 1.5819884382319414,
+                  "best_kpid": "kpid_64164ade698a4751"
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0010",
+              "query": "如果只说该学院博士招生，需要同时确认“港澳地区考生报名时需持有哪些身份证件”，以及“进入综合考核的考生名单是如何排序的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_467c753a650543da",
+              "elapsedMs": 33.21640000000025,
+              "rank": 4,
+              "hitAt1": false,
+              "reciprocalRank": 0.25,
+              "top1Otid": "otid_467c753a650543da",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_467c753a650543da",
+                  "score": 2.8934578626738943,
+                  "best_kpid": "kpid_1ea7d7e016d64f66"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_2c221a5f38864ced",
+                  "score": 2.721176389618607,
+                  "best_kpid": "kpid_5b555627094a493a"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_b5047e817198431e",
+                  "score": 2.3842330701375207,
+                  "best_kpid": "kpid_937f1ea18d2e4c9c"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_0f30eade3efc4803",
+                  "score": 2.354138372318628,
+                  "best_kpid": "kpid_2b0f816523314ffb"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_392eac0b27fa4b09",
+                  "score": 2.095136054421769,
+                  "best_kpid": "kpid_081fa6516435497f"
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0011",
+              "query": "如果只说该学院博士招生，需要同时确认“该学院成立于哪一天？学院位于哪个校区”，以及“进入综合考核的考生名单是如何排序的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_dc2fbd2f88f7453b",
+              "elapsedMs": 36.714500000000044,
+              "rank": 5,
+              "hitAt1": false,
+              "reciprocalRank": 0.2,
+              "top1Otid": "otid_b5047e817198431e",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_b5047e817198431e",
+                  "score": 2.00779705552335,
+                  "best_kpid": "kpid_937f1ea18d2e4c9c"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_392eac0b27fa4b09",
+                  "score": 1.726390640948831,
+                  "best_kpid": "kpid_081fa6516435497f"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_84a37b294495492a",
+                  "score": 1.6511825548998915,
+                  "best_kpid": "kpid_3fdde90231524df8"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_0f30eade3efc4803",
+                  "score": 1.558615281432183,
+                  "best_kpid": "kpid_2b0f816523314ffb"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_dc2fbd2f88f7453b",
+                  "score": 1.541201437126496,
+                  "best_kpid": "kpid_64164ade698a4751"
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0012",
+              "query": "如果只说该学院博士招生，需要同时确认“该学院成立于何时，位于哪个校区”，以及“进入综合考核的考生名单是如何排序的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_5f10b726aa1d4728",
+              "elapsedMs": 33.22160000000031,
+              "rank": 5,
+              "hitAt1": false,
+              "reciprocalRank": 0.2,
+              "top1Otid": "otid_dc2fbd2f88f7453b",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_dc2fbd2f88f7453b",
+                  "score": 2.151261792991092,
+                  "best_kpid": "kpid_64164ade698a4751"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_5f10b726aa1d4728",
+                  "score": 2.1371072439105854,
+                  "best_kpid": "kpid_5b5f80bbf4e249bf"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_b5047e817198431e",
+                  "score": 1.959889726079324,
+                  "best_kpid": "kpid_937f1ea18d2e4c9c"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_392eac0b27fa4b09",
+                  "score": 1.8049619523805411,
+                  "best_kpid": "kpid_081fa6516435497f"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_0f30eade3efc4803",
+                  "score": 1.7606901173360803,
+                  "best_kpid": "kpid_2b0f816523314ffb"
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0013",
+              "query": "如果只说该学院博士招生，需要同时确认“该学院成立于何时，其发展理念和依托的科研平台与学科优势是什么”，以及“进入综合考核的考生名单是如何排序的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_84a37b294495492a",
+              "elapsedMs": 33.75700000000006,
+              "rank": 5,
+              "hitAt1": false,
+              "reciprocalRank": 0.2,
+              "top1Otid": "otid_84a37b294495492a",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_84a37b294495492a",
+                  "score": 1.7188563289093028,
+                  "best_kpid": "kpid_3fdde90231524df8"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_b5047e817198431e",
+                  "score": 1.64369886937826,
+                  "best_kpid": "kpid_937f1ea18d2e4c9c"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_dc2fbd2f88f7453b",
+                  "score": 1.5771909950138638,
+                  "best_kpid": "kpid_64164ade698a4751"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_5f10b726aa1d4728",
+                  "score": 1.5609350327687055,
+                  "best_kpid": "kpid_5b5f80bbf4e249bf"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_0f30eade3efc4803",
+                  "score": 1.5570850721265612,
+                  "best_kpid": "kpid_2b0f816523314ffb"
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0014",
+              "query": "如果只说该学院综合评价，需要同时确认“获得入围资格的考生应在哪一天通过什么系统打印准考证”，以及“该校公示的2023年广东省综合评价录取名单是基于哪些上级部门的要求制定的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_29bee8c1d48a4946",
+              "elapsedMs": 33.05879999999979,
+              "rank": 4,
+              "hitAt1": false,
+              "reciprocalRank": 0.25,
+              "top1Otid": "otid_29bee8c1d48a4946",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_29bee8c1d48a4946",
+                  "score": 2.456136797150622,
+                  "best_kpid": "kpid_7821d864dcd14f39"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_2822fe40ab7e4534",
+                  "score": 2.34547157751532,
+                  "best_kpid": "kpid_d0957e88687e43fa"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_b64bdb78a2854fdc",
+                  "score": 2.213501655921836,
+                  "best_kpid": "kpid_2db72c7202444cdf"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_1c11811a02604c36",
+                  "score": 2.0743031613814193,
+                  "best_kpid": "kpid_0e1f2e222bd74b81"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_fbb4d0d85ec140b9",
+                  "score": 2.0063847438847855,
+                  "best_kpid": "kpid_96a0f706b9f64628"
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0015",
+              "query": "如果只说该学院综合评价，需要同时确认“获得入围资格的考生应在哪一天登录哪个网站打印准考证”，以及“该校公示2024年广东省综合评价录取名单是基于哪些上级部门的要求”，应分别依据哪两份通知？",
+              "expected_otid": "otid_9e0e777293cc4d35",
+              "elapsedMs": 35.78480000000036,
+              "rank": 5,
+              "hitAt1": false,
+              "reciprocalRank": 0.2,
+              "top1Otid": "otid_5d70ffdc13ea473c",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_5d70ffdc13ea473c",
+                  "score": 2.7388544703595725,
+                  "best_kpid": "kpid_9c6d2088725640ab"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_9e0e777293cc4d35",
+                  "score": 2.5834276465505703,
+                  "best_kpid": "kpid_597d5ce77d9d4038"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_395fb889a17b49fa",
+                  "score": 2.1070386017450637,
+                  "best_kpid": "kpid_5c6c9e2e47964343"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_2d77227bd2fa473c",
+                  "score": 2.061607954109241,
+                  "best_kpid": "kpid_24b87d7b333e4c47"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_25f8c20ce2194082",
+                  "score": 1.970358330478572,
+                  "best_kpid": "kpid_026dd946da8d43e7"
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0016",
+              "query": "如果只说该学院综合评价，需要同时确认“获得该校2025年广东省综合评价招生考核入围资格的考生，从2025年7月6日起，应通过哪个网站打印准考证”，以及“录取考生可以通过哪些官方平台查询录取详细信息”，应分别依据哪两份通知？",
+              "expected_otid": "otid_23801bcd14384525",
+              "elapsedMs": 38.970800000000054,
+              "rank": 3,
+              "hitAt1": false,
+              "reciprocalRank": 0.3333333333333333,
+              "top1Otid": "otid_f536f4e1af9e43aa",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_f536f4e1af9e43aa",
+                  "score": 2.742243245048294,
+                  "best_kpid": "kpid_97a56750666a45a2"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_b78d8162d15b4481",
+                  "score": 2.5808427508483547,
+                  "best_kpid": "kpid_58ca7514f24946c6"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_23801bcd14384525",
+                  "score": 2.492296314556884,
+                  "best_kpid": "kpid_a661d0677f604cd9"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_64c41c82baca43e4",
+                  "score": 2.421713270819904,
+                  "best_kpid": "kpid_1100af8ab0294d85"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_8be68548ed504099",
+                  "score": 2.1702808889912593,
+                  "best_kpid": "kpid_c645f22606de4300"
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0017",
+              "query": "如果只说该学院综合评价，需要同时确认“获得该校2025年广东省综合评价招生考核入围资格的考生，从2025年7月6日起，应通过哪个网站打印准考证”，以及“各专业组的考核入围分数线是多少”，应分别依据哪两份通知？",
+              "expected_otid": "otid_23801bcd14384525",
+              "elapsedMs": 48.258400000000165,
+              "rank": 2,
+              "hitAt1": false,
+              "reciprocalRank": 0.5,
+              "top1Otid": "otid_b78d8162d15b4481",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_b78d8162d15b4481",
+                  "score": 2.916605219691661,
+                  "best_kpid": "kpid_1086e84ae3254c41"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_23801bcd14384525",
+                  "score": 2.4929396566946407,
+                  "best_kpid": "kpid_a661d0677f604cd9"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_64c41c82baca43e4",
+                  "score": 2.486771805309747,
+                  "best_kpid": "kpid_e5814d7ad28548ae"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_8be68548ed504099",
+                  "score": 2.2485517192834266,
+                  "best_kpid": "kpid_c645f22606de4300"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_bacada41bba74749",
+                  "score": 1.795735277315405,
+                  "best_kpid": "kpid_cf09ccb0de784179"
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0018",
+              "query": "如果只说该学院博士调剂，需要同时确认“人工智能学院在2026年2月4日发布的关于2026年“申请-考核”制博士研究生调剂的通知中，公示了哪些具体信息”，以及“因学校追加招生指标，哪些考生有资格申请调剂”，应分别依据哪两份通知？",
+              "expected_otid": "otid_4b2b45a3a7f84940",
+              "elapsedMs": 35.79460000000017,
+              "rank": 3,
+              "hitAt1": false,
+              "reciprocalRank": 0.3333333333333333,
+              "top1Otid": "otid_8fd3944fd7814ff5",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_8fd3944fd7814ff5",
+                  "score": 2.878842815814851,
+                  "best_kpid": "kpid_6e3b013f3bed429c"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_eb3d3855deb74340",
+                  "score": 2.466293803805325,
+                  "best_kpid": "kpid_69f10b673a554b24"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_4b2b45a3a7f84940",
+                  "score": 2.2824149782701086,
+                  "best_kpid": "kpid_4571e90a78f8450d"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_1180b6d41c0e4ca7",
+                  "score": 1.9283796501149377,
+                  "best_kpid": "kpid_d1d68348e9794f6e"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_c03d97fc09704546",
+                  "score": 1.6988505265986924,
+                  "best_kpid": "kpid_dc9289c28ce44dd8"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Structured-Q+KP+OT",
+          "family": "structured",
+          "description": "前端 runtime 对齐主线：Q=0.3333, KP=0.3333, OT=0.3333。",
+          "metrics": {
+            "total": 18,
+            "hitAt1": 0,
+            "hitAt3": 94.44444444444444,
+            "hitAt5": 94.44444444444444,
+            "mrr": 0.41534391534391535
+          },
+          "timing": {
+            "avgMs": 64.45681111111104,
+            "p50Ms": 60.88415000000009,
+            "p95Ms": 93.65239000000005,
+            "maxMs": 102.26680000000033,
+            "totalMs": 1160.2225999999987
+          },
+          "hitAt1Interval95": {
+            "lower": 0,
+            "upper": 0
+          },
+          "mrrInterval95": {
+            "lower": 0.3664021164021164,
+            "upper": 0.4629629629629629
+          },
+          "perCase": [
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0001",
+              "query": "如果只说该学院综合评价，需要同时确认“获得入围资格的考生应在哪一天通过什么系统打印准考证”，以及“考生应通过哪个平台查看材料审核结果”，应分别依据哪两份通知？",
+              "expected_otid": "otid_29bee8c1d48a4946",
+              "elapsedMs": 92.13220000000001,
+              "rank": 2,
+              "hitAt1": false,
+              "reciprocalRank": 0.5,
+              "top1Otid": "otid_29bee8c1d48a4946",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_29bee8c1d48a4946",
+                  "score": 1.0283306624780666,
+                  "best_kpid": "kpid_7821d864dcd14f39"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_2822fe40ab7e4534",
+                  "score": 0.9203144770119793,
+                  "best_kpid": "kpid_d0957e88687e43fa"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_5f10b726aa1d4728",
+                  "score": 0.6462661712863105,
+                  "best_kpid": "kpid_5b5f80bbf4e249bf"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_dc2fbd2f88f7453b",
+                  "score": 0.5769234330164127,
+                  "best_kpid": "kpid_64164ade698a4751"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_aa024784667d4f5a",
+                  "score": 0.5583284536123287,
+                  "best_kpid": "kpid_91a32706835145b1"
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0002",
+              "query": "如果只说该学院综合评价，需要同时确认“获得入围资格的考生应在哪一天登录哪个网站打印准考证”，以及“考生应在何时登录哪个平台查看材料审核结果”，应分别依据哪两份通知？",
+              "expected_otid": "otid_9e0e777293cc4d35",
+              "elapsedMs": 102.26680000000033,
+              "rank": 2,
+              "hitAt1": false,
+              "reciprocalRank": 0.5,
+              "top1Otid": "otid_9e0e777293cc4d35",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_9e0e777293cc4d35",
+                  "score": 1.3943717594197675,
+                  "best_kpid": "kpid_597d5ce77d9d4038"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_2d77227bd2fa473c",
+                  "score": 1.0758692039945985,
+                  "best_kpid": "kpid_2a3a74c241ae4a2d"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_b9b1fa013e3d48e9",
+                  "score": 0.6099499226208056,
+                  "best_kpid": "kpid_f95f56f490c14eaf"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_f0baf746fd75421e",
+                  "score": 0.5948089315339955,
+                  "best_kpid": "kpid_99c98849c49e4f07"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_1d0896a191814c1e",
+                  "score": 0.5564216910188766,
+                  "best_kpid": "kpid_2a1a41879f9a45d7"
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0003",
+              "query": "如果只说该学院综合评价，需要同时确认“获得入围资格的考生应在哪一天通过什么系统打印准考证”，以及“该校在确定各专业组考核入围人选时，遵循什么比例原则”，应分别依据哪两份通知？",
+              "expected_otid": "otid_29bee8c1d48a4946",
+              "elapsedMs": 67.19119999999975,
+              "rank": 3,
+              "hitAt1": false,
+              "reciprocalRank": 0.3333333333333333,
+              "top1Otid": "otid_b64bdb78a2854fdc",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_b64bdb78a2854fdc",
+                  "score": 1.2730660551858444,
+                  "best_kpid": "kpid_2db72c7202444cdf"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_2822fe40ab7e4534",
+                  "score": 0.921361420478767,
+                  "best_kpid": "kpid_2b568453cdd44982"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_29bee8c1d48a4946",
+                  "score": 0.8316192237006507,
+                  "best_kpid": "kpid_7821d864dcd14f39"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_5f10b726aa1d4728",
+                  "score": 0.7244410443357899,
+                  "best_kpid": "kpid_5b5f80bbf4e249bf"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_dc2fbd2f88f7453b",
+                  "score": 0.4793910147674914,
+                  "best_kpid": "kpid_64164ade698a4751"
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0004",
+              "query": "如果只说该学院综合评价，需要同时确认“获得入围资格的考生应在哪一天登录哪个网站打印准考证”，以及“各专业组考核入围人选是按照什么比例原则确定的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_9e0e777293cc4d35",
+              "elapsedMs": 64.44299999999976,
+              "rank": 3,
+              "hitAt1": false,
+              "reciprocalRank": 0.3333333333333333,
+              "top1Otid": "otid_5d70ffdc13ea473c",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_5d70ffdc13ea473c",
+                  "score": 1.3896655007754193,
+                  "best_kpid": "kpid_9c6d2088725640ab"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_2d77227bd2fa473c",
+                  "score": 1.0330366268134337,
+                  "best_kpid": "kpid_4222dfcc49c14df7"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_9e0e777293cc4d35",
+                  "score": 0.8826665589653714,
+                  "best_kpid": "kpid_597d5ce77d9d4038"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_54fc4d3ca3a94536",
+                  "score": 0.5692822568673125,
+                  "best_kpid": "kpid_c2b8b4cddc934e3a"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_395fb889a17b49fa",
+                  "score": 0.5079390024808784,
+                  "best_kpid": "kpid_49bcc92debc646b1"
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0005",
+              "query": "如果只说该学院博士招生，需要同时确认“广州实验室作为呼吸系统疾病及其防控领域的新型科研事业单位，其未来定位是什么”，以及“进入综合考核的考生名单是如何排序的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_7933bd21608a41dd",
+              "elapsedMs": 60.68150000000014,
+              "rank": 3,
+              "hitAt1": false,
+              "reciprocalRank": 0.3333333333333333,
+              "top1Otid": "otid_fe078e0584fe4b77",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_fe078e0584fe4b77",
+                  "score": 1.804054172077931,
+                  "best_kpid": "kpid_733a00f758e54594"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_7933bd21608a41dd",
+                  "score": 1.7744625066847093,
+                  "best_kpid": "kpid_6ea8fe137fbd4aa6"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_0f30eade3efc4803",
+                  "score": 1.3639090112050924,
+                  "best_kpid": "kpid_2b0f816523314ffb"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_b5047e817198431e",
+                  "score": 1.227293215868319,
+                  "best_kpid": "kpid_937f1ea18d2e4c9c"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_392eac0b27fa4b09",
+                  "score": 1.1580463148432425,
+                  "best_kpid": "kpid_081fa6516435497f"
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0006",
+              "query": "如果只说该学院综合评价，需要同时确认“入围考生必须在什么日期参加远程视频面试”，以及“考生应如何查看自己的初审结果”，应分别依据哪两份通知？",
+              "expected_otid": "otid_83b704957347492c",
+              "elapsedMs": 62.768699999999626,
+              "rank": 2,
+              "hitAt1": false,
+              "reciprocalRank": 0.5,
+              "top1Otid": "otid_83b704957347492c",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_83b704957347492c",
+                  "score": 1.0460739150906497,
+                  "best_kpid": "kpid_e507361251d84ebb"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_36cce6f8f00c4d59",
+                  "score": 0.9017678176980988,
+                  "best_kpid": "kpid_4931ea7c0a0e4ea3"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_681df4bddf9c4ecb",
+                  "score": 0.8721942089364638,
+                  "best_kpid": "kpid_4a7ed66ebb464524"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_5b55d2b085754e96",
+                  "score": 0.7619099323452527,
+                  "best_kpid": "kpid_b3d6bdbf6b7440f1"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_ccb3b891b8f64953",
+                  "score": 0.6204949546205306,
+                  "best_kpid": "kpid_ae1357d2e0a14449"
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0007",
+              "query": "如果只说该学院综合评价，需要同时确认“入围考生必须在什么日期参加远程视频面试”，以及“各专业组考核入围人选是按照什么比例原则确定的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_83b704957347492c",
+              "elapsedMs": 57.047999999999774,
+              "rank": 3,
+              "hitAt1": false,
+              "reciprocalRank": 0.3333333333333333,
+              "top1Otid": "otid_ccb3b891b8f64953",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_ccb3b891b8f64953",
+                  "score": 1.0506110104310666,
+                  "best_kpid": "kpid_629e221957874e86"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_36cce6f8f00c4d59",
+                  "score": 0.935240450146956,
+                  "best_kpid": "kpid_1132e66900d649a0"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_83b704957347492c",
+                  "score": 0.9317152189942886,
+                  "best_kpid": "kpid_e507361251d84ebb"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_681df4bddf9c4ecb",
+                  "score": 0.7580207577736248,
+                  "best_kpid": "kpid_27a7f84e33244c36"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_67d3c146cf8c48b8",
+                  "score": 0.6347647281162222,
+                  "best_kpid": "kpid_8258b859b3fa4055"
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0008",
+              "query": "如果只说该学院博士招生，需要同时确认“该计划旨在服务国家创新驱动发展战略，具体如何助力粤港澳大湾区和深圳中国特色先行示范区建设”，以及“进入综合考核的考生名单是如何排序的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_903e35dbd70b496d",
+              "elapsedMs": 63.14900000000034,
+              "rank": 3,
+              "hitAt1": false,
+              "reciprocalRank": 0.3333333333333333,
+              "top1Otid": "otid_903e35dbd70b496d",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_903e35dbd70b496d",
+                  "score": 1.76398075212846,
+                  "best_kpid": "kpid_4fadd2f0e1da4d2d"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_b5047e817198431e",
+                  "score": 1.286521864862813,
+                  "best_kpid": "kpid_937f1ea18d2e4c9c"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_0f30eade3efc4803",
+                  "score": 1.271632029813575,
+                  "best_kpid": "kpid_2b0f816523314ffb"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_392eac0b27fa4b09",
+                  "score": 1.0552876607456092,
+                  "best_kpid": "kpid_081fa6516435497f"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_130b61ecfb1e428e",
+                  "score": 0.9429302077697828,
+                  "best_kpid": "kpid_365d0d76902d4813"
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0009",
+              "query": "如果只说该学院博士招生，需要同时确认“除哪个学院外，所有招生单位都实行“申请-考核”制”，以及“进入综合考核的考生名单是如何排序的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_0dd779fc00e845e3",
+              "elapsedMs": 57.279999999999745,
+              "rank": 3,
+              "hitAt1": false,
+              "reciprocalRank": 0.3333333333333333,
+              "top1Otid": "otid_0f30eade3efc4803",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_0f30eade3efc4803",
+                  "score": 1.3020960862545106,
+                  "best_kpid": "kpid_2b0f816523314ffb"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_392eac0b27fa4b09",
+                  "score": 1.2129880262586459,
+                  "best_kpid": "kpid_081fa6516435497f"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_0dd779fc00e845e3",
+                  "score": 1.2021218258185755,
+                  "best_kpid": "kpid_eb8ff7aa13f64887"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_b5047e817198431e",
+                  "score": 1.0720840932087063,
+                  "best_kpid": "kpid_937f1ea18d2e4c9c"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_860f1ae2b71c4de9",
+                  "score": 1.0458005364941554,
+                  "best_kpid": "kpid_e9dc07ad4de14960"
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0010",
+              "query": "如果只说该学院博士招生，需要同时确认“港澳地区考生报名时需持有哪些身份证件”，以及“进入综合考核的考生名单是如何排序的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_467c753a650543da",
+              "elapsedMs": 56.04120000000012,
+              "rank": 2,
+              "hitAt1": false,
+              "reciprocalRank": 0.5,
+              "top1Otid": "otid_0f30eade3efc4803",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_0f30eade3efc4803",
+                  "score": 1.481017864933179,
+                  "best_kpid": "kpid_2b0f816523314ffb"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_467c753a650543da",
+                  "score": 1.474231295182362,
+                  "best_kpid": "kpid_1ea7d7e016d64f66"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_b5047e817198431e",
+                  "score": 1.3660077744940604,
+                  "best_kpid": "kpid_937f1ea18d2e4c9c"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_392eac0b27fa4b09",
+                  "score": 1.3114331393719774,
+                  "best_kpid": "kpid_081fa6516435497f"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_2c221a5f38864ced",
+                  "score": 1.0348255940277873,
+                  "best_kpid": "kpid_5b555627094a493a"
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0011",
+              "query": "如果只说该学院博士招生，需要同时确认“该学院成立于哪一天？学院位于哪个校区”，以及“进入综合考核的考生名单是如何排序的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_dc2fbd2f88f7453b",
+              "elapsedMs": 59.08259999999973,
+              "rank": 7,
+              "hitAt1": false,
+              "reciprocalRank": 0.14285714285714285,
+              "top1Otid": "otid_0f30eade3efc4803",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_0f30eade3efc4803",
+                  "score": 1.162325596539052,
+                  "best_kpid": "kpid_2b0f816523314ffb"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_392eac0b27fa4b09",
+                  "score": 1.0927520307561673,
+                  "best_kpid": "kpid_081fa6516435497f"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_b5047e817198431e",
+                  "score": 1.076537428302345,
+                  "best_kpid": "kpid_937f1ea18d2e4c9c"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_860f1ae2b71c4de9",
+                  "score": 1.008444537149695,
+                  "best_kpid": "kpid_e9dc07ad4de14960"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_5f10b726aa1d4728",
+                  "score": 0.9053322219649045,
+                  "best_kpid": "kpid_5b5f80bbf4e249bf"
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0012",
+              "query": "如果只说该学院博士招生，需要同时确认“该学院成立于何时，位于哪个校区”，以及“进入综合考核的考生名单是如何排序的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_5f10b726aa1d4728",
+              "elapsedMs": 59.11299999999983,
+              "rank": 2,
+              "hitAt1": false,
+              "reciprocalRank": 0.5,
+              "top1Otid": "otid_5f10b726aa1d4728",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_5f10b726aa1d4728",
+                  "score": 1.3473608121706289,
+                  "best_kpid": "kpid_5b5f80bbf4e249bf"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_0f30eade3efc4803",
+                  "score": 1.2645526639230764,
+                  "best_kpid": "kpid_2b0f816523314ffb"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_b5047e817198431e",
+                  "score": 1.169046852914659,
+                  "best_kpid": "kpid_937f1ea18d2e4c9c"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_392eac0b27fa4b09",
+                  "score": 1.155855705459768,
+                  "best_kpid": "kpid_081fa6516435497f"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_dc2fbd2f88f7453b",
+                  "score": 1.1133160540233906,
+                  "best_kpid": "kpid_64164ade698a4751"
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0013",
+              "query": "如果只说该学院博士招生，需要同时确认“该学院成立于何时，其发展理念和依托的科研平台与学科优势是什么”，以及“进入综合考核的考生名单是如何排序的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_84a37b294495492a",
+              "elapsedMs": 63.11519999999973,
+              "rank": 3,
+              "hitAt1": false,
+              "reciprocalRank": 0.3333333333333333,
+              "top1Otid": "otid_0f30eade3efc4803",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_0f30eade3efc4803",
+                  "score": 1.0652082908875273,
+                  "best_kpid": "kpid_2b0f816523314ffb"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_b5047e817198431e",
+                  "score": 1.016661900635381,
+                  "best_kpid": "kpid_937f1ea18d2e4c9c"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_84a37b294495492a",
+                  "score": 1.016592426683011,
+                  "best_kpid": "kpid_3fdde90231524df8"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_392eac0b27fa4b09",
+                  "score": 0.952230958536584,
+                  "best_kpid": "kpid_081fa6516435497f"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_860f1ae2b71c4de9",
+                  "score": 0.9223229941466962,
+                  "best_kpid": "kpid_e9dc07ad4de14960"
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0014",
+              "query": "如果只说该学院综合评价，需要同时确认“获得入围资格的考生应在哪一天通过什么系统打印准考证”，以及“该校公示的2023年广东省综合评价录取名单是基于哪些上级部门的要求制定的”，应分别依据哪两份通知？",
+              "expected_otid": "otid_29bee8c1d48a4946",
+              "elapsedMs": 61.46070000000009,
+              "rank": 2,
+              "hitAt1": false,
+              "reciprocalRank": 0.5,
+              "top1Otid": "otid_1c11811a02604c36",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_1c11811a02604c36",
+                  "score": 1.4404002189534877,
+                  "best_kpid": "kpid_0e1f2e222bd74b81"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_29bee8c1d48a4946",
+                  "score": 1.4040170263507121,
+                  "best_kpid": "kpid_7821d864dcd14f39"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_b64bdb78a2854fdc",
+                  "score": 1.1782613514552323,
+                  "best_kpid": "kpid_2db72c7202444cdf"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_fbb4d0d85ec140b9",
+                  "score": 1.111610528010702,
+                  "best_kpid": "kpid_96a0f706b9f64628"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_2822fe40ab7e4534",
+                  "score": 1.087253257837252,
+                  "best_kpid": "kpid_d0957e88687e43fa"
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0015",
+              "query": "如果只说该学院综合评价，需要同时确认“获得入围资格的考生应在哪一天登录哪个网站打印准考证”，以及“该校公示2024年广东省综合评价录取名单是基于哪些上级部门的要求”，应分别依据哪两份通知？",
+              "expected_otid": "otid_9e0e777293cc4d35",
+              "elapsedMs": 60.4032000000002,
+              "rank": 2,
+              "hitAt1": false,
+              "reciprocalRank": 0.5,
+              "top1Otid": "otid_25f8c20ce2194082",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_25f8c20ce2194082",
+                  "score": 1.4519644358275774,
+                  "best_kpid": "kpid_026dd946da8d43e7"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_9e0e777293cc4d35",
+                  "score": 1.353516290726817,
+                  "best_kpid": "kpid_597d5ce77d9d4038"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_5d70ffdc13ea473c",
+                  "score": 1.2848998754950314,
+                  "best_kpid": "kpid_9c6d2088725640ab"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_395fb889a17b49fa",
+                  "score": 1.132325481397111,
+                  "best_kpid": "kpid_5c6c9e2e47964343"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_2d77227bd2fa473c",
+                  "score": 0.9544233594628532,
+                  "best_kpid": "kpid_24b87d7b333e4c47"
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0016",
+              "query": "如果只说该学院综合评价，需要同时确认“获得该校2025年广东省综合评价招生考核入围资格的考生，从2025年7月6日起，应通过哪个网站打印准考证”，以及“录取考生可以通过哪些官方平台查询录取详细信息”，应分别依据哪两份通知？",
+              "expected_otid": "otid_23801bcd14384525",
+              "elapsedMs": 57.03309999999965,
+              "rank": 2,
+              "hitAt1": false,
+              "reciprocalRank": 0.5,
+              "top1Otid": "otid_f536f4e1af9e43aa",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_f536f4e1af9e43aa",
+                  "score": 1.4587659754822941,
+                  "best_kpid": "kpid_97a56750666a45a2"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_23801bcd14384525",
+                  "score": 1.3163041919408789,
+                  "best_kpid": "kpid_a661d0677f604cd9"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_8be68548ed504099",
+                  "score": 1.1941929367366058,
+                  "best_kpid": "kpid_c645f22606de4300"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_b78d8162d15b4481",
+                  "score": 1.1338086927078523,
+                  "best_kpid": "kpid_58ca7514f24946c6"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_64c41c82baca43e4",
+                  "score": 1.0976975618817024,
+                  "best_kpid": "kpid_1100af8ab0294d85"
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0017",
+              "query": "如果只说该学院综合评价，需要同时确认“获得该校2025年广东省综合评价招生考核入围资格的考生，从2025年7月6日起，应通过哪个网站打印准考证”，以及“各专业组的考核入围分数线是多少”，应分别依据哪两份通知？",
+              "expected_otid": "otid_23801bcd14384525",
+              "elapsedMs": 55.92639999999983,
+              "rank": 2,
+              "hitAt1": false,
+              "reciprocalRank": 0.5,
+              "top1Otid": "otid_b78d8162d15b4481",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_b78d8162d15b4481",
+                  "score": 1.503920302525482,
+                  "best_kpid": "kpid_1086e84ae3254c41"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_23801bcd14384525",
+                  "score": 1.3609270891609535,
+                  "best_kpid": "kpid_a661d0677f604cd9"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_64c41c82baca43e4",
+                  "score": 1.0974975649016248,
+                  "best_kpid": "kpid_e5814d7ad28548ae"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_8be68548ed504099",
+                  "score": 1.0630849559581732,
+                  "best_kpid": "kpid_c645f22606de4300"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_f536f4e1af9e43aa",
+                  "score": 0.7959773343572184,
+                  "best_kpid": "kpid_b1973a1246884750"
+                }
+              ]
+            },
+            {
+              "id": "cross_doc_coverage_diag_18_frozen_v1_0018",
+              "query": "如果只说该学院博士调剂，需要同时确认“人工智能学院在2026年2月4日发布的关于2026年“申请-考核”制博士研究生调剂的通知中，公示了哪些具体信息”，以及“因学校追加招生指标，哪些考生有资格申请调剂”，应分别依据哪两份通知？",
+              "expected_otid": "otid_4b2b45a3a7f84940",
+              "elapsedMs": 61.08680000000004,
+              "rank": 2,
+              "hitAt1": false,
+              "reciprocalRank": 0.5,
+              "top1Otid": "otid_4b2b45a3a7f84940",
+              "topMatches": [
+                {
+                  "rank": 1,
+                  "otid": "otid_4b2b45a3a7f84940",
+                  "score": 1.7460725122515612,
+                  "best_kpid": "kpid_4571e90a78f8450d"
+                },
+                {
+                  "rank": 2,
+                  "otid": "otid_8fd3944fd7814ff5",
+                  "score": 1.743946600521553,
+                  "best_kpid": "kpid_6e3b013f3bed429c"
+                },
+                {
+                  "rank": 3,
+                  "otid": "otid_eb3d3855deb74340",
+                  "score": 1.6696034767206078,
+                  "best_kpid": "kpid_69f10b673a554b24"
+                },
+                {
+                  "rank": 4,
+                  "otid": "otid_c03d97fc09704546",
+                  "score": 0.6586621304912483,
+                  "best_kpid": "kpid_dc9289c28ce44dd8"
+                },
+                {
+                  "rank": 5,
+                  "otid": "otid_097b17ffece641a7",
+                  "score": 0.6284908183699153,
+                  "best_kpid": "kpid_e6c97801cea847b3"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "pairwiseComparisons": [
+        {
+          "challenger": "Structured-KP+OT",
+          "baseline": "BM25-OT",
+          "hitAt1": {
+            "observedDelta": 0,
+            "interval95": {
+              "lower": 0,
+              "upper": 0
+            },
+            "randomizationPValue": 1
+          },
+          "mrr": {
+            "observedDelta": 0.23523017921950257,
+            "interval95": {
+              "lower": 0.18353434517080086,
+              "upper": 0.288690167588602
+            },
+            "randomizationPValue": 0.00009999000099990002
+          }
+        },
+        {
+          "challenger": "Structured-KP+OT",
+          "baseline": "Dense-OT",
+          "hitAt1": {
+            "observedDelta": 0,
+            "interval95": {
+              "lower": 0,
+              "upper": 0
+            },
+            "randomizationPValue": 1
+          },
+          "mrr": {
+            "observedDelta": 0.21525883873127594,
+            "interval95": {
+              "lower": 0.15717885932357467,
+              "upper": 0.27720119559714723
+            },
+            "randomizationPValue": 0.00009999000099990002
+          }
+        },
+        {
+          "challenger": "Structured-Q+KP+OT",
+          "baseline": "BM25-OT",
+          "hitAt1": {
+            "observedDelta": 0,
+            "interval95": {
+              "lower": 0,
+              "upper": 0
+            },
+            "randomizationPValue": 1
+          },
+          "mrr": {
+            "observedDelta": 0.35857674006606344,
+            "interval95": {
+              "lower": 0.28497855152755147,
+              "upper": 0.4245774767449042
+            },
+            "randomizationPValue": 0.00009999000099990002
+          }
+        },
+        {
+          "challenger": "Structured-Q+KP+OT",
+          "baseline": "Dense-OT",
+          "hitAt1": {
+            "observedDelta": 0,
+            "interval95": {
+              "lower": 0,
+              "upper": 0
+            },
+            "randomizationPValue": 1
+          },
+          "mrr": {
+            "observedDelta": 0.3386053995778368,
+            "interval95": {
+              "lower": 0.2908572896671667,
+              "upper": 0.38377469020749233
+            },
+            "randomizationPValue": 0.00009999000099990002
+          }
+        }
+      ]
+    }
+  ]
+}

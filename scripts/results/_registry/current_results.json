@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-17T08:25:04.561Z",
+  "updatedAt": "2026-04-17T13:07:37.400Z",
   "entries": {
     "granularity_main_bench_120_current": {
       "slot": "granularity_main_bench_120_current",
@@ -82,15 +82,15 @@
     "answer_reject_current": {
       "slot": "answer_reject_current",
       "label": "唯一行为结果 `AnswerReject`",
-      "datasetName": "test_dataset_answer_reject_v4_frozen_holdout_reviewed",
-      "datasetAlias": "ar_v4",
-      "datasetDisplayName": "AnswerReject",
-      "datasetFile": "../../../../Backend/test/test_dataset_answer_reject/test_dataset_answer_reject_v4_frozen_holdout_reviewed.json",
-      "resultFile": "../answer_reject_ar_v4_1776313778930.json",
+      "datasetName": "test_dataset_answer_reject_v6_80_frozen_v1",
+      "datasetAlias": "ar_v6_80_frozen_v1",
+      "datasetDisplayName": "AnswerReject80",
+      "datasetFile": "../../../../Backend/test/test_dataset_answer_reject/test_dataset_answer_reject_v6_80_frozen_v1.json",
+      "resultFile": "../answer_reject_ar_v6_80_frozen_v1_1776431257395.json",
       "sourceScript": "../../eval_answer_reject.ts",
       "managedByScript": true,
-      "updatedAt": "2026-04-16T04:29:38.935Z",
-      "note": "当前稳定入口只保留未看过的单一 answer_reject v4 frozen holdout 主线。"
+      "updatedAt": "2026-04-17T13:07:37.400Z",
+      "note": "当前稳定入口使用 80-case frozen AnswerReject 主线。"
     },
     "granularity_hard_ood_blind_30_current": {
       "slot": "granularity_hard_ood_blind_30_current",
@@ -104,6 +104,19 @@
       "managedByScript": true,
       "updatedAt": "2026-04-16T08:53:47.523Z",
       "note": "当前结果已对齐前端 runtime preset frontend_research_sync_v1，基于单冻结集入口 HardOOD 导出。"
+    },
+    "answer_quality_current": {
+      "slot": "answer_quality_current",
+      "label": "回答质量结果 `AnswerQuality`",
+      "datasetName": "test_dataset_answer_quality_blind_v3_100_frozen_v1",
+      "datasetAlias": "aq_blind_v3_100_frozen_v1",
+      "datasetDisplayName": "AnswerQualityBlind100Frozen",
+      "datasetFile": "../../../../Backend/test/test_dataset_answer_quality/test_dataset_answer_quality_blind_v3_100_frozen_v1.json",
+      "resultFile": "../answer_quality_aq_blind_v3_100_frozen_v1_1776431257190.json",
+      "sourceScript": "../../eval_answer_quality.ts",
+      "managedByScript": true,
+      "updatedAt": "2026-04-17T13:07:37.194Z",
+      "note": "当前稳定入口使用 100-case frozen AnswerQuality-blind 主线。"
     }
   }
 }

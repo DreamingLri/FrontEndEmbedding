@@ -21,6 +21,7 @@ import {
     buildAnswerQualityResultFileName,
     resolveNamedDatasetProfile,
 } from "./result_naming.ts";
+import { updateCurrentResultRegistry } from "./result_registry.ts";
 
 type CaseReport = {
     id: string;
@@ -118,12 +119,12 @@ type Report = {
 const DATASET_FILE = path.resolve(
     process.cwd(),
     process.env.SUASK_ANSWER_QUALITY_DATASET_FILE ||
-        CURRENT_EVAL_DATASET_FILES.answerQualityBlindProvisionalV1,
+        CURRENT_EVAL_DATASET_FILES.answerQualityCurrent,
 );
 const RESULTS_DIR = path.resolve(process.cwd(), "./scripts/results");
 const CURRENT_TIMESTAMP = Date.now() / 1000;
 const DEFAULT_REPORT_NOTE =
-    "当前报告面向 answer-only blind 集，关注回答正确率与潜在误导率；默认入口为 provisional AnswerQuality-blind。";
+    "当前报告面向 answer-only blind 集，关注回答正确率与潜在误导率；默认入口为 100-case frozen AnswerQuality-blind。";
 const REPORT_NOTE = process.env.SUASK_ANSWER_QUALITY_NOTE || DEFAULT_REPORT_NOTE;
 const PIPELINE_PRESET_NAME =
     process.env.SUASK_PIPELINE_PRESET ||
@@ -363,6 +364,15 @@ async function main() {
         buildAnswerQualityResultFileName(datasetName, Date.now()),
     );
     fs.writeFileSync(outputPath, JSON.stringify(report, null, 2), "utf-8");
+    updateCurrentResultRegistry({
+        datasetName,
+        datasetAlias: datasetProfile.alias,
+        datasetDisplayName: datasetProfile.displayName,
+        datasetFile: DATASET_FILE,
+        outputPath,
+        sourceScript: "eval_answer_quality.ts",
+        note: "当前稳定入口使用 100-case frozen AnswerQuality-blind 主线。",
+    });
 
     console.log(`Saved report to ${outputPath}`);
     console.log(

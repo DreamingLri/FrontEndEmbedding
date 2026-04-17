@@ -44,17 +44,27 @@ export const CURRENT_EVAL_DATASET_FILES = {
         "../Backend/test/test_dataset_granularity/test_dataset_granularity_ladder_generalization_hard_100_frozen_v1.json",
     granularityLadderStructureStress80:
         "../Backend/test/test_dataset_granularity/test_dataset_granularity_ladder_structure_stress_80_frozen_v1.json",
-    // 当前唯一 behavior 主线：未看过的 v4 frozen holdout
+    granularityLadderCrossDocCoverageDiag18:
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_ladder_cross_doc_coverage_diag_18_frozen_v1.json",
+    // 当前 behavior 主线：80-case frozen holdout
     answerRejectCurrent:
-        "../Backend/test/test_dataset_answer_reject/test_dataset_answer_reject_v4_frozen_holdout_reviewed.json",
+        "../Backend/test/test_dataset_answer_reject/test_dataset_answer_reject_v6_80_frozen_v1.json",
     answerRejectV4FrozenHoldout:
         "../Backend/test/test_dataset_answer_reject/test_dataset_answer_reject_v4_frozen_holdout_reviewed.json",
     answerRejectV5ExpandedDraft:
         "../Backend/test/test_dataset_answer_reject/test_dataset_answer_reject_v5_expanded_draft.json",
     answerRejectV5ExpandedFrozenV1:
         "../Backend/test/test_dataset_answer_reject/test_dataset_answer_reject_v5_expanded_frozen_v1.json",
+    answerRejectV6Frozen80:
+        "../Backend/test/test_dataset_answer_reject/test_dataset_answer_reject_v6_80_frozen_v1.json",
+    answerRejectMixedLongTail59:
+        "../Backend/test/test_dataset_answer_reject/test_dataset_answer_reject_mixed_long_tail_59_derived_v1.json",
     answerRejectV6Combined80Draft:
         "../Backend/test/test_dataset_answer_reject/test_dataset_answer_reject_v6_80_combined_manifest.json",
+    answerQualityCurrent:
+        "../Backend/test/test_dataset_answer_quality/test_dataset_answer_quality_blind_v3_100_frozen_v1.json",
+    answerQualityExtOodBlind60:
+        "../Backend/test/test_dataset_answer_quality/test_dataset_answer_quality_ext_ood_blind_60_derived_v1.json",
     answerQualityBlindProvisionalV1:
         "../Backend/test/test_dataset_answer_quality/test_dataset_answer_quality_blind_provisional_v1.json",
     answerQualityBlindV1:

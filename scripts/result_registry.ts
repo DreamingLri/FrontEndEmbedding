@@ -11,6 +11,7 @@ export type CurrentResultSlot =
     | "granularity_main_106_current"
     | "granularity_holdout_v3_current"
     | "answer_reject_current"
+    | "answer_quality_current"
     | "platform_reject_kb_absent_v2_dev_current"
     | "platform_reject_kb_absent_v2_holdout_current"
     | "platform_reject_kb_absent_pair_control_v2_holdout_flat_current";
@@ -45,6 +46,7 @@ const SLOT_LABELS: Record<CurrentResultSlot, string> = {
     granularity_main_106_current: "主方法主结果 `main_106`",
     granularity_holdout_v3_current: "外部泛化主结果 `holdout_v3`",
     answer_reject_current: "唯一行为结果 `AnswerReject`",
+    answer_quality_current: "回答质量结果 `AnswerQuality`",
     platform_reject_kb_absent_v2_dev_current:
         "高风险拒答边界结果 `kb_absent_v2_dev`",
     platform_reject_kb_absent_v2_holdout_current:
@@ -91,6 +93,11 @@ const SLOT_BY_DATASET_NAME: Partial<Record<string, CurrentResultSlot>> = {
     test_dataset_answer_reject_v4_frozen_holdout_reviewed:
         "answer_reject_current",
     ar_v4: "answer_reject_current",
+    test_dataset_answer_reject_v6_80_frozen_v1: "answer_reject_current",
+    ar_v6_80_frozen_v1: "answer_reject_current",
+    test_dataset_answer_quality_blind_v3_100_frozen_v1:
+        "answer_quality_current",
+    aq_blind_v3_100_frozen_v1: "answer_quality_current",
     test_dataset_platform_reject_kb_absent_v2_dev_reviewed:
         "platform_reject_kb_absent_v2_dev_current",
     test_dataset_platform_reject_kb_absent_v2_holdout_reviewed:

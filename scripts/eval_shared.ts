@@ -95,7 +95,8 @@ export type GranularityDatasetTargetKey =
     | "ladder_structure_stress_60"
     | "ladder_main_balanced_150"
     | "ladder_generalization_hard_100"
-    | "ladder_structure_stress_80";
+    | "ladder_structure_stress_80"
+    | "ladder_cross_doc_coverage_diag_18";
 
 type GranularityDatasetTargetDefinition = {
     key: GranularityDatasetTargetKey;
@@ -249,6 +250,13 @@ const GRANULARITY_DATASET_TARGETS: Record<
         label: "StructureStress80",
         role: "adhoc",
         primaryPath: CURRENT_EVAL_DATASET_FILES.granularityLadderStructureStress80,
+    },
+    ladder_cross_doc_coverage_diag_18: {
+        key: "ladder_cross_doc_coverage_diag_18",
+        label: "CrossDocCoverage18",
+        role: "adhoc",
+        primaryPath:
+            CURRENT_EVAL_DATASET_FILES.granularityLadderCrossDocCoverageDiag18,
     },
 };
 

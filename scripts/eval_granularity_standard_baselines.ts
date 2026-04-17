@@ -268,6 +268,7 @@ const OPTIONAL_DATASET_TARGETS = (
         resolveDatasetTarget("ladder_main_balanced_150"),
         resolveDatasetTarget("ladder_generalization_hard_100"),
         resolveDatasetTarget("ladder_structure_stress_80"),
+        resolveDatasetTarget("ladder_cross_doc_coverage_diag_18"),
     ] as Array<DatasetTarget | null>
 ).filter((item): item is DatasetTarget => Boolean(item));
 

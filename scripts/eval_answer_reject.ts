@@ -123,7 +123,7 @@ const DATASET_FILE = path.resolve(
 const RESULTS_DIR = path.resolve(process.cwd(), "./scripts/results");
 const CURRENT_TIMESTAMP = Date.now() / 1000;
 const DEFAULT_REPORT_NOTE =
-    "当前报告默认对齐前端 runtime preset，数据集固定为未看过的 answer_reject v4 frozen holdout。";
+    "当前报告默认对齐前端 runtime preset，数据集固定为 80-case frozen AnswerReject 主线。";
 const REPORT_NOTE = process.env.SUASK_ANSWER_REJECT_NOTE || DEFAULT_REPORT_NOTE;
 const PIPELINE_PRESET_NAME =
     process.env.SUASK_PIPELINE_PRESET ||
@@ -443,7 +443,7 @@ async function main() {
         datasetFile: DATASET_FILE,
         outputPath,
         sourceScript: "eval_answer_reject.ts",
-        note: "当前稳定入口只保留未看过的单一 answer_reject v4 frozen holdout 主线。",
+        note: "当前稳定入口使用 80-case frozen AnswerReject 主线。",
     });
 
     console.log(`Saved report to ${outputPath}`);
