@@ -24,6 +24,8 @@ export const CURRENT_EVAL_DATASET_FILES = {
         "../Backend/test/test_dataset_granularity/test_dataset_granularity_hard_ood_blind_30_draft_v1.json",
     granularityHardOodV2DiagTop30:
         "../Backend/test/test_dataset_granularity/test_dataset_granularity_hard_ood_v2_diag_top30.json",
+    granularityStructureDev40:
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_structure_dev_40_draft_v1.json",
     // 当前唯一 behavior 主线：未看过的 v4 frozen holdout
     answerRejectCurrent:
         "../Backend/test/test_dataset_answer_reject/test_dataset_answer_reject_v4_frozen_holdout_reviewed.json",

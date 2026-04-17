@@ -2,6 +2,11 @@ import type { FeatureExtractionPipeline } from "@huggingface/transformers";
 
 import { fmmTokenize } from "./fmm_tokenize.ts";
 import {
+    buildQueryPlan,
+    inferDocumentRolesFromTitle,
+    type QueryPlan,
+} from "./query_planner.ts";
+import {
     getQuerySparse,
     parseQueryIntent,
     QUERY_SCOPE_SPECIFICITY_TERMS,
@@ -58,6 +63,7 @@ export type PipelinePreset = {
         fetchMatchLimit: number;
         fetchWeakMatchLimit: number;
         useYearPhaseTitleAdjustment: boolean;
+        enableQueryPlanner: boolean;
     };
 };
 
@@ -68,6 +74,7 @@ const DEFAULT_DISPLAY_CONFIG: PipelinePreset["display"] = {
     fetchMatchLimit: 15,
     fetchWeakMatchLimit: 10,
     useYearPhaseTitleAdjustment: false,
+    enableQueryPlanner: false,
 };
 
 export const PAPER_FROZEN_MAIN_PIPELINE_PRESET: PipelinePreset = {
@@ -189,6 +196,16 @@ export const FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET: PipelinePreset = {
     },
 };
 
+export const FRONTEND_RESEARCH_SYNC_QUERY_PLANNER_PIPELINE_PRESET: PipelinePreset =
+    {
+        name: "frontend_research_sync_query_planner_v1",
+        retrieval: { ...FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval },
+        display: {
+            ...FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.display,
+            enableQueryPlanner: true,
+        },
+    };
+
 export const PIPELINE_PRESET_REGISTRY = {
     paper_frozen_main_v1: PAPER_FROZEN_MAIN_PIPELINE_PRESET,
     product_canonical_full_v1: PRODUCT_CANONICAL_FULL_PIPELINE_PRESET,
@@ -196,6 +213,8 @@ export const PIPELINE_PRESET_REGISTRY = {
     product_tail_top3_w020_v1: PRODUCT_TAIL_TOP3_W020_PIPELINE_PRESET,
     minimal_q_kp_ot_v1: MINIMAL_BASELINE_PIPELINE_PRESET,
     frontend_research_sync_v1: FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET,
+    frontend_research_sync_query_planner_v1:
+        FRONTEND_RESEARCH_SYNC_QUERY_PLANNER_PIPELINE_PRESET,
 } as const;
 
 export type PipelinePresetName = keyof typeof PIPELINE_PRESET_REGISTRY;
@@ -234,6 +253,7 @@ export type PipelineTermMaps = {
 export type SearchPipelineQueryContext = {
     query: string;
     queryIntent: ParsedQueryIntent;
+    queryPlan: QueryPlan;
     queryWords: string[];
     querySparse: Record<number, number>;
     queryYearWordIds: number[];
@@ -283,6 +303,7 @@ export type PipelineTrace = {
     fetchedDocumentCount: number;
     querySignals?: QuerySignals;
     retrievalSignals?: RetrievalSignals;
+    queryPlan?: QueryPlan;
 };
 
 export type RetrievalStageResult = {
@@ -406,10 +427,12 @@ export function buildSearchPipelineQueryContext(
         .map(String)
         .map((year) => vocabMap.get(year))
         .filter((item): item is number => item !== undefined);
+    const queryPlan = buildQueryPlan(query, queryIntent);
 
     return {
         query,
         queryIntent,
+        queryPlan,
         queryWords,
         querySparse,
         queryYearWordIds,
@@ -585,6 +608,64 @@ function getDocumentEvidenceText(document: PipelineDocumentRecord): string {
 
 function normalizeTitleDedupKey(title: string): string {
     return normalizePatternText(title).replace(/20\d{2}年/g, "");
+}
+
+function computeQueryPlanDocRoleDelta(
+    document: PipelineDocumentRecord,
+    queryPlan: QueryPlan,
+): number {
+    if (
+        queryPlan.difficultyTier !== "high" &&
+        !queryPlan.asksOutcomeLike &&
+        !queryPlan.asksCoverageLike &&
+        !queryPlan.asksSystemTimelineLike
+    ) {
+        return 0;
+    }
+
+    const roles = inferDocumentRolesFromTitle(document.ot_title || "");
+    let delta = 0;
+
+    if (roles.some((role) => queryPlan.preferredDocRoles.includes(role))) {
+        delta += 0.22;
+    }
+    if (
+        (queryPlan.asksOutcomeLike || queryPlan.difficultyTier === "high") &&
+        roles.some((role) => queryPlan.avoidedDocRoles.includes(role))
+    ) {
+        delta -= 0.18;
+    }
+
+    if (queryPlan.asksCoverageLike) {
+        if (roles.includes("stage_list") || roles.includes("rule_doc")) {
+            delta += 0.1;
+        }
+        if (
+            !queryPlan.asksOutcomeLike &&
+            queryPlan.difficultyTier === "high" &&
+            roles.includes("result_notice")
+        ) {
+            delta -= 0.08;
+        }
+    }
+
+    if (queryPlan.intentType === "outcome" && roles.includes("result_notice")) {
+        delta += 0.12;
+    }
+    if (
+        queryPlan.intentType === "time_location" &&
+        roles.includes("stage_list")
+    ) {
+        delta += 0.08;
+    }
+    if (
+        queryPlan.intentType === "policy_overview" &&
+        roles.includes("rule_doc")
+    ) {
+        delta += 0.08;
+    }
+
+    return delta;
 }
 
 function computeTitleIntentDocDelta(
@@ -903,20 +984,22 @@ function computePhaseAnchorDocDelta(
 function applyPhaseAnchorBoostToDocuments(
     query: string,
     documents: PipelineDocumentRecord[],
+    queryPlan?: QueryPlan,
 ): PipelineDocumentRecord[] {
+    const weight = PHASE_ANCHOR_DOC_WEIGHT * (queryPlan?.phaseAnchorWeightScale ?? 1);
     return [...documents]
         .map((document) => {
             const baseScore =
                 document.displayScore ?? document.coarseScore ?? document.score ?? 0;
             const delta = computePhaseAnchorDocDelta(query, document);
-            const nextScore = baseScore + delta * PHASE_ANCHOR_DOC_WEIGHT;
+            const nextScore = baseScore + delta * weight;
 
             return {
                 ...document,
                 score: nextScore,
                 coarseScore:
                     (document.coarseScore ?? document.score ?? baseScore) +
-                    delta * PHASE_ANCHOR_DOC_WEIGHT,
+                    delta * weight,
                 displayScore: nextScore,
             };
         })
@@ -930,20 +1013,26 @@ function applyPhaseAnchorBoostToDocuments(
 function applyTitleIntentBoostToDocuments(
     query: string,
     documents: PipelineDocumentRecord[],
+    queryPlan?: QueryPlan,
 ): PipelineDocumentRecord[] {
+    const weight = TITLE_INTENT_DOC_WEIGHT * (queryPlan?.titleIntentWeightScale ?? 1);
     return [...documents]
         .map((document) => {
             const baseScore =
                 document.displayScore ?? document.coarseScore ?? document.score ?? 0;
-            const delta = computeTitleIntentDocDelta(query, document);
-            const nextScore = baseScore + delta * TITLE_INTENT_DOC_WEIGHT;
+            const delta =
+                computeTitleIntentDocDelta(query, document) +
+                (queryPlan
+                    ? computeQueryPlanDocRoleDelta(document, queryPlan)
+                    : 0);
+            const nextScore = baseScore + delta * weight;
 
             return {
                 ...document,
                 score: nextScore,
                 coarseScore:
                     (document.coarseScore ?? document.score ?? baseScore) +
-                    delta * TITLE_INTENT_DOC_WEIGHT,
+                    delta * weight,
                 displayScore: nextScore,
             };
         })
@@ -957,13 +1046,15 @@ function applyTitleIntentBoostToDocuments(
 function applyCoverageBoostToDocuments(
     query: string,
     documents: PipelineDocumentRecord[],
+    queryPlan?: QueryPlan,
 ): PipelineDocumentRecord[] {
+    const weight = TITLE_COVERAGE_DOC_WEIGHT * (queryPlan?.coverageWeightScale ?? 1);
     const scoredDocuments = [...documents]
         .map((document) => {
             const baseScore =
                 document.displayScore ?? document.coarseScore ?? document.score ?? 0;
             const delta = computeCoverageDocDelta(query, document);
-            const nextScore = baseScore + delta * TITLE_COVERAGE_DOC_WEIGHT;
+            const nextScore = baseScore + delta * weight;
 
             return {
                 ...document,
@@ -977,7 +1068,10 @@ function applyCoverageBoostToDocuments(
                 (left.displayScore ?? left.score ?? 0),
         );
 
-    if (!queryNeedsCoverageLikeTitle(normalizePatternText(query))) {
+    if (
+        !(queryPlan?.asksCoverageLike ?? false) &&
+        !queryNeedsCoverageLikeTitle(normalizePatternText(query))
+    ) {
         return scoredDocuments;
     }
 
@@ -1016,6 +1110,14 @@ function applyCoverageBoostToDocuments(
     }
 
     return selected;
+}
+
+function resolveDynamicFetchLimit(
+    baseLimit: number,
+    delta: number,
+    maxLimit: number,
+): number {
+    return Math.max(baseLimit, Math.min(baseLimit + delta, maxLimit));
 }
 
 export function mergeCoarseMatchesIntoDocuments(
@@ -1095,6 +1197,8 @@ export function executeRetrievalStage(params: {
         qConfusionMode: preset.retrieval.qConfusionMode,
         qConfusionWeight: preset.retrieval.qConfusionWeight,
         enableExplicitYearFilter: preset.retrieval.enableExplicitYearFilter,
+        queryPlan: queryContext.queryPlan,
+        enableQueryPlanner: preset.display.enableQueryPlanner,
         minimalMode: preset.retrieval.minimalMode,
     });
 
@@ -1157,18 +1261,29 @@ export async function executeSearchPipeline(params: {
     });
 
     const { searchOutput, retrievalDecision } = retrievalStage;
+    const plannerEnabled = preset.display.enableQueryPlanner;
+    const fetchMatchLimit = resolveDynamicFetchLimit(
+        preset.display.fetchMatchLimit,
+        plannerEnabled ? queryContext.queryPlan.fetchMatchLimitDelta : 0,
+        28,
+    );
+    const fetchWeakMatchLimit = resolveDynamicFetchLimit(
+        preset.display.fetchWeakMatchLimit,
+        plannerEnabled ? queryContext.queryPlan.fetchWeakMatchLimitDelta : 0,
+        18,
+    );
     const shouldFetchWeakResults =
         retrievalDecision.behavior === "reject" &&
         searchOutput.rejection?.reason === "low_topic_coverage";
     const matchIds =
         retrievalDecision.behavior === "answer"
             ? searchOutput.matches
-                  .slice(0, preset.display.fetchMatchLimit)
+                  .slice(0, fetchMatchLimit)
                   .map((item) => item.otid)
             : [];
     const weakMatchIds = shouldFetchWeakResults
         ? searchOutput.weakMatches
-              .slice(0, preset.display.fetchWeakMatchLimit)
+              .slice(0, fetchWeakMatchLimit)
               .map((item) => item.otid)
         : [];
     const fetchIds = dedupe([...matchIds, ...weakMatchIds]);
@@ -1193,7 +1308,7 @@ export async function executeSearchPipeline(params: {
             const directDocuments = mergeCoarseMatchesIntoDocuments(
                 documents,
                 searchOutput.matches
-                    .slice(0, preset.display.fetchMatchLimit)
+                    .slice(0, fetchMatchLimit)
                     .map((item) => ({
                         otid: item.otid,
                         score: item.score,
@@ -1202,15 +1317,27 @@ export async function executeSearchPipeline(params: {
             );
             const phaseAdjustedDocuments =
                 preset.retrieval.enablePhaseAnchorBoost
-                    ? applyPhaseAnchorBoostToDocuments(query, directDocuments)
+                    ? applyPhaseAnchorBoostToDocuments(
+                          query,
+                          directDocuments,
+                          plannerEnabled ? queryContext.queryPlan : undefined,
+                      )
                     : directDocuments;
             const titleAdjustedDocuments =
                 preset.display.useYearPhaseTitleAdjustment
-                    ? applyTitleIntentBoostToDocuments(query, phaseAdjustedDocuments)
+                    ? applyTitleIntentBoostToDocuments(
+                          query,
+                          phaseAdjustedDocuments,
+                          plannerEnabled ? queryContext.queryPlan : undefined,
+                      )
                     : phaseAdjustedDocuments;
             const coverageAdjustedDocuments =
                 preset.display.useYearPhaseTitleAdjustment
-                    ? applyCoverageBoostToDocuments(query, titleAdjustedDocuments)
+                    ? applyCoverageBoostToDocuments(
+                          query,
+                          titleAdjustedDocuments,
+                          plannerEnabled ? queryContext.queryPlan : undefined,
+                      )
                     : titleAdjustedDocuments;
             results = coverageAdjustedDocuments;
         }
@@ -1219,7 +1346,7 @@ export async function executeSearchPipeline(params: {
             weakResults = mergeCoarseMatchesIntoDocuments(
                 documents,
                 searchOutput.weakMatches
-                    .slice(0, preset.display.fetchWeakMatchLimit)
+                    .slice(0, fetchWeakMatchLimit)
                     .map((item) => ({
                         otid: item.otid,
                         score: item.score,
@@ -1252,6 +1379,7 @@ export async function executeSearchPipeline(params: {
             fetchedDocumentCount,
             querySignals: searchOutput.diagnostics?.querySignals,
             retrievalSignals: searchOutput.diagnostics?.retrievalSignals,
+            queryPlan: plannerEnabled ? queryContext.queryPlan : undefined,
         },
     };
 }

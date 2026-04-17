@@ -25,6 +25,11 @@ import {
     loadFrontendEvalEngine,
 } from "./frontend_eval_engine.ts";
 import { FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET } from "../src/worker/search_pipeline.ts";
+import {
+    buildQueryPlan,
+    inferDocumentRolesFromTitle,
+    type QueryPlan,
+} from "../src/worker/query_planner.ts";
 import { resolveBackendArticlesFile } from "./kb_version_paths.ts";
 import {
     buildStandardBaselinesResultFileName,
@@ -49,6 +54,7 @@ type QueryCacheItem = {
     queryWords: string[];
     querySparse: Record<number, number>;
     queryIntent: ReturnType<typeof parseQueryIntent>;
+    queryPlan: QueryPlan;
     queryYearWordIds: number[];
     queryPhaseAnchor: PhaseAnchor;
 };
@@ -208,6 +214,10 @@ const RANDOMIZATION_ITERATIONS = Number.parseInt(
     10,
 );
 const RNG_SEED = Number.parseInt(process.env.SUASK_RANDOM_SEED || "", 10);
+const INCLUDE_QUERY_PLANNER_MODEL =
+    process.env.SUASK_INCLUDE_QUERY_PLANNER_MODEL === "1";
+const INCLUDE_STRUCTURE_RISK_MODEL =
+    process.env.SUASK_INCLUDE_STRUCTURE_RISK_MODEL === "1";
 
 const SAFE_TOP_MATCH_COUNT =
     Number.isFinite(TOP_MATCH_COUNT) && TOP_MATCH_COUNT > 0 ? TOP_MATCH_COUNT : 5;
@@ -246,8 +256,15 @@ const AVAILABLE_DATASET_TARGETS = (
     ] as Array<DatasetTarget | null>
 ).filter((item): item is DatasetTarget => Boolean(item));
 
+const OPTIONAL_DATASET_TARGETS = (
+    [resolveDatasetTarget("structure_dev_40")] as Array<DatasetTarget | null>
+).filter((item): item is DatasetTarget => Boolean(item));
+
 const DATASET_TARGETS = Object.fromEntries(
-    AVAILABLE_DATASET_TARGETS.map((item) => [item.key, item]),
+    [...AVAILABLE_DATASET_TARGETS, ...OPTIONAL_DATASET_TARGETS].map((item) => [
+        item.key,
+        item,
+    ]),
 ) as Partial<Record<DatasetTargetKey, DatasetTarget>>;
 
 const DATASET_TARGET_ORDER = parseDatasetTargets(
@@ -264,6 +281,10 @@ const STRUCTURED_KP_OT_WEIGHTS = {
 const STRUCTURED_Q_KP_OT_WEIGHTS = {
     ...FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval.weights,
 };
+
+const STRUCTURED_FULL_DOC_AWARE_WEIGHTS = {
+    ...STRUCTURED_KP_OT_WEIGHTS,
+};
 const ARTICLE_TEXTS_FILE = resolveBackendArticlesFile();
 
 let vocabMap = new Map<string, number>();
@@ -278,6 +299,7 @@ let topicPartitionIndex: Awaited<
 let extractor: Awaited<ReturnType<typeof loadFrontendEvalEngine>>["extractor"] | null =
     null;
 let articlePhaseAnchorMap = new Map<string, PhaseAnchor>();
+let articleTitleMap = new Map<string, string>();
 
 function parseDatasetTargets(raw: string): DatasetTarget[] {
     const requested = raw
@@ -596,6 +618,29 @@ function loadArticlePhaseAnchors(): Map<string, PhaseAnchor> {
     return result;
 }
 
+function loadArticleTitles(): Map<string, string> {
+    const absolutePath = path.resolve(process.cwd(), ARTICLE_TEXTS_FILE);
+    if (!fs.existsSync(absolutePath)) {
+        return new Map<string, string>();
+    }
+
+    const raw = JSON.parse(
+        fs.readFileSync(absolutePath, "utf-8"),
+    ) as Array<{
+        otid?: string;
+        ot_title?: string;
+    }>;
+
+    const result = new Map<string, string>();
+    raw.forEach((item) => {
+        if (!item.otid) {
+            return;
+        }
+        result.set(item.otid, item.ot_title || "");
+    });
+    return result;
+}
+
 function computePhaseAnchorDocDelta(
     queryPhase: PhaseAnchor,
     articlePhase?: PhaseAnchor,
@@ -825,6 +870,7 @@ async function loadEngine() {
     corpusView = resolveCorpusView(metadataList);
     allMetadataBm25Stats = engine.bm25Stats;
     articlePhaseAnchorMap = loadArticlePhaseAnchors();
+    articleTitleMap = loadArticleTitles();
 }
 
 async function buildQueryCache(testCases: DatasetCase[]): Promise<QueryCacheItem[]> {
@@ -841,6 +887,7 @@ async function buildQueryCache(testCases: DatasetCase[]): Promise<QueryCacheItem
     return testCases.map((testCase, index) => {
         const referenceQueryText = testCase.source_query?.trim() || testCase.query;
         const queryIntent = parseQueryIntent(referenceQueryText);
+        const queryPlan = buildQueryPlan(referenceQueryText, queryIntent);
         const queryWords = Array.from(
             new Set(fmmTokenize(testCase.query, vocabMap)),
         );
@@ -856,6 +903,7 @@ async function buildQueryCache(testCases: DatasetCase[]): Promise<QueryCacheItem
             queryWords,
             querySparse,
             queryIntent,
+            queryPlan,
             queryYearWordIds,
             queryPhaseAnchor: extractPhaseAnchor(referenceQueryText),
         };
@@ -942,6 +990,7 @@ function buildDirectRanking(scored: readonly ScoredMeta[]): RankedDoc[] {
 function buildStructuredRanking(
     query: QueryCacheItem,
     weights: { Q: number; KP: number; OT: number },
+    options?: { enableQueryPlanner?: boolean },
 ): RankedDoc[] {
     if (!vectorMatrix || !corpusView || !allMetadataBm25Stats) {
         throw new Error("Structured ranking dependencies not initialized.");
@@ -992,6 +1041,8 @@ function buildStructuredRanking(
             FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval.qConfusionWeight,
         enableExplicitYearFilter:
             FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval.enableExplicitYearFilter,
+        queryPlan: query.queryPlan,
+        enableQueryPlanner: Boolean(options?.enableQueryPlanner),
         minimalMode:
             FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval.minimalMode,
     });
@@ -1004,6 +1055,149 @@ function buildStructuredRanking(
             best_kpid: item.best_kpid,
         })),
     );
+}
+
+function isFullDocumentBoundaryQuery(query: QueryCacheItem): boolean {
+    const normalizedQuery = query.queryPlan.normalizedQuery;
+
+    if (
+        query.queryPlan.asksOutcomeLike ||
+        query.queryPlan.intentType === "fact_detail" ||
+        query.queryPlan.intentType === "time_location"
+    ) {
+        return false;
+    }
+
+    if (
+        /整体|概述|总体|全流程|整个流程|完整流程|主要步骤|主要流程|主要要求|关键要求|整体政策|政策和关键要求|从.+到/.test(
+            normalizedQuery,
+        )
+    ) {
+        return true;
+    }
+
+    return (
+        query.queryPlan.asksCoverageLike &&
+        (query.queryPlan.intentType === "procedure" ||
+            query.queryPlan.intentType === "policy_overview" ||
+            query.queryPlan.intentType === "system_timeline")
+    );
+}
+
+function resolveStructureRiskAwareWeights(
+    query: QueryCacheItem,
+): { Q: number; KP: number; OT: number } {
+    return isFullDocumentBoundaryQuery(query)
+        ? STRUCTURED_FULL_DOC_AWARE_WEIGHTS
+        : STRUCTURED_Q_KP_OT_WEIGHTS;
+}
+
+const ENTITY_ANCHOR_PATTERNS = [
+    /中山大学/g,
+    /人工智能学院/g,
+    /软件工程学院/g,
+    /广州实验室/g,
+    /广东省综合评价/g,
+    /综合评价/g,
+    /同等学力/g,
+    /临床医学博士/g,
+    /在职临床医师/g,
+    /港澳台/g,
+    /少干计划/g,
+    /骨干计划/g,
+    /强基计划/g,
+    /报考点/g,
+    /推免/g,
+    /夏令营/g,
+    /博士/g,
+    /硕士/g,
+    /调剂/g,
+    /复试/g,
+    /录取/g,
+    /资格认定/g,
+    /论文答辩/g,
+];
+
+function extractEntityAnchors(text: string): string[] {
+    const anchors = new Set<string>();
+    const normalized = text.replace(/\s+/g, "");
+    ENTITY_ANCHOR_PATTERNS.forEach((pattern) => {
+        for (const match of normalized.matchAll(pattern)) {
+            anchors.add(match[0]);
+        }
+    });
+    return [...anchors];
+}
+
+function computeTitleEntityCoverage(query: QueryCacheItem, otid?: string): number {
+    if (!otid) {
+        return 0;
+    }
+    const queryAnchors = extractEntityAnchors(
+        query.testCase.source_query?.trim() || query.testCase.query || "",
+    );
+    if (queryAnchors.length === 0) {
+        return 0;
+    }
+    const title = articleTitleMap.get(otid) || "";
+    const normalizedTitle = title.replace(/\s+/g, "");
+    return queryAnchors.filter((anchor) => normalizedTitle.includes(anchor)).length;
+}
+
+function violatesAvoidedRole(query: QueryCacheItem, otid?: string): boolean {
+    if (!otid || query.queryPlan.avoidedDocRoles.length === 0) {
+        return false;
+    }
+    const title = articleTitleMap.get(otid) || "";
+    const roles = inferDocumentRolesFromTitle(title);
+    return roles.some((role) => query.queryPlan.avoidedDocRoles.includes(role));
+}
+
+function shouldAdoptFullDocAwareRanking(
+    query: QueryCacheItem,
+    fullRanking: readonly RankedDoc[],
+    fullDocAwareRanking: readonly RankedDoc[],
+): boolean {
+    if (!isFullDocumentBoundaryQuery(query)) {
+        return false;
+    }
+
+    if (
+        !/我|本人|作为|是一名|如果我|想申请|想报|准备报|准备申请/.test(
+            query.queryPlan.normalizedQuery,
+        )
+    ) {
+        return false;
+    }
+
+    const fullTop = fullRanking[0]?.otid;
+    const candidateTop = fullDocAwareRanking[0]?.otid;
+    if (!candidateTop || candidateTop === fullTop) {
+        return false;
+    }
+
+    if (violatesAvoidedRole(query, candidateTop) && !violatesAvoidedRole(query, fullTop)) {
+        return false;
+    }
+
+    const fullCoverage = computeTitleEntityCoverage(query, fullTop);
+    const candidateCoverage = computeTitleEntityCoverage(query, candidateTop);
+    if (candidateCoverage < fullCoverage) {
+        return false;
+    }
+
+    return true;
+}
+
+function buildStructureRiskAwareRanking(query: QueryCacheItem): RankedDoc[] {
+    const fullRanking = buildStructuredRanking(query, STRUCTURED_Q_KP_OT_WEIGHTS);
+    const fullDocAwareRanking = buildStructuredRanking(
+        query,
+        resolveStructureRiskAwareWeights(query),
+    );
+    return shouldAdoptFullDocAwareRanking(query, fullRanking, fullDocAwareRanking)
+        ? fullDocAwareRanking
+        : fullRanking;
 }
 
 function toPerCaseResult(
@@ -1157,6 +1351,18 @@ function buildDatasetReport(
             STRUCTURED_Q_KP_OT_WEIGHTS,
         ),
     );
+    const structuredFullPlannerPerCase = INCLUDE_QUERY_PLANNER_MODEL
+        ? buildTimedPerCaseResults(queryCache, (query) =>
+              buildStructuredRanking(query, STRUCTURED_Q_KP_OT_WEIGHTS, {
+                  enableQueryPlanner: true,
+              }),
+          )
+        : undefined;
+    const structuredRiskAwarePerCase = INCLUDE_STRUCTURE_RISK_MODEL
+        ? buildTimedPerCaseResults(queryCache, (query) =>
+              buildStructureRiskAwareRanking(query),
+          )
+        : undefined;
 
     const datasetProfile = resolveNamedDatasetProfile(target.datasetFile);
 
@@ -1185,6 +1391,26 @@ function buildDatasetReport(
             "前端 runtime 对齐主线：Q=0.3333, KP=0.3333, OT=0.3333。",
             structuredFullPerCase,
         ),
+        ...(structuredFullPlannerPerCase
+            ? [
+                  buildModelReport(
+                      "Structured-Q+KP+OT+Planner",
+                      "structured" as const,
+                      "实验模型：在 Structured-Q+KP+OT 上启用 retrieval-stage query planner。",
+                      structuredFullPlannerPerCase,
+                  ),
+              ]
+            : []),
+        ...(structuredRiskAwarePerCase
+            ? [
+                  buildModelReport(
+                      "Structured-Q+KP+OT+RiskAware",
+                      "structured" as const,
+                      "实验模型：运行时识别完整文档边界类 query，降低 Q 权重并提高 KP/OT 权重。",
+                      structuredRiskAwarePerCase,
+                  ),
+              ]
+            : []),
     ];
 
     const bestStandardBaseline = [...models]

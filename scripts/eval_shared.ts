@@ -85,7 +85,8 @@ export type GranularityDatasetTargetKey =
     | "external_ood_50"
     | "external_ood_holdout_30"
     | "external_ood_hard_30"
-    | "hard_ood_v2_diag_top30";
+    | "hard_ood_v2_diag_top30"
+    | "structure_dev_40";
 
 type GranularityDatasetTargetDefinition = {
     key: GranularityDatasetTargetKey;
@@ -179,6 +180,12 @@ const GRANULARITY_DATASET_TARGETS: Record<
         label: "HardOODv2Diag",
         role: "external_ood_holdout",
         primaryPath: CURRENT_EVAL_DATASET_FILES.granularityHardOodV2DiagTop30,
+    },
+    structure_dev_40: {
+        key: "structure_dev_40",
+        label: "StructureDev40",
+        role: "adhoc",
+        primaryPath: CURRENT_EVAL_DATASET_FILES.granularityStructureDev40,
     },
 };
 
@@ -433,6 +440,7 @@ export function listAvailableGranularityDatasetTargets(
         "matched_ext_ood_60",
         "hard_ood_blind_30",
         "hard_ood_v2_diag_top30",
+        "structure_dev_40",
     ],
 ): ResolvedGranularityDatasetTarget[] {
     return keys.flatMap((key) => {

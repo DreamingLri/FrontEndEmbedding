@@ -98,6 +98,16 @@ const DATASET_PROFILE_MAP: Record<string, NamedDatasetProfile> = {
         alias: "gran_hardood_v2diag30",
         displayName: "HardOODv2Diag",
     },
+    structure_dev_40: {
+        canonicalName: "test_dataset_granularity_structure_dev_40_draft_v1",
+        alias: "gran_structure_dev40",
+        displayName: "StructureDev40",
+    },
+    test_dataset_granularity_structure_dev_40_draft_v1: {
+        canonicalName: "test_dataset_granularity_structure_dev_40_draft_v1",
+        alias: "gran_structure_dev40",
+        displayName: "StructureDev40",
+    },
     test_dataset_granularity_external_ood_holdout_30_reviewed_userized_v1: {
         canonicalName:
             "test_dataset_granularity_external_ood_holdout_30_reviewed_userized_v1",
