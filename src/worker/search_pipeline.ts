@@ -278,6 +278,12 @@ export type PipelineDocumentRecord = {
     snippetScore?: number;
 };
 
+export type PipelineCoarseMatch = {
+    otid: string;
+    score: number;
+    best_kpid?: string;
+};
+
 export type PipelineDecision = {
     behavior: PipelineBehavior;
     rawMode: ResponseMode;
@@ -626,6 +632,11 @@ type DocumentRerankEntryLookup = {
     entry: DocumentRerankEntry;
     index: number;
 };
+
+type SearchOutputMatchRecord = Pick<
+    SearchRankOutput["matches"][number],
+    "otid" | "score" | "best_kpid"
+>;
 
 function normalizePatternText(text: string): string {
     return text.replace(/\s+/g, "");
@@ -1787,30 +1798,74 @@ function resolveDynamicFetchLimit(
     return Math.max(baseLimit, Math.min(baseLimit + delta, maxLimit));
 }
 
-export function mergeCoarseMatchesIntoDocuments(
+function buildPipelineDocumentLookup(
     documents: PipelineDocumentRecord[],
-    coarseMatches: Array<{ otid: string; score: number; best_kpid?: string }>,
-): PipelineDocumentRecord[] {
-    const documentMap = new Map(
-        documents.map((doc) => [doc.otid || doc.id || "", doc]),
+): Map<string, PipelineDocumentRecord> {
+    return new Map(
+        documents.map((document) => [document.otid || document.id || "", document]),
     );
+}
 
+function mergeCoarseMatchesWithDocumentLookup(
+    documentLookup: Map<string, PipelineDocumentRecord>,
+    coarseMatches: PipelineCoarseMatch[],
+): PipelineDocumentRecord[] {
     return coarseMatches
         .map((match) => {
-            const doc = documentMap.get(match.otid);
-            if (!doc) {
+            const document = documentLookup.get(match.otid);
+            if (!document) {
                 return null;
             }
 
             return {
-                ...doc,
-                score: match.score ?? doc.score,
-                coarseScore: match.score ?? doc.coarseScore ?? doc.score,
-                displayScore: match.score ?? doc.displayScore ?? doc.score,
-                best_kpid: match.best_kpid ?? doc.best_kpid,
+                ...document,
+                score: match.score ?? document.score,
+                coarseScore: match.score ?? document.coarseScore ?? document.score,
+                displayScore: match.score ?? document.displayScore ?? document.score,
+                best_kpid: match.best_kpid ?? document.best_kpid,
             };
         })
         .filter(Boolean) as PipelineDocumentRecord[];
+}
+
+function selectLimitedCoarseMatches(
+    matches: SearchOutputMatchRecord[],
+    limit: number,
+): PipelineCoarseMatch[] {
+    return matches.slice(0, limit).map((match) => ({
+        otid: match.otid,
+        score: match.score,
+        best_kpid: match.best_kpid,
+    }));
+}
+
+function collectUniqueFetchOtids(
+    ...coarseMatchGroups: PipelineCoarseMatch[][]
+): string[] {
+    const otids: string[] = [];
+    const seen = new Set<string>();
+
+    coarseMatchGroups.forEach((group) => {
+        group.forEach((match) => {
+            if (!match.otid || seen.has(match.otid)) {
+                return;
+            }
+            seen.add(match.otid);
+            otids.push(match.otid);
+        });
+    });
+
+    return otids;
+}
+
+export function mergeCoarseMatchesIntoDocuments(
+    documents: PipelineDocumentRecord[],
+    coarseMatches: PipelineCoarseMatch[],
+): PipelineDocumentRecord[] {
+    return mergeCoarseMatchesWithDocumentLookup(
+        buildPipelineDocumentLookup(documents),
+        coarseMatches,
+    );
 }
 
 export function executeRetrievalStage(params: {
@@ -1947,18 +2002,19 @@ export async function executeSearchPipeline(params: {
     const shouldFetchWeakResults =
         retrievalDecision.behavior === "reject" &&
         searchOutput.rejection?.reason === "low_topic_coverage";
-    const matchIds =
-        shouldFetchAnswerResults
-            ? searchOutput.matches
-                  .slice(0, fetchMatchLimit)
-                  .map((item) => item.otid)
-            : [];
-    const weakMatchIds = shouldFetchWeakResults
-        ? searchOutput.weakMatches
-              .slice(0, fetchWeakMatchLimit)
-              .map((item) => item.otid)
+    const answerCoarseMatches = shouldFetchAnswerResults
+        ? selectLimitedCoarseMatches(searchOutput.matches, fetchMatchLimit)
         : [];
-    const fetchIds = dedupe([...matchIds, ...weakMatchIds]);
+    const weakCoarseMatches = shouldFetchWeakResults
+        ? selectLimitedCoarseMatches(
+              searchOutput.weakMatches,
+              fetchWeakMatchLimit,
+          )
+        : [];
+    const fetchIds = collectUniqueFetchOtids(
+        answerCoarseMatches,
+        weakCoarseMatches,
+    );
 
     let fetchMs = 0;
     let fetchedDocumentCount = 0;
@@ -1974,17 +2030,12 @@ export async function executeSearchPipeline(params: {
         });
         fetchMs = nowMs() - fetchStartedAt;
         fetchedDocumentCount = documents.length;
+        const fetchedDocumentLookup = buildPipelineDocumentLookup(documents);
 
-        if (shouldFetchAnswerResults) {
-            const directDocuments = mergeCoarseMatchesIntoDocuments(
-                documents,
-                searchOutput.matches
-                    .slice(0, fetchMatchLimit)
-                    .map((item) => ({
-                        otid: item.otid,
-                        score: item.score,
-                        best_kpid: item.best_kpid,
-                    })),
+        if (answerCoarseMatches.length > 0) {
+            const directDocuments = mergeCoarseMatchesWithDocumentLookup(
+                fetchedDocumentLookup,
+                answerCoarseMatches,
             );
             results = rerankAnswerDocuments({
                 query,
@@ -1997,16 +2048,10 @@ export async function executeSearchPipeline(params: {
             });
         }
 
-        if (shouldFetchWeakResults) {
-            weakResults = mergeCoarseMatchesIntoDocuments(
-                documents,
-                searchOutput.weakMatches
-                    .slice(0, fetchWeakMatchLimit)
-                    .map((item) => ({
-                        otid: item.otid,
-                        score: item.score,
-                        best_kpid: item.best_kpid,
-                    })),
+        if (weakCoarseMatches.length > 0) {
+            weakResults = mergeCoarseMatchesWithDocumentLookup(
+                fetchedDocumentLookup,
+                weakCoarseMatches,
             );
         }
     }
