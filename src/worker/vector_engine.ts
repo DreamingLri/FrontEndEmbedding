@@ -176,6 +176,7 @@ export const DEFAULT_WEIGHTS = {
 };
 
 export const RRF_K = 60;
+const RRF_RANK_LIMIT = 4000;
 
 const BM25_K1 = 1.2;
 const BM25_B = 0.4;
@@ -475,6 +476,134 @@ export function dotProduct(
         sum += vecA[i] * matrix[offset + i];
     }
     return sum;
+}
+
+function compareMinHeapScoreIndex(
+    left: number,
+    right: number,
+    scores: Float32Array,
+): number {
+    const scoreDiff = scores[left] - scores[right];
+    if (scoreDiff !== 0) {
+        return scoreDiff;
+    }
+    return right - left;
+}
+
+function siftUpMinHeap(
+    heap: number[],
+    scores: Float32Array,
+    startIndex: number,
+) {
+    let index = startIndex;
+    while (index > 0) {
+        const parentIndex = Math.floor((index - 1) / 2);
+        if (
+            compareMinHeapScoreIndex(
+                heap[index] as number,
+                heap[parentIndex] as number,
+                scores,
+            ) >= 0
+        ) {
+            break;
+        }
+        [heap[index], heap[parentIndex]] = [heap[parentIndex], heap[index]];
+        index = parentIndex;
+    }
+}
+
+function siftDownMinHeap(
+    heap: number[],
+    scores: Float32Array,
+    startIndex: number,
+) {
+    let index = startIndex;
+    while (true) {
+        const leftChildIndex = index * 2 + 1;
+        const rightChildIndex = leftChildIndex + 1;
+        let smallestIndex = index;
+
+        if (
+            leftChildIndex < heap.length &&
+            compareMinHeapScoreIndex(
+                heap[leftChildIndex] as number,
+                heap[smallestIndex] as number,
+                scores,
+            ) < 0
+        ) {
+            smallestIndex = leftChildIndex;
+        }
+
+        if (
+            rightChildIndex < heap.length &&
+            compareMinHeapScoreIndex(
+                heap[rightChildIndex] as number,
+                heap[smallestIndex] as number,
+                scores,
+            ) < 0
+        ) {
+            smallestIndex = rightChildIndex;
+        }
+
+        if (smallestIndex === index) {
+            return;
+        }
+
+        [heap[index], heap[smallestIndex]] = [
+            heap[smallestIndex],
+            heap[index],
+        ];
+        index = smallestIndex;
+    }
+}
+
+function selectTopLocalIndices(
+    scores: Float32Array,
+    limit: number,
+    options?: {
+        minimumScoreExclusive?: number;
+    },
+): number[] {
+    if (limit <= 0 || scores.length === 0) {
+        return [];
+    }
+
+    const effectiveLimit = Math.min(limit, scores.length);
+    const minimumScoreExclusive =
+        options?.minimumScoreExclusive ?? Number.NEGATIVE_INFINITY;
+    const heap: number[] = [];
+
+    for (let localIndex = 0; localIndex < scores.length; localIndex += 1) {
+        const score = scores[localIndex] as number;
+        if (
+            !Number.isFinite(score) ||
+            score <= minimumScoreExclusive
+        ) {
+            continue;
+        }
+
+        if (heap.length < effectiveLimit) {
+            heap.push(localIndex);
+            siftUpMinHeap(heap, scores, heap.length - 1);
+            continue;
+        }
+
+        const worstIndex = heap[0] as number;
+        if (compareMinHeapScoreIndex(localIndex, worstIndex, scores) <= 0) {
+            continue;
+        }
+
+        heap[0] = localIndex;
+        siftDownMinHeap(heap, scores, 0);
+    }
+
+    return heap.sort((left, right) => {
+        const scoreDiff = scores[right] - scores[left];
+        if (scoreDiff !== 0) {
+            return scoreDiff;
+        }
+        return left - right;
+    });
 }
 
 export function getQuerySparse(
@@ -2599,19 +2728,20 @@ export function searchAndRank(params: {
             ? enableExplicitYearFilter
             : !minimalMode;
 
-    const n = metadata.length;
     const activeCandidateIndices =
         candidateIndices && candidateIndices.length > 0 ? candidateIndices : undefined;
     const candidateCount = activeCandidateIndices
         ? activeCandidateIndices.length
-        : n;
+        : metadata.length;
     const denseScores = new Float32Array(candidateCount);
     const sparseScores = new Float32Array(candidateCount);
-    const denseOrder = new Int32Array(candidateCount);
-    const sparseOrder = new Int32Array(candidateCount);
     const lexicalBonusMap = new Map<string, number>();
     const yearHitMap = new Map<string, boolean>();
     const docScopeSpecificityStatsMap = new Map<string, ScopeSpecificityStats>();
+    const queryYearWordIdSet =
+        queryYearWordIds && queryYearWordIds.length > 0
+            ? new Set(queryYearWordIds)
+            : undefined;
 
     for (let localIndex = 0; localIndex < candidateCount; localIndex++) {
         const metaIndex = activeCandidateIndices
@@ -2634,7 +2764,6 @@ export function searchAndRank(params: {
             dense = overriddenDense;
         }
         denseScores[localIndex] = dense;
-        denseOrder[localIndex] = localIndex;
 
         let sparse = 0;
         if (querySparse && meta.sparse && meta.sparse.length > 0) {
@@ -2659,7 +2788,7 @@ export function searchAndRank(params: {
                     docScopeSpecificityStatsMap.set(otid, existing);
                 }
 
-                if (queryYearWordIds && queryYearWordIds.includes(wordId)) {
+                if (queryYearWordIdSet?.has(wordId)) {
                     yearHitMap.set(otid, true);
                 }
 
@@ -2692,26 +2821,33 @@ export function searchAndRank(params: {
             }
         }
         sparseScores[localIndex] = sparse;
-        sparseOrder[localIndex] = localIndex;
     }
 
-    denseOrder.sort((a, b) => denseScores[b] - denseScores[a]);
+    const rrfRankLimit = Math.min(RRF_RANK_LIMIT, candidateCount);
+    const denseTopLocalIndices = selectTopLocalIndices(
+        denseScores,
+        rrfRankLimit,
+    );
     const rrfScores = new Map<Metadata, number>();
 
-    for (let rank = 0; rank < Math.min(4000, candidateCount); rank++) {
+    for (let rank = 0; rank < denseTopLocalIndices.length; rank++) {
         const metaIndex = activeCandidateIndices
-            ? activeCandidateIndices[denseOrder[rank]]
-            : denseOrder[rank];
+            ? activeCandidateIndices[denseTopLocalIndices[rank] as number]
+            : (denseTopLocalIndices[rank] as number);
         const meta = metadata[metaIndex];
         rrfScores.set(meta, (1 / (rank + RRF_K)) * safeDenseRrfWeight);
     }
 
     if (querySparse) {
-        sparseOrder.sort((a, b) => sparseScores[b] - sparseScores[a]);
-        for (let rank = 0; rank < Math.min(4000, candidateCount); rank++) {
-            const localIndex = sparseOrder[rank];
-            if (sparseScores[localIndex] === 0) break;
-
+        const sparseTopLocalIndices = selectTopLocalIndices(
+            sparseScores,
+            rrfRankLimit,
+            {
+                minimumScoreExclusive: 0,
+            },
+        );
+        for (let rank = 0; rank < sparseTopLocalIndices.length; rank++) {
+            const localIndex = sparseTopLocalIndices[rank] as number;
             const metaIndex = activeCandidateIndices
                 ? activeCandidateIndices[localIndex]
                 : localIndex;

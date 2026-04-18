@@ -1638,7 +1638,6 @@ export async function executeSearchPipeline(params: {
         dimensions,
         currentTimestamp,
         bm25Stats,
-        extractor: _extractor,
         documentLoader,
         termMaps,
         preset = CANONICAL_PIPELINE_PRESET,
@@ -1661,23 +1660,28 @@ export async function executeSearchPipeline(params: {
 
     const { searchOutput, retrievalDecision } = retrievalStage;
     const plannerEnabled = preset.display.enableQueryPlanner;
-    const compressedQueryFetchDelta = queryIsCompressedKeywordLike(query) ? 18 : 0;
+    const plannerQueryPlan = plannerEnabled ? queryContext.queryPlan : undefined;
+    const isCompressedKeywordQuery = queryIsCompressedKeywordLike(query);
+    const compressedQueryFetchDelta = isCompressedKeywordQuery ? 18 : 0;
+    const shouldApplyTitleAdjustments =
+        preset.display.useYearPhaseTitleAdjustment;
     const fetchMatchLimit = resolveDynamicFetchLimit(
         preset.display.fetchMatchLimit,
-        (plannerEnabled ? queryContext.queryPlan.fetchMatchLimitDelta : 0) +
+        (plannerQueryPlan?.fetchMatchLimitDelta ?? 0) +
             compressedQueryFetchDelta,
-        queryIsCompressedKeywordLike(query) ? 48 : 28,
+        isCompressedKeywordQuery ? 48 : 28,
     );
     const fetchWeakMatchLimit = resolveDynamicFetchLimit(
         preset.display.fetchWeakMatchLimit,
-        plannerEnabled ? queryContext.queryPlan.fetchWeakMatchLimitDelta : 0,
+        plannerQueryPlan?.fetchWeakMatchLimitDelta ?? 0,
         18,
     );
+    const shouldFetchAnswerResults = retrievalDecision.behavior === "answer";
     const shouldFetchWeakResults =
         retrievalDecision.behavior === "reject" &&
         searchOutput.rejection?.reason === "low_topic_coverage";
     const matchIds =
-        retrievalDecision.behavior === "answer"
+        shouldFetchAnswerResults
             ? searchOutput.matches
                   .slice(0, fetchMatchLimit)
                   .map((item) => item.otid)
@@ -1693,7 +1697,6 @@ export async function executeSearchPipeline(params: {
     let fetchedDocumentCount = 0;
     let results: PipelineDocumentRecord[] = [];
     let weakResults: PipelineDocumentRecord[] = [];
-    let finalDecision: PipelineDecision = retrievalDecision;
 
     if (fetchIds.length > 0) {
         onStatus?.("正在请求原文数据...");
@@ -1705,7 +1708,7 @@ export async function executeSearchPipeline(params: {
         fetchMs = nowMs() - fetchStartedAt;
         fetchedDocumentCount = documents.length;
 
-        if (retrievalDecision.behavior === "answer") {
+        if (shouldFetchAnswerResults) {
             const directDocuments = mergeCoarseMatchesIntoDocuments(
                 documents,
                 searchOutput.matches
@@ -1721,19 +1724,19 @@ export async function executeSearchPipeline(params: {
                     ? applyPhaseAnchorBoostToDocuments(
                           query,
                           directDocuments,
-                          plannerEnabled ? queryContext.queryPlan : undefined,
+                          plannerQueryPlan,
                       )
                     : directDocuments;
             const titleAdjustedDocuments =
-                preset.display.useYearPhaseTitleAdjustment
+                shouldApplyTitleAdjustments
                     ? applyTitleIntentBoostToDocuments(
                           query,
                           phaseAdjustedDocuments,
-                          plannerEnabled ? queryContext.queryPlan : undefined,
+                          plannerQueryPlan,
                       )
                     : phaseAdjustedDocuments;
             const latestAdjustedDocuments =
-                preset.display.useYearPhaseTitleAdjustment
+                shouldApplyTitleAdjustments
                     ? applyLatestVersionBoostToDocuments(
                           query,
                           titleAdjustedDocuments,
@@ -1742,11 +1745,11 @@ export async function executeSearchPipeline(params: {
                       )
                     : titleAdjustedDocuments;
             const coverageAdjustedDocuments =
-                preset.display.useYearPhaseTitleAdjustment
+                shouldApplyTitleAdjustments
                     ? applyCoverageBoostToDocuments(
                           query,
                           latestAdjustedDocuments,
-                          plannerEnabled ? queryContext.queryPlan : undefined,
+                          plannerQueryPlan,
                       )
                     : latestAdjustedDocuments;
             results = applyCompressedQueryDisplayGuard(
@@ -1777,7 +1780,7 @@ export async function executeSearchPipeline(params: {
         searchOutput,
         responseDecision: searchOutput.responseDecision,
         retrievalDecision,
-        finalDecision,
+        finalDecision: retrievalDecision,
         rejection: searchOutput.rejection,
         results,
         weakResults,
@@ -1793,7 +1796,7 @@ export async function executeSearchPipeline(params: {
             fetchedDocumentCount,
             querySignals: searchOutput.diagnostics?.querySignals,
             retrievalSignals: searchOutput.diagnostics?.retrievalSignals,
-            queryPlan: plannerEnabled ? queryContext.queryPlan : undefined,
+            queryPlan: plannerQueryPlan,
         },
     };
 }
