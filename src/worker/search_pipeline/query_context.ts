@@ -81,6 +81,9 @@ export function buildSearchPipelineQueryContext(
     topicPartitionIndex: TopicPartitionIndex,
     preset: PipelinePreset = CANONICAL_PIPELINE_PRESET,
 ): SearchPipelineQueryContext {
+    // 主链入口先把自然语言问题压成统一查询上下文：
+    // 这里一次性完成意图解析、候选裁剪、稀疏词特征和 planner 信号构建，
+    // 后续检索与展示阶段都只消费这个结构，不再重复解析原始 query。
     const expandedIntentQuery = preset.retrieval.useQueryExpansion
         ? buildExpandedIntentQuery(query)
         : query;
@@ -103,6 +106,8 @@ export function buildSearchPipelineQueryContext(
         .map(String)
         .map((year) => vocabMap.get(year))
         .filter((item): item is number => item !== undefined);
+    // queryPlan 负责抽取“覆盖型/结果型/时间型”等高层策略信号，
+    // 既影响检索阶段的 boost，也影响文档抓取与展示重排。
     const queryPlan = buildQueryPlan(query, queryIntent);
 
     return {

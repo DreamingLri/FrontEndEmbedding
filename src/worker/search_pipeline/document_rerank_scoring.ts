@@ -63,6 +63,8 @@ export function applyCompressedQueryDisplayGuardToEntries(
     baselineEntries: DocumentRerankEntry[],
     rerankedEntries: DocumentRerankEntry[],
 ): DocumentRerankEntry[] {
+    // 极短关键词查询对规则扰动非常敏感。
+    // 这里保留粗排第一名的兜底权，避免展示排序被标题修正规则过度放大。
     if (
         !querySignals.isCompressedKeywordQuery ||
         baselineEntries.length === 0 ||
@@ -175,6 +177,9 @@ export function computeTitleIntentDocDelta(
     querySignals: DocumentRerankQuerySignals,
     entry: DocumentRerankEntry,
 ): number {
+    // 这是展示重排里最重的一层打分：
+    // 按查询意图判断当前标题更像“条件/流程/结果/系统通知”中的哪一类，
+    // 再结合博士/推免/夏令营/调剂等主题约束做细粒度加减分。
     const { metadata } = entry;
     const { normalizedTitle } = metadata;
     if (!normalizedTitle) {
@@ -566,6 +571,8 @@ export function applyPhaseAnchorBoostToDocuments(
 export function applyCoverageTitleDiversity(
     entries: DocumentRerankEntry[],
 ): DocumentRerankEntry[] {
+    // 覆盖型问题不追求单篇文档最高分，而是希望前几篇互补。
+    // 这里按标题家族做轻量去重，把重复公告往后压。
     const remaining = [...entries];
     const selected: DocumentRerankEntry[] = [];
     const seenTitleKeys = new Map<string, number>();

@@ -21,6 +21,8 @@ export function extractRetrievalSignals(
     sortedRanking: SearchResult[],
     otidMap: Record<string, AggregatedDocScores>,
 ): RetrievalSignals {
+    // 只看前几名的主题分布，估计当前检索是否集中落在同一问题簇。
+    // 这部分信号不关心“答案内容”，只判断召回本身稳不稳。
     const consistencyWindow = sortedRanking.slice(0, 10);
     const topicHistogram = new Map<string, number>();
     let labeledCount = 0;
@@ -60,6 +62,8 @@ export function extractEvidenceSignals(
     sortedRanking: SearchResult[],
     otidMap: Record<string, AggregatedDocScores>,
 ): EvidenceSignals {
+    // 拒答判定不直接读正文，而是先看前几名 KP 角色证据：
+    // 如果强角色标签稀缺，通常说明当前结果更像噪声匹配或弱相关匹配。
     const topWindow = sortedRanking
         .slice(0, 3)
         .flatMap((item) =>
@@ -107,6 +111,9 @@ export function classifyResponseMode(
     retrievalSignals: RetrievalSignals,
     evidenceSignals: EvidenceSignals,
 ): ResponseDecision {
+    // 主判定逻辑把风险拆成三块：
+    // query 是否有足够锚点、retrieval 是否足够集中、evidence 是否足够可操作。
+    // 三者合成 rejectScore，再映射到 hard reject / boundary / answer。
     const tokenCount = querySignals.tokenCount || 0;
     const invalidInput = tokenCount === 0;
 

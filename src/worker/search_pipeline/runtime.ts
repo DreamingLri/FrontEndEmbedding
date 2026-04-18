@@ -116,6 +116,8 @@ export function executeRetrievalStage(
     } = params;
 
     const startedAt = nowMs();
+    // 第一阶段只做“召回 + 排序 + 拒答前诊断”，不触碰正文抓取。
+    // 这样检索质量和后续展示逻辑可以独立分析，也方便实验复现。
     const searchOutput = searchAndRank({
         queryVector,
         querySparse: queryContext.querySparse,
@@ -196,6 +198,8 @@ export async function executeSearchPipeline(
     const compressedQueryFetchDelta = isCompressedKeywordQuery ? 18 : 0;
     const shouldApplyTitleAdjustments =
         preset.display.useYearPhaseTitleAdjustment;
+    // 抓取上限不是固定常数，而是由 query planner 和压缩关键词保护共同调节。
+    // 目的是在“召回不稳”时多抓一些候选，但不让常规请求无上限膨胀。
     const fetchMatchLimit = resolveDynamicFetchLimit(
         preset.display.fetchMatchLimit,
         (plannerQueryPlan?.fetchMatchLimitDelta ?? 0) +
@@ -242,6 +246,8 @@ export async function executeSearchPipeline(
         const fetchedDocumentLookup = buildPipelineDocumentLookup(documents);
 
         if (answerCoarseMatches.length > 0) {
+            // answer 分支会把粗排结果映射回正文，并做标题/阶段/新旧版本等展示重排，
+            // 保证最终给用户看的顺序与纯向量粗排不同。
             const directDocuments = mergeCoarseMatchesWithDocumentLookup(
                 fetchedDocumentLookup,
                 answerCoarseMatches,
@@ -258,6 +264,7 @@ export async function executeSearchPipeline(
         }
 
         if (weakCoarseMatches.length > 0) {
+            // weakResults 仅保留给 reject/边界场景兜底，不做 answer 版重排。
             weakResults = mergeCoarseMatchesWithDocumentLookup(
                 fetchedDocumentLookup,
                 weakCoarseMatches,

@@ -166,6 +166,9 @@ export function searchAndRank(params: {
             ? new Set(queryYearWordIds)
             : undefined;
 
+    // 第一阶段：逐条元数据计算 dense / sparse 分数，
+    // 同时顺手积累 lexical bonus、年份命中和 scope specificity 统计，
+    // 这些都是后面 OT 级 boost 的原始特征。
     for (let localIndex = 0; localIndex < candidateCount; localIndex++) {
         const metaIndex = activeCandidateIndices
             ? activeCandidateIndices[localIndex]
@@ -246,6 +249,8 @@ export function searchAndRank(params: {
         sparseScores[localIndex] = sparse;
     }
 
+    // 第二阶段：用 RRF 融合 dense 与 sparse 排名，得到统一候选池。
+    // 这里仍然保留 Q / KP / OT 原子粒度，尚未汇总到文档级。
     const rrfRankLimit = Math.min(RRF_RANK_LIMIT, candidateCount);
     const denseTopLocalIndices = selectTopLocalIndices(
         denseScores,
@@ -289,6 +294,8 @@ export function searchAndRank(params: {
 
     const otidMap: Record<string, AggregatedDocScores> = {};
 
+    // 第三阶段：把同一 OT 下的 Q / KP / OT 信号聚合成文档级评分容器，
+    // 后续所有 baseScore、角色重排和拒答判定都基于这个 OT 视角运行。
     for (const [meta, score] of topHybrid) {
         const otid = resolveDocOtid(meta);
         const topicIds = resolveMetadataTopicIds(meta);
@@ -356,9 +363,12 @@ export function searchAndRank(params: {
                       Number.isFinite(qConfusionWeight) && qConfusionWeight > 0
                           ? Math.min(qConfusionWeight, 1)
                           : DEFAULT_Q_CONFUSION_WEIGHT,
-              })
+                  })
             : undefined;
 
+    // 第四阶段：对每个文档计算最终排序分数。
+    // decisionScore 用于拒答判断，outputScore 用于真正展示；
+    // 两条分支拆开是为了让“安全判定”与“用户可见排序”互不污染。
     for (const [otid, scores] of Object.entries(otidMap)) {
         const signals = getDocQuerySignals(
             otid,
@@ -435,6 +445,8 @@ export function searchAndRank(params: {
         });
     }
 
+    // 最后阶段：基于 decision ranking 抽取检索与证据信号，
+    // 统一交给 response classifier 做 answer / reject 判定。
     const sortedDecisionRanking = decisionRanking.sort(
         (a, b) => b.score - a.score,
     );
