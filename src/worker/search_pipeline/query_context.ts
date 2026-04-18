@@ -1,20 +1,20 @@
-import { fmmTokenize } from "./fmm_tokenize.ts";
-import { buildQueryPlan } from "./query_planner.ts";
+import { fmmTokenize } from "../fmm_tokenize.ts";
+import { buildQueryPlan } from "../query_planner.ts";
 import {
     getQuerySparse,
     parseQueryIntent,
     QUERY_SCOPE_SPECIFICITY_TERMS,
-} from "./vector_engine.ts";
+} from "../vector_engine.ts";
 import {
     getCandidateIndicesForQuery,
     type TopicPartitionIndex,
-} from "./topic_partition.ts";
+} from "../topic_partition.ts";
 import {
     type PipelinePreset,
     type PipelineTermMaps,
     type SearchPipelineQueryContext,
-} from "./pipeline_types.ts";
-import { CANONICAL_PIPELINE_PRESET } from "./pipeline_presets.ts";
+} from "./types.ts";
+import { CANONICAL_PIPELINE_PRESET } from "./presets.ts";
 
 function dedupe(items: string[]): string[] {
     return Array.from(new Set(items));
@@ -115,3 +115,4 @@ export function buildSearchPipelineQueryContext(
         candidateIndices,
     };
 }
+

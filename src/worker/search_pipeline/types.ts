@@ -13,8 +13,8 @@ import type {
     ResponseMode,
     SearchRankOutput,
     SearchRejection,
-} from "./vector_engine.ts";
-import type { QueryPlan } from "./query_planner.ts";
+} from "../vector_engine.ts";
+import type { QueryPlan } from "../query_planner.ts";
 
 export type PipelineBehavior = "answer" | "reject";
 
@@ -157,3 +157,4 @@ export type SearchPipelineRuntimeParams = {
     termMaps?: PipelineTermMaps;
     preset?: PipelinePreset;
 };
+

@@ -2,11 +2,11 @@ import {
     inferDocumentRolesFromTitle,
     type QueryPlan,
     type QueryPlanDocRole,
-} from "./query_planner.ts";
+} from "../query_planner.ts";
 import type {
     PipelineCoarseMatch,
     PipelineDocumentRecord,
-} from "./pipeline_types.ts";
+} from "./types.ts";
 
 type PhaseAnchor = {
     half?: "上半年" | "下半年";
@@ -1389,3 +1389,4 @@ export function collectUniqueFetchOtids(
 
     return otids;
 }
+

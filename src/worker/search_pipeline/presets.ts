@@ -1,4 +1,4 @@
-import type { PipelinePreset } from "./pipeline_types.ts";
+import type { PipelinePreset } from "./types.ts";
 
 const DEFAULT_DISPLAY_CONFIG: PipelinePreset["display"] = {
     rejectThreshold: 0.4,
@@ -178,3 +178,4 @@ export function resolvePipelinePresetByName(
     ];
     return clonePipelinePreset(preset || CANONICAL_PIPELINE_PRESET);
 }
+
