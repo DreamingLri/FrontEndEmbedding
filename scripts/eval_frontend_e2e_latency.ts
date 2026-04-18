@@ -10,6 +10,7 @@ import {
 import { searchAndRank } from "../src/worker/vector_engine.ts";
 import {
     ACTIVE_MAIN_DB_VERSION,
+    DEFAULT_GRANULARITY_MAINLINE_TARGET_KEYS,
     DEFAULT_QUERY_EMBED_BATCH_SIZE,
     FRONTEND_MODEL_NAME,
     loadDatasetSources,
@@ -91,9 +92,7 @@ const DEFAULT_COLD_SAMPLE_LIMIT = Number.parseInt(
     10,
 );
 const OFFICIAL_DATASET_KEYS: GranularityDatasetTargetKey[] = [
-    "main_bench_120",
-    "in_domain_holdout_50",
-    "ext_ood_blind_60",
+    ...DEFAULT_GRANULARITY_MAINLINE_TARGET_KEYS,
 ];
 
 function nowMs(): number {

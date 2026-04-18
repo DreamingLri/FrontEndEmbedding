@@ -481,6 +481,7 @@ type PhaseAnchor = {
 const PHASE_ANCHOR_DOC_WEIGHT = 0.35;
 const TITLE_INTENT_DOC_WEIGHT = 0.28;
 const TITLE_COVERAGE_DOC_WEIGHT = 0.18;
+const LATEST_VERSION_DOC_WEIGHT = 0.38;
 const TITLE_DIVERSITY_DUPLICATE_PENALTY = 0.34;
 const PHASE_STAGE_RULES: Array<{ stage: string; pattern: RegExp }> = [
     { stage: "预报名", pattern: /预报名/ },
@@ -578,10 +579,44 @@ function queryAsksSystemTimelineLikeTitle(query: string): boolean {
     );
 }
 
+function queryAsksBroadRuleDocLikeTitle(query: string): boolean {
+    return /(招生简章|简章|招生章程|章程|实施细则|细则|实施办法|办法|接收办法|录取方案|方案|专业目录|目录)/.test(
+        query,
+    );
+}
+
 function queryNeedsCoverageLikeTitle(query: string): boolean {
     return /分别|以及|并描述|整个流程|申请和录取过程|从预报名到录取|从准备材料到完成面试|条件.*评分|条件.*材料|材料.*时间|申请.*录取过程/.test(
         query,
     );
+}
+
+function queryHasPostOutcomeActionCue(query: string): boolean {
+    return /体检表|复审表|书面说明|签字|递补|增补|放弃录取|放弃资格/.test(
+        query,
+    );
+}
+
+function queryHasContactChannelCue(query: string): boolean {
+    return /联系方式|联系电话|邮箱|邮件|联系学院|联系老师|研究生办公室/.test(
+        query,
+    );
+}
+
+function queryHasResultCommunicationContextCue(query: string): boolean {
+    return /拟录取|录取|复试|调剂|结果|公示|名单|监督|申诉|沟通/.test(query);
+}
+
+function queryHasCampUpdateChannelCue(query: string): boolean {
+    return /更新/.test(query) && /联系方式|联系电话|邮箱|邮件|通信渠道/.test(query);
+}
+
+function queryHasCampOperationalCue(query: string): boolean {
+    return /报到|营员|入营/.test(query) || queryHasCampUpdateChannelCue(query);
+}
+
+function queryHasCampStatisticsCue(query: string): boolean {
+    return /人数|总人数|录取人数|男女|男生|女生/.test(query);
 }
 
 function getDocumentEvidenceText(document: PipelineDocumentRecord): string {
@@ -608,6 +643,223 @@ function getDocumentEvidenceText(document: PipelineDocumentRecord): string {
 
 function normalizeTitleDedupKey(title: string): string {
     return normalizePatternText(title).replace(/20\d{2}年/g, "");
+}
+
+function normalizeLatestVersionFamilyKey(title: string): string {
+    return normalizeTitleDedupKey(title)
+        .replace(/（[^）]*）/g, "")
+        .replace(/\([^)]*\)/g, "")
+        .replace(/第?[一二三四1234]批/g, "")
+        .replace(/上半年|下半年/g, "")
+        .replace(/第?[一二三四1234]轮/g, "");
+}
+
+function resolveDocumentRecencyKey(
+    document: Pick<PipelineDocumentRecord, "publish_time" | "ot_title">,
+): number | undefined {
+    const rawCandidates = [document.publish_time, document.ot_title];
+    for (const rawValue of rawCandidates) {
+        const raw = (rawValue || "").trim();
+        if (!raw) {
+            continue;
+        }
+
+        const fullDateMatch = raw.match(
+            /(20\d{2})[.\-/年](\d{1,2})[.\-/月](\d{1,2})/,
+        );
+        if (fullDateMatch) {
+            const year = Number(fullDateMatch[1]);
+            const month = Number(fullDateMatch[2]);
+            const day = Number(fullDateMatch[3]);
+            return year * 372 + month * 31 + day;
+        }
+
+        const yearMonthMatch = raw.match(/(20\d{2})[.\-/年](\d{1,2})[.\-/月]?/);
+        if (yearMonthMatch) {
+            const year = Number(yearMonthMatch[1]);
+            const month = Number(yearMonthMatch[2]);
+            return year * 372 + month * 31 + 1;
+        }
+
+        const yearMatch = raw.match(/(20\d{2})年?/);
+        if (yearMatch) {
+            const year = Number(yearMatch[1]);
+            return year * 372 + 1;
+        }
+    }
+
+    return undefined;
+}
+
+function queryWantsLatestVersion(query: string): boolean {
+    return /现在|最新|最近|最近一次|目前|当前/.test(query);
+}
+
+function applyLatestVersionBoostToDocuments(
+    query: string,
+    documents: PipelineDocumentRecord[],
+    preferLatestWithinTopic: boolean,
+): PipelineDocumentRecord[] {
+    const normalizedQuery = normalizePatternText(query);
+    const wantsLatestVersion = queryWantsLatestVersion(normalizedQuery);
+    if (!wantsLatestVersion || documents.length <= 1) {
+        return [...documents];
+    }
+
+    const asksOutcomeLike = queryAsksOutcomeLikeTitle(normalizedQuery);
+    const asksProcedureLike = queryAsksProcedureLikeTitle(normalizedQuery);
+    const asksRequirementLike = queryAsksRequirementLikeTitle(normalizedQuery);
+    const asksSystemTimelineLike = queryAsksSystemTimelineLikeTitle(normalizedQuery);
+    const asksPolicyOverviewLike = queryAsksPolicyOverviewLikeTitle(normalizedQuery);
+    const familyStats = new Map<
+        string,
+        { count: number; latestRecencyKey?: number }
+    >();
+
+    documents.forEach((document) => {
+        const familyKey = normalizeLatestVersionFamilyKey(document.ot_title || "");
+        if (!familyKey) {
+            return;
+        }
+
+        const recencyKey = resolveDocumentRecencyKey(document);
+        const existing = familyStats.get(familyKey) || { count: 0 };
+        existing.count += 1;
+        if (
+            recencyKey !== undefined &&
+            (existing.latestRecencyKey === undefined ||
+                recencyKey > existing.latestRecencyKey)
+        ) {
+            existing.latestRecencyKey = recencyKey;
+        }
+        familyStats.set(familyKey, existing);
+    });
+
+    const roleSensitiveQuery =
+        asksProcedureLike ||
+        asksRequirementLike ||
+        asksSystemTimelineLike ||
+        asksPolicyOverviewLike;
+    const weight = LATEST_VERSION_DOC_WEIGHT * (preferLatestWithinTopic ? 1.1 : 1);
+
+    return [...documents]
+        .map((document) => {
+            const baseScore =
+                document.displayScore ?? document.coarseScore ?? document.score ?? 0;
+            const familyKey = normalizeLatestVersionFamilyKey(document.ot_title || "");
+            const familyStat = familyKey ? familyStats.get(familyKey) : undefined;
+            const recencyKey = resolveDocumentRecencyKey(document);
+            const roles = inferDocumentRolesFromTitle(document.ot_title || "");
+            let delta = 0;
+
+            if (familyStat && familyStat.count >= 2) {
+                if (
+                    recencyKey !== undefined &&
+                    familyStat.latestRecencyKey !== undefined
+                ) {
+                    const gapMonths =
+                        (familyStat.latestRecencyKey - recencyKey) / 31;
+                    if (gapMonths <= 0) {
+                        delta += 0.92;
+                        if (
+                            roleSensitiveQuery &&
+                            (roles.includes("rule_doc") ||
+                                roles.includes("registration_notice") ||
+                                roles.includes("stage_list"))
+                        ) {
+                            delta += 0.12;
+                        }
+                    } else {
+                        delta -= Math.min(1.05, 0.2 + gapMonths * 0.08);
+                    }
+                } else {
+                    delta -= 0.18;
+                }
+            }
+
+            if (
+                !asksOutcomeLike &&
+                roleSensitiveQuery &&
+                (roles.includes("result_notice") || roles.includes("list_notice"))
+            ) {
+                delta -= 0.18;
+            }
+
+            const nextScore = baseScore + delta * weight;
+            return {
+                ...document,
+                score: nextScore,
+                displayScore: nextScore,
+            };
+        })
+        .sort(
+            (left, right) =>
+                (right.displayScore ?? right.score ?? 0) -
+                (left.displayScore ?? left.score ?? 0),
+        );
+}
+
+function queryIsCompressedKeywordLike(query: string): boolean {
+    const normalized = normalizePatternText(query);
+    return (
+        normalized.length <= 12 &&
+        /20\d{2}/.test(normalized) &&
+        !/[，。；！？,.!?]/.test(query)
+    );
+}
+
+function applyCompressedQueryDisplayGuard(
+    query: string,
+    baselineDocuments: PipelineDocumentRecord[],
+    rerankedDocuments: PipelineDocumentRecord[],
+): PipelineDocumentRecord[] {
+    if (
+        !queryIsCompressedKeywordLike(query) ||
+        baselineDocuments.length === 0 ||
+        rerankedDocuments.length === 0
+    ) {
+        return rerankedDocuments;
+    }
+
+    const baselineTop = baselineDocuments[0];
+    const rerankedTop = rerankedDocuments[0];
+    if (!baselineTop?.otid || !rerankedTop?.otid || baselineTop.otid === rerankedTop.otid) {
+        return rerankedDocuments;
+    }
+
+    const baselineTopScore =
+        baselineTop.displayScore ?? baselineTop.coarseScore ?? baselineTop.score ?? 0;
+    const rerankedTopBaseline = baselineDocuments.find(
+        (document) => document.otid === rerankedTop.otid,
+    );
+    const rerankedTopBaselineScore =
+        rerankedTopBaseline?.displayScore ??
+        rerankedTopBaseline?.coarseScore ??
+        rerankedTopBaseline?.score ??
+        Number.NEGATIVE_INFINITY;
+
+    if (baselineTopScore + 0.06 < rerankedTopBaselineScore) {
+        return rerankedDocuments;
+    }
+
+    const preservedBaseline = rerankedDocuments.find(
+        (document) => document.otid === baselineTop.otid,
+    );
+    if (!preservedBaseline) {
+        return rerankedDocuments;
+    }
+
+    const boostedTopScore =
+        (rerankedTop.displayScore ?? rerankedTop.score ?? 0) + 0.001;
+    const reordered = rerankedDocuments.filter(
+        (document) => document.otid !== baselineTop.otid,
+    );
+    reordered.unshift({
+        ...preservedBaseline,
+        score: boostedTopScore,
+        displayScore: boostedTopScore,
+    });
+    return reordered;
 }
 
 function computeQueryPlanDocRoleDelta(
@@ -678,6 +930,7 @@ function computeTitleIntentDocDelta(
         return 0;
     }
 
+    const documentRoles = inferDocumentRolesFromTitle(document.ot_title || "");
     const asksOutcomeLikeTitle = queryAsksOutcomeLikeTitle(normalizedQuery);
     const asksProcedureLikeTitle = queryAsksProcedureLikeTitle(normalizedQuery);
     const asksRequirementLikeTitle =
@@ -688,6 +941,9 @@ function computeTitleIntentDocDelta(
         queryAsksPolicyOverviewLikeTitle(normalizedQuery);
     const asksSystemTimelineLikeTitle =
         queryAsksSystemTimelineLikeTitle(normalizedQuery);
+    const asksBroadRuleDocLikeTitle =
+        queryAsksBroadRuleDocLikeTitle(normalizedQuery);
+    const isCompressedKeywordQuery = queryIsCompressedKeywordLike(normalizedQuery);
     const isRuleDocTitle = TITLE_RULE_DOC_PATTERN.test(normalizedTitle);
     const isProcessNoticeTitle =
         TITLE_PROCESS_NOTICE_PATTERN.test(normalizedTitle);
@@ -710,6 +966,18 @@ function computeTitleIntentDocDelta(
         !isTuimianTitle;
     const isSystemNoticeTitle =
         TITLE_SYSTEM_NOTICE_PATTERN.test(normalizedTitle);
+    const isRuleDocRole = documentRoles.includes("rule_doc");
+    const isRegistrationNoticeRole =
+        documentRoles.includes("registration_notice");
+    const isResultNoticeRole = documentRoles.includes("result_notice");
+    const isListNoticeRole = documentRoles.includes("list_notice");
+    const isStageListRole = documentRoles.includes("stage_list");
+    const isAdjustmentNoticeRole =
+        documentRoles.includes("adjustment_notice");
+    const isConstraintRoleDoc = isRuleDocRole || isRegistrationNoticeRole;
+    const isOperationalRoleDoc =
+        isRegistrationNoticeRole || isStageListRole || isAdjustmentNoticeRole;
+    const isOutcomeRoleDoc = isResultNoticeRole || isListNoticeRole;
     const mentionsAiSchool = /人工智能学院|AI学院/.test(normalizedQuery);
     const mentionsDoctoral = /博士/.test(normalizedQuery);
     const mentionsTuimian = /推免|推荐免试/.test(normalizedQuery);
@@ -719,6 +987,30 @@ function computeTitleIntentDocDelta(
         /通过考核后|还会被录取吗|确保.*录取|被.*录取/.test(normalizedQuery);
     const asksMaterialReviewTiming =
         /材料审核.*公示|通过材料审核/.test(normalizedQuery);
+    const asksPostOutcomeOperationalDetail =
+        queryHasPostOutcomeActionCue(normalizedQuery) ||
+        (queryHasContactChannelCue(normalizedQuery) &&
+            queryHasResultCommunicationContextCue(normalizedQuery));
+    const asksCampExecutionDetail =
+        queryHasCampOperationalCue(normalizedQuery) ||
+        (queryHasCampStatisticsCue(normalizedQuery) &&
+            /营员|入营|名单|报到/.test(normalizedQuery));
+    const asksCompressedNoticeLike =
+        /通知|时间安排|安排|细节|要点/.test(normalizedQuery);
+    const asksCompressedOutcomeLike =
+        /名单|结果|公示|复试|综合考核|调剂/.test(normalizedQuery);
+    const asksCompressedConstraintLike =
+        /条件|资格|要求|细节|要点/.test(normalizedQuery);
+    const hasCompressedThemeCue =
+        mentionsTuimian ||
+        mentionsDoctoral ||
+        mentionsSummerCamp ||
+        mentionsTransfer ||
+        /硕士|研究生/.test(normalizedQuery);
+    const hasCompressedIntentCue =
+        asksCompressedConstraintLike ||
+        asksCompressedNoticeLike ||
+        asksCompressedOutcomeLike;
 
     let delta = 0;
 
@@ -764,6 +1056,14 @@ function computeTitleIntentDocDelta(
     if (mentionsSummerCamp) {
         if (isSummerCampTitle) {
             delta += 0.35;
+        }
+        if (asksCampExecutionDetail) {
+            if (/入营通知/.test(normalizedTitle)) {
+                delta += 0.95;
+            }
+            if (/活动报名通知|报名通知/.test(normalizedTitle)) {
+                delta -= 0.75;
+            }
         }
         if (!asksEventDateLikeTitle && /活动报名通知|报名通知/.test(normalizedTitle)) {
             delta += 0.45;
@@ -848,6 +1148,105 @@ function computeTitleIntentDocDelta(
         }
         if (/综合考核结果/.test(normalizedTitle)) {
             delta -= 0.35;
+        }
+    }
+
+    if (asksPostOutcomeOperationalDetail) {
+        if (/复试结果|拟录取|增补拟录取|结果公示|名单公示/.test(normalizedTitle)) {
+            delta += 1.25;
+        }
+        if (/增补拟录取|递补录取/.test(normalizedTitle)) {
+            delta += 0.95;
+        }
+        if (/复试录取方案|调剂复试通知|招生简章|实施办法/.test(normalizedTitle)) {
+            delta -= 1.15;
+        }
+    }
+
+    if (isCompressedKeywordQuery && !asksBroadRuleDocLikeTitle) {
+        if (!asksCompressedConstraintLike && isRuleDocRole) {
+            delta -= asksCompressedOutcomeLike ? 0.95 : 0.55;
+        }
+        if (isSystemNoticeTitle) {
+            delta -= 1.1;
+        }
+        if (isOtherProgramTitle) {
+            delta -= 1.2;
+        }
+        if (asksCompressedConstraintLike && isConstraintRoleDoc) {
+            delta += asksCompressedOutcomeLike ? 0.58 : 0.74;
+        }
+        if (
+            asksCompressedNoticeLike &&
+            (isOperationalRoleDoc || isProcessNoticeTitle)
+        ) {
+            delta += asksCompressedConstraintLike ? 0.34 : 0.48;
+        }
+        if (asksCompressedOutcomeLike) {
+            if (isOutcomeRoleDoc || isReviewResultTitle) {
+                delta += asksCompressedConstraintLike ? 0.28 : 0.56;
+            }
+            if (isStageListRole || isCandidateListTitle) {
+                delta += asksCompressedConstraintLike ? 0.18 : 0.32;
+            }
+        }
+        if (
+            hasCompressedIntentCue &&
+            !asksCompressedConstraintLike &&
+            isOperationalRoleDoc &&
+            !isOutcomeRoleDoc
+        ) {
+            delta += 0.16;
+        }
+        if (mentionsTuimian && hasCompressedThemeCue && hasCompressedIntentCue) {
+            if (
+                isTuimianTitle &&
+                (isConstraintRoleDoc ||
+                    isOperationalRoleDoc ||
+                    isOutcomeRoleDoc)
+            ) {
+                delta += 0.72;
+            }
+            if (isDoctoralTitle && !isTuimianTitle) {
+                delta -= 0.88;
+            }
+        }
+        if (mentionsDoctoral && hasCompressedThemeCue && hasCompressedIntentCue) {
+            if (
+                isDoctoralTitle &&
+                (isConstraintRoleDoc ||
+                    isOperationalRoleDoc ||
+                    isOutcomeRoleDoc)
+            ) {
+                delta += 0.64;
+            }
+            if (isMasterOnlyTitle) {
+                delta -= 0.82;
+            }
+        }
+        if (mentionsSummerCamp && hasCompressedThemeCue && hasCompressedIntentCue) {
+            if (
+                isSummerCampTitle &&
+                (isOperationalRoleDoc || isOutcomeRoleDoc || isStageListRole)
+            ) {
+                delta += 0.6;
+            }
+            if (
+                !isSummerCampTitle &&
+                (isDoctoralTitle || isTuimianTitle || isMasterOnlyTitle)
+            ) {
+                delta -= 0.58;
+            }
+        }
+        if (mentionsTransfer && hasCompressedThemeCue && hasCompressedIntentCue) {
+            if (
+                isTransferTitle &&
+                (isOperationalRoleDoc ||
+                    isOutcomeRoleDoc ||
+                    isAdjustmentNoticeRole)
+            ) {
+                delta += 0.58;
+            }
         }
     }
 
@@ -1262,10 +1661,12 @@ export async function executeSearchPipeline(params: {
 
     const { searchOutput, retrievalDecision } = retrievalStage;
     const plannerEnabled = preset.display.enableQueryPlanner;
+    const compressedQueryFetchDelta = queryIsCompressedKeywordLike(query) ? 18 : 0;
     const fetchMatchLimit = resolveDynamicFetchLimit(
         preset.display.fetchMatchLimit,
-        plannerEnabled ? queryContext.queryPlan.fetchMatchLimitDelta : 0,
-        28,
+        (plannerEnabled ? queryContext.queryPlan.fetchMatchLimitDelta : 0) +
+            compressedQueryFetchDelta,
+        queryIsCompressedKeywordLike(query) ? 48 : 28,
     );
     const fetchWeakMatchLimit = resolveDynamicFetchLimit(
         preset.display.fetchWeakMatchLimit,
@@ -1331,15 +1732,28 @@ export async function executeSearchPipeline(params: {
                           plannerEnabled ? queryContext.queryPlan : undefined,
                       )
                     : phaseAdjustedDocuments;
+            const latestAdjustedDocuments =
+                preset.display.useYearPhaseTitleAdjustment
+                    ? applyLatestVersionBoostToDocuments(
+                          query,
+                          titleAdjustedDocuments,
+                          searchOutput.responseDecision?.preferLatestWithinTopic ??
+                              false,
+                      )
+                    : titleAdjustedDocuments;
             const coverageAdjustedDocuments =
                 preset.display.useYearPhaseTitleAdjustment
                     ? applyCoverageBoostToDocuments(
                           query,
-                          titleAdjustedDocuments,
+                          latestAdjustedDocuments,
                           plannerEnabled ? queryContext.queryPlan : undefined,
                       )
-                    : titleAdjustedDocuments;
-            results = coverageAdjustedDocuments;
+                    : latestAdjustedDocuments;
+            results = applyCompressedQueryDisplayGuard(
+                query,
+                phaseAdjustedDocuments,
+                coverageAdjustedDocuments,
+            );
         }
 
         if (shouldFetchWeakResults) {

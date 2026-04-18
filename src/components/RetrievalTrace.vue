@@ -1,17 +1,11 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import {
   Activity,
   Clock,
   ExternalLink,
   Layers,
 } from 'lucide-vue-next';
-import type {
-  PipelineBehavior,
-  PipelineDecision,
-  PipelineDocumentRecord,
-  PipelineTrace,
-} from '../worker/search_pipeline.ts';
-import type { SearchRejection } from '../worker/vector_engine.ts';
 import {
   formatPercent,
   formatRetrievalScore,
@@ -19,88 +13,29 @@ import {
   getPreviewText,
   isOriginalSnippet,
 } from '../utils/searchPresentation';
-
-type TraceDecision = PipelineDecision;
-type TraceRejection = SearchRejection;
-type TraceResult = PipelineDocumentRecord;
-
-type TraceData = {
-  query: string;
-  results: TraceResult[];
-  retrievalDecision?: TraceDecision | null;
-  decision?: TraceDecision | null;
-  rejection?: TraceRejection | null;
-  weakResultsCount?: number;
-  querySignals?: PipelineTrace['querySignals'] | null;
-  retrievalSignals?: PipelineTrace['retrievalSignals'] | null;
-  stats?: {
-    totalMs: string;
-    searchMs: string;
-    fetchMs: string;
-    rejected?: boolean;
-  };
-};
+import {
+  getBehaviorClass,
+  getBehaviorLabel,
+  getDecisionSubtitle,
+  getRejectReasonLabel,
+  ORIGINAL_SNIPPET_THRESHOLD,
+  splitPrimaryResults,
+  type SearchTraceData,
+} from '../utils/searchUi';
 
 const props = defineProps<{
-  traceData: TraceData | null;
+  traceData: SearchTraceData | null;
 }>();
 
-const top3Results = () => props.traceData?.results?.slice(0, 3) ?? [];
-const compactResults = () => props.traceData?.results?.slice(3, 10) ?? [];
-
-const behaviorLabel = (behavior?: PipelineBehavior | null) => {
-  switch (behavior) {
-    case 'answer':
-      return '回答';
-    case 'reject':
-      return '拒答';
-    default:
-      return '未决';
-  }
-};
-
-const behaviorClass = (behavior?: PipelineBehavior | null) => {
-  switch (behavior) {
-    case 'answer':
-      return 'border-emerald-500/25 bg-emerald-500/10 text-emerald-200';
-    case 'reject':
-      return 'border-rose-500/25 bg-rose-500/10 text-rose-200';
-    default:
-      return 'border-white/10 bg-white/[0.03] text-slate-300';
-  }
-};
-
-const rejectionReasonLabel = () => {
-  const reason =
-    props.traceData?.decision?.rejectionReason ??
-    props.traceData?.rejection?.reason ??
-    null;
-
-  switch (reason) {
-    case 'low_topic_coverage':
-      return '主题覆盖不足';
-    case 'low_consistency':
-      return '主题一致性不足';
-    default:
-      return '';
-  }
-};
-
-const decisionSubtitle = () => {
-  const decision = props.traceData?.decision;
-  if (!decision) {
-    return '等待统一 pipeline 返回行为决策。';
-  }
-
-  if (decision.behavior === 'reject') {
-    const rejectReason = rejectionReasonLabel();
-    return rejectReason
-      ? `系统选择拒答，主因是：${rejectReason}。`
-      : '系统选择拒答，当前结果未达到稳定可展示条件。';
-  }
-
-  return '系统已进入直接回答链路，并返回抓取后的候选文档。';
-};
+const resultBuckets = computed(() => splitPrimaryResults(props.traceData?.results ?? []));
+const top3Results = computed(() => resultBuckets.value.heroResults);
+const compactResults = computed(() => resultBuckets.value.compactResults);
+const rejectionReasonLabel = computed(() =>
+  getRejectReasonLabel(
+    props.traceData?.decision?.rejectionReason ?? props.traceData?.rejection?.reason
+  )
+);
+const decisionSubtitle = computed(() => getDecisionSubtitle(props.traceData));
 </script>
 
 <template>
@@ -144,14 +79,14 @@ const decisionSubtitle = () => {
           <div class="min-w-0">
             <div class="mb-2 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">行为决策</div>
             <div class="flex flex-wrap items-center gap-2">
-              <span class="rounded-full border px-2.5 py-1 text-[10px] font-semibold" :class="behaviorClass(traceData.decision.behavior)">
-                {{ behaviorLabel(traceData.decision.behavior) }}
+              <span class="rounded-full border px-2.5 py-1 text-[10px] font-semibold" :class="getBehaviorClass(traceData.decision.behavior)">
+                {{ getBehaviorLabel(traceData.decision.behavior) }}
               </span>
               <span
                 v-if="traceData.retrievalDecision"
                 class="rounded-full border border-white/10 bg-black/20 px-2.5 py-1 text-[10px] text-slate-300"
               >
-                检索阶段 {{ behaviorLabel(traceData.retrievalDecision.behavior) }}
+                检索阶段 {{ getBehaviorLabel(traceData.retrievalDecision.behavior) }}
               </span>
             </div>
           </div>
@@ -162,7 +97,7 @@ const decisionSubtitle = () => {
         </div>
 
         <div class="mt-2 text-[11px] leading-6 text-slate-400">
-          {{ decisionSubtitle() }}
+          {{ decisionSubtitle }}
         </div>
         <div class="mt-3 flex flex-wrap gap-2 text-[10px]">
           <span
@@ -178,10 +113,10 @@ const decisionSubtitle = () => {
             使用弱相关候选
           </span>
           <span
-            v-if="rejectionReasonLabel()"
+            v-if="rejectionReasonLabel"
             class="rounded-full border border-rose-400/20 bg-rose-400/10 px-2 py-0.5 text-rose-200"
           >
-            {{ rejectionReasonLabel() }}
+            {{ rejectionReasonLabel }}
           </span>
         </div>
       </div>
@@ -240,14 +175,14 @@ const decisionSubtitle = () => {
         </div>
       </div>
 
-      <section v-if="top3Results().length > 0" class="space-y-2">
+      <section v-if="top3Results.length > 0" class="space-y-2">
         <div class="flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
           <span>Top 1-3</span>
           <span>摘要</span>
         </div>
 
         <div
-          v-for="(res, i) in top3Results()"
+          v-for="(res, i) in top3Results"
           :key="res.otid || res.id || i"
           class="rounded-xl border border-white/5 bg-white/[0.03] p-3"
         >
@@ -256,13 +191,13 @@ const decisionSubtitle = () => {
               <div class="mb-1 flex items-center gap-2">
                 <span class="text-[10px] font-semibold text-slate-500">#{{ i + 1 }}</span>
                 <span class="rounded-full border border-white/8 px-2 py-0.5 text-[10px] text-slate-400">
-                  {{ isOriginalSnippet(res, 0.4) ? '官方原话' : '相关要点' }}
+                  {{ isOriginalSnippet(res, ORIGINAL_SNIPPET_THRESHOLD) ? '官方原话' : '相关要点' }}
                 </span>
               </div>
               <div class="text-xs font-semibold text-slate-200">{{ res.ot_title || '未命名政策文档' }}</div>
             </div>
             <div class="text-right">
-              <div v-if="isOriginalSnippet(res, 0.4)" class="text-[10px] font-mono text-slate-300">
+              <div v-if="isOriginalSnippet(res, ORIGINAL_SNIPPET_THRESHOLD)" class="text-[10px] font-mono text-slate-300">
                 {{ formatPercent(res.snippetScore ?? 0) }}
               </div>
               <div v-else class="text-[10px] font-mono text-slate-400">
@@ -288,14 +223,14 @@ const decisionSubtitle = () => {
         </div>
       </section>
 
-      <section v-if="compactResults().length > 0" class="space-y-1.5">
+      <section v-if="compactResults.length > 0" class="space-y-1.5">
         <div class="flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
           <span>Top 4-10</span>
           <span>列表</span>
         </div>
 
         <div
-          v-for="(res, i) in compactResults()"
+          v-for="(res, i) in compactResults"
           :key="res.otid || res.id || `compact-${i}`"
           class="rounded-xl border border-white/5 bg-white/[0.02] p-3"
         >

@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 
-export const DEFAULT_MAIN_DB_VERSION = "main_v1_base";
+export const DEFAULT_MAIN_DB_VERSION = "main_v2_plus";
 export const MAIN_DB_VERSION =
     process.env.SUASK_MAIN_DB_VERSION || DEFAULT_MAIN_DB_VERSION;
 

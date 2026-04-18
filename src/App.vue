@@ -2,10 +2,11 @@
 import { ref } from 'vue'
 import SearchRAG from './components/SearchRAG.vue'
 import RetrievalTrace from './components/RetrievalTrace.vue'
+import type { SearchTraceData } from './utils/searchUi'
 
-const traceData = ref<any>(null)
+const traceData = ref<SearchTraceData | null>(null)
 
-const handleTraceUpdate = (data: any) => {
+const handleTraceUpdate = (data: SearchTraceData) => {
   traceData.value = data
 }
 </script>

@@ -7,6 +7,11 @@ export type NamedDatasetProfile = {
 };
 
 const DATASET_PROFILE_MAP: Record<string, NamedDatasetProfile> = {
+    granularity_mainline_bundle: {
+        canonicalName: "granularity_mainline_bundle",
+        alias: "granularity_mainline_150_100_80",
+        displayName: "GranularityMainline150+Hard100+Stress80",
+    },
     main_bench_120: {
         canonicalName:
             "test_dataset_granularity_main_benchmark_v2_reviewed_userized_v1",

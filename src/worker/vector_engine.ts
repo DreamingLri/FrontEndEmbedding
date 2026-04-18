@@ -74,6 +74,8 @@ export interface QuerySignals {
     hasResultState: boolean;
     hasLatestPolicyState: boolean;
     hasGenericNextStep: boolean;
+    hasPostOutcomeOperationalCue: boolean;
+    hasMultiSlotConstraintCue: boolean;
     queryLength: number;
     tokenCount?: number;
 }
@@ -315,10 +317,47 @@ function hasPostOutcomeConditionCue(query: string): boolean {
     );
 }
 
+function hasContextualContactDetailCue(query: string): boolean {
+    return (
+        /联系方式|联系电话|邮箱|邮件/.test(query) &&
+        /学院|系|老师|办公室|研究生招生|研究生院|复试|录取|拟录取|公示|结果|通知|强基计划|夏令营|调剂/.test(
+            query,
+        )
+    );
+}
+
 function hasStrongDetailAnchorCue(query: string): boolean {
-    return /录取通知书|通知书|报到|宿舍|党团关系|奖助金|档案|调档|政审|网上确认|现场确认|答辩|报名|考试|考试内容|考试科目|科目|题型|缴费|申请书|复试|面试|邮寄|地址|银行卡|学费/.test(
+    return (
+        /录取通知书|通知书|报到|宿舍|党团关系|奖助金|档案|调档|政审|网上确认|现场确认|答辩|报名|考试|考试内容|考试科目|科目|题型|缴费|申请书|复试|面试|邮寄|地址|银行卡|学费|体检表|复审表|递补|书面说明|签字/.test(
+            query,
+        ) || hasContextualContactDetailCue(query)
+    );
+}
+
+function hasPostOutcomeActionCue(query: string): boolean {
+    return /书面说明|签字|递补|增补|体检表|复审表|总成绩|排序|放弃录取/.test(
         query,
     );
+}
+
+function hasPostOutcomeContactCue(query: string): boolean {
+    return /联系方式|联系电话|邮箱|邮件|联系学院|联系老师/.test(query);
+}
+
+function hasPostOutcomeCommunicationContextCue(query: string): boolean {
+    return /拟录取|录取|复试|调剂|结果|公示|名单|监督|申诉|沟通/.test(query);
+}
+
+function hasPostOutcomeOperationalCue(query: string): boolean {
+    return (
+        hasPostOutcomeActionCue(query) ||
+        (hasPostOutcomeContactCue(query) &&
+            hasPostOutcomeCommunicationContextCue(query))
+    );
+}
+
+function hasMultiSlotConstraintCue(query: string): boolean {
+    return /分别|另外|以及|同时|并说明|并描述|另行/.test(query);
 }
 
 function hasEntryLikeAnchorCue(query: string): boolean {
@@ -348,6 +387,8 @@ function buildQuerySignals(params: {
         hasResultState: hasClarificationStateCue(query),
         hasLatestPolicyState: hasLatestPolicyStateCue(query),
         hasGenericNextStep: hasGenericNextStepCue(query),
+        hasPostOutcomeOperationalCue: hasPostOutcomeOperationalCue(query),
+        hasMultiSlotConstraintCue: hasMultiSlotConstraintCue(query),
         queryLength: query.length,
     };
 }
@@ -2370,6 +2411,12 @@ export function classifyResponseMode(
         (querySignals.hasStrongDetailAnchor || querySignals.hasResultState)
             ? 0.09
             : 0;
+    const postOutcomeOperationalSafetyBonus =
+        querySignals.hasResultState && querySignals.hasPostOutcomeOperationalCue
+            ? querySignals.hasMultiSlotConstraintCue
+                ? 0.14
+                : 0.1
+            : 0;
 
     const rejectScore = clamp01(
         0.4 * intentRisk +
@@ -2377,7 +2424,8 @@ export function classifyResponseMode(
             0.35 * evidenceRisk -
             (querySignals.hasExplicitTopicOrIntent ? 0.08 : 0) -
             (querySignals.hasExplicitYear ? 0.03 : 0) -
-            genericProcessSafetyBonus,
+            genericProcessSafetyBonus -
+            postOutcomeOperationalSafetyBonus,
     );
 
     let mode: ResponseMode = "answer";
@@ -2852,6 +2900,8 @@ export function searchAndRank(params: {
         hasResultState: false,
         hasLatestPolicyState: false,
         hasGenericNextStep: false,
+        hasPostOutcomeOperationalCue: false,
+        hasMultiSlotConstraintCue: false,
         queryLength: queryIntent?.rawQuery.length || 0,
         tokenCount: 0,
     };

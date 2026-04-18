@@ -9,7 +9,11 @@ import {
     PRODUCT_TAIL_TOP3_W020_PIPELINE_PRESET,
     type PipelinePreset,
 } from "../src/worker/search_pipeline.ts";
-import { resolveGranularityDatasetTarget } from "./eval_shared.ts";
+import {
+    DEFAULT_GRANULARITY_BENCHMARK_TARGET_KEY,
+    DEFAULT_GRANULARITY_MAINLINE_TARGET_KEYS,
+    resolveGranularityDatasetTarget,
+} from "./eval_shared.ts";
 
 type DatasetTarget = {
     name: string;
@@ -85,11 +89,7 @@ const TEMP_DATASET_DIR = path.resolve(
 );
 
 function buildDefaultDatasetTargets(): DatasetTarget[] {
-    return [
-        "main_bench_120",
-        "in_domain_holdout_50",
-        "external_ood_50",
-    ].flatMap((key) => {
+    return DEFAULT_GRANULARITY_MAINLINE_TARGET_KEYS.flatMap((key) => {
         try {
             const target = resolveGranularityDatasetTarget(key);
             return [
@@ -275,9 +275,11 @@ function computeSummary(
     probe: PresetProbe,
     datasets: DatasetMetrics[],
 ): PresetSummary {
-    const benchmark = datasets.find((item) => item.datasetName === "main_bench_120");
+    const benchmark = datasets.find(
+        (item) => item.datasetName === DEFAULT_GRANULARITY_BENCHMARK_TARGET_KEY,
+    );
     const generalizationSets = datasets.filter(
-        (item) => item.datasetName !== "main_bench_120",
+        (item) => item.datasetName !== DEFAULT_GRANULARITY_BENCHMARK_TARGET_KEY,
     );
     const generalizationDocHitAt1 = generalizationSets.map((item) => item.docHitAt1);
     const generalizationDocMRR = generalizationSets.map((item) => item.docMRR);
@@ -424,7 +426,7 @@ async function main(): Promise<void> {
     const report: StabilityReport = {
         generatedAt: new Date().toISOString(),
         note:
-            "该报告用于在主 benchmark、同域泛化集与跨域 OOD 集上比较固定主配置的稳定性；排序优先看泛化集最差 Hit@1，再看泛化集平均 Hit@1，最后看主 benchmark。",
+            "该报告用于在当前主线三冻结集 MainBalanced150、GeneralizationHard100、StructureStress80 上比较固定主配置的稳定性；排序优先看泛化集最差 Hit@1，再看泛化集平均 Hit@1，最后看主集 MainBalanced150。",
         datasets: datasetTargets,
         probes: summaries,
         ranking: buildRanking(summaries),

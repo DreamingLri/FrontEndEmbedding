@@ -14,6 +14,7 @@ import {
 } from "../src/worker/vector_engine.ts";
 import { fmmTokenize } from "../src/worker/fmm_tokenize.ts";
 import {
+    DEFAULT_GRANULARITY_MAINLINE_TARGET_KEYS,
     FRONTEND_MODEL_NAME,
     loadDataset,
     resolveGranularityDatasetTarget,
@@ -246,6 +247,12 @@ function resolveDatasetTarget(key: DatasetTargetKey): DatasetTarget | null {
 }
 
 const AVAILABLE_DATASET_TARGETS = (
+    DEFAULT_GRANULARITY_MAINLINE_TARGET_KEYS.map((key) =>
+        resolveDatasetTarget(key),
+    ) as Array<DatasetTarget | null>
+).filter((item): item is DatasetTarget => Boolean(item));
+
+const OPTIONAL_DATASET_TARGETS = (
     [
         resolveDatasetTarget("main_bench_120"),
         resolveDatasetTarget("in_domain_holdout_50"),
@@ -253,11 +260,6 @@ const AVAILABLE_DATASET_TARGETS = (
         resolveDatasetTarget("external_ood_holdout_30"),
         resolveDatasetTarget("external_ood_hard_30"),
         resolveDatasetTarget("hard_ood_v2_diag_top30"),
-    ] as Array<DatasetTarget | null>
-).filter((item): item is DatasetTarget => Boolean(item));
-
-const OPTIONAL_DATASET_TARGETS = (
-    [
         resolveDatasetTarget("structure_dev_40"),
         resolveDatasetTarget("ladder_main_balanced_80"),
         resolveDatasetTarget("ladder_generalization_hard_60"),
@@ -265,9 +267,6 @@ const OPTIONAL_DATASET_TARGETS = (
         resolveDatasetTarget("ladder_main_balanced_120"),
         resolveDatasetTarget("ladder_generalization_hard_80"),
         resolveDatasetTarget("ladder_structure_stress_60"),
-        resolveDatasetTarget("ladder_main_balanced_150"),
-        resolveDatasetTarget("ladder_generalization_hard_100"),
-        resolveDatasetTarget("ladder_structure_stress_80"),
         resolveDatasetTarget("ladder_cross_doc_coverage_diag_18"),
     ] as Array<DatasetTarget | null>
 ).filter((item): item is DatasetTarget => Boolean(item));

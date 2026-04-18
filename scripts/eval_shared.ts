@@ -120,9 +120,20 @@ export const ACTIVE_MAIN_DB_VERSION = MAIN_DB_VERSION;
 export const FRONTEND_METADATA_FILE = resolveFrontendMetadataFile();
 export const FRONTEND_VECTOR_FILE = resolveFrontendVectorFile();
 export const DEFAULT_QUERY_EMBED_BATCH_SIZE = 16;
+export const DEFAULT_GRANULARITY_MAINLINE_TARGET_KEYS = [
+    "ladder_main_balanced_150",
+    "ladder_generalization_hard_100",
+    "ladder_structure_stress_80",
+] as const;
+export const DEFAULT_GRANULARITY_BENCHMARK_TARGET_KEY: GranularityDatasetTargetKey =
+    DEFAULT_GRANULARITY_MAINLINE_TARGET_KEYS[0];
+export const DEFAULT_GRANULARITY_DATASET_KEY =
+    "granularity_mainline_bundle";
+export const DEFAULT_GRANULARITY_DATASET_LABEL =
+    "Mainline150+Hard100+Stress80";
 
 const DEFAULT_GRANULARITY_TARGET_KEY: GranularityDatasetTargetKey =
-    "main_bench_120";
+    DEFAULT_GRANULARITY_BENCHMARK_TARGET_KEY;
 
 const GRANULARITY_DATASET_TARGETS: Record<
     GranularityDatasetTargetKey,
@@ -455,6 +466,40 @@ function buildNamedGroupConfig(
     };
 }
 
+function buildDefaultGranularityMainlineConfig(
+    datasetVersion: string,
+): EvalDatasetConfig {
+    const targets = DEFAULT_GRANULARITY_MAINLINE_TARGET_KEYS.map((key) =>
+        resolveGranularityDatasetTarget(key),
+    );
+    const groups = targets.map((target) =>
+        buildDatasetGroup(
+            target.key,
+            target.label,
+            target.role,
+            [
+                {
+                    path: target.datasetFile,
+                    datasetLabel: target.key,
+                },
+            ],
+            target.resolvedFromFallback,
+        ),
+    );
+    const allSources = groups.flatMap((group) => group.sources);
+
+    return {
+        datasetVersion,
+        datasetMode: "named_group",
+        datasetKey: DEFAULT_GRANULARITY_DATASET_KEY,
+        datasetLabel: DEFAULT_GRANULARITY_DATASET_LABEL,
+        groups,
+        tuneSources: allSources,
+        holdoutSources: [],
+        allSources,
+    };
+}
+
 function resolveExistingDatasetPath(
     datasetPaths: readonly string[],
 ): { datasetFile: string; resolvedFromFallback: boolean } | null {
@@ -505,6 +550,7 @@ export function resolveGranularityDatasetTarget(
 
 export function listAvailableGranularityDatasetTargets(
     keys: readonly GranularityDatasetTargetKey[] = [
+        ...DEFAULT_GRANULARITY_MAINLINE_TARGET_KEYS,
         "main_bench_120",
         "in_domain_holdout_50",
         "ext_ood_blind_60",
@@ -518,9 +564,6 @@ export function listAvailableGranularityDatasetTargets(
         "ladder_main_balanced_120",
         "ladder_generalization_hard_80",
         "ladder_structure_stress_60",
-        "ladder_main_balanced_150",
-        "ladder_generalization_hard_100",
-        "ladder_structure_stress_80",
     ],
 ): ResolvedGranularityDatasetTarget[] {
     return keys.flatMap((key) => {
@@ -550,6 +593,9 @@ export function resolveEvalDatasetConfig(options?: {
     }
 
     if (datasetVersion === "granularity") {
+        if (!options?.datasetTargetKey) {
+            return buildDefaultGranularityMainlineConfig(datasetVersion);
+        }
         const target = resolveGranularityDatasetTarget(
             options?.datasetTargetKey || DEFAULT_GRANULARITY_TARGET_KEY,
         );

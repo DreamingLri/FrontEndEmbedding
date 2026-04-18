@@ -1,0 +1,5235 @@
+{
+  "generatedAt": "2026-04-17T14:56:46.512Z",
+  "datasetFile": "D:\\Project\\SuAsk\\SuAsk_Agent\\Backend\\test\\test_dataset_answer_quality\\test_dataset_answer_quality_ext_ood_blind_60_derived_v1.json",
+  "datasetName": "test_dataset_answer_quality_ext_ood_blind_60_derived_v1",
+  "datasetAlias": "aq_ext_blind60",
+  "datasetDisplayName": "AnswerQualityExtBlind60",
+  "total": 60,
+  "config": {
+    "pipelineVersion": "frontend_research_sync_v1",
+    "preset": {
+      "name": "frontend_research_sync_v1",
+      "retrieval": {
+        "weights": {
+          "Q": 0.3333333333333333,
+          "KP": 0.3333333333333333,
+          "OT": 0.3333333333333333
+        },
+        "topHybridLimit": 1000,
+        "kpAggregationMode": "max",
+        "kpTopN": 3,
+        "kpTailWeight": 0.35,
+        "lexicalBonusMode": "sum",
+        "kpRoleRerankMode": "off",
+        "kpRoleDocWeight": 0,
+        "qConfusionMode": "combined",
+        "qConfusionWeight": 0.2,
+        "useQueryExpansion": false,
+        "useTopicPartition": false,
+        "enableExplicitYearFilter": true,
+        "enablePhaseAnchorBoost": true,
+        "minimalMode": true
+      },
+      "display": {
+        "rejectThreshold": 0.4,
+        "rerankBlendAlpha": 0.15,
+        "bestSentenceThreshold": 0.4,
+        "fetchMatchLimit": 20,
+        "fetchWeakMatchLimit": 12,
+        "useYearPhaseTitleAdjustment": true,
+        "enableQueryPlanner": false
+      }
+    },
+    "note": "支持实验：由 AlignedExtOOD blind 60 派生的外域 answer-quality 盲测线。 AnswerQuality-blind 仅评估应答侧：关注回答正确率与潜在误导率，不混入 reject 主线。"
+  },
+  "summary": {
+    "total": 60,
+    "answered": 60,
+    "answerRate": 1,
+    "falseReject": 0,
+    "falseRejectRate": 0,
+    "correctAt1": 0,
+    "correctAt1Rate": 0,
+    "correctAt3": 0,
+    "correctAt3Rate": 0,
+    "correctAt5": 0,
+    "correctAt5Rate": 0,
+    "retrievalDocHitAt1": 0,
+    "retrievalDocHitAt1Rate": 0,
+    "potentiallyMisleading": 60,
+    "potentiallyMisleadingRate": 1,
+    "byPredictedBehavior": {
+      "answer": 60,
+      "reject": 0
+    },
+    "byQueryScope": {
+      "policy_overview": {
+        "total": 12,
+        "answerRate": 1,
+        "correctAt1Rate": 0,
+        "correctAt3Rate": 0,
+        "correctAt5Rate": 0,
+        "falseRejectRate": 0,
+        "potentiallyMisleadingRate": 1
+      },
+      "eligibility_condition": {
+        "total": 9,
+        "answerRate": 1,
+        "correctAt1Rate": 0,
+        "correctAt3Rate": 0,
+        "correctAt5Rate": 0,
+        "falseRejectRate": 0,
+        "potentiallyMisleadingRate": 1
+      },
+      "fact_detail": {
+        "total": 9,
+        "answerRate": 1,
+        "correctAt1Rate": 0,
+        "correctAt3Rate": 0,
+        "correctAt5Rate": 0,
+        "falseRejectRate": 0,
+        "potentiallyMisleadingRate": 1
+      },
+      "procedure": {
+        "total": 21,
+        "answerRate": 1,
+        "correctAt1Rate": 0,
+        "correctAt3Rate": 0,
+        "correctAt5Rate": 0,
+        "falseRejectRate": 0,
+        "potentiallyMisleadingRate": 1
+      },
+      "time_location": {
+        "total": 9,
+        "answerRate": 1,
+        "correctAt1Rate": 0,
+        "correctAt3Rate": 0,
+        "correctAt5Rate": 0,
+        "falseRejectRate": 0,
+        "potentiallyMisleadingRate": 1
+      }
+    },
+    "byQueryType": {
+      "standard": {
+        "total": 30,
+        "answerRate": 1,
+        "correctAt1Rate": 0,
+        "correctAt3Rate": 0,
+        "correctAt5Rate": 0,
+        "falseRejectRate": 0,
+        "potentiallyMisleadingRate": 1
+      },
+      "situational": {
+        "total": 18,
+        "answerRate": 1,
+        "correctAt1Rate": 0,
+        "correctAt3Rate": 0,
+        "correctAt5Rate": 0,
+        "falseRejectRate": 0,
+        "potentiallyMisleadingRate": 1
+      },
+      "short_keyword": {
+        "total": 12,
+        "answerRate": 1,
+        "correctAt1Rate": 0,
+        "correctAt3Rate": 0,
+        "correctAt5Rate": 0,
+        "falseRejectRate": 0,
+        "potentiallyMisleadingRate": 1
+      }
+    }
+  },
+  "caseReports": [
+    {
+      "id": "aligned_ext_blind_v1_0001",
+      "query": "薛浩宇被拟录取的专业码、专业名称和方向码分别是什么，另外拟录取考生放弃资格需要提交什么格式的书面说明？",
+      "query_type": "standard",
+      "query_scope": "policy_overview",
+      "theme_family": "other",
+      "query_style_mode": "paired_multi_kp_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_b3ee840c319f48d2",
+      "top_result_otid": "otid_82c9966124154ddc",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.19561591867239192,
+      "final_reject_score": 0.19561591867239192,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_82c9966124154ddc",
+          "score": 1.0463331672887162,
+          "best_kpid": "kpid_299b0347ce5942e5"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_a711c70a3db84204",
+          "score": 0.9031484724795429,
+          "best_kpid": "kpid_0f1fe40e8dab4026"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_2734d7b994e0487e",
+          "score": 0.9012016586456165,
+          "best_kpid": "kpid_f8b547f5c37f48e1"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_1c9d2874ca184420",
+          "score": 0.8680384324024488,
+          "best_kpid": "kpid_3e85e786a60e47b9"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_5a1394b3b33e477f",
+          "score": 0.8648050567261202,
+          "best_kpid": "kpid_6380b9c3360145e6"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_82c9966124154ddc",
+          "displayScore": 1.2783331672887162
+        },
+        {
+          "rank": 2,
+          "otid": "otid_a711c70a3db84204",
+          "displayScore": 1.1351484724795429
+        },
+        {
+          "rank": 3,
+          "otid": "otid_5a1394b3b33e477f",
+          "displayScore": 1.0968050567261203
+        },
+        {
+          "rank": 4,
+          "otid": "otid_1ae107c08e73431e",
+          "displayScore": 1.0450361415270486
+        },
+        {
+          "rank": 5,
+          "otid": "otid_1c9d2874ca184420",
+          "displayScore": 0.9920384324024488
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0002",
+      "query": "拟录取考生放弃录取时，书面说明的文件格式和签字要求是什么，另外如果某拟录取考生决定放弃资格，学院依据什么原则和标准从其他考生中递补录取？",
+      "query_type": "situational",
+      "query_scope": "eligibility_condition",
+      "theme_family": "master_reexam",
+      "query_style_mode": "paired_multi_kp_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_42225868ea784bbf",
+      "top_result_otid": "otid_cba081d3aacb48b7",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.3314,
+      "final_reject_score": 0.3314,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_cba081d3aacb48b7",
+          "score": 1.0519342951153974,
+          "best_kpid": "kpid_6c276be3d10541ed"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_5b97857272764e74",
+          "score": 0.8005393174348627,
+          "best_kpid": "kpid_a4013ae3c2164b80"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_bdabc7cadb154b91",
+          "score": 0.8004724153279896,
+          "best_kpid": "kpid_14bb9827777e4bc6"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_2734d7b994e0487e",
+          "score": 0.7964008550681345,
+          "best_kpid": "kpid_f8b547f5c37f48e1"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_2d77227bd2fa473c",
+          "score": 0.7935325580756306,
+          "best_kpid": "kpid_24b87d7b333e4c47"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_cba081d3aacb48b7",
+          "displayScore": 1.4019342951153975
+        },
+        {
+          "rank": 2,
+          "otid": "otid_5b97857272764e74",
+          "displayScore": 1.1505393174348628
+        },
+        {
+          "rank": 3,
+          "otid": "otid_bdabc7cadb154b91",
+          "displayScore": 1.1504724153279897
+        },
+        {
+          "rank": 4,
+          "otid": "otid_2734d7b994e0487e",
+          "displayScore": 1.1464008550681346
+        },
+        {
+          "rank": 5,
+          "otid": "otid_a711c70a3db84204",
+          "displayScore": 1.0676626702451895
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0003",
+      "query": "如果某位考生的专家组面试成绩为85分、导师组面试成绩为90分，他的综合考核总成绩是多少，另外综合考核结果的公示时间是否包括1月11日和1月22日这两天？",
+      "query_type": "situational",
+      "query_scope": "fact_detail",
+      "theme_family": "doctoral",
+      "query_style_mode": "paired_multi_kp_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_77c43125dba648d2",
+      "top_result_otid": "otid_32f33b04286b4f12",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.402,
+      "final_reject_score": 0.402,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_cefdbe9b7cf34bdb",
+          "score": 1.3281658294523546,
+          "best_kpid": "kpid_424054514b17473b"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_395fb889a17b49fa",
+          "score": 1.1308243581066098,
+          "best_kpid": "kpid_49bcc92debc646b1"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_b78d8162d15b4481",
+          "score": 0.8873502122044825,
+          "best_kpid": "kpid_32a5fbe6d551496d"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_b2a1cc3ccb21453c",
+          "score": 0.8518668215549993,
+          "best_kpid": "kpid_e19a712a3e1f4bbf"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_b64bdb78a2854fdc",
+          "score": 0.8435462227923242,
+          "best_kpid": "kpid_1864f5d93e9741f1"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_32f33b04286b4f12",
+          "displayScore": 1.2364639396769517
+        },
+        {
+          "rank": 2,
+          "otid": "otid_395fb889a17b49fa",
+          "displayScore": 1.2223243581066097
+        },
+        {
+          "rank": 3,
+          "otid": "otid_cefdbe9b7cf34bdb",
+          "displayScore": 1.1921658294523545
+        },
+        {
+          "rank": 4,
+          "otid": "otid_15996476fc324e33",
+          "displayScore": 1.1707550692567232
+        },
+        {
+          "rank": 5,
+          "otid": "otid_b2a1cc3ccb21453c",
+          "displayScore": 0.9433668215549993
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0004",
+      "query": "根据2026年2月11日发布的《该学院关于公示2026年“申请-考核”制博士研究生调剂综合考核结果的通知》，公示期间如有异议，可以通过哪些具体联系方式进行反馈，另外该学院2026年博士研究生招生通知中，为什么强调拟录取考生需及时沟通信息变动？这如何维护招生流程的顺畅性？",
+      "query_type": "standard",
+      "query_scope": "procedure",
+      "theme_family": "doctor_adjustment",
+      "query_style_mode": "paired_multi_kp_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_eb3d3855deb74340",
+      "top_result_otid": "otid_3af3553b72dd476d",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0,
+      "final_reject_score": 0,
+      "weak_match_count": 0,
+      "match_count": 21,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_cefdbe9b7cf34bdb",
+          "score": 1.0541759826214012,
+          "best_kpid": "kpid_5ed00e9e13944108"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_3af3553b72dd476d",
+          "score": 0.9327637234285034,
+          "best_kpid": "kpid_325c0f0130a84cab"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_097b17ffece641a7",
+          "score": 0.7252103517277151,
+          "best_kpid": "kpid_e6c97801cea847b3"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_3bd3d86426934a8e",
+          "score": 0.6316338542013851,
+          "best_kpid": "kpid_e060a3c1e90a47cc"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_1ae107c08e73431e",
+          "score": 0.6234784710606297,
+          "best_kpid": "kpid_689c919059a941db"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_3af3553b72dd476d",
+          "displayScore": 1.6187637234285033
+        },
+        {
+          "rank": 2,
+          "otid": "otid_cefdbe9b7cf34bdb",
+          "displayScore": 0.7881759826214012
+        },
+        {
+          "rank": 3,
+          "otid": "otid_3bd3d86426934a8e",
+          "displayScore": 0.6351338542013851
+        },
+        {
+          "rank": 4,
+          "otid": "otid_40565beb38cf45c5",
+          "displayScore": 0.42366820922783593
+        },
+        {
+          "rank": 5,
+          "otid": "otid_097b17ffece641a7",
+          "displayScore": 0.4067103517277151
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0005",
+      "query": "他需要在7月12日的什么时间前完成报到，另外关于夏令营具体安排的更新，营员需要留意哪种通信渠道？",
+      "query_type": "situational",
+      "query_scope": "time_location",
+      "theme_family": "summer_camp",
+      "query_style_mode": "paired_multi_kp_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_ccebe408485d4e4b",
+      "top_result_otid": "otid_e0254fb4fe794e2f",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.12866666666666665,
+      "final_reject_score": 0.12866666666666665,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_e0254fb4fe794e2f",
+          "score": 1.3485513043323936,
+          "best_kpid": "kpid_1212114fa99c402d"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_12975d38e3234e5a",
+          "score": 0.8333912568306012
+        },
+        {
+          "rank": 3,
+          "otid": "otid_7f07ed38fde74862",
+          "score": 0.7547463487132265,
+          "best_kpid": "kpid_ddff8485bab44a6b"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_dd0c2e7b61014491",
+          "score": 0.7464559328182778,
+          "best_kpid": "kpid_05af2c30831d418c"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_a64e9944784c42bd",
+          "score": 0.733863697529003,
+          "best_kpid": "kpid_9a5795cdf1944e64"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_e0254fb4fe794e2f",
+          "displayScore": 1.3485513043323936
+        },
+        {
+          "rank": 2,
+          "otid": "otid_12975d38e3234e5a",
+          "displayScore": 0.8333912568306012
+        },
+        {
+          "rank": 3,
+          "otid": "otid_a64e9944784c42bd",
+          "displayScore": 0.7618636975290031
+        },
+        {
+          "rank": 4,
+          "otid": "otid_7f07ed38fde74862",
+          "displayScore": 0.7547463487132265
+        },
+        {
+          "rank": 5,
+          "otid": "otid_29bee8c1d48a4946",
+          "displayScore": 0.7508732354445724
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0006",
+      "query": "进入预推免考核名单的学生是如何确定的，另外该学院2026年预推免考核名单的附件摘要指出，当前文档仅包含哪两列信息，无法提取哪些考核相关的核心统计指标？",
+      "query_type": "standard",
+      "query_scope": "procedure",
+      "theme_family": "tuimian",
+      "query_style_mode": "paired_multi_kp_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_8c93e52cc4314e6c",
+      "top_result_otid": "otid_92abdd62658c4fd2",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.06849999999999999,
+      "final_reject_score": 0.06849999999999999,
+      "weak_match_count": 0,
+      "match_count": 21,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_92abdd62658c4fd2",
+          "score": 1.388941776933022,
+          "best_kpid": "kpid_82de8ee2206b4bd8"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_80529bdd365b4138",
+          "score": 0.827589842896414,
+          "best_kpid": "kpid_ca9565cd80c84d5c"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_faeac0ecd9304bd1",
+          "score": 0.7739894846666796,
+          "best_kpid": "kpid_3c828ccb3e2344c4"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_ae46d4b5d6e74990",
+          "score": 0.7484318765133171,
+          "best_kpid": "kpid_d1f197c06803411f"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_1ae107c08e73431e",
+          "score": 0.7339213068904145,
+          "best_kpid": "kpid_921e2206e7f24635"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_92abdd62658c4fd2",
+          "displayScore": 1.388941776933022
+        },
+        {
+          "rank": 2,
+          "otid": "otid_f86cd11add664a2c",
+          "displayScore": 0.8145841396480075
+        },
+        {
+          "rank": 3,
+          "otid": "otid_faeac0ecd9304bd1",
+          "displayScore": 0.7739894846666796
+        },
+        {
+          "rank": 4,
+          "otid": "otid_1ae107c08e73431e",
+          "displayScore": 0.7339213068904145
+        },
+        {
+          "rank": 5,
+          "otid": "otid_d2e81434d6754411",
+          "displayScore": 0.6680117869992891
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0007",
+      "query": "如果匿名反馈对该学院推免名单的异议，会如何处理，另外所有学生的专业和年级是什么？",
+      "query_type": "situational",
+      "query_scope": "policy_overview",
+      "theme_family": "other",
+      "query_style_mode": "paired_multi_kp_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_82fe535421c6472c",
+      "top_result_otid": "otid_92abdd62658c4fd2",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.06399999999999999,
+      "final_reject_score": 0.06399999999999999,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_92abdd62658c4fd2",
+          "score": 1.2577867895415968,
+          "best_kpid": "kpid_8968e535e52a4fec"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_027393e8a6f64ec3",
+          "score": 1.1161912448031301,
+          "best_kpid": "kpid_0b3445761c9a4fe1"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_fcc01f4998fe4c47",
+          "score": 1.1088607660929373,
+          "best_kpid": "kpid_c27825a3b79e478e"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_6a9cbceb1fc7406a",
+          "score": 1.1069512737268565,
+          "best_kpid": "kpid_7a3e9b3925ca4bea"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_62d5346e83474afd",
+          "score": 0.814546943853166,
+          "best_kpid": "kpid_cc7d6146e0f74f17"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_92abdd62658c4fd2",
+          "displayScore": 1.2577867895415968
+        },
+        {
+          "rank": 2,
+          "otid": "otid_027393e8a6f64ec3",
+          "displayScore": 1.1161912448031301
+        },
+        {
+          "rank": 3,
+          "otid": "otid_fcc01f4998fe4c47",
+          "displayScore": 1.1088607660929373
+        },
+        {
+          "rank": 4,
+          "otid": "otid_6a9cbceb1fc7406a",
+          "displayScore": 1.1069512737268565
+        },
+        {
+          "rank": 5,
+          "otid": "otid_f3ee1947f40e4b18",
+          "displayScore": 0.8901635246972865
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0008",
+      "query": "2025博士时间安排",
+      "query_type": "short_keyword",
+      "query_scope": "time_location",
+      "theme_family": "doctoral",
+      "query_style_mode": "short_keyword_compressed_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_401c4896f5614967",
+      "top_result_otid": "otid_1ab70aa425dd43cd",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.345,
+      "final_reject_score": 0.345,
+      "weak_match_count": 0,
+      "match_count": 51,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_1ab70aa425dd43cd",
+          "score": 0.9371555604937496,
+          "best_kpid": "kpid_5a51339c98ea4493"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_87c7c625e9f24ea9",
+          "score": 0.9033900222752465,
+          "best_kpid": "kpid_50b2cb19956b4bbf"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_56f2668278df4a1c",
+          "score": 0.8275911107818261,
+          "best_kpid": "kpid_6200a056a5f74a2b"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_fd99e3167f2849d0",
+          "score": 0.7258381276097368,
+          "best_kpid": "kpid_ee87f58e311940dd"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_17202809ac554122",
+          "score": 0.7227904933000474,
+          "best_kpid": "kpid_7a3db9624d96412a"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_1ab70aa425dd43cd",
+          "displayScore": 1.2683900222752464
+        },
+        {
+          "rank": 2,
+          "otid": "otid_87c7c625e9f24ea9",
+          "displayScore": 1.2673900222752466
+        },
+        {
+          "rank": 3,
+          "otid": "otid_2ec33053026040f8",
+          "displayScore": 1.209377112002306
+        },
+        {
+          "rank": 4,
+          "otid": "otid_17202809ac554122",
+          "displayScore": 1.1847904933000475
+        },
+        {
+          "rank": 5,
+          "otid": "otid_f029335ce4934d83",
+          "displayScore": 1.1093700581704327
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0009",
+      "query": "拟录取考生放弃录取资格后，学院将如何调整录取名单，另外拟录取考生放弃录取的递补机制如何确保招生名额的充分利用？",
+      "query_type": "standard",
+      "query_scope": "eligibility_condition",
+      "theme_family": "master_reexam",
+      "query_style_mode": "paired_multi_kp_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_2875f7b8cd70429c",
+      "top_result_otid": "otid_cba081d3aacb48b7",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.31949999999999995,
+      "final_reject_score": 0.31949999999999995,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_cba081d3aacb48b7",
+          "score": 1.183221590494501,
+          "best_kpid": "kpid_6c276be3d10541ed"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_5fff34b0edf94bfc",
+          "score": 1.097817889510057,
+          "best_kpid": "kpid_ff9639d66b5144d7"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_a64e9944784c42bd",
+          "score": 1.0442006487205946,
+          "best_kpid": "kpid_5cd81827ebb34991"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_bdabc7cadb154b91",
+          "score": 0.9038299436841943,
+          "best_kpid": "kpid_18f57ac823934f47"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_2734d7b994e0487e",
+          "score": 0.8594490367470017,
+          "best_kpid": "kpid_f8b547f5c37f48e1"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_cba081d3aacb48b7",
+          "displayScore": 1.533221590494501
+        },
+        {
+          "rank": 2,
+          "otid": "otid_5fff34b0edf94bfc",
+          "displayScore": 1.447817889510057
+        },
+        {
+          "rank": 3,
+          "otid": "otid_bdabc7cadb154b91",
+          "displayScore": 1.2538299436841944
+        },
+        {
+          "rank": 4,
+          "otid": "otid_2734d7b994e0487e",
+          "displayScore": 1.2094490367470017
+        },
+        {
+          "rank": 5,
+          "otid": "otid_82c9966124154ddc",
+          "displayScore": 1.19909033129119
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0010",
+      "query": "2026博士调剂细节",
+      "query_type": "short_keyword",
+      "query_scope": "fact_detail",
+      "theme_family": "doctor_adjustment",
+      "query_style_mode": "short_keyword_compressed_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_4b2b45a3a7f84940",
+      "top_result_otid": "otid_097b17ffece641a7",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.06849999999999999,
+      "final_reject_score": 0.06849999999999999,
+      "weak_match_count": 0,
+      "match_count": 23,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_7479616835454c16",
+          "score": 1.0586348494098494,
+          "best_kpid": "kpid_daa4bb62894f432c"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_fa0f61539ae34c82",
+          "score": 0.8420487979731844,
+          "best_kpid": "kpid_0f14b0808d154e57"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_097b17ffece641a7",
+          "score": 0.8397740151515152,
+          "best_kpid": "kpid_e6c97801cea847b3"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_cefdbe9b7cf34bdb",
+          "score": 0.6076153035521149,
+          "best_kpid": "kpid_681b9b6b66df47a4"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_ae46d4b5d6e74990",
+          "score": 0.5633791199914135
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_097b17ffece641a7",
+          "displayScore": 0.8859941226125454
+        },
+        {
+          "rank": 2,
+          "otid": "otid_3af3553b72dd476d",
+          "displayScore": 0.8849941226125454
+        },
+        {
+          "rank": 3,
+          "otid": "otid_92abdd62658c4fd2",
+          "displayScore": 0.6727062012933507
+        },
+        {
+          "rank": 4,
+          "otid": "otid_40565beb38cf45c5",
+          "displayScore": 0.6473448840197471
+        },
+        {
+          "rank": 5,
+          "otid": "otid_3bd3d86426934a8e",
+          "displayScore": 0.5667923463426574
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0011",
+      "query": "该学院夏令营的报到截止日期和活动总时长分别是多少，另外男性和女性的具体人数分别是多少？",
+      "query_type": "standard",
+      "query_scope": "fact_detail",
+      "theme_family": "summer_camp",
+      "query_style_mode": "paired_multi_kp_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_ccebe408485d4e4b",
+      "top_result_otid": "otid_53b2c84210304ea0",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.34778488568314964,
+      "final_reject_score": 0.34778488568314964,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_53b2c84210304ea0",
+          "score": 1.1208657463339473,
+          "best_kpid": "kpid_f808254855a24108"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_dd0c2e7b61014491",
+          "score": 0.991188584887863,
+          "best_kpid": "kpid_253edd8dbecc4e02"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_46b7578040384d16",
+          "score": 0.9878109452736318
+        },
+        {
+          "rank": 4,
+          "otid": "otid_e0254fb4fe794e2f",
+          "score": 0.9828677471199428,
+          "best_kpid": "kpid_1212114fa99c402d"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_e7c279c2d42f4293",
+          "score": 0.632905016171804,
+          "best_kpid": "kpid_202ca8b58f1049aa"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_53b2c84210304ea0",
+          "displayScore": 1.1208657463339473
+        },
+        {
+          "rank": 2,
+          "otid": "otid_46b7578040384d16",
+          "displayScore": 0.9878109452736318
+        },
+        {
+          "rank": 3,
+          "otid": "otid_e0254fb4fe794e2f",
+          "displayScore": 0.9828677471199428
+        },
+        {
+          "rank": 4,
+          "otid": "otid_29bee8c1d48a4946",
+          "displayScore": 0.7523982497549934
+        },
+        {
+          "rank": 5,
+          "otid": "otid_6010e10f0bd24934",
+          "displayScore": 0.7036320640987395
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0012",
+      "query": "根据该学院2024年9月22日公布的2025年预推免考核名单附件PDF，进入考核的总人数是多少，另外如果研究者需要深入分析该学院2025年预推免考核的考核分数，根据2024年9月的附件摘要，当前名单存在什么数据局限性？",
+      "query_type": "situational",
+      "query_scope": "policy_overview",
+      "theme_family": "tuimian",
+      "query_style_mode": "paired_multi_kp_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_2cf6f4e5e6b648a9",
+      "top_result_otid": "otid_7a5295e423c344e5",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.03399999999999999,
+      "final_reject_score": 0.03399999999999999,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_7a5295e423c344e5",
+          "score": 1.175744991545176,
+          "best_kpid": "kpid_4d277bdadbf949f4"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_027393e8a6f64ec3",
+          "score": 1.100206146118003,
+          "best_kpid": "kpid_94b439c329e14e29"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_fcc01f4998fe4c47",
+          "score": 0.9645943848432355,
+          "best_kpid": "kpid_cd027d904ead49d2"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_b78d8162d15b4481",
+          "score": 0.814267491133382,
+          "best_kpid": "kpid_58ca7514f24946c6"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_6010e10f0bd24934",
+          "score": 0.8053350341351457,
+          "best_kpid": "kpid_78e51a129eff4f46"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_7a5295e423c344e5",
+          "displayScore": 1.175744991545176
+        },
+        {
+          "rank": 2,
+          "otid": "otid_b78d8162d15b4481",
+          "displayScore": 1.1638674911333822
+        },
+        {
+          "rank": 3,
+          "otid": "otid_027393e8a6f64ec3",
+          "displayScore": 1.100206146118003
+        },
+        {
+          "rank": 4,
+          "otid": "otid_8be68548ed504099",
+          "displayScore": 0.986703952986455
+        },
+        {
+          "rank": 5,
+          "otid": "otid_fcc01f4998fe4c47",
+          "displayScore": 0.9645943848432355
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0013",
+      "query": "根据中山大学人工智能学院2025年博士研究生招生简章，综合考核复试包括哪些具体程序？",
+      "query_type": "standard",
+      "query_scope": "procedure",
+      "theme_family": "doctoral",
+      "query_style_mode": "source_seed_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_a555af8a126c4703",
+      "top_result_otid": "otid_6258d4af76df4ee7",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.09916878716700575,
+      "final_reject_score": 0.09916878716700575,
+      "weak_match_count": 0,
+      "match_count": 48,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_6258d4af76df4ee7",
+          "score": 1.1739821261341212,
+          "best_kpid": "kpid_068995ca116b460d"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_15996476fc324e33",
+          "score": 1.1618715438720442,
+          "best_kpid": "kpid_9451b20d077f4828"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_32f33b04286b4f12",
+          "score": 1.028678506325767,
+          "best_kpid": "kpid_c7e29bb1da224a36"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_94116dceb8f543e9",
+          "score": 0.8087501572866431,
+          "best_kpid": "kpid_424be6c926f04d64"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_b8a98fa84f504d63",
+          "score": 0.7869113678640314,
+          "best_kpid": "kpid_d7f8c8433aea4230"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_6258d4af76df4ee7",
+          "displayScore": 1.7339821261341213
+        },
+        {
+          "rank": 2,
+          "otid": "otid_db7dfa0d6dde403a",
+          "displayScore": 1.2411718122541913
+        },
+        {
+          "rank": 3,
+          "otid": "otid_15996476fc324e33",
+          "displayScore": 0.9798715438720441
+        },
+        {
+          "rank": 4,
+          "otid": "otid_32f33b04286b4f12",
+          "displayScore": 0.846678506325767
+        },
+        {
+          "rank": 5,
+          "otid": "otid_ed940aabc9c24803",
+          "displayScore": 0.642040574361276
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0014",
+      "query": "2025通知时间安排",
+      "query_type": "short_keyword",
+      "query_scope": "time_location",
+      "theme_family": "other",
+      "query_style_mode": "short_keyword_compressed_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_beb149b3688b4f4c",
+      "top_result_otid": "otid_1ab70aa425dd43cd",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.31999999999999995,
+      "final_reject_score": 0.31999999999999995,
+      "weak_match_count": 0,
+      "match_count": 55,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_1ab70aa425dd43cd",
+          "score": 0.9944333441826378,
+          "best_kpid": "kpid_5a51339c98ea4493"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_fd99e3167f2849d0",
+          "score": 0.9357452740587504,
+          "best_kpid": "kpid_ee87f58e311940dd"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_b8a98fa84f504d63",
+          "score": 0.7741350883375331,
+          "best_kpid": "kpid_d64df1b516e54e01"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_17202809ac554122",
+          "score": 0.7589895691510058,
+          "best_kpid": "kpid_7a3db9624d96412a"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_95c5075eb4ff45c3",
+          "score": 0.7586283704957533,
+          "best_kpid": "kpid_8c4770e61b9c4828"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_1ab70aa425dd43cd",
+          "displayScore": 1.2219895691510057
+        },
+        {
+          "rank": 2,
+          "otid": "otid_17202809ac554122",
+          "displayScore": 1.2209895691510058
+        },
+        {
+          "rank": 3,
+          "otid": "otid_f029335ce4934d83",
+          "displayScore": 1.0944481625028837
+        },
+        {
+          "rank": 4,
+          "otid": "otid_87c7c625e9f24ea9",
+          "displayScore": 1.0439167055474727
+        },
+        {
+          "rank": 5,
+          "otid": "otid_23801bcd14384525",
+          "displayScore": 0.9857890450900759
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0015",
+      "query": "但未收到活动日程邮件，他应参考哪个日期的通知来确认后续安排方式，另外该学院发布的夏令营入营名单中，为什么没有提供录取要求？",
+      "query_type": "situational",
+      "query_scope": "eligibility_condition",
+      "theme_family": "summer_camp",
+      "query_style_mode": "paired_multi_kp_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_ccebe408485d4e4b",
+      "top_result_otid": "otid_dd0c2e7b61014491",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0,
+      "final_reject_score": 0,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_dd0c2e7b61014491",
+          "score": 1.0298242356821736,
+          "best_kpid": "kpid_253edd8dbecc4e02"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_e0254fb4fe794e2f",
+          "score": 0.9537393676998387,
+          "best_kpid": "kpid_1212114fa99c402d"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_4b20a5e30c194bbf",
+          "score": 0.9073531753838657,
+          "best_kpid": "kpid_9b971c42ce8a454a"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_53b2c84210304ea0",
+          "score": 0.8385984108595554,
+          "best_kpid": "kpid_f808254855a24108"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_0b60e5ba58884d6f",
+          "score": 0.7540593686906664,
+          "best_kpid": "kpid_acad150a4b874d9e"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_dd0c2e7b61014491",
+          "displayScore": 1.1378242356821737
+        },
+        {
+          "rank": 2,
+          "otid": "otid_e0254fb4fe794e2f",
+          "displayScore": 1.0617393676998388
+        },
+        {
+          "rank": 3,
+          "otid": "otid_53b2c84210304ea0",
+          "displayScore": 0.9465984108595554
+        },
+        {
+          "rank": 4,
+          "otid": "otid_4b20a5e30c194bbf",
+          "displayScore": 0.8333531753838657
+        },
+        {
+          "rank": 5,
+          "otid": "otid_0653973ae1784e7e",
+          "displayScore": 0.8077701344792848
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0016",
+      "query": "拟录取考生如需放弃资格，其书面说明必须满足哪些格式要求，另外考生如需就复试结果进行沟通，应如何联系张老师？",
+      "query_type": "standard",
+      "query_scope": "procedure",
+      "theme_family": "master_reexam",
+      "query_style_mode": "paired_multi_kp_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_6c5b2af52b1d4df5",
+      "top_result_otid": "otid_ed940aabc9c24803",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0,
+      "final_reject_score": 0,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_fa0f61539ae34c82",
+          "score": 1.3890986431589738,
+          "best_kpid": "kpid_0f14b0808d154e57"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_ed940aabc9c24803",
+          "score": 1.0094883035909334,
+          "best_kpid": "kpid_9c08b43bad6b4437"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_db7dfa0d6dde403a",
+          "score": 0.939616850335512,
+          "best_kpid": "kpid_2696fc5eb0784667"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_559896ca74b944bd",
+          "score": 0.8766022825783611,
+          "best_kpid": "kpid_cf7261eb69e84426"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_95c5075eb4ff45c3",
+          "score": 0.8741149395677492,
+          "best_kpid": "kpid_62c2cbf1f497486d"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_ed940aabc9c24803",
+          "displayScore": 1.4994883035909334
+        },
+        {
+          "rank": 2,
+          "otid": "otid_1ae107c08e73431e",
+          "displayScore": 1.3031565141479735
+        },
+        {
+          "rank": 3,
+          "otid": "otid_559896ca74b944bd",
+          "displayScore": 1.156602282578361
+        },
+        {
+          "rank": 4,
+          "otid": "otid_95c5075eb4ff45c3",
+          "displayScore": 1.1541149395677492
+        },
+        {
+          "rank": 5,
+          "otid": "otid_994207bb2a0740a1",
+          "displayScore": 1.0207165542760928
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0017",
+      "query": "如果一位考生对中山大学人工智能学院2026年2月11日公示的博士研究生调剂综合考核结果有异议，在公示期间应如何实名反映问题？",
+      "query_type": "situational",
+      "query_scope": "policy_overview",
+      "theme_family": "doctor_adjustment",
+      "query_style_mode": "source_seed_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_eb3d3855deb74340",
+      "top_result_otid": "otid_3af3553b72dd476d",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.06849999999999999,
+      "final_reject_score": 0.06849999999999999,
+      "weak_match_count": 0,
+      "match_count": 22,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_3af3553b72dd476d",
+          "score": 1.234240691006279,
+          "best_kpid": "kpid_325c0f0130a84cab"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_faeac0ecd9304bd1",
+          "score": 0.5338768163104255,
+          "best_kpid": "kpid_e8188c515be34c8c"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_cefdbe9b7cf34bdb",
+          "score": 0.5323666368186618,
+          "best_kpid": "kpid_5ed00e9e13944108"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_3bd3d86426934a8e",
+          "score": 0.5187566001443864,
+          "best_kpid": "kpid_d2f55acadb774843"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_92abdd62658c4fd2",
+          "score": 0.4432953927395383,
+          "best_kpid": "kpid_8968e535e52a4fec"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_3af3553b72dd476d",
+          "displayScore": 1.3182406910062792
+        },
+        {
+          "rank": 2,
+          "otid": "otid_3bd3d86426934a8e",
+          "displayScore": 0.2702566001443864
+        },
+        {
+          "rank": 3,
+          "otid": "otid_faeac0ecd9304bd1",
+          "displayScore": 0.1593768163104255
+        },
+        {
+          "rank": 4,
+          "otid": "otid_92abdd62658c4fd2",
+          "displayScore": 0.13879539273953823
+        },
+        {
+          "rank": 5,
+          "otid": "otid_cefdbe9b7cf34bdb",
+          "displayScore": 0.12636663681866184
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0018",
+      "query": "2026推免条件",
+      "query_type": "short_keyword",
+      "query_scope": "eligibility_condition",
+      "theme_family": "tuimian",
+      "query_style_mode": "short_keyword_compressed_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_8c93e52cc4314e6c",
+      "top_result_otid": "otid_7479616835454c16",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.10184846499307285,
+      "final_reject_score": 0.10184846499307285,
+      "weak_match_count": 0,
+      "match_count": 23,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_7479616835454c16",
+          "score": 1.2129258523539521,
+          "best_kpid": "kpid_370117ba794c491a"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_f86cd11add664a2c",
+          "score": 1.0906534074291923,
+          "best_kpid": "kpid_a797ca0c89114a35"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_92abdd62658c4fd2",
+          "score": 0.9510133991054264,
+          "best_kpid": "kpid_619d4db3a9bd400a"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_d2e81434d6754411",
+          "score": 0.9250650565947142,
+          "best_kpid": "kpid_232b196e24b24bc7"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_1ae107c08e73431e",
+          "score": 0.5984049396504517,
+          "best_kpid": "kpid_921e2206e7f24635"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_7479616835454c16",
+          "displayScore": 1.3912534074291922
+        },
+        {
+          "rank": 2,
+          "otid": "otid_f86cd11add664a2c",
+          "displayScore": 1.3902534074291923
+        },
+        {
+          "rank": 3,
+          "otid": "otid_d2e81434d6754411",
+          "displayScore": 1.0510650565947142
+        },
+        {
+          "rank": 4,
+          "otid": "otid_92abdd62658c4fd2",
+          "displayScore": 0.8586133991054263
+        },
+        {
+          "rank": 5,
+          "otid": "otid_1ae107c08e73431e",
+          "displayScore": 0.8084049396504518
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0019",
+      "query": "学院因新增指标拟增补录取多少名博士研究生，另外拟录取考生如需变更报读意愿等信息，应通过哪些具体联系方式与张老师沟通？",
+      "query_type": "standard",
+      "query_scope": "fact_detail",
+      "theme_family": "doctoral",
+      "query_style_mode": "paired_multi_kp_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_0493c8c8aa734856",
+      "top_result_otid": "otid_2734d7b994e0487e",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.23499999999999993,
+      "final_reject_score": 0.23499999999999993,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_2734d7b994e0487e",
+          "score": 1.0979790711423092,
+          "best_kpid": "kpid_819693df513745e0"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_a64e9944784c42bd",
+          "score": 0.9005221107608131,
+          "best_kpid": "kpid_d6f5adc1429a460a"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_5fff34b0edf94bfc",
+          "score": 0.8194932806272318,
+          "best_kpid": "kpid_8bf854c2542846f5"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_784b354d2f6e407d",
+          "score": 0.8167075050990643,
+          "best_kpid": "kpid_bd1c0facb12d40e3"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_b7d1fd71f4a04123",
+          "score": 0.8152741651076665,
+          "best_kpid": "kpid_743499f469144925"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_2734d7b994e0487e",
+          "displayScore": 1.503979071142309
+        },
+        {
+          "rank": 2,
+          "otid": "otid_5fff34b0edf94bfc",
+          "displayScore": 1.2254932806272318
+        },
+        {
+          "rank": 3,
+          "otid": "otid_82c9966124154ddc",
+          "displayScore": 1.1836208960957202
+        },
+        {
+          "rank": 4,
+          "otid": "otid_b7d1fd71f4a04123",
+          "displayScore": 1.1652741651076666
+        },
+        {
+          "rank": 5,
+          "otid": "otid_cba081d3aacb48b7",
+          "displayScore": 0.9610336023684958
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0020",
+      "query": "拟录取考生如需联系该学院研究生办公室，可以通过哪些方式，另外如果考生未在4月21日前提交体检表，会有什么影响？",
+      "query_type": "situational",
+      "query_scope": "procedure",
+      "theme_family": "other",
+      "query_style_mode": "paired_multi_kp_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_1435d9cf85914ea7",
+      "top_result_otid": "otid_1ae107c08e73431e",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.2849999999999999,
+      "final_reject_score": 0.2849999999999999,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_a64e9944784c42bd",
+          "score": 1.1101197468591633,
+          "best_kpid": "kpid_fae78fdba2234365"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_1ae107c08e73431e",
+          "score": 1.0700469704427598,
+          "best_kpid": "kpid_689c919059a941db"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_ed940aabc9c24803",
+          "score": 0.9237737430761137,
+          "best_kpid": "kpid_8531354bfb6148cb"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_60cc15560fde4256",
+          "score": 0.7934911450986993,
+          "best_kpid": "kpid_d4a259ac7df3408b"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_a77bc38ad1cb4632",
+          "score": 0.6935680581866314,
+          "best_kpid": "kpid_cdd19ae5f3514425"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_1ae107c08e73431e",
+          "displayScore": 1.0700469704427598
+        },
+        {
+          "rank": 2,
+          "otid": "otid_2734d7b994e0487e",
+          "displayScore": 0.9622553715948183
+        },
+        {
+          "rank": 3,
+          "otid": "otid_ed940aabc9c24803",
+          "displayScore": 0.9237737430761137
+        },
+        {
+          "rank": 4,
+          "otid": "otid_5b97857272764e74",
+          "displayScore": 0.879269258773846
+        },
+        {
+          "rank": 5,
+          "otid": "otid_a64e9944784c42bd",
+          "displayScore": 0.7881197468591632
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0021",
+      "query": "2021硕士复试条件",
+      "query_type": "short_keyword",
+      "query_scope": "eligibility_condition",
+      "theme_family": "master_reexam",
+      "query_style_mode": "short_keyword_compressed_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_29dd671742524792",
+      "top_result_otid": "otid_a918179bb0e2441b",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0,
+      "final_reject_score": 0,
+      "weak_match_count": 0,
+      "match_count": 28,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_a918179bb0e2441b",
+          "score": 0.9736431690266045,
+          "best_kpid": "kpid_79f3c4c067fe4055"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_abb3158a1c2747c6",
+          "score": 0.7240560511176383,
+          "best_kpid": "kpid_a625ac32b72d4b1b"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_7915cf0cb5a94687",
+          "score": 0.565221599971983,
+          "best_kpid": "kpid_8f2213f71bdc4583"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_3bb5095120fb432b",
+          "score": 0.5240487079737626,
+          "best_kpid": "kpid_002625c35e2c41c9"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_5a4511192ee946c6",
+          "score": 0.4864997504081165
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_a918179bb0e2441b",
+          "displayScore": 1.0947431690266045
+        },
+        {
+          "rank": 2,
+          "otid": "otid_abb3158a1c2747c6",
+          "displayScore": 0.8451560511176383
+        },
+        {
+          "rank": 3,
+          "otid": "otid_7915cf0cb5a94687",
+          "displayScore": 0.6863215999719829
+        },
+        {
+          "rank": 4,
+          "otid": "otid_5a4511192ee946c6",
+          "displayScore": 0.6075997504081165
+        },
+        {
+          "rank": 5,
+          "otid": "otid_d371dde33a814b26",
+          "displayScore": 0.5793503757551245
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0022",
+      "query": "中山大学人工智能学院2025年预推免考核名单公布后，学生是否需要主动联系学院以获取考核信息，还是学院会主动通知？",
+      "query_type": "standard",
+      "query_scope": "policy_overview",
+      "theme_family": "tuimian",
+      "query_style_mode": "source_seed_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_2cf6f4e5e6b648a9",
+      "top_result_otid": "otid_b78d8162d15b4481",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.0828,
+      "final_reject_score": 0.0828,
+      "weak_match_count": 0,
+      "match_count": 50,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_b78d8162d15b4481",
+          "score": 0.8381999701058827,
+          "best_kpid": "kpid_58ca7514f24946c6"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_fcc01f4998fe4c47",
+          "score": 0.6898797981280764,
+          "best_kpid": "kpid_345178378e044ff5"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_6010e10f0bd24934",
+          "score": 0.678678139062602,
+          "best_kpid": "kpid_78e51a129eff4f46"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_2c2fffdc61b0465f",
+          "score": 0.6680029126213314,
+          "best_kpid": "kpid_43bc5373df744ecd"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_e2d751b9441d4178",
+          "score": 0.6535428531541402,
+          "best_kpid": "kpid_7b89b05dcec24992"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_b78d8162d15b4481",
+          "displayScore": 0.7821999701058826
+        },
+        {
+          "rank": 2,
+          "otid": "otid_f672cc42a5a04134",
+          "displayScore": 0.6277411119241925
+        },
+        {
+          "rank": 3,
+          "otid": "otid_9366d85ec4ba4471",
+          "displayScore": 0.6261205299342256
+        },
+        {
+          "rank": 4,
+          "otid": "otid_e2d751b9441d4178",
+          "displayScore": 0.5975428531541401
+        },
+        {
+          "rank": 5,
+          "otid": "otid_fd99e3167f2849d0",
+          "displayScore": 0.5288717798708724
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0023",
+      "query": "根据该学院2025年5月26日发布的第二批博士研究生综合考核结果公示，公示的具体起止日期是哪几天，另外如果一名拟录取博士生的联系方式或报读意愿发生变化，按照该学院的通知要求，他/她应该采取什么具体措施？",
+      "query_type": "situational",
+      "query_scope": "time_location",
+      "theme_family": "doctoral",
+      "query_style_mode": "paired_multi_kp_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_9a0576424d284199",
+      "top_result_otid": "otid_32f33b04286b4f12",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.01366666666666666,
+      "final_reject_score": 0.01366666666666666,
+      "weak_match_count": 0,
+      "match_count": 46,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_32f33b04286b4f12",
+          "score": 1.4637915972229845,
+          "best_kpid": "kpid_8b6d87b2ae9a42a9"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_15996476fc324e33",
+          "score": 0.984688149822111,
+          "best_kpid": "kpid_9451b20d077f4828"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_6374df77359049f8",
+          "score": 0.8961025288429394,
+          "best_kpid": "kpid_c98874a555e34313"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_94116dceb8f543e9",
+          "score": 0.7817751999839628,
+          "best_kpid": "kpid_424be6c926f04d64"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_fcc01f4998fe4c47",
+          "score": 0.7377223057644109
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_32f33b04286b4f12",
+          "displayScore": 2.2937915972229845
+        },
+        {
+          "rank": 2,
+          "otid": "otid_6374df77359049f8",
+          "displayScore": 1.3236025288429394
+        },
+        {
+          "rank": 3,
+          "otid": "otid_15996476fc324e33",
+          "displayScore": 1.042688149822111
+        },
+        {
+          "rank": 4,
+          "otid": "otid_5fff34b0edf94bfc",
+          "displayScore": 0.9738217027300594
+        },
+        {
+          "rank": 5,
+          "otid": "otid_d2c7f1cd37464fbf",
+          "displayScore": 0.9439459335242153
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0024",
+      "query": "如果拟录取考生放弃录取，学院将如何从其他考生中递补录取，另外该学院通知中提到，递补录取是基于总成绩排序进行的，这一规定具体如何操作？",
+      "query_type": "situational",
+      "query_scope": "policy_overview",
+      "theme_family": "master_reexam",
+      "query_style_mode": "paired_multi_kp_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_6c5b2af52b1d4df5",
+      "top_result_otid": "otid_1ae107c08e73431e",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.46613860954598296,
+      "final_reject_score": 0.46613860954598296,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_67d3c146cf8c48b8",
+          "score": 1.2984699417651708,
+          "best_kpid": "kpid_8258b859b3fa4055"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_1ae107c08e73431e",
+          "score": 1.2904413921502462,
+          "best_kpid": "kpid_4b8458c31ef04d55"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_a64e9944784c42bd",
+          "score": 1.178131848865667,
+          "best_kpid": "kpid_5cd81827ebb34991"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_c7119778b7984e16",
+          "score": 1.1127038129390747,
+          "best_kpid": "kpid_7fa90fd83d44469c"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_68999cb6f0a3468d",
+          "score": 1.1026105628625205,
+          "best_kpid": "kpid_b5143e15fd404302"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_1ae107c08e73431e",
+          "displayScore": 1.3984413921502463
+        },
+        {
+          "rank": 2,
+          "otid": "otid_a711c70a3db84204",
+          "displayScore": 1.3512255923357728
+        },
+        {
+          "rank": 3,
+          "otid": "otid_67d3c146cf8c48b8",
+          "displayScore": 1.3344699417651709
+        },
+        {
+          "rank": 4,
+          "otid": "otid_5fff34b0edf94bfc",
+          "displayScore": 1.2716796578869112
+        },
+        {
+          "rank": 5,
+          "otid": "otid_5a1394b3b33e477f",
+          "displayScore": 1.2386900969741796
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0025",
+      "query": "2023通知细节",
+      "query_type": "short_keyword",
+      "query_scope": "fact_detail",
+      "theme_family": "other",
+      "query_style_mode": "short_keyword_compressed_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_7dd1e1ab60ea44bc",
+      "top_result_otid": "otid_789d033ceea74f4b",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.39879999999999993,
+      "final_reject_score": 0.39879999999999993,
+      "weak_match_count": 0,
+      "match_count": 59,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_789d033ceea74f4b",
+          "score": 1.217318411648657,
+          "best_kpid": "kpid_8f85ed210f93481e"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_b64bdb78a2854fdc",
+          "score": 0.8030709059238178,
+          "best_kpid": "kpid_d8b5f6dad7df4a60"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_69b787d802014e94",
+          "score": 0.6858335568315319,
+          "best_kpid": "kpid_4c5a8c2e4a7c4a53"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_dcce8f93b4e24787",
+          "score": 0.649127224500034,
+          "best_kpid": "kpid_2f5e19981d384089"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_d98981a283344c4e",
+          "score": 0.5410933890281259,
+          "best_kpid": "kpid_47a26c9b9dba42c8"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_789d033ceea74f4b",
+          "displayScore": 0.867318411648657
+        },
+        {
+          "rank": 2,
+          "otid": "otid_b64bdb78a2854fdc",
+          "displayScore": 0.8450709059238178
+        },
+        {
+          "rank": 3,
+          "otid": "otid_1e4c2112a331417e",
+          "displayScore": 0.8360460821797407
+        },
+        {
+          "rank": 4,
+          "otid": "otid_e0c52921de884ef1",
+          "displayScore": 0.8155565183828437
+        },
+        {
+          "rank": 5,
+          "otid": "otid_d23cd8bd933e4d4b",
+          "displayScore": 0.6893321877982921
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0026",
+      "query": "是否包含了考生的成绩或录取标准信息，另外附件中的预推免考核名单是否包含任何与成绩或排名相关的字段？",
+      "query_type": "standard",
+      "query_scope": "eligibility_condition",
+      "theme_family": "tuimian",
+      "query_style_mode": "paired_multi_kp_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_2cf6f4e5e6b648a9",
+      "top_result_otid": "otid_191011d40b8a4792",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.2820789308727808,
+      "final_reject_score": 0.2820789308727808,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_191011d40b8a4792",
+          "score": 1.1302451123960604,
+          "best_kpid": "kpid_26dd9883f6414734"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_92abdd62658c4fd2",
+          "score": 1.0808307050539445,
+          "best_kpid": "kpid_82de8ee2206b4bd8"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_faeac0ecd9304bd1",
+          "score": 1.028006886073204,
+          "best_kpid": "kpid_3c828ccb3e2344c4"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_fcc01f4998fe4c47",
+          "score": 0.9794089968736374,
+          "best_kpid": "kpid_cd027d904ead49d2"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_7a5295e423c344e5",
+          "score": 0.9202293981927925,
+          "best_kpid": "kpid_4d277bdadbf949f4"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_191011d40b8a4792",
+          "displayScore": 1.2382451123960605
+        },
+        {
+          "rank": 2,
+          "otid": "otid_92abdd62658c4fd2",
+          "displayScore": 1.1888307050539446
+        },
+        {
+          "rank": 3,
+          "otid": "otid_faeac0ecd9304bd1",
+          "displayScore": 1.136006886073204
+        },
+        {
+          "rank": 4,
+          "otid": "otid_fcc01f4998fe4c47",
+          "displayScore": 1.0874089968736373
+        },
+        {
+          "rank": 5,
+          "otid": "otid_7a5295e423c344e5",
+          "displayScore": 1.0282293981927926
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0027",
+      "query": "在2024年12月公示期间可以通过哪些方式实名反映，另外针对2024年12月25日该学院发布的2025年博士招生综合考核名单，名单中是否提供了考生的成绩信息，如最高分或最低分？如果没有，考生应如何获取这些信息？",
+      "query_type": "situational",
+      "query_scope": "procedure",
+      "theme_family": "doctoral",
+      "query_style_mode": "paired_multi_kp_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_401c4896f5614967",
+      "top_result_otid": "otid_15996476fc324e33",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.12866666666666668,
+      "final_reject_score": 0.12866666666666668,
+      "weak_match_count": 0,
+      "match_count": 92,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_15996476fc324e33",
+          "score": 1.3251348451446843,
+          "best_kpid": "kpid_6ac132ba32794047"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_32f33b04286b4f12",
+          "score": 1.2173481276747653,
+          "best_kpid": "kpid_eb066007eb2242a6"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_a711c70a3db84204",
+          "score": 1.0098792835014454,
+          "best_kpid": "kpid_e3206a14e7d84749"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_94116dceb8f543e9",
+          "score": 0.9349018866661611,
+          "best_kpid": "kpid_424be6c926f04d64"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_6374df77359049f8",
+          "score": 0.8227304111870641,
+          "best_kpid": "kpid_ba7a31dd28304466"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_15996476fc324e33",
+          "displayScore": 1.7691348451446844
+        },
+        {
+          "rank": 2,
+          "otid": "otid_32f33b04286b4f12",
+          "displayScore": 1.6613481276747655
+        },
+        {
+          "rank": 3,
+          "otid": "otid_a711c70a3db84204",
+          "displayScore": 1.0493792835014455
+        },
+        {
+          "rank": 4,
+          "otid": "otid_94116dceb8f543e9",
+          "displayScore": 1.0464018866661613
+        },
+        {
+          "rank": 5,
+          "otid": "otid_6374df77359049f8",
+          "displayScore": 0.9342304111870642
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0028",
+      "query": "中山大学人工智能学院2025年硕士研究生招生通知中，对拟录取考生放弃录取的截止日期是2025年4月3日中午12:00，这一时间点之后是否还能处理放弃申请？",
+      "query_type": "standard",
+      "query_scope": "time_location",
+      "theme_family": "master_reexam",
+      "query_style_mode": "source_seed_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_6c5b2af52b1d4df5",
+      "top_result_otid": "otid_2ec33053026040f8",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0,
+      "final_reject_score": 0,
+      "weak_match_count": 0,
+      "match_count": 51,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_2ec33053026040f8",
+          "score": 0.7383190196099829,
+          "best_kpid": "kpid_295c0a5b212c40bf"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_f029335ce4934d83",
+          "score": 0.6593222702551944,
+          "best_kpid": "kpid_2a4ed6c702d847d0"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_23801bcd14384525",
+          "score": 0.6581511529203027,
+          "best_kpid": "kpid_d355061eabb64308"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_2c2fffdc61b0465f",
+          "score": 0.6443882301273605,
+          "best_kpid": "kpid_43bc5373df744ecd"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_8ee6bdcf13e741b8",
+          "score": 0.6237102232787433,
+          "best_kpid": "kpid_54070a445ec148f4"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_2ec33053026040f8",
+          "displayScore": 0.8363190196099829
+        },
+        {
+          "rank": 2,
+          "otid": "otid_8ee6bdcf13e741b8",
+          "displayScore": 0.7777102232787433
+        },
+        {
+          "rank": 3,
+          "otid": "otid_f029335ce4934d83",
+          "displayScore": 0.7573222702551944
+        },
+        {
+          "rank": 4,
+          "otid": "otid_23801bcd14384525",
+          "displayScore": 0.7561511529203027
+        },
+        {
+          "rank": 5,
+          "otid": "otid_9366d85ec4ba4471",
+          "displayScore": 0.7366121615120903
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0029",
+      "query": "拟录取考生需在什么日期前提交体检表以完成录取流程，另外如果考生有疑问或需要放弃录取，可以通过哪些联系方式与学院取得联系？",
+      "query_type": "situational",
+      "query_scope": "time_location",
+      "theme_family": "other",
+      "query_style_mode": "paired_multi_kp_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_db511e3324ad43f5",
+      "top_result_otid": "otid_1ae107c08e73431e",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.23499999999999993,
+      "final_reject_score": 0.23499999999999993,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_a64e9944784c42bd",
+          "score": 1.1376821986856351,
+          "best_kpid": "kpid_fae78fdba2234365"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_60cc15560fde4256",
+          "score": 1.0349675465880654,
+          "best_kpid": "kpid_d4a259ac7df3408b"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_d2e81434d6754411",
+          "score": 0.9383483262289303,
+          "best_kpid": "kpid_049caafd930e4c75"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_1ae107c08e73431e",
+          "score": 0.9128245503482817,
+          "best_kpid": "kpid_689c919059a941db"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_07571807121c4472",
+          "score": 0.8617901796804265,
+          "best_kpid": "kpid_58da30db088a4cd3"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_1ae107c08e73431e",
+          "displayScore": 1.2668245503482816
+        },
+        {
+          "rank": 2,
+          "otid": "otid_5b97857272764e74",
+          "displayScore": 1.2068968254168981
+        },
+        {
+          "rank": 3,
+          "otid": "otid_a64e9944784c42bd",
+          "displayScore": 1.1696821986856352
+        },
+        {
+          "rank": 4,
+          "otid": "otid_cba081d3aacb48b7",
+          "displayScore": 1.11189662789808
+        },
+        {
+          "rank": 5,
+          "otid": "otid_d2e81434d6754411",
+          "displayScore": 1.0823483262289302
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0030",
+      "query": "中山大学人工智能学院在2025年9月15日发布的通知中，公布了哪一年的预推免考核名单？",
+      "query_type": "standard",
+      "query_scope": "policy_overview",
+      "theme_family": "tuimian",
+      "query_style_mode": "source_seed_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_8c93e52cc4314e6c",
+      "top_result_otid": "otid_b78d8162d15b4481",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.06849999999999999,
+      "final_reject_score": 0.06849999999999999,
+      "weak_match_count": 0,
+      "match_count": 50,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_b78d8162d15b4481",
+          "score": 0.8356730577959062,
+          "best_kpid": "kpid_58ca7514f24946c6"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_32f33b04286b4f12",
+          "score": 0.7700379366767225,
+          "best_kpid": "kpid_8b6d87b2ae9a42a9"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_8be68548ed504099",
+          "score": 0.6223209087751296,
+          "best_kpid": "kpid_c645f22606de4300"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_5016e7c077f14008",
+          "score": 0.6156532282995504,
+          "best_kpid": "kpid_6bc94317c9a94359"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_15996476fc324e33",
+          "score": 0.5755879797308983,
+          "best_kpid": "kpid_6ac132ba32794047"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_b78d8162d15b4481",
+          "displayScore": 0.7796730577959061
+        },
+        {
+          "rank": 2,
+          "otid": "otid_8be68548ed504099",
+          "displayScore": 0.5663209087751295
+        },
+        {
+          "rank": 3,
+          "otid": "otid_fd99e3167f2849d0",
+          "displayScore": 0.511397560444024
+        },
+        {
+          "rank": 4,
+          "otid": "otid_4eb5b7417ee3470a",
+          "displayScore": 0.5023811821546563
+        },
+        {
+          "rank": 5,
+          "otid": "otid_f672cc42a5a04134",
+          "displayScore": 0.49316069948996993
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0031",
+      "query": "2026博士条件",
+      "query_type": "short_keyword",
+      "query_scope": "eligibility_condition",
+      "theme_family": "doctoral",
+      "query_style_mode": "short_keyword_compressed_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_f38fd69ea2d64794",
+      "top_result_otid": "otid_ae46d4b5d6e74990",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.09400000000000001,
+      "final_reject_score": 0.09400000000000001,
+      "weak_match_count": 0,
+      "match_count": 23,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_ae46d4b5d6e74990",
+          "score": 1.1010656164126411,
+          "best_kpid": "kpid_53230507f99c472c"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_fa0f61539ae34c82",
+          "score": 1.0092474156016953,
+          "best_kpid": "kpid_5c059b89320a4b4e"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_d2e81434d6754411",
+          "score": 0.8941030267977637,
+          "best_kpid": "kpid_232b196e24b24bc7"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_cefdbe9b7cf34bdb",
+          "score": 0.8324983589074932,
+          "best_kpid": "kpid_681b9b6b66df47a4"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_097b17ffece641a7",
+          "score": 0.7451749459917599,
+          "best_kpid": "kpid_2ef4667810ab477c"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_ae46d4b5d6e74990",
+          "displayScore": 0.9708200499771181
+        },
+        {
+          "rank": 2,
+          "otid": "otid_3af3553b72dd476d",
+          "displayScore": 0.9698200499771181
+        },
+        {
+          "rank": 3,
+          "otid": "otid_d2e81434d6754411",
+          "displayScore": 0.8941030267977637
+        },
+        {
+          "rank": 4,
+          "otid": "otid_40565beb38cf45c5",
+          "displayScore": 0.8496704442917051
+        },
+        {
+          "rank": 5,
+          "otid": "otid_f86cd11add664a2c",
+          "displayScore": 0.7204357568997504
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0032",
+      "query": "该学院拟录取考生的体检表提交和复审表发放分别有什么具体安排，另外基于5名拟录取考生的样本，总成绩的最低分是多少分？",
+      "query_type": "standard",
+      "query_scope": "procedure",
+      "theme_family": "other",
+      "query_style_mode": "paired_multi_kp_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_db511e3324ad43f5",
+      "top_result_otid": "otid_a711c70a3db84204",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.3314,
+      "final_reject_score": 0.3314,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_1ae107c08e73431e",
+          "score": 1.243680297660191,
+          "best_kpid": "kpid_689c919059a941db"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_a64e9944784c42bd",
+          "score": 1.1455654691425792,
+          "best_kpid": "kpid_5cd81827ebb34991"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_a711c70a3db84204",
+          "score": 1.1367875030612462,
+          "best_kpid": "kpid_31803d73adaa4487"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_5b97857272764e74",
+          "score": 0.8961335249110174,
+          "best_kpid": "kpid_a4013ae3c2164b80"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_567a14d384d44645",
+          "score": 0.8465341270484666,
+          "best_kpid": "kpid_bf23c8e9f21b4d95"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_a711c70a3db84204",
+          "displayScore": 1.5227875030612463
+        },
+        {
+          "rank": 2,
+          "otid": "otid_1ae107c08e73431e",
+          "displayScore": 1.3516802976601912
+        },
+        {
+          "rank": 3,
+          "otid": "otid_567a14d384d44645",
+          "displayScore": 1.2325341270484667
+        },
+        {
+          "rank": 4,
+          "otid": "otid_5b97857272764e74",
+          "displayScore": 1.1741335249110174
+        },
+        {
+          "rank": 5,
+          "otid": "otid_a64e9944784c42bd",
+          "displayScore": 0.9315654691425791
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0033",
+      "query": "2026年该学院博士研究生调剂名单的公示期持续多少天，另外除了电话和邮件，还可以通过什么形式实名反映？",
+      "query_type": "situational",
+      "query_scope": "fact_detail",
+      "theme_family": "doctor_adjustment",
+      "query_style_mode": "paired_multi_kp_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_4b2b45a3a7f84940",
+      "top_result_otid": "otid_3af3553b72dd476d",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.06849999999999999,
+      "final_reject_score": 0.06849999999999999,
+      "weak_match_count": 0,
+      "match_count": 19,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_3af3553b72dd476d",
+          "score": 1.2578816903715466,
+          "best_kpid": "kpid_94de97616a0f47f7"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_cefdbe9b7cf34bdb",
+          "score": 0.8884113345108541,
+          "best_kpid": "kpid_5ed00e9e13944108"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_d2e81434d6754411",
+          "score": 0.6115802151020118,
+          "best_kpid": "kpid_049caafd930e4c75"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_92abdd62658c4fd2",
+          "score": 0.53173740886237,
+          "best_kpid": "kpid_8968e535e52a4fec"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_1ae107c08e73431e",
+          "score": 0.41280930876842625,
+          "best_kpid": "kpid_921e2206e7f24635"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_3af3553b72dd476d",
+          "displayScore": 1.0338816903715466
+        },
+        {
+          "rank": 2,
+          "otid": "otid_cefdbe9b7cf34bdb",
+          "displayScore": 0.7344113345108542
+        },
+        {
+          "rank": 3,
+          "otid": "otid_d2e81434d6754411",
+          "displayScore": 0.5590802151020118
+        },
+        {
+          "rank": 4,
+          "otid": "otid_92abdd62658c4fd2",
+          "displayScore": 0.47923740886237
+        },
+        {
+          "rank": 5,
+          "otid": "otid_80529bdd365b4138",
+          "displayScore": 0.21540740782913445
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0034",
+      "query": "2026硕士复试流程",
+      "query_type": "short_keyword",
+      "query_scope": "procedure",
+      "theme_family": "master_reexam",
+      "query_style_mode": "short_keyword_compressed_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_42225868ea784bbf",
+      "top_result_otid": "otid_1ae107c08e73431e",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.02599999999999998,
+      "final_reject_score": 0.02599999999999998,
+      "weak_match_count": 0,
+      "match_count": 23,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_1ae107c08e73431e",
+          "score": 1.3479369603404288,
+          "best_kpid": "kpid_921e2206e7f24635"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_faeac0ecd9304bd1",
+          "score": 0.931208753718646,
+          "best_kpid": "kpid_282050a357f14476"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_097b17ffece641a7",
+          "score": 0.8600585584450975,
+          "best_kpid": "kpid_e6c97801cea847b3"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_7479616835454c16",
+          "score": 0.8211155040756231,
+          "best_kpid": "kpid_1d9cd306819f489f"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_139b9801959d4db4",
+          "score": 0.8094358061429998,
+          "best_kpid": "kpid_476166b526e04f05"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_1ae107c08e73431e",
+          "displayScore": 1.8379369603404287
+        },
+        {
+          "rank": 2,
+          "otid": "otid_faeac0ecd9304bd1",
+          "displayScore": 0.878708753718646
+        },
+        {
+          "rank": 3,
+          "otid": "otid_097b17ffece641a7",
+          "displayScore": 0.8075585584450975
+        },
+        {
+          "rank": 4,
+          "otid": "otid_226927e5287c498a",
+          "displayScore": 0.7996313517249161
+        },
+        {
+          "rank": 5,
+          "otid": "otid_139b9801959d4db4",
+          "displayScore": 0.7569358061429998
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0035",
+      "query": "截至2026年1月7日，中山大学人工智能学院2026年博士研究生招生中，综合考核复试的公示期有多长？",
+      "query_type": "standard",
+      "query_scope": "policy_overview",
+      "theme_family": "doctoral",
+      "query_style_mode": "source_seed_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_f38fd69ea2d64794",
+      "top_result_otid": "otid_3af3553b72dd476d",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.26794994273079664,
+      "final_reject_score": 0.26794994273079664,
+      "weak_match_count": 0,
+      "match_count": 23,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_3af3553b72dd476d",
+          "score": 1.2330073378614181,
+          "best_kpid": "kpid_325c0f0130a84cab"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_cefdbe9b7cf34bdb",
+          "score": 1.1381961222922388,
+          "best_kpid": "kpid_681b9b6b66df47a4"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_3bd3d86426934a8e",
+          "score": 0.743495190099806,
+          "best_kpid": "kpid_d2f55acadb774843"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_1ae107c08e73431e",
+          "score": 0.7214833682683117,
+          "best_kpid": "kpid_4b8458c31ef04d55"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_80529bdd365b4138",
+          "score": 0.695105914049666,
+          "best_kpid": "kpid_4804a2ca6c5449ba"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_3af3553b72dd476d",
+          "displayScore": 1.3170073378614182
+        },
+        {
+          "rank": 2,
+          "otid": "otid_cefdbe9b7cf34bdb",
+          "displayScore": 0.7321961222922387
+        },
+        {
+          "rank": 3,
+          "otid": "otid_3bd3d86426934a8e",
+          "displayScore": 0.494995190099806
+        },
+        {
+          "rank": 4,
+          "otid": "otid_1ae107c08e73431e",
+          "displayScore": 0.4834833682683116
+        },
+        {
+          "rank": 5,
+          "otid": "otid_fa0f61539ae34c82",
+          "displayScore": 0.3607836687442305
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0036",
+      "query": "如果学生对增补拟录取名单有疑问，应如何联系学院研究生办公室，另外电子邮箱jiangt69@mail.sysu.edu.cn是用于处理什么类型的问题？",
+      "query_type": "situational",
+      "query_scope": "procedure",
+      "theme_family": "other",
+      "query_style_mode": "paired_multi_kp_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_7dd1e1ab60ea44bc",
+      "top_result_otid": "otid_cba081d3aacb48b7",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.16300000000000003,
+      "final_reject_score": 0.16300000000000003,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_cba081d3aacb48b7",
+          "score": 1.3089843451564451,
+          "best_kpid": "kpid_675c395e19294c7d"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_027393e8a6f64ec3",
+          "score": 1.0790975294437855,
+          "best_kpid": "kpid_0b3445761c9a4fe1"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_bdabc7cadb154b91",
+          "score": 0.9151655351418533,
+          "best_kpid": "kpid_4469059962b24feb"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_994207bb2a0740a1",
+          "score": 0.908884695612213,
+          "best_kpid": "kpid_e8e45a6ded564d0b"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_b559ca9597eb4750",
+          "score": 0.8724778339283354,
+          "best_kpid": "kpid_b25871aeabe64936"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_cba081d3aacb48b7",
+          "displayScore": 1.6589843451564452
+        },
+        {
+          "rank": 2,
+          "otid": "otid_bdabc7cadb154b91",
+          "displayScore": 1.2651655351418534
+        },
+        {
+          "rank": 3,
+          "otid": "otid_994ffceadca749ee",
+          "displayScore": 1.1383620036508832
+        },
+        {
+          "rank": 4,
+          "otid": "otid_5a1394b3b33e477f",
+          "displayScore": 1.120135134294092
+        },
+        {
+          "rank": 5,
+          "otid": "otid_1c9d2874ca184420",
+          "displayScore": 1.116614978387727
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0037",
+      "query": "2024硕士复试要点",
+      "query_type": "short_keyword",
+      "query_scope": "policy_overview",
+      "theme_family": "master_reexam",
+      "query_style_mode": "short_keyword_compressed_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_2875f7b8cd70429c",
+      "top_result_otid": "otid_5d3de70a83da45af",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.04866666666666668,
+      "final_reject_score": 0.04866666666666668,
+      "weak_match_count": 0,
+      "match_count": 42,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_2db2c0c0349745ea",
+          "score": 1.313857131154344,
+          "best_kpid": "kpid_8c7b6b4e4f5f439a"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_5d3de70a83da45af",
+          "score": 1.1832646163899276,
+          "best_kpid": "kpid_06546a04f4e4480e"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_b9b1fa013e3d48e9",
+          "score": 0.8101233269058871,
+          "best_kpid": "kpid_1619446533604dbd"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_8b89d42037fa4682",
+          "score": 0.7974175401991117,
+          "best_kpid": "kpid_8fbf7bde3e6147cb"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_1c14b6043fd645c8",
+          "score": 0.7199973963339095,
+          "best_kpid": "kpid_59ef3b3207114a05"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_5d3de70a83da45af",
+          "displayScore": 1.4632646163899277
+        },
+        {
+          "rank": 2,
+          "otid": "otid_2db2c0c0349745ea",
+          "displayScore": 1.2613571311543441
+        },
+        {
+          "rank": 3,
+          "otid": "otid_a711c70a3db84204",
+          "displayScore": 0.9388819809595865
+        },
+        {
+          "rank": 4,
+          "otid": "otid_e9ff52409e304167",
+          "displayScore": 0.9157334313269376
+        },
+        {
+          "rank": 5,
+          "otid": "otid_b9b1fa013e3d48e9",
+          "displayScore": 0.7576233269058871
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0038",
+      "query": "2026年1月7日，中山大学人工智能学院公示了博士研究生综合考核结果，如果考生在公示期间对结果有异议，应如何联系学院？",
+      "query_type": "situational",
+      "query_scope": "procedure",
+      "theme_family": "doctoral",
+      "query_style_mode": "source_seed_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_f38fd69ea2d64794",
+      "top_result_otid": "otid_3af3553b72dd476d",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.14375,
+      "final_reject_score": 0.14375,
+      "weak_match_count": 0,
+      "match_count": 21,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_3af3553b72dd476d",
+          "score": 1.19935685210296,
+          "best_kpid": "kpid_325c0f0130a84cab"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_cefdbe9b7cf34bdb",
+          "score": 0.659035253471479,
+          "best_kpid": "kpid_5ed00e9e13944108"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_80529bdd365b4138",
+          "score": 0.5332381344563645,
+          "best_kpid": "kpid_4804a2ca6c5449ba"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_3bd3d86426934a8e",
+          "score": 0.49202154333485476,
+          "best_kpid": "kpid_e060a3c1e90a47cc"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_faeac0ecd9304bd1",
+          "score": 0.47300070215893053,
+          "best_kpid": "kpid_3c828ccb3e2344c4"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_3af3553b72dd476d",
+          "displayScore": 1.6333568521029602
+        },
+        {
+          "rank": 2,
+          "otid": "otid_3bd3d86426934a8e",
+          "displayScore": 0.24352154333485476
+        },
+        {
+          "rank": 3,
+          "otid": "otid_026bbae2756a4096",
+          "displayScore": 0.19850001588546629
+        },
+        {
+          "rank": 4,
+          "otid": "otid_faeac0ecd9304bd1",
+          "displayScore": 0.09850070215893053
+        },
+        {
+          "rank": 5,
+          "otid": "otid_c4214c3cb4464737",
+          "displayScore": 0.06992338442566938
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0039",
+      "query": "文件编号该校教务〔2023〕6号和人工智能教〔2023〕3号表明这两份文件适用于哪一年的推免工作，另外有多少名同学被拟推荐获得免试攻读研究生资格（普通类）？",
+      "query_type": "standard",
+      "query_scope": "eligibility_condition",
+      "theme_family": "other",
+      "query_style_mode": "paired_multi_kp_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_538c64bb37164663",
+      "top_result_otid": "otid_0653973ae1784e7e",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.09866666666666665,
+      "final_reject_score": 0.09866666666666665,
+      "weak_match_count": 0,
+      "match_count": 34,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_0653973ae1784e7e",
+          "score": 0.6884820807366239,
+          "best_kpid": "kpid_93a39d8137f64634"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_e1647864eb2b41e3",
+          "score": 0.48397134338623005,
+          "best_kpid": "kpid_15d7831875214e57"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_d2b18bcf0b2b453b",
+          "score": 0.3191157456093804,
+          "best_kpid": "kpid_fdbcf8b2715f4488"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_aa27e7af498e467d",
+          "score": 0.2844172891622989,
+          "best_kpid": "kpid_e544a3af71ac449b"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_dd1bdc2782194207",
+          "score": 0.2820305843720578,
+          "best_kpid": "kpid_b24fab2bb7174984"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_0653973ae1784e7e",
+          "displayScore": 1.1504820807366238
+        },
+        {
+          "rank": 2,
+          "otid": "otid_e1647864eb2b41e3",
+          "displayScore": 0.69397134338623
+        },
+        {
+          "rank": 3,
+          "otid": "otid_d2b18bcf0b2b453b",
+          "displayScore": 0.3611157456093804
+        },
+        {
+          "rank": 4,
+          "otid": "otid_d23cd8bd933e4d4b",
+          "displayScore": 0.2549244373366356
+        },
+        {
+          "rank": 5,
+          "otid": "otid_7933bd21608a41dd",
+          "displayScore": 0.24353644226986218
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0040",
+      "query": "如果一位拟录取考生在2026年4月3日中午12：00后决定放弃录取，按照人工智能学院的通知，是否还能从本次未录取的考生中递补录取？",
+      "query_type": "situational",
+      "query_scope": "policy_overview",
+      "theme_family": "master_reexam",
+      "query_style_mode": "source_seed_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_42225868ea784bbf",
+      "top_result_otid": "otid_1ae107c08e73431e",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.012800000000000006,
+      "final_reject_score": 0.012800000000000006,
+      "weak_match_count": 0,
+      "match_count": 22,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_1ae107c08e73431e",
+          "score": 0.821010920718598,
+          "best_kpid": "kpid_c35f576aa0664473"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_3bd3d86426934a8e",
+          "score": 0.6414758104322809,
+          "best_kpid": "kpid_f34d6068d8bc436c"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_dc54d3033b3c4944",
+          "score": 0.6150043049537758,
+          "best_kpid": "kpid_a9221ddeb8e84409"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_d2e81434d6754411",
+          "score": 0.5505786897551272,
+          "best_kpid": "kpid_049caafd930e4c75"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_40565beb38cf45c5",
+          "score": 0.5104982667830965,
+          "best_kpid": "kpid_8010becd465e40c3"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_1ae107c08e73431e",
+          "displayScore": 0.569010920718598
+        },
+        {
+          "rank": 2,
+          "otid": "otid_dc54d3033b3c4944",
+          "displayScore": 0.5590043049537757
+        },
+        {
+          "rank": 3,
+          "otid": "otid_d2e81434d6754411",
+          "displayScore": 0.49457868975512725
+        },
+        {
+          "rank": 4,
+          "otid": "otid_40565beb38cf45c5",
+          "displayScore": 0.4544982667830965
+        },
+        {
+          "rank": 5,
+          "otid": "otid_3bd3d86426934a8e",
+          "displayScore": 0.3894758104322808
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0041",
+      "query": "2024博士细节",
+      "query_type": "short_keyword",
+      "query_scope": "fact_detail",
+      "theme_family": "doctoral",
+      "query_style_mode": "short_keyword_compressed_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_c79e15cfe7c848e3",
+      "top_result_otid": "otid_fd6621f974774e1c",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.22729999999999997,
+      "final_reject_score": 0.22729999999999997,
+      "weak_match_count": 0,
+      "match_count": 56,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_fd6621f974774e1c",
+          "score": 0.8447446582340938,
+          "best_kpid": "kpid_b4f3a4d7b7f74c53"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_2d77227bd2fa473c",
+          "score": 0.777236200065208,
+          "best_kpid": "kpid_1effe8285e1e4377"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_0cf1cfb3d7bc4735",
+          "score": 0.6802841012854889,
+          "best_kpid": "kpid_ba3a95e53a9f49dd"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_cd24f8a51c504292",
+          "score": 0.6690230179758371,
+          "best_kpid": "kpid_f7cc6bc6e34f48aa"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_b5b5d513960a454f",
+          "score": 0.6516240117587268,
+          "best_kpid": "kpid_8e1b0fd973194fae"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_fd6621f974774e1c",
+          "displayScore": 0.820236200065208
+        },
+        {
+          "rank": 2,
+          "otid": "otid_2d77227bd2fa473c",
+          "displayScore": 0.819236200065208
+        },
+        {
+          "rank": 3,
+          "otid": "otid_286da9de105e4455",
+          "displayScore": 0.7742512676804485
+        },
+        {
+          "rank": 4,
+          "otid": "otid_1a4309ab66454772",
+          "displayScore": 0.6988825447530591
+        },
+        {
+          "rank": 5,
+          "otid": "otid_529165c30e3a4d41",
+          "displayScore": 0.6287337672488851
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0042",
+      "query": "2022硕士复试时间安排",
+      "query_type": "short_keyword",
+      "query_scope": "time_location",
+      "theme_family": "master_reexam",
+      "query_style_mode": "short_keyword_compressed_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_eae8392d216d48ea",
+      "top_result_otid": "otid_f4f08d56e1d84704",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.08366782641636432,
+      "final_reject_score": 0.08366782641636432,
+      "weak_match_count": 0,
+      "match_count": 44,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_1ef327d38b174afb",
+          "score": 1.1201237600854852,
+          "best_kpid": "kpid_4f7759de1d154c13"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_f4f08d56e1d84704",
+          "score": 0.9643431827431828
+        },
+        {
+          "rank": 3,
+          "otid": "otid_10644c71240a4a58",
+          "score": 0.7438926252092373,
+          "best_kpid": "kpid_1586936327b34083"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_5ff73caf3b104c08",
+          "score": 0.6799385163283406,
+          "best_kpid": "kpid_15ed1e09836e4184"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_1374cb79a2ea4590",
+          "score": 0.6403487540535926,
+          "best_kpid": "kpid_c560d9ef6c7c49eb"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_f4f08d56e1d84704",
+          "displayScore": 0.9118431827431828
+        },
+        {
+          "rank": 2,
+          "otid": "otid_9b3db69e0fa2476a",
+          "displayScore": 0.8226870971577507
+        },
+        {
+          "rank": 3,
+          "otid": "otid_752547880f7e4c3a",
+          "displayScore": 0.7098172177147875
+        },
+        {
+          "rank": 4,
+          "otid": "otid_10644c71240a4a58",
+          "displayScore": 0.6913926252092373
+        },
+        {
+          "rank": 5,
+          "otid": "otid_5ff73caf3b104c08",
+          "displayScore": 0.6274385163283406
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0043",
+      "query": "本次博士研究生调剂综合考核结果公示是基于哪三个具体文件或规定进行的，另外对该学院博士研究生调剂结果有异议的反馈，为什么要求自报或签署真实姓名？",
+      "query_type": "standard",
+      "query_scope": "eligibility_condition",
+      "theme_family": "doctor_adjustment",
+      "query_style_mode": "paired_multi_kp_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_eb3d3855deb74340",
+      "top_result_otid": "otid_32f33b04286b4f12",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.12817847741800076,
+      "final_reject_score": 0.12817847741800076,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_32f33b04286b4f12",
+          "score": 1.132815276563636,
+          "best_kpid": "kpid_8b6d87b2ae9a42a9"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_15996476fc324e33",
+          "score": 1.0741072023230258,
+          "best_kpid": "kpid_9451b20d077f4828"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_6374df77359049f8",
+          "score": 1.067248947565365,
+          "best_kpid": "kpid_c98874a555e34313"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_cba081d3aacb48b7",
+          "score": 0.9262130633839557,
+          "best_kpid": "kpid_675c395e19294c7d"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_3af3553b72dd476d",
+          "score": 0.9113867209000694,
+          "best_kpid": "kpid_325c0f0130a84cab"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_32f33b04286b4f12",
+          "displayScore": 1.576815276563636
+        },
+        {
+          "rank": 2,
+          "otid": "otid_15996476fc324e33",
+          "displayScore": 1.446107202323026
+        },
+        {
+          "rank": 3,
+          "otid": "otid_3af3553b72dd476d",
+          "displayScore": 1.2833867209000696
+        },
+        {
+          "rank": 4,
+          "otid": "otid_6374df77359049f8",
+          "displayScore": 1.1787489475653652
+        },
+        {
+          "rank": 5,
+          "otid": "otid_cba081d3aacb48b7",
+          "displayScore": 0.9817130633839557
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0044",
+      "query": "2023博士要点",
+      "query_type": "short_keyword",
+      "query_scope": "policy_overview",
+      "theme_family": "doctoral",
+      "query_style_mode": "short_keyword_compressed_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_0f30eade3efc4803",
+      "top_result_otid": "otid_d2b18bcf0b2b453b",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.22729999999999997,
+      "final_reject_score": 0.22729999999999997,
+      "weak_match_count": 0,
+      "match_count": 57,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_d2b18bcf0b2b453b",
+          "score": 1.0446672975060602,
+          "best_kpid": "kpid_7e5f5f6ae5014d91"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_7933bd21608a41dd",
+          "score": 0.8364697433731234,
+          "best_kpid": "kpid_200c8ed9b9e84991"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_1d27e24124864812",
+          "score": 0.8355050902940498,
+          "best_kpid": "kpid_c4c7c0de3f2f45eb"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_aa27e7af498e467d",
+          "score": 0.8248880513528076,
+          "best_kpid": "kpid_de78be21225c4904"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_903e35dbd70b496d",
+          "score": 0.799789851838391,
+          "best_kpid": "kpid_be44a03d6a294ce2"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_d2b18bcf0b2b453b",
+          "displayScore": 0.9398386717173542
+        },
+        {
+          "rank": 2,
+          "otid": "otid_46b7578040384d16",
+          "displayScore": 0.9388386717173542
+        },
+        {
+          "rank": 3,
+          "otid": "otid_529165c30e3a4d41",
+          "displayScore": 0.843577879228447
+        },
+        {
+          "rank": 4,
+          "otid": "otid_1e4c2112a331417e",
+          "displayScore": 0.8230953738532247
+        },
+        {
+          "rank": 5,
+          "otid": "otid_dd1bdc2782194207",
+          "displayScore": 0.8056077892058577
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0045",
+      "query": "拟录取考生需要在什么日期前提交体检表以完成录取流程，另外但需要提交体检表，根据学院复试录取方案的要求，最晚应在什么日期前提交？",
+      "query_type": "situational",
+      "query_scope": "time_location",
+      "theme_family": "master_reexam",
+      "query_style_mode": "paired_multi_kp_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_2875f7b8cd70429c",
+      "top_result_otid": "otid_1ae107c08e73431e",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0,
+      "final_reject_score": 0,
+      "weak_match_count": 0,
+      "match_count": 100,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_60cc15560fde4256",
+          "score": 1.3204242608468117,
+          "best_kpid": "kpid_d4a259ac7df3408b"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_a64e9944784c42bd",
+          "score": 1.1493663978058808,
+          "best_kpid": "kpid_fae78fdba2234365"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_c5df22e413fd4881",
+          "score": 1.14867285330191,
+          "best_kpid": "kpid_6801118bb13f4309"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_1ae107c08e73431e",
+          "score": 1.1443055909948323,
+          "best_kpid": "kpid_689c919059a941db"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_ed940aabc9c24803",
+          "score": 1.131446590837675,
+          "best_kpid": "kpid_8531354bfb6148cb"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_1ae107c08e73431e",
+          "displayScore": 1.8343055909948323
+        },
+        {
+          "rank": 2,
+          "otid": "otid_ed940aabc9c24803",
+          "displayScore": 1.821446590837675
+        },
+        {
+          "rank": 3,
+          "otid": "otid_95c5075eb4ff45c3",
+          "displayScore": 1.2175685908322318
+        },
+        {
+          "rank": 4,
+          "otid": "otid_c5df22e413fd4881",
+          "displayScore": 1.20417285330191
+        },
+        {
+          "rank": 5,
+          "otid": "otid_60cc15560fde4256",
+          "displayScore": 1.1284242608468116
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0046",
+      "query": "综合考核阶段的前置步骤是什么，另外该学院对2023年博士研究生综合考核的时间有何具体安排？",
+      "query_type": "standard",
+      "query_scope": "procedure",
+      "theme_family": "doctoral",
+      "query_style_mode": "paired_multi_kp_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_0f30eade3efc4803",
+      "top_result_otid": "otid_903e35dbd70b496d",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.17866666666666667,
+      "final_reject_score": 0.17866666666666667,
+      "weak_match_count": 0,
+      "match_count": 44,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_903e35dbd70b496d",
+          "score": 1.3710037376366087,
+          "best_kpid": "kpid_c60cfecad5394865"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_b64bdb78a2854fdc",
+          "score": 0.8269904991742694,
+          "best_kpid": "kpid_1864f5d93e9741f1"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_d2b18bcf0b2b453b",
+          "score": 0.7179623674337099,
+          "best_kpid": "kpid_39edcc67c246444b"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_467c753a650543da",
+          "score": 0.6764584688260075,
+          "best_kpid": "kpid_1ea7d7e016d64f66"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_88804cb412b84a0f",
+          "score": 0.6150833333333334
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_903e35dbd70b496d",
+          "displayScore": 1.5350037376366088
+        },
+        {
+          "rank": 2,
+          "otid": "otid_467c753a650543da",
+          "displayScore": 0.9979584688260075
+        },
+        {
+          "rank": 3,
+          "otid": "otid_d2b18bcf0b2b453b",
+          "displayScore": 0.8119623674337099
+        },
+        {
+          "rank": 4,
+          "otid": "otid_88804cb412b84a0f",
+          "displayScore": 0.7265833333333335
+        },
+        {
+          "rank": 5,
+          "otid": "otid_29bee8c1d48a4946",
+          "displayScore": 0.656484968579636
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0047",
+      "query": "该学院2022年硕士研究生复试结果公示中，哪个专业的增量后公开招考计划为10个名额？",
+      "query_type": "standard",
+      "query_scope": "policy_overview",
+      "theme_family": "master_reexam",
+      "query_style_mode": "deanchored_medium_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_eae8392d216d48ea",
+      "top_result_otid": "otid_dcfe8d5d21b24255",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.12284689692546139,
+      "final_reject_score": 0.12284689692546139,
+      "weak_match_count": 0,
+      "match_count": 33,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_dcfe8d5d21b24255",
+          "score": 0.7740161303089348,
+          "best_kpid": "kpid_ef79472202584f89"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_8f9030bdc1684758",
+          "score": 0.7107446240460431,
+          "best_kpid": "kpid_328de1308bbe4946"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_67d3c146cf8c48b8",
+          "score": 0.6883893626906519,
+          "best_kpid": "kpid_0e73bbb3810d4053"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_7d9f138aeeb74dac",
+          "score": 0.667883637793597,
+          "best_kpid": "kpid_56f4a77aec0d43ff"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_1ef327d38b174afb",
+          "score": 0.6405534935964685,
+          "best_kpid": "kpid_4f7759de1d154c13"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_dcfe8d5d21b24255",
+          "displayScore": 0.7215161303089348
+        },
+        {
+          "rank": 2,
+          "otid": "otid_8f9030bdc1684758",
+          "displayScore": 0.6582446240460431
+        },
+        {
+          "rank": 3,
+          "otid": "otid_67d3c146cf8c48b8",
+          "displayScore": 0.6358893626906519
+        },
+        {
+          "rank": 4,
+          "otid": "otid_7d9f138aeeb74dac",
+          "displayScore": 0.6153836377935971
+        },
+        {
+          "rank": 5,
+          "otid": "otid_ed4b1cd55d9e4326",
+          "displayScore": 0.5577742199025405
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0048",
+      "query": "在2023年12月25日发布的该学院博士招生通知中，张老师的联系电话和邮箱地址分别是什么？",
+      "query_type": "standard",
+      "query_scope": "time_location",
+      "theme_family": "doctoral",
+      "query_style_mode": "deanchored_medium_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_c79e15cfe7c848e3",
+      "top_result_otid": "otid_529165c30e3a4d41",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.3268181818181818,
+      "final_reject_score": 0.3268181818181818,
+      "weak_match_count": 0,
+      "match_count": 54,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_dcce8f93b4e24787",
+          "score": 0.9289385369412272,
+          "best_kpid": "kpid_2f5e19981d384089"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_529165c30e3a4d41",
+          "score": 0.7523234279609279,
+          "best_kpid": "kpid_16b5730ee45c4b98"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_aa024784667d4f5a",
+          "score": 0.6723508771929825
+        },
+        {
+          "rank": 4,
+          "otid": "otid_f29e93c7817844b3",
+          "score": 0.6100897051685401,
+          "best_kpid": "kpid_1a00c031cbd74288"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_624cf6538fff4424",
+          "score": 0.5869834664976966,
+          "best_kpid": "kpid_8bda6f589c344d1e"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_529165c30e3a4d41",
+          "displayScore": 0.8083234279609279
+        },
+        {
+          "rank": 2,
+          "otid": "otid_f29e93c7817844b3",
+          "displayScore": 0.6660897051685402
+        },
+        {
+          "rank": 3,
+          "otid": "otid_dcce8f93b4e24787",
+          "displayScore": 0.6629385369412272
+        },
+        {
+          "rank": 4,
+          "otid": "otid_1d27e24124864812",
+          "displayScore": 0.5232379159683243
+        },
+        {
+          "rank": 5,
+          "otid": "otid_af18ceedf37d44bb",
+          "displayScore": 0.49109515669515674
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0049",
+      "query": "基于2024年9月14日发布的附件摘要，该学院2025届工程硕博专项类推免名单中，专业集中度、年级统一性和类型一致性各是多少百分比？",
+      "query_type": "standard",
+      "query_scope": "fact_detail",
+      "theme_family": "other",
+      "query_style_mode": "deanchored_medium_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_82fe535421c6472c",
+      "top_result_otid": "otid_027393e8a6f64ec3",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.03399999999999999,
+      "final_reject_score": 0.03399999999999999,
+      "weak_match_count": 0,
+      "match_count": 92,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_027393e8a6f64ec3",
+          "score": 1.1783046841416212,
+          "best_kpid": "kpid_94b439c329e14e29"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_6010e10f0bd24934",
+          "score": 0.9585304072318159,
+          "best_kpid": "kpid_78e51a129eff4f46"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_fcc01f4998fe4c47",
+          "score": 0.9547361562207984,
+          "best_kpid": "kpid_345178378e044ff5"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_61e44e3f9f6548de",
+          "score": 0.8327770061499364,
+          "best_kpid": "kpid_c0aec0fe8fe34660"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_6374df77359049f8",
+          "score": 0.7989683328543601,
+          "best_kpid": "kpid_ba7a31dd28304466"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_027393e8a6f64ec3",
+          "displayScore": 1.1783046841416212
+        },
+        {
+          "rank": 2,
+          "otid": "otid_61e44e3f9f6548de",
+          "displayScore": 0.9587770061499364
+        },
+        {
+          "rank": 3,
+          "otid": "otid_6010e10f0bd24934",
+          "displayScore": 0.9585304072318159
+        },
+        {
+          "rank": 4,
+          "otid": "otid_fcc01f4998fe4c47",
+          "displayScore": 0.9547361562207984
+        },
+        {
+          "rank": 5,
+          "otid": "otid_e9ff52409e304167",
+          "displayScore": 0.7289436924617307
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0050",
+      "query": "如果某位考生的专家组面试成绩和导师组面试成绩已知，如何确定其是否进入拟录取名单，另外该学院2022年博士研究生招生结果公示中，如对结果有异议，联系地址的邮政编码是多少？",
+      "query_type": "situational",
+      "query_scope": "procedure",
+      "theme_family": "doctoral",
+      "query_style_mode": "paired_multi_kp_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_860f1ae2b71c4de9",
+      "top_result_otid": "otid_36cce6f8f00c4d59",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.10914855274942367,
+      "final_reject_score": 0.10914855274942367,
+      "weak_match_count": 0,
+      "match_count": 36,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_36cce6f8f00c4d59",
+          "score": 0.7693111719000825,
+          "best_kpid": "kpid_1132e66900d649a0"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_07571807121c4472",
+          "score": 0.6098825326750197,
+          "best_kpid": "kpid_58da30db088a4cd3"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_8c27fc74819145d9",
+          "score": 0.540095935981123,
+          "best_kpid": "kpid_91f6ce11bd514f7d"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_5b41b96b75e34c39",
+          "score": 0.5312191910841677,
+          "best_kpid": "kpid_5290c686dc954cdc"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_9326c24422404292",
+          "score": 0.4802241462449238,
+          "best_kpid": "kpid_5d5f6169475b4969"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_36cce6f8f00c4d59",
+          "displayScore": 0.7693111719000825
+        },
+        {
+          "rank": 2,
+          "otid": "otid_07571807121c4472",
+          "displayScore": 0.6098825326750197
+        },
+        {
+          "rank": 3,
+          "otid": "otid_8c27fc74819145d9",
+          "displayScore": 0.5960959359811231
+        },
+        {
+          "rank": 4,
+          "otid": "otid_9326c24422404292",
+          "displayScore": 0.5362241462449239
+        },
+        {
+          "rank": 5,
+          "otid": "otid_5b41b96b75e34c39",
+          "displayScore": 0.5312191910841677
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0051",
+      "query": "根据该学院2022年4月1日发布的硕士研究生复试结果公示，计算机科学与技术专业（代码081200）的增量计划和增量后公开招考计划分别是多少？",
+      "query_type": "standard",
+      "query_scope": "fact_detail",
+      "theme_family": "master_reexam",
+      "query_style_mode": "deanchored_medium_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_eae8392d216d48ea",
+      "top_result_otid": "otid_bca34f3bc50d4b10",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.0828,
+      "final_reject_score": 0.0828,
+      "weak_match_count": 0,
+      "match_count": 39,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_1ef327d38b174afb",
+          "score": 0.7416531690662553,
+          "best_kpid": "kpid_4f7759de1d154c13"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_fe078e0584fe4b77",
+          "score": 0.7283754882008424,
+          "best_kpid": "kpid_282dd939d1a34d24"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_bca34f3bc50d4b10",
+          "score": 0.5882809523809523,
+          "best_kpid": "kpid_629d6f627a6c4131"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_dcfe8d5d21b24255",
+          "score": 0.5008052286381013,
+          "best_kpid": "kpid_ef79472202584f89"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_36cce6f8f00c4d59",
+          "score": 0.482848034406658,
+          "best_kpid": "kpid_9e8afe9d3c7e44c4"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_bca34f3bc50d4b10",
+          "displayScore": 0.8682809523809523
+        },
+        {
+          "rank": 2,
+          "otid": "otid_1ef327d38b174afb",
+          "displayScore": 0.46165316906625536
+        },
+        {
+          "rank": 3,
+          "otid": "otid_fe078e0584fe4b77",
+          "displayScore": 0.44837548820084244
+        },
+        {
+          "rank": 4,
+          "otid": "otid_dcfe8d5d21b24255",
+          "displayScore": 0.4483052286381013
+        },
+        {
+          "rank": 5,
+          "otid": "otid_36cce6f8f00c4d59",
+          "displayScore": 0.43034803440665803
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0052",
+      "query": "拟录取的硕士研究生在正式录取前需要完成哪些具体步骤，另外在该学院2025年硕士研究生增补拟录取（第一批）中，复试成绩对最终总成绩排名起到了什么作用？",
+      "query_type": "standard",
+      "query_scope": "procedure",
+      "theme_family": "other",
+      "query_style_mode": "paired_multi_kp_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_3eaad7074d4a4dc9",
+      "top_result_otid": "otid_915aba738ea449e4",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0,
+      "final_reject_score": 0,
+      "weak_match_count": 0,
+      "match_count": 49,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_d2c7f1cd37464fbf",
+          "score": 1.1271506147396924,
+          "best_kpid": "kpid_ed3d9dcb94fe4193"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_915aba738ea449e4",
+          "score": 1.0826043673260948,
+          "best_kpid": "kpid_902d63c5c3404638"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_f1b9c5657c3c4c90",
+          "score": 0.9848865463704628,
+          "best_kpid": "kpid_7140cb4c35724b7f"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_b8a98fa84f504d63",
+          "score": 0.7521758135918573,
+          "best_kpid": "kpid_d7f8c8433aea4230"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_c7af54f9342e4a1c",
+          "score": 0.721427956084702,
+          "best_kpid": "kpid_d4d0d23a82cc4b33"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_915aba738ea449e4",
+          "displayScore": 1.3461043673260948
+        },
+        {
+          "rank": 2,
+          "otid": "otid_ed940aabc9c24803",
+          "displayScore": 1.2066805029571193
+        },
+        {
+          "rank": 3,
+          "otid": "otid_f1b9c5657c3c4c90",
+          "displayScore": 0.9703865463704628
+        },
+        {
+          "rank": 4,
+          "otid": "otid_6374df77359049f8",
+          "displayScore": 0.9270494112428178
+        },
+        {
+          "rank": 5,
+          "otid": "otid_c7af54f9342e4a1c",
+          "displayScore": 0.8994279560847019
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0053",
+      "query": "根据该学院2022年5月27日发布的博士研究生递补录取结果公示，如对结果有异议，应如何联系学院？",
+      "query_type": "standard",
+      "query_scope": "procedure",
+      "theme_family": "doctoral",
+      "query_style_mode": "deanchored_medium_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_b53a9170fcfe4d2e",
+      "top_result_otid": "otid_d21d1c0e20b649d7",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.12582949731465565,
+      "final_reject_score": 0.12582949731465565,
+      "weak_match_count": 0,
+      "match_count": 32,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_d21d1c0e20b649d7",
+          "score": 0.546094128816212,
+          "best_kpid": "kpid_94e5d9ae80e549ce"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_67d3c146cf8c48b8",
+          "score": 0.5005352253215505,
+          "best_kpid": "kpid_23b3fac3dcb34f40"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_36cce6f8f00c4d59",
+          "score": 0.4688108182303906,
+          "best_kpid": "kpid_33cbda64788741b3"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_8dcb848e9edd4fd2",
+          "score": 0.45251366932587495,
+          "best_kpid": "kpid_97435903d5344927"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_72abe3fc6a084d38",
+          "score": 0.44676944982537425,
+          "best_kpid": "kpid_3a3aac0f06c747f4"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_d21d1c0e20b649d7",
+          "displayScore": 0.546094128816212
+        },
+        {
+          "rank": 2,
+          "otid": "otid_8dcb848e9edd4fd2",
+          "displayScore": 0.5085136693258749
+        },
+        {
+          "rank": 3,
+          "otid": "otid_67d3c146cf8c48b8",
+          "displayScore": 0.5005352253215505
+        },
+        {
+          "rank": 4,
+          "otid": "otid_36cce6f8f00c4d59",
+          "displayScore": 0.4688108182303906
+        },
+        {
+          "rank": 5,
+          "otid": "otid_72abe3fc6a084d38",
+          "displayScore": 0.44676944982537425
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0054",
+      "query": "该学院2023年4月12日的公示中，增补拟录取名单的性质是什么？正式录取名单的确认流程是怎样的？",
+      "query_type": "standard",
+      "query_scope": "procedure",
+      "theme_family": "other",
+      "query_style_mode": "deanchored_medium_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_7dd1e1ab60ea44bc",
+      "top_result_otid": "otid_263c1fbb8a3c4542",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.09849999999999998,
+      "final_reject_score": 0.09849999999999998,
+      "weak_match_count": 0,
+      "match_count": 47,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_263c1fbb8a3c4542",
+          "score": 0.9706099700365141,
+          "best_kpid": "kpid_74aeff716fe244d5"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_1c11811a02604c36",
+          "score": 0.8467502246505975,
+          "best_kpid": "kpid_0e1f2e222bd74b81"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_0653973ae1784e7e",
+          "score": 0.6497843553789722,
+          "best_kpid": "kpid_bd34fcfac9114f8e"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_1d27e24124864812",
+          "score": 0.6142113300492611,
+          "best_kpid": "kpid_fc002c3ff4024d0e"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_0d173e55107840a1",
+          "score": 0.5865216419968705,
+          "best_kpid": "kpid_d48f3efb03a843ea"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_263c1fbb8a3c4542",
+          "displayScore": 1.3206099700365141
+        },
+        {
+          "rank": 2,
+          "otid": "otid_0653973ae1784e7e",
+          "displayScore": 0.8597843553789721
+        },
+        {
+          "rank": 3,
+          "otid": "otid_1c11811a02604c36",
+          "displayScore": 0.8467502246505975
+        },
+        {
+          "rank": 4,
+          "otid": "otid_d2b18bcf0b2b453b",
+          "displayScore": 0.6580556631907652
+        },
+        {
+          "rank": 5,
+          "otid": "otid_1d27e24124864812",
+          "displayScore": 0.6142113300492611
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0055",
+      "query": "根据2025年5月26日发布的《该学院2025年以“申请-考核”制招收博士研究生招生简章》，综合考核结果（第二批）的公示是基于哪些具体规定和审核流程？",
+      "query_type": "standard",
+      "query_scope": "procedure",
+      "theme_family": "doctoral",
+      "query_style_mode": "deanchored_medium_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_9a0576424d284199",
+      "top_result_otid": "otid_32f33b04286b4f12",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.057800000000000004,
+      "final_reject_score": 0.057800000000000004,
+      "weak_match_count": 0,
+      "match_count": 44,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_15996476fc324e33",
+          "score": 1.408415868701796,
+          "best_kpid": "kpid_9451b20d077f4828"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_32f33b04286b4f12",
+          "score": 1.3684410664842876,
+          "best_kpid": "kpid_8b6d87b2ae9a42a9"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_d2c7f1cd37464fbf",
+          "score": 1.0904793430037873,
+          "best_kpid": "kpid_ed3d9dcb94fe4193"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_b8a98fa84f504d63",
+          "score": 1.0611244890520894,
+          "best_kpid": "kpid_d7f8c8433aea4230"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_94116dceb8f543e9",
+          "score": 0.9871240506675287,
+          "best_kpid": "kpid_424be6c926f04d64"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_32f33b04286b4f12",
+          "displayScore": 2.0544410664842876
+        },
+        {
+          "rank": 2,
+          "otid": "otid_d2c7f1cd37464fbf",
+          "displayScore": 1.4439793430037873
+        },
+        {
+          "rank": 3,
+          "otid": "otid_15996476fc324e33",
+          "displayScore": 1.394415868701796
+        },
+        {
+          "rank": 4,
+          "otid": "otid_6258d4af76df4ee7",
+          "displayScore": 1.2229920844521518
+        },
+        {
+          "rank": 5,
+          "otid": "otid_b8a98fa84f504d63",
+          "displayScore": 0.9946244890520896
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0056",
+      "query": "拟录取名单是如何确定的？具体依据哪些因素和顺序，另外该学院2021年博士研究生综合考核结果公示中，负责处理异议的蒋老师的完整通讯地址和邮政编码是什么？",
+      "query_type": "standard",
+      "query_scope": "procedure",
+      "theme_family": "doctoral",
+      "query_style_mode": "paired_multi_kp_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_77c43125dba648d2",
+      "top_result_otid": "otid_70b617c59a044b46",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.37,
+      "final_reject_score": 0.37,
+      "weak_match_count": 0,
+      "match_count": 22,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_70b617c59a044b46",
+          "score": 0.4068125603515944,
+          "best_kpid": "kpid_f40b91371a6b48df"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_5a4511192ee946c6",
+          "score": 0.37070105414549365,
+          "best_kpid": "kpid_c71173564845486a"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_34fe7299a2684cc6",
+          "score": 0.3421090947805212,
+          "best_kpid": "kpid_59fd80ea2d964776"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_484d051467384d83",
+          "score": 0.33427881689461597,
+          "best_kpid": "kpid_f1b644a0ae6647f1"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_a918179bb0e2441b",
+          "score": 0.17574794963030257
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_70b617c59a044b46",
+          "displayScore": 0.3543125603515944
+        },
+        {
+          "rank": 2,
+          "otid": "otid_484d051467384d83",
+          "displayScore": 0.337778816894616
+        },
+        {
+          "rank": 3,
+          "otid": "otid_5a4511192ee946c6",
+          "displayScore": 0.31820105414549366
+        },
+        {
+          "rank": 4,
+          "otid": "otid_02d8157232244d06",
+          "displayScore": 0.16687768009755893
+        },
+        {
+          "rank": 5,
+          "otid": "otid_286da9de105e4455",
+          "displayScore": 0.1541849315068493
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0057",
+      "query": "2024年12月25日该学院公布2025年“申请-考核”制博士招生名单后，考生需要注意哪些后续安排？",
+      "query_type": "standard",
+      "query_scope": "procedure",
+      "theme_family": "doctoral",
+      "query_style_mode": "deanchored_medium_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_401c4896f5614967",
+      "top_result_otid": "otid_b8a98fa84f504d63",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.009361329813698138,
+      "final_reject_score": 0.009361329813698138,
+      "weak_match_count": 0,
+      "match_count": 97,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_b8a98fa84f504d63",
+          "score": 1.1881040287139122,
+          "best_kpid": "kpid_d7f8c8433aea4230"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_5016e7c077f14008",
+          "score": 1.0260495694850595,
+          "best_kpid": "kpid_44ae6cb639b7436a"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_2ec33053026040f8",
+          "score": 0.8563057460069639,
+          "best_kpid": "kpid_99244413b8044fa2"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_a206a52bfb3f46aa",
+          "score": 0.8282053908680543,
+          "best_kpid": "kpid_885e53bfdf004c9e"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_87c7c625e9f24ea9",
+          "score": 0.8027687110148372,
+          "best_kpid": "kpid_50b2cb19956b4bbf"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_b8a98fa84f504d63",
+          "displayScore": 1.2441040287139122
+        },
+        {
+          "rank": 2,
+          "otid": "otid_5016e7c077f14008",
+          "displayScore": 1.0820495694850596
+        },
+        {
+          "rank": 3,
+          "otid": "otid_2ec33053026040f8",
+          "displayScore": 0.9123057460069639
+        },
+        {
+          "rank": 4,
+          "otid": "otid_a206a52bfb3f46aa",
+          "displayScore": 0.8842053908680544
+        },
+        {
+          "rank": 5,
+          "otid": "otid_87c7c625e9f24ea9",
+          "displayScore": 0.8587687110148372
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0058",
+      "query": "在该学院2022年以“申请-考核”制招收博士研究生的综合考核结果公示中，对于考核结果为“候补录取”的考生，是如何确定候补录取名单的？",
+      "query_type": "standard",
+      "query_scope": "procedure",
+      "theme_family": "doctoral",
+      "query_style_mode": "deanchored_medium_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_860f1ae2b71c4de9",
+      "top_result_otid": "otid_07571807121c4472",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.0828,
+      "final_reject_score": 0.0828,
+      "weak_match_count": 0,
+      "match_count": 30,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_07571807121c4472",
+          "score": 0.6888758660634274,
+          "best_kpid": "kpid_58da30db088a4cd3"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_5b41b96b75e34c39",
+          "score": 0.625205943530374,
+          "best_kpid": "kpid_5290c686dc954cdc"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_72abe3fc6a084d38",
+          "score": 0.587271773336365,
+          "best_kpid": "kpid_3a3aac0f06c747f4"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_36cce6f8f00c4d59",
+          "score": 0.5859743696223334,
+          "best_kpid": "kpid_4931ea7c0a0e4ea3"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_fe078e0584fe4b77",
+          "score": 0.5446209056080227,
+          "best_kpid": "kpid_87c69976dfbc4495"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_07571807121c4472",
+          "displayScore": 0.6363758660634274
+        },
+        {
+          "rank": 2,
+          "otid": "otid_5b41b96b75e34c39",
+          "displayScore": 0.572705943530374
+        },
+        {
+          "rank": 3,
+          "otid": "otid_72abe3fc6a084d38",
+          "displayScore": 0.534771773336365
+        },
+        {
+          "rank": 4,
+          "otid": "otid_36cce6f8f00c4d59",
+          "displayScore": 0.5334743696223334
+        },
+        {
+          "rank": 5,
+          "otid": "otid_67d3c146cf8c48b8",
+          "displayScore": 0.43316854974106167
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0059",
+      "query": "2025年该学院第二批增补拟录取考生的培养模式是什么？这表明本次增补属于什么性质的招生流程？",
+      "query_type": "standard",
+      "query_scope": "procedure",
+      "theme_family": "other",
+      "query_style_mode": "deanchored_medium_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_1435d9cf85914ea7",
+      "top_result_otid": "otid_32f33b04286b4f12",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0.24499999999999997,
+      "final_reject_score": 0.24499999999999997,
+      "weak_match_count": 0,
+      "match_count": 52,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_32f33b04286b4f12",
+          "score": 0.9747747829561744,
+          "best_kpid": "kpid_16b5bbc4e01748c6"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_d2c7f1cd37464fbf",
+          "score": 0.8963869982214661,
+          "best_kpid": "kpid_73db12151d8c4dbb"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_5fff34b0edf94bfc",
+          "score": 0.7697964861144059,
+          "best_kpid": "kpid_a55d9b5958ac42bf"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_6374df77359049f8",
+          "score": 0.7408385048439476,
+          "best_kpid": "kpid_12c77f6adce74184"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_d0d8258f19744c72",
+          "score": 0.6411193736865199,
+          "best_kpid": "kpid_dbf7f4d171c441a2"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_32f33b04286b4f12",
+          "displayScore": 1.3247747829561742
+        },
+        {
+          "rank": 2,
+          "otid": "otid_d2c7f1cd37464fbf",
+          "displayScore": 1.2463869982214661
+        },
+        {
+          "rank": 3,
+          "otid": "otid_5fff34b0edf94bfc",
+          "displayScore": 1.049796486114406
+        },
+        {
+          "rank": 4,
+          "otid": "otid_6374df77359049f8",
+          "displayScore": 1.0208385048439477
+        },
+        {
+          "rank": 5,
+          "otid": "otid_2c2fffdc61b0465f",
+          "displayScore": 0.9052026619052761
+        }
+      ]
+    },
+    {
+      "id": "aligned_ext_blind_v1_0060",
+      "query": "该学院在“申请-考核”制招生中，新增的专业学位博士指标是如何确定的，另外在该学院2023年“申请-考核”制博士研究生递补录取公示中，蒋滔的外国语、业务课和综合能力三项具体考核成绩分别是多少？",
+      "query_type": "standard",
+      "query_scope": "procedure",
+      "theme_family": "doctoral",
+      "query_style_mode": "paired_multi_kp_v1",
+      "predicted_behavior": "answer",
+      "retrieval_behavior": "answer",
+      "false_reject": false,
+      "potentially_misleading": true,
+      "expected_otid": "otid_1d07d7c9f48e4090",
+      "top_result_otid": "otid_d2b18bcf0b2b453b",
+      "retrieval_doc_rank": null,
+      "rendered_doc_rank": null,
+      "doc_hit_at_1": false,
+      "doc_hit_at_3": false,
+      "doc_hit_at_5": false,
+      "retrieval_doc_hit_at_1": false,
+      "rejection_reason": null,
+      "retrieval_reject_score": 0,
+      "final_reject_score": 0,
+      "weak_match_count": 0,
+      "match_count": 32,
+      "candidate_count": 16212,
+      "top_matches": [
+        {
+          "rank": 1,
+          "otid": "otid_d2b18bcf0b2b453b",
+          "score": 1.400621887402378,
+          "best_kpid": "kpid_39edcc67c246444b"
+        },
+        {
+          "rank": 2,
+          "otid": "otid_903e35dbd70b496d",
+          "score": 0.7979388090621659,
+          "best_kpid": "kpid_c60cfecad5394865"
+        },
+        {
+          "rank": 3,
+          "otid": "otid_d98981a283344c4e",
+          "score": 0.5661745119933274,
+          "best_kpid": "kpid_4c26bda4aa7a4f00"
+        },
+        {
+          "rank": 4,
+          "otid": "otid_fbb4d0d85ec140b9",
+          "score": 0.5560650574542949,
+          "best_kpid": "kpid_96a0f706b9f64628"
+        },
+        {
+          "rank": 5,
+          "otid": "otid_88804cb412b84a0f",
+          "score": 0.5549502344721932,
+          "best_kpid": "kpid_dc55ca5445994e40"
+        }
+      ],
+      "top_results": [
+        {
+          "rank": 1,
+          "otid": "otid_d2b18bcf0b2b453b",
+          "displayScore": 1.564621887402378
+        },
+        {
+          "rank": 2,
+          "otid": "otid_d98981a283344c4e",
+          "displayScore": 0.7301745119933274
+        },
+        {
+          "rank": 3,
+          "otid": "otid_903e35dbd70b496d",
+          "displayScore": 0.7099388090621658
+        },
+        {
+          "rank": 4,
+          "otid": "otid_fbb4d0d85ec140b9",
+          "displayScore": 0.6640650574542949
+        },
+        {
+          "rank": 5,
+          "otid": "otid_5b41b96b75e34c39",
+          "displayScore": 0.6017163270645872
+        }
+      ]
+    }
+  ]
+}

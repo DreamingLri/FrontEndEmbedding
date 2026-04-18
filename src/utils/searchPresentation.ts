@@ -43,3 +43,38 @@ export function formatRetrievalScore(score: number): string {
 export function formatPercent(score: number): string {
   return `${((score || 0) * 100).toFixed(1)}%`
 }
+
+const escapeHtml = (value: string) =>
+  value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+
+const escapeRegExp = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
+function getHighlightTerms(query: string): string[] {
+  return Array.from(
+    new Set(
+      query
+        .split(/[\s,，。；;、]+/)
+        .map((item) => item.trim())
+        .filter((item) => item.length >= 2),
+    ),
+  ).sort((left, right) => right.length - left.length)
+}
+
+export function highlightSnippet(text: string, query: string): string {
+  const safeText = escapeHtml(text || '')
+  const terms = getHighlightTerms(query)
+  if (!safeText || terms.length === 0) {
+    return safeText
+  }
+
+  const pattern = terms.map(escapeRegExp).join('|')
+  return safeText.replace(
+    new RegExp(`(${pattern})`, 'gi'),
+    '<mark class="rounded bg-blue-500/20 px-0.5 text-blue-100">$1</mark>',
+  )
+}

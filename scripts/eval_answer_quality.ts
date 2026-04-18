@@ -22,6 +22,11 @@ import {
     resolveNamedDatasetProfile,
 } from "./result_naming.ts";
 import { updateCurrentResultRegistry } from "./result_registry.ts";
+import {
+    ACTIVE_MAIN_DB_VERSION,
+    FRONTEND_METADATA_FILE,
+    FRONTEND_VECTOR_FILE,
+} from "./eval_shared.ts";
 
 type CaseReport = {
     id: string;
@@ -107,6 +112,9 @@ type Report = {
     datasetAlias?: string;
     datasetDisplayName?: string;
     total: number;
+    mainDbVersion: string;
+    frontendMetadataFile: string;
+    frontendVectorFile: string;
     config: {
         pipelineVersion: string;
         preset: PipelinePreset;
@@ -241,6 +249,9 @@ async function main() {
 
     console.log(`Loading answer_quality dataset: ${DATASET_FILE}`);
     console.log(`Loaded ${testCases.length} cases.`);
+    console.log(
+        `Using main DB version: ${ACTIVE_MAIN_DB_VERSION} (${FRONTEND_METADATA_FILE})`,
+    );
 
     const engine = await loadFrontendEvalEngine();
     const termMaps = buildPipelineTermMaps(engine.vocabMap);
@@ -349,6 +360,9 @@ async function main() {
         datasetAlias: datasetProfile.alias,
         datasetDisplayName: datasetProfile.displayName,
         total: caseReports.length,
+        mainDbVersion: ACTIVE_MAIN_DB_VERSION,
+        frontendMetadataFile: FRONTEND_METADATA_FILE,
+        frontendVectorFile: FRONTEND_VECTOR_FILE,
         config: {
             pipelineVersion: EVAL_PRESET.name,
             preset: EVAL_PRESET,

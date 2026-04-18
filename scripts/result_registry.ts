@@ -36,7 +36,7 @@ type ResultRegistryFile = {
 };
 
 const SLOT_LABELS: Record<CurrentResultSlot, string> = {
-    granularity_main_bench_120_current: "主方法主结果 `Main`",
+    granularity_main_bench_120_current: "主方法主结果 `MainlineBundle`",
     granularity_in_domain_holdout_50_current: "同域泛化结果 `InDomain`",
     granularity_external_ood_50_current: "跨域泛化结果 `ExtOOD`",
     granularity_matched_ext_ood_60_current:
@@ -56,6 +56,7 @@ const SLOT_LABELS: Record<CurrentResultSlot, string> = {
 };
 
 const SLOT_BY_DATASET_NAME: Partial<Record<string, CurrentResultSlot>> = {
+    granularity_mainline_bundle: "granularity_main_bench_120_current",
     test_dataset_granularity_main_120_reviewed:
         "granularity_main_bench_120_current",
     test_dataset_granularity_main_120_reviewed_userized_v1:
@@ -83,6 +84,7 @@ const SLOT_BY_DATASET_NAME: Partial<Record<string, CurrentResultSlot>> = {
     test_dataset_granularity_main_106_reviewed:
         "granularity_main_106_current",
     gran_main_v2: "granularity_main_bench_120_current",
+    granularity_mainline_150_100_80: "granularity_main_bench_120_current",
     gran_in_v2: "granularity_in_domain_holdout_50_current",
     gran_ext_blind60: "granularity_external_ood_50_current",
     gran_matched_ext60: "granularity_matched_ext_ood_60_current",

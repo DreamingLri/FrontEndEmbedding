@@ -66,7 +66,7 @@ type ModeResult = {
 type Report = {
     generatedAt: string;
     datasetVersion: string;
-    datasetMode: 'split' | 'single_file';
+    datasetMode: 'split' | 'single_file' | 'named_group';
     datasetKey: string;
     datasetSizes: Record<string, number>;
     queryEmbeddingBatchSize: number;

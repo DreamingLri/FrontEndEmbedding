@@ -368,9 +368,8 @@ const DATASET_FILE = process.env.SUASK_EVAL_DATASET_FILE;
 const DATASET_TARGET_KEY = (
     process.env.SUASK_EVAL_DATASET_TARGET_KEY ||
     process.env.SUASK_EVAL_DATASET_TARGET ||
-    parseCliDatasetTargetKey() ||
-    "main_bench_120"
-) as GranularityDatasetTargetKey;
+    parseCliDatasetTargetKey()
+) as GranularityDatasetTargetKey | undefined;
 const SINGLE_FILE_AS_ALL = process.env.SUASK_EVAL_SINGLE_FILE_AS_ALL !== "0";
 const DATASET_CONFIG = resolveEvalDatasetConfig({
     datasetVersion: DATASET_VERSION,
@@ -3662,10 +3661,16 @@ async function main() {
     const holdoutCases = loadDatasets(DATASET_CONFIG.holdoutSources);
     const allCases = [...tuneCases, ...holdoutCases];
     const hasIndependentHoldout = holdoutCases.length > 0;
+    const usesFrozenDatasetBundle =
+        !hasIndependentHoldout && DATASET_CONFIG.groups.length > 1;
 
     if (hasIndependentHoldout) {
         console.log(
             `Loaded tune=${tuneCases.length}, holdout=${holdoutCases.length}, combined=${allCases.length} cases`,
+        );
+    } else if (usesFrozenDatasetBundle) {
+        console.log(
+            `Loaded frozen evaluation bundle ${DATASET_CONFIG.datasetLabel}: total=${allCases.length} cases, groups=${DATASET_CONFIG.groups.length}`,
         );
     } else {
         console.log(
@@ -3832,6 +3837,8 @@ async function main() {
             sourceScript: "eval_granularity_mix.ts",
             note: hasIndependentHoldout
                 ? "当前结果基于旧式 tune/holdout 分流口径导出。"
+                : usesFrozenDatasetBundle
+                  ? `当前结果已切换到主线三冻结集口径 ${DATASET_CONFIG.datasetLabel} 导出。`
                 : EXPERIMENT_TRACK === "frontend_runtime"
                   ? `当前结果已对齐前端 runtime preset ${FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.name}，基于单冻结集入口 ${DATASET_CONFIG.datasetLabel} 导出。`
                   : `当前结果基于单冻结集入口 ${DATASET_CONFIG.datasetLabel} 导出，不再默认按 tune/holdout 切分。`,
