@@ -693,26 +693,49 @@ function queryWantsLatestVersion(query: string): boolean {
     return /现在|最新|最近|最近一次|目前|当前/.test(query);
 }
 
-function applyLatestVersionBoostToDocuments(
-    query: string,
-    documents: PipelineDocumentRecord[],
-    preferLatestWithinTopic: boolean,
-): PipelineDocumentRecord[] {
-    const normalizedQuery = normalizePatternText(query);
-    const wantsLatestVersion = queryWantsLatestVersion(normalizedQuery);
-    if (!wantsLatestVersion || documents.length <= 1) {
-        return [...documents];
-    }
+type LatestVersionFamilyStat = {
+    count: number;
+    latestRecencyKey?: number;
+};
 
-    const asksOutcomeLike = queryAsksOutcomeLikeTitle(normalizedQuery);
-    const asksProcedureLike = queryAsksProcedureLikeTitle(normalizedQuery);
-    const asksRequirementLike = queryAsksRequirementLikeTitle(normalizedQuery);
-    const asksSystemTimelineLike = queryAsksSystemTimelineLikeTitle(normalizedQuery);
-    const asksPolicyOverviewLike = queryAsksPolicyOverviewLikeTitle(normalizedQuery);
-    const familyStats = new Map<
-        string,
-        { count: number; latestRecencyKey?: number }
-    >();
+function getDocumentDisplayScore(document: PipelineDocumentRecord): number {
+    return document.displayScore ?? document.coarseScore ?? document.score ?? 0;
+}
+
+function getDocumentCoarseScore(document: PipelineDocumentRecord): number {
+    return document.coarseScore ?? document.score ?? getDocumentDisplayScore(document);
+}
+
+function sortDocumentsByDisplayScore(
+    documents: PipelineDocumentRecord[],
+): PipelineDocumentRecord[] {
+    return [...documents].sort(
+        (left, right) =>
+            getDocumentDisplayScore(right) - getDocumentDisplayScore(left),
+    );
+}
+
+function updateDocumentScores(
+    document: PipelineDocumentRecord,
+    displayDelta: number,
+    coarseDelta?: number,
+): PipelineDocumentRecord {
+    const nextDisplayScore = getDocumentDisplayScore(document) + displayDelta;
+    return {
+        ...document,
+        score: nextDisplayScore,
+        coarseScore:
+            coarseDelta === undefined
+                ? document.coarseScore
+                : getDocumentCoarseScore(document) + coarseDelta,
+        displayScore: nextDisplayScore,
+    };
+}
+
+function buildLatestVersionFamilyStats(
+    documents: PipelineDocumentRecord[],
+): Map<string, LatestVersionFamilyStat> {
+    const familyStats = new Map<string, LatestVersionFamilyStat>();
 
     documents.forEach((document) => {
         const familyKey = normalizeLatestVersionFamilyKey(document.ot_title || "");
@@ -733,68 +756,60 @@ function applyLatestVersionBoostToDocuments(
         familyStats.set(familyKey, existing);
     });
 
-    const roleSensitiveQuery =
-        asksProcedureLike ||
-        asksRequirementLike ||
-        asksSystemTimelineLike ||
-        asksPolicyOverviewLike;
-    const weight = LATEST_VERSION_DOC_WEIGHT * (preferLatestWithinTopic ? 1.1 : 1);
+    return familyStats;
+}
 
-    return [...documents]
-        .map((document) => {
-            const baseScore =
-                document.displayScore ?? document.coarseScore ?? document.score ?? 0;
-            const familyKey = normalizeLatestVersionFamilyKey(document.ot_title || "");
-            const familyStat = familyKey ? familyStats.get(familyKey) : undefined;
-            const recencyKey = resolveDocumentRecencyKey(document);
-            const roles = inferDocumentRolesFromTitle(document.ot_title || "");
-            let delta = 0;
+function computeLatestVersionDocDelta(params: {
+    document: PipelineDocumentRecord;
+    familyStats: Map<string, LatestVersionFamilyStat>;
+    asksOutcomeLike: boolean;
+    roleSensitiveQuery: boolean;
+}): number {
+    const {
+        document,
+        familyStats,
+        asksOutcomeLike,
+        roleSensitiveQuery,
+    } = params;
+    const familyKey = normalizeLatestVersionFamilyKey(document.ot_title || "");
+    const familyStat = familyKey ? familyStats.get(familyKey) : undefined;
+    const recencyKey = resolveDocumentRecencyKey(document);
+    const roles = inferDocumentRolesFromTitle(document.ot_title || "");
+    let delta = 0;
 
-            if (familyStat && familyStat.count >= 2) {
+    if (familyStat && familyStat.count >= 2) {
+        if (
+            recencyKey !== undefined &&
+            familyStat.latestRecencyKey !== undefined
+        ) {
+            const gapMonths = (familyStat.latestRecencyKey - recencyKey) / 31;
+            if (gapMonths <= 0) {
+                delta += 0.92;
                 if (
-                    recencyKey !== undefined &&
-                    familyStat.latestRecencyKey !== undefined
+                    roleSensitiveQuery &&
+                    (roles.includes("rule_doc") ||
+                        roles.includes("registration_notice") ||
+                        roles.includes("stage_list"))
                 ) {
-                    const gapMonths =
-                        (familyStat.latestRecencyKey - recencyKey) / 31;
-                    if (gapMonths <= 0) {
-                        delta += 0.92;
-                        if (
-                            roleSensitiveQuery &&
-                            (roles.includes("rule_doc") ||
-                                roles.includes("registration_notice") ||
-                                roles.includes("stage_list"))
-                        ) {
-                            delta += 0.12;
-                        }
-                    } else {
-                        delta -= Math.min(1.05, 0.2 + gapMonths * 0.08);
-                    }
-                } else {
-                    delta -= 0.18;
+                    delta += 0.12;
                 }
+            } else {
+                delta -= Math.min(1.05, 0.2 + gapMonths * 0.08);
             }
+        } else {
+            delta -= 0.18;
+        }
+    }
 
-            if (
-                !asksOutcomeLike &&
-                roleSensitiveQuery &&
-                (roles.includes("result_notice") || roles.includes("list_notice"))
-            ) {
-                delta -= 0.18;
-            }
+    if (
+        !asksOutcomeLike &&
+        roleSensitiveQuery &&
+        (roles.includes("result_notice") || roles.includes("list_notice"))
+    ) {
+        delta -= 0.18;
+    }
 
-            const nextScore = baseScore + delta * weight;
-            return {
-                ...document,
-                score: nextScore,
-                displayScore: nextScore,
-            };
-        })
-        .sort(
-            (left, right) =>
-                (right.displayScore ?? right.score ?? 0) -
-                (left.displayScore ?? left.score ?? 0),
-        );
+    return delta;
 }
 
 function queryIsCompressedKeywordLike(query: string): boolean {
@@ -1384,95 +1399,19 @@ function applyPhaseAnchorBoostToDocuments(
     queryPlan?: QueryPlan,
 ): PipelineDocumentRecord[] {
     const weight = PHASE_ANCHOR_DOC_WEIGHT * (queryPlan?.phaseAnchorWeightScale ?? 1);
-    return [...documents]
-        .map((document) => {
-            const baseScore =
-                document.displayScore ?? document.coarseScore ?? document.score ?? 0;
-            const delta = computePhaseAnchorDocDelta(query, document);
-            const nextScore = baseScore + delta * weight;
-
-            return {
-                ...document,
-                score: nextScore,
-                coarseScore:
-                    (document.coarseScore ?? document.score ?? baseScore) +
-                    delta * weight,
-                displayScore: nextScore,
-            };
-        })
-        .sort(
-            (left, right) =>
-                (right.displayScore ?? right.score ?? 0) -
-                (left.displayScore ?? left.score ?? 0),
-        );
+    return sortDocumentsByDisplayScore(
+        documents
+            .map((document) => {
+                const delta = computePhaseAnchorDocDelta(query, document) * weight;
+                return updateDocumentScores(document, delta, delta);
+            }),
+    );
 }
 
-function applyTitleIntentBoostToDocuments(
-    query: string,
+function applyCoverageTitleDiversity(
     documents: PipelineDocumentRecord[],
-    queryPlan?: QueryPlan,
 ): PipelineDocumentRecord[] {
-    const weight = TITLE_INTENT_DOC_WEIGHT * (queryPlan?.titleIntentWeightScale ?? 1);
-    return [...documents]
-        .map((document) => {
-            const baseScore =
-                document.displayScore ?? document.coarseScore ?? document.score ?? 0;
-            const delta =
-                computeTitleIntentDocDelta(query, document) +
-                (queryPlan
-                    ? computeQueryPlanDocRoleDelta(document, queryPlan)
-                    : 0);
-            const nextScore = baseScore + delta * weight;
-
-            return {
-                ...document,
-                score: nextScore,
-                coarseScore:
-                    (document.coarseScore ?? document.score ?? baseScore) +
-                    delta * weight,
-                displayScore: nextScore,
-            };
-        })
-        .sort(
-            (left, right) =>
-                (right.displayScore ?? right.score ?? 0) -
-                (left.displayScore ?? left.score ?? 0),
-        );
-}
-
-function applyCoverageBoostToDocuments(
-    query: string,
-    documents: PipelineDocumentRecord[],
-    queryPlan?: QueryPlan,
-): PipelineDocumentRecord[] {
-    const weight = TITLE_COVERAGE_DOC_WEIGHT * (queryPlan?.coverageWeightScale ?? 1);
-    const scoredDocuments = [...documents]
-        .map((document) => {
-            const baseScore =
-                document.displayScore ?? document.coarseScore ?? document.score ?? 0;
-            const delta = computeCoverageDocDelta(query, document);
-            const nextScore = baseScore + delta * weight;
-
-            return {
-                ...document,
-                score: nextScore,
-                displayScore: nextScore,
-            };
-        })
-        .sort(
-            (left, right) =>
-                (right.displayScore ?? right.score ?? 0) -
-                (left.displayScore ?? left.score ?? 0),
-        );
-
-    if (
-        !(queryPlan?.asksCoverageLike ?? false) &&
-        !queryNeedsCoverageLikeTitle(normalizePatternText(query))
-    ) {
-        return scoredDocuments;
-    }
-
-    const remaining = [...scoredDocuments];
+    const remaining = [...documents];
     const selected: PipelineDocumentRecord[] = [];
     const seenTitleKeys = new Map<string, number>();
 
@@ -1481,8 +1420,7 @@ function applyCoverageBoostToDocuments(
         let bestAdjustedScore = Number.NEGATIVE_INFINITY;
 
         remaining.forEach((candidate, index) => {
-            const baseScore =
-                candidate.displayScore ?? candidate.coarseScore ?? candidate.score ?? 0;
+            const baseScore = getDocumentDisplayScore(candidate);
             const titleKey = normalizeTitleDedupKey(candidate.ot_title || "");
             const seenCount = titleKey ? (seenTitleKeys.get(titleKey) ?? 0) : 0;
             const adjustedScore =
@@ -1507,6 +1445,93 @@ function applyCoverageBoostToDocuments(
     }
 
     return selected;
+}
+
+function rerankAnswerDocuments(params: {
+    query: string;
+    documents: PipelineDocumentRecord[];
+    queryPlan?: QueryPlan;
+    enablePhaseAnchorBoost: boolean;
+    applyTitleAdjustments: boolean;
+    preferLatestWithinTopic: boolean;
+}): PipelineDocumentRecord[] {
+    const {
+        query,
+        documents,
+        queryPlan,
+        enablePhaseAnchorBoost,
+        applyTitleAdjustments,
+        preferLatestWithinTopic,
+    } = params;
+    const phaseAdjustedDocuments = enablePhaseAnchorBoost
+        ? applyPhaseAnchorBoostToDocuments(query, documents, queryPlan)
+        : documents;
+
+    if (!applyTitleAdjustments) {
+        return applyCompressedQueryDisplayGuard(
+            query,
+            phaseAdjustedDocuments,
+            phaseAdjustedDocuments,
+        );
+    }
+
+    const normalizedQuery = normalizePatternText(query);
+    const titleWeight = TITLE_INTENT_DOC_WEIGHT * (queryPlan?.titleIntentWeightScale ?? 1);
+    const coverageWeight = TITLE_COVERAGE_DOC_WEIGHT * (queryPlan?.coverageWeightScale ?? 1);
+    const wantsCoverageDiversity =
+        (queryPlan?.asksCoverageLike ?? false) ||
+        queryNeedsCoverageLikeTitle(normalizedQuery);
+    const wantsLatestVersion =
+        queryWantsLatestVersion(normalizedQuery) &&
+        phaseAdjustedDocuments.length > 1;
+    const asksOutcomeLike = queryAsksOutcomeLikeTitle(normalizedQuery);
+    const roleSensitiveQuery =
+        queryAsksProcedureLikeTitle(normalizedQuery) ||
+        queryAsksRequirementLikeTitle(normalizedQuery) ||
+        queryAsksSystemTimelineLikeTitle(normalizedQuery) ||
+        queryAsksPolicyOverviewLikeTitle(normalizedQuery);
+    const latestVersionWeight =
+        LATEST_VERSION_DOC_WEIGHT * (preferLatestWithinTopic ? 1.1 : 1);
+    const latestVersionFamilyStats = wantsLatestVersion
+        ? buildLatestVersionFamilyStats(phaseAdjustedDocuments)
+        : undefined;
+    const rerankedDocuments = sortDocumentsByDisplayScore(
+        phaseAdjustedDocuments
+            .map((document) => {
+                const titleDelta =
+                    (computeTitleIntentDocDelta(query, document) +
+                        (queryPlan
+                            ? computeQueryPlanDocRoleDelta(document, queryPlan)
+                            : 0)) *
+                    titleWeight;
+                const latestDelta =
+                    wantsLatestVersion && latestVersionFamilyStats
+                        ? computeLatestVersionDocDelta({
+                              document,
+                              familyStats: latestVersionFamilyStats,
+                              asksOutcomeLike,
+                              roleSensitiveQuery,
+                          }) * latestVersionWeight
+                        : 0;
+                const coverageDelta =
+                    computeCoverageDocDelta(query, document) * coverageWeight;
+
+                return updateDocumentScores(
+                    document,
+                    titleDelta + latestDelta + coverageDelta,
+                    titleDelta,
+                );
+            }),
+    );
+    const displayDocuments = wantsCoverageDiversity
+        ? applyCoverageTitleDiversity(rerankedDocuments)
+        : rerankedDocuments;
+
+    return applyCompressedQueryDisplayGuard(
+        query,
+        phaseAdjustedDocuments,
+        displayDocuments,
+    );
 }
 
 function resolveDynamicFetchLimit(
@@ -1716,44 +1741,15 @@ export async function executeSearchPipeline(params: {
                         best_kpid: item.best_kpid,
                     })),
             );
-            const phaseAdjustedDocuments =
-                preset.retrieval.enablePhaseAnchorBoost
-                    ? applyPhaseAnchorBoostToDocuments(
-                          query,
-                          directDocuments,
-                          plannerQueryPlan,
-                      )
-                    : directDocuments;
-            const titleAdjustedDocuments =
-                shouldApplyTitleAdjustments
-                    ? applyTitleIntentBoostToDocuments(
-                          query,
-                          phaseAdjustedDocuments,
-                          plannerQueryPlan,
-                      )
-                    : phaseAdjustedDocuments;
-            const latestAdjustedDocuments =
-                shouldApplyTitleAdjustments
-                    ? applyLatestVersionBoostToDocuments(
-                          query,
-                          titleAdjustedDocuments,
-                          searchOutput.responseDecision?.preferLatestWithinTopic ??
-                              false,
-                      )
-                    : titleAdjustedDocuments;
-            const coverageAdjustedDocuments =
-                shouldApplyTitleAdjustments
-                    ? applyCoverageBoostToDocuments(
-                          query,
-                          latestAdjustedDocuments,
-                          plannerQueryPlan,
-                      )
-                    : latestAdjustedDocuments;
-            results = applyCompressedQueryDisplayGuard(
+            results = rerankAnswerDocuments({
                 query,
-                phaseAdjustedDocuments,
-                coverageAdjustedDocuments,
-            );
+                documents: directDocuments,
+                queryPlan: plannerQueryPlan,
+                enablePhaseAnchorBoost: preset.retrieval.enablePhaseAnchorBoost,
+                applyTitleAdjustments: shouldApplyTitleAdjustments,
+                preferLatestWithinTopic:
+                    searchOutput.responseDecision?.preferLatestWithinTopic ?? false,
+            });
         }
 
         if (shouldFetchWeakResults) {
