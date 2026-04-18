@@ -1,4 +1,4 @@
-import type { AggregatedDocScores } from "./aggregated_doc_scores.ts";
+import type { AggregatedDocScores } from "../aggregated_doc_scores.ts";
 import {
     BOUNDARY_REJECT_SCORE_THRESHOLD,
     clamp01,
@@ -14,9 +14,9 @@ import {
     type ResponseMode,
     type RetrievalSignals,
     type SearchResult,
-} from "./vector_engine_shared.ts";
-import { getCoverageComparableTopicIds } from "./vector_engine_search_context.ts";
-import { hasAnyRoleEvidence } from "./vector_engine_search_boosts.ts";
+} from "./shared.ts";
+import { getCoverageComparableTopicIds } from "./search_context.ts";
+import { hasAnyRoleEvidence } from "./search_role_rerank.ts";
 export function extractRetrievalSignals(
     sortedRanking: SearchResult[],
     otidMap: Record<string, AggregatedDocScores>,
@@ -263,3 +263,4 @@ export function classifyResponseMode(
         rejectTier,
     };
 }
+

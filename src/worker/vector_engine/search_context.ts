@@ -1,4 +1,4 @@
-import type { AggregatedDocScores } from "./aggregated_doc_scores.ts";
+import type { AggregatedDocScores } from "../aggregated_doc_scores.ts";
 import {
     BROAD_LATEST_SCOPE_CUE_PATTERN,
     DEFAULT_Q_CONFUSION_WEIGHT,
@@ -12,7 +12,7 @@ import {
     type KPAggregationMode,
     type ParsedQueryIntent,
     type QConfusionMode,
-} from "./vector_engine_shared.ts";
+} from "./shared.ts";
 export function hasIntentConflict(
     queryIntentIds: string[],
     docIntentIds?: string[],
@@ -405,3 +405,4 @@ export function computeBaseScore(
 
     return maxComponent + unionBonus;
 }
+

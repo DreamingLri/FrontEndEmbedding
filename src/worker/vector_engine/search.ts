@@ -3,8 +3,8 @@ import {
     createAggregatedDocScores,
     mergeAggregatedDocMetadata,
     type AggregatedDocScores,
-} from "./aggregated_doc_scores.ts";
-import type { QueryPlan } from "./query_planner.ts";
+} from "../aggregated_doc_scores.ts";
+import type { QueryPlan } from "../query_planner.ts";
 import {
     BM25_B,
     BM25_K1,
@@ -33,7 +33,7 @@ import {
     type SearchRejection,
     type SearchRankOutput,
     type SearchResult,
-} from "./vector_engine_shared.ts";
+} from "./shared.ts";
 import {
     computeBaseScore,
     computeQCompetitionPenaltyMap,
@@ -42,23 +42,21 @@ import {
     getMatchedSpecificityTf,
     type ScopeSpecificityStats,
     shouldSkipForExplicitYear,
-} from "./vector_engine_search_context.ts";
-import {
-    applyQueryPlannerCoverageDiversification,
-    computeBoostMultiplier,
-    rerankKpCandidatesByRole,
-} from "./vector_engine_search_boosts.ts";
+} from "./search_context.ts";
+import { rerankKpCandidatesByRole } from "./search_role_rerank.ts";
+import { computeBoostMultiplier } from "./search_score_boosts.ts";
+import { applyQueryPlannerCoverageDiversification } from "./search_planner.ts";
 import {
     classifyResponseMode,
     extractEvidenceSignals,
     extractRetrievalSignals,
-} from "./vector_engine_search_decision.ts";
+} from "./search_decision.ts";
 
 export {
     classifyResponseMode,
     extractEvidenceSignals,
     extractRetrievalSignals,
-} from "./vector_engine_search_decision.ts";
+} from "./search_decision.ts";
 export function searchAndRank(params: {
     queryVector: Float32Array;
     querySparse?: Record<number, number>;

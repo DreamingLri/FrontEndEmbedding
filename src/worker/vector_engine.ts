@@ -1,7 +1,7 @@
-export * from "./vector_engine_shared.ts";
+export * from "./vector_engine/shared.ts";
 export {
     classifyResponseMode,
     extractEvidenceSignals,
     extractRetrievalSignals,
     searchAndRank,
-} from "./vector_engine_search.ts";
+} from "./vector_engine/search.ts";

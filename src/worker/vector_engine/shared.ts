@@ -5,8 +5,8 @@ import {
     INTENT_VECTOR_TABLE as CONFIG_INTENT_VECTOR_TABLE,
     LATEST_QUERY_HINTS as CONFIG_LATEST_QUERY_HINTS,
     TOPIC_CONFIGS as CONFIG_TOPIC_CONFIGS,
-} from "./search_topic_config.ts";
-import type { KPCandidate } from "./aggregated_doc_scores.ts";
+} from "../search_topic_config.ts";
+import type { KPCandidate } from "../aggregated_doc_scores.ts";
 export interface Metadata {
     id: string;
     type: "Q" | "KP" | "OT";
@@ -683,4 +683,5 @@ export function parseQueryIntent(query: string): ParsedQueryIntent {
         signals,
     };
 }
+
 
