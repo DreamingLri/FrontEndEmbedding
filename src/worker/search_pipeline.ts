@@ -541,6 +541,47 @@ const QUERY_ASPECT_RULES = [
     },
 ] as const;
 
+type QueryAspectRule = (typeof QUERY_ASPECT_RULES)[number];
+
+type DocumentRerankQuerySignals = {
+    normalizedQuery: string;
+    asksOutcomeLikeTitle: boolean;
+    asksProcedureLikeTitle: boolean;
+    asksRequirementLikeTitle: boolean;
+    asksEventDateLikeTitle: boolean;
+    asksPolicyOverviewLikeTitle: boolean;
+    asksSystemTimelineLikeTitle: boolean;
+    asksBroadRuleDocLikeTitle: boolean;
+    isCompressedKeywordQuery: boolean;
+    mentionsAiSchool: boolean;
+    mentionsDoctoral: boolean;
+    mentionsTuimian: boolean;
+    mentionsSummerCamp: boolean;
+    mentionsTransfer: boolean;
+    asksPostOutcomeAdmission: boolean;
+    asksMaterialReviewTiming: boolean;
+    asksPostOutcomeOperationalDetail: boolean;
+    asksCampExecutionDetail: boolean;
+    asksCompressedNoticeLike: boolean;
+    asksCompressedOutcomeLike: boolean;
+    asksCompressedConstraintLike: boolean;
+    hasCompressedThemeCue: boolean;
+    hasCompressedIntentCue: boolean;
+    asksTimelineNodeLike: boolean;
+    asksSystemOperationLike: boolean;
+    mentionsRegistration: boolean;
+    requestedAspects: QueryAspectRule[];
+    queryPhase: PhaseAnchor;
+    hasExplicitPhaseAnchor: boolean;
+    wantsLatestVersion: boolean;
+    roleSensitiveLatestVersion: boolean;
+    wantsCoverageDiversity: boolean;
+    phaseAnchorWeight: number;
+    titleIntentWeight: number;
+    coverageWeight: number;
+    latestVersionWeight: number;
+};
+
 function normalizePatternText(text: string): string {
     return text.replace(/\s+/g, "");
 }
@@ -762,15 +803,9 @@ function buildLatestVersionFamilyStats(
 function computeLatestVersionDocDelta(params: {
     document: PipelineDocumentRecord;
     familyStats: Map<string, LatestVersionFamilyStat>;
-    asksOutcomeLike: boolean;
-    roleSensitiveQuery: boolean;
+    querySignals: DocumentRerankQuerySignals;
 }): number {
-    const {
-        document,
-        familyStats,
-        asksOutcomeLike,
-        roleSensitiveQuery,
-    } = params;
+    const { document, familyStats, querySignals } = params;
     const familyKey = normalizeLatestVersionFamilyKey(document.ot_title || "");
     const familyStat = familyKey ? familyStats.get(familyKey) : undefined;
     const recencyKey = resolveDocumentRecencyKey(document);
@@ -786,7 +821,7 @@ function computeLatestVersionDocDelta(params: {
             if (gapMonths <= 0) {
                 delta += 0.92;
                 if (
-                    roleSensitiveQuery &&
+                    querySignals.roleSensitiveLatestVersion &&
                     (roles.includes("rule_doc") ||
                         roles.includes("registration_notice") ||
                         roles.includes("stage_list"))
@@ -802,8 +837,8 @@ function computeLatestVersionDocDelta(params: {
     }
 
     if (
-        !asksOutcomeLike &&
-        roleSensitiveQuery &&
+        !querySignals.asksOutcomeLikeTitle &&
+        querySignals.roleSensitiveLatestVersion &&
         (roles.includes("result_notice") || roles.includes("list_notice"))
     ) {
         delta -= 0.18;
@@ -934,29 +969,15 @@ function computeQueryPlanDocRoleDelta(
 }
 
 function computeTitleIntentDocDelta(
-    query: string,
+    querySignals: DocumentRerankQuerySignals,
     document: PipelineDocumentRecord,
 ): number {
-    const normalizedQuery = normalizePatternText(query);
     const normalizedTitle = normalizePatternText(document.ot_title || "");
     if (!normalizedTitle) {
         return 0;
     }
 
     const documentRoles = inferDocumentRolesFromTitle(document.ot_title || "");
-    const asksOutcomeLikeTitle = queryAsksOutcomeLikeTitle(normalizedQuery);
-    const asksProcedureLikeTitle = queryAsksProcedureLikeTitle(normalizedQuery);
-    const asksRequirementLikeTitle =
-        queryAsksRequirementLikeTitle(normalizedQuery);
-    const asksEventDateLikeTitle =
-        queryAsksEventDateLikeTitle(normalizedQuery);
-    const asksPolicyOverviewLikeTitle =
-        queryAsksPolicyOverviewLikeTitle(normalizedQuery);
-    const asksSystemTimelineLikeTitle =
-        queryAsksSystemTimelineLikeTitle(normalizedQuery);
-    const asksBroadRuleDocLikeTitle =
-        queryAsksBroadRuleDocLikeTitle(normalizedQuery);
-    const isCompressedKeywordQuery = queryIsCompressedKeywordLike(normalizedQuery);
     const isRuleDocTitle = TITLE_RULE_DOC_PATTERN.test(normalizedTitle);
     const isProcessNoticeTitle =
         TITLE_PROCESS_NOTICE_PATTERN.test(normalizedTitle);
@@ -991,53 +1012,28 @@ function computeTitleIntentDocDelta(
     const isOperationalRoleDoc =
         isRegistrationNoticeRole || isStageListRole || isAdjustmentNoticeRole;
     const isOutcomeRoleDoc = isResultNoticeRole || isListNoticeRole;
-    const mentionsAiSchool = /人工智能学院|AI学院/.test(normalizedQuery);
-    const mentionsDoctoral = /博士/.test(normalizedQuery);
-    const mentionsTuimian = /推免|推荐免试/.test(normalizedQuery);
-    const mentionsSummerCamp = /夏令营/.test(normalizedQuery);
-    const mentionsTransfer = /调剂/.test(normalizedQuery);
-    const asksPostOutcomeAdmission =
-        /通过考核后|还会被录取吗|确保.*录取|被.*录取/.test(normalizedQuery);
-    const asksMaterialReviewTiming =
-        /材料审核.*公示|通过材料审核/.test(normalizedQuery);
-    const asksPostOutcomeOperationalDetail =
-        queryHasPostOutcomeActionCue(normalizedQuery) ||
-        (queryHasContactChannelCue(normalizedQuery) &&
-            queryHasResultCommunicationContextCue(normalizedQuery));
-    const asksCampExecutionDetail =
-        queryHasCampOperationalCue(normalizedQuery) ||
-        (queryHasCampStatisticsCue(normalizedQuery) &&
-            /营员|入营|名单|报到/.test(normalizedQuery));
-    const asksCompressedNoticeLike =
-        /通知|时间安排|安排|细节|要点/.test(normalizedQuery);
-    const asksCompressedOutcomeLike =
-        /名单|结果|公示|复试|综合考核|调剂/.test(normalizedQuery);
-    const asksCompressedConstraintLike =
-        /条件|资格|要求|细节|要点/.test(normalizedQuery);
-    const hasCompressedThemeCue =
-        mentionsTuimian ||
-        mentionsDoctoral ||
-        mentionsSummerCamp ||
-        mentionsTransfer ||
-        /硕士|研究生/.test(normalizedQuery);
-    const hasCompressedIntentCue =
-        asksCompressedConstraintLike ||
-        asksCompressedNoticeLike ||
-        asksCompressedOutcomeLike;
 
     let delta = 0;
 
-    if (!asksOutcomeLikeTitle && isOutcomeTitle) {
+    if (!querySignals.asksOutcomeLikeTitle && isOutcomeTitle) {
         delta -= 0.95;
     }
-    if ((asksProcedureLikeTitle || asksRequirementLikeTitle) && isRuleDocTitle) {
-        delta += asksProcedureLikeTitle && asksRequirementLikeTitle ? 0.95 : 0.75;
+    if (
+        (querySignals.asksProcedureLikeTitle ||
+            querySignals.asksRequirementLikeTitle) &&
+        isRuleDocTitle
+    ) {
+        delta +=
+            querySignals.asksProcedureLikeTitle &&
+            querySignals.asksRequirementLikeTitle
+                ? 0.95
+                : 0.75;
     }
-    if (asksProcedureLikeTitle && isProcessNoticeTitle) {
+    if (querySignals.asksProcedureLikeTitle && isProcessNoticeTitle) {
         delta += 0.55;
     }
 
-    if (mentionsAiSchool) {
+    if (querySignals.mentionsAiSchool) {
         if (isAiSchoolTitle) {
             delta += 0.45;
         } else if (isOtherProgramTitle) {
@@ -1049,7 +1045,7 @@ function computeTitleIntentDocDelta(
         }
     }
 
-    if (mentionsDoctoral) {
+    if (querySignals.mentionsDoctoral) {
         if (isMasterOnlyTitle) {
             delta -= 0.95;
         } else if (isDoctoralTitle) {
@@ -1057,7 +1053,7 @@ function computeTitleIntentDocDelta(
         }
     }
 
-    if (mentionsTuimian) {
+    if (querySignals.mentionsTuimian) {
         if (isTuimianTitle) {
             delta += 0.45;
         }
@@ -1066,11 +1062,11 @@ function computeTitleIntentDocDelta(
         }
     }
 
-    if (mentionsSummerCamp) {
+    if (querySignals.mentionsSummerCamp) {
         if (isSummerCampTitle) {
             delta += 0.35;
         }
-        if (asksCampExecutionDetail) {
+        if (querySignals.asksCampExecutionDetail) {
             if (/入营通知/.test(normalizedTitle)) {
                 delta += 0.95;
             }
@@ -1078,22 +1074,28 @@ function computeTitleIntentDocDelta(
                 delta -= 0.75;
             }
         }
-        if (!asksEventDateLikeTitle && /活动报名通知|报名通知/.test(normalizedTitle)) {
+        if (
+            !querySignals.asksEventDateLikeTitle &&
+            /活动报名通知|报名通知/.test(normalizedTitle)
+        ) {
             delta += 0.45;
         }
         if (
-            !asksOutcomeLikeTitle &&
-            !asksEventDateLikeTitle &&
+            !querySignals.asksOutcomeLikeTitle &&
+            !querySignals.asksEventDateLikeTitle &&
             /入营通知/.test(normalizedTitle)
         ) {
             delta -= 0.45;
         }
-        if (asksEventDateLikeTitle && /入营通知|活动通知/.test(normalizedTitle)) {
+        if (
+            querySignals.asksEventDateLikeTitle &&
+            /入营通知|活动通知/.test(normalizedTitle)
+        ) {
             delta += 0.95;
         }
         if (
-            asksEventDateLikeTitle &&
-            !/报名/.test(normalizedQuery) &&
+            querySignals.asksEventDateLikeTitle &&
+            !querySignals.mentionsRegistration &&
             /活动报名通知|报名通知/.test(normalizedTitle)
         ) {
             delta -= 0.45;
@@ -1106,47 +1108,50 @@ function computeTitleIntentDocDelta(
         }
     }
 
-    if (mentionsTuimian && /接收办法|工作方案/.test(normalizedTitle)) {
+    if (querySignals.mentionsTuimian && /接收办法|工作方案/.test(normalizedTitle)) {
         delta += 0.45;
     }
 
-    if (mentionsDoctoral && /实施办法|招生简章|综合考核通知/.test(normalizedTitle)) {
+    if (
+        querySignals.mentionsDoctoral &&
+        /实施办法|招生简章|综合考核通知/.test(normalizedTitle)
+    ) {
         delta += 0.25;
     }
 
-    if (asksPolicyOverviewLikeTitle) {
+    if (querySignals.asksPolicyOverviewLikeTitle) {
         if (/招生简章|接收办法|实施办法/.test(normalizedTitle)) {
             delta += 0.55;
         }
         if (isPreapplyTitle) {
             delta -= 0.45;
         }
-        if (isTransferTitle && !mentionsTransfer) {
+        if (isTransferTitle && !querySignals.mentionsTransfer) {
             delta -= 0.65;
         }
-        if (isReviewResultTitle && !asksOutcomeLikeTitle) {
+        if (isReviewResultTitle && !querySignals.asksOutcomeLikeTitle) {
             delta -= 0.55;
         }
     }
 
-    if (asksSystemTimelineLikeTitle) {
+    if (querySignals.asksSystemTimelineLikeTitle) {
         if (/接收办法|实施办法/.test(normalizedTitle)) {
             delta += 0.45;
         }
-        if (isPreapplyTitle && /录取过程|系统操作/.test(normalizedQuery)) {
+        if (isPreapplyTitle && querySignals.asksSystemOperationLike) {
             delta -= 0.2;
         }
         if (isSystemNoticeTitle) {
             delta -= 0.55;
         }
     } else if (
-        /关键时间节点|时间节点|截止日期|截止时间/.test(normalizedQuery) &&
+        querySignals.asksTimelineNodeLike &&
         /报名通知|综合考核通知|复试通知/.test(normalizedTitle)
     ) {
         delta += 0.4;
     }
 
-    if (asksPostOutcomeAdmission) {
+    if (querySignals.asksPostOutcomeAdmission) {
         if (/招生简章|实施办法/.test(normalizedTitle)) {
             delta += 0.4;
         }
@@ -1155,7 +1160,7 @@ function computeTitleIntentDocDelta(
         }
     }
 
-    if (asksMaterialReviewTiming) {
+    if (querySignals.asksMaterialReviewTiming) {
         if (isCandidateListTitle) {
             delta += 0.8;
         }
@@ -1164,7 +1169,7 @@ function computeTitleIntentDocDelta(
         }
     }
 
-    if (asksPostOutcomeOperationalDetail) {
+    if (querySignals.asksPostOutcomeOperationalDetail) {
         if (/复试结果|拟录取|增补拟录取|结果公示|名单公示/.test(normalizedTitle)) {
             delta += 1.25;
         }
@@ -1176,9 +1181,12 @@ function computeTitleIntentDocDelta(
         }
     }
 
-    if (isCompressedKeywordQuery && !asksBroadRuleDocLikeTitle) {
-        if (!asksCompressedConstraintLike && isRuleDocRole) {
-            delta -= asksCompressedOutcomeLike ? 0.95 : 0.55;
+    if (
+        querySignals.isCompressedKeywordQuery &&
+        !querySignals.asksBroadRuleDocLikeTitle
+    ) {
+        if (!querySignals.asksCompressedConstraintLike && isRuleDocRole) {
+            delta -= querySignals.asksCompressedOutcomeLike ? 0.95 : 0.55;
         }
         if (isSystemNoticeTitle) {
             delta -= 1.1;
@@ -1186,32 +1194,36 @@ function computeTitleIntentDocDelta(
         if (isOtherProgramTitle) {
             delta -= 1.2;
         }
-        if (asksCompressedConstraintLike && isConstraintRoleDoc) {
-            delta += asksCompressedOutcomeLike ? 0.58 : 0.74;
+        if (querySignals.asksCompressedConstraintLike && isConstraintRoleDoc) {
+            delta += querySignals.asksCompressedOutcomeLike ? 0.58 : 0.74;
         }
         if (
-            asksCompressedNoticeLike &&
+            querySignals.asksCompressedNoticeLike &&
             (isOperationalRoleDoc || isProcessNoticeTitle)
         ) {
-            delta += asksCompressedConstraintLike ? 0.34 : 0.48;
+            delta += querySignals.asksCompressedConstraintLike ? 0.34 : 0.48;
         }
-        if (asksCompressedOutcomeLike) {
+        if (querySignals.asksCompressedOutcomeLike) {
             if (isOutcomeRoleDoc || isReviewResultTitle) {
-                delta += asksCompressedConstraintLike ? 0.28 : 0.56;
+                delta += querySignals.asksCompressedConstraintLike ? 0.28 : 0.56;
             }
             if (isStageListRole || isCandidateListTitle) {
-                delta += asksCompressedConstraintLike ? 0.18 : 0.32;
+                delta += querySignals.asksCompressedConstraintLike ? 0.18 : 0.32;
             }
         }
         if (
-            hasCompressedIntentCue &&
-            !asksCompressedConstraintLike &&
+            querySignals.hasCompressedIntentCue &&
+            !querySignals.asksCompressedConstraintLike &&
             isOperationalRoleDoc &&
             !isOutcomeRoleDoc
         ) {
             delta += 0.16;
         }
-        if (mentionsTuimian && hasCompressedThemeCue && hasCompressedIntentCue) {
+        if (
+            querySignals.mentionsTuimian &&
+            querySignals.hasCompressedThemeCue &&
+            querySignals.hasCompressedIntentCue
+        ) {
             if (
                 isTuimianTitle &&
                 (isConstraintRoleDoc ||
@@ -1224,7 +1236,11 @@ function computeTitleIntentDocDelta(
                 delta -= 0.88;
             }
         }
-        if (mentionsDoctoral && hasCompressedThemeCue && hasCompressedIntentCue) {
+        if (
+            querySignals.mentionsDoctoral &&
+            querySignals.hasCompressedThemeCue &&
+            querySignals.hasCompressedIntentCue
+        ) {
             if (
                 isDoctoralTitle &&
                 (isConstraintRoleDoc ||
@@ -1237,7 +1253,11 @@ function computeTitleIntentDocDelta(
                 delta -= 0.82;
             }
         }
-        if (mentionsSummerCamp && hasCompressedThemeCue && hasCompressedIntentCue) {
+        if (
+            querySignals.mentionsSummerCamp &&
+            querySignals.hasCompressedThemeCue &&
+            querySignals.hasCompressedIntentCue
+        ) {
             if (
                 isSummerCampTitle &&
                 (isOperationalRoleDoc || isOutcomeRoleDoc || isStageListRole)
@@ -1251,7 +1271,11 @@ function computeTitleIntentDocDelta(
                 delta -= 0.58;
             }
         }
-        if (mentionsTransfer && hasCompressedThemeCue && hasCompressedIntentCue) {
+        if (
+            querySignals.mentionsTransfer &&
+            querySignals.hasCompressedThemeCue &&
+            querySignals.hasCompressedIntentCue
+        ) {
             if (
                 isTransferTitle &&
                 (isOperationalRoleDoc ||
@@ -1267,13 +1291,10 @@ function computeTitleIntentDocDelta(
 }
 
 function computeCoverageDocDelta(
-    query: string,
+    querySignals: DocumentRerankQuerySignals,
     document: PipelineDocumentRecord,
 ): number {
-    const normalizedQuery = normalizePatternText(query);
-    const requestedAspects = QUERY_ASPECT_RULES.filter((rule) =>
-        rule.query.test(normalizedQuery),
-    );
+    const { requestedAspects } = querySignals;
     if (requestedAspects.length < 2) {
         return 0;
     }
@@ -1341,14 +1362,14 @@ function hasExplicitPhaseAnchor(anchor: PhaseAnchor): boolean {
 }
 
 function computePhaseAnchorDocDelta(
-    query: string,
+    querySignals: DocumentRerankQuerySignals,
     document: PipelineDocumentRecord,
 ): number {
-    const queryPhase = extractPhaseAnchor(query);
-    if (!hasExplicitPhaseAnchor(queryPhase)) {
+    if (!querySignals.hasExplicitPhaseAnchor) {
         return 0;
     }
 
+    const queryPhase = querySignals.queryPhase;
     const title = (document.ot_title || "").replace(/\s+/g, "");
     if (!title) {
         return -0.15;
@@ -1393,16 +1414,126 @@ function computePhaseAnchorDocDelta(
     return delta;
 }
 
+function buildDocumentRerankQuerySignals(params: {
+    query: string;
+    queryPlan?: QueryPlan;
+    preferLatestWithinTopic: boolean;
+}): DocumentRerankQuerySignals {
+    const { query, queryPlan, preferLatestWithinTopic } = params;
+    const normalizedQuery = queryPlan?.normalizedQuery ?? normalizePatternText(query);
+    const asksOutcomeLikeTitle = queryAsksOutcomeLikeTitle(normalizedQuery);
+    const asksProcedureLikeTitle = queryAsksProcedureLikeTitle(normalizedQuery);
+    const asksRequirementLikeTitle = queryAsksRequirementLikeTitle(normalizedQuery);
+    const asksEventDateLikeTitle = queryAsksEventDateLikeTitle(normalizedQuery);
+    const asksPolicyOverviewLikeTitle =
+        queryAsksPolicyOverviewLikeTitle(normalizedQuery);
+    const asksSystemTimelineLikeTitle =
+        queryAsksSystemTimelineLikeTitle(normalizedQuery);
+    const asksBroadRuleDocLikeTitle =
+        queryAsksBroadRuleDocLikeTitle(normalizedQuery);
+    const isCompressedKeywordQuery = queryIsCompressedKeywordLike(normalizedQuery);
+    const mentionsAiSchool = /人工智能学院|AI学院/.test(normalizedQuery);
+    const mentionsDoctoral = /博士/.test(normalizedQuery);
+    const mentionsTuimian = /推免|推荐免试/.test(normalizedQuery);
+    const mentionsSummerCamp = /夏令营/.test(normalizedQuery);
+    const mentionsTransfer = /调剂/.test(normalizedQuery);
+    const asksPostOutcomeAdmission =
+        /通过考核后|还会被录取吗|确保.*录取|被.*录取/.test(normalizedQuery);
+    const asksMaterialReviewTiming =
+        /材料审核.*公示|通过材料审核/.test(normalizedQuery);
+    const asksCampAudienceLike = /营员|入营|名单|报到/.test(normalizedQuery);
+    const asksCompressedNoticeLike =
+        /通知|时间安排|安排|细节|要点/.test(normalizedQuery);
+    const asksCompressedOutcomeLike =
+        /名单|结果|公示|复试|综合考核|调剂/.test(normalizedQuery);
+    const asksCompressedConstraintLike =
+        /条件|资格|要求|细节|要点/.test(normalizedQuery);
+    const mentionsMasterOrGraduate = /硕士|研究生/.test(normalizedQuery);
+    const hasCompressedThemeCue =
+        mentionsTuimian ||
+        mentionsDoctoral ||
+        mentionsSummerCamp ||
+        mentionsTransfer ||
+        mentionsMasterOrGraduate;
+    const hasCompressedIntentCue =
+        asksCompressedConstraintLike ||
+        asksCompressedNoticeLike ||
+        asksCompressedOutcomeLike;
+    const asksTimelineNodeLike =
+        /关键时间节点|时间节点|截止日期|截止时间/.test(normalizedQuery);
+    const asksSystemOperationLike = /录取过程|系统操作/.test(normalizedQuery);
+    const mentionsRegistration = /报名/.test(normalizedQuery);
+    const requestedAspects = QUERY_ASPECT_RULES.filter((rule) =>
+        rule.query.test(normalizedQuery),
+    );
+    const queryPhase = extractPhaseAnchor(query);
+    const hasExplicitQueryPhaseAnchor = hasExplicitPhaseAnchor(queryPhase);
+
+    return {
+        normalizedQuery,
+        asksOutcomeLikeTitle,
+        asksProcedureLikeTitle,
+        asksRequirementLikeTitle,
+        asksEventDateLikeTitle,
+        asksPolicyOverviewLikeTitle,
+        asksSystemTimelineLikeTitle,
+        asksBroadRuleDocLikeTitle,
+        isCompressedKeywordQuery,
+        mentionsAiSchool,
+        mentionsDoctoral,
+        mentionsTuimian,
+        mentionsSummerCamp,
+        mentionsTransfer,
+        asksPostOutcomeAdmission,
+        asksMaterialReviewTiming,
+        asksPostOutcomeOperationalDetail:
+            queryHasPostOutcomeActionCue(normalizedQuery) ||
+            (queryHasContactChannelCue(normalizedQuery) &&
+                queryHasResultCommunicationContextCue(normalizedQuery)),
+        asksCampExecutionDetail:
+            queryHasCampOperationalCue(normalizedQuery) ||
+            (queryHasCampStatisticsCue(normalizedQuery) && asksCampAudienceLike),
+        asksCompressedNoticeLike,
+        asksCompressedOutcomeLike,
+        asksCompressedConstraintLike,
+        hasCompressedThemeCue,
+        hasCompressedIntentCue,
+        asksTimelineNodeLike,
+        asksSystemOperationLike,
+        mentionsRegistration,
+        requestedAspects,
+        queryPhase,
+        hasExplicitPhaseAnchor: hasExplicitQueryPhaseAnchor,
+        wantsLatestVersion: queryWantsLatestVersion(normalizedQuery),
+        roleSensitiveLatestVersion:
+            asksProcedureLikeTitle ||
+            asksRequirementLikeTitle ||
+            asksSystemTimelineLikeTitle ||
+            asksPolicyOverviewLikeTitle,
+        wantsCoverageDiversity:
+            (queryPlan?.asksCoverageLike ?? false) ||
+            queryNeedsCoverageLikeTitle(normalizedQuery),
+        phaseAnchorWeight:
+            PHASE_ANCHOR_DOC_WEIGHT * (queryPlan?.phaseAnchorWeightScale ?? 1),
+        titleIntentWeight:
+            TITLE_INTENT_DOC_WEIGHT * (queryPlan?.titleIntentWeightScale ?? 1),
+        coverageWeight:
+            TITLE_COVERAGE_DOC_WEIGHT * (queryPlan?.coverageWeightScale ?? 1),
+        latestVersionWeight:
+            LATEST_VERSION_DOC_WEIGHT * (preferLatestWithinTopic ? 1.1 : 1),
+    };
+}
+
 function applyPhaseAnchorBoostToDocuments(
-    query: string,
+    querySignals: DocumentRerankQuerySignals,
     documents: PipelineDocumentRecord[],
-    queryPlan?: QueryPlan,
 ): PipelineDocumentRecord[] {
-    const weight = PHASE_ANCHOR_DOC_WEIGHT * (queryPlan?.phaseAnchorWeightScale ?? 1);
     return sortDocumentsByDisplayScore(
         documents
             .map((document) => {
-                const delta = computePhaseAnchorDocDelta(query, document) * weight;
+                const delta =
+                    computePhaseAnchorDocDelta(querySignals, document) *
+                    querySignals.phaseAnchorWeight;
                 return updateDocumentScores(document, delta, delta);
             }),
     );
@@ -1463,8 +1594,13 @@ function rerankAnswerDocuments(params: {
         applyTitleAdjustments,
         preferLatestWithinTopic,
     } = params;
+    const querySignals = buildDocumentRerankQuerySignals({
+        query,
+        queryPlan,
+        preferLatestWithinTopic,
+    });
     const phaseAdjustedDocuments = enablePhaseAnchorBoost
-        ? applyPhaseAnchorBoostToDocuments(query, documents, queryPlan)
+        ? applyPhaseAnchorBoostToDocuments(querySignals, documents)
         : documents;
 
     if (!applyTitleAdjustments) {
@@ -1475,46 +1611,31 @@ function rerankAnswerDocuments(params: {
         );
     }
 
-    const normalizedQuery = normalizePatternText(query);
-    const titleWeight = TITLE_INTENT_DOC_WEIGHT * (queryPlan?.titleIntentWeightScale ?? 1);
-    const coverageWeight = TITLE_COVERAGE_DOC_WEIGHT * (queryPlan?.coverageWeightScale ?? 1);
-    const wantsCoverageDiversity =
-        (queryPlan?.asksCoverageLike ?? false) ||
-        queryNeedsCoverageLikeTitle(normalizedQuery);
-    const wantsLatestVersion =
-        queryWantsLatestVersion(normalizedQuery) &&
-        phaseAdjustedDocuments.length > 1;
-    const asksOutcomeLike = queryAsksOutcomeLikeTitle(normalizedQuery);
-    const roleSensitiveQuery =
-        queryAsksProcedureLikeTitle(normalizedQuery) ||
-        queryAsksRequirementLikeTitle(normalizedQuery) ||
-        queryAsksSystemTimelineLikeTitle(normalizedQuery) ||
-        queryAsksPolicyOverviewLikeTitle(normalizedQuery);
-    const latestVersionWeight =
-        LATEST_VERSION_DOC_WEIGHT * (preferLatestWithinTopic ? 1.1 : 1);
-    const latestVersionFamilyStats = wantsLatestVersion
+    const shouldApplyLatestVersionBoost =
+        querySignals.wantsLatestVersion && phaseAdjustedDocuments.length > 1;
+    const latestVersionFamilyStats = shouldApplyLatestVersionBoost
         ? buildLatestVersionFamilyStats(phaseAdjustedDocuments)
         : undefined;
     const rerankedDocuments = sortDocumentsByDisplayScore(
         phaseAdjustedDocuments
             .map((document) => {
                 const titleDelta =
-                    (computeTitleIntentDocDelta(query, document) +
+                    (computeTitleIntentDocDelta(querySignals, document) +
                         (queryPlan
                             ? computeQueryPlanDocRoleDelta(document, queryPlan)
                             : 0)) *
-                    titleWeight;
+                    querySignals.titleIntentWeight;
                 const latestDelta =
-                    wantsLatestVersion && latestVersionFamilyStats
+                    shouldApplyLatestVersionBoost && latestVersionFamilyStats
                         ? computeLatestVersionDocDelta({
                               document,
                               familyStats: latestVersionFamilyStats,
-                              asksOutcomeLike,
-                              roleSensitiveQuery,
-                          }) * latestVersionWeight
+                              querySignals,
+                          }) * querySignals.latestVersionWeight
                         : 0;
                 const coverageDelta =
-                    computeCoverageDocDelta(query, document) * coverageWeight;
+                    computeCoverageDocDelta(querySignals, document) *
+                    querySignals.coverageWeight;
 
                 return updateDocumentScores(
                     document,
@@ -1523,7 +1644,7 @@ function rerankAnswerDocuments(params: {
                 );
             }),
     );
-    const displayDocuments = wantsCoverageDiversity
+    const displayDocuments = querySignals.wantsCoverageDiversity
         ? applyCoverageTitleDiversity(rerankedDocuments)
         : rerankedDocuments;
 
