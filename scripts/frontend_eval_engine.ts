@@ -13,6 +13,7 @@ import {
 } from '../src/worker/vector_engine.ts';
 import {
     buildTopicPartitionIndex,
+    createEmptyTopicPartitionIndex,
     type TopicPartitionIndex,
 } from '../src/worker/topic_partition.ts';
 import {
@@ -79,7 +80,10 @@ export async function loadFrontendEvalEngine(): Promise<FrontendEvalEngine> {
         vectorMatrix,
         dimensions,
         bm25Stats: buildBM25Stats(metadataList),
-        topicPartitionIndex: buildTopicPartitionIndex(metadataList),
+        topicPartitionIndex:
+            metadataList.length > 0
+                ? buildTopicPartitionIndex(metadataList)
+                : createEmptyTopicPartitionIndex(),
     };
 }
 

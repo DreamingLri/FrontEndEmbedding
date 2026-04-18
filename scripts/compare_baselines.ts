@@ -16,6 +16,7 @@ import {
 } from '../src/worker/vector_engine.ts';
 import {
     buildTopicPartitionIndex,
+    createEmptyTopicPartitionIndex,
     getCandidateIndicesForQuery,
     type TopicPartitionIndex,
 } from '../src/worker/topic_partition.ts';
@@ -102,11 +103,7 @@ let dimensions = 768;
 let currentBM25Stats: CurrentBM25Stats | null = null;
 let legacyBM25Stats: LegacyBM25Stats | null = null;
 let legacyEngine: typeof import('../../Backend/test/vector_engine.ts') | null = null;
-let topicPartitionIndex: TopicPartitionIndex = {
-    topicCandidateIndex: new Map<string, number[]>(),
-    unlabeledCandidateIndices: [],
-    metadataCount: 0,
-};
+let topicPartitionIndex: TopicPartitionIndex = createEmptyTopicPartitionIndex();
 
 function initializeJieba() {
     const dictPath = path.resolve(process.cwd(), '../Backend/data/campus_dict.txt');

@@ -15,6 +15,7 @@ import {
 } from '../src/worker/vector_engine.ts';
 import {
     buildTopicPartitionIndex,
+    createEmptyTopicPartitionIndex,
     getCandidateIndicesForQuery,
     type TopicPartitionIndex,
 } from '../src/worker/topic_partition.ts';
@@ -93,11 +94,7 @@ let metadataList: Metadata[] = [];
 let vectorMatrix: Int8Array | null = null;
 let globalBM25Stats: BM25Stats | null = null;
 let dimensions = 768;
-let topicPartitionIndex: TopicPartitionIndex = {
-    topicCandidateIndex: new Map<string, number[]>(),
-    unlabeledCandidateIndices: [],
-    metadataCount: 0,
-};
+let topicPartitionIndex: TopicPartitionIndex = createEmptyTopicPartitionIndex();
 
 function getRank(result: SearchRankOutput, expectedOtid: string): number {
     const rankIndex = result.matches.findIndex((item) => item.otid === expectedOtid);

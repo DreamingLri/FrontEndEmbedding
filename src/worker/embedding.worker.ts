@@ -9,6 +9,7 @@ import {
 } from './vector_engine.ts';
 import {
     buildTopicPartitionIndex,
+    createEmptyTopicPartitionIndex,
     type TopicPartitionIndex,
 } from './topic_partition.ts';
 import {
@@ -46,11 +47,7 @@ let metadataList: Metadata[] = [];
 let vectorMatrix: Int8Array | null = null;
 let globalBM25Stats: BM25Stats | null = null;
 let scopeSpecificityWordIdToTerm = new Map<number, string>();
-let topicPartitionIndex: TopicPartitionIndex = {
-    topicCandidateIndex: new Map<string, number[]>(),
-    unlabeledCandidateIndices: [],
-    metadataCount: 0,
-};
+let topicPartitionIndex: TopicPartitionIndex = createEmptyTopicPartitionIndex();
 
 async function fetchDocumentsFromApi(query: string, otids: string[]) {
     const response = await fetch('/api/get_answers', {
@@ -170,7 +167,6 @@ async function handleSearch(query: string, taskId?: string) {
         dimensions: DIMENSIONS,
         currentTimestamp: Date.now() / 1000,
         bm25Stats: globalBM25Stats,
-        extractor,
         documentLoader: ({ query: documentQuery, otids }) =>
             fetchDocumentsFromApi(documentQuery, otids),
         termMaps: {

@@ -1,5 +1,3 @@
-import type { FeatureExtractionPipeline } from "@huggingface/transformers";
-
 import { fmmTokenize } from "./fmm_tokenize.ts";
 import {
     buildQueryPlan,
@@ -1623,7 +1621,6 @@ export async function executeSearchPipeline(params: {
     dimensions: number;
     currentTimestamp: number;
     bm25Stats: BM25Stats;
-    extractor: FeatureExtractionPipeline;
     documentLoader: PipelineDocumentLoader;
     termMaps?: PipelineTermMaps;
     preset?: PipelinePreset;

@@ -215,7 +215,6 @@ async function main() {
             dimensions: engine.dimensions,
             currentTimestamp: CURRENT_TIMESTAMP,
             bm25Stats: engine.bm25Stats,
-            extractor: engine.extractor,
             documentLoader,
             termMaps,
             preset: EVAL_PRESET,

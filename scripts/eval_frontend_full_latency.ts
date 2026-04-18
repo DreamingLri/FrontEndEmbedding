@@ -421,7 +421,6 @@ async function main() {
             dimensions: engine.dimensions,
             currentTimestamp: Date.now() / 1000,
             bm25Stats: engine.bm25Stats,
-            extractor: engine.extractor,
             documentLoader,
             termMaps,
             preset: FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET,
