@@ -3,6 +3,7 @@ import {
     buildQueryPlan,
     inferDocumentRolesFromTitle,
     type QueryPlan,
+    type QueryPlanDocRole,
 } from "./query_planner.ts";
 import {
     getQuerySparse,
@@ -582,6 +583,45 @@ type DocumentRerankQuerySignals = {
     latestVersionWeight: number;
 };
 
+type DocumentRerankMetadata = {
+    normalizedTitle: string;
+    titleDedupKey: string;
+    latestVersionFamilyKey: string;
+    recencyKey?: number;
+    evidenceText: string;
+    phaseAnchor: PhaseAnchor;
+    roles: QueryPlanDocRole[];
+    isRuleDocTitle: boolean;
+    isProcessNoticeTitle: boolean;
+    isOutcomeTitle: boolean;
+    isAiSchoolTitle: boolean;
+    isOtherProgramTitle: boolean;
+    isPreapplyTitle: boolean;
+    isTransferTitle: boolean;
+    isCandidateListTitle: boolean;
+    isReviewResultTitle: boolean;
+    isSummerCampTitle: boolean;
+    isTuimianTitle: boolean;
+    isDoctoralTitle: boolean;
+    isMasterOnlyTitle: boolean;
+    isSystemNoticeTitle: boolean;
+    isRuleDocRole: boolean;
+    isRegistrationNoticeRole: boolean;
+    isResultNoticeRole: boolean;
+    isListNoticeRole: boolean;
+    isStageListRole: boolean;
+    isAdjustmentNoticeRole: boolean;
+    isConstraintRoleDoc: boolean;
+    isOperationalRoleDoc: boolean;
+    isOutcomeRoleDoc: boolean;
+    hasCollegeTitle: boolean;
+};
+
+type DocumentRerankEntry = {
+    document: PipelineDocumentRecord;
+    metadata: DocumentRerankMetadata;
+};
+
 function normalizePatternText(text: string): string {
     return text.replace(/\s+/g, "");
 }
@@ -730,6 +770,69 @@ function resolveDocumentRecencyKey(
     return undefined;
 }
 
+function buildDocumentRerankMetadata(
+    document: PipelineDocumentRecord,
+): DocumentRerankMetadata {
+    const title = document.ot_title || "";
+    const normalizedTitle = normalizePatternText(title);
+    const roles = inferDocumentRolesFromTitle(title);
+    const isDoctoralTitle = TITLE_DOCTORAL_PATTERN.test(normalizedTitle);
+    const isTuimianTitle = TITLE_TUIMIAN_PATTERN.test(normalizedTitle);
+    const isRuleDocRole = roles.includes("rule_doc");
+    const isRegistrationNoticeRole = roles.includes("registration_notice");
+    const isResultNoticeRole = roles.includes("result_notice");
+    const isListNoticeRole = roles.includes("list_notice");
+    const isStageListRole = roles.includes("stage_list");
+    const isAdjustmentNoticeRole = roles.includes("adjustment_notice");
+
+    return {
+        normalizedTitle,
+        titleDedupKey: normalizeTitleDedupKey(title),
+        latestVersionFamilyKey: normalizeLatestVersionFamilyKey(title),
+        recencyKey: resolveDocumentRecencyKey(document),
+        evidenceText: getDocumentEvidenceText(document),
+        phaseAnchor: extractPhaseAnchor(title),
+        roles,
+        isRuleDocTitle: TITLE_RULE_DOC_PATTERN.test(normalizedTitle),
+        isProcessNoticeTitle: TITLE_PROCESS_NOTICE_PATTERN.test(normalizedTitle),
+        isOutcomeTitle: TITLE_OUTCOME_PATTERN.test(normalizedTitle),
+        isAiSchoolTitle: TITLE_AI_SCHOOL_PATTERN.test(normalizedTitle),
+        isOtherProgramTitle: TITLE_OTHER_PROGRAM_PATTERN.test(normalizedTitle),
+        isPreapplyTitle: TITLE_PREAPPLY_PATTERN.test(normalizedTitle),
+        isTransferTitle: TITLE_TRANSFER_PATTERN.test(normalizedTitle),
+        isCandidateListTitle: TITLE_CANDIDATE_LIST_PATTERN.test(normalizedTitle),
+        isReviewResultTitle: TITLE_REVIEW_RESULT_PATTERN.test(normalizedTitle),
+        isSummerCampTitle: TITLE_SUMMER_CAMP_PATTERN.test(normalizedTitle),
+        isTuimianTitle,
+        isDoctoralTitle,
+        isMasterOnlyTitle:
+            TITLE_MASTER_PATTERN.test(normalizedTitle) &&
+            !isDoctoralTitle &&
+            !isTuimianTitle,
+        isSystemNoticeTitle: TITLE_SYSTEM_NOTICE_PATTERN.test(normalizedTitle),
+        isRuleDocRole,
+        isRegistrationNoticeRole,
+        isResultNoticeRole,
+        isListNoticeRole,
+        isStageListRole,
+        isAdjustmentNoticeRole,
+        isConstraintRoleDoc: isRuleDocRole || isRegistrationNoticeRole,
+        isOperationalRoleDoc:
+            isRegistrationNoticeRole || isStageListRole || isAdjustmentNoticeRole,
+        isOutcomeRoleDoc: isResultNoticeRole || isListNoticeRole,
+        hasCollegeTitle: /学院/.test(normalizedTitle),
+    };
+}
+
+function buildDocumentRerankEntries(
+    documents: PipelineDocumentRecord[],
+): DocumentRerankEntry[] {
+    return documents.map((document) => ({
+        document,
+        metadata: buildDocumentRerankMetadata(document),
+    }));
+}
+
 function queryWantsLatestVersion(query: string): boolean {
     return /现在|最新|最近|最近一次|目前|当前/.test(query);
 }
@@ -747,12 +850,13 @@ function getDocumentCoarseScore(document: PipelineDocumentRecord): number {
     return document.coarseScore ?? document.score ?? getDocumentDisplayScore(document);
 }
 
-function sortDocumentsByDisplayScore(
-    documents: PipelineDocumentRecord[],
-): PipelineDocumentRecord[] {
-    return [...documents].sort(
+function sortDocumentRerankEntriesByDisplayScore(
+    entries: DocumentRerankEntry[],
+): DocumentRerankEntry[] {
+    return [...entries].sort(
         (left, right) =>
-            getDocumentDisplayScore(right) - getDocumentDisplayScore(left),
+            getDocumentDisplayScore(right.document) -
+            getDocumentDisplayScore(left.document),
     );
 }
 
@@ -773,18 +877,35 @@ function updateDocumentScores(
     };
 }
 
+function updateDocumentRerankEntryScores(
+    entry: DocumentRerankEntry,
+    displayDelta: number,
+    coarseDelta?: number,
+): DocumentRerankEntry {
+    return {
+        document: updateDocumentScores(entry.document, displayDelta, coarseDelta),
+        metadata: entry.metadata,
+    };
+}
+
+function getDocumentsFromRerankEntries(
+    entries: DocumentRerankEntry[],
+): PipelineDocumentRecord[] {
+    return entries.map((entry) => entry.document);
+}
+
 function buildLatestVersionFamilyStats(
-    documents: PipelineDocumentRecord[],
+    entries: DocumentRerankEntry[],
 ): Map<string, LatestVersionFamilyStat> {
     const familyStats = new Map<string, LatestVersionFamilyStat>();
 
-    documents.forEach((document) => {
-        const familyKey = normalizeLatestVersionFamilyKey(document.ot_title || "");
+    entries.forEach((entry) => {
+        const { latestVersionFamilyKey, recencyKey } = entry.metadata;
+        const familyKey = latestVersionFamilyKey;
         if (!familyKey) {
             return;
         }
 
-        const recencyKey = resolveDocumentRecencyKey(document);
         const existing = familyStats.get(familyKey) || { count: 0 };
         existing.count += 1;
         if (
@@ -801,15 +922,16 @@ function buildLatestVersionFamilyStats(
 }
 
 function computeLatestVersionDocDelta(params: {
-    document: PipelineDocumentRecord;
+    entry: DocumentRerankEntry;
     familyStats: Map<string, LatestVersionFamilyStat>;
     querySignals: DocumentRerankQuerySignals;
 }): number {
-    const { document, familyStats, querySignals } = params;
-    const familyKey = normalizeLatestVersionFamilyKey(document.ot_title || "");
+    const { entry, familyStats, querySignals } = params;
+    const { metadata } = entry;
+    const familyKey = metadata.latestVersionFamilyKey;
     const familyStat = familyKey ? familyStats.get(familyKey) : undefined;
-    const recencyKey = resolveDocumentRecencyKey(document);
-    const roles = inferDocumentRolesFromTitle(document.ot_title || "");
+    const recencyKey = metadata.recencyKey;
+    const roles = metadata.roles;
     let delta = 0;
 
     if (familyStat && familyStat.count >= 2) {
@@ -911,7 +1033,7 @@ function applyCompressedQueryDisplayGuard(
 }
 
 function computeQueryPlanDocRoleDelta(
-    document: PipelineDocumentRecord,
+    roles: QueryPlanDocRole[],
     queryPlan: QueryPlan,
 ): number {
     if (
@@ -923,7 +1045,6 @@ function computeQueryPlanDocRoleDelta(
         return 0;
     }
 
-    const roles = inferDocumentRolesFromTitle(document.ot_title || "");
     let delta = 0;
 
     if (roles.some((role) => queryPlan.preferredDocRoles.includes(role))) {
@@ -970,58 +1091,23 @@ function computeQueryPlanDocRoleDelta(
 
 function computeTitleIntentDocDelta(
     querySignals: DocumentRerankQuerySignals,
-    document: PipelineDocumentRecord,
+    entry: DocumentRerankEntry,
 ): number {
-    const normalizedTitle = normalizePatternText(document.ot_title || "");
+    const { metadata } = entry;
+    const { normalizedTitle } = metadata;
     if (!normalizedTitle) {
         return 0;
     }
 
-    const documentRoles = inferDocumentRolesFromTitle(document.ot_title || "");
-    const isRuleDocTitle = TITLE_RULE_DOC_PATTERN.test(normalizedTitle);
-    const isProcessNoticeTitle =
-        TITLE_PROCESS_NOTICE_PATTERN.test(normalizedTitle);
-    const isOutcomeTitle = TITLE_OUTCOME_PATTERN.test(normalizedTitle);
-    const isAiSchoolTitle = TITLE_AI_SCHOOL_PATTERN.test(normalizedTitle);
-    const isOtherProgramTitle =
-        TITLE_OTHER_PROGRAM_PATTERN.test(normalizedTitle);
-    const isPreapplyTitle = TITLE_PREAPPLY_PATTERN.test(normalizedTitle);
-    const isTransferTitle = TITLE_TRANSFER_PATTERN.test(normalizedTitle);
-    const isCandidateListTitle =
-        TITLE_CANDIDATE_LIST_PATTERN.test(normalizedTitle);
-    const isReviewResultTitle =
-        TITLE_REVIEW_RESULT_PATTERN.test(normalizedTitle);
-    const isSummerCampTitle = TITLE_SUMMER_CAMP_PATTERN.test(normalizedTitle);
-    const isTuimianTitle = TITLE_TUIMIAN_PATTERN.test(normalizedTitle);
-    const isDoctoralTitle = TITLE_DOCTORAL_PATTERN.test(normalizedTitle);
-    const isMasterOnlyTitle =
-        TITLE_MASTER_PATTERN.test(normalizedTitle) &&
-        !isDoctoralTitle &&
-        !isTuimianTitle;
-    const isSystemNoticeTitle =
-        TITLE_SYSTEM_NOTICE_PATTERN.test(normalizedTitle);
-    const isRuleDocRole = documentRoles.includes("rule_doc");
-    const isRegistrationNoticeRole =
-        documentRoles.includes("registration_notice");
-    const isResultNoticeRole = documentRoles.includes("result_notice");
-    const isListNoticeRole = documentRoles.includes("list_notice");
-    const isStageListRole = documentRoles.includes("stage_list");
-    const isAdjustmentNoticeRole =
-        documentRoles.includes("adjustment_notice");
-    const isConstraintRoleDoc = isRuleDocRole || isRegistrationNoticeRole;
-    const isOperationalRoleDoc =
-        isRegistrationNoticeRole || isStageListRole || isAdjustmentNoticeRole;
-    const isOutcomeRoleDoc = isResultNoticeRole || isListNoticeRole;
-
     let delta = 0;
 
-    if (!querySignals.asksOutcomeLikeTitle && isOutcomeTitle) {
+    if (!querySignals.asksOutcomeLikeTitle && metadata.isOutcomeTitle) {
         delta -= 0.95;
     }
     if (
         (querySignals.asksProcedureLikeTitle ||
             querySignals.asksRequirementLikeTitle) &&
-        isRuleDocTitle
+        metadata.isRuleDocTitle
     ) {
         delta +=
             querySignals.asksProcedureLikeTitle &&
@@ -1029,16 +1115,16 @@ function computeTitleIntentDocDelta(
                 ? 0.95
                 : 0.75;
     }
-    if (querySignals.asksProcedureLikeTitle && isProcessNoticeTitle) {
+    if (querySignals.asksProcedureLikeTitle && metadata.isProcessNoticeTitle) {
         delta += 0.55;
     }
 
     if (querySignals.mentionsAiSchool) {
-        if (isAiSchoolTitle) {
+        if (metadata.isAiSchoolTitle) {
             delta += 0.45;
-        } else if (isOtherProgramTitle) {
+        } else if (metadata.isOtherProgramTitle) {
             delta -= 0.9;
-        } else if (/学院/.test(normalizedTitle)) {
+        } else if (metadata.hasCollegeTitle) {
             delta -= 0.55;
         } else {
             delta -= 0.2;
@@ -1046,24 +1132,24 @@ function computeTitleIntentDocDelta(
     }
 
     if (querySignals.mentionsDoctoral) {
-        if (isMasterOnlyTitle) {
+        if (metadata.isMasterOnlyTitle) {
             delta -= 0.95;
-        } else if (isDoctoralTitle) {
+        } else if (metadata.isDoctoralTitle) {
             delta += 0.2;
         }
     }
 
     if (querySignals.mentionsTuimian) {
-        if (isTuimianTitle) {
+        if (metadata.isTuimianTitle) {
             delta += 0.45;
         }
-        if (isDoctoralTitle && !isTuimianTitle) {
+        if (metadata.isDoctoralTitle && !metadata.isTuimianTitle) {
             delta -= 0.6;
         }
     }
 
     if (querySignals.mentionsSummerCamp) {
-        if (isSummerCampTitle) {
+        if (metadata.isSummerCampTitle) {
             delta += 0.35;
         }
         if (querySignals.asksCampExecutionDetail) {
@@ -1101,8 +1187,10 @@ function computeTitleIntentDocDelta(
             delta -= 0.45;
         }
         if (
-            !isSummerCampTitle &&
-            (isDoctoralTitle || isTuimianTitle || isMasterOnlyTitle)
+            !metadata.isSummerCampTitle &&
+            (metadata.isDoctoralTitle ||
+                metadata.isTuimianTitle ||
+                metadata.isMasterOnlyTitle)
         ) {
             delta -= 0.65;
         }
@@ -1123,13 +1211,13 @@ function computeTitleIntentDocDelta(
         if (/招生简章|接收办法|实施办法/.test(normalizedTitle)) {
             delta += 0.55;
         }
-        if (isPreapplyTitle) {
+        if (metadata.isPreapplyTitle) {
             delta -= 0.45;
         }
-        if (isTransferTitle && !querySignals.mentionsTransfer) {
+        if (metadata.isTransferTitle && !querySignals.mentionsTransfer) {
             delta -= 0.65;
         }
-        if (isReviewResultTitle && !querySignals.asksOutcomeLikeTitle) {
+        if (metadata.isReviewResultTitle && !querySignals.asksOutcomeLikeTitle) {
             delta -= 0.55;
         }
     }
@@ -1138,10 +1226,10 @@ function computeTitleIntentDocDelta(
         if (/接收办法|实施办法/.test(normalizedTitle)) {
             delta += 0.45;
         }
-        if (isPreapplyTitle && querySignals.asksSystemOperationLike) {
+        if (metadata.isPreapplyTitle && querySignals.asksSystemOperationLike) {
             delta -= 0.2;
         }
-        if (isSystemNoticeTitle) {
+        if (metadata.isSystemNoticeTitle) {
             delta -= 0.55;
         }
     } else if (
@@ -1155,13 +1243,13 @@ function computeTitleIntentDocDelta(
         if (/招生简章|实施办法/.test(normalizedTitle)) {
             delta += 0.4;
         }
-        if (isReviewResultTitle) {
+        if (metadata.isReviewResultTitle) {
             delta -= 0.55;
         }
     }
 
     if (querySignals.asksMaterialReviewTiming) {
-        if (isCandidateListTitle) {
+        if (metadata.isCandidateListTitle) {
             delta += 0.8;
         }
         if (/综合考核结果/.test(normalizedTitle)) {
@@ -1185,37 +1273,40 @@ function computeTitleIntentDocDelta(
         querySignals.isCompressedKeywordQuery &&
         !querySignals.asksBroadRuleDocLikeTitle
     ) {
-        if (!querySignals.asksCompressedConstraintLike && isRuleDocRole) {
+        if (!querySignals.asksCompressedConstraintLike && metadata.isRuleDocRole) {
             delta -= querySignals.asksCompressedOutcomeLike ? 0.95 : 0.55;
         }
-        if (isSystemNoticeTitle) {
+        if (metadata.isSystemNoticeTitle) {
             delta -= 1.1;
         }
-        if (isOtherProgramTitle) {
+        if (metadata.isOtherProgramTitle) {
             delta -= 1.2;
         }
-        if (querySignals.asksCompressedConstraintLike && isConstraintRoleDoc) {
+        if (
+            querySignals.asksCompressedConstraintLike &&
+            metadata.isConstraintRoleDoc
+        ) {
             delta += querySignals.asksCompressedOutcomeLike ? 0.58 : 0.74;
         }
         if (
             querySignals.asksCompressedNoticeLike &&
-            (isOperationalRoleDoc || isProcessNoticeTitle)
+            (metadata.isOperationalRoleDoc || metadata.isProcessNoticeTitle)
         ) {
             delta += querySignals.asksCompressedConstraintLike ? 0.34 : 0.48;
         }
         if (querySignals.asksCompressedOutcomeLike) {
-            if (isOutcomeRoleDoc || isReviewResultTitle) {
+            if (metadata.isOutcomeRoleDoc || metadata.isReviewResultTitle) {
                 delta += querySignals.asksCompressedConstraintLike ? 0.28 : 0.56;
             }
-            if (isStageListRole || isCandidateListTitle) {
+            if (metadata.isStageListRole || metadata.isCandidateListTitle) {
                 delta += querySignals.asksCompressedConstraintLike ? 0.18 : 0.32;
             }
         }
         if (
             querySignals.hasCompressedIntentCue &&
             !querySignals.asksCompressedConstraintLike &&
-            isOperationalRoleDoc &&
-            !isOutcomeRoleDoc
+            metadata.isOperationalRoleDoc &&
+            !metadata.isOutcomeRoleDoc
         ) {
             delta += 0.16;
         }
@@ -1225,14 +1316,14 @@ function computeTitleIntentDocDelta(
             querySignals.hasCompressedIntentCue
         ) {
             if (
-                isTuimianTitle &&
-                (isConstraintRoleDoc ||
-                    isOperationalRoleDoc ||
-                    isOutcomeRoleDoc)
+                metadata.isTuimianTitle &&
+                (metadata.isConstraintRoleDoc ||
+                    metadata.isOperationalRoleDoc ||
+                    metadata.isOutcomeRoleDoc)
             ) {
                 delta += 0.72;
             }
-            if (isDoctoralTitle && !isTuimianTitle) {
+            if (metadata.isDoctoralTitle && !metadata.isTuimianTitle) {
                 delta -= 0.88;
             }
         }
@@ -1242,14 +1333,14 @@ function computeTitleIntentDocDelta(
             querySignals.hasCompressedIntentCue
         ) {
             if (
-                isDoctoralTitle &&
-                (isConstraintRoleDoc ||
-                    isOperationalRoleDoc ||
-                    isOutcomeRoleDoc)
+                metadata.isDoctoralTitle &&
+                (metadata.isConstraintRoleDoc ||
+                    metadata.isOperationalRoleDoc ||
+                    metadata.isOutcomeRoleDoc)
             ) {
                 delta += 0.64;
             }
-            if (isMasterOnlyTitle) {
+            if (metadata.isMasterOnlyTitle) {
                 delta -= 0.82;
             }
         }
@@ -1259,14 +1350,18 @@ function computeTitleIntentDocDelta(
             querySignals.hasCompressedIntentCue
         ) {
             if (
-                isSummerCampTitle &&
-                (isOperationalRoleDoc || isOutcomeRoleDoc || isStageListRole)
+                metadata.isSummerCampTitle &&
+                (metadata.isOperationalRoleDoc ||
+                    metadata.isOutcomeRoleDoc ||
+                    metadata.isStageListRole)
             ) {
                 delta += 0.6;
             }
             if (
-                !isSummerCampTitle &&
-                (isDoctoralTitle || isTuimianTitle || isMasterOnlyTitle)
+                !metadata.isSummerCampTitle &&
+                (metadata.isDoctoralTitle ||
+                    metadata.isTuimianTitle ||
+                    metadata.isMasterOnlyTitle)
             ) {
                 delta -= 0.58;
             }
@@ -1277,10 +1372,10 @@ function computeTitleIntentDocDelta(
             querySignals.hasCompressedIntentCue
         ) {
             if (
-                isTransferTitle &&
-                (isOperationalRoleDoc ||
-                    isOutcomeRoleDoc ||
-                    isAdjustmentNoticeRole)
+                metadata.isTransferTitle &&
+                (metadata.isOperationalRoleDoc ||
+                    metadata.isOutcomeRoleDoc ||
+                    metadata.isAdjustmentNoticeRole)
             ) {
                 delta += 0.58;
             }
@@ -1292,14 +1387,14 @@ function computeTitleIntentDocDelta(
 
 function computeCoverageDocDelta(
     querySignals: DocumentRerankQuerySignals,
-    document: PipelineDocumentRecord,
+    entry: DocumentRerankEntry,
 ): number {
     const { requestedAspects } = querySignals;
     if (requestedAspects.length < 2) {
         return 0;
     }
 
-    const evidenceText = getDocumentEvidenceText(document);
+    const evidenceText = entry.metadata.evidenceText;
     if (!evidenceText) {
         return -0.35;
     }
@@ -1363,19 +1458,18 @@ function hasExplicitPhaseAnchor(anchor: PhaseAnchor): boolean {
 
 function computePhaseAnchorDocDelta(
     querySignals: DocumentRerankQuerySignals,
-    document: PipelineDocumentRecord,
+    entry: DocumentRerankEntry,
 ): number {
     if (!querySignals.hasExplicitPhaseAnchor) {
         return 0;
     }
 
     const queryPhase = querySignals.queryPhase;
-    const title = (document.ot_title || "").replace(/\s+/g, "");
-    if (!title) {
+    if (!entry.metadata.normalizedTitle) {
         return -0.15;
     }
 
-    const articlePhase = extractPhaseAnchor(title);
+    const articlePhase = entry.metadata.phaseAnchor;
     let delta = 0;
 
     if (queryPhase.half) {
@@ -1526,24 +1620,24 @@ function buildDocumentRerankQuerySignals(params: {
 
 function applyPhaseAnchorBoostToDocuments(
     querySignals: DocumentRerankQuerySignals,
-    documents: PipelineDocumentRecord[],
-): PipelineDocumentRecord[] {
-    return sortDocumentsByDisplayScore(
-        documents
-            .map((document) => {
+    entries: DocumentRerankEntry[],
+): DocumentRerankEntry[] {
+    return sortDocumentRerankEntriesByDisplayScore(
+        entries
+            .map((entry) => {
                 const delta =
-                    computePhaseAnchorDocDelta(querySignals, document) *
+                    computePhaseAnchorDocDelta(querySignals, entry) *
                     querySignals.phaseAnchorWeight;
-                return updateDocumentScores(document, delta, delta);
+                return updateDocumentRerankEntryScores(entry, delta, delta);
             }),
     );
 }
 
 function applyCoverageTitleDiversity(
-    documents: PipelineDocumentRecord[],
-): PipelineDocumentRecord[] {
-    const remaining = [...documents];
-    const selected: PipelineDocumentRecord[] = [];
+    entries: DocumentRerankEntry[],
+): DocumentRerankEntry[] {
+    const remaining = [...entries];
+    const selected: DocumentRerankEntry[] = [];
     const seenTitleKeys = new Map<string, number>();
 
     while (remaining.length > 0) {
@@ -1551,8 +1645,8 @@ function applyCoverageTitleDiversity(
         let bestAdjustedScore = Number.NEGATIVE_INFINITY;
 
         remaining.forEach((candidate, index) => {
-            const baseScore = getDocumentDisplayScore(candidate);
-            const titleKey = normalizeTitleDedupKey(candidate.ot_title || "");
+            const baseScore = getDocumentDisplayScore(candidate.document);
+            const titleKey = candidate.metadata.titleDedupKey;
             const seenCount = titleKey ? (seenTitleKeys.get(titleKey) ?? 0) : 0;
             const adjustedScore =
                 baseScore - seenCount * TITLE_DIVERSITY_DUPLICATE_PENALTY;
@@ -1564,14 +1658,17 @@ function applyCoverageTitleDiversity(
         });
 
         const chosen = remaining.splice(bestIndex, 1)[0];
-        const titleKey = normalizeTitleDedupKey(chosen.ot_title || "");
+        const titleKey = chosen.metadata.titleDedupKey;
         if (titleKey) {
             seenTitleKeys.set(titleKey, (seenTitleKeys.get(titleKey) ?? 0) + 1);
         }
         selected.push({
-            ...chosen,
-            score: bestAdjustedScore,
-            displayScore: bestAdjustedScore,
+            document: {
+                ...chosen.document,
+                score: bestAdjustedScore,
+                displayScore: bestAdjustedScore,
+            },
+            metadata: chosen.metadata,
         });
     }
 
@@ -1599,9 +1696,11 @@ function rerankAnswerDocuments(params: {
         queryPlan,
         preferLatestWithinTopic,
     });
-    const phaseAdjustedDocuments = enablePhaseAnchorBoost
-        ? applyPhaseAnchorBoostToDocuments(querySignals, documents)
-        : documents;
+    const documentEntries = buildDocumentRerankEntries(documents);
+    const phaseAdjustedEntries = enablePhaseAnchorBoost
+        ? applyPhaseAnchorBoostToDocuments(querySignals, documentEntries)
+        : documentEntries;
+    const phaseAdjustedDocuments = getDocumentsFromRerankEntries(phaseAdjustedEntries);
 
     if (!applyTitleAdjustments) {
         return applyCompressedQueryDisplayGuard(
@@ -1612,41 +1711,45 @@ function rerankAnswerDocuments(params: {
     }
 
     const shouldApplyLatestVersionBoost =
-        querySignals.wantsLatestVersion && phaseAdjustedDocuments.length > 1;
+        querySignals.wantsLatestVersion && phaseAdjustedEntries.length > 1;
     const latestVersionFamilyStats = shouldApplyLatestVersionBoost
-        ? buildLatestVersionFamilyStats(phaseAdjustedDocuments)
+        ? buildLatestVersionFamilyStats(phaseAdjustedEntries)
         : undefined;
-    const rerankedDocuments = sortDocumentsByDisplayScore(
-        phaseAdjustedDocuments
-            .map((document) => {
+    const rerankedEntries = sortDocumentRerankEntriesByDisplayScore(
+        phaseAdjustedEntries
+            .map((entry) => {
                 const titleDelta =
-                    (computeTitleIntentDocDelta(querySignals, document) +
+                    (computeTitleIntentDocDelta(querySignals, entry) +
                         (queryPlan
-                            ? computeQueryPlanDocRoleDelta(document, queryPlan)
+                            ? computeQueryPlanDocRoleDelta(
+                                  entry.metadata.roles,
+                                  queryPlan,
+                              )
                             : 0)) *
                     querySignals.titleIntentWeight;
                 const latestDelta =
                     shouldApplyLatestVersionBoost && latestVersionFamilyStats
                         ? computeLatestVersionDocDelta({
-                              document,
+                              entry,
                               familyStats: latestVersionFamilyStats,
                               querySignals,
                           }) * querySignals.latestVersionWeight
                         : 0;
                 const coverageDelta =
-                    computeCoverageDocDelta(querySignals, document) *
+                    computeCoverageDocDelta(querySignals, entry) *
                     querySignals.coverageWeight;
 
-                return updateDocumentScores(
-                    document,
+                return updateDocumentRerankEntryScores(
+                    entry,
                     titleDelta + latestDelta + coverageDelta,
                     titleDelta,
                 );
             }),
     );
-    const displayDocuments = querySignals.wantsCoverageDiversity
-        ? applyCoverageTitleDiversity(rerankedDocuments)
-        : rerankedDocuments;
+    const displayEntries = querySignals.wantsCoverageDiversity
+        ? applyCoverageTitleDiversity(rerankedEntries)
+        : rerankedEntries;
+    const displayDocuments = getDocumentsFromRerankEntries(displayEntries);
 
     return applyCompressedQueryDisplayGuard(
         query,
