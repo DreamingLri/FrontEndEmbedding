@@ -1858,16 +1858,6 @@ function collectUniqueFetchOtids(
     return otids;
 }
 
-export function mergeCoarseMatchesIntoDocuments(
-    documents: PipelineDocumentRecord[],
-    coarseMatches: PipelineCoarseMatch[],
-): PipelineDocumentRecord[] {
-    return mergeCoarseMatchesWithDocumentLookup(
-        buildPipelineDocumentLookup(documents),
-        coarseMatches,
-    );
-}
-
 export function executeRetrievalStage(params: {
     query: string;
     queryVector: Float32Array;
