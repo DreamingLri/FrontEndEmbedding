@@ -622,6 +622,11 @@ type DocumentRerankEntry = {
     metadata: DocumentRerankMetadata;
 };
 
+type DocumentRerankEntryLookup = {
+    entry: DocumentRerankEntry;
+    index: number;
+};
+
 function normalizePatternText(text: string): string {
     return text.replace(/\s+/g, "");
 }
@@ -894,6 +899,20 @@ function getDocumentsFromRerankEntries(
     return entries.map((entry) => entry.document);
 }
 
+function buildDocumentRerankEntryLookup(
+    entries: DocumentRerankEntry[],
+): Map<string, DocumentRerankEntryLookup> {
+    const lookup = new Map<string, DocumentRerankEntryLookup>();
+    entries.forEach((entry, index) => {
+        const otid = entry.document.otid;
+        if (!otid || lookup.has(otid)) {
+            return;
+        }
+        lookup.set(otid, { entry, index });
+    });
+    return lookup;
+}
+
 function buildLatestVersionFamilyStats(
     entries: DocumentRerankEntry[],
 ): Map<string, LatestVersionFamilyStat> {
@@ -978,56 +997,58 @@ function queryIsCompressedKeywordLike(query: string): boolean {
     );
 }
 
-function applyCompressedQueryDisplayGuard(
-    query: string,
-    baselineDocuments: PipelineDocumentRecord[],
-    rerankedDocuments: PipelineDocumentRecord[],
-): PipelineDocumentRecord[] {
+function applyCompressedQueryDisplayGuardToEntries(
+    querySignals: DocumentRerankQuerySignals,
+    baselineEntries: DocumentRerankEntry[],
+    rerankedEntries: DocumentRerankEntry[],
+): DocumentRerankEntry[] {
     if (
-        !queryIsCompressedKeywordLike(query) ||
-        baselineDocuments.length === 0 ||
-        rerankedDocuments.length === 0
+        !querySignals.isCompressedKeywordQuery ||
+        baselineEntries.length === 0 ||
+        rerankedEntries.length === 0
     ) {
-        return rerankedDocuments;
+        return rerankedEntries;
     }
 
-    const baselineTop = baselineDocuments[0];
-    const rerankedTop = rerankedDocuments[0];
-    if (!baselineTop?.otid || !rerankedTop?.otid || baselineTop.otid === rerankedTop.otid) {
-        return rerankedDocuments;
+    const baselineTop = baselineEntries[0];
+    const rerankedTop = rerankedEntries[0];
+    const baselineTopOtid = baselineTop.document.otid;
+    const rerankedTopOtid = rerankedTop.document.otid;
+    if (
+        !baselineTopOtid ||
+        !rerankedTopOtid ||
+        baselineTopOtid === rerankedTopOtid
+    ) {
+        return rerankedEntries;
     }
 
-    const baselineTopScore =
-        baselineTop.displayScore ?? baselineTop.coarseScore ?? baselineTop.score ?? 0;
-    const rerankedTopBaseline = baselineDocuments.find(
-        (document) => document.otid === rerankedTop.otid,
-    );
-    const rerankedTopBaselineScore =
-        rerankedTopBaseline?.displayScore ??
-        rerankedTopBaseline?.coarseScore ??
-        rerankedTopBaseline?.score ??
-        Number.NEGATIVE_INFINITY;
+    const baselineTopScore = getDocumentDisplayScore(baselineTop.document);
+    const baselineLookup = buildDocumentRerankEntryLookup(baselineEntries);
+    const rerankedTopBaseline = baselineLookup.get(rerankedTopOtid)?.entry;
+    const rerankedTopBaselineScore = rerankedTopBaseline
+        ? getDocumentDisplayScore(rerankedTopBaseline.document)
+        : Number.NEGATIVE_INFINITY;
 
     if (baselineTopScore + 0.06 < rerankedTopBaselineScore) {
-        return rerankedDocuments;
+        return rerankedEntries;
     }
 
-    const preservedBaseline = rerankedDocuments.find(
-        (document) => document.otid === baselineTop.otid,
-    );
-    if (!preservedBaseline) {
-        return rerankedDocuments;
+    const rerankedLookup = buildDocumentRerankEntryLookup(rerankedEntries);
+    const preservedBaselineLookup = rerankedLookup.get(baselineTopOtid);
+    if (!preservedBaselineLookup) {
+        return rerankedEntries;
     }
 
-    const boostedTopScore =
-        (rerankedTop.displayScore ?? rerankedTop.score ?? 0) + 0.001;
-    const reordered = rerankedDocuments.filter(
-        (document) => document.otid !== baselineTop.otid,
-    );
+    const boostedTopScore = getDocumentDisplayScore(rerankedTop.document) + 0.001;
+    const reordered = [...rerankedEntries];
+    const [preservedBaseline] = reordered.splice(preservedBaselineLookup.index, 1);
     reordered.unshift({
-        ...preservedBaseline,
-        score: boostedTopScore,
-        displayScore: boostedTopScore,
+        document: {
+            ...preservedBaseline.document,
+            score: boostedTopScore,
+            displayScore: boostedTopScore,
+        },
+        metadata: preservedBaseline.metadata,
     });
     return reordered;
 }
@@ -1700,14 +1721,14 @@ function rerankAnswerDocuments(params: {
     const phaseAdjustedEntries = enablePhaseAnchorBoost
         ? applyPhaseAnchorBoostToDocuments(querySignals, documentEntries)
         : documentEntries;
-    const phaseAdjustedDocuments = getDocumentsFromRerankEntries(phaseAdjustedEntries);
 
     if (!applyTitleAdjustments) {
-        return applyCompressedQueryDisplayGuard(
-            query,
-            phaseAdjustedDocuments,
-            phaseAdjustedDocuments,
+        const guardedEntries = applyCompressedQueryDisplayGuardToEntries(
+            querySignals,
+            phaseAdjustedEntries,
+            phaseAdjustedEntries,
         );
+        return getDocumentsFromRerankEntries(guardedEntries);
     }
 
     const shouldApplyLatestVersionBoost =
@@ -1749,13 +1770,13 @@ function rerankAnswerDocuments(params: {
     const displayEntries = querySignals.wantsCoverageDiversity
         ? applyCoverageTitleDiversity(rerankedEntries)
         : rerankedEntries;
-    const displayDocuments = getDocumentsFromRerankEntries(displayEntries);
-
-    return applyCompressedQueryDisplayGuard(
-        query,
-        phaseAdjustedDocuments,
-        displayDocuments,
+    const guardedEntries = applyCompressedQueryDisplayGuardToEntries(
+        querySignals,
+        phaseAdjustedEntries,
+        displayEntries,
     );
+
+    return getDocumentsFromRerankEntries(guardedEntries);
 }
 
 function resolveDynamicFetchLimit(
