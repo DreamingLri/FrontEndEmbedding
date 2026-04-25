@@ -1,0 +1,154 @@
+{
+  "generatedAt": "2026-04-24T12:20:51.410Z",
+  "profileDefinition": "Heuristic user-pain audit for implicit latest, low title anchor, multi-intent, post-outcome action, cross-doc flow, and ambiguous user state. This script does not mutate source datasets.",
+  "targetPainCaseRate": "30%-40% per split after manual replacement",
+  "summaries": [
+    {
+      "label": "Main",
+      "file": "../Backend/test/test_dataset_granularity/test_dataset_granularity_main_generalization_aligned_120_draft_v4.json",
+      "total": 120,
+      "painCaseCount": 90,
+      "painCaseRate": 75,
+      "avgPainTypesPerCase": 1.32,
+      "avgTitleOverlapRatio": 0.2988,
+      "replacementCandidateCount": 0,
+      "byPainType": {
+        "low_title_anchor": 47,
+        "multi_intent": 52,
+        "cross_doc_flow": 14,
+        "implicit_latest": 24,
+        "ambiguous_user_state": 13,
+        "post_outcome_action": 8
+      },
+      "byTitleAnchorLevel": {
+        "low": 47,
+        "high": 44,
+        "medium": 29
+      },
+      "bySupportPattern": {
+        "multi_kp": 42,
+        "ot_required": 28,
+        "single_kp": 50
+      },
+      "replacementCandidates": [],
+      "byStructuralComplexityTag": {
+        "multi_kp": 42,
+        "kp_plus_ot": 42,
+        "dense_same_theme": 22,
+        "dense_version_chain": 34
+      }
+    },
+    {
+      "label": "InDomain",
+      "file": "../Backend/test/test_dataset_granularity/test_dataset_granularity_in_domain_generalization_aligned_100_draft_v7.json",
+      "total": 100,
+      "painCaseCount": 75,
+      "painCaseRate": 75,
+      "avgPainTypesPerCase": 1.23,
+      "avgTitleOverlapRatio": 0.2932,
+      "replacementCandidateCount": 3,
+      "byPainType": {
+        "low_title_anchor": 33,
+        "multi_intent": 49,
+        "implicit_latest": 14,
+        "cross_doc_flow": 10,
+        "post_outcome_action": 8,
+        "ambiguous_user_state": 9
+      },
+      "byTitleAnchorLevel": {
+        "low": 33,
+        "high": 49,
+        "medium": 18
+      },
+      "bySupportPattern": {
+        "multi_kp": 33,
+        "ot_required": 25,
+        "single_kp": 42
+      },
+      "replacementCandidates": [
+        {
+          "id": "in_domain_100_draft_v1_0041",
+          "query": "临床医生报医学博士外语统考，已经拿到的硕士学位类别有什么限制",
+          "ot_title": "关于在职临床医师申请临床医学和口腔医学博士专业学位参加全国医学博士外语统一考试报名工作的通知",
+          "title_bigram_overlap_ratio": 0.3214,
+          "difficulty_level_v1": "L1",
+          "difficulty_score_v1": 2
+        },
+        {
+          "id": "in_domain_100_draft_v1_0042",
+          "query": "临床医生想参加医学博士外语统考，需要有多久临床工作经历",
+          "ot_title": "关于在职临床医师申请临床医学和口腔医学博士专业学位参加全国医学博士外语统一考试报名工作的通知",
+          "title_bigram_overlap_ratio": 0.4167,
+          "difficulty_level_v1": "L1",
+          "difficulty_score_v1": 2
+        },
+        {
+          "id": "in_domain_100_draft_v1_0046",
+          "query": "申请参加医学博士外语统考，本专业临床医疗工作年限至少要满几年",
+          "ot_title": "关于在职临床医师申请临床医学和口腔医学博士专业学位参加全国医学博士外语统一考试报名工作的通知",
+          "title_bigram_overlap_ratio": 0.4286,
+          "difficulty_level_v1": "L1",
+          "difficulty_score_v1": 2.6
+        }
+      ],
+      "byStructuralComplexityTag": {
+        "multi_kp": 33,
+        "kp_plus_ot": 24,
+        "dense_same_theme": 9,
+        "dense_version_chain": 26
+      }
+    },
+    {
+      "label": "BlindExtOOD",
+      "file": "../Backend/test/test_dataset_granularity/test_dataset_granularity_blind_ext_ood_generalization_aligned_100_draft_v4.json",
+      "total": 100,
+      "painCaseCount": 78,
+      "painCaseRate": 78,
+      "avgPainTypesPerCase": 1.62,
+      "avgTitleOverlapRatio": 0.2373,
+      "replacementCandidateCount": 2,
+      "byPainType": {
+        "implicit_latest": 33,
+        "ambiguous_user_state": 15,
+        "low_title_anchor": 30,
+        "multi_intent": 55,
+        "cross_doc_flow": 14,
+        "post_outcome_action": 15
+      },
+      "byTitleAnchorLevel": {
+        "medium": 18,
+        "low": 30,
+        "high": 52
+      },
+      "bySupportPattern": {
+        "single_kp": 46,
+        "multi_kp": 37,
+        "ot_required": 17
+      },
+      "replacementCandidates": [
+        {
+          "id": "blind_ext_ood_100_draft_v1_0045",
+          "query": "申请逸仙博士后项目，一般需要什么学术背景",
+          "ot_title": "中山大学人工智能学院诚邀全球青年英才申请逸仙博士后项目",
+          "title_bigram_overlap_ratio": 0.4444,
+          "difficulty_level_v1": "L1",
+          "difficulty_score_v1": 2.6
+        },
+        {
+          "id": "blind_ext_ood_100_draft_v1_0064",
+          "query": "科研团队秘书这个岗位计划招几个人",
+          "ot_title": "招聘中山大学人工智能学院科研团队秘书的启事",
+          "title_bigram_overlap_ratio": 0.3333,
+          "difficulty_level_v1": "L1",
+          "difficulty_score_v1": 2.9
+        }
+      ],
+      "byStructuralComplexityTag": {
+        "multi_kp": 37,
+        "kp_plus_ot": 34,
+        "dense_same_theme": 30,
+        "dense_version_chain": 23
+      }
+    }
+  ]
+}

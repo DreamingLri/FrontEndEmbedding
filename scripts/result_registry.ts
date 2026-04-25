@@ -36,11 +36,12 @@ type ResultRegistryFile = {
 };
 
 const SLOT_LABELS: Record<CurrentResultSlot, string> = {
-    granularity_main_bench_120_current: "主方法主结果 `MainlineBundle`",
+    granularity_main_bench_120_current:
+        "主方法主结果 `DomainGeneralizationBundle`",
     granularity_in_domain_holdout_50_current: "同域泛化结果 `InDomain`",
     granularity_external_ood_50_current: "跨域泛化结果 `ExtOOD`",
     granularity_matched_ext_ood_60_current:
-        "对照外域结果 `MatchedExtOOD`",
+        "支撑外域结果 `BlindExtOOD`",
     granularity_hard_ood_blind_30_current: "最难外域结果 `HardOOD`",
     granularity_external_ood_holdout_30_current: "内部 hard stress `ExtHard`",
     granularity_main_106_current: "主方法主结果 `main_106`",
@@ -56,6 +57,8 @@ const SLOT_LABELS: Record<CurrentResultSlot, string> = {
 };
 
 const SLOT_BY_DATASET_NAME: Partial<Record<string, CurrentResultSlot>> = {
+    granularity_domain_generalization_bundle:
+        "granularity_main_bench_120_current",
     granularity_mainline_bundle: "granularity_main_bench_120_current",
     test_dataset_granularity_main_120_reviewed:
         "granularity_main_bench_120_current",
@@ -69,12 +72,28 @@ const SLOT_BY_DATASET_NAME: Partial<Record<string, CurrentResultSlot>> = {
         "granularity_external_ood_50_current",
     test_dataset_granularity_main_benchmark_v2_reviewed_userized_v1:
         "granularity_main_bench_120_current",
+    test_dataset_granularity_main_generalization_aligned_120_draft_v4:
+        "granularity_main_bench_120_current",
+    test_dataset_granularity_main_generalization_aligned_120_draft_v3:
+        "granularity_main_bench_120_current",
+    test_dataset_granularity_in_domain_generalization_aligned_100_draft_v7:
+        "granularity_in_domain_holdout_50_current",
+    test_dataset_granularity_in_domain_generalization_aligned_100_draft_v6:
+        "granularity_in_domain_holdout_50_current",
+    test_dataset_granularity_blind_ext_ood_generalization_aligned_100_draft_v4:
+        "granularity_matched_ext_ood_60_current",
+    test_dataset_granularity_blind_ext_ood_generalization_aligned_100_draft_v3:
+        "granularity_matched_ext_ood_60_current",
+    test_dataset_granularity_in_domain_generalization_60_reviewed_userized_v2:
+        "granularity_in_domain_holdout_50_current",
     test_dataset_granularity_in_domain_generalization_60_reviewed_userized_v1:
         "granularity_in_domain_holdout_50_current",
     test_dataset_granularity_aligned_ext_ood_blind_60_draft_v1:
+        "granularity_matched_ext_ood_60_current",
+    test_dataset_granularity_external_matched_ood_60_reviewed_userized_v2:
         "granularity_external_ood_50_current",
     test_dataset_granularity_external_matched_ood_60_reviewed_userized_v1:
-        "granularity_matched_ext_ood_60_current",
+        "granularity_external_ood_50_current",
     test_dataset_granularity_hard_ood_blind_30_draft_v1:
         "granularity_hard_ood_blind_30_current",
     test_dataset_granularity_external_ood_holdout_30_reviewed:
@@ -84,12 +103,14 @@ const SLOT_BY_DATASET_NAME: Partial<Record<string, CurrentResultSlot>> = {
     test_dataset_granularity_main_106_reviewed:
         "granularity_main_106_current",
     gran_main_v2: "granularity_main_bench_120_current",
+    granularity_domain_generalization_120_60_60:
+        "granularity_main_bench_120_current",
     granularity_mainline_150_100_80: "granularity_main_bench_120_current",
     gran_in_v2: "granularity_in_domain_holdout_50_current",
-    gran_ext_blind60: "granularity_external_ood_50_current",
-    gran_matched_ext60: "granularity_matched_ext_ood_60_current",
+    gran_ext_blind60: "granularity_matched_ext_ood_60_current",
+    gran_matched_ext60: "granularity_external_ood_50_current",
     gran_hardood_blind30: "granularity_hard_ood_blind_30_current",
-    gran_ext_v2: "granularity_matched_ext_ood_60_current",
+    gran_ext_v2: "granularity_external_ood_50_current",
     gran_ext_hard30: "granularity_external_ood_holdout_30_current",
     gran_legacy_hard30: "granularity_external_ood_holdout_30_current",
     test_dataset_answer_reject_v4_frozen_holdout_reviewed:

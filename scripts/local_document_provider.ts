@@ -42,6 +42,7 @@ function ensureArticleMap(): Map<string, PipelineDocumentRecord> {
         pkid?: string;
         otid?: string;
         kp_text?: string;
+        kp_role_tags?: string[];
     }>;
 
     const articleMap = new Map<string, PipelineDocumentRecord>();
@@ -78,6 +79,7 @@ function ensureArticleMap(): Map<string, PipelineDocumentRecord> {
         article.kps.push({
             kpid: item.pkid,
             kp_text: item.kp_text,
+            kp_role_tags: item.kp_role_tags,
         });
     });
 

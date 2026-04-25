@@ -55,6 +55,18 @@ type VariantReport = {
         enableExplicitYearFilter: boolean;
         enablePhaseAnchorBoost: boolean;
         useYearPhaseTitleAdjustment: boolean;
+        enableTitleIntentConfusionGate: boolean;
+        enableStructuredQueryPlanDocRoleAdjustments: boolean;
+        enableStructuredKpRoleEvidenceAdjustments: boolean;
+        enableLexicalTitleIntentAdjustments: boolean;
+        enableLexicalTitleTypeAdjustments: boolean;
+        enableThemeSpecificTitleAdjustments: boolean;
+        enableDoctoralThemeTitleAdjustments: boolean;
+        enableTuimianThemeTitleAdjustments: boolean;
+        enableSummerCampThemeTitleAdjustments: boolean;
+        enableTransferThemeTitleAdjustments: boolean;
+        enableAiSchoolEntityTitleAdjustments: boolean;
+        enableCompressedKeywordTitleAdjustments: boolean;
     };
     answerReject: AnswerRejectSummary;
     answerQuality: AnswerQualitySummary;
@@ -116,6 +128,34 @@ const VARIANTS: VariantDefinition[] = [
         "Disable document-level phase anchor boost before display ordering.",
         (preset) => {
             preset.retrieval.enablePhaseAnchorBoost = false;
+        },
+    ),
+    createVariant(
+        "no_title_intent_confusion_gate",
+        "Disable ambiguity-aware title-intent downscaling while keeping other display rules.",
+        (preset) => {
+            preset.display.enableTitleIntentConfusionGate = false;
+        },
+    ),
+    createVariant(
+        "no_structured_kp_role_evidence_adjustment",
+        "Disable structured KP-role evidence adjustment while keeping other display rules.",
+        (preset) => {
+            preset.display.enableStructuredKpRoleEvidenceAdjustments = false;
+        },
+    ),
+    createVariant(
+        "no_lexical_title_intent_adjustment",
+        "Disable lexical title-intent rules while keeping structured display signals.",
+        (preset) => {
+            preset.display.enableLexicalTitleIntentAdjustments = false;
+        },
+    ),
+    createVariant(
+        "no_structured_query_plan_doc_role_adjustment",
+        "Disable structured query-plan doc-role alignment while keeping other display rules.",
+        (preset) => {
+            preset.display.enableStructuredQueryPlanDocRoleAdjustments = false;
         },
     ),
     createVariant(
@@ -365,6 +405,33 @@ async function main() {
                     variant.preset.retrieval.enablePhaseAnchorBoost,
                 useYearPhaseTitleAdjustment:
                     variant.preset.display.useYearPhaseTitleAdjustment,
+                enableTitleIntentConfusionGate:
+                    variant.preset.display.enableTitleIntentConfusionGate,
+                enableStructuredQueryPlanDocRoleAdjustments:
+                    variant.preset.display
+                        .enableStructuredQueryPlanDocRoleAdjustments,
+                enableStructuredKpRoleEvidenceAdjustments:
+                    variant.preset.display
+                        .enableStructuredKpRoleEvidenceAdjustments,
+                enableLexicalTitleIntentAdjustments:
+                    variant.preset.display.enableLexicalTitleIntentAdjustments,
+                enableLexicalTitleTypeAdjustments:
+                    variant.preset.display.enableLexicalTitleTypeAdjustments,
+                enableThemeSpecificTitleAdjustments:
+                    variant.preset.display.enableThemeSpecificTitleAdjustments,
+                enableDoctoralThemeTitleAdjustments:
+                    variant.preset.display.enableDoctoralThemeTitleAdjustments,
+                enableTuimianThemeTitleAdjustments:
+                    variant.preset.display.enableTuimianThemeTitleAdjustments,
+                enableSummerCampThemeTitleAdjustments:
+                    variant.preset.display.enableSummerCampThemeTitleAdjustments,
+                enableTransferThemeTitleAdjustments:
+                    variant.preset.display.enableTransferThemeTitleAdjustments,
+                enableAiSchoolEntityTitleAdjustments:
+                    variant.preset.display.enableAiSchoolEntityTitleAdjustments,
+                enableCompressedKeywordTitleAdjustments:
+                    variant.preset.display
+                        .enableCompressedKeywordTitleAdjustments,
             },
             answerReject,
             answerQuality,

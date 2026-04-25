@@ -1,0 +1,137 @@
+{
+  "generatedAt": "2026-04-24T12:46:04.062Z",
+  "profileDefinition": "Heuristic user-pain audit for implicit latest, low title anchor, multi-intent, post-outcome action, cross-doc flow, and ambiguous user state. This script does not mutate source datasets.",
+  "targetPainCaseRate": "30%-40% per split after manual replacement",
+  "summaries": [
+    {
+      "label": "Main",
+      "file": "../Backend/test/test_dataset_granularity/test_dataset_granularity_main_generalization_aligned_120_draft_v4.json",
+      "total": 120,
+      "painCaseCount": 90,
+      "painCaseRate": 75,
+      "avgPainTypesPerCase": 1.32,
+      "avgTitleOverlapRatio": 0.2988,
+      "replacementCandidateCount": 0,
+      "byPainType": {
+        "low_title_anchor": 47,
+        "multi_intent": 52,
+        "cross_doc_flow": 14,
+        "implicit_latest": 24,
+        "ambiguous_user_state": 13,
+        "post_outcome_action": 8
+      },
+      "byTitleAnchorLevel": {
+        "low": 47,
+        "high": 44,
+        "medium": 29
+      },
+      "bySupportPattern": {
+        "multi_kp": 42,
+        "ot_required": 28,
+        "single_kp": 50
+      },
+      "replacementCandidates": [],
+      "byStructuralComplexityTag": {
+        "multi_kp": 42,
+        "kp_plus_ot": 42,
+        "dense_same_theme": 22,
+        "dense_version_chain": 34
+      }
+    },
+    {
+      "label": "InDomain",
+      "file": "../Backend/test/test_dataset_granularity/test_dataset_granularity_in_domain_generalization_aligned_100_draft_v7.json",
+      "total": 100,
+      "painCaseCount": 77,
+      "painCaseRate": 77,
+      "avgPainTypesPerCase": 1.25,
+      "avgTitleOverlapRatio": 0.2882,
+      "replacementCandidateCount": 0,
+      "byPainType": {
+        "low_title_anchor": 33,
+        "multi_intent": 50,
+        "implicit_latest": 14,
+        "cross_doc_flow": 10,
+        "post_outcome_action": 8,
+        "ambiguous_user_state": 10
+      },
+      "byTitleAnchorLevel": {
+        "low": 33,
+        "high": 48,
+        "medium": 19
+      },
+      "bySupportPattern": {
+        "multi_kp": 33,
+        "ot_required": 25,
+        "single_kp": 42
+      },
+      "replacementCandidates": [],
+      "byStructuralComplexityTag": {
+        "multi_kp": 33,
+        "kp_plus_ot": 24,
+        "dense_same_theme": 9,
+        "dense_version_chain": 26
+      }
+    },
+    {
+      "label": "BlindExtOOD",
+      "file": "../Backend/test/test_dataset_granularity/test_dataset_granularity_blind_ext_ood_generalization_aligned_100_draft_v4.json",
+      "total": 100,
+      "painCaseCount": 79,
+      "painCaseRate": 79,
+      "avgPainTypesPerCase": 1.63,
+      "avgTitleOverlapRatio": 0.181,
+      "replacementCandidateCount": 3,
+      "byPainType": {
+        "ambiguous_user_state": 15,
+        "low_title_anchor": 40,
+        "multi_intent": 58,
+        "cross_doc_flow": 16,
+        "implicit_latest": 19,
+        "post_outcome_action": 15
+      },
+      "byTitleAnchorLevel": {
+        "medium": 25,
+        "low": 40,
+        "high": 35
+      },
+      "bySupportPattern": {
+        "single_kp": 46,
+        "multi_kp": 37,
+        "ot_required": 17
+      },
+      "replacementCandidates": [
+        {
+          "id": "blind_ext_ood_100_draft_v1_0005",
+          "query": "2021年硕士复试如果采用线上方式，复试形式和总成绩怎么算",
+          "ot_title": "中山大学人工智能学院2021年硕士研究生复试录取方案",
+          "title_bigram_overlap_ratio": 0.1429,
+          "difficulty_level_v1": "L1",
+          "difficulty_score_v1": 2.3
+        },
+        {
+          "id": "blind_ext_ood_100_draft_v1_0062",
+          "query": "2024年硕士复试当天怎么报到，复试成绩在总成绩里占多少",
+          "ot_title": "中山大学人工智能学院2024年硕士研究生复试录取方案",
+          "title_bigram_overlap_ratio": 0.1579,
+          "difficulty_level_v1": "L1",
+          "difficulty_score_v1": 2.5
+        },
+        {
+          "id": "blind_ext_ood_100_draft_v1_0085",
+          "query": "2023年夏令营具体是哪几天举办",
+          "ot_title": "中山大学人工智能学院2023年全国优秀大学生夏令营入营通知",
+          "title_bigram_overlap_ratio": 0.2,
+          "difficulty_level_v1": "L1",
+          "difficulty_score_v1": 1.7
+        }
+      ],
+      "byStructuralComplexityTag": {
+        "multi_kp": 37,
+        "kp_plus_ot": 34,
+        "dense_same_theme": 30,
+        "dense_version_chain": 23
+      }
+    }
+  ]
+}

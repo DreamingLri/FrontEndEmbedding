@@ -7,6 +7,17 @@ const DEFAULT_DISPLAY_CONFIG: PipelinePreset["display"] = {
     fetchMatchLimit: 15,
     fetchWeakMatchLimit: 10,
     useYearPhaseTitleAdjustment: false,
+    enableTitleIntentConfusionGate: false,
+    enableStructuredQueryPlanDocRoleAdjustments: false,
+    enableStructuredKpRoleEvidenceAdjustments: false,
+    enableLexicalTitleIntentAdjustments: true,
+    enableLexicalTitleTypeAdjustments: true,
+    enableThemeSpecificTitleAdjustments: true,
+    enableDoctoralThemeTitleAdjustments: true,
+    enableTuimianThemeTitleAdjustments: true,
+    enableSummerCampThemeTitleAdjustments: true,
+    enableTransferThemeTitleAdjustments: true,
+    enableCompressedKeywordTitleAdjustments: true,
     enableQueryPlanner: false,
 };
 
@@ -23,6 +34,7 @@ export const PAPER_FROZEN_MAIN_PIPELINE_PRESET: PipelinePreset = {
         kpTopN: 3,
         kpTailWeight: 0.35,
         lexicalBonusMode: "sum",
+        enableLexicalBonusBoost: true,
         kpRoleRerankMode: "feature",
         kpRoleDocWeight: 0.35,
         qConfusionMode: "off",
@@ -51,6 +63,7 @@ export const PRODUCT_CANONICAL_FULL_PIPELINE_PRESET: PipelinePreset = {
         kpTopN: 3,
         kpTailWeight: 0.35,
         lexicalBonusMode: "sum",
+        enableLexicalBonusBoost: true,
         kpRoleRerankMode: "feature",
         kpRoleDocWeight: 0.35,
         qConfusionMode: "off",
@@ -99,6 +112,7 @@ export const MINIMAL_BASELINE_PIPELINE_PRESET: PipelinePreset = {
         kpTopN: 3,
         kpTailWeight: 0.35,
         lexicalBonusMode: "sum",
+        enableLexicalBonusBoost: true,
         kpRoleRerankMode: "off",
         kpRoleDocWeight: 0,
         qConfusionMode: "off",
@@ -116,16 +130,39 @@ export const FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET: PipelinePreset = {
     name: "frontend_research_sync_v1",
     retrieval: {
         ...MINIMAL_BASELINE_PIPELINE_PRESET.retrieval,
+        // Sparse retrieval already captures lexical overlap. Disable the
+        // additional OT-level lexical multiplier to avoid double-counting
+        // word matching in the current non-specialized mainline preset.
+        enableLexicalBonusBoost: false,
         qConfusionMode: "combined",
         qConfusionWeight: 0.2,
         enableExplicitYearFilter: true,
-        enablePhaseAnchorBoost: true,
+        // Keep phase cues in retrieval/query planning, but do not let the
+        // display-stage phase-anchor boost override the mainline dataset order.
+        enablePhaseAnchorBoost: false,
     },
     display: {
         ...DEFAULT_DISPLAY_CONFIG,
         fetchMatchLimit: 20,
         fetchWeakMatchLimit: 12,
         useYearPhaseTitleAdjustment: true,
+        // Only let display rerank fully intervene when coarse retrieval is
+        // actually ambiguous; otherwise shrink positive title-intent rescue.
+        enableTitleIntentConfusionGate: true,
+        enableStructuredQueryPlanDocRoleAdjustments: true,
+        enableStructuredKpRoleEvidenceAdjustments: true,
+        enableLexicalTitleIntentAdjustments: true,
+        enableLexicalTitleTypeAdjustments: false,
+        // Raw theme-specific title fallback is fully replaced by structured
+        // intent/role consistency on the current mainline bundle.
+        enableThemeSpecificTitleAdjustments: false,
+        enableDoctoralThemeTitleAdjustments: false,
+        enableTuimianThemeTitleAdjustments: false,
+        enableSummerCampThemeTitleAdjustments: false,
+        enableTransferThemeTitleAdjustments: false,
+        // The compressed-keyword title branch adds benchmark-specific lexical
+        // specialization without improving current mainline Hit@1.
+        enableCompressedKeywordTitleAdjustments: false,
     },
 };
 

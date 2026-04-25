@@ -1,6 +1,8 @@
 import type { QueryPlan } from "../query_planner.ts";
+import type { ParsedQueryIntent } from "../vector_engine.ts";
 import {
     extractPhaseAnchor,
+    extractInstitutionEntities,
     hasExplicitPhaseAnchor,
     LATEST_VERSION_DOC_WEIGHT,
     PHASE_ANCHOR_DOC_WEIGHT,
@@ -15,15 +17,18 @@ import {
 
 export type DocumentRerankQuerySignals = {
     normalizedQuery: string;
+    queryYears: number[];
     asksOutcomeLikeTitle: boolean;
     asksProcedureLikeTitle: boolean;
     asksRequirementLikeTitle: boolean;
     asksEventDateLikeTitle: boolean;
     asksPolicyOverviewLikeTitle: boolean;
+    asksFlowOverviewLike: boolean;
     asksSystemTimelineLikeTitle: boolean;
     asksBroadRuleDocLikeTitle: boolean;
     isCompressedKeywordQuery: boolean;
-    mentionsAiSchool: boolean;
+    mentionsCollegeEntity: boolean;
+    queryInstitutionEntities: string[];
     mentionsDoctoral: boolean;
     mentionsTuimian: boolean;
     mentionsSummerCamp: boolean;
@@ -50,6 +55,10 @@ export type DocumentRerankQuerySignals = {
     titleIntentWeight: number;
     coverageWeight: number;
     latestVersionWeight: number;
+    queryTopicIds: string[];
+    queryIntentIds: string[];
+    queryDegreeLevels: string[];
+    queryEventTypes: string[];
 };
 
 function queryAsksOutcomeLikeTitle(query: string): boolean {
@@ -76,6 +85,12 @@ function queryAsksEventDateLikeTitle(query: string): boolean {
 
 function queryAsksPolicyOverviewLikeTitle(query: string): boolean {
     return /整体政策|主要要求|关键要求|政策|总体要求/.test(query);
+}
+
+function queryAsksFlowOverviewLikeTitle(query: string): boolean {
+    return /流程|步骤|环节|程序|过程|怎么走|需要经过|从.*到|整体需要完成哪些关键环节|完整流程|整体框架/.test(
+        query,
+    );
 }
 
 function queryAsksSystemTimelineLikeTitle(query: string): boolean {
@@ -135,10 +150,11 @@ export function queryIsCompressedKeywordLike(query: string): boolean {
 
 export function buildDocumentRerankQuerySignals(params: {
     query: string;
+    queryIntent?: ParsedQueryIntent;
     queryPlan?: QueryPlan;
     preferLatestWithinTopic: boolean;
 }): DocumentRerankQuerySignals {
-    const { query, queryPlan, preferLatestWithinTopic } = params;
+    const { query, queryIntent, queryPlan, preferLatestWithinTopic } = params;
     const normalizedQuery = queryPlan?.normalizedQuery ?? normalizePatternText(query);
     const asksOutcomeLikeTitle = queryAsksOutcomeLikeTitle(normalizedQuery);
     const asksProcedureLikeTitle = queryAsksProcedureLikeTitle(normalizedQuery);
@@ -146,12 +162,14 @@ export function buildDocumentRerankQuerySignals(params: {
     const asksEventDateLikeTitle = queryAsksEventDateLikeTitle(normalizedQuery);
     const asksPolicyOverviewLikeTitle =
         queryAsksPolicyOverviewLikeTitle(normalizedQuery);
+    const asksFlowOverviewLike = queryAsksFlowOverviewLikeTitle(normalizedQuery);
     const asksSystemTimelineLikeTitle =
         queryAsksSystemTimelineLikeTitle(normalizedQuery);
     const asksBroadRuleDocLikeTitle =
         queryAsksBroadRuleDocLikeTitle(normalizedQuery);
     const isCompressedKeywordQuery = queryIsCompressedKeywordLike(normalizedQuery);
-    const mentionsAiSchool = /人工智能学院|AI学院/.test(normalizedQuery);
+    const queryInstitutionEntities = extractInstitutionEntities(normalizedQuery);
+    const mentionsCollegeEntity = queryInstitutionEntities.length > 0;
     const mentionsDoctoral = /博士/.test(normalizedQuery);
     const mentionsTuimian = /推免|推荐免试/.test(normalizedQuery);
     const mentionsSummerCamp = /夏令营/.test(normalizedQuery);
@@ -190,15 +208,18 @@ export function buildDocumentRerankQuerySignals(params: {
 
     return {
         normalizedQuery,
+        queryYears: queryIntent?.years || [],
         asksOutcomeLikeTitle,
         asksProcedureLikeTitle,
         asksRequirementLikeTitle,
         asksEventDateLikeTitle,
         asksPolicyOverviewLikeTitle,
+        asksFlowOverviewLike,
         asksSystemTimelineLikeTitle,
         asksBroadRuleDocLikeTitle,
         isCompressedKeywordQuery,
-        mentionsAiSchool,
+        mentionsCollegeEntity,
+        queryInstitutionEntities,
         mentionsDoctoral,
         mentionsTuimian,
         mentionsSummerCamp,
@@ -240,5 +261,9 @@ export function buildDocumentRerankQuerySignals(params: {
             TITLE_COVERAGE_DOC_WEIGHT * (queryPlan?.coverageWeightScale ?? 1),
         latestVersionWeight:
             LATEST_VERSION_DOC_WEIGHT * (preferLatestWithinTopic ? 1.1 : 1),
+        queryTopicIds: queryIntent?.topicIds || [],
+        queryIntentIds: queryIntent?.intentIds || [],
+        queryDegreeLevels: queryIntent?.degreeLevels || [],
+        queryEventTypes: queryIntent?.eventTypes || [],
     };
 }

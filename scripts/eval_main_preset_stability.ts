@@ -426,7 +426,7 @@ async function main(): Promise<void> {
     const report: StabilityReport = {
         generatedAt: new Date().toISOString(),
         note:
-            "该报告用于在当前主线三冻结集 MainBalanced150、GeneralizationHard100、StructureStress80 上比较固定主配置的稳定性；排序优先看泛化集最差 Hit@1，再看泛化集平均 Hit@1，最后看主集 MainBalanced150。",
+            "该报告用于在当前主线三测试集上比较固定主配置的稳定性；排序优先看泛化集最差 Hit@1，再看泛化集平均 Hit@1，最后看主集。",
         datasets: datasetTargets,
         probes: summaries,
         ranking: buildRanking(summaries),

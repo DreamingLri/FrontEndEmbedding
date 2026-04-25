@@ -31,6 +31,7 @@ export type PipelinePreset = {
         kpTopN: number;
         kpTailWeight: number;
         lexicalBonusMode: LexicalBonusMode;
+        enableLexicalBonusBoost: boolean;
         kpRoleRerankMode: KPRoleRerankMode;
         kpRoleDocWeight: number;
         qConfusionMode: QConfusionMode;
@@ -48,6 +49,17 @@ export type PipelinePreset = {
         fetchMatchLimit: number;
         fetchWeakMatchLimit: number;
         useYearPhaseTitleAdjustment: boolean;
+        enableTitleIntentConfusionGate: boolean;
+        enableStructuredQueryPlanDocRoleAdjustments: boolean;
+        enableStructuredKpRoleEvidenceAdjustments: boolean;
+        enableLexicalTitleIntentAdjustments: boolean;
+        enableLexicalTitleTypeAdjustments: boolean;
+        enableThemeSpecificTitleAdjustments: boolean;
+        enableDoctoralThemeTitleAdjustments: boolean;
+        enableTuimianThemeTitleAdjustments: boolean;
+        enableSummerCampThemeTitleAdjustments: boolean;
+        enableTransferThemeTitleAdjustments: boolean;
+        enableCompressedKeywordTitleAdjustments: boolean;
         enableQueryPlanner: boolean;
     };
 };
@@ -76,7 +88,14 @@ export type PipelineDocumentRecord = {
     bestSentence?: string;
     bestPoint?: string;
     best_kpid?: string;
-    kps?: Array<{ kpid?: string; kp_text?: string }>;
+    best_kp_role_tags?: string[];
+    evidence_top_role_tags?: string[];
+    kp_evidence_group_counts?: Record<string, number>;
+    kps?: Array<{ kpid?: string; kp_text?: string; kp_role_tags?: string[] }>;
+    topic_ids?: string[];
+    intent_ids?: string[];
+    degree_levels?: string[];
+    event_types?: string[];
     score?: number;
     coarseScore?: number;
     displayScore?: number;
@@ -89,6 +108,13 @@ export type PipelineCoarseMatch = {
     otid: string;
     score: number;
     best_kpid?: string;
+    best_kp_role_tags?: string[];
+    evidence_top_role_tags?: string[];
+    kp_evidence_group_counts?: Record<string, number>;
+    topic_ids?: string[];
+    intent_ids?: string[];
+    degree_levels?: string[];
+    event_types?: string[];
 };
 
 export type PipelineDecision = {

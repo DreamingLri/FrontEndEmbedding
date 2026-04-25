@@ -34,7 +34,14 @@ export interface Metadata {
 export interface SearchResult {
     otid: string;
     best_kpid?: string;
+    best_kp_role_tags?: string[];
+    evidence_top_role_tags?: string[];
+    kp_evidence_group_counts?: Record<string, number>;
     kp_candidates?: KPCandidate[];
+    topic_ids?: string[];
+    intent_ids?: string[];
+    degree_levels?: string[];
+    event_types?: string[];
     score: number;
     details?: {
         denseRRF: number;
@@ -202,6 +209,19 @@ export const WEAK_EVIDENCE_ROLE_TAGS: ReadonlySet<string> = new Set([
     "thesis",
     "reminder",
 ]);
+export const KP_EVIDENCE_GROUP_TAGS = {
+    requirement: ["condition", "materials", "email", "deadline"],
+    procedure: ["procedure", "application_stage", "schedule"],
+    timeline: [
+        "arrival",
+        "deadline",
+        "announcement_period",
+        "time_expression",
+        "schedule",
+        "location",
+    ],
+    post_outcome: ["post_outcome"],
+} as const;
 export const HARD_REJECT_SCORE_THRESHOLD = 0.68;
 export const BOUNDARY_REJECT_SCORE_THRESHOLD = 0.5;
 export const QUERY_SCOPE_SPECIFICITY_TERMS = [
@@ -284,6 +304,26 @@ function matchTopicIds(query: string): string[] {
 
 export function dedupe<T>(items: T[]): T[] {
     return Array.from(new Set(items));
+}
+
+export function computeKpEvidenceGroupCounts(
+    tagSets: ReadonlyArray<readonly string[] | undefined>,
+): Record<string, number> {
+    const counts: Record<string, number> = {};
+
+    tagSets.forEach((tags) => {
+        if (!tags?.length) {
+            return;
+        }
+
+        Object.entries(KP_EVIDENCE_GROUP_TAGS).forEach(([group, groupTags]) => {
+            if (groupTags.some((tag) => tags.includes(tag))) {
+                counts[group] = (counts[group] || 0) + 1;
+            }
+        });
+    });
+
+    return counts;
 }
 
 function hasGenericNextStepCue(query: string): boolean {

@@ -1,0 +1,5674 @@
+{
+  "generatedAt": "2026-04-24T07:58:15.649Z",
+  "datasetFile": "../Backend/test/test_dataset_granularity/test_dataset_granularity_in_domain_generalization_aligned_100_draft_v1.json",
+  "badCaseFile": "scripts/results/granularity_test_dataset_granularity_in_domain_generalization_aligned_100_draft_v1_1777017103896_bad_cases_q_kp_ot.json",
+  "filters": {
+    "supportPattern": [
+      "multi_kp"
+    ],
+    "queryType": [
+      "situational"
+    ],
+    "queryScope": [],
+    "preferredGranularity": [],
+    "failureRisk": [],
+    "docMissOnly": true
+  },
+  "topHybridLimit": 1000,
+  "reportLimit": 10,
+  "summary": {
+    "total": 9,
+    "byEntryBucket": {
+      "early_late": 1,
+      "aggregation_drop": 7,
+      "already_top1": 1
+    },
+    "bySupportQueryScope": {
+      "multi_kp|situational|procedure": 6,
+      "multi_kp|situational|policy_overview": 1,
+      "multi_kp|situational|eligibility_condition": 1,
+      "multi_kp|situational|time_location": 1
+    }
+  },
+  "cases": [
+    {
+      "query": "我现在是应届硕士生，准备报2024年博士，但不确定网上报名、材料上传、导师确认和系统填报有没有先后要求，报名阶段最需要注意哪些事？",
+      "expectedOtid": "otid_68999cb6f0a3468d",
+      "expectedTitle": "中山大学2024年博士研究生招生章程及招生学科专业目录",
+      "queryScope": "procedure",
+      "queryType": "situational",
+      "supportPattern": "multi_kp",
+      "preferredGranularity": "KP+OT",
+      "themeFamily": "博士招生报名流程",
+      "badCase": {
+        "docHitAt1": false,
+        "docHitAt5": false,
+        "kpidHitAt1": false,
+        "supportFullCoverTop5": false,
+        "failureRisk": "requires_multi_kp",
+        "failureReasons": [
+          "正确文档未进入前5，优先表现为文档级召回或排序失败。",
+          "文档候选中未能稳定选出正确主证据 KP。",
+          "多重点样本当前仍先受文档级召回限制，尚未进入方面覆盖判定阶段。",
+          "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+        ]
+      },
+      "queryIntent": {
+        "rawQuery": "我现在是应届硕士生，准备报2024年博士，但不确定网上报名、材料上传、导师确认和系统填报有没有先后要求，报名阶段最需要注意哪些事？",
+        "years": [
+          2024
+        ],
+        "months": [],
+        "topicIds": [],
+        "subtopicIds": [],
+        "intentIds": [],
+        "degreeLevels": [
+          "硕士",
+          "博士"
+        ],
+        "eventTypes": [],
+        "normalizedTerms": [],
+        "confidence": 0,
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false,
+          "hasPostOutcomeOperationalCue": false,
+          "hasMultiSlotConstraintCue": false,
+          "queryLength": 65
+        }
+      },
+      "finalRank": 15,
+      "entryBucket": "early_late",
+      "bestCorrectRrfRank": 96,
+      "bestCorrectAtomicType": "KP",
+      "finalTopDocs": [
+        {
+          "rank": 1,
+          "otid": "otid_a206a52bfb3f46aa",
+          "title": "中山大学2024年博士研究生招生报名公告",
+          "score": 1.0615738888836337,
+          "bestKpid": "kpid_0cff06450fa74790",
+          "kpEvidenceGroupCounts": {
+            "requirement": 3,
+            "procedure": 2,
+            "timeline": 3,
+            "post_outcome": 1
+          }
+        },
+        {
+          "rank": 2,
+          "otid": "otid_b9b1fa013e3d48e9",
+          "title": "2024年全国硕士研究生招生考试中山大学报考点（代码4413） 网上确认公告",
+          "score": 0.9913757805863581,
+          "bestKpid": "kpid_9b63a7c3ea264239",
+          "kpEvidenceGroupCounts": {
+            "requirement": 4,
+            "procedure": 3,
+            "timeline": 5,
+            "post_outcome": 1
+          }
+        },
+        {
+          "rank": 3,
+          "otid": "otid_189bc24102e2423a",
+          "title": "招生资讯转载 | 中山大学药学院关于接收2024年工程硕博士改革专项研究生补报名通知",
+          "score": 0.803658334554497,
+          "kpEvidenceGroupCounts": {}
+        },
+        {
+          "rank": 4,
+          "otid": "otid_cd24f8a51c504292",
+          "title": "关于开通2024年博士研究生招生录取通知书邮寄地址校对系统的通知",
+          "score": 0.734833261919096,
+          "bestKpid": "kpid_520c02c198b74166",
+          "kpEvidenceGroupCounts": {
+            "requirement": 1,
+            "procedure": 1,
+            "timeline": 1
+          }
+        },
+        {
+          "rank": 5,
+          "otid": "otid_ee3035722c4b481e",
+          "title": "中山大学2024年面向香港、澳门、台湾地区招收博士、硕士研究生章程及招生学科专业目录",
+          "score": 0.709126611560209,
+          "bestKpid": "kpid_78fbb957a4ff436b",
+          "kpEvidenceGroupCounts": {
+            "requirement": 1,
+            "procedure": 1,
+            "timeline": 1
+          }
+        },
+        {
+          "rank": 6,
+          "otid": "otid_06710b412753461e",
+          "title": "2024年全国硕士研究生报名考试中山大学报考点（代码：4413）公告",
+          "score": 0.6914018353037108,
+          "bestKpid": "kpid_8c812055464e4ea2",
+          "kpEvidenceGroupCounts": {
+            "requirement": 2,
+            "timeline": 2,
+            "procedure": 1,
+            "post_outcome": 1
+          }
+        },
+        {
+          "rank": 7,
+          "otid": "otid_f3ee1947f40e4b18",
+          "title": "中山大学2024年推荐免试研究生接收办法",
+          "score": 0.6116607632093441,
+          "bestKpid": "kpid_15c047714f974984",
+          "kpEvidenceGroupCounts": {
+            "requirement": 1,
+            "procedure": 1,
+            "timeline": 2
+          }
+        },
+        {
+          "rank": 8,
+          "otid": "otid_1c14b6043fd645c8",
+          "title": "中山大学2024年硕士研究生招生章程及招生学科专业目录",
+          "score": 0.5654008925111951,
+          "bestKpid": "kpid_1b78cd892cc649fc",
+          "kpEvidenceGroupCounts": {
+            "procedure": 1,
+            "timeline": 1,
+            "requirement": 1
+          }
+        },
+        {
+          "rank": 9,
+          "otid": "otid_f0baf746fd75421e",
+          "title": "中山大学人工智能学院2024年以“申请-考核”制招收博士研究生招生简章",
+          "score": 0.5560247976953787,
+          "bestKpid": "kpid_99c98849c49e4f07",
+          "kpEvidenceGroupCounts": {
+            "requirement": 1,
+            "timeline": 1,
+            "post_outcome": 1
+          }
+        },
+        {
+          "rank": 10,
+          "otid": "otid_f47cc83680a34adf",
+          "title": "关于2024年上半年同等学力人员申请硕士学位论文答辩的通知",
+          "score": 0.5302506297766961,
+          "kpEvidenceGroupCounts": {}
+        }
+      ],
+      "correctDocCandidates": [
+        {
+          "id": "kpid_f60eec02e4b24f0e",
+          "otid": "otid_68999cb6f0a3468d",
+          "type": "KP",
+          "denseScore": 328.2875061035156,
+          "sparseScore": 16.59381103515625,
+          "denseRank": 87,
+          "sparseRank": 209,
+          "rrfScore": 1.1263687631186303,
+          "rrfRank": 96,
+          "kpRoleTags": [
+            "time_expression",
+            "schedule",
+            "materials"
+          ]
+        },
+        {
+          "id": "kpid_f5fc04c4edfa4f58",
+          "otid": "otid_68999cb6f0a3468d",
+          "type": "KP",
+          "denseScore": 343.37384033203125,
+          "sparseScore": 4.4634809494018555,
+          "denseRank": 35,
+          "sparseRank": null,
+          "rrfScore": 1.0526315789473684,
+          "rrfRank": 118,
+          "kpRoleTags": [
+            "materials",
+            "background",
+            "reminder"
+          ]
+        },
+        {
+          "id": "kpid_5cc633a436f64d4a",
+          "otid": "otid_68999cb6f0a3468d",
+          "type": "KP",
+          "denseScore": 339.12347412109375,
+          "sparseScore": 9.98328685760498,
+          "denseRank": 49,
+          "sparseRank": 1201,
+          "rrfScore": 1.012593762049924,
+          "rrfRank": 124,
+          "kpRoleTags": [
+            "time_expression",
+            "condition",
+            "materials"
+          ]
+        },
+        {
+          "id": "otid_68999cb6f0a3468d",
+          "otid": "otid_68999cb6f0a3468d",
+          "type": "OT",
+          "denseScore": 243.4093780517578,
+          "sparseScore": 19.682966232299805,
+          "denseRank": 3712,
+          "sparseRank": 96,
+          "rrfScore": 0.7957419039073333,
+          "rrfRank": 186
+        },
+        {
+          "id": "kpid_7b4c104a067b4de1",
+          "otid": "otid_68999cb6f0a3468d",
+          "type": "KP",
+          "denseScore": 321.50201416015625,
+          "sparseScore": 8.989810943603516,
+          "denseRank": 124,
+          "sparseRank": 1515,
+          "rrfScore": 0.6196687370600413,
+          "rrfRank": 273,
+          "kpRoleTags": [
+            "time_expression",
+            "publish",
+            "background"
+          ]
+        },
+        {
+          "id": "qid_843ffb7e13074573",
+          "otid": "otid_68999cb6f0a3468d",
+          "type": "Q",
+          "parentPkid": "kpid_f5fc04c4edfa4f58",
+          "denseScore": 312.4449157714844,
+          "sparseScore": 6.064004421234131,
+          "denseRank": 198,
+          "sparseRank": 3623,
+          "rrfScore": 0.4201790333545917,
+          "rrfRank": 471
+        },
+        {
+          "id": "qid_bee937bcb0784bbb",
+          "otid": "otid_68999cb6f0a3468d",
+          "type": "Q",
+          "parentPkid": "kpid_5cc633a436f64d4a",
+          "denseScore": 309.2424011230469,
+          "sparseScore": 4.145113945007324,
+          "denseRank": 233,
+          "sparseRank": null,
+          "rrfScore": 0.3412969283276451,
+          "rrfRank": 596
+        },
+        {
+          "id": "qid_084ff9bb18fc45cd",
+          "otid": "otid_68999cb6f0a3468d",
+          "type": "Q",
+          "parentPkid": "kpid_f60eec02e4b24f0e",
+          "denseScore": 247.62257385253906,
+          "sparseScore": 14.336563110351562,
+          "denseRank": 3279,
+          "sparseRank": 368,
+          "rrfScore": 0.31032291832856107,
+          "rrfRank": 669
+        },
+        {
+          "id": "qid_f043130233f248aa",
+          "otid": "otid_68999cb6f0a3468d",
+          "type": "Q",
+          "parentPkid": "kpid_f60eec02e4b24f0e",
+          "denseScore": 274.1491394042969,
+          "sparseScore": 13.242183685302734,
+          "denseRank": 1236,
+          "sparseRank": 472,
+          "rrfScore": 0.3027244036015966,
+          "rrfRank": 688
+        }
+      ],
+      "topDocs": [
+        {
+          "otid": "otid_ae46d4b5d6e74990",
+          "title": "鹏城国家实验室-中山大学2026年联合培养博士研究生专项计划招生简章",
+          "bestRrfScore": 2.5584415584415585,
+          "bestRrfRank": 1,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_dc54d3033b3c4944",
+          "title": "中山大学2026年招收海外高校优秀中国籍本科毕业生直接攻读博士学位网上报名通知",
+          "bestRrfScore": 2.3132313231323134,
+          "bestRrfRank": 2,
+          "bestType": "OT"
+        },
+        {
+          "otid": "otid_8c27fc74819145d9",
+          "title": "中山大学2022年博士研究生报名公告",
+          "bestRrfScore": 2.161970331464263,
+          "bestRrfRank": 3,
+          "bestType": "OT"
+        },
+        {
+          "otid": "otid_f77c101d05104a9e",
+          "title": "中山大学2023年博士研究生招生报名公告",
+          "bestRrfScore": 2.096644910111073,
+          "bestRrfRank": 4,
+          "bestType": "OT"
+        },
+        {
+          "otid": "otid_2ec33053026040f8",
+          "title": "中山大学2025年博士研究生招生网上报名通知",
+          "bestRrfScore": 2.0877659574468086,
+          "bestRrfRank": 5,
+          "bestType": "OT"
+        },
+        {
+          "otid": "otid_40565beb38cf45c5",
+          "title": "中山大学2026年博士研究生招生网上报名通知",
+          "bestRrfScore": 2.086030026856866,
+          "bestRrfRank": 6,
+          "bestType": "OT"
+        },
+        {
+          "otid": "otid_18390f7cb6784527",
+          "title": "2025年全国硕士研究生招生考试中山大学报考点（代码4413）网上确认公告",
+          "bestRrfScore": 2.005882875001585,
+          "bestRrfRank": 7,
+          "bestType": "OT"
+        },
+        {
+          "otid": "otid_f432dc1f6535443f",
+          "title": "中山大学2018年博士研究生招生报名公告",
+          "bestRrfScore": 1.9721747620209908,
+          "bestRrfRank": 8,
+          "bestType": "OT"
+        },
+        {
+          "otid": "otid_c15c87e71b5b49b0",
+          "title": "2022年全国硕士研究生招生考试中山大学报考点（代码4413）网上确认公告",
+          "bestRrfScore": 1.9399112896476691,
+          "bestRrfRank": 9,
+          "bestType": "OT"
+        },
+        {
+          "otid": "otid_b9b1fa013e3d48e9",
+          "title": "2024年全国硕士研究生招生考试中山大学报考点（代码4413） 网上确认公告",
+          "bestRrfScore": 1.935483870967742,
+          "bestRrfRank": 10,
+          "bestType": "OT"
+        }
+      ],
+      "topAtomicCandidates": [
+        {
+          "id": "kpid_53230507f99c472c",
+          "otid": "otid_ae46d4b5d6e74990",
+          "type": "KP",
+          "denseScore": 342.0768127441406,
+          "sparseScore": 25.041889190673828,
+          "denseRank": 40,
+          "sparseRank": 17,
+          "rrfScore": 2.5584415584415585,
+          "rrfRank": 1,
+          "kpRoleTags": [
+            "time_expression",
+            "materials",
+            "email",
+            "background"
+          ]
+        },
+        {
+          "id": "otid_dc54d3033b3c4944",
+          "otid": "otid_dc54d3033b3c4944",
+          "type": "OT",
+          "denseScore": 319.2229919433594,
+          "sparseScore": 32.299468994140625,
+          "denseRank": 142,
+          "sparseRank": 6,
+          "rrfScore": 2.3132313231323134,
+          "rrfRank": 2
+        },
+        {
+          "id": "otid_8c27fc74819145d9",
+          "otid": "otid_8c27fc74819145d9",
+          "type": "OT",
+          "denseScore": 320.6269226074219,
+          "sparseScore": 27.03823471069336,
+          "denseRank": 133,
+          "sparseRank": 13,
+          "rrfScore": 2.161970331464263,
+          "rrfRank": 3
+        },
+        {
+          "id": "otid_f77c101d05104a9e",
+          "otid": "otid_f77c101d05104a9e",
+          "type": "OT",
+          "denseScore": 313.8890075683594,
+          "sparseScore": 28.96495819091797,
+          "denseRank": 186,
+          "sparseRank": 11,
+          "rrfScore": 2.096644910111073,
+          "rrfRank": 4
+        },
+        {
+          "id": "otid_2ec33053026040f8",
+          "otid": "otid_2ec33053026040f8",
+          "type": "OT",
+          "denseScore": 299.43243408203125,
+          "sparseScore": 32.73089599609375,
+          "denseRank": 410,
+          "sparseRank": 4,
+          "rrfScore": 2.0877659574468086,
+          "rrfRank": 5
+        },
+        {
+          "id": "otid_40565beb38cf45c5",
+          "otid": "otid_40565beb38cf45c5",
+          "type": "OT",
+          "denseScore": 306.05621337890625,
+          "sparseScore": 31.736797332763672,
+          "denseRank": 279,
+          "sparseRank": 7,
+          "rrfScore": 2.086030026856866,
+          "rrfRank": 6
+        },
+        {
+          "id": "otid_18390f7cb6784527",
+          "otid": "otid_18390f7cb6784527",
+          "type": "OT",
+          "denseScore": 255.877685546875,
+          "sparseScore": 35.092899322509766,
+          "denseRank": 2526,
+          "sparseRank": 1,
+          "rrfScore": 2.005882875001585,
+          "rrfRank": 7
+        },
+        {
+          "id": "otid_f432dc1f6535443f",
+          "otid": "otid_f432dc1f6535443f",
+          "type": "OT",
+          "denseScore": 298.7462463378906,
+          "sparseScore": 31.160627365112305,
+          "denseRank": 422,
+          "sparseRank": 8,
+          "rrfScore": 1.9721747620209908,
+          "rrfRank": 8
+        },
+        {
+          "id": "otid_c15c87e71b5b49b0",
+          "otid": "otid_c15c87e71b5b49b0",
+          "type": "OT",
+          "denseScore": 252.968994140625,
+          "sparseScore": 33.276451110839844,
+          "denseRank": 2785,
+          "sparseRank": 3,
+          "rrfScore": 1.9399112896476691,
+          "rrfRank": 9
+        },
+        {
+          "id": "otid_b9b1fa013e3d48e9",
+          "otid": "otid_b9b1fa013e3d48e9",
+          "type": "OT",
+          "denseScore": 169.7060089111328,
+          "sparseScore": 34.61771011352539,
+          "denseRank": null,
+          "sparseRank": 2,
+          "rrfScore": 1.935483870967742,
+          "rrfRank": 10
+        }
+      ]
+    },
+    {
+      "query": "一名应届硕士毕业生 想报考2024年博士 报名时需要注意什么",
+      "expectedOtid": "otid_68999cb6f0a3468d",
+      "expectedTitle": "中山大学2024年博士研究生招生章程及招生学科专业目录",
+      "queryScope": "procedure",
+      "queryType": "situational",
+      "supportPattern": "multi_kp",
+      "preferredGranularity": "KP+OT",
+      "themeFamily": "博士招生报名流程",
+      "badCase": {
+        "docHitAt1": false,
+        "docHitAt5": false,
+        "kpidHitAt1": false,
+        "supportFullCoverTop5": false,
+        "failureRisk": "requires_multi_kp",
+        "failureReasons": [
+          "正确文档未进入前5，优先表现为文档级召回或排序失败。",
+          "文档候选中未能稳定选出正确主证据 KP。",
+          "多重点样本当前仍先受文档级召回限制，尚未进入方面覆盖判定阶段。",
+          "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+        ]
+      },
+      "queryIntent": {
+        "rawQuery": "一名应届硕士毕业生 想报考2024年博士 报名时需要注意什么",
+        "years": [
+          2024
+        ],
+        "months": [],
+        "topicIds": [],
+        "subtopicIds": [],
+        "intentIds": [],
+        "degreeLevels": [
+          "硕士",
+          "博士"
+        ],
+        "eventTypes": [],
+        "normalizedTerms": [],
+        "confidence": 0,
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false,
+          "hasPostOutcomeOperationalCue": false,
+          "hasMultiSlotConstraintCue": false,
+          "queryLength": 30
+        }
+      },
+      "finalRank": 12,
+      "entryBucket": "aggregation_drop",
+      "bestCorrectRrfRank": 3,
+      "bestCorrectAtomicType": "KP",
+      "finalTopDocs": [
+        {
+          "rank": 1,
+          "otid": "otid_57fa7965fa92417a",
+          "title": "广州实验室-中山大学2024年联合培养博士研究生专项计划招生简章",
+          "score": 1.0371685743962222,
+          "bestKpid": "kpid_ab4b6aa5e4db4b4b",
+          "kpEvidenceGroupCounts": {
+            "requirement": 1,
+            "timeline": 1
+          }
+        },
+        {
+          "rank": 2,
+          "otid": "otid_1c14b6043fd645c8",
+          "title": "中山大学2024年硕士研究生招生章程及招生学科专业目录",
+          "score": 0.9939377913363068,
+          "bestKpid": "kpid_80a66ddf62484027",
+          "kpEvidenceGroupCounts": {
+            "requirement": 1,
+            "procedure": 1,
+            "timeline": 1
+          }
+        },
+        {
+          "rank": 3,
+          "otid": "otid_f0baf746fd75421e",
+          "title": "中山大学人工智能学院2024年以“申请-考核”制招收博士研究生招生简章",
+          "score": 0.8945532119846542,
+          "bestKpid": "kpid_9b0b633eb4354385",
+          "kpEvidenceGroupCounts": {
+            "requirement": 2,
+            "timeline": 1,
+            "post_outcome": 1
+          }
+        },
+        {
+          "rank": 4,
+          "otid": "otid_a206a52bfb3f46aa",
+          "title": "中山大学2024年博士研究生招生报名公告",
+          "score": 0.8765443458471949,
+          "bestKpid": "kpid_9f5dc6200a58475a",
+          "kpEvidenceGroupCounts": {
+            "requirement": 2,
+            "timeline": 3,
+            "procedure": 2,
+            "post_outcome": 2
+          }
+        },
+        {
+          "rank": 5,
+          "otid": "otid_189bc24102e2423a",
+          "title": "招生资讯转载 | 中山大学药学院关于接收2024年工程硕博士改革专项研究生补报名通知",
+          "score": 0.7487263756809849,
+          "bestKpid": "kpid_f64aeb7e349b4d00",
+          "kpEvidenceGroupCounts": {
+            "timeline": 1,
+            "requirement": 1
+          }
+        },
+        {
+          "rank": 6,
+          "otid": "otid_55c5131d829e4a00",
+          "title": "中山大学人工智能学院诚邀全球青年英才申请逸仙博士后项目",
+          "score": 0.7417099567099567,
+          "bestKpid": "kpid_22c34a1fdcf84c26",
+          "kpEvidenceGroupCounts": {
+            "requirement": 1,
+            "timeline": 1
+          }
+        },
+        {
+          "rank": 7,
+          "otid": "otid_98f334aa60cb4f06",
+          "title": "逸仙英才·智汇湾区  中山大学逸仙博士后项目全球招聘",
+          "score": 0.7066936728433019,
+          "bestKpid": "kpid_26c3348a370244ef",
+          "kpEvidenceGroupCounts": {
+            "requirement": 1,
+            "timeline": 1
+          }
+        },
+        {
+          "rank": 8,
+          "otid": "otid_fd6621f974774e1c",
+          "title": "招生资讯转载 | 中山大学材料科学与工程学院关于接收2024年工程硕博士改革专项研究生的补报名通知",
+          "score": 0.6627486850383864,
+          "kpEvidenceGroupCounts": {}
+        },
+        {
+          "rank": 9,
+          "otid": "otid_06710b412753461e",
+          "title": "2024年全国硕士研究生报名考试中山大学报考点（代码：4413）公告",
+          "score": 0.6237877619335557,
+          "bestKpid": "kpid_8c812055464e4ea2",
+          "kpEvidenceGroupCounts": {
+            "requirement": 2,
+            "timeline": 2
+          }
+        },
+        {
+          "rank": 10,
+          "otid": "otid_ee3035722c4b481e",
+          "title": "中山大学2024年面向香港、澳门、台湾地区招收博士、硕士研究生章程及招生学科专业目录",
+          "score": 0.6101439986076366,
+          "bestKpid": "kpid_ad82dfda25984fe2",
+          "kpEvidenceGroupCounts": {
+            "requirement": 2,
+            "timeline": 3,
+            "procedure": 1
+          }
+        }
+      ],
+      "correctDocCandidates": [
+        {
+          "id": "kpid_5cc633a436f64d4a",
+          "otid": "otid_68999cb6f0a3468d",
+          "type": "KP",
+          "denseScore": 357.0228271484375,
+          "sparseScore": 14.473797798156738,
+          "denseRank": 4,
+          "sparseRank": 76,
+          "rrfScore": 2.4448529411764706,
+          "rrfRank": 3,
+          "kpRoleTags": [
+            "time_expression",
+            "condition",
+            "materials"
+          ]
+        },
+        {
+          "id": "kpid_7b4c104a067b4de1",
+          "otid": "otid_68999cb6f0a3468d",
+          "type": "KP",
+          "denseScore": 332.7615661621094,
+          "sparseScore": 5.6806511878967285,
+          "denseRank": 20,
+          "sparseRank": 1761,
+          "rrfScore": 1.3158978583196046,
+          "rrfRank": 64,
+          "kpRoleTags": [
+            "time_expression",
+            "publish",
+            "background"
+          ]
+        },
+        {
+          "id": "otid_68999cb6f0a3468d",
+          "otid": "otid_68999cb6f0a3468d",
+          "type": "OT",
+          "denseScore": 230.5149383544922,
+          "sparseScore": 16.823692321777344,
+          "denseRank": 3318,
+          "sparseRank": 34,
+          "rrfScore": 1.3061990602521951,
+          "rrfRank": 67
+        },
+        {
+          "id": "kpid_f60eec02e4b24f0e",
+          "otid": "otid_68999cb6f0a3468d",
+          "type": "KP",
+          "denseScore": 313.9657897949219,
+          "sparseScore": 10.73264217376709,
+          "denseRank": 65,
+          "sparseRank": 315,
+          "rrfScore": 1.12,
+          "rrfRank": 101,
+          "kpRoleTags": [
+            "time_expression",
+            "schedule",
+            "materials"
+          ]
+        },
+        {
+          "id": "qid_03256c40b8254867",
+          "otid": "otid_68999cb6f0a3468d",
+          "type": "Q",
+          "parentPkid": "kpid_5cc633a436f64d4a",
+          "denseScore": 268.7466735839844,
+          "sparseScore": 14.549372673034668,
+          "denseRank": 674,
+          "sparseRank": 73,
+          "rrfScore": 1.038495421114093,
+          "rrfRank": 118
+        },
+        {
+          "id": "kpid_f5fc04c4edfa4f58",
+          "otid": "otid_68999cb6f0a3468d",
+          "type": "KP",
+          "denseScore": 317.0993957519531,
+          "sparseScore": 3.041808605194092,
+          "denseRank": 50,
+          "sparseRank": null,
+          "rrfScore": 0.9090909090909091,
+          "rrfRank": 153,
+          "kpRoleTags": [
+            "materials",
+            "background",
+            "reminder"
+          ]
+        },
+        {
+          "id": "qid_084ff9bb18fc45cd",
+          "otid": "otid_68999cb6f0a3468d",
+          "type": "Q",
+          "parentPkid": "kpid_f60eec02e4b24f0e",
+          "denseScore": 249.20166015625,
+          "sparseScore": 14.100658416748047,
+          "denseRank": 1636,
+          "sparseRank": 91,
+          "rrfScore": 0.8536642509059102,
+          "rrfRank": 167
+        },
+        {
+          "id": "qid_ec1e839cf369470f",
+          "otid": "otid_68999cb6f0a3468d",
+          "type": "Q",
+          "parentPkid": "kpid_5cc633a436f64d4a",
+          "denseScore": 304.7969970703125,
+          "sparseScore": 7.780512809753418,
+          "denseRank": 96,
+          "sparseRank": 765,
+          "rrfScore": 0.7864801864801865,
+          "rrfRank": 197
+        },
+        {
+          "id": "qid_843ffb7e13074573",
+          "otid": "otid_68999cb6f0a3468d",
+          "type": "Q",
+          "parentPkid": "kpid_f5fc04c4edfa4f58",
+          "denseScore": 309.0140075683594,
+          "sparseScore": 5.4985432624816895,
+          "denseRank": 80,
+          "sparseRank": 1930,
+          "rrfScore": 0.7745872218234028,
+          "rrfRank": 204
+        },
+        {
+          "id": "qid_bee937bcb0784bbb",
+          "otid": "otid_68999cb6f0a3468d",
+          "type": "Q",
+          "parentPkid": "kpid_5cc633a436f64d4a",
+          "denseScore": 304.32415771484375,
+          "sparseScore": 5.678491115570068,
+          "denseRank": 98,
+          "sparseRank": 1766,
+          "rrfScore": 0.6986288075200688,
+          "rrfRank": 240
+        },
+        {
+          "id": "kpid_501deb1865974703",
+          "otid": "otid_68999cb6f0a3468d",
+          "type": "KP",
+          "denseScore": 299.39874267578125,
+          "sparseScore": 6.086476802825928,
+          "denseRank": 125,
+          "sparseRank": 1535,
+          "rrfScore": 0.6157756502584089,
+          "rrfRank": 282,
+          "kpRoleTags": [
+            "time_expression",
+            "publish"
+          ]
+        },
+        {
+          "id": "qid_c01725b9d2f44e95",
+          "otid": "otid_68999cb6f0a3468d",
+          "type": "Q",
+          "parentPkid": "kpid_f5fc04c4edfa4f58",
+          "denseScore": 285.886962890625,
+          "sparseScore": 9.990897178649902,
+          "denseRank": 267,
+          "sparseRank": 389,
+          "rrfScore": 0.5730709766181048,
+          "rrfRank": 314
+        },
+        {
+          "id": "qid_dde2401fbaf041ef",
+          "otid": "otid_68999cb6f0a3468d",
+          "type": "Q",
+          "parentPkid": "kpid_501deb1865974703",
+          "denseScore": 272.9368591308594,
+          "sparseScore": 10.550142288208008,
+          "denseRank": 565,
+          "sparseRank": 332,
+          "rrfScore": 0.46612244897959176,
+          "rrfRank": 405
+        },
+        {
+          "id": "qid_bf8dd13d6f824faa",
+          "otid": "otid_68999cb6f0a3468d",
+          "type": "Q",
+          "parentPkid": "kpid_501deb1865974703",
+          "denseScore": 284.36785888671875,
+          "sparseScore": 7.188154697418213,
+          "denseRank": 296,
+          "sparseRank": 955,
+          "rrfScore": 0.39912547738971604,
+          "rrfRank": 483
+        },
+        {
+          "id": "qid_4b1d1974cc6740e6",
+          "otid": "otid_68999cb6f0a3468d",
+          "type": "Q",
+          "parentPkid": "kpid_f60eec02e4b24f0e",
+          "denseScore": 283.74072265625,
+          "sparseScore": 5.557245254516602,
+          "denseRank": 302,
+          "sparseRank": 1869,
+          "rrfScore": 0.33845149205639996,
+          "rrfRank": 613
+        },
+        {
+          "id": "qid_2ff65e8c1c214319",
+          "otid": "otid_68999cb6f0a3468d",
+          "type": "Q",
+          "parentPkid": "kpid_f5fc04c4edfa4f58",
+          "denseScore": 281.6842346191406,
+          "sparseScore": 4.035069465637207,
+          "denseRank": 340,
+          "sparseRank": 3556,
+          "rrfScore": 0.2831858407079646,
+          "rrfRank": 733
+        },
+        {
+          "id": "qid_805a2847331b4393",
+          "otid": "otid_68999cb6f0a3468d",
+          "type": "Q",
+          "parentPkid": "kpid_f60eec02e4b24f0e",
+          "denseScore": 273.0231628417969,
+          "sparseScore": 6.800318241119385,
+          "denseRank": 560,
+          "sparseRank": 1140,
+          "rrfScore": 0.26129032258064516,
+          "rrfRank": 806
+        },
+        {
+          "id": "kpid_2c6851ec2b6e4aca",
+          "otid": "otid_68999cb6f0a3468d",
+          "type": "KP",
+          "denseScore": 282.4281005859375,
+          "sparseScore": 2.7348315715789795,
+          "denseRank": 323,
+          "sparseRank": null,
+          "rrfScore": 0.26109660574412535,
+          "rrfRank": 807,
+          "kpRoleTags": []
+        },
+        {
+          "id": "qid_676626aeee0b4b9e",
+          "otid": "otid_68999cb6f0a3468d",
+          "type": "Q",
+          "parentPkid": "kpid_7b4c104a067b4de1",
+          "denseScore": 275.3323974609375,
+          "sparseScore": 4.696019172668457,
+          "denseRank": 498,
+          "sparseRank": 2642,
+          "rrfScore": 0.22362301653627076,
+          "rrfRank": 963
+        },
+        {
+          "id": "qid_baba2d6e54be4ca3",
+          "otid": "otid_68999cb6f0a3468d",
+          "type": "Q",
+          "parentPkid": "kpid_5cc633a436f64d4a",
+          "denseScore": 248.8675994873047,
+          "sparseScore": 8.17735481262207,
+          "denseRank": 1661,
+          "sparseRank": 674,
+          "rrfScore": 0.221593490889113,
+          "rrfRank": 972
+        }
+      ],
+      "topDocs": [
+        {
+          "otid": "otid_903e35dbd70b496d",
+          "title": "2023年中山大学-鹏城实验室联合培养博士研究生专项计划招生简章",
+          "bestRrfScore": 2.5290108675630876,
+          "bestRrfRank": 1,
+          "bestType": "Q"
+        },
+        {
+          "otid": "otid_57fa7965fa92417a",
+          "title": "广州实验室-中山大学2024年联合培养博士研究生专项计划招生简章",
+          "bestRrfScore": 2.5124093165330277,
+          "bestRrfRank": 2,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_68999cb6f0a3468d",
+          "title": "中山大学2024年博士研究生招生章程及招生学科专业目录",
+          "bestRrfScore": 2.4448529411764706,
+          "bestRrfRank": 3,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_7933bd21608a41dd",
+          "title": "2023年中山大学-广州实验室联合培养博士研究生专项计划招生简章",
+          "bestRrfScore": 2.3994252873563218,
+          "bestRrfRank": 4,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_5e4e1434da5748eb",
+          "title": "中山大学人工智能学院2022年以“申请-考核”制招收博士研究生招生简章",
+          "bestRrfScore": 2.35122838944495,
+          "bestRrfRank": 5,
+          "bestType": "Q"
+        },
+        {
+          "otid": "otid_cefdbe9b7cf34bdb",
+          "title": "中山大学软件工程学院2026年博士研究生招生简章",
+          "bestRrfScore": 2.0211458077206785,
+          "bestRrfRank": 6,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_f0baf746fd75421e",
+          "title": "中山大学人工智能学院2024年以“申请-考核”制招收博士研究生招生简章",
+          "bestRrfScore": 1.985533921017792,
+          "bestRrfRank": 7,
+          "bestType": "Q"
+        },
+        {
+          "otid": "otid_1c14b6043fd645c8",
+          "title": "中山大学2024年硕士研究生招生章程及招生学科专业目录",
+          "bestRrfScore": 1.9298546352166759,
+          "bestRrfRank": 8,
+          "bestType": "Q"
+        },
+        {
+          "otid": "otid_467c753a650543da",
+          "title": "中山大学2023年面向香港、澳门、台湾地区招收博士、硕士研究生章程及招生学科专业目录",
+          "bestRrfScore": 1.9047619047619047,
+          "bestRrfRank": 10,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_b2a1cc3ccb21453c",
+          "title": "中山大学关于马克思主义学院2018年以“申请—考核”制招收博士研究生（第二批）的通知",
+          "bestRrfScore": 1.8845710570643341,
+          "bestRrfRank": 11,
+          "bestType": "Q"
+        }
+      ],
+      "topAtomicCandidates": [
+        {
+          "id": "qid_c2eada64f12146ca",
+          "otid": "otid_903e35dbd70b496d",
+          "type": "Q",
+          "parentPkid": "kpid_f365e54b31e848ea",
+          "denseScore": 300.4037170410156,
+          "sparseScore": 22.451547622680664,
+          "denseRank": 118,
+          "sparseRank": 1,
+          "rrfScore": 2.5290108675630876,
+          "rrfRank": 1
+        },
+        {
+          "id": "kpid_ab4b6aa5e4db4b4b",
+          "otid": "otid_57fa7965fa92417a",
+          "type": "KP",
+          "denseScore": 321.7940368652344,
+          "sparseScore": 18.025876998901367,
+          "denseRank": 37,
+          "sparseRank": 21,
+          "rrfScore": 2.5124093165330277,
+          "rrfRank": 2,
+          "kpRoleTags": [
+            "time_expression",
+            "condition",
+            "materials",
+            "reminder"
+          ]
+        },
+        {
+          "id": "kpid_5cc633a436f64d4a",
+          "otid": "otid_68999cb6f0a3468d",
+          "type": "KP",
+          "denseScore": 357.0228271484375,
+          "sparseScore": 14.473797798156738,
+          "denseRank": 4,
+          "sparseRank": 76,
+          "rrfScore": 2.4448529411764706,
+          "rrfRank": 3,
+          "kpRoleTags": [
+            "time_expression",
+            "condition",
+            "materials"
+          ]
+        },
+        {
+          "id": "kpid_32e9237d4ff94146",
+          "otid": "otid_7933bd21608a41dd",
+          "type": "KP",
+          "denseScore": 327.3782958984375,
+          "sparseScore": 16.687217712402344,
+          "denseRank": 27,
+          "sparseRank": 36,
+          "rrfScore": 2.3994252873563218,
+          "rrfRank": 4,
+          "kpRoleTags": [
+            "time_expression",
+            "condition",
+            "materials",
+            "reminder"
+          ]
+        },
+        {
+          "id": "qid_f46688c2b396481a",
+          "otid": "otid_5e4e1434da5748eb",
+          "type": "Q",
+          "parentPkid": "kpid_79904ecf12d04839",
+          "denseScore": 304.77947998046875,
+          "sparseScore": 19.350372314453125,
+          "denseRank": 97,
+          "sparseRank": 10,
+          "rrfScore": 2.35122838944495,
+          "rrfRank": 5
+        },
+        {
+          "id": "kpid_b663a3c5b58944b6",
+          "otid": "otid_cefdbe9b7cf34bdb",
+          "type": "KP",
+          "denseScore": 329.9273681640625,
+          "sparseScore": 14.181035041809082,
+          "denseRank": 23,
+          "sparseRank": 87,
+          "rrfScore": 2.0211458077206785,
+          "rrfRank": 6,
+          "kpRoleTags": [
+            "time_expression",
+            "condition",
+            "materials",
+            "reminder",
+            "thesis"
+          ]
+        },
+        {
+          "id": "qid_668fc6a0354a4920",
+          "otid": "otid_f0baf746fd75421e",
+          "type": "Q",
+          "parentPkid": "kpid_9b0b633eb4354385",
+          "denseScore": 245.37815856933594,
+          "sparseScore": 22.397300720214844,
+          "denseRank": 1938,
+          "sparseRank": 2,
+          "rrfScore": 1.985533921017792,
+          "rrfRank": 7
+        },
+        {
+          "id": "qid_6642e4721b0d44ad",
+          "otid": "otid_1c14b6043fd645c8",
+          "type": "Q",
+          "parentPkid": "kpid_1b78cd892cc649fc",
+          "denseScore": 247.5385284423828,
+          "sparseScore": 20.584692001342773,
+          "denseRank": 1763,
+          "sparseRank": 4,
+          "rrfScore": 1.9298546352166759,
+          "rrfRank": 8
+        },
+        {
+          "id": "qid_382958e6c4bd415d",
+          "otid": "otid_57fa7965fa92417a",
+          "type": "Q",
+          "parentPkid": "kpid_ab4b6aa5e4db4b4b",
+          "denseScore": 281.5342712402344,
+          "sparseScore": 19.070459365844727,
+          "denseRank": 344,
+          "sparseRank": 12,
+          "rrfScore": 1.914191419141914,
+          "rrfRank": 9
+        },
+        {
+          "id": "kpid_db1f7b0ea0054f18",
+          "otid": "otid_467c753a650543da",
+          "type": "KP",
+          "denseScore": 217.42465209960938,
+          "sparseScore": 21.394514083862305,
+          "denseRank": null,
+          "sparseRank": 3,
+          "rrfScore": 1.9047619047619047,
+          "rrfRank": 10,
+          "kpRoleTags": [
+            "time_expression"
+          ]
+        }
+      ]
+    },
+    {
+      "query": "如果网上确认时被要求补材料 之后还要按什么步骤完成审核和确认",
+      "expectedOtid": "otid_aa024784667d4f5a",
+      "expectedTitle": "2023年全国硕士研究生招生考试中山大学报考点（代码4413）网上确认公告",
+      "queryScope": "procedure",
+      "queryType": "situational",
+      "supportPattern": "multi_kp",
+      "preferredGranularity": "KP+OT",
+      "themeFamily": "网上确认审核流程",
+      "badCase": {
+        "docHitAt1": false,
+        "docHitAt5": true,
+        "kpidHitAt1": false,
+        "supportFullCoverTop5": true,
+        "failureRisk": "best_kpid_confusion",
+        "failureReasons": [
+          "正确文档进入前5但未到第1名，存在文档级排序偏差。",
+          "正确文档命中后，主证据 KP 选择仍不够准确。",
+          "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+        ]
+      },
+      "queryIntent": {
+        "rawQuery": "如果网上确认时被要求补材料 之后还要按什么步骤完成审核和确认",
+        "years": [],
+        "months": [],
+        "topicIds": [
+          "graduate_admission"
+        ],
+        "subtopicIds": [
+          "master_unified_exam"
+        ],
+        "intentIds": [
+          "master_unified_exam"
+        ],
+        "degreeLevels": [],
+        "eventTypes": [],
+        "normalizedTerms": [
+          "统考硕士"
+        ],
+        "confidence": 1,
+        "preferLatest": true,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false,
+          "hasPostOutcomeOperationalCue": false,
+          "hasMultiSlotConstraintCue": false,
+          "queryLength": 30
+        }
+      },
+      "finalRank": 1,
+      "entryBucket": "already_top1",
+      "bestCorrectRrfRank": 2,
+      "bestCorrectAtomicType": "Q",
+      "finalTopDocs": [
+        {
+          "rank": 1,
+          "otid": "otid_aa024784667d4f5a",
+          "title": "2023年全国硕士研究生招生考试中山大学报考点（代码4413）网上确认公告",
+          "score": 1.3835521316327883,
+          "bestKpid": "kpid_91a32706835145b1",
+          "kpEvidenceGroupCounts": {
+            "requirement": 4,
+            "procedure": 3,
+            "timeline": 5
+          }
+        },
+        {
+          "rank": 2,
+          "otid": "otid_c15c87e71b5b49b0",
+          "title": "2022年全国硕士研究生招生考试中山大学报考点（代码4413）网上确认公告",
+          "score": 1.3736259204622967,
+          "bestKpid": "kpid_1616dfb973154a9f",
+          "kpEvidenceGroupCounts": {
+            "requirement": 2,
+            "procedure": 2,
+            "timeline": 4
+          }
+        },
+        {
+          "rank": 3,
+          "otid": "otid_73f79ecec23b48cf",
+          "title": "全国2023年硕士研究生报名考试中山大学报考点（代码：4413）公告",
+          "score": 1.112849103723634,
+          "bestKpid": "kpid_441c66af349d4264",
+          "kpEvidenceGroupCounts": {
+            "requirement": 1,
+            "procedure": 1,
+            "timeline": 1,
+            "post_outcome": 1
+          }
+        },
+        {
+          "rank": 4,
+          "otid": "otid_18390f7cb6784527",
+          "title": "2025年全国硕士研究生招生考试中山大学报考点（代码4413）网上确认公告",
+          "score": 1.109657080891686,
+          "bestKpid": "kpid_f90b524229144776",
+          "kpEvidenceGroupCounts": {
+            "requirement": 3,
+            "procedure": 2,
+            "timeline": 3
+          }
+        },
+        {
+          "rank": 5,
+          "otid": "otid_b9b1fa013e3d48e9",
+          "title": "2024年全国硕士研究生招生考试中山大学报考点（代码4413） 网上确认公告",
+          "score": 1.089876447765737,
+          "bestKpid": "kpid_10c8ef9cb874432a",
+          "kpEvidenceGroupCounts": {
+            "requirement": 3,
+            "procedure": 3,
+            "timeline": 4,
+            "post_outcome": 1
+          }
+        },
+        {
+          "rank": 6,
+          "otid": "otid_e12192a9d6e942cf",
+          "title": "关于遴选2017年中俄政府奖学金留学候选人的通知",
+          "score": 1.0736609703469688,
+          "bestKpid": "kpid_33509948d46e4c54",
+          "kpEvidenceGroupCounts": {
+            "requirement": 3,
+            "timeline": 1,
+            "post_outcome": 1
+          }
+        },
+        {
+          "rank": 7,
+          "otid": "otid_8f77ee9e86c84c7d",
+          "title": "2026年全国硕士研究生招生考试中山大学报考点（代码4413）网上确认公告",
+          "score": 0.9837114683840582,
+          "bestKpid": "kpid_b186797bd66a4e5a",
+          "kpEvidenceGroupCounts": {
+            "requirement": 3,
+            "procedure": 2,
+            "timeline": 3
+          }
+        },
+        {
+          "rank": 8,
+          "otid": "otid_dcf55ee630fa41da",
+          "title": "关于2023年下半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+          "score": 0.957244474435911,
+          "bestKpid": "kpid_7fe34ea9f91c4f8e",
+          "kpEvidenceGroupCounts": {
+            "requirement": 2,
+            "timeline": 2,
+            "procedure": 1,
+            "post_outcome": 1
+          }
+        },
+        {
+          "rank": 9,
+          "otid": "otid_a206a52bfb3f46aa",
+          "title": "中山大学2024年博士研究生招生报名公告",
+          "score": 0.8534681722449273,
+          "bestKpid": "kpid_0cff06450fa74790",
+          "kpEvidenceGroupCounts": {
+            "requirement": 1,
+            "procedure": 1,
+            "timeline": 1,
+            "post_outcome": 1
+          }
+        },
+        {
+          "rank": 10,
+          "otid": "otid_88804cb412b84a0f",
+          "title": "关于2024年上半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+          "score": 0.828963286802554,
+          "bestKpid": "kpid_e502f25ac93640a0",
+          "kpEvidenceGroupCounts": {
+            "requirement": 1,
+            "timeline": 1
+          }
+        }
+      ],
+      "correctDocCandidates": [
+        {
+          "id": "qid_bb507c2bf03145ec",
+          "otid": "otid_aa024784667d4f5a",
+          "type": "Q",
+          "parentPkid": "kpid_91a32706835145b1",
+          "denseScore": 327.4945983886719,
+          "sparseScore": 18.56450843811035,
+          "denseRank": 1,
+          "sparseRank": 21,
+          "rrfScore": 3.1208257437765634,
+          "rrfRank": 2
+        },
+        {
+          "id": "kpid_91a32706835145b1",
+          "otid": "otid_aa024784667d4f5a",
+          "type": "KP",
+          "denseScore": 253.14923095703125,
+          "sparseScore": 24.111330032348633,
+          "denseRank": 67,
+          "sparseRank": 2,
+          "rrfScore": 2.7228854457708915,
+          "rrfRank": 3,
+          "kpRoleTags": [
+            "deadline",
+            "materials",
+            "procedure"
+          ]
+        },
+        {
+          "id": "kpid_13aa965b4422479e",
+          "otid": "otid_aa024784667d4f5a",
+          "type": "KP",
+          "denseScore": 177.42877197265625,
+          "sparseScore": 23.255704879760742,
+          "denseRank": 3931,
+          "sparseRank": 4,
+          "rrfScore": 1.9000563768479077,
+          "rrfRank": 12,
+          "kpRoleTags": [
+            "time_expression",
+            "deadline",
+            "schedule",
+            "materials",
+            "procedure"
+          ]
+        },
+        {
+          "id": "qid_57adc95f400a4ed6",
+          "otid": "otid_aa024784667d4f5a",
+          "type": "Q",
+          "parentPkid": "kpid_13aa965b4422479e",
+          "denseScore": 232.76878356933594,
+          "sparseScore": 17.781816482543945,
+          "denseRank": 221,
+          "sparseRank": 24,
+          "rrfScore": 1.7844433146924248,
+          "rrfRank": 16
+        },
+        {
+          "id": "qid_abcca360630f4cc5",
+          "otid": "otid_aa024784667d4f5a",
+          "type": "Q",
+          "parentPkid": "kpid_4db0420b226846c4",
+          "denseScore": 197.35052490234375,
+          "sparseScore": 19.827611923217773,
+          "denseRank": 1621,
+          "sparseRank": 17,
+          "rrfScore": 1.6179299582036049,
+          "rrfRank": 30
+        },
+        {
+          "id": "otid_aa024784667d4f5a",
+          "otid": "otid_aa024784667d4f5a",
+          "type": "OT",
+          "denseScore": 116.24871063232422,
+          "sparseScore": 20.681039810180664,
+          "denseRank": null,
+          "sparseRank": 15,
+          "rrfScore": 1.6,
+          "rrfRank": 31
+        },
+        {
+          "id": "qid_d8aa1e03f95a4516",
+          "otid": "otid_aa024784667d4f5a",
+          "type": "Q",
+          "parentPkid": "kpid_13aa965b4422479e",
+          "denseScore": 198.942138671875,
+          "sparseScore": 16.834049224853516,
+          "denseRank": 1486,
+          "sparseRank": 29,
+          "rrfScore": 1.4129976597816765,
+          "rrfRank": 59
+        },
+        {
+          "id": "qid_2f5014daeaaa4e18",
+          "otid": "otid_aa024784667d4f5a",
+          "type": "Q",
+          "parentPkid": "kpid_91a32706835145b1",
+          "denseScore": 213.53997802734375,
+          "sparseScore": 16.290851593017578,
+          "denseRank": 699,
+          "sparseRank": 38,
+          "rrfScore": 1.3562421015837163,
+          "rrfRank": 62
+        },
+        {
+          "id": "qid_fea20084902e4018",
+          "otid": "otid_aa024784667d4f5a",
+          "type": "Q",
+          "parentPkid": "kpid_d2f0225255b5400e",
+          "denseScore": 201.3859405517578,
+          "sparseScore": 16.276039123535156,
+          "denseRank": 1321,
+          "sparseRank": 40,
+          "rrfScore": 1.2724112961622012,
+          "rrfRank": 74
+        },
+        {
+          "id": "kpid_ac03ec7559634b19",
+          "otid": "otid_aa024784667d4f5a",
+          "type": "KP",
+          "denseScore": 156.8675537109375,
+          "sparseScore": 15.196309089660645,
+          "denseRank": null,
+          "sparseRank": 51,
+          "rrfScore": 1.0810810810810811,
+          "rrfRank": 109,
+          "kpRoleTags": [
+            "time_expression",
+            "materials",
+            "reminder"
+          ]
+        },
+        {
+          "id": "qid_245b68d41d964489",
+          "otid": "otid_aa024784667d4f5a",
+          "type": "Q",
+          "parentPkid": "kpid_ac03ec7559634b19",
+          "denseScore": 228.21607971191406,
+          "sparseScore": 13.283897399902344,
+          "denseRank": 304,
+          "sparseRank": 93,
+          "rrfScore": 1.0590390002154708,
+          "rrfRank": 116
+        },
+        {
+          "id": "kpid_4db0420b226846c4",
+          "otid": "otid_aa024784667d4f5a",
+          "type": "KP",
+          "denseScore": 192.2452392578125,
+          "sparseScore": 14.49319076538086,
+          "denseRank": 2066,
+          "sparseRank": 63,
+          "rrfScore": 1.0226464447146824,
+          "rrfRank": 128,
+          "kpRoleTags": [
+            "time_expression",
+            "background"
+          ]
+        },
+        {
+          "id": "qid_8e132c3af24b430a",
+          "otid": "otid_aa024784667d4f5a",
+          "type": "Q",
+          "parentPkid": "kpid_d2f0225255b5400e",
+          "denseScore": 208.49826049804688,
+          "sparseScore": 13.96993637084961,
+          "denseRank": 915,
+          "sparseRank": 72,
+          "rrfScore": 1.0116550116550118,
+          "rrfRank": 131
+        },
+        {
+          "id": "qid_c9bfb01de622458e",
+          "otid": "otid_aa024784667d4f5a",
+          "type": "Q",
+          "parentPkid": "kpid_ac03ec7559634b19",
+          "denseScore": 174.64520263671875,
+          "sparseScore": 14.66388988494873,
+          "denseRank": null,
+          "sparseRank": 59,
+          "rrfScore": 1.0084033613445378,
+          "rrfRank": 134
+        },
+        {
+          "id": "qid_16c142cfbd6843c8",
+          "otid": "otid_aa024784667d4f5a",
+          "type": "Q",
+          "parentPkid": "kpid_7e52e0465cdf4e44",
+          "denseScore": 192.18907165527344,
+          "sparseScore": 13.73988151550293,
+          "denseRank": 2075,
+          "sparseRank": 77,
+          "rrfScore": 0.9227508162532692,
+          "rrfRank": 154
+        },
+        {
+          "id": "kpid_d2f0225255b5400e",
+          "otid": "otid_aa024784667d4f5a",
+          "type": "KP",
+          "denseScore": 152.0547637939453,
+          "sparseScore": 13.362459182739258,
+          "denseRank": null,
+          "sparseRank": 89,
+          "rrfScore": 0.8053691275167785,
+          "rrfRank": 189,
+          "kpRoleTags": [
+            "deadline",
+            "materials",
+            "email",
+            "procedure"
+          ]
+        },
+        {
+          "id": "qid_8fb635785e38418c",
+          "otid": "otid_aa024784667d4f5a",
+          "type": "Q",
+          "parentPkid": "kpid_91a32706835145b1",
+          "denseScore": 204.57643127441406,
+          "sparseScore": 12.57124137878418,
+          "denseRank": 1110,
+          "sparseRank": 125,
+          "rrfScore": 0.7341187341187342,
+          "rrfRank": 211
+        },
+        {
+          "id": "qid_2f66464d8ec04113",
+          "otid": "otid_aa024784667d4f5a",
+          "type": "Q",
+          "parentPkid": "kpid_4db0420b226846c4",
+          "denseScore": 196.5313720703125,
+          "sparseScore": 12.47674560546875,
+          "denseRank": 1673,
+          "sparseRank": 127,
+          "rrfScore": 0.6994146344473896,
+          "rrfRank": 224
+        },
+        {
+          "id": "qid_e19fd01f019d43b8",
+          "otid": "otid_aa024784667d4f5a",
+          "type": "Q",
+          "parentPkid": "kpid_4db0420b226846c4",
+          "denseScore": 202.36532592773438,
+          "sparseScore": 11.73060417175293,
+          "denseRank": 1251,
+          "sparseRank": 167,
+          "rrfScore": 0.6049120118818402,
+          "rrfRank": 280
+        },
+        {
+          "id": "qid_2caff77b4f554f66",
+          "otid": "otid_aa024784667d4f5a",
+          "type": "Q",
+          "parentPkid": "kpid_7e52e0465cdf4e44",
+          "denseScore": 186.83566284179688,
+          "sparseScore": 11.967462539672852,
+          "denseRank": 2661,
+          "sparseRank": 153,
+          "rrfScore": 0.6001314761039593,
+          "rrfRank": 285
+        },
+        {
+          "id": "qid_44effd5a12004b35",
+          "otid": "otid_aa024784667d4f5a",
+          "type": "Q",
+          "parentPkid": "kpid_91a32706835145b1",
+          "denseScore": 224.90235900878906,
+          "sparseScore": 10.424273490905762,
+          "denseRank": 380,
+          "sparseRank": 270,
+          "rrfScore": 0.5909090909090909,
+          "rrfRank": 292
+        },
+        {
+          "id": "qid_c78c50b18e2645ff",
+          "otid": "otid_aa024784667d4f5a",
+          "type": "Q",
+          "parentPkid": "kpid_13aa965b4422479e",
+          "denseScore": 226.14036560058594,
+          "sparseScore": 9.228616714477539,
+          "denseRank": 349,
+          "sparseRank": 457,
+          "rrfScore": 0.47660709472081264,
+          "rrfRank": 390
+        },
+        {
+          "id": "qid_a18459f332324849",
+          "otid": "otid_aa024784667d4f5a",
+          "type": "Q",
+          "parentPkid": "kpid_13aa965b4422479e",
+          "denseScore": 151.4529571533203,
+          "sparseScore": 9.674520492553711,
+          "denseRank": null,
+          "sparseRank": 368,
+          "rrfScore": 0.2803738317757009,
+          "rrfRank": 736
+        },
+        {
+          "id": "qid_b640a74c527844a3",
+          "otid": "otid_aa024784667d4f5a",
+          "type": "Q",
+          "parentPkid": "kpid_7e52e0465cdf4e44",
+          "denseScore": 189.7258758544922,
+          "sparseScore": 9.282482147216797,
+          "denseRank": 2323,
+          "sparseRank": 446,
+          "rrfScore": 0.27911806123413707,
+          "rrfRank": 742
+        },
+        {
+          "id": "kpid_7e52e0465cdf4e44",
+          "otid": "otid_aa024784667d4f5a",
+          "type": "KP",
+          "denseScore": 181.64303588867188,
+          "sparseScore": 9.428435325622559,
+          "denseRank": 3330,
+          "sparseRank": 423,
+          "rrfScore": 0.2779457300426904,
+          "rrfRank": 747,
+          "kpRoleTags": [
+            "time_expression",
+            "materials",
+            "background"
+          ]
+        },
+        {
+          "id": "qid_913c35c4851d49f8",
+          "otid": "otid_aa024784667d4f5a",
+          "type": "Q",
+          "parentPkid": "kpid_4db0420b226846c4",
+          "denseScore": 188.26866149902344,
+          "sparseScore": 9.108404159545898,
+          "denseRank": 2487,
+          "sparseRank": 483,
+          "rrfScore": 0.2602563518558287,
+          "rrfRank": 814
+        },
+        {
+          "id": "qid_faaf20f01925499e",
+          "otid": "otid_aa024784667d4f5a",
+          "type": "Q",
+          "parentPkid": "kpid_91a32706835145b1",
+          "denseScore": 181.53233337402344,
+          "sparseScore": 8.714567184448242,
+          "denseRank": 3347,
+          "sparseRank": 538,
+          "rrfScore": 0.23002023180683484,
+          "rrfRank": 939
+        }
+      ],
+      "topDocs": [
+        {
+          "otid": "otid_c15c87e71b5b49b0",
+          "title": "2022年全国硕士研究生招生考试中山大学报考点（代码4413）网上确认公告",
+          "bestRrfScore": 3.3370761284527286,
+          "bestRrfRank": 1,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_aa024784667d4f5a",
+          "title": "2023年全国硕士研究生招生考试中山大学报考点（代码4413）网上确认公告",
+          "bestRrfScore": 3.1208257437765634,
+          "bestRrfRank": 2,
+          "bestType": "Q"
+        },
+        {
+          "otid": "otid_e12192a9d6e942cf",
+          "title": "关于遴选2017年中俄政府奖学金留学候选人的通知",
+          "bestRrfScore": 2.657585857122156,
+          "bestRrfRank": 4,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_3912909c5f1449bd",
+          "title": "绿色通道",
+          "bestRrfScore": 2.490842490842491,
+          "bestRrfRank": 5,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_18390f7cb6784527",
+          "title": "2025年全国硕士研究生招生考试中山大学报考点（代码4413）网上确认公告",
+          "bestRrfScore": 2.2032967032967035,
+          "bestRrfRank": 6,
+          "bestType": "Q"
+        },
+        {
+          "otid": "otid_b9b1fa013e3d48e9",
+          "title": "2024年全国硕士研究生招生考试中山大学报考点（代码4413） 网上确认公告",
+          "bestRrfScore": 2.012870012870013,
+          "bestRrfRank": 7,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_8f77ee9e86c84c7d",
+          "title": "2026年全国硕士研究生招生考试中山大学报考点（代码4413）网上确认公告",
+          "bestRrfScore": 1.9914455777226094,
+          "bestRrfRank": 8,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_1c14b6043fd645c8",
+          "title": "中山大学2024年硕士研究生招生章程及招生学科专业目录",
+          "bestRrfScore": 1.9133885438233262,
+          "bestRrfRank": 11,
+          "bestType": "Q"
+        },
+        {
+          "otid": "otid_f7a9215086674711",
+          "title": "关于2020年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+          "bestRrfScore": 1.8931234465617233,
+          "bestRrfRank": 13,
+          "bestType": "Q"
+        },
+        {
+          "otid": "otid_9911c0374cdd4ce4",
+          "title": "中山大学人工智能学院2021年以“申请-考核”制招收博士研究生实施办法",
+          "bestRrfScore": 1.7093788249694002,
+          "bestRrfRank": 21,
+          "bestType": "Q"
+        }
+      ],
+      "topAtomicCandidates": [
+        {
+          "id": "kpid_1616dfb973154a9f",
+          "otid": "otid_c15c87e71b5b49b0",
+          "type": "KP",
+          "denseScore": 274.97369384765625,
+          "sparseScore": 28.185943603515625,
+          "denseRank": 13,
+          "sparseRank": 1,
+          "rrfScore": 3.3370761284527286,
+          "rrfRank": 1,
+          "kpRoleTags": [
+            "time_expression",
+            "materials",
+            "procedure"
+          ]
+        },
+        {
+          "id": "qid_bb507c2bf03145ec",
+          "otid": "otid_aa024784667d4f5a",
+          "type": "Q",
+          "parentPkid": "kpid_91a32706835145b1",
+          "denseScore": 327.4945983886719,
+          "sparseScore": 18.56450843811035,
+          "denseRank": 1,
+          "sparseRank": 21,
+          "rrfScore": 3.1208257437765634,
+          "rrfRank": 2
+        },
+        {
+          "id": "kpid_91a32706835145b1",
+          "otid": "otid_aa024784667d4f5a",
+          "type": "KP",
+          "denseScore": 253.14923095703125,
+          "sparseScore": 24.111330032348633,
+          "denseRank": 67,
+          "sparseRank": 2,
+          "rrfScore": 2.7228854457708915,
+          "rrfRank": 3,
+          "kpRoleTags": [
+            "deadline",
+            "materials",
+            "procedure"
+          ]
+        },
+        {
+          "id": "kpid_33509948d46e4c54",
+          "otid": "otid_e12192a9d6e942cf",
+          "type": "KP",
+          "denseScore": 281.52618408203125,
+          "sparseScore": 16.089454650878906,
+          "denseRank": 7,
+          "sparseRank": 43,
+          "rrfScore": 2.657585857122156,
+          "rrfRank": 4,
+          "kpRoleTags": [
+            "materials"
+          ]
+        },
+        {
+          "id": "kpid_5aea9f61615c4275",
+          "otid": "otid_3912909c5f1449bd",
+          "type": "KP",
+          "denseScore": 290.4466552734375,
+          "sparseScore": 14.322775840759277,
+          "denseRank": 5,
+          "sparseRank": 66,
+          "rrfScore": 2.490842490842491,
+          "rrfRank": 5,
+          "kpRoleTags": [
+            "materials",
+            "post_outcome"
+          ]
+        },
+        {
+          "id": "qid_74663a024d2c48ac",
+          "otid": "otid_18390f7cb6784527",
+          "type": "Q",
+          "parentPkid": "kpid_56ae9f921d12472c",
+          "denseScore": 232.7811737060547,
+          "sparseScore": 22.63558578491211,
+          "denseRank": 220,
+          "sparseRank": 5,
+          "rrfScore": 2.2032967032967035,
+          "rrfRank": 6
+        },
+        {
+          "id": "kpid_10c8ef9cb874432a",
+          "otid": "otid_b9b1fa013e3d48e9",
+          "type": "KP",
+          "denseScore": 209.62380981445312,
+          "sparseScore": 23.64434814453125,
+          "denseRank": 865,
+          "sparseRank": 3,
+          "rrfScore": 2.012870012870013,
+          "rrfRank": 7,
+          "kpRoleTags": [
+            "deadline",
+            "materials",
+            "procedure",
+            "background",
+            "post_outcome"
+          ]
+        },
+        {
+          "id": "kpid_b186797bd66a4e5a",
+          "otid": "otid_8f77ee9e86c84c7d",
+          "type": "KP",
+          "denseScore": 222.39781188964844,
+          "sparseScore": 22.49688720703125,
+          "denseRank": 439,
+          "sparseRank": 7,
+          "rrfScore": 1.9914455777226094,
+          "rrfRank": 8,
+          "kpRoleTags": [
+            "materials",
+            "procedure"
+          ]
+        },
+        {
+          "id": "qid_77adb7f809a8465b",
+          "otid": "otid_c15c87e71b5b49b0",
+          "type": "Q",
+          "parentPkid": "kpid_1616dfb973154a9f",
+          "denseScore": 244.31686401367188,
+          "sparseScore": 17.0924015045166,
+          "denseRank": 111,
+          "sparseRank": 27,
+          "rrfScore": 1.9641056664650132,
+          "rrfRank": 9
+        },
+        {
+          "id": "kpid_56ae9f921d12472c",
+          "otid": "otid_18390f7cb6784527",
+          "type": "KP",
+          "denseScore": 221.37155151367188,
+          "sparseScore": 21.742725372314453,
+          "denseRank": 467,
+          "sparseRank": 9,
+          "rrfScore": 1.9288837554657206,
+          "rrfRank": 10,
+          "kpRoleTags": [
+            "deadline",
+            "materials",
+            "procedure"
+          ]
+        }
+      ]
+    },
+    {
+      "query": "如果我已经通过英语考试并交了认定材料 后面学校会怎么审查并通知结果",
+      "expectedOtid": "otid_ffd4fbd63cc34a41",
+      "expectedTitle": "关于2019年在职临床医师以研究生毕业同等学力申请临床医学博士专业学位资格认定的 通知",
+      "queryScope": "procedure",
+      "queryType": "situational",
+      "supportPattern": "multi_kp",
+      "preferredGranularity": "KP",
+      "themeFamily": "资格认定审查流程",
+      "badCase": {
+        "docHitAt1": false,
+        "docHitAt5": true,
+        "kpidHitAt1": false,
+        "supportFullCoverTop5": true,
+        "failureRisk": "best_kpid_confusion",
+        "failureReasons": [
+          "正确文档进入前5但未到第1名，存在文档级排序偏差。",
+          "正确文档命中后，主证据 KP 选择仍不够准确。",
+          "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+        ]
+      },
+      "queryIntent": {
+        "rawQuery": "如果我已经通过英语考试并交了认定材料 后面学校会怎么审查并通知结果",
+        "years": [],
+        "months": [],
+        "topicIds": [],
+        "subtopicIds": [],
+        "intentIds": [],
+        "degreeLevels": [],
+        "eventTypes": [],
+        "normalizedTerms": [],
+        "confidence": 0,
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false,
+          "hasPostOutcomeOperationalCue": false,
+          "hasMultiSlotConstraintCue": false,
+          "queryLength": 33
+        }
+      },
+      "finalRank": 2,
+      "entryBucket": "aggregation_drop",
+      "bestCorrectRrfRank": 5,
+      "bestCorrectAtomicType": "Q",
+      "finalTopDocs": [
+        {
+          "rank": 1,
+          "otid": "otid_4f011b71905d4b3f",
+          "title": "关于2017年在职临床医师以研究生毕业同等学力申请临床医学博士专业学位资格认定的通知",
+          "score": 1.1762301276821705,
+          "bestKpid": "kpid_d63ac81112cc48d3",
+          "kpEvidenceGroupCounts": {
+            "requirement": 2,
+            "post_outcome": 1
+          }
+        },
+        {
+          "rank": 2,
+          "otid": "otid_ffd4fbd63cc34a41",
+          "title": "关于2019年在职临床医师以研究生毕业同等学力申请临床医学博士专业学位资格认定的 通知",
+          "score": 1.1751229804588572,
+          "bestKpid": "kpid_594b5d648f8a42b1",
+          "kpEvidenceGroupCounts": {
+            "timeline": 3,
+            "requirement": 2,
+            "procedure": 1,
+            "post_outcome": 1
+          }
+        },
+        {
+          "rank": 3,
+          "otid": "otid_64c41c82baca43e4",
+          "title": "中山大学关于公布2025年广东省综合评价材料审核结果的通知",
+          "score": 1.1518161476284177,
+          "bestKpid": "kpid_1100af8ab0294d85",
+          "kpEvidenceGroupCounts": {
+            "requirement": 2,
+            "timeline": 2
+          }
+        },
+        {
+          "rank": 4,
+          "otid": "otid_79fde873cbd54280",
+          "title": "关于2024年在职临床医师以研究生毕业同等学力申请临床医学博士专业学位资格认定的通知",
+          "score": 1.1476536375836024,
+          "bestKpid": "kpid_a5fd8d00b74b40a3",
+          "kpEvidenceGroupCounts": {
+            "timeline": 2,
+            "requirement": 1,
+            "post_outcome": 1
+          }
+        },
+        {
+          "rank": 5,
+          "otid": "otid_e2bcfb99b4af4c46",
+          "title": "关于2018年在职临床医师以研究生毕业同等学力申请临床医学博士专业学位资格认定的通知",
+          "score": 1.0517948230958185,
+          "bestKpid": "kpid_c46f1325d9984a79",
+          "kpEvidenceGroupCounts": {
+            "timeline": 3,
+            "requirement": 2,
+            "post_outcome": 1
+          }
+        },
+        {
+          "rank": 6,
+          "otid": "otid_ae46d4b5d6e74990",
+          "title": "鹏城国家实验室-中山大学2026年联合培养博士研究生专项计划招生简章",
+          "score": 1.0179651027077496,
+          "bestKpid": "kpid_46533026685e4ee1",
+          "kpEvidenceGroupCounts": {
+            "requirement": 1,
+            "timeline": 1
+          }
+        },
+        {
+          "rank": 7,
+          "otid": "otid_b57a49e0f30144fb",
+          "title": "关于2020年在职临床医师以研究生毕业同等学力申请临床医学博士专业学位资格认定的通知",
+          "score": 1.015379315657983,
+          "bestKpid": "kpid_7ba5e6471cca4218",
+          "kpEvidenceGroupCounts": {
+            "requirement": 2,
+            "procedure": 1,
+            "timeline": 3,
+            "post_outcome": 1
+          }
+        },
+        {
+          "rank": 8,
+          "otid": "otid_87b9bb5e7fef44de",
+          "title": "关于2018年下半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+          "score": 0.9733797551226844,
+          "bestKpid": "kpid_406e031cbcd049c0",
+          "kpEvidenceGroupCounts": {
+            "timeline": 2,
+            "post_outcome": 1,
+            "requirement": 1,
+            "procedure": 1
+          }
+        },
+        {
+          "rank": 9,
+          "otid": "otid_2822fe40ab7e4534",
+          "title": "中山大学关于公布2023年广东省综合评价材料审核通过名单的通知",
+          "score": 0.9215052596702297,
+          "bestKpid": "kpid_d0957e88687e43fa",
+          "kpEvidenceGroupCounts": {
+            "requirement": 2,
+            "timeline": 2
+          }
+        },
+        {
+          "rank": 10,
+          "otid": "otid_2d77227bd2fa473c",
+          "title": "中山大学关于公布2024年广东省综合评价材料审核通过名单的通知",
+          "score": 0.9163047921500403,
+          "bestKpid": "kpid_2a3a74c241ae4a2d",
+          "kpEvidenceGroupCounts": {
+            "requirement": 2,
+            "timeline": 2,
+            "post_outcome": 1
+          }
+        }
+      ],
+      "correctDocCandidates": [
+        {
+          "id": "qid_389c3fb43a8d424e",
+          "otid": "otid_ffd4fbd63cc34a41",
+          "type": "Q",
+          "parentPkid": "kpid_594b5d648f8a42b1",
+          "denseScore": 226.8031768798828,
+          "sparseScore": 18.395906448364258,
+          "denseRank": 1549,
+          "sparseRank": 5,
+          "rrfScore": 1.9083042501314722,
+          "rrfRank": 5
+        },
+        {
+          "id": "otid_ffd4fbd63cc34a41",
+          "otid": "otid_ffd4fbd63cc34a41",
+          "type": "OT",
+          "denseScore": 207.59329223632812,
+          "sparseScore": 17.84595489501953,
+          "denseRank": 3596,
+          "sparseRank": 6,
+          "rrfScore": 1.8455341157748162,
+          "rrfRank": 9
+        },
+        {
+          "id": "kpid_594b5d648f8a42b1",
+          "otid": "otid_ffd4fbd63cc34a41",
+          "type": "KP",
+          "denseScore": 263.8452453613281,
+          "sparseScore": 13.207291603088379,
+          "denseRank": 233,
+          "sparseRank": 26,
+          "rrfScore": 1.7366457655369474,
+          "rrfRank": 16,
+          "kpRoleTags": [
+            "time_expression"
+          ]
+        },
+        {
+          "id": "qid_99bc26743e7741b1",
+          "otid": "otid_ffd4fbd63cc34a41",
+          "type": "Q",
+          "parentPkid": "kpid_b20f7186b6884587",
+          "denseScore": 218.9217987060547,
+          "sparseScore": 14.333402633666992,
+          "denseRank": 2216,
+          "sparseRank": 14,
+          "rrfScore": 1.6655583527288274,
+          "rrfRank": 25
+        },
+        {
+          "id": "kpid_b20f7186b6884587",
+          "otid": "otid_ffd4fbd63cc34a41",
+          "type": "KP",
+          "denseScore": 235.54318237304688,
+          "sparseScore": 13.788710594177246,
+          "denseRank": 1031,
+          "sparseRank": 20,
+          "rrfScore": 1.5916590284142988,
+          "rrfRank": 31,
+          "kpRoleTags": [
+            "time_expression",
+            "background"
+          ]
+        },
+        {
+          "id": "qid_e6efd351a08a4753",
+          "otid": "otid_ffd4fbd63cc34a41",
+          "type": "Q",
+          "parentPkid": "kpid_501037a02ec74c04",
+          "denseScore": 248.46218872070312,
+          "sparseScore": 12.777982711791992,
+          "denseRank": 547,
+          "sparseRank": 35,
+          "rrfScore": 1.4279025405358536,
+          "rrfRank": 55
+        },
+        {
+          "id": "qid_168acbe2f5124513",
+          "otid": "otid_ffd4fbd63cc34a41",
+          "type": "Q",
+          "parentPkid": "kpid_594b5d648f8a42b1",
+          "denseScore": 203.09519958496094,
+          "sparseScore": 13.066291809082031,
+          "denseRank": null,
+          "sparseRank": 30,
+          "rrfScore": 1.3333333333333335,
+          "rrfRank": 67
+        },
+        {
+          "id": "qid_a1e85035418d4ffb",
+          "otid": "otid_ffd4fbd63cc34a41",
+          "type": "Q",
+          "parentPkid": "kpid_501037a02ec74c04",
+          "denseScore": 231.65284729003906,
+          "sparseScore": 11.751821517944336,
+          "denseRank": 1237,
+          "sparseRank": 56,
+          "rrfScore": 1.1115837609337198,
+          "rrfRank": 94
+        },
+        {
+          "id": "kpid_caedc9b58db449b5",
+          "otid": "otid_ffd4fbd63cc34a41",
+          "type": "KP",
+          "denseScore": 215.94119262695312,
+          "sparseScore": 9.890982627868652,
+          "denseRank": 2544,
+          "sparseRank": 162,
+          "rrfScore": 0.578942998297837,
+          "rrfRank": 294,
+          "kpRoleTags": [
+            "time_expression",
+            "application_stage",
+            "materials",
+            "thesis"
+          ]
+        },
+        {
+          "id": "kpid_501037a02ec74c04",
+          "otid": "otid_ffd4fbd63cc34a41",
+          "type": "KP",
+          "denseScore": 244.35667419433594,
+          "sparseScore": 8.145462989807129,
+          "denseRank": 668,
+          "sparseRank": 402,
+          "rrfScore": 0.3971028971028971,
+          "rrfRank": 472,
+          "kpRoleTags": [
+            "materials",
+            "reminder",
+            "post_outcome"
+          ]
+        },
+        {
+          "id": "qid_4a53ee71c9f44e07",
+          "otid": "otid_ffd4fbd63cc34a41",
+          "type": "Q",
+          "parentPkid": "kpid_caedc9b58db449b5",
+          "denseScore": 164.78585815429688,
+          "sparseScore": 7.94777250289917,
+          "denseRank": null,
+          "sparseRank": 457,
+          "rrfScore": 0.23210831721470018,
+          "rrfRank": 897
+        },
+        {
+          "id": "qid_01d7f27b25294ac3",
+          "otid": "otid_ffd4fbd63cc34a41",
+          "type": "Q",
+          "parentPkid": "kpid_501037a02ec74c04",
+          "denseScore": 197.5310821533203,
+          "sparseScore": 7.828420162200928,
+          "denseRank": null,
+          "sparseRank": 496,
+          "rrfScore": 0.21582733812949642,
+          "rrfRank": 987
+        }
+      ],
+      "topDocs": [
+        {
+          "otid": "otid_ae46d4b5d6e74990",
+          "title": "鹏城国家实验室-中山大学2026年联合培养博士研究生专项计划招生简章",
+          "bestRrfScore": 3.2311372037399435,
+          "bestRrfRank": 1,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_b57a49e0f30144fb",
+          "title": "关于2020年在职临床医师以研究生毕业同等学力申请临床医学博士专业学位资格认定的通知",
+          "bestRrfScore": 2.3720714143492403,
+          "bestRrfRank": 2,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_e2bcfb99b4af4c46",
+          "title": "关于2018年在职临床医师以研究生毕业同等学力申请临床医学博士专业学位资格认定的通知",
+          "bestRrfScore": 1.935483870967742,
+          "bestRrfRank": 4,
+          "bestType": "Q"
+        },
+        {
+          "otid": "otid_ffd4fbd63cc34a41",
+          "title": "关于2019年在职临床医师以研究生毕业同等学力申请临床医学博士专业学位资格认定的 通知",
+          "bestRrfScore": 1.9083042501314722,
+          "bestRrfRank": 5,
+          "bestType": "Q"
+        },
+        {
+          "otid": "otid_4f011b71905d4b3f",
+          "title": "关于2017年在职临床医师以研究生毕业同等学力申请临床医学博士专业学位资格认定的通知",
+          "bestRrfScore": 1.877001921844971,
+          "bestRrfRank": 6,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_7893d1be905b4266",
+          "title": "中山大学人工智能学院2022年硕士研究生复试录取方案",
+          "bestRrfScore": 1.8506103345771932,
+          "bestRrfRank": 8,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_87b9bb5e7fef44de",
+          "title": "关于2018年下半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+          "bestRrfScore": 1.836882145437545,
+          "bestRrfRank": 10,
+          "bestType": "Q"
+        },
+        {
+          "otid": "otid_79fde873cbd54280",
+          "title": "关于2024年在职临床医师以研究生毕业同等学力申请临床医学博士专业学位资格认定的通知",
+          "bestRrfScore": 1.83557760453579,
+          "bestRrfRank": 11,
+          "bestType": "OT"
+        },
+        {
+          "otid": "otid_9911c0374cdd4ce4",
+          "title": "中山大学人工智能学院2021年以“申请-考核”制招收博士研究生实施办法",
+          "bestRrfScore": 1.7385326834145731,
+          "bestRrfRank": 15,
+          "bestType": "Q"
+        },
+        {
+          "otid": "otid_b9b8116d57a8493e",
+          "title": "软件工程学院关于拟选聘中山大学青年教师专职辅导员的通知",
+          "bestRrfScore": 1.7142857142857142,
+          "bestRrfRank": 17,
+          "bestType": "Q"
+        }
+      ],
+      "topAtomicCandidates": [
+        {
+          "id": "kpid_46533026685e4ee1",
+          "otid": "otid_ae46d4b5d6e74990",
+          "type": "KP",
+          "denseScore": 316.5601501464844,
+          "sparseScore": 14.725587844848633,
+          "denseRank": 3,
+          "sparseRank": 13,
+          "rrfScore": 3.2311372037399435,
+          "rrfRank": 1,
+          "kpRoleTags": [
+            "time_expression",
+            "materials",
+            "background",
+            "reminder"
+          ]
+        },
+        {
+          "id": "kpid_7ba5e6471cca4218",
+          "otid": "otid_b57a49e0f30144fb",
+          "type": "KP",
+          "denseScore": 267.7904968261719,
+          "sparseScore": 20.278091430664062,
+          "denseRank": 187,
+          "sparseRank": 1,
+          "rrfScore": 2.3720714143492403,
+          "rrfRank": 2,
+          "kpRoleTags": [
+            "time_expression",
+            "application_stage",
+            "materials",
+            "reminder",
+            "post_outcome"
+          ]
+        },
+        {
+          "id": "otid_b57a49e0f30144fb",
+          "otid": "otid_b57a49e0f30144fb",
+          "type": "OT",
+          "denseScore": 220.18917846679688,
+          "sparseScore": 19.292606353759766,
+          "denseRank": 2093,
+          "sparseRank": 3,
+          "rrfScore": 1.9512087231548447,
+          "rrfRank": 3
+        },
+        {
+          "id": "qid_60b8655cd04d4c5b",
+          "otid": "otid_e2bcfb99b4af4c46",
+          "type": "Q",
+          "parentPkid": "kpid_c46f1325d9984a79",
+          "denseScore": 186.76365661621094,
+          "sparseScore": 19.65654182434082,
+          "denseRank": null,
+          "sparseRank": 2,
+          "rrfScore": 1.935483870967742,
+          "rrfRank": 4
+        },
+        {
+          "id": "qid_389c3fb43a8d424e",
+          "otid": "otid_ffd4fbd63cc34a41",
+          "type": "Q",
+          "parentPkid": "kpid_594b5d648f8a42b1",
+          "denseScore": 226.8031768798828,
+          "sparseScore": 18.395906448364258,
+          "denseRank": 1549,
+          "sparseRank": 5,
+          "rrfScore": 1.9083042501314722,
+          "rrfRank": 5
+        },
+        {
+          "id": "kpid_d63ac81112cc48d3",
+          "otid": "otid_4f011b71905d4b3f",
+          "type": "KP",
+          "denseScore": 269.8008117675781,
+          "sparseScore": 13.351366996765137,
+          "denseRank": 163,
+          "sparseRank": 24,
+          "rrfScore": 1.877001921844971,
+          "rrfRank": 6,
+          "kpRoleTags": []
+        },
+        {
+          "id": "otid_e2bcfb99b4af4c46",
+          "otid": "otid_e2bcfb99b4af4c46",
+          "type": "OT",
+          "denseScore": 204.4921112060547,
+          "sparseScore": 18.482707977294922,
+          "denseRank": null,
+          "sparseRank": 4,
+          "rrfScore": 1.875,
+          "rrfRank": 7
+        },
+        {
+          "id": "kpid_f183fc1e191a4fe9",
+          "otid": "otid_7893d1be905b4266",
+          "type": "KP",
+          "denseScore": 277.6752014160156,
+          "sparseScore": 12.484334945678711,
+          "denseRank": 103,
+          "sparseRank": 37,
+          "rrfScore": 1.8506103345771932,
+          "rrfRank": 8,
+          "kpRoleTags": [
+            "time_expression",
+            "materials",
+            "email",
+            "procedure",
+            "reminder",
+            "post_outcome"
+          ]
+        },
+        {
+          "id": "otid_ffd4fbd63cc34a41",
+          "otid": "otid_ffd4fbd63cc34a41",
+          "type": "OT",
+          "denseScore": 207.59329223632812,
+          "sparseScore": 17.84595489501953,
+          "denseRank": 3596,
+          "sparseRank": 6,
+          "rrfScore": 1.8455341157748162,
+          "rrfRank": 9
+        },
+        {
+          "id": "qid_67f24050bef44ea0",
+          "otid": "otid_87b9bb5e7fef44de",
+          "type": "Q",
+          "parentPkid": "kpid_406e031cbcd049c0",
+          "denseScore": 237.0299530029297,
+          "sparseScore": 16.542041778564453,
+          "denseRank": 963,
+          "sparseRank": 9,
+          "rrfScore": 1.836882145437545,
+          "rrfRank": 10
+        }
+      ]
+    },
+    {
+      "query": "如果我想走申请考核第二批博士 材料审核后还要按什么顺序参加后续考核",
+      "expectedOtid": "otid_b2a1cc3ccb21453c",
+      "expectedTitle": "中山大学关于马克思主义学院2018年以“申请—考核”制招收博士研究生（第二批）的通知",
+      "queryScope": "procedure",
+      "queryType": "situational",
+      "supportPattern": "multi_kp",
+      "preferredGranularity": "KP",
+      "themeFamily": "申请考核博士流程",
+      "badCase": {
+        "docHitAt1": false,
+        "docHitAt5": true,
+        "kpidHitAt1": false,
+        "supportFullCoverTop5": false,
+        "failureRisk": "partial_multi_kp_coverage",
+        "failureReasons": [
+          "正确文档进入前5但未到第1名，存在文档级排序偏差。",
+          "正确文档命中后，主证据 KP 选择仍不够准确。",
+          "正确文档命中后，仅覆盖了部分同等重要的证据方面。",
+          "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+        ]
+      },
+      "queryIntent": {
+        "rawQuery": "如果我想走申请考核第二批博士 材料审核后还要按什么顺序参加后续考核",
+        "years": [],
+        "months": [],
+        "topicIds": [
+          "graduate_admission"
+        ],
+        "subtopicIds": [
+          "phd_apply_assessment"
+        ],
+        "intentIds": [
+          "phd_apply_assessment"
+        ],
+        "degreeLevels": [
+          "博士"
+        ],
+        "eventTypes": [],
+        "normalizedTerms": [
+          "博士申请考核"
+        ],
+        "confidence": 1,
+        "preferLatest": true,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false,
+          "hasPostOutcomeOperationalCue": false,
+          "hasMultiSlotConstraintCue": false,
+          "queryLength": 33
+        }
+      },
+      "finalRank": 7,
+      "entryBucket": "aggregation_drop",
+      "bestCorrectRrfRank": 18,
+      "bestCorrectAtomicType": "Q",
+      "finalTopDocs": [
+        {
+          "rank": 1,
+          "otid": "otid_9911c0374cdd4ce4",
+          "title": "中山大学人工智能学院2021年以“申请-考核”制招收博士研究生实施办法",
+          "score": 1.4659737211502115,
+          "bestKpid": "kpid_01070b9570494653",
+          "kpEvidenceGroupCounts": {
+            "requirement": 1,
+            "post_outcome": 1,
+            "timeline": 1
+          }
+        },
+        {
+          "rank": 2,
+          "otid": "otid_392eac0b27fa4b09",
+          "title": "中山大学人工智能学院2022年以“申请-考核”制招收博士研究生综合考核通知",
+          "score": 1.167381962904384,
+          "bestKpid": "kpid_a17b5df4d05c447b",
+          "kpEvidenceGroupCounts": {
+            "requirement": 2,
+            "timeline": 2
+          }
+        },
+        {
+          "rank": 3,
+          "otid": "otid_9a0576424d284199",
+          "title": "人工智能学院关于公示2025年“申请-考核”制博士研究生综合考核结果（第二批）的通知",
+          "score": 1.161326529128916,
+          "bestKpid": "kpid_d72853bd031247e8",
+          "kpEvidenceGroupCounts": {
+            "timeline": 1,
+            "post_outcome": 1
+          }
+        },
+        {
+          "rank": 4,
+          "otid": "otid_a206a52bfb3f46aa",
+          "title": "中山大学2024年博士研究生招生报名公告",
+          "score": 1.1515215104419472,
+          "bestKpid": "kpid_885e53bfdf004c9e",
+          "kpEvidenceGroupCounts": {
+            "procedure": 2,
+            "timeline": 3,
+            "post_outcome": 2,
+            "requirement": 2
+          }
+        },
+        {
+          "rank": 5,
+          "otid": "otid_c5344a7fc3bc439a",
+          "title": "中山大学人工智能学院2022年以“申请-考核”制招收博士研究生实施办法",
+          "score": 1.1308789999743318,
+          "bestKpid": "kpid_75ae2113b59e44b7",
+          "kpEvidenceGroupCounts": {
+            "requirement": 2,
+            "timeline": 1
+          }
+        },
+        {
+          "rank": 6,
+          "otid": "otid_1e743544c32142f1",
+          "title": "中山大学人工智能学院2025年博士研究生招生简章",
+          "score": 1.0760133414584419,
+          "bestKpid": "kpid_10f85e9b86e54ad2",
+          "kpEvidenceGroupCounts": {
+            "requirement": 3,
+            "timeline": 2,
+            "post_outcome": 1
+          }
+        },
+        {
+          "rank": 7,
+          "otid": "otid_b2a1cc3ccb21453c",
+          "title": "中山大学关于马克思主义学院2018年以“申请—考核”制招收博士研究生（第二批）的通知",
+          "score": 1.0669498926717516,
+          "bestKpid": "kpid_d57143e245584e84",
+          "kpEvidenceGroupCounts": {
+            "requirement": 1,
+            "timeline": 1
+          }
+        },
+        {
+          "rank": 8,
+          "otid": "otid_f0baf746fd75421e",
+          "title": "中山大学人工智能学院2024年以“申请-考核”制招收博士研究生招生简章",
+          "score": 1.0372771599159407,
+          "bestKpid": "kpid_99c98849c49e4f07",
+          "kpEvidenceGroupCounts": {
+            "requirement": 2,
+            "timeline": 1,
+            "post_outcome": 1
+          }
+        },
+        {
+          "rank": 9,
+          "otid": "otid_40565beb38cf45c5",
+          "title": "中山大学2026年博士研究生招生网上报名通知",
+          "score": 0.9739510220551241,
+          "bestKpid": "kpid_cb726d71ad8341c5",
+          "kpEvidenceGroupCounts": {
+            "procedure": 1,
+            "timeline": 2,
+            "post_outcome": 1,
+            "requirement": 1
+          }
+        },
+        {
+          "rank": 10,
+          "otid": "otid_5f10b726aa1d4728",
+          "title": "中山大学人工智能学院2023年以“申请-考核”制招收博士研究生实施办法",
+          "score": 0.9378522443582685,
+          "bestKpid": "kpid_c67b75b015104827",
+          "kpEvidenceGroupCounts": {
+            "requirement": 2,
+            "timeline": 1
+          }
+        }
+      ],
+      "correctDocCandidates": [
+        {
+          "id": "qid_9b78f2379dd841a0",
+          "otid": "otid_b2a1cc3ccb21453c",
+          "type": "Q",
+          "parentPkid": "kpid_d57143e245584e84",
+          "denseScore": 296.8296813964844,
+          "sparseScore": 13.538859367370605,
+          "denseRank": 67,
+          "sparseRank": 35,
+          "rrfScore": 2.0505594695399916,
+          "rrfRank": 18
+        },
+        {
+          "id": "qid_0b69fffc2f604da9",
+          "otid": "otid_b2a1cc3ccb21453c",
+          "type": "Q",
+          "parentPkid": "kpid_e19a712a3e1f4bbf",
+          "denseScore": 303.080810546875,
+          "sparseScore": 12.067355155944824,
+          "denseRank": 43,
+          "sparseRank": 90,
+          "rrfScore": 1.7708737864077668,
+          "rrfRank": 28
+        },
+        {
+          "id": "otid_b2a1cc3ccb21453c",
+          "otid": "otid_b2a1cc3ccb21453c",
+          "type": "OT",
+          "denseScore": 204.7684326171875,
+          "sparseScore": 15.768803596496582,
+          "denseRank": null,
+          "sparseRank": 8,
+          "rrfScore": 1.7647058823529411,
+          "rrfRank": 30
+        },
+        {
+          "id": "qid_8de12200b14e4c75",
+          "otid": "otid_b2a1cc3ccb21453c",
+          "type": "Q",
+          "parentPkid": "kpid_f01e71c0274f46b8",
+          "denseScore": 286.01031494140625,
+          "sparseScore": 13.078678131103516,
+          "denseRank": 130,
+          "sparseRank": 47,
+          "rrfScore": 1.647811116576488,
+          "rrfRank": 41
+        },
+        {
+          "id": "kpid_d57143e245584e84",
+          "otid": "otid_b2a1cc3ccb21453c",
+          "type": "KP",
+          "denseScore": 290.01739501953125,
+          "sparseScore": 9.848906517028809,
+          "denseRank": 103,
+          "sparseRank": 258,
+          "rrfScore": 0.9908554230813752,
+          "rrfRank": 131,
+          "kpRoleTags": [
+            "time_expression",
+            "materials",
+            "background"
+          ]
+        },
+        {
+          "id": "qid_9d8133c8dd9f48b5",
+          "otid": "otid_b2a1cc3ccb21453c",
+          "type": "Q",
+          "parentPkid": "kpid_d57143e245584e84",
+          "denseScore": 269.01690673828125,
+          "sparseScore": 11.131296157836914,
+          "denseRank": 328,
+          "sparseRank": 139,
+          "rrfScore": 0.860747034139771,
+          "rrfRank": 168
+        },
+        {
+          "id": "qid_3426d2dbff10405e",
+          "otid": "otid_b2a1cc3ccb21453c",
+          "type": "Q",
+          "parentPkid": "kpid_f6f13c958d5e40d2",
+          "denseScore": 258.6966247558594,
+          "sparseScore": 11.006880760192871,
+          "denseRank": 559,
+          "sparseRank": 148,
+          "rrfScore": 0.738473965452964,
+          "rrfRank": 198
+        },
+        {
+          "id": "qid_be9e4c3a379841ad",
+          "otid": "otid_b2a1cc3ccb21453c",
+          "type": "Q",
+          "parentPkid": "kpid_d57143e245584e84",
+          "denseScore": 262.6400451660156,
+          "sparseScore": 9.575164794921875,
+          "denseRank": 464,
+          "sparseRank": 316,
+          "rrfScore": 0.5099886308267013,
+          "rrfRank": 351
+        },
+        {
+          "id": "qid_cbab53bc35db45e3",
+          "otid": "otid_b2a1cc3ccb21453c",
+          "type": "Q",
+          "parentPkid": "kpid_f6f13c958d5e40d2",
+          "denseScore": 265.3909606933594,
+          "sparseScore": 8.58994197845459,
+          "denseRank": 405,
+          "sparseRank": 544,
+          "rrfScore": 0.41372926012960193,
+          "rrfRank": 457
+        },
+        {
+          "id": "qid_70628ffc4f694bfd",
+          "otid": "otid_b2a1cc3ccb21453c",
+          "type": "Q",
+          "parentPkid": "kpid_e19a712a3e1f4bbf",
+          "denseScore": 264.35760498046875,
+          "sparseScore": 6.099748611450195,
+          "denseRank": 432,
+          "sparseRank": 1933,
+          "rrfScore": 0.2634627701018606,
+          "rrfRank": 774
+        }
+      ],
+      "topDocs": [
+        {
+          "otid": "otid_9911c0374cdd4ce4",
+          "title": "中山大学人工智能学院2021年以“申请-考核”制招收博士研究生实施办法",
+          "bestRrfScore": 3.4432234432234434,
+          "bestRrfRank": 1,
+          "bestType": "Q"
+        },
+        {
+          "otid": "otid_392eac0b27fa4b09",
+          "title": "中山大学人工智能学院2022年以“申请-考核”制招收博士研究生综合考核通知",
+          "bestRrfScore": 2.9315845444877704,
+          "bestRrfRank": 2,
+          "bestType": "Q"
+        },
+        {
+          "otid": "otid_9a0576424d284199",
+          "title": "人工智能学院关于公示2025年“申请-考核”制博士研究生综合考核结果（第二批）的通知",
+          "bestRrfScore": 2.8763040238450075,
+          "bestRrfRank": 3,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_a206a52bfb3f46aa",
+          "title": "中山大学2024年博士研究生招生报名公告",
+          "bestRrfScore": 2.579449152542373,
+          "bestRrfRank": 4,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_1e743544c32142f1",
+          "title": "中山大学人工智能学院2025年博士研究生招生简章",
+          "bestRrfScore": 2.45771144278607,
+          "bestRrfRank": 6,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_903e35dbd70b496d",
+          "title": "2023年中山大学-鹏城实验室联合培养博士研究生专项计划招生简章",
+          "bestRrfScore": 2.359323476225933,
+          "bestRrfRank": 8,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_40565beb38cf45c5",
+          "title": "中山大学2026年博士研究生招生网上报名通知",
+          "bestRrfScore": 2.3218003370675127,
+          "bestRrfRank": 9,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_80529bdd365b4138",
+          "title": "大湾区大学-中山大学2026年联合培养博士研究生专项计划招生简章",
+          "bestRrfScore": 2.3065531284709366,
+          "bestRrfRank": 10,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_1fe8155fa2f64320",
+          "title": "中山大学人工智能学院2021年以“申请-考核”制招收博士研究生招生简章",
+          "bestRrfScore": 2.2993960310612596,
+          "bestRrfRank": 11,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_f0baf746fd75421e",
+          "title": "中山大学人工智能学院2024年以“申请-考核”制招收博士研究生招生简章",
+          "bestRrfScore": 2.2559899117276165,
+          "bestRrfRank": 12,
+          "bestType": "KP"
+        }
+      ],
+      "topAtomicCandidates": [
+        {
+          "id": "qid_99dc7c8c7fcc47ef",
+          "otid": "otid_9911c0374cdd4ce4",
+          "type": "Q",
+          "parentPkid": "kpid_979e2581633943b3",
+          "denseScore": 343.4343566894531,
+          "sparseScore": 18.305240631103516,
+          "denseRank": 5,
+          "sparseRank": 3,
+          "rrfScore": 3.4432234432234434,
+          "rrfRank": 1
+        },
+        {
+          "id": "qid_e5e749b395464936",
+          "otid": "otid_392eac0b27fa4b09",
+          "type": "Q",
+          "parentPkid": "kpid_081fa6516435497f",
+          "denseScore": 350.83123779296875,
+          "sparseScore": 13.675979614257812,
+          "denseRank": 2,
+          "sparseRank": 31,
+          "rrfScore": 2.9315845444877704,
+          "rrfRank": 2
+        },
+        {
+          "id": "kpid_d72853bd031247e8",
+          "otid": "otid_9a0576424d284199",
+          "type": "KP",
+          "denseScore": 299.9449768066406,
+          "sparseScore": 18.527910232543945,
+          "denseRank": 50,
+          "sparseRank": 1,
+          "rrfScore": 2.8763040238450075,
+          "rrfRank": 3,
+          "kpRoleTags": [
+            "time_expression",
+            "background",
+            "post_outcome"
+          ]
+        },
+        {
+          "id": "kpid_0cff06450fa74790",
+          "otid": "otid_a206a52bfb3f46aa",
+          "type": "KP",
+          "denseScore": 347.2937927246094,
+          "sparseScore": 12.909098625183105,
+          "denseRank": 4,
+          "sparseRank": 58,
+          "rrfScore": 2.579449152542373,
+          "rrfRank": 4,
+          "kpRoleTags": [
+            "time_expression",
+            "materials",
+            "procedure",
+            "reminder",
+            "post_outcome"
+          ]
+        },
+        {
+          "id": "kpid_885e53bfdf004c9e",
+          "otid": "otid_a206a52bfb3f46aa",
+          "type": "KP",
+          "denseScore": 296.0010681152344,
+          "sparseScore": 15.451702117919922,
+          "denseRank": 69,
+          "sparseRank": 9,
+          "rrfScore": 2.5143242332322213,
+          "rrfRank": 5,
+          "kpRoleTags": [
+            "time_expression",
+            "schedule",
+            "post_outcome"
+          ]
+        },
+        {
+          "id": "kpid_10f85e9b86e54ad2",
+          "otid": "otid_1e743544c32142f1",
+          "type": "KP",
+          "denseScore": 292.1393127441406,
+          "sparseScore": 16.532909393310547,
+          "denseRank": 90,
+          "sparseRank": 7,
+          "rrfScore": 2.45771144278607,
+          "rrfRank": 6,
+          "kpRoleTags": [
+            "time_expression",
+            "announcement_period",
+            "materials",
+            "background",
+            "post_outcome"
+          ]
+        },
+        {
+          "id": "qid_65863b6c4fc7469a",
+          "otid": "otid_9a0576424d284199",
+          "type": "Q",
+          "parentPkid": "kpid_d72853bd031247e8",
+          "denseScore": 300.7705078125,
+          "sparseScore": 14.519686698913574,
+          "denseRank": 48,
+          "sparseRank": 20,
+          "rrfScore": 2.4259259259259256,
+          "rrfRank": 7
+        },
+        {
+          "id": "kpid_c60cfecad5394865",
+          "otid": "otid_903e35dbd70b496d",
+          "type": "KP",
+          "denseScore": 297.780517578125,
+          "sparseScore": 14.63961410522461,
+          "denseRank": 59,
+          "sparseRank": 19,
+          "rrfScore": 2.359323476225933,
+          "rrfRank": 8,
+          "kpRoleTags": [
+            "materials",
+            "background"
+          ]
+        },
+        {
+          "id": "kpid_cb726d71ad8341c5",
+          "otid": "otid_40565beb38cf45c5",
+          "type": "KP",
+          "denseScore": 295.7491760253906,
+          "sparseScore": 14.815864562988281,
+          "denseRank": 71,
+          "sparseRank": 17,
+          "rrfScore": 2.3218003370675127,
+          "rrfRank": 9,
+          "kpRoleTags": [
+            "time_expression",
+            "schedule",
+            "publish",
+            "post_outcome"
+          ]
+        },
+        {
+          "id": "kpid_4804a2ca6c5449ba",
+          "otid": "otid_80529bdd365b4138",
+          "type": "KP",
+          "denseScore": 292.6849365234375,
+          "sparseScore": 15.008514404296875,
+          "denseRank": 86,
+          "sparseRank": 14,
+          "rrfScore": 2.3065531284709366,
+          "rrfRank": 10,
+          "kpRoleTags": [
+            "time_expression",
+            "materials",
+            "background",
+            "reminder"
+          ]
+        }
+      ]
+    },
+    {
+      "query": "如果我准备申请这类访学资助 从提交材料到领款要怎么走 还要特别注意哪些出国时限和回国结项要求",
+      "expectedOtid": "otid_72560bd680b24a42",
+      "expectedTitle": "关于启动2019年中山大学博士生国外访学与合作研究项目资助计划的通知",
+      "queryScope": "procedure",
+      "queryType": "situational",
+      "supportPattern": "multi_kp",
+      "preferredGranularity": "KP",
+      "themeFamily": "访学资助申请与时限要求",
+      "badCase": {
+        "docHitAt1": false,
+        "docHitAt5": true,
+        "kpidHitAt1": false,
+        "supportFullCoverTop5": true,
+        "failureRisk": "best_kpid_confusion",
+        "failureReasons": [
+          "正确文档进入前5但未到第1名，存在文档级排序偏差。",
+          "正确文档命中后，主证据 KP 选择仍不够准确。",
+          "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+        ]
+      },
+      "queryIntent": {
+        "rawQuery": "如果我准备申请这类访学资助 从提交材料到领款要怎么走 还要特别注意哪些出国时限和回国结项要求",
+        "years": [],
+        "months": [],
+        "topicIds": [
+          "student_funding"
+        ],
+        "subtopicIds": [],
+        "intentIds": [],
+        "degreeLevels": [],
+        "eventTypes": [],
+        "normalizedTerms": [],
+        "confidence": 0,
+        "preferLatest": true,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": false,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false,
+          "hasPostOutcomeOperationalCue": false,
+          "hasMultiSlotConstraintCue": false,
+          "queryLength": 46
+        }
+      },
+      "finalRank": 3,
+      "entryBucket": "aggregation_drop",
+      "bestCorrectRrfRank": 15,
+      "bestCorrectAtomicType": "KP",
+      "finalTopDocs": [
+        {
+          "rank": 1,
+          "otid": "otid_455a359913d243d9",
+          "title": "关于启动2020年中山大学博士生国外访学与合作研究项目资助计划的通知",
+          "score": 1.4566850534638454,
+          "bestKpid": "kpid_58ea233d7392484f",
+          "kpEvidenceGroupCounts": {
+            "requirement": 1,
+            "post_outcome": 1,
+            "timeline": 1
+          }
+        },
+        {
+          "rank": 2,
+          "otid": "otid_fb11f16dc2564248",
+          "title": "关于下达2017年中山大学博士生国外访学与合作研究项目资助计划的通知",
+          "score": 1.3566926281949598,
+          "bestKpid": "kpid_209f56343f6549ff",
+          "kpEvidenceGroupCounts": {
+            "timeline": 4,
+            "requirement": 2,
+            "post_outcome": 1
+          }
+        },
+        {
+          "rank": 3,
+          "otid": "otid_72560bd680b24a42",
+          "title": "关于启动2019年中山大学博士生国外访学与合作研究项目资助计划的通知",
+          "score": 1.350876949700248,
+          "bestKpid": "kpid_438161e195a7432b",
+          "kpEvidenceGroupCounts": {
+            "requirement": 2,
+            "timeline": 4
+          }
+        },
+        {
+          "rank": 4,
+          "otid": "otid_8f3b2fa91c544f99",
+          "title": "关于下达2018年中山大学博士生国外访学与合作研究项目资助计划的通知",
+          "score": 1.1585097683289676,
+          "bestKpid": "kpid_7138ec462dab4333",
+          "kpEvidenceGroupCounts": {
+            "requirement": 3,
+            "timeline": 5,
+            "post_outcome": 1
+          }
+        },
+        {
+          "rank": 5,
+          "otid": "otid_42791a5498da4c46",
+          "title": "关于领取2018年国家公派研究生项目录取材料及办理出国境相关手续的通知",
+          "score": 1.1507898639785399,
+          "bestKpid": "kpid_90b5e8af1e044488",
+          "kpEvidenceGroupCounts": {
+            "requirement": 4,
+            "timeline": 2,
+            "post_outcome": 1
+          }
+        },
+        {
+          "rank": 6,
+          "otid": "otid_a437e6ddbf7e4cad",
+          "title": "关于公布2017年中山大学博士生国外访学与合作研究项目第二批资助名单的通知",
+          "score": 1.0910380143366099,
+          "bestKpid": "kpid_4c8687a4bd0f4186",
+          "kpEvidenceGroupCounts": {
+            "requirement": 1,
+            "timeline": 3
+          }
+        },
+        {
+          "rank": 7,
+          "otid": "otid_784b354d2f6e407d",
+          "title": "关于下达2017年中山大学研究生参加国际学术会议资助计划的通知",
+          "score": 1.082407903460535,
+          "bestKpid": "kpid_7058e87abf034afd",
+          "kpEvidenceGroupCounts": {
+            "requirement": 1,
+            "post_outcome": 2,
+            "timeline": 1
+          }
+        },
+        {
+          "rank": 8,
+          "otid": "otid_dd4203f5c9ee4ac7",
+          "title": "关于公派研究生出国项目结项要求的通知",
+          "score": 1.0630318152210876,
+          "bestKpid": "kpid_a2db45f55f884454",
+          "kpEvidenceGroupCounts": {
+            "requirement": 3,
+            "post_outcome": 2,
+            "timeline": 1
+          }
+        },
+        {
+          "rank": 9,
+          "otid": "otid_531662467632436a",
+          "title": "关于启动2021年中山大学博士生国外访学与合作研究项目资助计划的通知",
+          "score": 1.04376275145166,
+          "bestKpid": "kpid_3b5a53ea5fd44995",
+          "kpEvidenceGroupCounts": {
+            "requirement": 2,
+            "timeline": 3
+          }
+        },
+        {
+          "rank": 10,
+          "otid": "otid_dd1bdc2782194207",
+          "title": "关于启动2023年中山大学博士生国外访学与合作研究项目资助计划的通知",
+          "score": 0.9811170877117046,
+          "bestKpid": "kpid_49c32f7bc00f4f69",
+          "kpEvidenceGroupCounts": {
+            "requirement": 2,
+            "post_outcome": 1,
+            "timeline": 1
+          }
+        }
+      ],
+      "correctDocCandidates": [
+        {
+          "id": "kpid_438161e195a7432b",
+          "otid": "otid_72560bd680b24a42",
+          "type": "KP",
+          "denseScore": 305.278564453125,
+          "sparseScore": 26.027441024780273,
+          "denseRank": 37,
+          "sparseRank": 29,
+          "rrfScore": 2.379242441793119,
+          "rrfRank": 15,
+          "kpRoleTags": [
+            "time_expression",
+            "materials"
+          ]
+        },
+        {
+          "id": "qid_a0794cdd119a4f22",
+          "otid": "otid_72560bd680b24a42",
+          "type": "Q",
+          "parentPkid": "kpid_438161e195a7432b",
+          "denseScore": 299.75164794921875,
+          "sparseScore": 25.354520797729492,
+          "denseRank": 49,
+          "sparseRank": 33,
+          "rrfScore": 2.207753773305712,
+          "rrfRank": 22
+        },
+        {
+          "id": "kpid_e9300d074e474456",
+          "otid": "otid_72560bd680b24a42",
+          "type": "KP",
+          "denseScore": 272.8671569824219,
+          "sparseScore": 26.485706329345703,
+          "denseRank": 241,
+          "sparseRank": 25,
+          "rrfScore": 1.7439906195036152,
+          "rrfRank": 42,
+          "kpRoleTags": [
+            "time_expression",
+            "materials",
+            "publish"
+          ]
+        },
+        {
+          "id": "otid_72560bd680b24a42",
+          "otid": "otid_72560bd680b24a42",
+          "type": "OT",
+          "denseScore": 253.25750732421875,
+          "sparseScore": 29.245115280151367,
+          "denseRank": 666,
+          "sparseRank": 16,
+          "rrfScore": 1.7166884152530086,
+          "rrfRank": 45
+        },
+        {
+          "id": "qid_5d03df7f39ed4c82",
+          "otid": "otid_72560bd680b24a42",
+          "type": "Q",
+          "parentPkid": "kpid_e9300d074e474456",
+          "denseScore": 272.0755920410156,
+          "sparseScore": 21.718666076660156,
+          "denseRank": 247,
+          "sparseRank": 46,
+          "rrfScore": 1.4578083707209144,
+          "rrfRank": 65
+        },
+        {
+          "id": "qid_d546e6676808443f",
+          "otid": "otid_72560bd680b24a42",
+          "type": "Q",
+          "parentPkid": "kpid_438161e195a7432b",
+          "denseScore": 296.6339416503906,
+          "sparseScore": 13.480538368225098,
+          "denseRank": 59,
+          "sparseRank": 199,
+          "rrfScore": 1.303656597774245,
+          "rrfRank": 86
+        },
+        {
+          "id": "qid_d192cd5908be4792",
+          "otid": "otid_72560bd680b24a42",
+          "type": "Q",
+          "parentPkid": "kpid_e9300d074e474456",
+          "denseScore": 290.81549072265625,
+          "sparseScore": 11.803725242614746,
+          "denseRank": 83,
+          "sparseRank": 306,
+          "rrfScore": 1.0271695517597157,
+          "rrfRank": 137
+        },
+        {
+          "id": "kpid_7612608958714953",
+          "otid": "otid_72560bd680b24a42",
+          "type": "KP",
+          "denseScore": 286.7543029785156,
+          "sparseScore": 9.843344688415527,
+          "denseRank": 113,
+          "sparseRank": 545,
+          "rrfScore": 0.7763817895189413,
+          "rrfRank": 207,
+          "kpRoleTags": [
+            "time_expression",
+            "background"
+          ]
+        },
+        {
+          "id": "qid_a4a52099a3104951",
+          "otid": "otid_72560bd680b24a42",
+          "type": "Q",
+          "parentPkid": "kpid_edb9428832d642a9",
+          "denseScore": 270.7546081542969,
+          "sparseScore": 10.96113395690918,
+          "denseRank": 273,
+          "sparseRank": 394,
+          "rrfScore": 0.5646174809170403,
+          "rrfRank": 292
+        },
+        {
+          "id": "qid_cd1458594ea7424b",
+          "otid": "otid_72560bd680b24a42",
+          "type": "Q",
+          "parentPkid": "kpid_edb9428832d642a9",
+          "denseScore": 257.7314758300781,
+          "sparseScore": 12.410014152526855,
+          "denseRank": 528,
+          "sparseRank": 271,
+          "rrfScore": 0.5326057915613375,
+          "rrfRank": 315
+        },
+        {
+          "id": "kpid_edb9428832d642a9",
+          "otid": "otid_72560bd680b24a42",
+          "type": "KP",
+          "denseScore": 267.1607360839844,
+          "sparseScore": 10.731369018554688,
+          "denseRank": 314,
+          "sparseRank": 421,
+          "rrfScore": 0.5168599286246345,
+          "rrfRank": 330,
+          "kpRoleTags": [
+            "thesis"
+          ]
+        },
+        {
+          "id": "qid_97a87843dafd4782",
+          "otid": "otid_72560bd680b24a42",
+          "type": "Q",
+          "parentPkid": "kpid_7612608958714953",
+          "denseScore": 278.6602783203125,
+          "sparseScore": 7.7070136070251465,
+          "denseRank": 181,
+          "sparseRank": 1142,
+          "rrfScore": 0.514771369985018,
+          "rrfRank": 332
+        },
+        {
+          "id": "qid_83c390d918ff4ab3",
+          "otid": "otid_72560bd680b24a42",
+          "type": "Q",
+          "parentPkid": "kpid_83883b7c151e416c",
+          "denseScore": 277.7907409667969,
+          "sparseScore": 7.532956123352051,
+          "denseRank": 188,
+          "sparseRank": 1215,
+          "rrfScore": 0.4973434535104364,
+          "rrfRank": 346
+        },
+        {
+          "id": "qid_cd6c058838044ec5",
+          "otid": "otid_72560bd680b24a42",
+          "type": "Q",
+          "parentPkid": "kpid_e9300d074e474456",
+          "denseScore": 248.2545928955078,
+          "sparseScore": 11.702247619628906,
+          "denseRank": 866,
+          "sparseRank": 316,
+          "rrfScore": 0.4271402968613575,
+          "rrfRank": 417
+        },
+        {
+          "id": "qid_9a36c6d6315f45bc",
+          "otid": "otid_72560bd680b24a42",
+          "type": "Q",
+          "parentPkid": "kpid_edb9428832d642a9",
+          "denseScore": 266.7138671875,
+          "sparseScore": 9.072744369506836,
+          "denseRank": 323,
+          "sparseRank": 705,
+          "rrfScore": 0.41795935084216457,
+          "rrfRank": 435
+        },
+        {
+          "id": "qid_8570e53fc29a41c9",
+          "otid": "otid_72560bd680b24a42",
+          "type": "Q",
+          "parentPkid": "kpid_83883b7c151e416c",
+          "denseScore": 262.7780456542969,
+          "sparseScore": 7.950793743133545,
+          "denseRank": 392,
+          "sparseRank": 1089,
+          "rrfScore": 0.32567758035074745,
+          "rrfRank": 590
+        },
+        {
+          "id": "qid_76ed91b1976145a7",
+          "otid": "otid_72560bd680b24a42",
+          "type": "Q",
+          "parentPkid": "kpid_7612608958714953",
+          "denseScore": 259.9172058105469,
+          "sparseScore": 8.651567459106445,
+          "denseRank": 459,
+          "sparseRank": 850,
+          "rrfScore": 0.32454635922844016,
+          "rrfRank": 594
+        },
+        {
+          "id": "kpid_83883b7c151e416c",
+          "otid": "otid_72560bd680b24a42",
+          "type": "KP",
+          "denseScore": 246.8264617919922,
+          "sparseScore": 10.129476547241211,
+          "denseRank": 942,
+          "sparseRank": 502,
+          "rrfScore": 0.3133235308741946,
+          "rrfRank": 615,
+          "kpRoleTags": [
+            "time_expression"
+          ]
+        },
+        {
+          "id": "qid_244a274483f64900",
+          "otid": "otid_72560bd680b24a42",
+          "type": "Q",
+          "parentPkid": "kpid_7612608958714953",
+          "denseScore": 239.95053100585938,
+          "sparseScore": 9.536810874938965,
+          "denseRank": 1314,
+          "sparseRank": 587,
+          "rrfScore": 0.25825161027606985,
+          "rrfRank": 765
+        },
+        {
+          "id": "qid_f1a7ddb699004d7d",
+          "otid": "otid_72560bd680b24a42",
+          "type": "Q",
+          "parentPkid": "kpid_e9300d074e474456",
+          "denseScore": 257.60113525390625,
+          "sparseScore": 6.581204891204834,
+          "denseRank": 537,
+          "sparseRank": 1757,
+          "rrfScore": 0.23354711550782717,
+          "rrfRank": 874
+        }
+      ],
+      "topDocs": [
+        {
+          "otid": "otid_1e4c2112a331417e",
+          "title": "关于组织开展2023年广东省高校优秀青年科研人才国际培养计划的通知",
+          "bestRrfScore": 3.138461538461539,
+          "bestRrfRank": 1,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_c54bbe8d3e4d42e9",
+          "title": "关于公布2017年中山大学研究生参加国际学术会议第三批资助名单的通知",
+          "bestRrfScore": 2.9475587703435804,
+          "bestRrfRank": 2,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_dd1bdc2782194207",
+          "title": "关于启动2023年中山大学博士生国外访学与合作研究项目资助计划的通知",
+          "bestRrfScore": 2.893835616438356,
+          "bestRrfRank": 3,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_42791a5498da4c46",
+          "title": "关于领取2018年国家公派研究生项目录取材料及办理出国境相关手续的通知",
+          "bestRrfScore": 2.786989795918367,
+          "bestRrfRank": 4,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_abb3158a1c2747c6",
+          "title": "关于启动2021年中山大学研究生参加国际学术会议资助计划的通知",
+          "bestRrfScore": 2.691622103386809,
+          "bestRrfRank": 5,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_531662467632436a",
+          "title": "关于启动2021年中山大学博士生国外访学与合作研究项目资助计划的通知",
+          "bestRrfScore": 2.6521446216034135,
+          "bestRrfRank": 6,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_dcaea3047c9645ff",
+          "title": "关于启动2019年中山大学研究生参加国际学术会议资助计划的通知",
+          "bestRrfScore": 2.56986301369863,
+          "bestRrfRank": 7,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_455a359913d243d9",
+          "title": "关于启动2020年中山大学博士生国外访学与合作研究项目资助计划的通知",
+          "bestRrfScore": 2.5602755453501724,
+          "bestRrfRank": 8,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_afd67d4b1e9e427e",
+          "title": "关于启动2022年中山大学博士生国外访学与合作研究项目资助计划的通知",
+          "bestRrfScore": 2.5448416997712773,
+          "bestRrfRank": 9,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_d399773853264504",
+          "title": "关于启动2019年中山大学研究生参加国际学术会议资助计划的通知",
+          "bestRrfScore": 2.51604621309371,
+          "bestRrfRank": 11,
+          "bestType": "KP"
+        }
+      ],
+      "topAtomicCandidates": [
+        {
+          "id": "kpid_9fba3ceed48046db",
+          "otid": "otid_1e4c2112a331417e",
+          "type": "KP",
+          "denseScore": 329.3064880371094,
+          "sparseScore": 29.287357330322266,
+          "denseRank": 5,
+          "sparseRank": 15,
+          "rrfScore": 3.138461538461539,
+          "rrfRank": 1,
+          "kpRoleTags": [
+            "materials"
+          ]
+        },
+        {
+          "id": "kpid_011dd61cda1a4ee5",
+          "otid": "otid_c54bbe8d3e4d42e9",
+          "type": "KP",
+          "denseScore": 319.1904602050781,
+          "sparseScore": 27.760995864868164,
+          "denseRank": 10,
+          "sparseRank": 19,
+          "rrfScore": 2.9475587703435804,
+          "rrfRank": 2,
+          "kpRoleTags": []
+        },
+        {
+          "id": "kpid_49c32f7bc00f4f69",
+          "otid": "otid_dd1bdc2782194207",
+          "type": "KP",
+          "denseScore": 313.9250793457031,
+          "sparseScore": 29.702749252319336,
+          "denseRank": 20,
+          "sparseRank": 13,
+          "rrfScore": 2.893835616438356,
+          "rrfRank": 3,
+          "kpRoleTags": [
+            "materials",
+            "post_outcome",
+            "thesis"
+          ]
+        },
+        {
+          "id": "kpid_90b5e8af1e044488",
+          "otid": "otid_42791a5498da4c46",
+          "type": "KP",
+          "denseScore": 331.0899963378906,
+          "sparseScore": 23.432727813720703,
+          "denseRank": 4,
+          "sparseRank": 38,
+          "rrfScore": 2.786989795918367,
+          "rrfRank": 4,
+          "kpRoleTags": [
+            "materials",
+            "background"
+          ]
+        },
+        {
+          "id": "kpid_155af136b8f84678",
+          "otid": "otid_abb3158a1c2747c6",
+          "type": "KP",
+          "denseScore": 322.24407958984375,
+          "sparseScore": 22.370838165283203,
+          "denseRank": 6,
+          "sparseRank": 42,
+          "rrfScore": 2.691622103386809,
+          "rrfRank": 5,
+          "kpRoleTags": [
+            "materials",
+            "post_outcome",
+            "thesis"
+          ]
+        },
+        {
+          "id": "kpid_3b5a53ea5fd44995",
+          "otid": "otid_531662467632436a",
+          "type": "KP",
+          "denseScore": 290.4561767578125,
+          "sparseScore": 34.436405181884766,
+          "denseRank": 86,
+          "sparseRank": 1,
+          "rrfScore": 2.6521446216034135,
+          "rrfRank": 6,
+          "kpRoleTags": [
+            "time_expression",
+            "materials"
+          ]
+        },
+        {
+          "id": "kpid_0ce5e8c5357a41d9",
+          "otid": "otid_dcaea3047c9645ff",
+          "type": "KP",
+          "denseScore": 317.763916015625,
+          "sparseScore": 22.926008224487305,
+          "denseRank": 13,
+          "sparseRank": 40,
+          "rrfScore": 2.56986301369863,
+          "rrfRank": 7,
+          "kpRoleTags": [
+            "materials",
+            "post_outcome"
+          ]
+        },
+        {
+          "id": "kpid_58ea233d7392484f",
+          "otid": "otid_455a359913d243d9",
+          "type": "KP",
+          "denseScore": 294.3404541015625,
+          "sparseScore": 30.93423080444336,
+          "denseRank": 70,
+          "sparseRank": 7,
+          "rrfScore": 2.5602755453501724,
+          "rrfRank": 8,
+          "kpRoleTags": [
+            "materials",
+            "post_outcome"
+          ]
+        },
+        {
+          "id": "kpid_84205b435e634234",
+          "otid": "otid_afd67d4b1e9e427e",
+          "type": "KP",
+          "denseScore": 296.8982849121094,
+          "sparseScore": 29.997360229492188,
+          "denseRank": 57,
+          "sparseRank": 11,
+          "rrfScore": 2.5448416997712773,
+          "rrfRank": 9,
+          "kpRoleTags": [
+            "materials",
+            "post_outcome"
+          ]
+        },
+        {
+          "id": "kpid_03f631a3545b4bf9",
+          "otid": "otid_dd1bdc2782194207",
+          "type": "KP",
+          "denseScore": 333.39990234375,
+          "sparseScore": 20.074251174926758,
+          "denseRank": 3,
+          "sparseRank": 67,
+          "rrfScore": 2.5321834770653666,
+          "rrfRank": 10,
+          "kpRoleTags": [
+            "materials",
+            "background"
+          ]
+        }
+      ]
+    },
+    {
+      "query": "如果我想转入软件工程学院 本科转专业的资格要求 初试面试和最终录取规则要一起看哪些要点",
+      "expectedOtid": "otid_6010e10f0bd24934",
+      "expectedTitle": "软件工程学院关于印发《软件工程学院接收本科生转院系专业实施细则》的通知",
+      "queryScope": "policy_overview",
+      "queryType": "situational",
+      "supportPattern": "multi_kp",
+      "preferredGranularity": "KP+OT",
+      "themeFamily": "软件工程转专业政策",
+      "badCase": {
+        "docHitAt1": false,
+        "docHitAt5": true,
+        "kpidHitAt1": false,
+        "supportFullCoverTop5": false,
+        "failureRisk": "partial_multi_kp_coverage",
+        "failureReasons": [
+          "正确文档进入前5但未到第1名，存在文档级排序偏差。",
+          "正确文档命中后，主证据 KP 选择仍不够准确。",
+          "正确文档命中后，仅覆盖了部分同等重要的证据方面。",
+          "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+        ]
+      },
+      "queryIntent": {
+        "rawQuery": "如果我想转入软件工程学院 本科转专业的资格要求 初试面试和最终录取规则要一起看哪些要点",
+        "years": [],
+        "months": [],
+        "topicIds": [
+          "graduate_admission",
+          "academic_affairs"
+        ],
+        "subtopicIds": [
+          "master_unified_exam"
+        ],
+        "intentIds": [
+          "master_unified_exam"
+        ],
+        "degreeLevels": [
+          "本科"
+        ],
+        "eventTypes": [
+          "资格要求"
+        ],
+        "normalizedTerms": [
+          "统考硕士"
+        ],
+        "confidence": 1,
+        "preferLatest": true,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": false,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": true,
+          "hasLatestPolicyState": true,
+          "hasGenericNextStep": false,
+          "hasPostOutcomeOperationalCue": false,
+          "hasMultiSlotConstraintCue": false,
+          "queryLength": 43
+        }
+      },
+      "finalRank": 2,
+      "entryBucket": "aggregation_drop",
+      "bestCorrectRrfRank": 3,
+      "bestCorrectAtomicType": "KP",
+      "finalTopDocs": [
+        {
+          "rank": 1,
+          "otid": "otid_67d3c146cf8c48b8",
+          "title": "软件工程学院关于印发《软件工程学院接收本科生转专业实施细则》的通知",
+          "score": 1.2483371080690029,
+          "bestKpid": "kpid_8258b859b3fa4055",
+          "kpEvidenceGroupCounts": {
+            "timeline": 2,
+            "post_outcome": 1
+          }
+        },
+        {
+          "rank": 2,
+          "otid": "otid_6010e10f0bd24934",
+          "title": "软件工程学院关于印发《软件工程学院接收本科生转院系专业实施细则》的通知",
+          "score": 1.1618596123624934,
+          "bestKpid": "kpid_78e51a129eff4f46",
+          "kpEvidenceGroupCounts": {
+            "post_outcome": 1,
+            "timeline": 1
+          }
+        },
+        {
+          "rank": 3,
+          "otid": "otid_ed940aabc9c24803",
+          "title": "软件工程学院2025年面向港澳台地区招收研究生招生复试录取实施细则",
+          "score": 0.8613230754866424,
+          "bestKpid": "kpid_7d3f8a1dcb06440e",
+          "kpEvidenceGroupCounts": {
+            "timeline": 3,
+            "requirement": 2,
+            "procedure": 2
+          }
+        },
+        {
+          "rank": 4,
+          "otid": "otid_1ae107c08e73431e",
+          "title": "软件工程学院2026年硕士研究生复试录取实施细则",
+          "score": 0.8500340315584579,
+          "bestKpid": "kpid_4b8458c31ef04d55",
+          "kpEvidenceGroupCounts": {
+            "requirement": 2,
+            "procedure": 2,
+            "timeline": 3
+          }
+        },
+        {
+          "rank": 5,
+          "otid": "otid_44984069cc2b4f1f",
+          "title": "软件工程学院关于开展本科生2024-2025学年综合素质测评工作的通知",
+          "score": 0.8464463809178298,
+          "bestKpid": "kpid_01a3b5d6cc624515",
+          "kpEvidenceGroupCounts": {
+            "timeline": 1
+          }
+        },
+        {
+          "rank": 6,
+          "otid": "otid_a2f94115e88244d4",
+          "title": "中山大学人工智能学院2021年硕士研究生调剂公告",
+          "score": 0.8290354214245651,
+          "bestKpid": "kpid_43b9659d9943436b",
+          "kpEvidenceGroupCounts": {}
+        },
+        {
+          "rank": 7,
+          "otid": "otid_54fc4d3ca3a94536",
+          "title": "中山大学人工智能学院2024年硕士研究生复试录取方案",
+          "score": 0.7554220585074938,
+          "bestKpid": "kpid_c2b8b4cddc934e3a",
+          "kpEvidenceGroupCounts": {
+            "requirement": 1,
+            "procedure": 1,
+            "timeline": 1
+          }
+        },
+        {
+          "rank": 8,
+          "otid": "otid_752547880f7e4c3a",
+          "title": "关于2022学年秋季学期研究生新生报到注册有关事项的通知",
+          "score": 0.6974197473335403,
+          "bestKpid": "kpid_8c86407add4246c8",
+          "kpEvidenceGroupCounts": {
+            "requirement": 1
+          }
+        },
+        {
+          "rank": 9,
+          "otid": "otid_b2a1cc3ccb21453c",
+          "title": "中山大学关于马克思主义学院2018年以“申请—考核”制招收博士研究生（第二批）的通知",
+          "score": 0.6944635414182306,
+          "bestKpid": "kpid_e19a712a3e1f4bbf",
+          "kpEvidenceGroupCounts": {
+            "post_outcome": 1
+          }
+        },
+        {
+          "rank": 10,
+          "otid": "otid_f86cd11add664a2c",
+          "title": "中山大学软件工程学院2026年接收优秀应届本科毕业生推荐免试攻读研究生预报名通知",
+          "score": 0.6891764672296702,
+          "bestKpid": "kpid_a797ca0c89114a35",
+          "kpEvidenceGroupCounts": {
+            "requirement": 1,
+            "timeline": 2,
+            "post_outcome": 1
+          }
+        }
+      ],
+      "correctDocCandidates": [
+        {
+          "id": "kpid_78e51a129eff4f46",
+          "otid": "otid_6010e10f0bd24934",
+          "type": "KP",
+          "denseScore": 284.86163330078125,
+          "sparseScore": 17.817781448364258,
+          "denseRank": 84,
+          "sparseRank": 13,
+          "rrfScore": 2.3382800608828003,
+          "rrfRank": 3,
+          "kpRoleTags": [
+            "publish",
+            "background",
+            "post_outcome"
+          ]
+        },
+        {
+          "id": "qid_a7b8c79d7a654ce7",
+          "otid": "otid_6010e10f0bd24934",
+          "type": "Q",
+          "parentPkid": "kpid_e982314692894cb5",
+          "denseScore": 314.925048828125,
+          "sparseScore": 13.907590866088867,
+          "denseRank": 17,
+          "sparseRank": 60,
+          "rrfScore": 2.2987012987012987,
+          "rrfRank": 4
+        },
+        {
+          "id": "qid_5ced0e98091c4708",
+          "otid": "otid_6010e10f0bd24934",
+          "type": "Q",
+          "parentPkid": "kpid_e982314692894cb5",
+          "denseScore": 316.5062255859375,
+          "sparseScore": 12.94650650024414,
+          "denseRank": 15,
+          "sparseRank": 99,
+          "rrfScore": 2.0880503144654092,
+          "rrfRank": 9
+        },
+        {
+          "id": "otid_6010e10f0bd24934",
+          "otid": "otid_6010e10f0bd24934",
+          "type": "OT",
+          "denseScore": 188.6393585205078,
+          "sparseScore": 23.94517707824707,
+          "denseRank": null,
+          "sparseRank": 1,
+          "rrfScore": 1.9672131147540985,
+          "rrfRank": 15
+        },
+        {
+          "id": "qid_9efe08b658ba4737",
+          "otid": "otid_6010e10f0bd24934",
+          "type": "Q",
+          "parentPkid": "kpid_e982314692894cb5",
+          "denseScore": 277.1800537109375,
+          "sparseScore": 15.986001014709473,
+          "denseRank": 142,
+          "sparseRank": 24,
+          "rrfScore": 1.9236209335219234,
+          "rrfRank": 16
+        },
+        {
+          "id": "kpid_57c21e1fca8d41e3",
+          "otid": "otid_6010e10f0bd24934",
+          "type": "KP",
+          "denseScore": 355.3098449707031,
+          "sparseScore": 9.277713775634766,
+          "denseRank": 2,
+          "sparseRank": 475,
+          "rrfScore": 1.8372022912270123,
+          "rrfRank": 22,
+          "kpRoleTags": []
+        },
+        {
+          "id": "qid_53aefb03ef2c4ae8",
+          "otid": "otid_6010e10f0bd24934",
+          "type": "Q",
+          "parentPkid": "kpid_69b94187f84e4c63",
+          "denseScore": 275.70172119140625,
+          "sparseScore": 14.61377239227295,
+          "denseRank": 156,
+          "sparseRank": 41,
+          "rrfScore": 1.651081774844151,
+          "rrfRank": 33
+        },
+        {
+          "id": "kpid_2fdc184dbe054e46",
+          "otid": "otid_6010e10f0bd24934",
+          "type": "KP",
+          "denseScore": 320.75726318359375,
+          "sparseScore": 7.330106735229492,
+          "denseRank": 11,
+          "sparseRank": 1053,
+          "rrfScore": 1.5162674158156488,
+          "rrfRank": 51,
+          "kpRoleTags": [
+            "publish"
+          ]
+        },
+        {
+          "id": "qid_12fa5f6544164d72",
+          "otid": "otid_6010e10f0bd24934",
+          "type": "Q",
+          "parentPkid": "kpid_78e51a129eff4f46",
+          "denseScore": 257.70294189453125,
+          "sparseScore": 13.941091537475586,
+          "denseRank": 458,
+          "sparseRank": 59,
+          "rrfScore": 1.201453554394731,
+          "rrfRank": 86
+        },
+        {
+          "id": "kpid_a34d0a16e8944532",
+          "otid": "otid_6010e10f0bd24934",
+          "type": "KP",
+          "denseScore": 295.9667053222656,
+          "sparseScore": 7.310497283935547,
+          "denseRank": 36,
+          "sparseRank": 1069,
+          "rrfScore": 1.147955417773841,
+          "rrfRank": 100,
+          "kpRoleTags": [
+            "time_expression",
+            "publish",
+            "background"
+          ]
+        },
+        {
+          "id": "kpid_69b94187f84e4c63",
+          "otid": "otid_6010e10f0bd24934",
+          "type": "KP",
+          "denseScore": 289.5998229980469,
+          "sparseScore": 9.856178283691406,
+          "denseRank": 55,
+          "sparseRank": 373,
+          "rrfScore": 1.1467014760518124,
+          "rrfRank": 101,
+          "kpRoleTags": [
+            "background"
+          ]
+        },
+        {
+          "id": "qid_1c7bdfefbe4041d8",
+          "otid": "otid_6010e10f0bd24934",
+          "type": "Q",
+          "parentPkid": "kpid_78e51a129eff4f46",
+          "denseScore": 292.80596923828125,
+          "sparseScore": 6.261990070343018,
+          "denseRank": 44,
+          "sparseRank": 1612,
+          "rrfScore": 1.0333087964666912,
+          "rrfRank": 118
+        },
+        {
+          "id": "qid_ea1e96d19b204a5a",
+          "otid": "otid_6010e10f0bd24934",
+          "type": "Q",
+          "parentPkid": "kpid_69b94187f84e4c63",
+          "denseScore": 288.98052978515625,
+          "sparseScore": 8.989237785339355,
+          "denseRank": 60,
+          "sparseRank": 548,
+          "rrfScore": 1.030701754385965,
+          "rrfRank": 119
+        },
+        {
+          "id": "kpid_e982314692894cb5",
+          "otid": "otid_6010e10f0bd24934",
+          "type": "KP",
+          "denseScore": 236.16041564941406,
+          "sparseScore": 13.538790702819824,
+          "denseRank": 1399,
+          "sparseRank": 76,
+          "rrfScore": 0.9508930371326049,
+          "rrfRank": 136,
+          "kpRoleTags": []
+        },
+        {
+          "id": "qid_cd94ffa52fcb4bed",
+          "otid": "otid_6010e10f0bd24934",
+          "type": "Q",
+          "parentPkid": "kpid_167e0177028d433d",
+          "denseScore": 251.40829467773438,
+          "sparseScore": 12.819019317626953,
+          "denseRank": 652,
+          "sparseRank": 110,
+          "rrfScore": 0.8463317911434236,
+          "rrfRank": 167
+        },
+        {
+          "id": "kpid_167e0177028d433d",
+          "otid": "otid_6010e10f0bd24934",
+          "type": "KP",
+          "denseScore": 251.8345184326172,
+          "sparseScore": 12.77432632446289,
+          "denseRank": 639,
+          "sparseRank": 112,
+          "rrfScore": 0.8407359350567256,
+          "rrfRank": 173,
+          "kpRoleTags": [
+            "time_expression",
+            "publish",
+            "background"
+          ]
+        },
+        {
+          "id": "qid_fa693c3c6b974efe",
+          "otid": "otid_6010e10f0bd24934",
+          "type": "Q",
+          "parentPkid": "kpid_57c21e1fca8d41e3",
+          "denseScore": 217.94122314453125,
+          "sparseScore": 12.16628360748291,
+          "denseRank": 3071,
+          "sparseRank": 136,
+          "rrfScore": 0.6441835756979252,
+          "rrfRank": 256
+        },
+        {
+          "id": "qid_8464304335a843bb",
+          "otid": "otid_6010e10f0bd24934",
+          "type": "Q",
+          "parentPkid": "kpid_2fdc184dbe054e46",
+          "denseScore": 275.0071716308594,
+          "sparseScore": 8.422636032104492,
+          "denseRank": 166,
+          "sparseRank": 673,
+          "rrfScore": 0.6061886537323884,
+          "rrfRank": 282
+        },
+        {
+          "id": "qid_9beb55963f424956",
+          "otid": "otid_6010e10f0bd24934",
+          "type": "Q",
+          "parentPkid": "kpid_57c21e1fca8d41e3",
+          "denseScore": 273.54949951171875,
+          "sparseScore": 8.07116985321045,
+          "denseRank": 190,
+          "sparseRank": 781,
+          "rrfScore": 0.5426872770511296,
+          "rrfRank": 334
+        },
+        {
+          "id": "qid_1db14c31bcc04ea8",
+          "otid": "otid_6010e10f0bd24934",
+          "type": "Q",
+          "parentPkid": "kpid_167e0177028d433d",
+          "denseScore": 194.311279296875,
+          "sparseScore": 11.756126403808594,
+          "denseRank": null,
+          "sparseRank": 163,
+          "rrfScore": 0.5381165919282511,
+          "rrfRank": 337
+        },
+        {
+          "id": "qid_07eba008927049ac",
+          "otid": "otid_6010e10f0bd24934",
+          "type": "Q",
+          "parentPkid": "kpid_167e0177028d433d",
+          "denseScore": 234.84288024902344,
+          "sparseScore": 10.878695487976074,
+          "denseRank": 1505,
+          "sparseRank": 241,
+          "rrfScore": 0.4625688599237897,
+          "rrfRank": 412
+        },
+        {
+          "id": "qid_66dd06af024f4061",
+          "otid": "otid_6010e10f0bd24934",
+          "type": "Q",
+          "parentPkid": "kpid_78e51a129eff4f46",
+          "denseScore": 197.9546356201172,
+          "sparseScore": 10.88287353515625,
+          "denseRank": null,
+          "sparseRank": 238,
+          "rrfScore": 0.40268456375838924,
+          "rrfRank": 479
+        },
+        {
+          "id": "qid_005d127da8da4de3",
+          "otid": "otid_6010e10f0bd24934",
+          "type": "Q",
+          "parentPkid": "kpid_78e51a129eff4f46",
+          "denseScore": 245.7084197998047,
+          "sparseScore": 9.951800346374512,
+          "denseRank": 893,
+          "sparseRank": 366,
+          "rrfScore": 0.38662193517875354,
+          "rrfRank": 501
+        },
+        {
+          "id": "qid_b0b342abd70146cf",
+          "otid": "otid_6010e10f0bd24934",
+          "type": "Q",
+          "parentPkid": "kpid_69b94187f84e4c63",
+          "denseScore": 258.98876953125,
+          "sparseScore": 7.102875709533691,
+          "denseRank": 439,
+          "sparseRank": 1178,
+          "rrfScore": 0.29733133472113854,
+          "rrfRank": 694
+        },
+        {
+          "id": "qid_d15e677f6a684102",
+          "otid": "otid_6010e10f0bd24934",
+          "type": "Q",
+          "parentPkid": "kpid_2fdc184dbe054e46",
+          "denseScore": 210.67649841308594,
+          "sparseScore": 9.71674633026123,
+          "denseRank": 3977,
+          "sparseRank": 399,
+          "rrfScore": 0.28620877795425,
+          "rrfRank": 725
+        },
+        {
+          "id": "qid_2f7efee319d049be",
+          "otid": "otid_6010e10f0bd24934",
+          "type": "Q",
+          "parentPkid": "kpid_57c21e1fca8d41e3",
+          "denseScore": 241.37667846679688,
+          "sparseScore": 8.94786262512207,
+          "denseRank": 1089,
+          "sparseRank": 556,
+          "rrfScore": 0.28183739671990327,
+          "rrfRank": 734
+        },
+        {
+          "id": "qid_8043a69c945a48ed",
+          "otid": "otid_6010e10f0bd24934",
+          "type": "Q",
+          "parentPkid": "kpid_167e0177028d433d",
+          "denseScore": 193.53182983398438,
+          "sparseScore": 9.76797103881836,
+          "denseRank": null,
+          "sparseRank": 391,
+          "rrfScore": 0.2660753880266075,
+          "rrfRank": 782
+        },
+        {
+          "id": "qid_3d35c05aa2ec41b7",
+          "otid": "otid_6010e10f0bd24934",
+          "type": "Q",
+          "parentPkid": "kpid_a34d0a16e8944532",
+          "denseScore": 239.84002685546875,
+          "sparseScore": 8.457322120666504,
+          "denseRank": 1167,
+          "sparseRank": 662,
+          "rrfScore": 0.247704578651622,
+          "rrfRank": 831
+        }
+      ],
+      "topDocs": [
+        {
+          "otid": "otid_67d3c146cf8c48b8",
+          "title": "软件工程学院关于印发《软件工程学院接收本科生转专业实施细则》的通知",
+          "bestRrfScore": 2.8056628056628057,
+          "bestRrfRank": 1,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_a2f94115e88244d4",
+          "title": "中山大学人工智能学院2021年硕士研究生调剂公告",
+          "bestRrfScore": 2.612942612942613,
+          "bestRrfRank": 2,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_6010e10f0bd24934",
+          "title": "软件工程学院关于印发《软件工程学院接收本科生转院系专业实施细则》的通知",
+          "bestRrfScore": 2.3382800608828003,
+          "bestRrfRank": 3,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_3c8fbcf6bdb24c95",
+          "title": "研究生院关于2020学年秋季学期研究生新生报到注册有关事项的通知",
+          "bestRrfScore": 2.280304589421692,
+          "bestRrfRank": 5,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_d2c7f1cd37464fbf",
+          "title": "中山大学软件工程学院2025年以“申请-考核”制招收博士研究生改报志愿公告（第二批）",
+          "bestRrfScore": 2.2746578574799434,
+          "bestRrfRank": 6,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_5e4e1434da5748eb",
+          "title": "中山大学人工智能学院2022年以“申请-考核”制招收博士研究生招生简章",
+          "bestRrfScore": 2.1514629948364887,
+          "bestRrfRank": 7,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_07571807121c4472",
+          "title": "中山大学2022年接收推荐免试研究生办法",
+          "bestRrfScore": 2.083333333333333,
+          "bestRrfRank": 10,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_b2a1cc3ccb21453c",
+          "title": "中山大学关于马克思主义学院2018年以“申请—考核”制招收博士研究生（第二批）的通知",
+          "bestRrfScore": 2.030741410488246,
+          "bestRrfRank": 12,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_44984069cc2b4f1f",
+          "title": "软件工程学院关于开展本科生2024-2025学年综合素质测评工作的通知",
+          "bestRrfScore": 2.0202020202020203,
+          "bestRrfRank": 13,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_76a9de03eda44299",
+          "title": "中山大学2020年本科招生章程",
+          "bestRrfScore": 1.9038160587456363,
+          "bestRrfRank": 17,
+          "bestType": "KP"
+        }
+      ],
+      "topAtomicCandidates": [
+        {
+          "id": "kpid_8258b859b3fa4055",
+          "otid": "otid_67d3c146cf8c48b8",
+          "type": "KP",
+          "denseScore": 289.7629089355469,
+          "sparseScore": 20.572378158569336,
+          "denseRank": 51,
+          "sparseRank": 3,
+          "rrfScore": 2.8056628056628057,
+          "rrfRank": 1,
+          "kpRoleTags": [
+            "background"
+          ]
+        },
+        {
+          "id": "kpid_43b9659d9943436b",
+          "otid": "otid_a2f94115e88244d4",
+          "type": "KP",
+          "denseScore": 334.1452941894531,
+          "sparseScore": 14.002946853637695,
+          "denseRank": 3,
+          "sparseRank": 57,
+          "rrfScore": 2.612942612942613,
+          "rrfRank": 2,
+          "kpRoleTags": []
+        },
+        {
+          "id": "kpid_78e51a129eff4f46",
+          "otid": "otid_6010e10f0bd24934",
+          "type": "KP",
+          "denseScore": 284.86163330078125,
+          "sparseScore": 17.817781448364258,
+          "denseRank": 84,
+          "sparseRank": 13,
+          "rrfScore": 2.3382800608828003,
+          "rrfRank": 3,
+          "kpRoleTags": [
+            "publish",
+            "background",
+            "post_outcome"
+          ]
+        },
+        {
+          "id": "qid_a7b8c79d7a654ce7",
+          "otid": "otid_6010e10f0bd24934",
+          "type": "Q",
+          "parentPkid": "kpid_e982314692894cb5",
+          "denseScore": 314.925048828125,
+          "sparseScore": 13.907590866088867,
+          "denseRank": 17,
+          "sparseRank": 60,
+          "rrfScore": 2.2987012987012987,
+          "rrfRank": 4
+        },
+        {
+          "id": "kpid_089e6683d39b4657",
+          "otid": "otid_3c8fbcf6bdb24c95",
+          "type": "KP",
+          "denseScore": 289.6961975097656,
+          "sparseScore": 15.796881675720215,
+          "denseRank": 53,
+          "sparseRank": 26,
+          "rrfScore": 2.280304589421692,
+          "rrfRank": 5,
+          "kpRoleTags": [
+            "time_expression"
+          ]
+        },
+        {
+          "id": "kpid_621f8e0dcf504674",
+          "otid": "otid_d2c7f1cd37464fbf",
+          "type": "KP",
+          "denseScore": 329.27197265625,
+          "sparseScore": 12.884343147277832,
+          "denseRank": 5,
+          "sparseRank": 103,
+          "rrfScore": 2.2746578574799434,
+          "rrfRank": 6,
+          "kpRoleTags": []
+        },
+        {
+          "id": "kpid_5fdf3972d69e4094",
+          "otid": "otid_5e4e1434da5748eb",
+          "type": "KP",
+          "denseScore": 322.66534423828125,
+          "sparseScore": 12.867769241333008,
+          "denseRank": 10,
+          "sparseRank": 106,
+          "rrfScore": 2.1514629948364887,
+          "rrfRank": 7,
+          "kpRoleTags": [
+            "materials"
+          ]
+        },
+        {
+          "id": "qid_341d590266e446eb",
+          "otid": "otid_67d3c146cf8c48b8",
+          "type": "Q",
+          "parentPkid": "kpid_8258b859b3fa4055",
+          "denseScore": 259.3680419921875,
+          "sparseScore": 22.115983963012695,
+          "denseRank": 433,
+          "sparseRank": 2,
+          "rrfScore": 2.138323627560034,
+          "rrfRank": 8
+        },
+        {
+          "id": "qid_5ced0e98091c4708",
+          "otid": "otid_6010e10f0bd24934",
+          "type": "Q",
+          "parentPkid": "kpid_e982314692894cb5",
+          "denseScore": 316.5062255859375,
+          "sparseScore": 12.94650650024414,
+          "denseRank": 15,
+          "sparseRank": 99,
+          "rrfScore": 2.0880503144654092,
+          "rrfRank": 9
+        },
+        {
+          "id": "kpid_92520a3e47284f15",
+          "otid": "otid_07571807121c4472",
+          "type": "KP",
+          "denseScore": 304.76983642578125,
+          "sparseScore": 13.26479721069336,
+          "denseRank": 20,
+          "sparseRank": 84,
+          "rrfScore": 2.083333333333333,
+          "rrfRank": 10,
+          "kpRoleTags": [
+            "materials",
+            "thesis"
+          ]
+        }
+      ]
+    },
+    {
+      "query": "如果我是2020年6月后通过资格认定的申请人 现在想赶2022年下半年答辩 还得同时满足哪些资格和有效期要求",
+      "expectedOtid": "otid_98669718896245fc",
+      "expectedTitle": "关于2022年下半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+      "queryScope": "eligibility_condition",
+      "queryType": "situational",
+      "supportPattern": "multi_kp",
+      "preferredGranularity": "KP",
+      "themeFamily": "同等学力博士答辩资格",
+      "badCase": {
+        "docHitAt1": false,
+        "docHitAt5": true,
+        "kpidHitAt1": false,
+        "supportFullCoverTop5": true,
+        "failureRisk": "best_kpid_confusion",
+        "failureReasons": [
+          "正确文档进入前5但未到第1名，存在文档级排序偏差。",
+          "正确文档命中后，主证据 KP 选择仍不够准确。",
+          "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+        ]
+      },
+      "queryIntent": {
+        "rawQuery": "如果我是2020年6月后通过资格认定的申请人 现在想赶2022年下半年答辩 还得同时满足哪些资格和有效期要求",
+        "years": [
+          2020,
+          2022
+        ],
+        "months": [
+          6
+        ],
+        "topicIds": [],
+        "subtopicIds": [],
+        "intentIds": [],
+        "degreeLevels": [],
+        "eventTypes": [],
+        "normalizedTerms": [],
+        "confidence": 0,
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": false,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": true,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false,
+          "hasPostOutcomeOperationalCue": false,
+          "hasMultiSlotConstraintCue": true,
+          "queryLength": 54
+        }
+      },
+      "finalRank": 2,
+      "entryBucket": "aggregation_drop",
+      "bestCorrectRrfRank": 1,
+      "bestCorrectAtomicType": "KP",
+      "finalTopDocs": [
+        {
+          "rank": 1,
+          "otid": "otid_43d49d8e09054fe3",
+          "title": "关于2024年下半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+          "score": 1.360439322773279,
+          "bestKpid": "kpid_2279f1d1057749c3",
+          "kpEvidenceGroupCounts": {
+            "requirement": 3,
+            "procedure": 1,
+            "timeline": 2,
+            "post_outcome": 2
+          }
+        },
+        {
+          "rank": 2,
+          "otid": "otid_98669718896245fc",
+          "title": "关于2022年下半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+          "score": 1.328786808414725,
+          "bestKpid": "kpid_beb1807525224887",
+          "kpEvidenceGroupCounts": {
+            "requirement": 2,
+            "procedure": 1,
+            "timeline": 3,
+            "post_outcome": 2
+          }
+        },
+        {
+          "rank": 3,
+          "otid": "otid_dcf55ee630fa41da",
+          "title": "关于2023年下半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+          "score": 1.3193556450803512,
+          "bestKpid": "kpid_98f49ece64f1408e",
+          "kpEvidenceGroupCounts": {
+            "requirement": 3,
+            "procedure": 1,
+            "timeline": 3,
+            "post_outcome": 3
+          }
+        },
+        {
+          "rank": 4,
+          "otid": "otid_d98981a283344c4e",
+          "title": "关于2023年上半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+          "score": 1.246099694260477,
+          "bestKpid": "kpid_47a26c9b9dba42c8",
+          "kpEvidenceGroupCounts": {
+            "requirement": 2,
+            "procedure": 1,
+            "timeline": 3,
+            "post_outcome": 1
+          }
+        },
+        {
+          "rank": 5,
+          "otid": "otid_5b36fce72ab84f14",
+          "title": "研究生院关于2019年下半年同等学力人员申请硕士学位论文答辩的通知",
+          "score": 1.1980396824275166,
+          "bestKpid": "kpid_2b203ce343d1428d",
+          "kpEvidenceGroupCounts": {
+            "requirement": 2,
+            "procedure": 2,
+            "timeline": 2,
+            "post_outcome": 1
+          }
+        },
+        {
+          "rank": 6,
+          "otid": "otid_45577d5754a4495d",
+          "title": "关于2022年上半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+          "score": 1.1827971546464537,
+          "bestKpid": "kpid_5633d08b99ed4203",
+          "kpEvidenceGroupCounts": {
+            "procedure": 2,
+            "timeline": 3,
+            "post_outcome": 1,
+            "requirement": 1
+          }
+        },
+        {
+          "rank": 7,
+          "otid": "otid_f7a9215086674711",
+          "title": "关于2020年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+          "score": 1.1111013222296173,
+          "bestKpid": "kpid_4e4f2e9e9a2b4ec0",
+          "kpEvidenceGroupCounts": {
+            "requirement": 2,
+            "procedure": 1,
+            "timeline": 3,
+            "post_outcome": 2
+          }
+        },
+        {
+          "rank": 8,
+          "otid": "otid_5c9fb358e9324bb6",
+          "title": "关于2022年下半年同等学力人员申请硕士学位论文答辩的通知",
+          "score": 1.0928779032641847,
+          "bestKpid": "kpid_d55d30640d064964",
+          "kpEvidenceGroupCounts": {
+            "requirement": 2,
+            "procedure": 1,
+            "timeline": 1,
+            "post_outcome": 2
+          }
+        },
+        {
+          "rank": 9,
+          "otid": "otid_93db8141426b4dd3",
+          "title": "研究生院关于做好2020年下半年论文答辩与学位授予审核工作的通知",
+          "score": 0.9983013190978164,
+          "bestKpid": "kpid_a76a7244fe1d4fc3",
+          "kpEvidenceGroupCounts": {
+            "requirement": 1,
+            "procedure": 1,
+            "timeline": 1
+          }
+        },
+        {
+          "rank": 10,
+          "otid": "otid_e4227af2d62a4f20",
+          "title": "关于2021年下半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+          "score": 0.9096240809529055,
+          "bestKpid": "kpid_a653a55953034d6d",
+          "kpEvidenceGroupCounts": {
+            "requirement": 2,
+            "procedure": 2,
+            "timeline": 3,
+            "post_outcome": 1
+          }
+        }
+      ],
+      "correctDocCandidates": [
+        {
+          "id": "kpid_beb1807525224887",
+          "otid": "otid_98669718896245fc",
+          "type": "KP",
+          "denseScore": 361.22265625,
+          "sparseScore": 25.775035858154297,
+          "denseRank": 4,
+          "sparseRank": 3,
+          "rrfScore": 3.4672619047619047,
+          "rrfRank": 1,
+          "kpRoleTags": [
+            "time_expression",
+            "schedule",
+            "application_stage",
+            "condition",
+            "thesis"
+          ]
+        },
+        {
+          "id": "qid_8dc0dd5aa7964827",
+          "otid": "otid_98669718896245fc",
+          "type": "Q",
+          "parentPkid": "kpid_beb1807525224887",
+          "denseScore": 366.1761779785156,
+          "sparseScore": 19.648324966430664,
+          "denseRank": 2,
+          "sparseRank": 38,
+          "rrfScore": 2.837393021724819,
+          "rrfRank": 8
+        },
+        {
+          "id": "qid_4fc0fd9415f1411b",
+          "otid": "otid_98669718896245fc",
+          "type": "Q",
+          "parentPkid": "kpid_9361ea6b6d0f4341",
+          "denseScore": 325.2429504394531,
+          "sparseScore": 20.943344116210938,
+          "denseRank": 46,
+          "sparseRank": 18,
+          "rrfScore": 2.481857764876633,
+          "rrfRank": 17
+        },
+        {
+          "id": "otid_98669718896245fc",
+          "otid": "otid_98669718896245fc",
+          "type": "OT",
+          "denseScore": 272.3514709472656,
+          "sparseScore": 21.262821197509766,
+          "denseRank": 681,
+          "sparseRank": 15,
+          "rrfScore": 1.734952766531714,
+          "rrfRank": 34
+        },
+        {
+          "id": "qid_e9fe8b8e5a4f4ac3",
+          "otid": "otid_98669718896245fc",
+          "type": "Q",
+          "parentPkid": "kpid_beb1807525224887",
+          "denseScore": 287.6540222167969,
+          "sparseScore": 20.06001091003418,
+          "denseRank": 339,
+          "sparseRank": 31,
+          "rrfScore": 1.569307885097359,
+          "rrfRank": 50
+        },
+        {
+          "id": "qid_0b15841b06ea46e9",
+          "otid": "otid_98669718896245fc",
+          "type": "Q",
+          "parentPkid": "kpid_beb1807525224887",
+          "denseScore": 287.3539123535156,
+          "sparseScore": 19.811735153198242,
+          "denseRank": 343,
+          "sparseRank": 34,
+          "rrfScore": 1.5247347024972284,
+          "rrfRank": 55
+        },
+        {
+          "id": "qid_d6a4e8d9e94a4f47",
+          "otid": "otid_98669718896245fc",
+          "type": "Q",
+          "parentPkid": "kpid_beb1807525224887",
+          "denseScore": 334.1633605957031,
+          "sparseScore": 8.247604370117188,
+          "denseRank": 35,
+          "sparseRank": 1182,
+          "rrfScore": 1.149249936435291,
+          "rrfRank": 106
+        },
+        {
+          "id": "qid_5818f04cf7c24c22",
+          "otid": "otid_98669718896245fc",
+          "type": "Q",
+          "parentPkid": "kpid_c3a780a2e58245cf",
+          "denseScore": 322.5622863769531,
+          "sparseScore": 7.600185394287109,
+          "denseRank": 50,
+          "sparseRank": 1462,
+          "rrfScore": 0.9879345358977422,
+          "rrfRank": 143
+        },
+        {
+          "id": "qid_254299fc3b804319",
+          "otid": "otid_98669718896245fc",
+          "type": "Q",
+          "parentPkid": "kpid_9361ea6b6d0f4341",
+          "denseScore": 295.58447265625,
+          "sparseScore": 14.940896034240723,
+          "denseRank": 229,
+          "sparseRank": 148,
+          "rrfScore": 0.9229438381687518,
+          "rrfRank": 157
+        },
+        {
+          "id": "kpid_c3a780a2e58245cf",
+          "otid": "otid_98669718896245fc",
+          "type": "KP",
+          "denseScore": 303.3544006347656,
+          "sparseScore": 12.637171745300293,
+          "denseRank": 151,
+          "sparseRank": 299,
+          "rrfScore": 0.808195487729211,
+          "rrfRank": 190,
+          "kpRoleTags": [
+            "time_expression",
+            "background",
+            "post_outcome",
+            "thesis"
+          ]
+        },
+        {
+          "id": "kpid_9361ea6b6d0f4341",
+          "otid": "otid_98669718896245fc",
+          "type": "KP",
+          "denseScore": 214.416259765625,
+          "sparseScore": 15.785964965820312,
+          "denseRank": null,
+          "sparseRank": 112,
+          "rrfScore": 0.6976744186046512,
+          "rrfRank": 240,
+          "kpRoleTags": [
+            "time_expression",
+            "reminder",
+            "post_outcome",
+            "thesis"
+          ]
+        },
+        {
+          "id": "kpid_fb8c92735980489a",
+          "otid": "otid_98669718896245fc",
+          "type": "KP",
+          "denseScore": 296.48583984375,
+          "sparseScore": 12.607304573059082,
+          "denseRank": 219,
+          "sparseRank": 305,
+          "rrfScore": 0.6871900623557716,
+          "rrfRank": 244,
+          "kpRoleTags": [
+            "materials",
+            "background",
+            "thesis"
+          ]
+        },
+        {
+          "id": "qid_5811486de481450b",
+          "otid": "otid_98669718896245fc",
+          "type": "Q",
+          "parentPkid": "kpid_2e5c57952f044551",
+          "denseScore": 294.7225036621094,
+          "sparseScore": 12.046974182128906,
+          "denseRank": 240,
+          "sparseRank": 359,
+          "rrfScore": 0.6197295147175816,
+          "rrfRank": 281
+        },
+        {
+          "id": "qid_6cbec9e460b74667",
+          "otid": "otid_98669718896245fc",
+          "type": "Q",
+          "parentPkid": "kpid_beb1807525224887",
+          "denseScore": 254.87904357910156,
+          "sparseScore": 14.500625610351562,
+          "denseRank": 1447,
+          "sparseRank": 166,
+          "rrfScore": 0.5973304519910035,
+          "rrfRank": 300
+        },
+        {
+          "id": "qid_70c6591ff2fe4392",
+          "otid": "otid_98669718896245fc",
+          "type": "Q",
+          "parentPkid": "kpid_9361ea6b6d0f4341",
+          "denseScore": 280.0630187988281,
+          "sparseScore": 12.343043327331543,
+          "denseRank": 479,
+          "sparseRank": 330,
+          "rrfScore": 0.4932210646496361,
+          "rrfRank": 379
+        },
+        {
+          "id": "qid_8810c21943184ee5",
+          "otid": "otid_98669718896245fc",
+          "type": "Q",
+          "parentPkid": "kpid_c3a780a2e58245cf",
+          "denseScore": 224.99412536621094,
+          "sparseScore": 14.017875671386719,
+          "denseRank": null,
+          "sparseRank": 195,
+          "rrfScore": 0.47058823529411764,
+          "rrfRank": 408
+        },
+        {
+          "id": "qid_152f9a47d94a4bf4",
+          "otid": "otid_98669718896245fc",
+          "type": "Q",
+          "parentPkid": "kpid_eabc3967a3244f21",
+          "denseScore": 289.4560546875,
+          "sparseScore": 8.970580101013184,
+          "denseRank": 313,
+          "sparseRank": 919,
+          "rrfScore": 0.39067056990363314,
+          "rrfRank": 491
+        },
+        {
+          "id": "qid_f3196ee44c394304",
+          "otid": "otid_98669718896245fc",
+          "type": "Q",
+          "parentPkid": "kpid_c3a780a2e58245cf",
+          "denseScore": 224.69317626953125,
+          "sparseScore": 13.287789344787598,
+          "denseRank": null,
+          "sparseRank": 255,
+          "rrfScore": 0.38095238095238093,
+          "rrfRank": 508
+        },
+        {
+          "id": "qid_d8f240cf92614b10",
+          "otid": "otid_98669718896245fc",
+          "type": "Q",
+          "parentPkid": "kpid_2e5c57952f044551",
+          "denseScore": 195.19471740722656,
+          "sparseScore": 12.684828758239746,
+          "denseRank": null,
+          "sparseRank": 297,
+          "rrfScore": 0.33613445378151263,
+          "rrfRank": 590
+        },
+        {
+          "id": "qid_1ba07ab2bde64e19",
+          "otid": "otid_98669718896245fc",
+          "type": "Q",
+          "parentPkid": "kpid_fb8c92735980489a",
+          "denseScore": 174.78257751464844,
+          "sparseScore": 12.13347053527832,
+          "denseRank": null,
+          "sparseRank": 347,
+          "rrfScore": 0.29484029484029484,
+          "rrfRank": 691
+        },
+        {
+          "id": "qid_afc5a677aabc4850",
+          "otid": "otid_98669718896245fc",
+          "type": "Q",
+          "parentPkid": "kpid_2e5c57952f044551",
+          "denseScore": 269.390625,
+          "sparseScore": 10.114967346191406,
+          "denseRank": 798,
+          "sparseRank": 644,
+          "rrfScore": 0.287004662004662,
+          "rrfRank": 720
+        },
+        {
+          "id": "qid_00ac203b96de4fa3",
+          "otid": "otid_98669718896245fc",
+          "type": "Q",
+          "parentPkid": "kpid_c3a780a2e58245cf",
+          "denseScore": 258.1601867675781,
+          "sparseScore": 9.822667121887207,
+          "denseRank": 1269,
+          "sparseRank": 705,
+          "rrfScore": 0.23210728986854334,
+          "rrfRank": 894
+        }
+      ],
+      "topDocs": [
+        {
+          "otid": "otid_98669718896245fc",
+          "title": "关于2022年下半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+          "bestRrfScore": 3.4672619047619047,
+          "bestRrfRank": 1,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_45577d5754a4495d",
+          "title": "关于2022年上半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+          "bestRrfScore": 3.235294117647059,
+          "bestRrfRank": 2,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_d98981a283344c4e",
+          "title": "关于2023年上半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+          "bestRrfScore": 3.2172131147540988,
+          "bestRrfRank": 3,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_f7a9215086674711",
+          "title": "关于2020年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+          "bestRrfScore": 3.139416207389263,
+          "bestRrfRank": 4,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_dcf55ee630fa41da",
+          "title": "关于2023年下半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+          "bestRrfScore": 3.0798192771084336,
+          "bestRrfRank": 5,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_0f6e5f14259148ad",
+          "title": "关于2021年上半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+          "bestRrfScore": 2.9473304473304474,
+          "bestRrfRank": 6,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_5b36fce72ab84f14",
+          "title": "研究生院关于2019年下半年同等学力人员申请硕士学位论文答辩的通知",
+          "bestRrfScore": 2.823920265780731,
+          "bestRrfRank": 9,
+          "bestType": "Q"
+        },
+        {
+          "otid": "otid_87b9bb5e7fef44de",
+          "title": "关于2018年下半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+          "bestRrfScore": 2.8181818181818183,
+          "bestRrfRank": 10,
+          "bestType": "Q"
+        },
+        {
+          "otid": "otid_43d49d8e09054fe3",
+          "title": "关于2024年下半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+          "bestRrfScore": 2.7972709551656916,
+          "bestRrfRank": 11,
+          "bestType": "Q"
+        },
+        {
+          "otid": "otid_e4227af2d62a4f20",
+          "title": "关于2021年下半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+          "bestRrfScore": 2.694677871148459,
+          "bestRrfRank": 12,
+          "bestType": "KP"
+        }
+      ],
+      "topAtomicCandidates": [
+        {
+          "id": "kpid_beb1807525224887",
+          "otid": "otid_98669718896245fc",
+          "type": "KP",
+          "denseScore": 361.22265625,
+          "sparseScore": 25.775035858154297,
+          "denseRank": 4,
+          "sparseRank": 3,
+          "rrfScore": 3.4672619047619047,
+          "rrfRank": 1,
+          "kpRoleTags": [
+            "time_expression",
+            "schedule",
+            "application_stage",
+            "condition",
+            "thesis"
+          ]
+        },
+        {
+          "id": "kpid_5633d08b99ed4203",
+          "otid": "otid_45577d5754a4495d",
+          "type": "KP",
+          "denseScore": 352.7148742675781,
+          "sparseScore": 23.53646469116211,
+          "denseRank": 8,
+          "sparseRank": 8,
+          "rrfScore": 3.235294117647059,
+          "rrfRank": 2,
+          "kpRoleTags": [
+            "time_expression",
+            "schedule",
+            "thesis"
+          ]
+        },
+        {
+          "id": "kpid_47a26c9b9dba42c8",
+          "otid": "otid_d98981a283344c4e",
+          "type": "KP",
+          "denseScore": 342.2611083984375,
+          "sparseScore": 27.49151039123535,
+          "denseRank": 20,
+          "sparseRank": 1,
+          "rrfScore": 3.2172131147540988,
+          "rrfRank": 3,
+          "kpRoleTags": [
+            "time_expression",
+            "schedule",
+            "application_stage",
+            "condition",
+            "background",
+            "thesis"
+          ]
+        },
+        {
+          "id": "kpid_4e4f2e9e9a2b4ec0",
+          "otid": "otid_f7a9215086674711",
+          "type": "KP",
+          "denseScore": 352.1286926269531,
+          "sparseScore": 22.3938045501709,
+          "denseRank": 9,
+          "sparseRank": 11,
+          "rrfScore": 3.139416207389263,
+          "rrfRank": 4,
+          "kpRoleTags": [
+            "time_expression",
+            "schedule",
+            "application_stage",
+            "condition",
+            "thesis"
+          ]
+        },
+        {
+          "id": "kpid_98f49ece64f1408e",
+          "otid": "otid_dcf55ee630fa41da",
+          "type": "KP",
+          "denseScore": 339.4866027832031,
+          "sparseScore": 24.78889274597168,
+          "denseRank": 23,
+          "sparseRank": 4,
+          "rrfScore": 3.0798192771084336,
+          "rrfRank": 5,
+          "kpRoleTags": [
+            "time_expression",
+            "schedule",
+            "application_stage",
+            "condition",
+            "post_outcome",
+            "thesis"
+          ]
+        },
+        {
+          "id": "kpid_965b17333db74aff",
+          "otid": "otid_0f6e5f14259148ad",
+          "type": "KP",
+          "denseScore": 346.8742370605469,
+          "sparseScore": 20.985380172729492,
+          "denseRank": 12,
+          "sparseRank": 17,
+          "rrfScore": 2.9473304473304474,
+          "rrfRank": 6,
+          "kpRoleTags": [
+            "time_expression",
+            "schedule",
+            "condition",
+            "publish",
+            "thesis"
+          ]
+        },
+        {
+          "id": "qid_97deb3c646d64153",
+          "otid": "otid_d98981a283344c4e",
+          "type": "Q",
+          "parentPkid": "kpid_47a26c9b9dba42c8",
+          "denseScore": 346.4580383300781,
+          "sparseScore": 20.933528900146484,
+          "denseRank": 14,
+          "sparseRank": 19,
+          "rrfScore": 2.870338693123503,
+          "rrfRank": 7
+        },
+        {
+          "id": "qid_8dc0dd5aa7964827",
+          "otid": "otid_98669718896245fc",
+          "type": "Q",
+          "parentPkid": "kpid_beb1807525224887",
+          "denseScore": 366.1761779785156,
+          "sparseScore": 19.648324966430664,
+          "denseRank": 2,
+          "sparseRank": 38,
+          "rrfScore": 2.837393021724819,
+          "rrfRank": 8
+        },
+        {
+          "id": "qid_851db5039e71460a",
+          "otid": "otid_5b36fce72ab84f14",
+          "type": "Q",
+          "parentPkid": "kpid_2b203ce343d1428d",
+          "denseScore": 350.6268310546875,
+          "sparseScore": 20.25994300842285,
+          "denseRank": 10,
+          "sparseRank": 26,
+          "rrfScore": 2.823920265780731,
+          "rrfRank": 9
+        },
+        {
+          "id": "qid_65a721f0823a43f9",
+          "otid": "otid_87b9bb5e7fef44de",
+          "type": "Q",
+          "parentPkid": "kpid_c4a5d774c2474940",
+          "denseScore": 329.45703125,
+          "sparseScore": 23.649879455566406,
+          "denseRank": 40,
+          "sparseRank": 6,
+          "rrfScore": 2.8181818181818183,
+          "rrfRank": 10
+        }
+      ]
+    },
+    {
+      "query": "在香港的本科毕业生 想报考2024年的硕士 初试科目是什么？报名截止时间是什么时候",
+      "expectedOtid": "otid_ee3035722c4b481e",
+      "expectedTitle": "中山大学2024年面向香港、澳门、台湾地区招收博士、硕士研究生章程及招生学科专业目录",
+      "queryScope": "time_location",
+      "queryType": "situational",
+      "supportPattern": "multi_kp",
+      "preferredGranularity": "KP+OT",
+      "themeFamily": "港澳台招生考试",
+      "badCase": {
+        "docHitAt1": false,
+        "docHitAt5": true,
+        "kpidHitAt1": false,
+        "supportFullCoverTop5": true,
+        "failureRisk": "best_kpid_confusion",
+        "failureReasons": [
+          "正确文档进入前5但未到第1名，存在文档级排序偏差。",
+          "文档候选中未能稳定选出正确主证据 KP。",
+          "该样本依赖多条 KP 联合支撑，适合继续补 multi_kp 邻近问法。"
+        ]
+      },
+      "queryIntent": {
+        "rawQuery": "在香港的本科毕业生 想报考2024年的硕士 初试科目是什么？报名截止时间是什么时候",
+        "years": [
+          2024
+        ],
+        "months": [],
+        "topicIds": [
+          "graduate_admission"
+        ],
+        "subtopicIds": [
+          "master_unified_exam"
+        ],
+        "intentIds": [
+          "master_unified_exam"
+        ],
+        "degreeLevels": [
+          "本科",
+          "硕士"
+        ],
+        "eventTypes": [],
+        "normalizedTerms": [
+          "统考硕士"
+        ],
+        "confidence": 1,
+        "preferLatest": false,
+        "preferLatestStrong": false,
+        "signals": {
+          "hasExplicitTopicOrIntent": true,
+          "hasExplicitYear": true,
+          "hasHistoricalHint": false,
+          "hasStrongDetailAnchor": true,
+          "hasEntryLikeAnchor": false,
+          "hasResultState": false,
+          "hasLatestPolicyState": false,
+          "hasGenericNextStep": false,
+          "hasPostOutcomeOperationalCue": false,
+          "hasMultiSlotConstraintCue": false,
+          "queryLength": 41
+        }
+      },
+      "finalRank": 2,
+      "entryBucket": "aggregation_drop",
+      "bestCorrectRrfRank": 5,
+      "bestCorrectAtomicType": "KP",
+      "finalTopDocs": [
+        {
+          "rank": 1,
+          "otid": "otid_06710b412753461e",
+          "title": "2024年全国硕士研究生报名考试中山大学报考点（代码：4413）公告",
+          "score": 1.2436020975919109,
+          "bestKpid": "kpid_d4dd7d6da2584984",
+          "kpEvidenceGroupCounts": {
+            "requirement": 3,
+            "timeline": 3,
+            "procedure": 1,
+            "post_outcome": 1
+          }
+        },
+        {
+          "rank": 2,
+          "otid": "otid_ee3035722c4b481e",
+          "title": "中山大学2024年面向香港、澳门、台湾地区招收博士、硕士研究生章程及招生学科专业目录",
+          "score": 1.0298596465210461,
+          "bestKpid": "kpid_ad82dfda25984fe2",
+          "kpEvidenceGroupCounts": {
+            "requirement": 3,
+            "timeline": 4,
+            "procedure": 2
+          }
+        },
+        {
+          "rank": 3,
+          "otid": "otid_1c14b6043fd645c8",
+          "title": "中山大学2024年硕士研究生招生章程及招生学科专业目录",
+          "score": 0.9409698706498081,
+          "bestKpid": "kpid_a5672865c8d54bcd",
+          "kpEvidenceGroupCounts": {
+            "requirement": 2,
+            "timeline": 2,
+            "procedure": 1
+          }
+        },
+        {
+          "rank": 4,
+          "otid": "otid_07c96191f91e425a",
+          "title": "中山大学2024年面向港澳台地区招收研究生初试成绩查询公告",
+          "score": 0.7223514517278788,
+          "bestKpid": "kpid_afb68e633a534132",
+          "kpEvidenceGroupCounts": {}
+        },
+        {
+          "rank": 5,
+          "otid": "otid_a206a52bfb3f46aa",
+          "title": "中山大学2024年博士研究生招生报名公告",
+          "score": 0.7129813894549014,
+          "bestKpid": "kpid_9f5dc6200a58475a",
+          "kpEvidenceGroupCounts": {
+            "requirement": 2,
+            "timeline": 3,
+            "procedure": 2,
+            "post_outcome": 1
+          }
+        },
+        {
+          "rank": 6,
+          "otid": "otid_e9ff52409e304167",
+          "title": "中山大学2024年面向香港、澳门、台湾地区招收研究生拟录取名单公示",
+          "score": 0.6856792938629862,
+          "bestKpid": "kpid_70a6e1a0c60c4662",
+          "kpEvidenceGroupCounts": {
+            "timeline": 2
+          }
+        },
+        {
+          "rank": 7,
+          "otid": "otid_697767196bdf46b2",
+          "title": "中山大学人工智能学院关于接收2024年推荐免试研究生预报名申请的通知",
+          "score": 0.6478162029492828,
+          "bestKpid": "kpid_e061993eadb740fe",
+          "kpEvidenceGroupCounts": {
+            "requirement": 1,
+            "procedure": 1,
+            "timeline": 1
+          }
+        },
+        {
+          "rank": 8,
+          "otid": "otid_656f7a8ec44e4fac",
+          "title": "研究生院关于评选研究生2024年度港澳及华侨学生奖学金、台湾学生奖学金的通知",
+          "score": 0.6178638764036081,
+          "bestKpid": "kpid_116808149f1d4f29",
+          "kpEvidenceGroupCounts": {}
+        },
+        {
+          "rank": 9,
+          "otid": "otid_44c68315287642c2",
+          "title": "中山大学2024年港澳台研究生招生初试合格成绩要求的公告",
+          "score": 0.597792298223449,
+          "bestKpid": "kpid_77fc5dd08bce4efc",
+          "kpEvidenceGroupCounts": {
+            "timeline": 1,
+            "post_outcome": 1
+          }
+        },
+        {
+          "rank": 10,
+          "otid": "otid_b9b1fa013e3d48e9",
+          "title": "2024年全国硕士研究生招生考试中山大学报考点（代码4413） 网上确认公告",
+          "score": 0.4668408810548795,
+          "bestKpid": "kpid_9b63a7c3ea264239",
+          "kpEvidenceGroupCounts": {
+            "requirement": 1,
+            "procedure": 1,
+            "timeline": 2
+          }
+        }
+      ],
+      "correctDocCandidates": [
+        {
+          "id": "kpid_ad82dfda25984fe2",
+          "otid": "otid_ee3035722c4b481e",
+          "type": "KP",
+          "denseScore": 304.8957824707031,
+          "sparseScore": 19.335973739624023,
+          "denseRank": 92,
+          "sparseRank": 12,
+          "rrfScore": 2.324561403508772,
+          "rrfRank": 5,
+          "kpRoleTags": [
+            "time_expression",
+            "deadline"
+          ]
+        },
+        {
+          "id": "otid_ee3035722c4b481e",
+          "otid": "otid_ee3035722c4b481e",
+          "type": "OT",
+          "denseScore": 284.8312072753906,
+          "sparseScore": 21.81805992126465,
+          "denseRank": 299,
+          "sparseRank": 4,
+          "rrfScore": 2.1535515320334264,
+          "rrfRank": 7
+        },
+        {
+          "id": "kpid_78fbb957a4ff436b",
+          "otid": "otid_ee3035722c4b481e",
+          "type": "KP",
+          "denseScore": 333.4689636230469,
+          "sparseScore": 12.946867942810059,
+          "denseRank": 16,
+          "sparseRank": 210,
+          "rrfScore": 1.7602339181286548,
+          "rrfRank": 21,
+          "kpRoleTags": [
+            "time_expression",
+            "schedule",
+            "materials"
+          ]
+        },
+        {
+          "id": "kpid_a99b48ef87084384",
+          "otid": "otid_ee3035722c4b481e",
+          "type": "KP",
+          "denseScore": 265.8658447265625,
+          "sparseScore": 18.8697452545166,
+          "denseRank": 742,
+          "sparseRank": 15,
+          "rrfScore": 1.7246882793017457,
+          "rrfRank": 24,
+          "kpRoleTags": [
+            "time_expression",
+            "schedule",
+            "materials",
+            "background",
+            "reminder",
+            "thesis"
+          ]
+        },
+        {
+          "id": "qid_d3d0f602e58a4401",
+          "otid": "otid_ee3035722c4b481e",
+          "type": "Q",
+          "parentPkid": "kpid_78fbb957a4ff436b",
+          "denseScore": 317.6356506347656,
+          "sparseScore": 14.473779678344727,
+          "denseRank": 39,
+          "sparseRank": 123,
+          "rrfScore": 1.665838715019043,
+          "rrfRank": 34
+        },
+        {
+          "id": "kpid_a58c3f98cbf44114",
+          "otid": "otid_ee3035722c4b481e",
+          "type": "KP",
+          "denseScore": 335.264404296875,
+          "sparseScore": 7.664691925048828,
+          "denseRank": 12,
+          "sparseRank": 1142,
+          "rrfScore": 1.4887224995378072,
+          "rrfRank": 51,
+          "kpRoleTags": [
+            "time_expression"
+          ]
+        },
+        {
+          "id": "qid_81417cfca4b54b07",
+          "otid": "otid_ee3035722c4b481e",
+          "type": "Q",
+          "parentPkid": "kpid_a58c3f98cbf44114",
+          "denseScore": 305.0505676269531,
+          "sparseScore": 15.16041374206543,
+          "denseRank": 91,
+          "sparseRank": 96,
+          "rrfScore": 1.4314824248599083,
+          "rrfRank": 59
+        },
+        {
+          "id": "qid_9269957218db46fc",
+          "otid": "otid_ee3035722c4b481e",
+          "type": "Q",
+          "parentPkid": "kpid_78fbb957a4ff436b",
+          "denseScore": 301.3644714355469,
+          "sparseScore": 12.731977462768555,
+          "denseRank": 112,
+          "sparseRank": 234,
+          "rrfScore": 0.9895586141433318,
+          "rrfRank": 134
+        },
+        {
+          "id": "qid_b3b8a563597144e8",
+          "otid": "otid_ee3035722c4b481e",
+          "type": "Q",
+          "parentPkid": "kpid_a99b48ef87084384",
+          "denseScore": 298.0812072753906,
+          "sparseScore": 6.010815143585205,
+          "denseRank": 143,
+          "sparseRank": 1942,
+          "rrfScore": 0.5525508973784836,
+          "rrfRank": 325
+        },
+        {
+          "id": "qid_9512130178ee4565",
+          "otid": "otid_ee3035722c4b481e",
+          "type": "Q",
+          "parentPkid": "kpid_a58c3f98cbf44114",
+          "denseScore": 299.8874816894531,
+          "sparseScore": 2.231119155883789,
+          "denseRank": 125,
+          "sparseRank": null,
+          "rrfScore": 0.5405405405405406,
+          "rrfRank": 333
+        },
+        {
+          "id": "qid_c356985446f14c96",
+          "otid": "otid_ee3035722c4b481e",
+          "type": "Q",
+          "parentPkid": "kpid_a58c3f98cbf44114",
+          "denseScore": 297.28082275390625,
+          "sparseScore": 4.974257946014404,
+          "denseRank": 153,
+          "sparseRank": 2522,
+          "rrfScore": 0.5159591683849547,
+          "rrfRank": 354
+        },
+        {
+          "id": "qid_12f6a93088a64521",
+          "otid": "otid_ee3035722c4b481e",
+          "type": "Q",
+          "parentPkid": "kpid_56a31884cc2c4858",
+          "denseScore": 297.22186279296875,
+          "sparseScore": 2.344252824783325,
+          "denseRank": 154,
+          "sparseRank": null,
+          "rrfScore": 0.46728971962616817,
+          "rrfRank": 416
+        },
+        {
+          "id": "qid_71a4820744f94e56",
+          "otid": "otid_ee3035722c4b481e",
+          "type": "Q",
+          "parentPkid": "kpid_78fbb957a4ff436b",
+          "denseScore": 293.4549560546875,
+          "sparseScore": 6.4742302894592285,
+          "denseRank": 194,
+          "sparseRank": 1602,
+          "rrfScore": 0.46590295346655675,
+          "rrfRank": 417
+        },
+        {
+          "id": "qid_1b55c68e3bf4493f",
+          "otid": "otid_ee3035722c4b481e",
+          "type": "Q",
+          "parentPkid": "kpid_a58c3f98cbf44114",
+          "denseScore": 292.37677001953125,
+          "sparseScore": 2.3290083408355713,
+          "denseRank": 207,
+          "sparseRank": null,
+          "rrfScore": 0.37453183520599254,
+          "rrfRank": 540
+        },
+        {
+          "id": "qid_b1e94a970f324b70",
+          "otid": "otid_ee3035722c4b481e",
+          "type": "Q",
+          "parentPkid": "kpid_a99b48ef87084384",
+          "denseScore": 250.64112854003906,
+          "sparseScore": 9.875308990478516,
+          "denseRank": 1537,
+          "sparseRank": 586,
+          "rrfScore": 0.2483759215712123,
+          "rrfRank": 857
+        }
+      ],
+      "topDocs": [
+        {
+          "otid": "otid_06710b412753461e",
+          "title": "2024年全国硕士研究生报名考试中山大学报考点（代码：4413）公告",
+          "bestRrfScore": 3.007716920760399,
+          "bestRrfRank": 1,
+          "bestType": "Q"
+        },
+        {
+          "otid": "otid_a206a52bfb3f46aa",
+          "title": "中山大学2024年博士研究生招生报名公告",
+          "bestRrfScore": 2.798092209856916,
+          "bestRrfRank": 2,
+          "bestType": "Q"
+        },
+        {
+          "otid": "otid_6258d4af76df4ee7",
+          "title": "广州国家实验室-中山大学 2025年联合培养博士研究生专项计划招生简章",
+          "bestRrfScore": 2.70066889632107,
+          "bestRrfRank": 3,
+          "bestType": "Q"
+        },
+        {
+          "otid": "otid_40565beb38cf45c5",
+          "title": "中山大学2026年博士研究生招生网上报名通知",
+          "bestRrfScore": 2.4943424691978877,
+          "bestRrfRank": 4,
+          "bestType": "Q"
+        },
+        {
+          "otid": "otid_ee3035722c4b481e",
+          "title": "中山大学2024年面向香港、澳门、台湾地区招收博士、硕士研究生章程及招生学科专业目录",
+          "bestRrfScore": 2.324561403508772,
+          "bestRrfRank": 5,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_8ee6bdcf13e741b8",
+          "title": "中山大学2025年硕士研究生招生章程及招生学科专业目录",
+          "bestRrfScore": 2.1580333625987707,
+          "bestRrfRank": 6,
+          "bestType": "Q"
+        },
+        {
+          "otid": "otid_e1647864eb2b41e3",
+          "title": "中山大学2023年硕士研究生招生章程及招生学科专业目录",
+          "bestRrfScore": 2.0968551736729197,
+          "bestRrfRank": 8,
+          "bestType": "KP"
+        },
+        {
+          "otid": "otid_1c14b6043fd645c8",
+          "title": "中山大学2024年硕士研究生招生章程及招生学科专业目录",
+          "bestRrfScore": 2.058901098901099,
+          "bestRrfRank": 9,
+          "bestType": "Q"
+        },
+        {
+          "otid": "otid_f77c101d05104a9e",
+          "title": "中山大学2023年博士研究生招生报名公告",
+          "bestRrfScore": 2.052881017710152,
+          "bestRrfRank": 10,
+          "bestType": "Q"
+        },
+        {
+          "otid": "otid_139b9801959d4db4",
+          "title": "2026年全国硕士研究生报名考试中山大学报考点（代码：4413）公告",
+          "bestRrfScore": 2.0076661891877556,
+          "bestRrfRank": 11,
+          "bestType": "KP"
+        }
+      ],
+      "topAtomicCandidates": [
+        {
+          "id": "qid_6ab85fed01344625",
+          "otid": "otid_06710b412753461e",
+          "type": "Q",
+          "parentPkid": "kpid_c3bdf6ab57db4281",
+          "denseScore": 341.4513854980469,
+          "sparseScore": 18.812705993652344,
+          "denseRank": 9,
+          "sparseRank": 17,
+          "rrfScore": 3.007716920760399,
+          "rrfRank": 1
+        },
+        {
+          "id": "qid_665ce95ac4b24abf",
+          "otid": "otid_a206a52bfb3f46aa",
+          "type": "Q",
+          "parentPkid": "kpid_c0f0d7495c864adf",
+          "denseScore": 325.77008056640625,
+          "sparseScore": 19.047929763793945,
+          "denseRank": 25,
+          "sparseRank": 14,
+          "rrfScore": 2.798092209856916,
+          "rrfRank": 2
+        },
+        {
+          "id": "qid_54d6b81d3c9e49c4",
+          "otid": "otid_6258d4af76df4ee7",
+          "type": "Q",
+          "parentPkid": "kpid_f29a3d96be534262",
+          "denseScore": 316.61724853515625,
+          "sparseScore": 19.937110900878906,
+          "denseRank": 44,
+          "sparseRank": 9,
+          "rrfScore": 2.70066889632107,
+          "rrfRank": 3
+        },
+        {
+          "id": "qid_9ac725a63aaf41ce",
+          "otid": "otid_40565beb38cf45c5",
+          "type": "Q",
+          "parentPkid": "kpid_bb1dbcdb3fc84622",
+          "denseScore": 317.90069580078125,
+          "sparseScore": 17.946853637695312,
+          "denseRank": 37,
+          "sparseRank": 22,
+          "rrfScore": 2.4943424691978877,
+          "rrfRank": 4
+        },
+        {
+          "id": "kpid_ad82dfda25984fe2",
+          "otid": "otid_ee3035722c4b481e",
+          "type": "KP",
+          "denseScore": 304.8957824707031,
+          "sparseScore": 19.335973739624023,
+          "denseRank": 92,
+          "sparseRank": 12,
+          "rrfScore": 2.324561403508772,
+          "rrfRank": 5,
+          "kpRoleTags": [
+            "time_expression",
+            "deadline"
+          ]
+        },
+        {
+          "id": "qid_af42e1e770834c86",
+          "otid": "otid_8ee6bdcf13e741b8",
+          "type": "Q",
+          "parentPkid": "kpid_71936148eeda4cd0",
+          "denseScore": 307.5262451171875,
+          "sparseScore": 17.401397705078125,
+          "denseRank": 74,
+          "sparseRank": 25,
+          "rrfScore": 2.1580333625987707,
+          "rrfRank": 6
+        },
+        {
+          "id": "otid_ee3035722c4b481e",
+          "otid": "otid_ee3035722c4b481e",
+          "type": "OT",
+          "denseScore": 284.8312072753906,
+          "sparseScore": 21.81805992126465,
+          "denseRank": 299,
+          "sparseRank": 4,
+          "rrfScore": 2.1535515320334264,
+          "rrfRank": 7
+        },
+        {
+          "id": "kpid_b9d0c32e81be45f5",
+          "otid": "otid_e1647864eb2b41e3",
+          "type": "KP",
+          "denseScore": 286.8218078613281,
+          "sparseScore": 20.24396514892578,
+          "denseRank": 267,
+          "sparseRank": 7,
+          "rrfScore": 2.0968551736729197,
+          "rrfRank": 8,
+          "kpRoleTags": [
+            "time_expression",
+            "deadline",
+            "schedule"
+          ]
+        },
+        {
+          "id": "qid_c982a7968a6e4f92",
+          "otid": "otid_1c14b6043fd645c8",
+          "type": "Q",
+          "parentPkid": "kpid_a5672865c8d54bcd",
+          "denseScore": 321.38226318359375,
+          "sparseScore": 15.83460807800293,
+          "denseRank": 31,
+          "sparseRank": 65,
+          "rrfScore": 2.058901098901099,
+          "rrfRank": 9
+        },
+        {
+          "id": "qid_94683bdf5ab94808",
+          "otid": "otid_f77c101d05104a9e",
+          "type": "Q",
+          "parentPkid": "kpid_20c25ff2c81e4311",
+          "denseScore": 297.5618591308594,
+          "sparseScore": 18.82308006286621,
+          "denseRank": 151,
+          "sparseRank": 16,
+          "rrfScore": 2.052881017710152,
+          "rrfRank": 10
+        }
+      ]
+    }
+  ]
+}

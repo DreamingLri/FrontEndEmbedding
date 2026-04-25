@@ -1,0 +1,538 @@
+{
+  "generatedAt": "2026-04-19T04:51:49.187Z",
+  "datasetBundle": "retrieval_matched_v1",
+  "datasetKey": "granularity_retrieval_matched_v1_bundle",
+  "datasetLabel": "Main+InDomain+ExtOOD(retrieval_matched_v1)",
+  "datasetGroups": [
+    {
+      "key": "main_bench_120",
+      "label": "Main",
+      "role": "benchmark",
+      "size": 120,
+      "sources": [
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_main_benchmark_v2_reviewed_userized_v1.json"
+      ]
+    },
+    {
+      "key": "in_domain_holdout_50",
+      "label": "InDomain",
+      "role": "in_domain_holdout",
+      "size": 60,
+      "sources": [
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_in_domain_generalization_60_reviewed_userized_retrieval_matched_v1.json"
+      ]
+    },
+    {
+      "key": "matched_ext_ood_60",
+      "label": "ExtOOD",
+      "role": "external_ood_holdout",
+      "size": 60,
+      "sources": [
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_external_matched_ood_60_reviewed_userized_retrieval_matched_v1.json"
+      ]
+    }
+  ],
+  "presetName": "frontend_research_sync_v1",
+  "variants": [
+    {
+      "label": "runtime_full",
+      "note": "Current frontend runtime display chain.",
+      "flags": {
+        "enablePhaseAnchorBoost": true,
+        "enableTitleIntentAdjustments": true,
+        "enableCoverageAdjustments": true,
+        "enableLatestVersionRerank": true
+      },
+      "metricsByDataset": {
+        "main_bench_120": {
+          "retrieval": {
+            "total": 120,
+            "answerRate": 100,
+            "hitAt1": 71.67,
+            "hitAt3": 92.5,
+            "hitAt5": 94.17,
+            "mrr": 0.8202,
+            "latestTriggeredRate": 1.67
+          },
+          "rendered": {
+            "total": 120,
+            "answerRate": 100,
+            "hitAt1": 71.67,
+            "hitAt3": 91.67,
+            "hitAt5": 94.17,
+            "mrr": 0.8213,
+            "latestTriggeredRate": 1.67
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0.0011
+        },
+        "in_domain_holdout_50": {
+          "retrieval": {
+            "total": 60,
+            "answerRate": 100,
+            "hitAt1": 78.33,
+            "hitAt3": 93.33,
+            "hitAt5": 95,
+            "mrr": 0.8604,
+            "latestTriggeredRate": 0
+          },
+          "rendered": {
+            "total": 60,
+            "answerRate": 100,
+            "hitAt1": 80,
+            "hitAt3": 93.33,
+            "hitAt5": 95,
+            "mrr": 0.8727,
+            "latestTriggeredRate": 0
+          },
+          "displayLiftHitAt1": 1.67,
+          "displayLiftMRR": 0.0123
+        },
+        "matched_ext_ood_60": {
+          "retrieval": {
+            "total": 60,
+            "answerRate": 100,
+            "hitAt1": 81.67,
+            "hitAt3": 86.67,
+            "hitAt5": 90,
+            "mrr": 0.8503,
+            "latestTriggeredRate": 1.67
+          },
+          "rendered": {
+            "total": 60,
+            "answerRate": 100,
+            "hitAt1": 83.33,
+            "hitAt3": 88.33,
+            "hitAt5": 90,
+            "mrr": 0.8608,
+            "latestTriggeredRate": 1.67
+          },
+          "displayLiftHitAt1": 1.66,
+          "displayLiftMRR": 0.0105
+        }
+      },
+      "combined": {
+        "retrieval": {
+          "total": 240,
+          "answerRate": 100,
+          "hitAt1": 75.83,
+          "hitAt3": 91.25,
+          "hitAt5": 93.33,
+          "mrr": 0.8378,
+          "latestTriggeredRate": 1.25
+        },
+        "rendered": {
+          "total": 240,
+          "answerRate": 100,
+          "hitAt1": 76.67,
+          "hitAt3": 91.25,
+          "hitAt5": 93.33,
+          "mrr": 0.844,
+          "latestTriggeredRate": 1.25
+        },
+        "displayLiftHitAt1": 0.84,
+        "displayLiftMRR": 0.0062
+      }
+    },
+    {
+      "label": "no_phase_anchor_boost",
+      "note": "Disable phase-anchor document boost only.",
+      "flags": {
+        "enablePhaseAnchorBoost": false,
+        "enableTitleIntentAdjustments": true,
+        "enableCoverageAdjustments": true,
+        "enableLatestVersionRerank": true
+      },
+      "metricsByDataset": {
+        "main_bench_120": {
+          "retrieval": {
+            "total": 120,
+            "answerRate": 100,
+            "hitAt1": 71.67,
+            "hitAt3": 92.5,
+            "hitAt5": 94.17,
+            "mrr": 0.8202,
+            "latestTriggeredRate": 1.67
+          },
+          "rendered": {
+            "total": 120,
+            "answerRate": 100,
+            "hitAt1": 72.5,
+            "hitAt3": 91.67,
+            "hitAt5": 94.17,
+            "mrr": 0.8269,
+            "latestTriggeredRate": 1.67
+          },
+          "displayLiftHitAt1": 0.83,
+          "displayLiftMRR": 0.0067
+        },
+        "in_domain_holdout_50": {
+          "retrieval": {
+            "total": 60,
+            "answerRate": 100,
+            "hitAt1": 78.33,
+            "hitAt3": 93.33,
+            "hitAt5": 95,
+            "mrr": 0.8604,
+            "latestTriggeredRate": 0
+          },
+          "rendered": {
+            "total": 60,
+            "answerRate": 100,
+            "hitAt1": 80,
+            "hitAt3": 93.33,
+            "hitAt5": 95,
+            "mrr": 0.8736,
+            "latestTriggeredRate": 0
+          },
+          "displayLiftHitAt1": 1.67,
+          "displayLiftMRR": 0.0132
+        },
+        "matched_ext_ood_60": {
+          "retrieval": {
+            "total": 60,
+            "answerRate": 100,
+            "hitAt1": 81.67,
+            "hitAt3": 86.67,
+            "hitAt5": 90,
+            "mrr": 0.8503,
+            "latestTriggeredRate": 1.67
+          },
+          "rendered": {
+            "total": 60,
+            "answerRate": 100,
+            "hitAt1": 83.33,
+            "hitAt3": 85,
+            "hitAt5": 86.67,
+            "mrr": 0.8536,
+            "latestTriggeredRate": 1.67
+          },
+          "displayLiftHitAt1": 1.66,
+          "displayLiftMRR": 0.0033
+        }
+      },
+      "combined": {
+        "retrieval": {
+          "total": 240,
+          "answerRate": 100,
+          "hitAt1": 75.83,
+          "hitAt3": 91.25,
+          "hitAt5": 93.33,
+          "mrr": 0.8378,
+          "latestTriggeredRate": 1.25
+        },
+        "rendered": {
+          "total": 240,
+          "answerRate": 100,
+          "hitAt1": 77.08,
+          "hitAt3": 90.42,
+          "hitAt5": 92.5,
+          "mrr": 0.8453,
+          "latestTriggeredRate": 1.25
+        },
+        "displayLiftHitAt1": 1.25,
+        "displayLiftMRR": 0.0075
+      }
+    },
+    {
+      "label": "no_latest_version_rerank",
+      "note": "Keep other display rules, but force latest-version preference off.",
+      "flags": {
+        "enablePhaseAnchorBoost": true,
+        "enableTitleIntentAdjustments": true,
+        "enableCoverageAdjustments": true,
+        "enableLatestVersionRerank": false
+      },
+      "metricsByDataset": {
+        "main_bench_120": {
+          "retrieval": {
+            "total": 120,
+            "answerRate": 100,
+            "hitAt1": 71.67,
+            "hitAt3": 92.5,
+            "hitAt5": 94.17,
+            "mrr": 0.8202,
+            "latestTriggeredRate": 1.67
+          },
+          "rendered": {
+            "total": 120,
+            "answerRate": 100,
+            "hitAt1": 71.67,
+            "hitAt3": 92.5,
+            "hitAt5": 95,
+            "mrr": 0.8229,
+            "latestTriggeredRate": 1.67
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0.0027
+        },
+        "in_domain_holdout_50": {
+          "retrieval": {
+            "total": 60,
+            "answerRate": 100,
+            "hitAt1": 78.33,
+            "hitAt3": 93.33,
+            "hitAt5": 95,
+            "mrr": 0.8604,
+            "latestTriggeredRate": 0
+          },
+          "rendered": {
+            "total": 60,
+            "answerRate": 100,
+            "hitAt1": 80,
+            "hitAt3": 93.33,
+            "hitAt5": 95,
+            "mrr": 0.8727,
+            "latestTriggeredRate": 0
+          },
+          "displayLiftHitAt1": 1.67,
+          "displayLiftMRR": 0.0123
+        },
+        "matched_ext_ood_60": {
+          "retrieval": {
+            "total": 60,
+            "answerRate": 100,
+            "hitAt1": 81.67,
+            "hitAt3": 86.67,
+            "hitAt5": 90,
+            "mrr": 0.8503,
+            "latestTriggeredRate": 1.67
+          },
+          "rendered": {
+            "total": 60,
+            "answerRate": 100,
+            "hitAt1": 83.33,
+            "hitAt3": 88.33,
+            "hitAt5": 90,
+            "mrr": 0.8608,
+            "latestTriggeredRate": 1.67
+          },
+          "displayLiftHitAt1": 1.66,
+          "displayLiftMRR": 0.0105
+        }
+      },
+      "combined": {
+        "retrieval": {
+          "total": 240,
+          "answerRate": 100,
+          "hitAt1": 75.83,
+          "hitAt3": 91.25,
+          "hitAt5": 93.33,
+          "mrr": 0.8378,
+          "latestTriggeredRate": 1.25
+        },
+        "rendered": {
+          "total": 240,
+          "answerRate": 100,
+          "hitAt1": 76.67,
+          "hitAt3": 91.67,
+          "hitAt5": 93.75,
+          "mrr": 0.8448,
+          "latestTriggeredRate": 1.25
+        },
+        "displayLiftHitAt1": 0.84,
+        "displayLiftMRR": 0.007
+      }
+    },
+    {
+      "label": "no_title_intent_adjustment",
+      "note": "Disable title-intent and query-plan role adjustment, keep coverage and latest-version.",
+      "flags": {
+        "enablePhaseAnchorBoost": true,
+        "enableTitleIntentAdjustments": false,
+        "enableCoverageAdjustments": true,
+        "enableLatestVersionRerank": true
+      },
+      "metricsByDataset": {
+        "main_bench_120": {
+          "retrieval": {
+            "total": 120,
+            "answerRate": 100,
+            "hitAt1": 71.67,
+            "hitAt3": 92.5,
+            "hitAt5": 94.17,
+            "mrr": 0.8202,
+            "latestTriggeredRate": 1.67
+          },
+          "rendered": {
+            "total": 120,
+            "answerRate": 100,
+            "hitAt1": 70.83,
+            "hitAt3": 90.83,
+            "hitAt5": 93.33,
+            "mrr": 0.8152,
+            "latestTriggeredRate": 1.67
+          },
+          "displayLiftHitAt1": -0.84,
+          "displayLiftMRR": -0.005
+        },
+        "in_domain_holdout_50": {
+          "retrieval": {
+            "total": 60,
+            "answerRate": 100,
+            "hitAt1": 78.33,
+            "hitAt3": 93.33,
+            "hitAt5": 95,
+            "mrr": 0.8604,
+            "latestTriggeredRate": 0
+          },
+          "rendered": {
+            "total": 60,
+            "answerRate": 100,
+            "hitAt1": 78.33,
+            "hitAt3": 91.67,
+            "hitAt5": 95,
+            "mrr": 0.8579,
+            "latestTriggeredRate": 0
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": -0.0025
+        },
+        "matched_ext_ood_60": {
+          "retrieval": {
+            "total": 60,
+            "answerRate": 100,
+            "hitAt1": 81.67,
+            "hitAt3": 86.67,
+            "hitAt5": 90,
+            "mrr": 0.8503,
+            "latestTriggeredRate": 1.67
+          },
+          "rendered": {
+            "total": 60,
+            "answerRate": 100,
+            "hitAt1": 78.33,
+            "hitAt3": 88.33,
+            "hitAt5": 90,
+            "mrr": 0.8415,
+            "latestTriggeredRate": 1.67
+          },
+          "displayLiftHitAt1": -3.34,
+          "displayLiftMRR": -0.0088
+        }
+      },
+      "combined": {
+        "retrieval": {
+          "total": 240,
+          "answerRate": 100,
+          "hitAt1": 75.83,
+          "hitAt3": 91.25,
+          "hitAt5": 93.33,
+          "mrr": 0.8378,
+          "latestTriggeredRate": 1.25
+        },
+        "rendered": {
+          "total": 240,
+          "answerRate": 100,
+          "hitAt1": 74.58,
+          "hitAt3": 90.42,
+          "hitAt5": 92.92,
+          "mrr": 0.8324,
+          "latestTriggeredRate": 1.25
+        },
+        "displayLiftHitAt1": -1.25,
+        "displayLiftMRR": -0.0054
+      }
+    },
+    {
+      "label": "all_display_rules_off",
+      "note": "Disable phase, title-intent, coverage, and latest-version display rerank.",
+      "flags": {
+        "enablePhaseAnchorBoost": false,
+        "enableTitleIntentAdjustments": false,
+        "enableCoverageAdjustments": false,
+        "enableLatestVersionRerank": false
+      },
+      "metricsByDataset": {
+        "main_bench_120": {
+          "retrieval": {
+            "total": 120,
+            "answerRate": 100,
+            "hitAt1": 71.67,
+            "hitAt3": 92.5,
+            "hitAt5": 94.17,
+            "mrr": 0.8202,
+            "latestTriggeredRate": 1.67
+          },
+          "rendered": {
+            "total": 120,
+            "answerRate": 100,
+            "hitAt1": 71.67,
+            "hitAt3": 92.5,
+            "hitAt5": 94.17,
+            "mrr": 0.8202,
+            "latestTriggeredRate": 1.67
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0
+        },
+        "in_domain_holdout_50": {
+          "retrieval": {
+            "total": 60,
+            "answerRate": 100,
+            "hitAt1": 78.33,
+            "hitAt3": 93.33,
+            "hitAt5": 95,
+            "mrr": 0.8604,
+            "latestTriggeredRate": 0
+          },
+          "rendered": {
+            "total": 60,
+            "answerRate": 100,
+            "hitAt1": 78.33,
+            "hitAt3": 93.33,
+            "hitAt5": 95,
+            "mrr": 0.8604,
+            "latestTriggeredRate": 0
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0
+        },
+        "matched_ext_ood_60": {
+          "retrieval": {
+            "total": 60,
+            "answerRate": 100,
+            "hitAt1": 81.67,
+            "hitAt3": 86.67,
+            "hitAt5": 90,
+            "mrr": 0.8503,
+            "latestTriggeredRate": 1.67
+          },
+          "rendered": {
+            "total": 60,
+            "answerRate": 100,
+            "hitAt1": 81.67,
+            "hitAt3": 86.67,
+            "hitAt5": 90,
+            "mrr": 0.8503,
+            "latestTriggeredRate": 1.67
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0
+        }
+      },
+      "combined": {
+        "retrieval": {
+          "total": 240,
+          "answerRate": 100,
+          "hitAt1": 75.83,
+          "hitAt3": 91.25,
+          "hitAt5": 93.33,
+          "mrr": 0.8378,
+          "latestTriggeredRate": 1.25
+        },
+        "rendered": {
+          "total": 240,
+          "answerRate": 100,
+          "hitAt1": 75.83,
+          "hitAt3": 91.25,
+          "hitAt5": 93.33,
+          "mrr": 0.8378,
+          "latestTriggeredRate": 1.25
+        },
+        "displayLiftHitAt1": 0,
+        "displayLiftMRR": 0
+      }
+    }
+  ]
+}

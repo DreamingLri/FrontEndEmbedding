@@ -1,25 +1,31 @@
 export const CURRENT_EVAL_DATASET_FILES = {
-    // 当前 granularity 主线
+    // 当前 granularity 泛化三集主线：
+    // Main v4 / InDomain v7 / BlindExtOOD v4：
+    // 在结构风险基本对齐基础上融入现实用户痛点，降低标题锚点过强导致的分数虚高。
     granularityMain120:
-        "../Backend/test/test_dataset_granularity/test_dataset_granularity_main_benchmark_v2_reviewed_userized_v1.json",
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_main_generalization_aligned_120_draft_v4.json",
+    granularityInDomainGeneralization100:
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_in_domain_generalization_aligned_100_draft_v7.json",
+    granularityBlindExtOod100:
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_blind_ext_ood_generalization_aligned_100_draft_v4.json",
+    // Legacy aliases kept for old scripts only. Do not use these names in current mainline reports.
     granularityInDomainHoldout50:
-        "../Backend/test/test_dataset_granularity/test_dataset_granularity_in_domain_generalization_60_reviewed_userized_v1.json",
-    // 当前论文口径：blind aligned 外域集作为正式 ExtOOD；旧 matched 外域集单列保留
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_in_domain_generalization_aligned_100_draft_v7.json",
     granularityExtOodBlind60:
-        "../Backend/test/test_dataset_granularity/test_dataset_granularity_aligned_ext_ood_blind_60_draft_v1.json",
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_blind_ext_ood_generalization_aligned_100_draft_v4.json",
     granularityMatchedExtOod60:
-        "../Backend/test/test_dataset_granularity/test_dataset_granularity_external_matched_ood_60_reviewed_userized_v1.json",
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_external_matched_ood_60_reviewed_userized_gradient_v3_result_calibrated_harder.json",
     granularityHardOodBlind30:
         "../Backend/test/test_dataset_granularity/test_dataset_granularity_hard_ood_blind_30_draft_v1.json",
     granularityLegacyExternalOodHard30:
         "../Backend/test/test_dataset_granularity/test_dataset_granularity_external_ood_holdout_30_reviewed_userized_v1.json",
-    // 兼容旧 target key：external_ood_50 现在映射到正式 blind ExtOOD。
+    // 兼容旧 target key：external_ood_50 现在映射到正式 matched ExtOOD。
     granularityExternalOod50:
-        "../Backend/test/test_dataset_granularity/test_dataset_granularity_aligned_ext_ood_blind_60_draft_v1.json",
-    // 兼容旧 target key：historical external_ood_holdout_30 过去已被借用为 matched external 入口，这里保留该映射。
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_external_matched_ood_60_reviewed_userized_gradient_v3_result_calibrated_harder.json",
+    // external_ood_holdout_30 回到真实 30 条 hard stress 入口，不再借用为 matched external。
     granularityExternalOodHoldout30:
-        "../Backend/test/test_dataset_granularity/test_dataset_granularity_external_matched_ood_60_reviewed_userized_v1.json",
-    // 兼容旧 target key：external_ood_hard_30 现在映射到正式 blind HardOOD。
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_external_ood_holdout_30_reviewed_userized_v1.json",
+    // 兼容旧 target key：external_ood_hard_30 仍映射到 blind HardOOD。
     granularityExternalOodHard30:
         "../Backend/test/test_dataset_granularity/test_dataset_granularity_hard_ood_blind_30_draft_v1.json",
     granularityHardOodV2DiagTop30:

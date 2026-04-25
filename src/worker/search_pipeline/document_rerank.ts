@@ -1,4 +1,5 @@
 import type { QueryPlan } from "../query_planner.ts";
+import type { ParsedQueryIntent } from "../vector_engine.ts";
 import type { PipelineDocumentRecord } from "./types.ts";
 import {
     buildDocumentRerankEntries,
@@ -9,9 +10,12 @@ import {
 } from "./document_rerank_shared.ts";
 import { buildDocumentRerankQuerySignals } from "./document_rerank_query.ts";
 import {
+    applyTitleIntentConfusionGate,
     applyCompressedQueryDisplayGuardToEntries,
+    applyYearlessSameFamilyFreshnessGuardToEntries,
     applyCoverageTitleDiversity,
     applyPhaseAnchorBoostToDocuments,
+    buildTitleIntentConfusionGate,
     computeCoverageWeightedDelta,
     computeLatestVersionDocDelta,
     computeQueryPlanDocRoleDelta,
@@ -29,22 +33,47 @@ export {
 
 export function rerankAnswerDocuments(params: {
     query: string;
+    queryIntent?: ParsedQueryIntent;
     documents: PipelineDocumentRecord[];
     queryPlan?: QueryPlan;
+    roleAlignmentQueryPlan?: QueryPlan;
     enablePhaseAnchorBoost: boolean;
     applyTitleAdjustments: boolean;
+    enableTitleIntentConfusionGate: boolean;
+    enableStructuredKpRoleEvidenceAdjustments: boolean;
+    enableLexicalTitleIntentAdjustments: boolean;
+    enableLexicalTitleTypeAdjustments: boolean;
+    enableThemeSpecificTitleAdjustments: boolean;
+    enableDoctoralThemeTitleAdjustments: boolean;
+    enableTuimianThemeTitleAdjustments: boolean;
+    enableSummerCampThemeTitleAdjustments: boolean;
+    enableTransferThemeTitleAdjustments: boolean;
+    enableCompressedKeywordTitleAdjustments: boolean;
     preferLatestWithinTopic: boolean;
 }): PipelineDocumentRecord[] {
     const {
         query,
+        queryIntent,
         documents,
         queryPlan,
+        roleAlignmentQueryPlan,
         enablePhaseAnchorBoost,
         applyTitleAdjustments,
+        enableTitleIntentConfusionGate,
+        enableStructuredKpRoleEvidenceAdjustments,
+        enableLexicalTitleIntentAdjustments,
+        enableLexicalTitleTypeAdjustments,
+        enableThemeSpecificTitleAdjustments,
+        enableDoctoralThemeTitleAdjustments,
+        enableTuimianThemeTitleAdjustments,
+        enableSummerCampThemeTitleAdjustments,
+        enableTransferThemeTitleAdjustments,
+        enableCompressedKeywordTitleAdjustments,
         preferLatestWithinTopic,
     } = params;
     const querySignals = buildDocumentRerankQuerySignals({
         query,
+        queryIntent,
         queryPlan,
         preferLatestWithinTopic,
     });
@@ -71,6 +100,9 @@ export function rerankAnswerDocuments(params: {
     const latestVersionFamilyStats = shouldApplyLatestVersionBoost
         ? buildLatestVersionFamilyStats(phaseAdjustedEntries)
         : undefined;
+    const titleIntentConfusionGate = enableTitleIntentConfusionGate
+        ? buildTitleIntentConfusionGate(querySignals, phaseAdjustedEntries)
+        : undefined;
     // 这里是真正文档展示打分：
     // title intent 决定“这篇文档像不像用户要的那类通知”，
     // latest version 处理同一家族的新旧版本，
@@ -78,14 +110,44 @@ export function rerankAnswerDocuments(params: {
     const rerankedEntries = sortDocumentRerankEntriesByDisplayScore(
         phaseAdjustedEntries
             .map((entry) => {
+                const rawTitleIntentDelta = computeTitleIntentDocDelta(
+                    querySignals,
+                    entry,
+                    {
+                        enableStructuredKpRoleEvidenceAdjustments,
+                        enableLexicalTitleIntentAdjustments,
+                        enableLexicalTitleTypeAdjustments,
+                        enableThemeSpecificAdjustments:
+                            enableThemeSpecificTitleAdjustments,
+                        enableDoctoralThemeAdjustments:
+                            enableDoctoralThemeTitleAdjustments,
+                        enableTuimianThemeAdjustments:
+                            enableTuimianThemeTitleAdjustments,
+                        enableSummerCampThemeAdjustments:
+                            enableSummerCampThemeTitleAdjustments,
+                        enableTransferThemeAdjustments:
+                            enableTransferThemeTitleAdjustments,
+                        enableCompressedKeywordAdjustments:
+                            enableCompressedKeywordTitleAdjustments,
+                    },
+                );
+                const rawRoleAlignmentDelta = roleAlignmentQueryPlan
+                    ? computeQueryPlanDocRoleDelta(
+                          entry.metadata.roles,
+                          roleAlignmentQueryPlan,
+                      )
+                    : 0;
+                // 当 coarse retrieval 已经给出清晰领先时，只缩小 display 的救援幅度；
+                // 真正低间隔、强混淆的候选簇仍保留完整结构化重排能力。
                 const titleDelta =
-                    (computeTitleIntentDocDelta(querySignals, entry) +
-                        (queryPlan
-                            ? computeQueryPlanDocRoleDelta(
-                                  entry.metadata.roles,
-                                  queryPlan,
-                              )
-                            : 0)) *
+                    (applyTitleIntentConfusionGate(
+                        rawTitleIntentDelta,
+                        titleIntentConfusionGate,
+                    ) +
+                        applyTitleIntentConfusionGate(
+                            rawRoleAlignmentDelta,
+                            titleIntentConfusionGate,
+                        )) *
                     querySignals.titleIntentWeight;
                 const latestDelta =
                     shouldApplyLatestVersionBoost && latestVersionFamilyStats
@@ -112,10 +174,15 @@ export function rerankAnswerDocuments(params: {
     const displayEntries = querySignals.wantsCoverageDiversity
         ? applyCoverageTitleDiversity(rerankedEntries)
         : rerankedEntries;
-    const guardedEntries = applyCompressedQueryDisplayGuardToEntries(
+    const freshnessGuardedEntries = applyYearlessSameFamilyFreshnessGuardToEntries(
         querySignals,
         phaseAdjustedEntries,
         displayEntries,
+    );
+    const guardedEntries = applyCompressedQueryDisplayGuardToEntries(
+        querySignals,
+        phaseAdjustedEntries,
+        freshnessGuardedEntries,
     );
 
     return getDocumentsFromRerankEntries(guardedEntries);

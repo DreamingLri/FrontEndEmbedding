@@ -1,0 +1,640 @@
+{
+  "generatedAt": "2026-04-20T08:25:33.696Z",
+  "datasetBundle": "hard_ood_blind_30",
+  "datasetKey": "test_dataset_granularity_hard_ood_blind_30_draft_v1",
+  "datasetLabel": "HardOOD",
+  "datasetGroups": [
+    {
+      "key": "hard_ood_blind_30",
+      "label": "HardOOD",
+      "role": "external_ood_holdout",
+      "size": 30,
+      "sources": [
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_hard_ood_blind_30_draft_v1.json"
+      ]
+    }
+  ],
+  "presetName": "frontend_research_sync_v1",
+  "variants": [
+    {
+      "label": "runtime_full",
+      "note": "Current frontend runtime display chain.",
+      "metricsByDataset": {
+        "test_dataset_granularity_hard_ood_blind_30_draft_v1": {
+          "total": 30,
+          "answerRate": 93.33,
+          "hitAt1": 63.33,
+          "mrr": 0.7607
+        }
+      },
+      "combined": {
+        "total": 30,
+        "answerRate": 93.33,
+        "hitAt1": 63.33,
+        "mrr": 0.7607
+      }
+    },
+    {
+      "label": "no_structured_kp_role_evidence_adjustment",
+      "note": "Disable structured KP-role evidence adjustment only.",
+      "metricsByDataset": {
+        "test_dataset_granularity_hard_ood_blind_30_draft_v1": {
+          "total": 30,
+          "answerRate": 93.33,
+          "hitAt1": 63.33,
+          "mrr": 0.7524
+        }
+      },
+      "combined": {
+        "total": 30,
+        "answerRate": 93.33,
+        "hitAt1": 63.33,
+        "mrr": 0.7524
+      }
+    },
+    {
+      "label": "no_lexical_title_type_adjustment",
+      "note": "Disable coarse title-type lexical rules only.",
+      "metricsByDataset": {
+        "test_dataset_granularity_hard_ood_blind_30_draft_v1": {
+          "total": 30,
+          "answerRate": 93.33,
+          "hitAt1": 63.33,
+          "mrr": 0.7607
+        }
+      },
+      "combined": {
+        "total": 30,
+        "answerRate": 93.33,
+        "hitAt1": 63.33,
+        "mrr": 0.7607
+      }
+    }
+  ],
+  "pairwiseDiffs": [
+    {
+      "baseLabel": "runtime_full",
+      "compareLabel": "no_structured_kp_role_evidence_adjustment",
+      "betterSummary": {
+        "count": 1,
+        "hit1RecoveredCount": 0,
+        "hit1LostCount": 0,
+        "avgReciprocalRankGain": 0.25,
+        "byDataset": [
+          {
+            "key": "test_dataset_granularity_hard_ood_blind_30_draft_v1",
+            "count": 1
+          }
+        ],
+        "byQueryScope": [
+          {
+            "key": "eligibility_condition",
+            "count": 1
+          }
+        ],
+        "byPreferredGranularity": [
+          {
+            "key": "Q+KP",
+            "count": 1
+          }
+        ],
+        "bySupportPattern": [
+          {
+            "key": "multi_kp",
+            "count": 1
+          }
+        ],
+        "byThemeFamily": [
+          {
+            "key": "master_reexam",
+            "count": 1
+          }
+        ],
+        "byDominantEvidenceGroup": [
+          {
+            "key": "timeline",
+            "count": 1
+          }
+        ],
+        "byPrimaryBestKpRoleTag": [
+          {
+            "key": "time_expression",
+            "count": 1
+          }
+        ]
+      },
+      "worseSummary": {
+        "count": 0,
+        "hit1RecoveredCount": 0,
+        "hit1LostCount": 0,
+        "avgReciprocalRankGain": 0,
+        "byDataset": [],
+        "byQueryScope": [],
+        "byPreferredGranularity": [],
+        "bySupportPattern": [],
+        "byThemeFamily": [],
+        "byDominantEvidenceGroup": [],
+        "byPrimaryBestKpRoleTag": []
+      },
+      "betterCases": [
+        {
+          "caseIndex": 13,
+          "id": "hard_ood_blind_v1_0014",
+          "dataset": "test_dataset_granularity_hard_ood_blind_30_draft_v1",
+          "query": "拟录取考生在正式录取前必须满足哪些条件，另外他需要如何提交书面说明以满足学院的要求？",
+          "sourceQuery": "根据2026年人工智能学院的硕士研究生招生流程，拟录取考生在正式录取前必须满足哪些条件？ || 如果一位拟录取考生在2026年4月3日决定放弃录取，他需要如何提交书面说明以满足学院的要求？",
+          "sourceSeedId": "qid_1e442c7ab55346d5__qid_b3c038f856394a57",
+          "sourceDataset": "external_blind_unused_sai_answers_v1",
+          "queryType": "situational",
+          "queryScope": "eligibility_condition",
+          "preferredGranularity": "Q+KP",
+          "supportPattern": "multi_kp",
+          "themeFamily": "master_reexam",
+          "challengeTags": [
+            "master_reexam",
+            "result_notice",
+            "multi_kp",
+            "paired_unused_seed"
+          ],
+          "expectedOtid": "otid_42225868ea784bbf",
+          "runtimeFull": {
+            "answered": true,
+            "latestTriggered": true,
+            "retrievalRank": 1,
+            "renderedRank": 2,
+            "renderedReciprocalRank": 0.5,
+            "displayTop1Margin": 0.0144,
+            "top1": {
+              "otid": "otid_beb149b3688b4f4c",
+              "title": "人工智能学院关于公布2025年硕士研究生增补拟录取名单（第三批）的通知",
+              "displayScore": 1.8206,
+              "coarseScore": 1.7126,
+              "bestKpid": "kpid_1e2c6378f51047bd",
+              "eventTypes": [
+                "录取公示",
+                "复试通知",
+                "材料提交"
+              ],
+              "structuredTopicIds": [
+                "graduate_admission"
+              ],
+              "structuredIntentIds": [
+                "master_unified_exam"
+              ],
+              "degreeLevels": [
+                "硕士"
+              ],
+              "titleRoles": [
+                "result_notice"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "email"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "email",
+                "publish",
+                "background",
+                "post_outcome"
+              ],
+              "kpEvidenceGroupCounts": {
+                "requirement": 1,
+                "timeline": 2,
+                "post_outcome": 1
+              },
+              "dominantEvidenceGroup": "timeline",
+              "titleTypeFlags": [
+                "outcome"
+              ],
+              "roleTypeFlags": [
+                "outcome"
+              ]
+            },
+            "top3": [
+              {
+                "otid": "otid_beb149b3688b4f4c",
+                "title": "人工智能学院关于公布2025年硕士研究生增补拟录取名单（第三批）的通知",
+                "displayScore": 1.8206,
+                "coarseScore": 1.7126,
+                "bestKpid": "kpid_1e2c6378f51047bd",
+                "eventTypes": [
+                  "录取公示",
+                  "复试通知",
+                  "材料提交"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "result_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "email"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "email",
+                  "publish",
+                  "background",
+                  "post_outcome"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "timeline": 2,
+                  "post_outcome": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [
+                  "outcome"
+                ],
+                "roleTypeFlags": [
+                  "outcome"
+                ]
+              },
+              {
+                "otid": "otid_42225868ea784bbf",
+                "title": "人工智能学院关于公布2026年硕士研究生招生复试结果的通知",
+                "displayScore": 1.8063,
+                "coarseScore": 1.6983,
+                "bestKpid": "kpid_5d44223cacfc40db",
+                "eventTypes": [
+                  "录取公示",
+                  "复试通知",
+                  "材料提交"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "result_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "reminder",
+                  "post_outcome"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "reminder",
+                  "post_outcome",
+                  "publish",
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "timeline": 2,
+                  "post_outcome": 2
+                },
+                "dominantEvidenceGroup": "post_outcome",
+                "titleTypeFlags": [],
+                "roleTypeFlags": [
+                  "outcome"
+                ]
+              },
+              {
+                "otid": "otid_1435d9cf85914ea7",
+                "title": "人工智能学院关于公布2025年硕士研究生增补拟录取名单（第二批）的通知",
+                "displayScore": 1.775,
+                "coarseScore": 1.667,
+                "bestKpid": "kpid_d8245be1c2754894",
+                "eventTypes": [
+                  "录取公示",
+                  "复试通知",
+                  "材料提交"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "result_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "reminder"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "reminder",
+                  "publish",
+                  "background",
+                  "post_outcome"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 2,
+                  "post_outcome": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [
+                  "outcome"
+                ],
+                "roleTypeFlags": [
+                  "outcome"
+                ]
+              }
+            ]
+          },
+          "compare": {
+            "answered": true,
+            "latestTriggered": true,
+            "retrievalRank": 1,
+            "renderedRank": 4,
+            "renderedReciprocalRank": 0.25,
+            "displayTop1Margin": 0.0108,
+            "top1": {
+              "otid": "otid_1435d9cf85914ea7",
+              "title": "人工智能学院关于公布2025年硕士研究生增补拟录取名单（第二批）的通知",
+              "displayScore": 1.7669,
+              "coarseScore": 1.6589,
+              "bestKpid": "kpid_d8245be1c2754894",
+              "eventTypes": [
+                "录取公示",
+                "复试通知",
+                "材料提交"
+              ],
+              "structuredTopicIds": [
+                "graduate_admission"
+              ],
+              "structuredIntentIds": [
+                "master_unified_exam"
+              ],
+              "degreeLevels": [
+                "硕士"
+              ],
+              "titleRoles": [
+                "result_notice"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "reminder"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "reminder",
+                "publish",
+                "background",
+                "post_outcome"
+              ],
+              "kpEvidenceGroupCounts": {
+                "timeline": 2,
+                "post_outcome": 1
+              },
+              "dominantEvidenceGroup": "timeline",
+              "titleTypeFlags": [
+                "outcome"
+              ],
+              "roleTypeFlags": [
+                "outcome"
+              ]
+            },
+            "top3": [
+              {
+                "otid": "otid_1435d9cf85914ea7",
+                "title": "人工智能学院关于公布2025年硕士研究生增补拟录取名单（第二批）的通知",
+                "displayScore": 1.7669,
+                "coarseScore": 1.6589,
+                "bestKpid": "kpid_d8245be1c2754894",
+                "eventTypes": [
+                  "录取公示",
+                  "复试通知",
+                  "材料提交"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "result_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "reminder"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "reminder",
+                  "publish",
+                  "background",
+                  "post_outcome"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 2,
+                  "post_outcome": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [
+                  "outcome"
+                ],
+                "roleTypeFlags": [
+                  "outcome"
+                ]
+              },
+              {
+                "otid": "otid_beb149b3688b4f4c",
+                "title": "人工智能学院关于公布2025年硕士研究生增补拟录取名单（第三批）的通知",
+                "displayScore": 1.7561,
+                "coarseScore": 1.6481,
+                "bestKpid": "kpid_1e2c6378f51047bd",
+                "eventTypes": [
+                  "录取公示",
+                  "复试通知",
+                  "材料提交"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "result_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "email"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "email",
+                  "publish",
+                  "background",
+                  "post_outcome"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "timeline": 2,
+                  "post_outcome": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [
+                  "outcome"
+                ],
+                "roleTypeFlags": [
+                  "outcome"
+                ]
+              },
+              {
+                "otid": "otid_3eaad7074d4a4dc9",
+                "title": "人工智能学院关于公布2025年硕士研究生增补拟录取名单（第一批）的通知",
+                "displayScore": 1.738,
+                "coarseScore": 1.63,
+                "bestKpid": "kpid_19b5c19889b946f0",
+                "eventTypes": [
+                  "录取公示",
+                  "复试通知",
+                  "材料提交"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "result_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "background",
+                  "post_outcome"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "background",
+                  "post_outcome"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 1,
+                  "post_outcome": 1
+                },
+                "dominantEvidenceGroup": "post_outcome",
+                "titleTypeFlags": [
+                  "outcome"
+                ],
+                "roleTypeFlags": [
+                  "outcome"
+                ]
+              }
+            ]
+          },
+          "reciprocalRankGain": 0.25,
+          "rankGain": 2,
+          "hit1Recovered": false,
+          "hit1Lost": false,
+          "top1Changed": true
+        }
+      ],
+      "worseCases": []
+    },
+    {
+      "baseLabel": "runtime_full",
+      "compareLabel": "no_lexical_title_type_adjustment",
+      "betterSummary": {
+        "count": 0,
+        "hit1RecoveredCount": 0,
+        "hit1LostCount": 0,
+        "avgReciprocalRankGain": 0,
+        "byDataset": [],
+        "byQueryScope": [],
+        "byPreferredGranularity": [],
+        "bySupportPattern": [],
+        "byThemeFamily": [],
+        "byDominantEvidenceGroup": [],
+        "byPrimaryBestKpRoleTag": []
+      },
+      "worseSummary": {
+        "count": 0,
+        "hit1RecoveredCount": 0,
+        "hit1LostCount": 0,
+        "avgReciprocalRankGain": 0,
+        "byDataset": [],
+        "byQueryScope": [],
+        "byPreferredGranularity": [],
+        "bySupportPattern": [],
+        "byThemeFamily": [],
+        "byDominantEvidenceGroup": [],
+        "byPrimaryBestKpRoleTag": []
+      },
+      "betterCases": [],
+      "worseCases": []
+    }
+  ],
+  "sharedHit1Protection": {
+    "bothProtectedHit1Summary": {
+      "count": 0,
+      "hit1RecoveredCount": 0,
+      "hit1LostCount": 0,
+      "avgReciprocalRankGain": 0,
+      "byDataset": [],
+      "byQueryScope": [],
+      "byPreferredGranularity": [],
+      "bySupportPattern": [],
+      "byThemeFamily": [],
+      "byDominantEvidenceGroup": [],
+      "byPrimaryBestKpRoleTag": []
+    },
+    "structuredOnlyProtectedHit1Summary": {
+      "count": 0,
+      "hit1RecoveredCount": 0,
+      "hit1LostCount": 0,
+      "avgReciprocalRankGain": 0,
+      "byDataset": [],
+      "byQueryScope": [],
+      "byPreferredGranularity": [],
+      "bySupportPattern": [],
+      "byThemeFamily": [],
+      "byDominantEvidenceGroup": [],
+      "byPrimaryBestKpRoleTag": []
+    },
+    "lexicalOnlyProtectedHit1Summary": {
+      "count": 0,
+      "hit1RecoveredCount": 0,
+      "hit1LostCount": 0,
+      "avgReciprocalRankGain": 0,
+      "byDataset": [],
+      "byQueryScope": [],
+      "byPreferredGranularity": [],
+      "bySupportPattern": [],
+      "byThemeFamily": [],
+      "byDominantEvidenceGroup": [],
+      "byPrimaryBestKpRoleTag": []
+    },
+    "bothProtectedHit1Cases": [],
+    "structuredOnlyProtectedHit1Cases": [],
+    "lexicalOnlyProtectedHit1Cases": []
+  }
+}

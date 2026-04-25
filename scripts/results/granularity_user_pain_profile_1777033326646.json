@@ -1,0 +1,112 @@
+{
+  "generatedAt": "2026-04-24T12:22:06.645Z",
+  "profileDefinition": "Heuristic user-pain audit for implicit latest, low title anchor, multi-intent, post-outcome action, cross-doc flow, and ambiguous user state. This script does not mutate source datasets.",
+  "targetPainCaseRate": "30%-40% per split after manual replacement",
+  "summaries": [
+    {
+      "label": "Main",
+      "file": "../Backend/test/test_dataset_granularity/test_dataset_granularity_main_generalization_aligned_120_draft_v4.json",
+      "total": 120,
+      "painCaseCount": 90,
+      "painCaseRate": 75,
+      "avgPainTypesPerCase": 1.32,
+      "avgTitleOverlapRatio": 0.2988,
+      "replacementCandidateCount": 0,
+      "byPainType": {
+        "low_title_anchor": 47,
+        "multi_intent": 52,
+        "cross_doc_flow": 14,
+        "implicit_latest": 24,
+        "ambiguous_user_state": 13,
+        "post_outcome_action": 8
+      },
+      "byTitleAnchorLevel": {
+        "low": 47,
+        "high": 44,
+        "medium": 29
+      },
+      "bySupportPattern": {
+        "multi_kp": 42,
+        "ot_required": 28,
+        "single_kp": 50
+      },
+      "replacementCandidates": [],
+      "byStructuralComplexityTag": {
+        "multi_kp": 42,
+        "kp_plus_ot": 42,
+        "dense_same_theme": 22,
+        "dense_version_chain": 34
+      }
+    },
+    {
+      "label": "InDomain",
+      "file": "../Backend/test/test_dataset_granularity/test_dataset_granularity_in_domain_generalization_aligned_100_draft_v7.json",
+      "total": 100,
+      "painCaseCount": 77,
+      "painCaseRate": 77,
+      "avgPainTypesPerCase": 1.25,
+      "avgTitleOverlapRatio": 0.2882,
+      "replacementCandidateCount": 0,
+      "byPainType": {
+        "low_title_anchor": 33,
+        "multi_intent": 50,
+        "implicit_latest": 14,
+        "cross_doc_flow": 10,
+        "post_outcome_action": 8,
+        "ambiguous_user_state": 10
+      },
+      "byTitleAnchorLevel": {
+        "low": 33,
+        "high": 48,
+        "medium": 19
+      },
+      "bySupportPattern": {
+        "multi_kp": 33,
+        "ot_required": 25,
+        "single_kp": 42
+      },
+      "replacementCandidates": [],
+      "byStructuralComplexityTag": {
+        "multi_kp": 33,
+        "kp_plus_ot": 24,
+        "dense_same_theme": 9,
+        "dense_version_chain": 26
+      }
+    },
+    {
+      "label": "BlindExtOOD",
+      "file": "../Backend/test/test_dataset_granularity/test_dataset_granularity_blind_ext_ood_generalization_aligned_100_draft_v4.json",
+      "total": 100,
+      "painCaseCount": 78,
+      "painCaseRate": 78,
+      "avgPainTypesPerCase": 1.62,
+      "avgTitleOverlapRatio": 0.2344,
+      "replacementCandidateCount": 0,
+      "byPainType": {
+        "implicit_latest": 33,
+        "ambiguous_user_state": 15,
+        "low_title_anchor": 30,
+        "multi_intent": 55,
+        "cross_doc_flow": 14,
+        "post_outcome_action": 15
+      },
+      "byTitleAnchorLevel": {
+        "medium": 20,
+        "low": 30,
+        "high": 50
+      },
+      "bySupportPattern": {
+        "single_kp": 46,
+        "multi_kp": 37,
+        "ot_required": 17
+      },
+      "replacementCandidates": [],
+      "byStructuralComplexityTag": {
+        "multi_kp": 37,
+        "kp_plus_ot": 34,
+        "dense_same_theme": 30,
+        "dense_version_chain": 23
+      }
+    }
+  ]
+}

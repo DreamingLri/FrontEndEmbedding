@@ -1,0 +1,939 @@
+{
+  "generatedAt": "2026-04-24T09:21:50.378Z",
+  "targetFile": "../Backend/test/test_dataset_granularity/test_dataset_granularity_in_domain_generalization_aligned_100_draft_v4.json",
+  "targetIds": [
+    "in_domain_100_draft_v1_0025",
+    "in_domain_100_draft_v1_0011",
+    "in_domain_100_draft_v1_0008",
+    "in_domain_100_draft_v1_0074",
+    "in_domain_100_draft_v1_0061",
+    "in_domain_100_draft_v1_0054",
+    "in_domain_100_draft_v1_0018",
+    "in_domain_100_draft_v1_0064",
+    "in_domain_100_draft_v1_0090"
+  ],
+  "summary": {
+    "targetCount": 9,
+    "buckets": [
+      "multi_kp|situational|procedure|Q+KP",
+      "multi_kp|standard|procedure|KP+OT",
+      "multi_kp|situational|procedure|KP",
+      "single_kp|standard|policy_overview|OT",
+      "multi_kp|standard|eligibility_condition|KP+OT",
+      "single_kp|situational|fact_detail|Q+KP",
+      "single_kp|short_keyword|fact_detail|KP",
+      "single_kp|situational|time_location|Q+KP"
+    ],
+    "candidateCountsByBucket": {
+      "multi_kp|standard|procedure|KP+OT": 6,
+      "single_kp|short_keyword|fact_detail|KP": 1
+    }
+  },
+  "replacements": [
+    {
+      "target": {
+        "query_style_mode": "userized_v1",
+        "query_scope": "procedure",
+        "expected_otid": "otid_79fde873cbd54280",
+        "query": "我已经通过了2024年全国医学博士外语考试 接下来怎么弄资格认定？需要准备要准备什么材料",
+        "support_pattern": "multi_kp",
+        "preferred_granularity": "Q+KP",
+        "theme_family": "在职临床医师博士资格认定",
+        "id": "in_domain_100_draft_v1_0008",
+        "kp_eval_mode": "aspect_coverage",
+        "min_groups_to_cover": 2,
+        "required_kpid_groups": [
+          "['kpid_8ca9592349954c12']",
+          "['kpid_4b39a681e9cb4e45']"
+        ],
+        "source_review_item_id": "ai_inhold50v1_0020",
+        "query_type": "situational",
+        "granularity_sensitive": true,
+        "source_dataset": "in_domain_holdout_50_v1",
+        "expected_kpid": "kpid_8ca9592349954c12",
+        "query_derivation": "runtime_hard_rewrite_frozen_v1",
+        "notes": "自动预填骨架：已同步建议 otid / query_scope / preferred_granularity / support_pattern；multi_kp 已回填 AI_evidence_kpids，expected_kpid 为建议值或首个证据点，导出前仍建议人工复核。",
+        "challenge_tags": [
+          "procedure",
+          "multi_kp",
+          "situational_query",
+          "pref_q_plus_kp"
+        ],
+        "source_seed_id": "ai_seed_otid_79fde873cbd54280_02",
+        "source_query": "我已经通过了2024年全国医学博士外语考试，接下来怎么申请资格认定？需要准备哪些材料？",
+        "support_kpids": [
+          "kpid_8ca9592349954c12",
+          "kpid_4b39a681e9cb4e45"
+        ],
+        "ot_title": "关于2024年在职临床医师以研究生毕业同等学力申请临床医学博士专业学位资格认定的通知",
+        "publish_time": "2024-04-15",
+        "link": "https://graduate.sysu.edu.cn/article/554",
+        "anchor_bucket": "medium_anchor",
+        "doc_role": "general_notice",
+        "year_inferred_v1": "2024",
+        "review_status": "reviewed",
+        "difficulty_score_v1": 4.4,
+        "difficulty_level_v1": "L2",
+        "difficulty_reasons_v1": [
+          "support:multi_kp+2.0",
+          "query_type:situational+0.8",
+          "boundary_terms+0.7",
+          "anchor:medium_anchor+0.6",
+          "scope:procedure+0.3"
+        ],
+        "near_neighbor_level": "high",
+        "same_theme_candidate_count_v1": 5,
+        "same_theme_near_year_candidate_count_v1": 3,
+        "source_triplet_original_id": "ai_inhold50v1_0020",
+        "source_triplet_pool": "in_domain_reviewed_v2",
+        "source_triplet_file": "Backend\\test\\test_dataset_granularity\\test_dataset_granularity_in_domain_generalization_60_reviewed_userized_v2.json",
+        "source_triplet_priority": 0,
+        "theme_key_v1": "在职临床医师博士资格认定"
+      },
+      "bucket": "multi_kp|situational|procedure|Q+KP",
+      "candidates": []
+    },
+    {
+      "target": {
+        "query_style_mode": "userized_v1",
+        "query_scope": "procedure",
+        "expected_otid": "otid_79fde873cbd54280",
+        "query": "2024年在职临床医师申请临床医学博士专业学位的资格认定具体步骤都有哪些",
+        "support_pattern": "multi_kp",
+        "preferred_granularity": "KP+OT",
+        "theme_family": "在职临床医师博士资格认定",
+        "id": "in_domain_100_draft_v1_0011",
+        "kp_eval_mode": "aspect_coverage",
+        "min_groups_to_cover": 4,
+        "required_kpid_groups": [
+          "['kpid_4b39a681e9cb4e45']",
+          "['kpid_a5fd8d00b74b40a3']",
+          "['kpid_59ac02baf7924ee2']",
+          "['kpid_991fde5d2940422d']"
+        ],
+        "source_review_item_id": "ai_inhold50v1_0019",
+        "query_type": "standard",
+        "granularity_sensitive": true,
+        "source_dataset": "in_domain_holdout_50_v1",
+        "expected_kpid": "kpid_4b39a681e9cb4e45",
+        "query_derivation": "runtime_hard_rewrite_frozen_v1",
+        "notes": "自动预填骨架：已同步建议 otid / query_scope / preferred_granularity / support_pattern；multi_kp 已回填 AI_evidence_kpids，expected_kpid 为建议值或首个证据点，导出前仍建议人工复核。",
+        "challenge_tags": [
+          "procedure",
+          "multi_kp",
+          "standard_query",
+          "pref_kp_plus_ot"
+        ],
+        "source_seed_id": "ai_seed_otid_79fde873cbd54280_01",
+        "source_query": "2024年在职临床医师申请临床医学博士专业学位的资格认定具体步骤有哪些？",
+        "support_kpids": [
+          "kpid_4b39a681e9cb4e45",
+          "kpid_a5fd8d00b74b40a3",
+          "kpid_59ac02baf7924ee2",
+          "kpid_991fde5d2940422d"
+        ],
+        "ot_title": "关于2024年在职临床医师以研究生毕业同等学力申请临床医学博士专业学位资格认定的通知",
+        "publish_time": "2024-04-15",
+        "link": "https://graduate.sysu.edu.cn/article/554",
+        "anchor_bucket": "medium_anchor",
+        "doc_role": "general_notice",
+        "year_inferred_v1": "2024",
+        "review_status": "reviewed",
+        "difficulty_score_v1": 3.6,
+        "difficulty_level_v1": "L2",
+        "difficulty_reasons_v1": [
+          "support:multi_kp+2.0",
+          "boundary_terms+0.7",
+          "anchor:medium_anchor+0.6",
+          "scope:procedure+0.3"
+        ],
+        "near_neighbor_level": "high",
+        "same_theme_candidate_count_v1": 5,
+        "same_theme_near_year_candidate_count_v1": 3,
+        "source_triplet_original_id": "ai_inhold50v1_0019",
+        "source_triplet_pool": "in_domain_reviewed_v2",
+        "source_triplet_file": "Backend\\test\\test_dataset_granularity\\test_dataset_granularity_in_domain_generalization_60_reviewed_userized_v2.json",
+        "source_triplet_priority": 0,
+        "theme_key_v1": "在职临床医师博士资格认定"
+      },
+      "bucket": "multi_kp|standard|procedure|KP+OT",
+      "candidates": [
+        {
+          "score": 12,
+          "sourceFile": "..\\Backend\\test\\test_dataset_granularity\\test_dataset_granularity_in_domain_generalization_60_reviewed_userized_gradient_v1.json",
+          "item": {
+            "query_style_mode": "userized_v1",
+            "query_scope": "procedure",
+            "expected_otid": "otid_80529bdd365b4138",
+            "query": "申请2026年大湾区大学-联合培养博士的流程怎么走是什么",
+            "support_pattern": "multi_kp",
+            "preferred_granularity": "KP+OT",
+            "theme_family": "联合培养博士招生",
+            "id": "ai_inhold50v1_0058",
+            "kp_eval_mode": "aspect_coverage",
+            "min_groups_to_cover": 3,
+            "required_kpid_groups": [
+              "['kpid_e39f8fb8fb2c4c57']",
+              "['kpid_4804a2ca6c5449ba']",
+              "['kpid_519b1685f7e64a3e']"
+            ],
+            "source_review_item_id": "ai_inhold50v1_0058",
+            "query_type": "standard",
+            "granularity_sensitive": true,
+            "source_dataset": "in_domain_holdout_50_v1",
+            "expected_kpid": "kpid_e39f8fb8fb2c4c57",
+            "query_derivation": "runtime_hard_rewrite_frozen_v1",
+            "notes": "自动预填骨架：已同步建议 otid / query_scope / preferred_granularity / support_pattern；multi_kp 已回填 AI_evidence_kpids，expected_kpid 为建议值或首个证据点，导出前仍建议人工复核。",
+            "challenge_tags": [
+              "procedure",
+              "multi_kp",
+              "standard_query",
+              "pref_kp_plus_ot"
+            ],
+            "source_seed_id": "ai_seed_otid_80529bdd365b4138_01",
+            "source_query": "申请2026年大湾区大学-中山大学联合培养博士研究生的完整流程是什么？",
+            "support_kpids": [
+              "kpid_e39f8fb8fb2c4c57",
+              "kpid_4804a2ca6c5449ba",
+              "kpid_519b1685f7e64a3e"
+            ],
+            "retrieval_match_profile": "retrieval_matched_v1",
+            "retrieval_difficulty_construct_score_v1": 35.37,
+            "retrieval_difficulty_construct_bucket_v1": "medium",
+            "retrieval_candidate_confusion_raw_v1": 2.3755,
+            "retrieval_topic_chain_density_raw_v1": 5.4634,
+            "retrieval_query_margin_raw_v1": -0.1437,
+            "retrieval_title_kp_distinctiveness_raw_v1": 3.1649,
+            "gradient_profile": "gradient_v1_in_domain_harder",
+            "sourceFile": "D:\\Project\\SuAsk\\SuAsk_Agent\\Backend\\test\\test_dataset_granularity\\test_dataset_granularity_in_domain_generalization_60_reviewed_userized_gradient_v1.json"
+          },
+          "bucket": "multi_kp|standard|procedure|KP+OT",
+          "usedExpectedOtid": false,
+          "reason": [
+            "new_expected_otid",
+            "non_backup_source"
+          ]
+        },
+        {
+          "score": 2,
+          "sourceFile": "..\\Backend\\test\\test_dataset_granularity\\test_dataset_granularity_in_domain_generalization_60_reviewed_userized_gradient_v1.json",
+          "item": {
+            "query_style_mode": "userized_v1",
+            "query_scope": "procedure",
+            "expected_otid": "otid_0d274d8aa9684e3e",
+            "query": "报考2024年少干计划硕士需要参加什么考试和邮寄登记表的截止时间是什么",
+            "support_pattern": "multi_kp",
+            "preferred_granularity": "KP+OT",
+            "theme_family": "少干计划报考流程",
+            "id": "ai_inhold50v1_0039",
+            "kp_eval_mode": "aspect_coverage",
+            "min_groups_to_cover": 2,
+            "required_kpid_groups": [
+              "['kpid_424160411c7f44a6']",
+              "['kpid_890271c2dac34b78']"
+            ],
+            "source_review_item_id": "ai_inhold50v1_0039",
+            "query_type": "standard",
+            "granularity_sensitive": true,
+            "source_dataset": "in_domain_holdout_50_v1",
+            "expected_kpid": "kpid_424160411c7f44a6",
+            "query_derivation": "runtime_hard_rewrite_frozen_v1",
+            "notes": "自动预填骨架：已同步建议 otid / query_scope / preferred_granularity / support_pattern；multi_kp 已回填 AI_evidence_kpids，expected_kpid 为建议值或首个证据点，导出前仍建议人工复核。",
+            "challenge_tags": [
+              "procedure",
+              "multi_kp",
+              "standard_query",
+              "pref_kp_plus_ot"
+            ],
+            "source_seed_id": "ai_seed_otid_0d274d8aa9684e3e_01",
+            "source_query": "报考中山大学2024年少干计划硕士需要参加什么考试和邮寄登记表的截止时间是什么？",
+            "support_kpids": [
+              "kpid_424160411c7f44a6",
+              "kpid_890271c2dac34b78"
+            ],
+            "retrieval_match_profile": "retrieval_matched_v1",
+            "retrieval_difficulty_construct_score_v1": 49.35,
+            "retrieval_difficulty_construct_bucket_v1": "medium",
+            "retrieval_candidate_confusion_raw_v1": 2.5209,
+            "retrieval_topic_chain_density_raw_v1": 4.6685,
+            "retrieval_query_margin_raw_v1": -0.3136,
+            "retrieval_title_kp_distinctiveness_raw_v1": 3.1115,
+            "gradient_profile": "gradient_v1_in_domain_harder",
+            "sourceFile": "D:\\Project\\SuAsk\\SuAsk_Agent\\Backend\\test\\test_dataset_granularity\\test_dataset_granularity_in_domain_generalization_60_reviewed_userized_gradient_v1.json"
+          },
+          "bucket": "multi_kp|standard|procedure|KP+OT",
+          "usedExpectedOtid": true,
+          "reason": [
+            "non_backup_source"
+          ]
+        },
+        {
+          "score": 2,
+          "sourceFile": "..\\Backend\\test\\test_dataset_granularity\\test_dataset_granularity_in_domain_generalization_60_reviewed_userized_gradient_v1.json",
+          "item": {
+            "query_style_mode": "userized_v1",
+            "query_scope": "procedure",
+            "expected_otid": "otid_68999cb6f0a3468d",
+            "query": "报考2024年临床医学专业学位博士需要提交哪些要准备要准备什么材料",
+            "support_pattern": "multi_kp",
+            "preferred_granularity": "KP+OT",
+            "theme_family": "博士招生材料要求",
+            "id": "ai_inhold50v1_0042",
+            "kp_eval_mode": "aspect_coverage",
+            "min_groups_to_cover": 2,
+            "required_kpid_groups": [
+              "['kpid_f60eec02e4b24f0e']",
+              "['kpid_5cc633a436f64d4a']"
+            ],
+            "source_review_item_id": "ai_inhold50v1_0042",
+            "query_type": "standard",
+            "granularity_sensitive": true,
+            "source_dataset": "in_domain_holdout_50_v1",
+            "expected_kpid": "kpid_f60eec02e4b24f0e",
+            "query_derivation": "runtime_hard_rewrite_frozen_v1",
+            "notes": "自动预填骨架：已同步建议 otid / query_scope / preferred_granularity / support_pattern；multi_kp 已回填 AI_evidence_kpids，expected_kpid 为建议值或首个证据点，导出前仍建议人工复核。 2026-04-03 人工复核确认：该题属于完整流程题，应维持 aspect_coverage，而不是压成单一主锚点。",
+            "challenge_tags": [
+              "procedure",
+              "multi_kp",
+              "standard_query",
+              "pref_kp_plus_ot"
+            ],
+            "source_seed_id": "ai_seed_otid_68999cb6f0a3468d_01",
+            "source_query": "报考中山大学2024年临床医学专业学位博士研究生需要提交哪些申请材料？",
+            "support_kpids": [
+              "kpid_f60eec02e4b24f0e",
+              "kpid_5cc633a436f64d4a"
+            ],
+            "retrieval_match_profile": "retrieval_matched_v1",
+            "retrieval_difficulty_construct_score_v1": 66.97,
+            "retrieval_difficulty_construct_bucket_v1": "hard",
+            "retrieval_candidate_confusion_raw_v1": 2.8723,
+            "retrieval_topic_chain_density_raw_v1": 5.933,
+            "retrieval_query_margin_raw_v1": -0.3093,
+            "retrieval_title_kp_distinctiveness_raw_v1": 3.0006,
+            "gradient_profile": "gradient_v1_in_domain_harder",
+            "sourceFile": "D:\\Project\\SuAsk\\SuAsk_Agent\\Backend\\test\\test_dataset_granularity\\test_dataset_granularity_in_domain_generalization_60_reviewed_userized_gradient_v1.json"
+          },
+          "bucket": "multi_kp|standard|procedure|KP+OT",
+          "usedExpectedOtid": true,
+          "reason": [
+            "non_backup_source"
+          ]
+        },
+        {
+          "score": 2,
+          "sourceFile": "..\\Backend\\test\\test_dataset_granularity\\test_dataset_granularity_in_domain_generalization_60_reviewed_userized_gradient_v1.json",
+          "item": {
+            "query_style_mode": "userized_v1",
+            "query_scope": "procedure",
+            "expected_otid": "otid_2db2c0c0349745ea",
+            "query": "2024年硕士初试成绩复核的完整申请流程和要求是什么",
+            "support_pattern": "multi_kp",
+            "preferred_granularity": "KP+OT",
+            "theme_family": "成绩复核",
+            "id": "ai_inhold50v1_0047",
+            "kp_eval_mode": "aspect_coverage",
+            "min_groups_to_cover": 2,
+            "required_kpid_groups": [
+              "['kpid_85274adfd6be4a6e']",
+              "['kpid_231f6eff1fbc4077']"
+            ],
+            "source_review_item_id": "ai_inhold50v1_0047",
+            "query_type": "standard",
+            "granularity_sensitive": true,
+            "source_dataset": "in_domain_holdout_50_v1",
+            "expected_kpid": "kpid_85274adfd6be4a6e",
+            "query_derivation": "runtime_hard_rewrite_frozen_v1",
+            "notes": "自动预填骨架：已同步建议 otid / query_scope / preferred_granularity / support_pattern；multi_kp 已回填 AI_evidence_kpids，expected_kpid 为建议值或首个证据点，导出前仍建议人工复核。",
+            "challenge_tags": [
+              "procedure",
+              "multi_kp",
+              "standard_query",
+              "pref_kp_plus_ot"
+            ],
+            "source_seed_id": "ai_seed_otid_2db2c0c0349745ea_01",
+            "source_query": "中山大学2024年硕士初试成绩复核的完整申请流程和要求是什么？",
+            "support_kpids": [
+              "kpid_85274adfd6be4a6e",
+              "kpid_231f6eff1fbc4077"
+            ],
+            "retrieval_match_profile": "retrieval_matched_v1",
+            "retrieval_difficulty_construct_score_v1": 59.33,
+            "retrieval_difficulty_construct_bucket_v1": "medium",
+            "retrieval_candidate_confusion_raw_v1": 2.7137,
+            "retrieval_topic_chain_density_raw_v1": 5.0337,
+            "retrieval_query_margin_raw_v1": -0.2993,
+            "retrieval_title_kp_distinctiveness_raw_v1": 2.8854,
+            "gradient_profile": "gradient_v1_in_domain_harder",
+            "sourceFile": "D:\\Project\\SuAsk\\SuAsk_Agent\\Backend\\test\\test_dataset_granularity\\test_dataset_granularity_in_domain_generalization_60_reviewed_userized_gradient_v1.json"
+          },
+          "bucket": "multi_kp|standard|procedure|KP+OT",
+          "usedExpectedOtid": true,
+          "reason": [
+            "non_backup_source"
+          ]
+        },
+        {
+          "score": 2,
+          "sourceFile": "..\\Backend\\test\\test_dataset_granularity\\test_dataset_granularity_in_domain_generalization_60_reviewed_userized_gradient_v1.json",
+          "item": {
+            "id": "ai_inhold50v1_0003",
+            "query": "2024年强基计划考核的流程怎么走是什么",
+            "expected_otid": "otid_1d0896a191814c1e",
+            "support_kpids": [
+              "kpid_2a1a41879f9a45d7",
+              "kpid_a92d2f9d7b3440c0",
+              "kpid_40a065a2e1954afb",
+              "kpid_8737527562d94c7a"
+            ],
+            "kp_eval_mode": "aspect_coverage",
+            "query_type": "standard",
+            "query_scope": "procedure",
+            "preferred_granularity": "KP+OT",
+            "support_pattern": "multi_kp",
+            "granularity_sensitive": true,
+            "theme_family": "中山大学2024强基计划考核",
+            "source_dataset": "in_domain_holdout_50_v1",
+            "source_seed_id": "ai_seed_otid_1d0896a191814c1e_01",
+            "source_review_item_id": "ai_inhold50v1_0003",
+            "challenge_tags": [
+              "procedure",
+              "multi_kp",
+              "standard_query",
+              "pref_kp_plus_ot"
+            ],
+            "notes": "自动预填骨架：已同步建议 otid / query_scope / preferred_granularity / support_pattern；multi_kp 已回填 AI_evidence_kpids，expected_kpid 为建议值或首个证据点，导出前仍建议人工复核。 完整流程题不宜默认把首个流程片段当作主锚点。 2026-04-03 第二轮语义复核：该题改回 aspect_coverage，按有限流程方面覆盖评估，不再维持 ot_required。",
+            "source_query": "中山大学2024年强基计划考核的完整流程是什么？",
+            "query_style_mode": "userized_v1",
+            "query_derivation": "runtime_hard_rewrite_frozen_v1",
+            "retrieval_match_profile": "retrieval_matched_v1",
+            "retrieval_difficulty_construct_score_v1": 30.86,
+            "retrieval_difficulty_construct_bucket_v1": "easy",
+            "retrieval_candidate_confusion_raw_v1": 3.312,
+            "retrieval_topic_chain_density_raw_v1": 4.4868,
+            "retrieval_query_margin_raw_v1": -0.2145,
+            "retrieval_title_kp_distinctiveness_raw_v1": 3.4611,
+            "gradient_profile": "gradient_v1_in_domain_harder",
+            "sourceFile": "D:\\Project\\SuAsk\\SuAsk_Agent\\Backend\\test\\test_dataset_granularity\\test_dataset_granularity_in_domain_generalization_60_reviewed_userized_gradient_v1.json"
+          },
+          "bucket": "multi_kp|standard|procedure|KP+OT",
+          "usedExpectedOtid": true,
+          "reason": [
+            "non_backup_source"
+          ]
+        },
+        {
+          "score": 2,
+          "sourceFile": "..\\Backend\\test\\test_dataset_granularity\\test_dataset_granularity_in_domain_generalization_60_reviewed_userized_gradient_v1.json",
+          "item": {
+            "id": "ai_inhold50v1_0014",
+            "query": "2024年上半年同等学力临床医学博士论文答辩的整个申请和答辩流程是怎样的",
+            "expected_otid": "otid_88804cb412b84a0f",
+            "support_kpids": [
+              "kpid_0867dbaa69af4bf6",
+              "kpid_8617415fc9d1463e",
+              "kpid_27cee68f3f1e4162",
+              "kpid_85072e43cfab4758"
+            ],
+            "kp_eval_mode": "aspect_coverage",
+            "required_kpid_groups": [
+              [
+                "kpid_0867dbaa69af4bf6"
+              ],
+              [
+                "kpid_8617415fc9d1463e"
+              ],
+              [
+                "kpid_27cee68f3f1e4162"
+              ],
+              [
+                "kpid_85072e43cfab4758"
+              ]
+            ],
+            "min_groups_to_cover": 4,
+            "query_type": "standard",
+            "query_scope": "procedure",
+            "preferred_granularity": "KP+OT",
+            "support_pattern": "multi_kp",
+            "granularity_sensitive": true,
+            "theme_family": "同等学力答辩流程",
+            "source_dataset": "in_domain_holdout_50_v1",
+            "source_seed_id": "ai_seed_otid_88804cb412b84a0f_01",
+            "source_review_item_id": "ai_inhold50v1_0014",
+            "challenge_tags": [
+              "procedure",
+              "multi_kp",
+              "standard_query",
+              "pref_kp_plus_ot"
+            ],
+            "notes": "自动预填骨架：已同步建议 otid / query_scope / preferred_granularity / support_pattern；multi_kp 已回填 AI_evidence_kpids，expected_kpid 为建议值或首个证据点，导出前仍建议人工复核。 答辩全流程题保持 multi_kp，但撤销自动预填主锚点。",
+            "source_query": "2024年上半年中山大学同等学力临床医学博士论文答辩的整个申请和答辩流程是怎样的？",
+            "query_style_mode": "userized_v1",
+            "query_derivation": "runtime_hard_rewrite_frozen_v1",
+            "retrieval_match_profile": "retrieval_matched_v1",
+            "retrieval_difficulty_construct_score_v1": 70.23,
+            "retrieval_difficulty_construct_bucket_v1": "hard",
+            "retrieval_candidate_confusion_raw_v1": 4.4646,
+            "retrieval_topic_chain_density_raw_v1": 6.8101,
+            "retrieval_query_margin_raw_v1": -0.2488,
+            "retrieval_title_kp_distinctiveness_raw_v1": 3.0943,
+            "gradient_profile": "gradient_v1_in_domain_harder",
+            "sourceFile": "D:\\Project\\SuAsk\\SuAsk_Agent\\Backend\\test\\test_dataset_granularity\\test_dataset_granularity_in_domain_generalization_60_reviewed_userized_gradient_v1.json"
+          },
+          "bucket": "multi_kp|standard|procedure|KP+OT",
+          "usedExpectedOtid": true,
+          "reason": [
+            "non_backup_source"
+          ]
+        }
+      ]
+    },
+    {
+      "target": {
+        "id": "in_domain_100_draft_v1_0018",
+        "query": "如果我准备申请2019年博士生国外访学资助 从提交材料到领款要怎么走 还要特别注意哪些出国时限和回国结项要求",
+        "expected_otid": "otid_72560bd680b24a42",
+        "expected_kpid": "kpid_e9300d074e474456",
+        "support_kpids": [
+          "kpid_e9300d074e474456",
+          "kpid_438161e195a7432b"
+        ],
+        "kp_eval_mode": "aspect_coverage",
+        "required_kpid_groups": [
+          [
+            "kpid_e9300d074e474456"
+          ],
+          [
+            "kpid_438161e195a7432b"
+          ]
+        ],
+        "min_groups_to_cover": 2,
+        "query_type": "situational",
+        "query_scope": "procedure",
+        "preferred_granularity": "KP",
+        "support_pattern": "multi_kp",
+        "granularity_sensitive": true,
+        "theme_family": "访学资助申请与时限要求",
+        "source_dataset": "in_domain_generalization_manual_direct_fill_reviewed_v1",
+        "source_seed_id": "manual_seed_otid_72560bd680b24a42_02",
+        "source_review_item_id": "in_domain_manual_direct_fill_v1_0013",
+        "challenge_tags": [
+          "procedure",
+          "multi_kp",
+          "situational_query",
+          "pref_kp"
+        ],
+        "notes": "手工直补：用于增强 InDomain 的 procedure L3 weak_anchor multi_kp。 ",
+        "source_query": "如果我准备申请2019年博士生国外访学资助，从提交材料到领款要怎么走，还要特别注意哪些出国时限和回国结项要求？",
+        "query_style_mode": "userized_v1",
+        "query_derivation": "manual_direct_fill_reviewed_v1",
+        "anchor_bucket": "weak_anchor",
+        "review_status": "reviewed",
+        "ot_title": "关于启动2019年中山大学博士生国外访学与合作研究项目资助计划的通知",
+        "publish_time": "2019-04-10 00:00:00",
+        "link": "https://graduate.sysu.edu.cn/article/321",
+        "doc_role": "general_notice",
+        "year_inferred_v1": "2019",
+        "difficulty_score_v1": 5.1,
+        "difficulty_level_v1": "L3",
+        "difficulty_reasons_v1": [
+          "support:multi_kp+2.0",
+          "query_type:situational+0.8",
+          "no_explicit_year+0.8",
+          "anchor:weak_anchor+1.2",
+          "scope:procedure+0.3"
+        ],
+        "near_neighbor_level": "low",
+        "same_theme_candidate_count_v1": 0,
+        "same_theme_near_year_candidate_count_v1": 0,
+        "source_triplet_original_id": "in_domain_manual_direct_fill_v1_0013",
+        "source_triplet_pool": "in_domain_manual_direct_fill_reviewed_v1",
+        "source_triplet_file": "Backend\\test\\test_dataset_granularity\\test_dataset_granularity_in_domain_generalization_manual_direct_fill_reviewed_v1.json",
+        "source_triplet_priority": -1,
+        "theme_key_v1": "访学资助申请与时限要求"
+      },
+      "bucket": "multi_kp|situational|procedure|KP",
+      "candidates": []
+    },
+    {
+      "target": {
+        "query": "鹏城国家实验室-中山大学2026年联合培养博士研究生专项计划的主要服务目标是什么？",
+        "expected_otid": "otid_ae46d4b5d6e74990",
+        "expected_kpid": "kpid_d1f197c06803411f",
+        "query_type": "standard",
+        "query_scope": "policy_overview",
+        "preferred_granularity": "OT",
+        "support_pattern": "single_kp",
+        "granularity_sensitive": true,
+        "theme_family": "鹏城实验室-中大联培",
+        "source_dataset": "in_domain_generalization_triplet_round2_v1_in_r2_policy_l1a",
+        "source_seed_id": "ai_seed_otid_ae46d4b5d6e74990_01",
+        "challenge_tags": [
+          "policy_overview",
+          "L1",
+          "OT_retrieval",
+          "single_kp",
+          "purpose_query"
+        ],
+        "notes": "查询关于整体政策目的，检索时OT粒度更易命中，但答案仅依赖单条KP。",
+        "evidence_kpids": [
+          "kpid_d1f197c06803411f"
+        ],
+        "evidence_text": "KP1指出计划旨在服务国家创新驱动发展战略，助力粤港澳大湾区发展和深圳中国特色社会主义先行示范区建设，加强科研联合攻关。",
+        "uniqueness_risk": "low",
+        "review_status": "pending",
+        "generation_mode": "general",
+        "seed_bad_case_queries": [],
+        "seed_failure_risks": [],
+        "ot_title": "鹏城国家实验室-中山大学2026年联合培养博士研究生专项计划招生简章",
+        "publish_time": "2025-10-23 00:00:00",
+        "link": "https://graduate.sysu.edu.cn/zsw/article/511",
+        "id": "in_domain_100_draft_v1_0025",
+        "anchor_bucket": "medium_anchor",
+        "doc_role": "rule_doc",
+        "year_inferred_v1": "2026",
+        "difficulty_score_v1": 2.4,
+        "difficulty_level_v1": "L1",
+        "difficulty_reasons_v1": [
+          "support:single_kp+1.0",
+          "anchor:medium_anchor+0.6",
+          "scope:policy_overview+0.8"
+        ],
+        "near_neighbor_level": "medium",
+        "same_theme_candidate_count_v1": 2,
+        "same_theme_near_year_candidate_count_v1": 2,
+        "source_triplet_original_id": "in_domain_generalization_triplet_round2_v1_in_r2_policy_l1a_0005",
+        "source_triplet_pool": "in_domain_generalization_triplet_difficulty_round2_drafts_v1",
+        "source_triplet_file": "Backend\\test\\test_dataset_granularity\\generalization_triplet_difficulty_round2_drafts_v1\\in_domain_generalization_triplet_round2_v1\\in_r2_policy_l1a\\in_r2_policy_l1a_draft_report_items.json",
+        "source_triplet_priority": 3,
+        "theme_key_v1": "鹏城实验室-中大联培"
+      },
+      "bucket": "single_kp|standard|policy_overview|OT",
+      "candidates": []
+    },
+    {
+      "target": {
+        "id": "in_domain_100_draft_v1_0054",
+        "query": "2023学年研究生捐赠奖学金中 哪些奖学金有学院或专业的特定限制",
+        "expected_otid": "otid_46b7578040384d16",
+        "expected_kpid": "kpid_6fd71666631d4dda",
+        "support_kpids": [
+          "kpid_6fd71666631d4dda",
+          "kpid_3fd075022cd34d0c"
+        ],
+        "kp_eval_mode": "aspect_coverage",
+        "required_kpid_groups": [
+          [
+            "kpid_6fd71666631d4dda"
+          ],
+          [
+            "kpid_3fd075022cd34d0c"
+          ]
+        ],
+        "min_groups_to_cover": 2,
+        "query_type": "standard",
+        "query_scope": "eligibility_condition",
+        "preferred_granularity": "KP+OT",
+        "support_pattern": "multi_kp",
+        "granularity_sensitive": true,
+        "theme_family": "奖学金学院限制",
+        "source_dataset": "in_domain_holdout_50_v1",
+        "source_seed_id": "ai_seed_otid_46b7578040384d16_01",
+        "source_review_item_id": "ai_inhold50v1_0012",
+        "challenge_tags": [
+          "eligibility_condition",
+          "multi_kp",
+          "standard_query",
+          "pref_kp_plus_ot"
+        ],
+        "notes": "自动预填骨架：已同步建议 otid / query_scope / preferred_granularity / support_pattern；multi_kp 已回填 AI_evidence_kpids，expected_kpid 为建议值或首个证据点，导出前仍建议人工复核。",
+        "source_query": "2023学年研究生捐赠奖学金中，哪些奖学金有学院或专业的特定限制？",
+        "query_style_mode": "userized_v1",
+        "query_derivation": "runtime_hard_rewrite_frozen_v1",
+        "ot_title": "研究生院关于做好2023学年研究生各项奖学金评选工作的通知（研院〔2023〕130号）",
+        "publish_time": "2023-09-22",
+        "link": "https://graduate.sysu.edu.cn/article/531",
+        "anchor_bucket": "medium_anchor",
+        "doc_role": "general_notice",
+        "year_inferred_v1": "2023",
+        "review_status": "reviewed",
+        "difficulty_score_v1": 4.3,
+        "difficulty_level_v1": "L2",
+        "difficulty_reasons_v1": [
+          "support:multi_kp+2.0",
+          "boundary_terms+0.7",
+          "anchor:medium_anchor+0.6",
+          "scope:eligibility_condition+1.0"
+        ],
+        "near_neighbor_level": "low",
+        "same_theme_candidate_count_v1": 0,
+        "same_theme_near_year_candidate_count_v1": 0,
+        "source_triplet_original_id": "ai_inhold50v1_0012",
+        "source_triplet_pool": "in_domain_holdout_50",
+        "source_triplet_file": "Backend\\test\\test_dataset_granularity\\test_dataset_granularity_in_domain_holdout_50_reviewed_userized_v1.json",
+        "source_triplet_priority": 1,
+        "theme_key_v1": "奖学金学院限制"
+      },
+      "bucket": "multi_kp|standard|eligibility_condition|KP+OT",
+      "candidates": []
+    },
+    {
+      "target": {
+        "query_style_mode": "userized_v1",
+        "query_scope": "fact_detail",
+        "expected_otid": "otid_a03c3337485448e0",
+        "query": "中山大学2020高水平运动队初审过了，要在线确认考试吗",
+        "support_pattern": "single_kp",
+        "preferred_granularity": "Q+KP",
+        "theme_family": "招生流程",
+        "id": "in_domain_100_draft_v1_0061",
+        "source_review_item_id": "in_domain_generalization_v2_in_fill_03_0002",
+        "query_type": "situational",
+        "granularity_sensitive": true,
+        "source_dataset": "in_domain_generalization_v2_in_fill_03",
+        "expected_kpid": "kpid_18204ace7e4e4d21",
+        "query_derivation": "gap_fill_ai_screened_2026-04-04",
+        "notes": "Q+KP 情境化操作问法，虽风险中等但可用。",
+        "challenge_tags": [
+          "fact_detail",
+          "single_kp",
+          "situational_query",
+          "pref_q_plus_kp"
+        ],
+        "source_seed_id": "ai_seed_otid_a03c3337485448e0_02",
+        "source_query": "中山大学2020高水平运动队初审过了，要在线确认考试吗",
+        "support_kpids": [
+          "kpid_18204ace7e4e4d21"
+        ],
+        "ot_title": "关于中山大学2020年高水平运动队招生测试安排的通知",
+        "publish_time": "2020-06-12",
+        "link": "https://admission.sysu.edu.cn/f/newsCenter/article/1373584",
+        "anchor_bucket": "medium_anchor",
+        "doc_role": "general_notice",
+        "year_inferred_v1": "2020",
+        "review_status": "reviewed",
+        "difficulty_score_v1": 2.9,
+        "difficulty_level_v1": "L1",
+        "difficulty_reasons_v1": [
+          "support:single_kp+1.0",
+          "query_type:situational+0.8",
+          "anchor:medium_anchor+0.6",
+          "scope:fact_detail+0.5"
+        ],
+        "near_neighbor_level": "low",
+        "same_theme_candidate_count_v1": 0,
+        "same_theme_near_year_candidate_count_v1": 0,
+        "source_triplet_original_id": "in_domain_generalization_v2_in_fill_03_0002",
+        "source_triplet_pool": "in_domain_reviewed_v2",
+        "source_triplet_file": "Backend\\test\\test_dataset_granularity\\test_dataset_granularity_in_domain_generalization_60_reviewed_userized_v2.json",
+        "source_triplet_priority": 0,
+        "theme_key_v1": "招生流程"
+      },
+      "bucket": "single_kp|situational|fact_detail|Q+KP",
+      "candidates": []
+    },
+    {
+      "target": {
+        "query": "我在内蒙古工作满3年的汉族职工，能报考中山大学2026骨干计划吗？",
+        "expected_otid": "otid_c4214c3cb4464737",
+        "expected_kpid": "kpid_a924fb348b9a4a56",
+        "query_type": "situational",
+        "query_scope": "fact_detail",
+        "preferred_granularity": "Q+KP",
+        "support_pattern": "single_kp",
+        "granularity_sensitive": true,
+        "theme_family": "中山大学骨干计划资格条件",
+        "source_dataset": "in_domain_generalization_v2_in_fill_03",
+        "source_seed_id": "ai_seed_otid_c4214c3cb4464737_02",
+        "challenge_tags": [
+          "情境化查询",
+          "资格判定",
+          "汉族考生"
+        ],
+        "notes": "情境化描述个人背景，需要自然语言匹配到KP中的资格条款",
+        "evidence_kpids": [
+          "kpid_a924fb348b9a4a56"
+        ],
+        "evidence_text": "生源地在内蒙古等省区的汉族考生，在工作满3年以上、报名时仍在当地工作可报考普通计划",
+        "uniqueness_risk": "low",
+        "review_status": "pending",
+        "generation_mode": "general",
+        "seed_bad_case_queries": [],
+        "seed_failure_risks": [],
+        "ot_title": "中山大学2026年少数民族高层次骨干人才计划研究生招生公告",
+        "publish_time": "2025-10-16 00:00:00",
+        "link": "https://graduate.sysu.edu.cn/zsw/article/497",
+        "id": "in_domain_100_draft_v1_0064",
+        "anchor_bucket": "medium_anchor",
+        "doc_role": "general_notice",
+        "year_inferred_v1": "2026",
+        "difficulty_score_v1": 2.9,
+        "difficulty_level_v1": "L1",
+        "difficulty_reasons_v1": [
+          "support:single_kp+1.0",
+          "query_type:situational+0.8",
+          "anchor:medium_anchor+0.6",
+          "scope:fact_detail+0.5"
+        ],
+        "near_neighbor_level": "low",
+        "same_theme_candidate_count_v1": 0,
+        "same_theme_near_year_candidate_count_v1": 0,
+        "source_triplet_original_id": "in_domain_generalization_v2_in_fill_03_0006",
+        "source_triplet_pool": "in_domain_gap_fill_drafts",
+        "source_triplet_file": "Backend\\test\\test_dataset_granularity\\v2_gap_fill_drafts\\in_domain_generalization_v2\\in_fill_03\\in_fill_03_draft_report_items.json",
+        "source_triplet_priority": 2,
+        "theme_key_v1": "中山大学骨干计划资格条件"
+      },
+      "bucket": "single_kp|situational|fact_detail|Q+KP",
+      "candidates": []
+    },
+    {
+      "target": {
+        "query": "资格认定材料提交时间2018",
+        "expected_otid": "otid_e2bcfb99b4af4c46",
+        "expected_kpid": "kpid_7c8755af075a4705",
+        "query_type": "short_keyword",
+        "query_scope": "fact_detail",
+        "preferred_granularity": "KP",
+        "support_pattern": "single_kp",
+        "granularity_sensitive": true,
+        "theme_family": "在职临床医师博士资格认定2018",
+        "source_dataset": "in_domain_generalization_v2_in_fill_02",
+        "source_seed_id": "ai_seed_otid_e2bcfb99b4af4c46_02",
+        "challenge_tags": [
+          "关键词匹配",
+          "时间细节",
+          "材料要求"
+        ],
+        "notes": "验证对提交截止日期的简短关键词召回和局部证据匹配。",
+        "evidence_kpids": [
+          "kpid_7c8755af075a4705"
+        ],
+        "evidence_text": "KP2指定提交材料时间为2018年5月10日-5月16日（公休日除外）。",
+        "uniqueness_risk": "low",
+        "review_status": "pending",
+        "generation_mode": "general",
+        "seed_bad_case_queries": [],
+        "seed_failure_risks": [],
+        "ot_title": "关于2018年在职临床医师以研究生毕业同等学力申请临床医学博士专业学位资格认定的通知",
+        "publish_time": "2018-05-02 00:00:00",
+        "link": "https://graduate.sysu.edu.cn/article/228",
+        "id": "in_domain_100_draft_v1_0074",
+        "anchor_bucket": "medium_anchor",
+        "doc_role": "general_notice",
+        "year_inferred_v1": "2018",
+        "difficulty_score_v1": 4.3,
+        "difficulty_level_v1": "L2",
+        "difficulty_reasons_v1": [
+          "support:single_kp+1.0",
+          "query_type:short_keyword+1.5",
+          "boundary_terms+0.7",
+          "anchor:medium_anchor+0.6",
+          "scope:fact_detail+0.5"
+        ],
+        "near_neighbor_level": "medium",
+        "same_theme_candidate_count_v1": 2,
+        "same_theme_near_year_candidate_count_v1": 2,
+        "source_triplet_original_id": "in_domain_generalization_v2_in_fill_02_0009",
+        "source_triplet_pool": "in_domain_gap_fill_drafts",
+        "source_triplet_file": "Backend\\test\\test_dataset_granularity\\v2_gap_fill_drafts\\in_domain_generalization_v2\\in_fill_02\\in_fill_02_draft_report_items.json",
+        "source_triplet_priority": 2,
+        "theme_key_v1": "在职临床医师博士资格认定2018"
+      },
+      "bucket": "single_kp|short_keyword|fact_detail|KP",
+      "candidates": [
+        {
+          "score": -2,
+          "sourceFile": "..\\Backend\\test\\test_dataset_granularity\\v2_hardening_round2_2026-04-04\\backups\\test_dataset_granularity_in_domain_generalization_60_reviewed_userized_v1.json",
+          "item": {
+            "query_style_mode": "userized_v1",
+            "query_scope": "fact_detail",
+            "expected_otid": "otid_273cdf3acb7346fd",
+            "query": "在职临床医师外语考试 报名时间 2019年12月",
+            "support_pattern": "single_kp",
+            "preferred_granularity": "KP",
+            "theme_family": "在职临床医师博士外语考试",
+            "id": "in_domain_generalization_v2_in_fill_02_0001",
+            "source_review_item_id": "in_domain_generalization_v2_in_fill_02_0001",
+            "query_type": "short_keyword",
+            "granularity_sensitive": true,
+            "source_dataset": "in_domain_generalization_v2_in_fill_02",
+            "expected_kpid": "kpid_fb33c63fbc5448c4",
+            "query_derivation": "gap_fill_ai_screened_2026-04-04",
+            "notes": "短关键词事实问法清晰。",
+            "challenge_tags": [
+              "fact_detail",
+              "single_kp",
+              "short_query",
+              "pref_kp"
+            ],
+            "source_seed_id": "ai_seed_otid_273cdf3acb7346fd_02",
+            "source_query": "在职临床医师外语考试 报名时间 2019年12月",
+            "support_kpids": [
+              "kpid_fb33c63fbc5448c4"
+            ],
+            "sourceFile": "D:\\Project\\SuAsk\\SuAsk_Agent\\Backend\\test\\test_dataset_granularity\\v2_hardening_round2_2026-04-04\\backups\\test_dataset_granularity_in_domain_generalization_60_reviewed_userized_v1.json"
+          },
+          "bucket": "single_kp|short_keyword|fact_detail|KP",
+          "usedExpectedOtid": true,
+          "reason": []
+        }
+      ]
+    },
+    {
+      "target": {
+        "query": "I've passed the preliminary review for Zhongshan University's 2021 high-level sports team test. When do I need to confirm and pay?",
+        "expected_otid": "otid_14ff3c5f13ac4c49",
+        "expected_kpid": "kpid_5377041e0d2c47b4",
+        "query_type": "situational",
+        "query_scope": "time_location",
+        "preferred_granularity": "Q+KP",
+        "support_pattern": "single_kp",
+        "granularity_sensitive": true,
+        "theme_family": "test_registration",
+        "source_dataset": "in_domain_generalization_v2_in_fill_03",
+        "source_seed_id": "ai_seed_otid_14ff3c5f13ac4c49_01",
+        "challenge_tags": [
+          "colloquial_query",
+          "time_sensitive",
+          "multi_word"
+        ],
+        "notes": "This query uses natural language that may not directly match KP text, testing retrieval sensitivity to Q+KP granularity.",
+        "evidence_kpids": [
+          "kpid_5377041e0d2c47b4"
+        ],
+        "evidence_text": "Confirmation and payment time is March 6-8, 2021, as specified in the KP.",
+        "uniqueness_risk": "low",
+        "review_status": "pending",
+        "generation_mode": "general",
+        "seed_bad_case_queries": [],
+        "seed_failure_risks": [],
+        "ot_title": "中山大学关于2021年高水平运动队招生测试安排的通知",
+        "publish_time": "2021-03-07 00:00:00",
+        "link": "https://admission.sysu.edu.cn/f/newsCenter/article/1385989",
+        "id": "in_domain_100_draft_v1_0090",
+        "anchor_bucket": "medium_anchor",
+        "doc_role": "general_notice",
+        "year_inferred_v1": "2021",
+        "difficulty_score_v1": 3.1,
+        "difficulty_level_v1": "L2",
+        "difficulty_reasons_v1": [
+          "support:single_kp+1.0",
+          "query_type:situational+0.8",
+          "anchor:medium_anchor+0.6",
+          "scope:time_location+0.7"
+        ],
+        "near_neighbor_level": "low",
+        "same_theme_candidate_count_v1": 0,
+        "same_theme_near_year_candidate_count_v1": 0,
+        "source_triplet_original_id": "in_domain_generalization_v2_in_fill_03_0002",
+        "source_triplet_pool": "in_domain_gap_fill_drafts",
+        "source_triplet_file": "Backend\\test\\test_dataset_granularity\\v2_gap_fill_drafts\\in_domain_generalization_v2\\in_fill_03\\in_fill_03_draft_report_items.json",
+        "source_triplet_priority": 2,
+        "theme_key_v1": "test_registration"
+      },
+      "bucket": "single_kp|situational|time_location|Q+KP",
+      "candidates": []
+    }
+  ]
+}

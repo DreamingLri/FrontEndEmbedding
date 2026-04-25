@@ -8,6 +8,7 @@ import type { QueryPlan } from "../query_planner.ts";
 import {
     BM25_B,
     BM25_K1,
+    DEFAULT_KP_ROLE_CANDIDATE_LIMIT,
     DEFAULT_KP_ROLE_DOC_WEIGHT,
     DEFAULT_Q_CONFUSION_WEIGHT,
     DEFAULT_WEIGHTS,
@@ -17,7 +18,9 @@ import {
     resolveMetadataTopicIds,
     RRF_K,
     RRF_RANK_LIMIT,
+    computeKpEvidenceGroupCounts,
     withQueryTokenCount,
+    dedupe,
     dotProduct,
     selectTopLocalIndices,
     type BM25Stats,
@@ -43,7 +46,10 @@ import {
     type ScopeSpecificityStats,
     shouldSkipForExplicitYear,
 } from "./search_context.ts";
-import { rerankKpCandidatesByRole } from "./search_role_rerank.ts";
+import {
+    computeKpMultiEvidenceConsensusScore,
+    rerankKpCandidatesByRole,
+} from "./search_role_rerank.ts";
 import { computeBoostMultiplier } from "./search_score_boosts.ts";
 import { applyQueryPlannerCoverageDiversification } from "./search_planner.ts";
 import {
@@ -57,6 +63,7 @@ export {
     extractEvidenceSignals,
     extractRetrievalSignals,
 } from "./search_decision.ts";
+
 export function searchAndRank(params: {
     queryVector: Float32Array;
     querySparse?: Record<number, number>;
@@ -78,6 +85,7 @@ export function searchAndRank(params: {
     kpTailWeight?: number;
     fusionMode?: FusionMode;
     lexicalBonusMode?: LexicalBonusMode;
+    enableLexicalBonusBoost?: boolean;
     qLexicalMultiplier?: number;
     kpLexicalMultiplier?: number;
     otLexicalMultiplier?: number;
@@ -115,6 +123,7 @@ export function searchAndRank(params: {
         kpTailWeight = 0.35,
         fusionMode = "default",
         lexicalBonusMode = "sum",
+        enableLexicalBonusBoost = true,
         qLexicalMultiplier = 1.5,
         kpLexicalMultiplier = 1.2,
         otLexicalMultiplier = 1.0,
@@ -381,6 +390,24 @@ export function searchAndRank(params: {
             continue;
         }
 
+        const kpRoleSelection = minimalMode
+            ? {
+                  bestKpid: scores.best_kpid,
+                  orderedCandidates: scores.kp_candidates,
+                  docScoreDelta: 0,
+              }
+            : rerankKpCandidatesByRole({
+                  kpCandidates: scores.kp_candidates,
+                  bestKpid: scores.best_kpid,
+                  rawQuery: queryIntent?.rawQuery || "",
+                  queryScopeHint,
+                  mode: kpRoleRerankMode,
+              });
+        const multiEvidenceConsensusScore = computeKpMultiEvidenceConsensusScore({
+            kpCandidates: kpRoleSelection.orderedCandidates,
+            rawQuery: queryIntent?.rawQuery || "",
+            queryScopeHint,
+        });
         const decisionScore = computeBaseScore(scores, weights, {
             kpAggregationMode,
             kpTopN,
@@ -398,28 +425,16 @@ export function searchAndRank(params: {
             qConfusionWeight,
             qCompetitionPenaltyMultiplier: qCompetitionPenaltyMap?.get(otid),
         });
-        const kpRoleSelection = minimalMode
-            ? {
-                  bestKpid: scores.best_kpid,
-                  orderedCandidates: scores.kp_candidates,
-                  docScoreDelta: 0,
-              }
-            : rerankKpCandidatesByRole({
-                  kpCandidates: scores.kp_candidates,
-                  bestKpid: scores.best_kpid,
-                  rawQuery: queryIntent?.rawQuery || "",
-                  queryScopeHint,
-                  mode: kpRoleRerankMode,
-              });
         const boost = minimalMode
             ? 1
             : computeBoostMultiplier({
-                  otid,
-                  scores,
-                  lexicalBonusMap,
-                  yearHitMap,
-                  queryYearWordIds,
-                  intentContext,
+              otid,
+              scores,
+              lexicalBonusMap,
+              enableLexicalBonusBoost,
+              yearHitMap,
+              queryYearWordIds,
+              intentContext,
                   latestTargetYear,
                   latestTimestamp,
                   scopeSpecificityStats: docScopeSpecificityStatsMap.get(otid),
@@ -428,20 +443,47 @@ export function searchAndRank(params: {
               });
         const baseDocScoreDelta =
             kpRoleSelection.docScoreDelta * kpRoleDocWeight;
+        const bestKpRoleTags =
+            kpRoleSelection.orderedCandidates.find(
+                (candidate) => candidate.kpid === kpRoleSelection.bestKpid,
+            )?.kp_role_tags || [];
+        const evidenceTopRoleTags = dedupe(
+            kpRoleSelection.orderedCandidates
+                .slice(0, DEFAULT_KP_ROLE_CANDIDATE_LIMIT)
+                .flatMap((candidate) => candidate.kp_role_tags || []),
+        );
+        const kpEvidenceGroupCounts = computeKpEvidenceGroupCounts(
+            kpRoleSelection.orderedCandidates
+                .slice(0, DEFAULT_KP_ROLE_CANDIDATE_LIMIT)
+                .map((candidate) => candidate.kp_role_tags),
+        );
         const rankingItem = {
             otid,
             score: 0,
             best_kpid: kpRoleSelection.bestKpid,
+            best_kp_role_tags: bestKpRoleTags,
+            evidence_top_role_tags: evidenceTopRoleTags,
+            kp_evidence_group_counts: kpEvidenceGroupCounts,
             kp_candidates: kpRoleSelection.orderedCandidates.slice(0, 5),
+            topic_ids: scores.topic_ids,
+            intent_ids: scores.intent_ids,
+            degree_levels: scores.degree_levels,
+            event_types: scores.event_types,
         };
 
         decisionRanking.push({
             ...rankingItem,
-            score: decisionScore * boost + baseDocScoreDelta,
+            score:
+                decisionScore * boost +
+                baseDocScoreDelta +
+                multiEvidenceConsensusScore,
         });
         outputRanking.push({
             ...rankingItem,
-            score: outputScore * boost + baseDocScoreDelta,
+            score:
+                outputScore * boost +
+                baseDocScoreDelta +
+                multiEvidenceConsensusScore,
         });
     }
 

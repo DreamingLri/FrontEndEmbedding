@@ -1,0 +1,162 @@
+{
+  "generatedAt": "2026-04-19T05:02:06.261Z",
+  "answerRejectDatasetFile": "D:\\Project\\SuAsk\\SuAsk_Agent\\Backend\\test\\test_dataset_answer_reject\\test_dataset_answer_reject_v6_80_frozen_v1.json",
+  "answerQualityDatasetFile": "D:\\Project\\SuAsk\\SuAsk_Agent\\Backend\\test\\test_dataset_answer_quality\\test_dataset_answer_quality_blind_v3_100_frozen_v1.json",
+  "variants": [
+    {
+      "label": "runtime_full",
+      "note": "Current runtime preset.",
+      "preset": {
+        "name": "runtime_full",
+        "qConfusionMode": "combined",
+        "qConfusionWeight": 0.2,
+        "enableExplicitYearFilter": true,
+        "enablePhaseAnchorBoost": true,
+        "useYearPhaseTitleAdjustment": true
+      },
+      "answerReject": {
+        "total": 80,
+        "binaryBehaviorAccuracy": 1,
+        "answerHitRate": 1,
+        "rejectRecall": 1,
+        "falseRejectRate": 0,
+        "unsafeAnswerRate": 0,
+        "answerDocHitRate": 0.875
+      },
+      "answerQuality": {
+        "total": 100,
+        "answerRate": 1,
+        "correctAt1Rate": 1,
+        "correctAt3Rate": 1,
+        "correctAt5Rate": 1,
+        "falseRejectRate": 0,
+        "potentiallyMisleadingRate": 0,
+        "retrievalDocHitAt1Rate": 0.98
+      }
+    },
+    {
+      "label": "no_q_confusion",
+      "note": "Disable qConfusion while keeping other runtime modules unchanged.",
+      "preset": {
+        "name": "no_q_confusion",
+        "qConfusionMode": "off",
+        "qConfusionWeight": 0.2,
+        "enableExplicitYearFilter": true,
+        "enablePhaseAnchorBoost": true,
+        "useYearPhaseTitleAdjustment": true
+      },
+      "answerReject": {
+        "total": 80,
+        "binaryBehaviorAccuracy": 1,
+        "answerHitRate": 1,
+        "rejectRecall": 1,
+        "falseRejectRate": 0,
+        "unsafeAnswerRate": 0,
+        "answerDocHitRate": 0.875
+      },
+      "answerQuality": {
+        "total": 100,
+        "answerRate": 1,
+        "correctAt1Rate": 0.96,
+        "correctAt3Rate": 0.99,
+        "correctAt5Rate": 1,
+        "falseRejectRate": 0,
+        "potentiallyMisleadingRate": 0.04,
+        "retrievalDocHitAt1Rate": 0.97
+      }
+    },
+    {
+      "label": "no_year_filter",
+      "note": "Disable explicit year filtering while keeping other runtime modules unchanged.",
+      "preset": {
+        "name": "no_year_filter",
+        "qConfusionMode": "combined",
+        "qConfusionWeight": 0.2,
+        "enableExplicitYearFilter": false,
+        "enablePhaseAnchorBoost": true,
+        "useYearPhaseTitleAdjustment": true
+      },
+      "answerReject": {
+        "total": 80,
+        "binaryBehaviorAccuracy": 1,
+        "answerHitRate": 1,
+        "rejectRecall": 1,
+        "falseRejectRate": 0,
+        "unsafeAnswerRate": 0,
+        "answerDocHitRate": 0.85
+      },
+      "answerQuality": {
+        "total": 100,
+        "answerRate": 1,
+        "correctAt1Rate": 0.92,
+        "correctAt3Rate": 0.97,
+        "correctAt5Rate": 0.99,
+        "falseRejectRate": 0,
+        "potentiallyMisleadingRate": 0.08,
+        "retrievalDocHitAt1Rate": 0.91
+      }
+    },
+    {
+      "label": "no_phase_anchor_boost",
+      "note": "Disable document-level phase anchor boost before display ordering.",
+      "preset": {
+        "name": "no_phase_anchor_boost",
+        "qConfusionMode": "combined",
+        "qConfusionWeight": 0.2,
+        "enableExplicitYearFilter": true,
+        "enablePhaseAnchorBoost": false,
+        "useYearPhaseTitleAdjustment": true
+      },
+      "answerReject": {
+        "total": 80,
+        "binaryBehaviorAccuracy": 1,
+        "answerHitRate": 1,
+        "rejectRecall": 1,
+        "falseRejectRate": 0,
+        "unsafeAnswerRate": 0,
+        "answerDocHitRate": 0.875
+      },
+      "answerQuality": {
+        "total": 100,
+        "answerRate": 1,
+        "correctAt1Rate": 1,
+        "correctAt3Rate": 1,
+        "correctAt5Rate": 1,
+        "falseRejectRate": 0,
+        "potentiallyMisleadingRate": 0,
+        "retrievalDocHitAt1Rate": 0.98
+      }
+    },
+    {
+      "label": "no_display_adjustment",
+      "note": "Disable title-intent and coverage adjustments in the display stage.",
+      "preset": {
+        "name": "no_display_adjustment",
+        "qConfusionMode": "combined",
+        "qConfusionWeight": 0.2,
+        "enableExplicitYearFilter": true,
+        "enablePhaseAnchorBoost": true,
+        "useYearPhaseTitleAdjustment": false
+      },
+      "answerReject": {
+        "total": 80,
+        "binaryBehaviorAccuracy": 1,
+        "answerHitRate": 1,
+        "rejectRecall": 1,
+        "falseRejectRate": 0,
+        "unsafeAnswerRate": 0,
+        "answerDocHitRate": 0.9
+      },
+      "answerQuality": {
+        "total": 100,
+        "answerRate": 1,
+        "correctAt1Rate": 0.99,
+        "correctAt3Rate": 1,
+        "correctAt5Rate": 1,
+        "falseRejectRate": 0,
+        "potentiallyMisleadingRate": 0.01,
+        "retrievalDocHitAt1Rate": 0.98
+      }
+    }
+  ]
+}

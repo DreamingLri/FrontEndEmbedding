@@ -99,6 +99,8 @@ type MetricInterval = {
 type ModelFamily =
     | "sparse"
     | "dense"
+    | "hybrid"
+    | "passage"
     | "structured";
 
 type ModelReport = {
@@ -163,6 +165,17 @@ type CorpusView = {
     kpBm25Stats: BM25Stats;
     otIndices: number[];
     kpIndices: number[];
+};
+
+type MetadataScoringContext = {
+    vectorMatrix: Int8Array;
+    dimensions: number;
+};
+
+type AuxiliaryCorpusView = {
+    metadata: Metadata[];
+    bm25Stats: BM25Stats;
+    scoringContext: MetadataScoringContext;
 };
 
 type ScoredMeta = {
@@ -267,6 +280,9 @@ const OPTIONAL_DATASET_TARGETS = (
         resolveDatasetTarget("ladder_main_balanced_120"),
         resolveDatasetTarget("ladder_generalization_hard_80"),
         resolveDatasetTarget("ladder_structure_stress_60"),
+        resolveDatasetTarget("ladder_main_balanced_150"),
+        resolveDatasetTarget("ladder_generalization_hard_100"),
+        resolveDatasetTarget("ladder_structure_stress_80"),
         resolveDatasetTarget("ladder_cross_doc_coverage_diag_18"),
     ] as Array<DatasetTarget | null>
 ).filter((item): item is DatasetTarget => Boolean(item));
@@ -304,6 +320,7 @@ let vectorMatrix: Int8Array | null = null;
 let dimensions = 768;
 let corpusView: CorpusView | null = null;
 let allMetadataBm25Stats: BM25Stats | null = null;
+let slidingOtCorpusView: AuxiliaryCorpusView | null = null;
 let topicPartitionIndex: Awaited<
     ReturnType<typeof loadFrontendEvalEngine>
 >["topicPartitionIndex"] | null = null;
@@ -862,6 +879,49 @@ function resolveCorpusView(metadata: readonly Metadata[]): CorpusView {
     };
 }
 
+function loadAuxiliaryCorpusView(
+    metadataFile: string,
+    vectorFile: string,
+    metadataPredicate: (item: Metadata) => boolean,
+): AuxiliaryCorpusView | null {
+    const metadataPath = path.resolve(process.cwd(), metadataFile);
+    const vectorPath = path.resolve(process.cwd(), vectorFile);
+    if (!fs.existsSync(metadataPath) || !fs.existsSync(vectorPath)) {
+        return null;
+    }
+
+    const payload = JSON.parse(fs.readFileSync(metadataPath, "utf-8"));
+    const allMetadata: Metadata[] = Array.isArray(payload.data) ? payload.data : payload;
+    const buffer = fs.readFileSync(vectorPath);
+    const auxiliaryVectorMatrix = new Int8Array(
+        buffer.buffer,
+        buffer.byteOffset,
+        buffer.byteLength,
+    );
+    const auxiliaryDimensions =
+        allMetadata.length > 0 && auxiliaryVectorMatrix.length > 0
+            ? Math.round(auxiliaryVectorMatrix.length / allMetadata.length)
+            : dimensions;
+    const metadata = allMetadata.filter(metadataPredicate);
+
+    return {
+        metadata,
+        bm25Stats: buildBM25Stats(metadata),
+        scoringContext: {
+            vectorMatrix: auxiliaryVectorMatrix,
+            dimensions: auxiliaryDimensions,
+        },
+    };
+}
+
+function loadSlidingOtCorpusView(): AuxiliaryCorpusView | null {
+    return loadAuxiliaryCorpusView(
+        "public/data/frontend_metadata_dmeta_small_main_v2_plus_otwin512o128.json",
+        "public/data/frontend_vectors_dmeta_small_main_v2_plus_otwin512o128.bin",
+        (item) => item.type === "OT" && Boolean((item as any).parent_otid),
+    );
+}
+
 function dotVectorPair(queryVector: Float32Array, candidateVector: Float32Array): number {
     let score = 0;
     for (let index = 0; index < dimensions; index++) {
@@ -880,6 +940,7 @@ async function loadEngine() {
     extractor = engine.extractor;
     corpusView = resolveCorpusView(metadataList);
     allMetadataBm25Stats = engine.bm25Stats;
+    slidingOtCorpusView = loadSlidingOtCorpusView();
     articlePhaseAnchorMap = loadArticlePhaseAnchors();
     articleTitleMap = loadArticleTitles();
 }
@@ -957,11 +1018,14 @@ function scoreDirectMetadata(
     query: QueryCacheItem,
     metadata: readonly Metadata[],
     stats: BM25Stats,
+    scoringContext?: MetadataScoringContext,
 ): {
     dense: ScoredMeta[];
     sparse: ScoredMeta[];
 } {
-    if (!vectorMatrix) {
+    const activeVectorMatrix = scoringContext?.vectorMatrix || vectorMatrix;
+    const activeDimensions = scoringContext?.dimensions || dimensions;
+    if (!activeVectorMatrix) {
         throw new Error("Vector matrix not initialized.");
     }
 
@@ -971,9 +1035,9 @@ function scoreDirectMetadata(
     metadata.forEach((meta, index) => {
         let denseScore = dotProduct(
             query.queryVector,
-            vectorMatrix,
+            activeVectorMatrix,
             meta.vector_index,
-            dimensions,
+            activeDimensions,
         );
         if (meta.scale !== undefined && meta.scale !== null) {
             denseScore *= meta.scale;
@@ -993,9 +1057,40 @@ function scoreDirectMetadata(
 
 function buildDirectRanking(scored: readonly ScoredMeta[]): RankedDoc[] {
     return scored.map((item) => ({
-        otid: item.meta.id,
+        otid: resolveDocumentOtid(item.meta),
         score: item.score,
     }));
+}
+
+function resolveDocumentOtid(meta: Metadata): string {
+    return ((meta as any).parent_otid as string | undefined) || meta.id;
+}
+
+function buildRrfHybridMaxRanking(
+    dense: readonly ScoredMeta[],
+    sparse: readonly ScoredMeta[],
+): RankedDoc[] {
+    const scores = new Map<string, RankedDoc>();
+    for (const rankedList of [dense, sparse]) {
+        rankedList.forEach((item, index) => {
+            const otid = resolveDocumentOtid(item.meta);
+            const contribution = 1 / (RRF_K + index + 1);
+            const existing = scores.get(otid);
+            if (!existing) {
+                scores.set(otid, {
+                    otid,
+                    score: contribution,
+                    best_kpid: item.meta.type === "KP" ? item.meta.id : undefined,
+                });
+                return;
+            }
+            existing.score += contribution;
+            if (!existing.best_kpid && item.meta.type === "KP") {
+                existing.best_kpid = item.meta.id;
+            }
+        });
+    }
+    return Array.from(scores.values()).sort((a, b) => b.score - a.score);
 }
 
 function buildStructuredRanking(
@@ -1352,6 +1447,28 @@ function buildDatasetReport(
         return buildDirectRanking(scored.dense);
     });
 
+    const hybridOtPerCase = buildTimedPerCaseResults(queryCache, (query) => {
+        const scored = scoreDirectMetadata(query, corpusView.otMetadata, corpusView.otBm25Stats);
+        return buildRrfHybridMaxRanking(scored.dense, scored.sparse);
+    });
+
+    const passageKpHybridPerCase = buildTimedPerCaseResults(queryCache, (query) => {
+        const scored = scoreDirectMetadata(query, corpusView.kpMetadata, corpusView.kpBm25Stats);
+        return buildRrfHybridMaxRanking(scored.dense, scored.sparse);
+    });
+
+    const slidingOtHybridPerCase = slidingOtCorpusView
+        ? buildTimedPerCaseResults(queryCache, (query) => {
+              const scored = scoreDirectMetadata(
+                  query,
+                  slidingOtCorpusView.metadata,
+                  slidingOtCorpusView.bm25Stats,
+                  slidingOtCorpusView.scoringContext,
+              );
+              return buildRrfHybridMaxRanking(scored.dense, scored.sparse);
+          })
+        : undefined;
+
     const structuredKpOtPerCase = buildTimedPerCaseResults(queryCache, (query) =>
         buildStructuredRanking(query, STRUCTURED_KP_OT_WEIGHTS),
     );
@@ -1390,6 +1507,28 @@ function buildDatasetReport(
             "语义检索：仅在 OT 文档上执行向量相似度排序。",
             denseOtPerCase,
         ),
+        buildModelReport(
+            "Hybrid-OT-RRF",
+            "hybrid",
+            "通用混合检索基线：在 OT 文档上融合 BM25 与 Dense 排名。",
+            hybridOtPerCase,
+        ),
+        buildModelReport(
+            "Passage-KP-HybridMax",
+            "passage",
+            "朴素段落级基线：以 KP 作为局部段落候选，融合 BM25 与 Dense 后按文档取最大值。",
+            passageKpHybridPerCase,
+        ),
+        ...(slidingOtHybridPerCase
+            ? [
+                  buildModelReport(
+                      "Sliding-OT-HybridMax",
+                      "passage" as const,
+                      "固定窗口段落基线：使用 OT 512/128 滑窗候选，融合 BM25 与 Dense 后按文档取最大值。",
+                      slidingOtHybridPerCase,
+                  ),
+              ]
+            : []),
         buildModelReport(
             "Structured-KP+OT",
             "structured",

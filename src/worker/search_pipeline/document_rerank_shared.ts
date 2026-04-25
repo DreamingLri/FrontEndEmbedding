@@ -2,6 +2,7 @@ import {
     inferDocumentRolesFromTitle,
     type QueryPlanDocRole,
 } from "../query_planner.ts";
+import { computeKpEvidenceGroupCounts } from "../vector_engine/shared.ts";
 import type { PipelineDocumentRecord } from "./types.ts";
 
 export type PhaseAnchor = {
@@ -36,9 +37,6 @@ const TITLE_PROCESS_NOTICE_PATTERN =
     /(活动报名通知|报名通知|预报名|综合考核通知|复试通知|考核通知|考核安排|申请通知|报名安排)/;
 const TITLE_OUTCOME_PATTERN =
     /(结果公示|录取结果|拟录取|公示|名单|递补|增补|入营通知)/;
-const TITLE_AI_SCHOOL_PATTERN = /人工智能学院/;
-const TITLE_OTHER_PROGRAM_PATTERN =
-    /(软件工程学院|海洋工程与技术学院|附属医院|广州实验室|鹏城实验室|大湾区大学|鹏城国家实验室)/;
 const TITLE_PREAPPLY_PATTERN = /预报名/;
 const TITLE_TRANSFER_PATTERN = /调剂/;
 const TITLE_CANDIDATE_LIST_PATTERN =
@@ -91,8 +89,7 @@ export type DocumentRerankMetadata = {
     isRuleDocTitle: boolean;
     isProcessNoticeTitle: boolean;
     isOutcomeTitle: boolean;
-    isAiSchoolTitle: boolean;
-    isOtherProgramTitle: boolean;
+    titleInstitutionEntities: string[];
     isPreapplyTitle: boolean;
     isTransferTitle: boolean;
     isCandidateListTitle: boolean;
@@ -112,6 +109,13 @@ export type DocumentRerankMetadata = {
     isOperationalRoleDoc: boolean;
     isOutcomeRoleDoc: boolean;
     hasCollegeTitle: boolean;
+    bestKpRoleTags: string[];
+    evidenceTopRoleTags: string[];
+    kpEvidenceGroupCounts: Record<string, number>;
+    structuredTopicIds: string[];
+    structuredIntentIds: string[];
+    structuredDegreeLevels: string[];
+    structuredEventTypes: string[];
 };
 
 export type DocumentRerankEntry = {
@@ -131,6 +135,10 @@ export type LatestVersionFamilyStat = {
 
 export function normalizePatternText(text: string): string {
     return text.replace(/\s+/g, "");
+}
+
+function dedupeStrings(items: string[]): string[] {
+    return Array.from(new Set(items.filter(Boolean)));
 }
 
 function getDocumentEvidenceText(document: PipelineDocumentRecord): string {
@@ -153,6 +161,57 @@ function getDocumentEvidenceText(document: PipelineDocumentRecord): string {
             });
     }
     return normalizePatternText(parts.join(" "));
+}
+
+function getBestKpRoleTags(document: PipelineDocumentRecord): string[] {
+    if (document.best_kp_role_tags?.length) {
+        return dedupeStrings(document.best_kp_role_tags);
+    }
+
+    const bestKp = document.kps?.find((item) => item.kpid === document.best_kpid);
+    return bestKp?.kp_role_tags?.length
+        ? dedupeStrings(bestKp.kp_role_tags)
+        : [];
+}
+
+function getEvidenceTopRoleTags(document: PipelineDocumentRecord): string[] {
+    if (document.evidence_top_role_tags?.length) {
+        return dedupeStrings(document.evidence_top_role_tags);
+    }
+
+    if (!Array.isArray(document.kps) || document.kps.length === 0) {
+        return [];
+    }
+
+    const prioritizedKps = [
+        ...document.kps.filter((item) => item.kpid === document.best_kpid),
+        ...document.kps.filter((item) => item.kpid !== document.best_kpid),
+    ].slice(0, 5);
+
+    return dedupeStrings(
+        prioritizedKps.flatMap((item) => item.kp_role_tags || []),
+    );
+}
+
+function getKpEvidenceGroupCounts(
+    document: PipelineDocumentRecord,
+): Record<string, number> {
+    if (document.kp_evidence_group_counts) {
+        return { ...document.kp_evidence_group_counts };
+    }
+
+    if (!Array.isArray(document.kps) || document.kps.length === 0) {
+        return {};
+    }
+
+    const prioritizedKps = [
+        ...document.kps.filter((item) => item.kpid === document.best_kpid),
+        ...document.kps.filter((item) => item.kpid !== document.best_kpid),
+    ].slice(0, 5);
+
+    return computeKpEvidenceGroupCounts(
+        prioritizedKps.map((item) => item.kp_role_tags),
+    );
 }
 
 function normalizeTitleDedupKey(title: string): string {
@@ -205,6 +264,14 @@ function resolveDocumentRecencyKey(
     return undefined;
 }
 
+export function extractInstitutionEntities(text: string): string[] {
+    const normalized = normalizePatternText(text);
+    const matches = normalized.match(
+        /[\u4e00-\u9fa5A-Za-z0-9]{2,24}(?:学院|实验室|医院|研究院|研究中心|中心|系|部)/g,
+    );
+    return dedupeStrings(matches || []);
+}
+
 function normalizeBatchToken(token: string): string | undefined {
     switch (token) {
         case "1":
@@ -253,6 +320,7 @@ export function buildDocumentRerankMetadata(
     const title = document.ot_title || "";
     const normalizedTitle = normalizePatternText(title);
     const roles = inferDocumentRolesFromTitle(title);
+    const titleInstitutionEntities = extractInstitutionEntities(title);
     const isDoctoralTitle = TITLE_DOCTORAL_PATTERN.test(normalizedTitle);
     const isTuimianTitle = TITLE_TUIMIAN_PATTERN.test(normalizedTitle);
     const isRuleDocRole = roles.includes("rule_doc");
@@ -273,8 +341,7 @@ export function buildDocumentRerankMetadata(
         isRuleDocTitle: TITLE_RULE_DOC_PATTERN.test(normalizedTitle),
         isProcessNoticeTitle: TITLE_PROCESS_NOTICE_PATTERN.test(normalizedTitle),
         isOutcomeTitle: TITLE_OUTCOME_PATTERN.test(normalizedTitle),
-        isAiSchoolTitle: TITLE_AI_SCHOOL_PATTERN.test(normalizedTitle),
-        isOtherProgramTitle: TITLE_OTHER_PROGRAM_PATTERN.test(normalizedTitle),
+        titleInstitutionEntities,
         isPreapplyTitle: TITLE_PREAPPLY_PATTERN.test(normalizedTitle),
         isTransferTitle: TITLE_TRANSFER_PATTERN.test(normalizedTitle),
         isCandidateListTitle: TITLE_CANDIDATE_LIST_PATTERN.test(normalizedTitle),
@@ -297,7 +364,14 @@ export function buildDocumentRerankMetadata(
         isOperationalRoleDoc:
             isRegistrationNoticeRole || isStageListRole || isAdjustmentNoticeRole,
         isOutcomeRoleDoc: isResultNoticeRole || isListNoticeRole,
-        hasCollegeTitle: /学院/.test(normalizedTitle),
+        hasCollegeTitle: titleInstitutionEntities.length > 0,
+        bestKpRoleTags: getBestKpRoleTags(document),
+        evidenceTopRoleTags: getEvidenceTopRoleTags(document),
+        kpEvidenceGroupCounts: getKpEvidenceGroupCounts(document),
+        structuredTopicIds: document.topic_ids || [],
+        structuredIntentIds: document.intent_ids || [],
+        structuredDegreeLevels: document.degree_levels || [],
+        structuredEventTypes: document.event_types || [],
     };
 }
 

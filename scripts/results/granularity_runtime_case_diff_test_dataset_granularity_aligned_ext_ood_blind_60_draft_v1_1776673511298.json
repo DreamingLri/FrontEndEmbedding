@@ -1,0 +1,1546 @@
+{
+  "generatedAt": "2026-04-20T08:25:11.297Z",
+  "datasetBundle": "ext_ood_blind_60",
+  "datasetKey": "test_dataset_granularity_aligned_ext_ood_blind_60_draft_v1",
+  "datasetLabel": "BlindExtOOD",
+  "datasetGroups": [
+    {
+      "key": "ext_ood_blind_60",
+      "label": "BlindExtOOD",
+      "role": "external_ood_holdout",
+      "size": 60,
+      "sources": [
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_aligned_ext_ood_blind_60_draft_v1.json"
+      ]
+    }
+  ],
+  "presetName": "frontend_research_sync_v1",
+  "variants": [
+    {
+      "label": "runtime_full",
+      "note": "Current frontend runtime display chain.",
+      "metricsByDataset": {
+        "test_dataset_granularity_aligned_ext_ood_blind_60_draft_v1": {
+          "total": 60,
+          "answerRate": 100,
+          "hitAt1": 73.33,
+          "mrr": 0.7829
+        }
+      },
+      "combined": {
+        "total": 60,
+        "answerRate": 100,
+        "hitAt1": 73.33,
+        "mrr": 0.7829
+      }
+    },
+    {
+      "label": "no_structured_kp_role_evidence_adjustment",
+      "note": "Disable structured KP-role evidence adjustment only.",
+      "metricsByDataset": {
+        "test_dataset_granularity_aligned_ext_ood_blind_60_draft_v1": {
+          "total": 60,
+          "answerRate": 100,
+          "hitAt1": 73.33,
+          "mrr": 0.7841
+        }
+      },
+      "combined": {
+        "total": 60,
+        "answerRate": 100,
+        "hitAt1": 73.33,
+        "mrr": 0.7841
+      }
+    },
+    {
+      "label": "no_lexical_title_type_adjustment",
+      "note": "Disable coarse title-type lexical rules only.",
+      "metricsByDataset": {
+        "test_dataset_granularity_aligned_ext_ood_blind_60_draft_v1": {
+          "total": 60,
+          "answerRate": 100,
+          "hitAt1": 73.33,
+          "mrr": 0.7829
+        }
+      },
+      "combined": {
+        "total": 60,
+        "answerRate": 100,
+        "hitAt1": 73.33,
+        "mrr": 0.7829
+      }
+    }
+  ],
+  "pairwiseDiffs": [
+    {
+      "baseLabel": "runtime_full",
+      "compareLabel": "no_structured_kp_role_evidence_adjustment",
+      "betterSummary": {
+        "count": 1,
+        "hit1RecoveredCount": 0,
+        "hit1LostCount": 0,
+        "avgReciprocalRankGain": 0.0202,
+        "byDataset": [
+          {
+            "key": "test_dataset_granularity_aligned_ext_ood_blind_60_draft_v1",
+            "count": 1
+          }
+        ],
+        "byQueryScope": [
+          {
+            "key": "eligibility_condition",
+            "count": 1
+          }
+        ],
+        "byPreferredGranularity": [
+          {
+            "key": "KP",
+            "count": 1
+          }
+        ],
+        "bySupportPattern": [
+          {
+            "key": "single_kp",
+            "count": 1
+          }
+        ],
+        "byThemeFamily": [
+          {
+            "key": "doctoral",
+            "count": 1
+          }
+        ],
+        "byDominantEvidenceGroup": [
+          {
+            "key": "requirement",
+            "count": 1
+          }
+        ],
+        "byPrimaryBestKpRoleTag": [
+          {
+            "key": "time_expression",
+            "count": 1
+          }
+        ]
+      },
+      "worseSummary": {
+        "count": 2,
+        "hit1RecoveredCount": 0,
+        "hit1LostCount": 0,
+        "avgReciprocalRankGain": -0.0451,
+        "byDataset": [
+          {
+            "key": "test_dataset_granularity_aligned_ext_ood_blind_60_draft_v1",
+            "count": 2
+          }
+        ],
+        "byQueryScope": [
+          {
+            "key": "eligibility_condition",
+            "count": 1
+          },
+          {
+            "key": "time_location",
+            "count": 1
+          }
+        ],
+        "byPreferredGranularity": [
+          {
+            "key": "KP",
+            "count": 2
+          }
+        ],
+        "bySupportPattern": [
+          {
+            "key": "single_kp",
+            "count": 2
+          }
+        ],
+        "byThemeFamily": [
+          {
+            "key": "master_reexam",
+            "count": 1
+          },
+          {
+            "key": "tuimian",
+            "count": 1
+          }
+        ],
+        "byDominantEvidenceGroup": [
+          {
+            "key": "requirement",
+            "count": 1
+          },
+          {
+            "key": "timeline",
+            "count": 1
+          }
+        ],
+        "byPrimaryBestKpRoleTag": [
+          {
+            "key": "condition",
+            "count": 1
+          },
+          {
+            "key": "time_expression",
+            "count": 1
+          }
+        ]
+      },
+      "betterCases": [
+        {
+          "caseIndex": 30,
+          "id": "aligned_ext_blind_v1_0031",
+          "dataset": "test_dataset_granularity_aligned_ext_ood_blind_60_draft_v1",
+          "query": "2026博士条件",
+          "sourceQuery": "在2026年中山大学人工智能学院博士研究生招生中，如果一名拟录取考生的报读意愿在公示期间发生变化，按照通知要求，他应该联系哪位老师以避免录取误解？",
+          "sourceSeedId": "qid_19c5fa941e114bb9",
+          "sourceDataset": "external_blind_unused_sai_answers_v1",
+          "queryType": "short_keyword",
+          "queryScope": "eligibility_condition",
+          "preferredGranularity": "KP",
+          "supportPattern": "single_kp",
+          "themeFamily": "doctoral",
+          "challengeTags": [
+            "doctoral",
+            "list_notice",
+            "eligibility_condition",
+            "single_kp"
+          ],
+          "expectedOtid": "otid_f38fd69ea2d64794",
+          "runtimeFull": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 10,
+            "renderedRank": 9,
+            "renderedReciprocalRank": 0.1111,
+            "displayTop1Margin": 0.0484,
+            "top1": {
+              "otid": "otid_ae46d4b5d6e74990",
+              "title": "鹏城国家实验室-中山大学2026年联合培养博士研究生专项计划招生简章",
+              "displayScore": 1.1026,
+              "coarseScore": 1.1026,
+              "bestKpid": "kpid_53230507f99c472c",
+              "eventTypes": [
+                "录取公示",
+                "招生章程"
+              ],
+              "structuredTopicIds": [
+                "graduate_admission",
+                "academic_affairs"
+              ],
+              "structuredIntentIds": [
+                "phd_apply_assessment"
+              ],
+              "degreeLevels": [
+                "博士"
+              ],
+              "titleRoles": [
+                "rule_doc"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "materials",
+                "email",
+                "background"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "materials",
+                "email",
+                "background"
+              ],
+              "kpEvidenceGroupCounts": {
+                "requirement": 1,
+                "timeline": 1
+              },
+              "dominantEvidenceGroup": "requirement",
+              "titleTypeFlags": [
+                "rule"
+              ],
+              "roleTypeFlags": [
+                "constraint"
+              ]
+            },
+            "top3": [
+              {
+                "otid": "otid_ae46d4b5d6e74990",
+                "title": "鹏城国家实验室-中山大学2026年联合培养博士研究生专项计划招生简章",
+                "displayScore": 1.1026,
+                "coarseScore": 1.1026,
+                "bestKpid": "kpid_53230507f99c472c",
+                "eventTypes": [
+                  "录取公示",
+                  "招生章程"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission",
+                  "academic_affairs"
+                ],
+                "structuredIntentIds": [
+                  "phd_apply_assessment"
+                ],
+                "degreeLevels": [
+                  "博士"
+                ],
+                "titleRoles": [
+                  "rule_doc"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "materials",
+                  "email",
+                  "background"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "materials",
+                  "email",
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "timeline": 1
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [
+                  "rule"
+                ],
+                "roleTypeFlags": [
+                  "constraint"
+                ]
+              },
+              {
+                "otid": "otid_fa0f61539ae34c82",
+                "title": "中山大学2026年高校思想政治工作骨干在职攻读博士学位专项计划研究生招生简章",
+                "displayScore": 1.0541,
+                "coarseScore": 1.0541,
+                "bestKpid": "kpid_5c059b89320a4b4e",
+                "eventTypes": [
+                  "报名通知",
+                  "资格要求",
+                  "招生章程"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission",
+                  "academic_affairs"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "本科",
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "rule_doc"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "condition",
+                  "reminder"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "condition",
+                  "reminder"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "timeline": 1
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [
+                  "rule"
+                ],
+                "roleTypeFlags": [
+                  "constraint"
+                ]
+              },
+              {
+                "otid": "otid_8fd3944fd7814ff5",
+                "title": "人工智能学院2026年“申请-考核”制招收博士研究生调剂公告（第1批）",
+                "displayScore": 1.0372,
+                "coarseScore": 1.0372,
+                "bestKpid": "kpid_8d27b364d1f443ee",
+                "eventTypes": [
+                  "录取公示",
+                  "复试通知",
+                  "材料提交"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_adjustment",
+                  "phd_apply_assessment",
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "adjustment_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "materials",
+                  "procedure",
+                  "background",
+                  "reminder"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 3,
+                  "requirement": 1,
+                  "procedure": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [],
+                "roleTypeFlags": [
+                  "operational"
+                ]
+              }
+            ]
+          },
+          "compare": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 10,
+            "renderedRank": 11,
+            "renderedReciprocalRank": 0.0909,
+            "displayTop1Margin": 0.0484,
+            "top1": {
+              "otid": "otid_ae46d4b5d6e74990",
+              "title": "鹏城国家实验室-中山大学2026年联合培养博士研究生专项计划招生简章",
+              "displayScore": 1.135,
+              "coarseScore": 1.135,
+              "bestKpid": "kpid_53230507f99c472c",
+              "eventTypes": [
+                "录取公示",
+                "招生章程"
+              ],
+              "structuredTopicIds": [
+                "graduate_admission",
+                "academic_affairs"
+              ],
+              "structuredIntentIds": [
+                "phd_apply_assessment"
+              ],
+              "degreeLevels": [
+                "博士"
+              ],
+              "titleRoles": [
+                "rule_doc"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "materials",
+                "email",
+                "background"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "materials",
+                "email",
+                "background"
+              ],
+              "kpEvidenceGroupCounts": {
+                "requirement": 1,
+                "timeline": 1
+              },
+              "dominantEvidenceGroup": "requirement",
+              "titleTypeFlags": [
+                "rule"
+              ],
+              "roleTypeFlags": [
+                "constraint"
+              ]
+            },
+            "top3": [
+              {
+                "otid": "otid_ae46d4b5d6e74990",
+                "title": "鹏城国家实验室-中山大学2026年联合培养博士研究生专项计划招生简章",
+                "displayScore": 1.135,
+                "coarseScore": 1.135,
+                "bestKpid": "kpid_53230507f99c472c",
+                "eventTypes": [
+                  "录取公示",
+                  "招生章程"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission",
+                  "academic_affairs"
+                ],
+                "structuredIntentIds": [
+                  "phd_apply_assessment"
+                ],
+                "degreeLevels": [
+                  "博士"
+                ],
+                "titleRoles": [
+                  "rule_doc"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "materials",
+                  "email",
+                  "background"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "materials",
+                  "email",
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "timeline": 1
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [
+                  "rule"
+                ],
+                "roleTypeFlags": [
+                  "constraint"
+                ]
+              },
+              {
+                "otid": "otid_fa0f61539ae34c82",
+                "title": "中山大学2026年高校思想政治工作骨干在职攻读博士学位专项计划研究生招生简章",
+                "displayScore": 1.0866,
+                "coarseScore": 1.0866,
+                "bestKpid": "kpid_5c059b89320a4b4e",
+                "eventTypes": [
+                  "报名通知",
+                  "资格要求",
+                  "招生章程"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission",
+                  "academic_affairs"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "本科",
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "rule_doc"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "condition",
+                  "reminder"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "condition",
+                  "reminder"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "timeline": 1
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [
+                  "rule"
+                ],
+                "roleTypeFlags": [
+                  "constraint"
+                ]
+              },
+              {
+                "otid": "otid_8fd3944fd7814ff5",
+                "title": "人工智能学院2026年“申请-考核”制招收博士研究生调剂公告（第1批）",
+                "displayScore": 1.0036,
+                "coarseScore": 1.0036,
+                "bestKpid": "kpid_8d27b364d1f443ee",
+                "eventTypes": [
+                  "录取公示",
+                  "复试通知",
+                  "材料提交"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_adjustment",
+                  "phd_apply_assessment",
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "adjustment_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "materials",
+                  "procedure",
+                  "background",
+                  "reminder"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 3,
+                  "requirement": 1,
+                  "procedure": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [],
+                "roleTypeFlags": [
+                  "operational"
+                ]
+              }
+            ]
+          },
+          "reciprocalRankGain": 0.0202,
+          "rankGain": 2,
+          "hit1Recovered": false,
+          "hit1Lost": false,
+          "top1Changed": false
+        }
+      ],
+      "worseCases": [
+        {
+          "caseIndex": 17,
+          "id": "aligned_ext_blind_v1_0018",
+          "dataset": "test_dataset_granularity_aligned_ext_ood_blind_60_draft_v1",
+          "query": "2026推免条件",
+          "sourceQuery": "在2025年9月15日中山大学人工智能学院的通知中，预推免考核名单的公布是基于哪个具体文件的要求？",
+          "sourceSeedId": "qid_d8ff9fa04e944de5",
+          "sourceDataset": "external_blind_unused_sai_answers_v1",
+          "queryType": "short_keyword",
+          "queryScope": "eligibility_condition",
+          "preferredGranularity": "KP",
+          "supportPattern": "single_kp",
+          "themeFamily": "tuimian",
+          "challengeTags": [
+            "tuimian",
+            "stage_list",
+            "eligibility_condition",
+            "single_kp"
+          ],
+          "expectedOtid": "otid_8c93e52cc4314e6c",
+          "runtimeFull": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 9,
+            "renderedRank": 18,
+            "renderedReciprocalRank": 0.0556,
+            "displayTop1Margin": 0.1936,
+            "top1": {
+              "otid": "otid_7479616835454c16",
+              "title": "中山大学2026年硕士研究生招生章程及招生学科专业目录",
+              "displayScore": 1.3071,
+              "coarseScore": 1.3071,
+              "bestKpid": "kpid_370117ba794c491a",
+              "eventTypes": [
+                "推免通知",
+                "考试安排",
+                "招生章程"
+              ],
+              "structuredTopicIds": [
+                "graduate_admission",
+                "academic_affairs"
+              ],
+              "structuredIntentIds": [
+                "master_unified_exam",
+                "master_recommend_exemption"
+              ],
+              "degreeLevels": [
+                "硕士",
+                "博士"
+              ],
+              "titleRoles": [
+                "rule_doc"
+              ],
+              "bestKpRoleTags": [
+                "condition"
+              ],
+              "evidenceTopRoleTags": [
+                "condition",
+                "time_expression",
+                "deadline",
+                "materials"
+              ],
+              "kpEvidenceGroupCounts": {
+                "requirement": 3,
+                "timeline": 2
+              },
+              "dominantEvidenceGroup": "requirement",
+              "titleTypeFlags": [
+                "rule"
+              ],
+              "roleTypeFlags": [
+                "constraint"
+              ]
+            },
+            "top3": [
+              {
+                "otid": "otid_7479616835454c16",
+                "title": "中山大学2026年硕士研究生招生章程及招生学科专业目录",
+                "displayScore": 1.3071,
+                "coarseScore": 1.3071,
+                "bestKpid": "kpid_370117ba794c491a",
+                "eventTypes": [
+                  "推免通知",
+                  "考试安排",
+                  "招生章程"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission",
+                  "academic_affairs"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam",
+                  "master_recommend_exemption"
+                ],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "rule_doc"
+                ],
+                "bestKpRoleTags": [
+                  "condition"
+                ],
+                "evidenceTopRoleTags": [
+                  "condition",
+                  "time_expression",
+                  "deadline",
+                  "materials"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 3,
+                  "timeline": 2
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [
+                  "rule"
+                ],
+                "roleTypeFlags": [
+                  "constraint"
+                ]
+              },
+              {
+                "otid": "otid_f86cd11add664a2c",
+                "title": "中山大学软件工程学院2026年接收优秀应届本科毕业生推荐免试攻读研究生预报名通知",
+                "displayScore": 1.1135,
+                "coarseScore": 1.1135,
+                "bestKpid": "kpid_a797ca0c89114a35",
+                "eventTypes": [
+                  "推免资格公示",
+                  "推免通知",
+                  "报名通知"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_recommend_exemption",
+                  "pre_recommend"
+                ],
+                "degreeLevels": [
+                  "本科",
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "registration_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "email",
+                  "reminder",
+                  "post_outcome"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "email",
+                  "reminder",
+                  "post_outcome",
+                  "publish",
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "timeline": 2,
+                  "post_outcome": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [
+                  "process"
+                ],
+                "roleTypeFlags": [
+                  "constraint",
+                  "operational"
+                ]
+              },
+              {
+                "otid": "otid_9c03330f339d4f33",
+                "title": "中山大学人工智能学院2026年接收优秀应届本科毕业生推荐免试攻读研究生预报名通知",
+                "displayScore": 1.0663,
+                "coarseScore": 1.0663,
+                "bestKpid": "kpid_009e1b19de234feb",
+                "eventTypes": [
+                  "推免资格公示",
+                  "推免通知",
+                  "录取公示"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_recommend_exemption"
+                ],
+                "degreeLevels": [
+                  "本科",
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "registration_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "email",
+                  "reminder",
+                  "post_outcome"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "email",
+                  "reminder",
+                  "post_outcome",
+                  "condition",
+                  "publish",
+                  "background",
+                  "deadline",
+                  "materials"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 3,
+                  "timeline": 4,
+                  "post_outcome": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [
+                  "process"
+                ],
+                "roleTypeFlags": [
+                  "constraint",
+                  "operational"
+                ]
+              }
+            ]
+          },
+          "compare": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 9,
+            "renderedRank": 16,
+            "renderedReciprocalRank": 0.0625,
+            "displayTop1Margin": 0.1936,
+            "top1": {
+              "otid": "otid_7479616835454c16",
+              "title": "中山大学2026年硕士研究生招生章程及招生学科专业目录",
+              "displayScore": 1.3305,
+              "coarseScore": 1.3305,
+              "bestKpid": "kpid_370117ba794c491a",
+              "eventTypes": [
+                "推免通知",
+                "考试安排",
+                "招生章程"
+              ],
+              "structuredTopicIds": [
+                "graduate_admission",
+                "academic_affairs"
+              ],
+              "structuredIntentIds": [
+                "master_unified_exam",
+                "master_recommend_exemption"
+              ],
+              "degreeLevels": [
+                "硕士",
+                "博士"
+              ],
+              "titleRoles": [
+                "rule_doc"
+              ],
+              "bestKpRoleTags": [
+                "condition"
+              ],
+              "evidenceTopRoleTags": [
+                "condition",
+                "time_expression",
+                "deadline",
+                "materials"
+              ],
+              "kpEvidenceGroupCounts": {
+                "requirement": 3,
+                "timeline": 2
+              },
+              "dominantEvidenceGroup": "requirement",
+              "titleTypeFlags": [
+                "rule"
+              ],
+              "roleTypeFlags": [
+                "constraint"
+              ]
+            },
+            "top3": [
+              {
+                "otid": "otid_7479616835454c16",
+                "title": "中山大学2026年硕士研究生招生章程及招生学科专业目录",
+                "displayScore": 1.3305,
+                "coarseScore": 1.3305,
+                "bestKpid": "kpid_370117ba794c491a",
+                "eventTypes": [
+                  "推免通知",
+                  "考试安排",
+                  "招生章程"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission",
+                  "academic_affairs"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam",
+                  "master_recommend_exemption"
+                ],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "rule_doc"
+                ],
+                "bestKpRoleTags": [
+                  "condition"
+                ],
+                "evidenceTopRoleTags": [
+                  "condition",
+                  "time_expression",
+                  "deadline",
+                  "materials"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 3,
+                  "timeline": 2
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [
+                  "rule"
+                ],
+                "roleTypeFlags": [
+                  "constraint"
+                ]
+              },
+              {
+                "otid": "otid_f86cd11add664a2c",
+                "title": "中山大学软件工程学院2026年接收优秀应届本科毕业生推荐免试攻读研究生预报名通知",
+                "displayScore": 1.1369,
+                "coarseScore": 1.1369,
+                "bestKpid": "kpid_a797ca0c89114a35",
+                "eventTypes": [
+                  "推免资格公示",
+                  "推免通知",
+                  "报名通知"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_recommend_exemption",
+                  "pre_recommend"
+                ],
+                "degreeLevels": [
+                  "本科",
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "registration_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "email",
+                  "reminder",
+                  "post_outcome"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "email",
+                  "reminder",
+                  "post_outcome",
+                  "publish",
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "timeline": 2,
+                  "post_outcome": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [
+                  "process"
+                ],
+                "roleTypeFlags": [
+                  "constraint",
+                  "operational"
+                ]
+              },
+              {
+                "otid": "otid_9c03330f339d4f33",
+                "title": "中山大学人工智能学院2026年接收优秀应届本科毕业生推荐免试攻读研究生预报名通知",
+                "displayScore": 1.0897,
+                "coarseScore": 1.0897,
+                "bestKpid": "kpid_009e1b19de234feb",
+                "eventTypes": [
+                  "推免资格公示",
+                  "推免通知",
+                  "录取公示"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_recommend_exemption"
+                ],
+                "degreeLevels": [
+                  "本科",
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "registration_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "email",
+                  "reminder",
+                  "post_outcome"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "email",
+                  "reminder",
+                  "post_outcome",
+                  "condition",
+                  "publish",
+                  "background",
+                  "deadline",
+                  "materials"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 3,
+                  "timeline": 4,
+                  "post_outcome": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [
+                  "process"
+                ],
+                "roleTypeFlags": [
+                  "constraint",
+                  "operational"
+                ]
+              }
+            ]
+          },
+          "reciprocalRankGain": -0.0069,
+          "rankGain": -2,
+          "hit1Recovered": false,
+          "hit1Lost": false,
+          "top1Changed": false
+        },
+        {
+          "caseIndex": 41,
+          "id": "aligned_ext_blind_v1_0042",
+          "dataset": "test_dataset_granularity_aligned_ext_ood_blind_60_draft_v1",
+          "query": "2022硕士复试时间安排",
+          "sourceQuery": "如果一位拟录取考生在2022年4月决定放弃录取，按照中山大学人工智能学院的规定，他或她必须在什么时间前联系学院？",
+          "sourceSeedId": "qid_a8cc04198e7b4cda",
+          "sourceDataset": "external_blind_unused_sai_answers_v1",
+          "queryType": "short_keyword",
+          "queryScope": "time_location",
+          "preferredGranularity": "KP",
+          "supportPattern": "single_kp",
+          "themeFamily": "master_reexam",
+          "challengeTags": [
+            "master_reexam",
+            "result_notice",
+            "time_location",
+            "single_kp"
+          ],
+          "expectedOtid": "otid_eae8392d216d48ea",
+          "runtimeFull": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 3,
+            "renderedRank": 4,
+            "renderedReciprocalRank": 0.25,
+            "displayTop1Margin": 0.0163,
+            "top1": {
+              "otid": "otid_1ef327d38b174afb",
+              "title": "中山大学2022年硕士研究生招生章程及招生学科专业目录",
+              "displayScore": 1.2814,
+              "coarseScore": 1.2814,
+              "bestKpid": "kpid_4f7759de1d154c13",
+              "eventTypes": [
+                "推免通知",
+                "考试安排",
+                "招生章程"
+              ],
+              "structuredTopicIds": [
+                "graduate_admission"
+              ],
+              "structuredIntentIds": [
+                "master_unified_exam",
+                "master_recommend_exemption"
+              ],
+              "degreeLevels": [
+                "硕士",
+                "博士"
+              ],
+              "titleRoles": [
+                "rule_doc"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "publish",
+                "background"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "publish",
+                "background"
+              ],
+              "kpEvidenceGroupCounts": {
+                "timeline": 1
+              },
+              "dominantEvidenceGroup": "timeline",
+              "titleTypeFlags": [
+                "rule"
+              ],
+              "roleTypeFlags": [
+                "constraint"
+              ]
+            },
+            "top3": [
+              {
+                "otid": "otid_1ef327d38b174afb",
+                "title": "中山大学2022年硕士研究生招生章程及招生学科专业目录",
+                "displayScore": 1.2814,
+                "coarseScore": 1.2814,
+                "bestKpid": "kpid_4f7759de1d154c13",
+                "eventTypes": [
+                  "推免通知",
+                  "考试安排",
+                  "招生章程"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam",
+                  "master_recommend_exemption"
+                ],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "rule_doc"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "background"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [
+                  "rule"
+                ],
+                "roleTypeFlags": [
+                  "constraint"
+                ]
+              },
+              {
+                "otid": "otid_f4f08d56e1d84704",
+                "title": "全国2022年硕士研究生报名考试中山大学报考点（代码：4413）公告",
+                "displayScore": 1.2652,
+                "coarseScore": 1.2652,
+                "eventTypes": [
+                  "考试安排",
+                  "报名通知",
+                  "材料提交"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "condition",
+                  "materials",
+                  "reminder",
+                  "schedule",
+                  "publish",
+                  "post_outcome",
+                  "deadline"
+                ],
+                "kpEvidenceGroupCounts": {},
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_7893d1be905b4266",
+                "title": "中山大学人工智能学院2022年硕士研究生复试录取方案",
+                "displayScore": 1.0503,
+                "coarseScore": 1.0503,
+                "bestKpid": "kpid_7e0498bb8bab4b43",
+                "eventTypes": [
+                  "录取公示",
+                  "复试通知",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam",
+                  "master_recommend_exemption"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "rule_doc"
+                ],
+                "bestKpRoleTags": [],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "background",
+                  "materials",
+                  "email",
+                  "procedure",
+                  "reminder",
+                  "post_outcome"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 2,
+                  "requirement": 1,
+                  "procedure": 1,
+                  "post_outcome": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [
+                  "rule"
+                ],
+                "roleTypeFlags": [
+                  "constraint"
+                ]
+              }
+            ]
+          },
+          "compare": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 3,
+            "renderedRank": 3,
+            "renderedReciprocalRank": 0.3333,
+            "displayTop1Margin": 0.02,
+            "top1": {
+              "otid": "otid_1ef327d38b174afb",
+              "title": "中山大学2022年硕士研究生招生章程及招生学科专业目录",
+              "displayScore": 1.3213,
+              "coarseScore": 1.3213,
+              "bestKpid": "kpid_4f7759de1d154c13",
+              "eventTypes": [
+                "推免通知",
+                "考试安排",
+                "招生章程"
+              ],
+              "structuredTopicIds": [
+                "graduate_admission"
+              ],
+              "structuredIntentIds": [
+                "master_unified_exam",
+                "master_recommend_exemption"
+              ],
+              "degreeLevels": [
+                "硕士",
+                "博士"
+              ],
+              "titleRoles": [
+                "rule_doc"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "publish",
+                "background"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "publish",
+                "background"
+              ],
+              "kpEvidenceGroupCounts": {
+                "timeline": 1
+              },
+              "dominantEvidenceGroup": "timeline",
+              "titleTypeFlags": [
+                "rule"
+              ],
+              "roleTypeFlags": [
+                "constraint"
+              ]
+            },
+            "top3": [
+              {
+                "otid": "otid_1ef327d38b174afb",
+                "title": "中山大学2022年硕士研究生招生章程及招生学科专业目录",
+                "displayScore": 1.3213,
+                "coarseScore": 1.3213,
+                "bestKpid": "kpid_4f7759de1d154c13",
+                "eventTypes": [
+                  "推免通知",
+                  "考试安排",
+                  "招生章程"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam",
+                  "master_recommend_exemption"
+                ],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "rule_doc"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "background"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [
+                  "rule"
+                ],
+                "roleTypeFlags": [
+                  "constraint"
+                ]
+              },
+              {
+                "otid": "otid_f4f08d56e1d84704",
+                "title": "全国2022年硕士研究生报名考试中山大学报考点（代码：4413）公告",
+                "displayScore": 1.3013,
+                "coarseScore": 1.3013,
+                "eventTypes": [
+                  "考试安排",
+                  "报名通知",
+                  "材料提交"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "condition",
+                  "materials",
+                  "reminder",
+                  "schedule",
+                  "publish",
+                  "post_outcome",
+                  "deadline"
+                ],
+                "kpEvidenceGroupCounts": {},
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_eae8392d216d48ea",
+                "title": "中山大学人工智能学院2022年硕士研究生复试结果公示",
+                "displayScore": 1.0128,
+                "coarseScore": 1.0128,
+                "bestKpid": "kpid_c1604e824c76441c",
+                "eventTypes": [
+                  "录取公示",
+                  "复试通知"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "result_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "background"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 2
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [
+                  "outcome"
+                ],
+                "roleTypeFlags": [
+                  "outcome"
+                ]
+              }
+            ]
+          },
+          "reciprocalRankGain": -0.0833,
+          "rankGain": -1,
+          "hit1Recovered": false,
+          "hit1Lost": false,
+          "top1Changed": false
+        }
+      ]
+    },
+    {
+      "baseLabel": "runtime_full",
+      "compareLabel": "no_lexical_title_type_adjustment",
+      "betterSummary": {
+        "count": 0,
+        "hit1RecoveredCount": 0,
+        "hit1LostCount": 0,
+        "avgReciprocalRankGain": 0,
+        "byDataset": [],
+        "byQueryScope": [],
+        "byPreferredGranularity": [],
+        "bySupportPattern": [],
+        "byThemeFamily": [],
+        "byDominantEvidenceGroup": [],
+        "byPrimaryBestKpRoleTag": []
+      },
+      "worseSummary": {
+        "count": 0,
+        "hit1RecoveredCount": 0,
+        "hit1LostCount": 0,
+        "avgReciprocalRankGain": 0,
+        "byDataset": [],
+        "byQueryScope": [],
+        "byPreferredGranularity": [],
+        "bySupportPattern": [],
+        "byThemeFamily": [],
+        "byDominantEvidenceGroup": [],
+        "byPrimaryBestKpRoleTag": []
+      },
+      "betterCases": [],
+      "worseCases": []
+    }
+  ],
+  "sharedHit1Protection": {
+    "bothProtectedHit1Summary": {
+      "count": 0,
+      "hit1RecoveredCount": 0,
+      "hit1LostCount": 0,
+      "avgReciprocalRankGain": 0,
+      "byDataset": [],
+      "byQueryScope": [],
+      "byPreferredGranularity": [],
+      "bySupportPattern": [],
+      "byThemeFamily": [],
+      "byDominantEvidenceGroup": [],
+      "byPrimaryBestKpRoleTag": []
+    },
+    "structuredOnlyProtectedHit1Summary": {
+      "count": 0,
+      "hit1RecoveredCount": 0,
+      "hit1LostCount": 0,
+      "avgReciprocalRankGain": 0,
+      "byDataset": [],
+      "byQueryScope": [],
+      "byPreferredGranularity": [],
+      "bySupportPattern": [],
+      "byThemeFamily": [],
+      "byDominantEvidenceGroup": [],
+      "byPrimaryBestKpRoleTag": []
+    },
+    "lexicalOnlyProtectedHit1Summary": {
+      "count": 0,
+      "hit1RecoveredCount": 0,
+      "hit1LostCount": 0,
+      "avgReciprocalRankGain": 0,
+      "byDataset": [],
+      "byQueryScope": [],
+      "byPreferredGranularity": [],
+      "bySupportPattern": [],
+      "byThemeFamily": [],
+      "byDominantEvidenceGroup": [],
+      "byPrimaryBestKpRoleTag": []
+    },
+    "bothProtectedHit1Cases": [],
+    "structuredOnlyProtectedHit1Cases": [],
+    "lexicalOnlyProtectedHit1Cases": []
+  }
+}

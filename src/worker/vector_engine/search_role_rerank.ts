@@ -395,3 +395,70 @@ export function hasAnyRoleEvidence(
         tags.some((tag) => hasKpRoleTag(candidate, tag)),
     );
 }
+
+export function computeKpMultiEvidenceConsensusScore(params: {
+    kpCandidates: readonly KPCandidate[];
+    rawQuery: string;
+    queryScopeHint?: string;
+}): number {
+    const { kpCandidates, rawQuery, queryScopeHint } = params;
+    if (kpCandidates.length === 0) {
+        return 0;
+    }
+
+    const signals = deriveQueryRoleSignals(rawQuery, queryScopeHint);
+    const asksCoverageLike =
+        /同时|一起|分别|以及|还要|并且|并说明|先后|顺序|哪些要点|哪些事|从.*到/.test(
+            rawQuery,
+        ) ||
+        queryScopeHint === "procedure" ||
+        queryScopeHint === "policy_overview";
+    if (!asksCoverageLike) {
+        return 0;
+    }
+
+    const window = kpCandidates.slice(0, DEFAULT_KP_ROLE_CANDIDATE_LIMIT);
+    const hasRequirementEvidence =
+        (signals.asksCondition || signals.asksMaterials || queryScopeHint === "policy_overview") &&
+        hasAnyRoleEvidence(window, ["condition", "materials", "email", "deadline"]);
+    const hasProcedureEvidence =
+        (signals.asksProcedure ||
+            signals.asksApplicationStage ||
+            queryScopeHint === "procedure" ||
+            queryScopeHint === "policy_overview") &&
+        hasAnyRoleEvidence(window, ["procedure", "application_stage"]);
+    const hasTimelineEvidence =
+        (signals.asksTime ||
+            signals.asksAnnouncementPeriod ||
+            signals.asksProcedure ||
+            queryScopeHint === "time_location" ||
+            queryScopeHint === "procedure") &&
+        hasAnyRoleEvidence(window, [
+            "schedule",
+            "arrival",
+            "deadline",
+            "announcement_period",
+            "time_expression",
+            "location",
+        ]);
+
+    const coveredGroupCount = [
+        hasRequirementEvidence,
+        hasProcedureEvidence,
+        hasTimelineEvidence,
+    ].filter(Boolean).length;
+
+    if (coveredGroupCount >= 3) {
+        return 0.18;
+    }
+    if (coveredGroupCount === 2) {
+        return 0.1;
+    }
+    if (
+        queryScopeHint === "procedure" ||
+        queryScopeHint === "policy_overview"
+    ) {
+        return -0.04;
+    }
+    return 0;
+}

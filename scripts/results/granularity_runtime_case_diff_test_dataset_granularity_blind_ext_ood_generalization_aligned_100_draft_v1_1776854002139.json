@@ -1,0 +1,2816 @@
+{
+  "generatedAt": "2026-04-22T10:33:22.137Z",
+  "datasetBundle": "current_mainline",
+  "datasetKey": "test_dataset_granularity_blind_ext_ood_generalization_aligned_100_draft_v1",
+  "datasetLabel": "test_dataset_granularity_blind_ext_ood_generalization_aligned_100_draft_v1",
+  "datasetGroups": [
+    {
+      "key": "evaluation",
+      "label": "test_dataset_granularity_blind_ext_ood_generalization_aligned_100_draft_v1",
+      "role": "adhoc",
+      "size": 100,
+      "sources": [
+        "D:\\Project\\SuAsk\\SuAsk_Agent\\Backend\\test\\test_dataset_granularity\\test_dataset_granularity_blind_ext_ood_generalization_aligned_100_draft_v1.json"
+      ]
+    }
+  ],
+  "presetName": "frontend_research_sync_v1",
+  "variants": [
+    {
+      "label": "runtime_full",
+      "note": "Current frontend runtime display chain.",
+      "metricsByDataset": {
+        "test_dataset_granularity_blind_ext_ood_generalization_aligned_100_draft_v1": {
+          "total": 100,
+          "answerRate": 100,
+          "hitAt1": 66,
+          "mrr": 0.7536
+        }
+      },
+      "combined": {
+        "total": 100,
+        "answerRate": 100,
+        "hitAt1": 66,
+        "mrr": 0.7536
+      }
+    },
+    {
+      "label": "no_structured_kp_role_evidence_adjustment",
+      "note": "Disable structured KP-role evidence adjustment only.",
+      "metricsByDataset": {
+        "test_dataset_granularity_blind_ext_ood_generalization_aligned_100_draft_v1": {
+          "total": 100,
+          "answerRate": 100,
+          "hitAt1": 66,
+          "mrr": 0.7568
+        }
+      },
+      "combined": {
+        "total": 100,
+        "answerRate": 100,
+        "hitAt1": 66,
+        "mrr": 0.7568
+      }
+    },
+    {
+      "label": "no_lexical_title_type_adjustment",
+      "note": "Disable coarse title-type lexical rules only.",
+      "metricsByDataset": {
+        "test_dataset_granularity_blind_ext_ood_generalization_aligned_100_draft_v1": {
+          "total": 100,
+          "answerRate": 100,
+          "hitAt1": 66,
+          "mrr": 0.7536
+        }
+      },
+      "combined": {
+        "total": 100,
+        "answerRate": 100,
+        "hitAt1": 66,
+        "mrr": 0.7536
+      }
+    }
+  ],
+  "pairwiseDiffs": [
+    {
+      "baseLabel": "runtime_full",
+      "compareLabel": "no_structured_kp_role_evidence_adjustment",
+      "betterSummary": {
+        "count": 3,
+        "hit1RecoveredCount": 0,
+        "hit1LostCount": 0,
+        "avgReciprocalRankGain": 0.05,
+        "byDataset": [
+          {
+            "key": "test_dataset_granularity_blind_ext_ood_generalization_aligned_100_draft_v1",
+            "count": 3
+          }
+        ],
+        "byQueryScope": [
+          {
+            "key": "time_location",
+            "count": 2
+          },
+          {
+            "key": "fact_detail",
+            "count": 1
+          }
+        ],
+        "byPreferredGranularity": [
+          {
+            "key": "KP",
+            "count": 1
+          },
+          {
+            "key": "OT",
+            "count": 1
+          },
+          {
+            "key": "Q+KP",
+            "count": 1
+          }
+        ],
+        "bySupportPattern": [
+          {
+            "key": "multi_kp",
+            "count": 1
+          },
+          {
+            "key": "ot_required",
+            "count": 1
+          },
+          {
+            "key": "single_kp",
+            "count": 1
+          }
+        ],
+        "byThemeFamily": [
+          {
+            "key": "复试地点分布",
+            "count": 1
+          },
+          {
+            "key": "doctoral",
+            "count": 1
+          },
+          {
+            "key": "master_reexam",
+            "count": 1
+          }
+        ],
+        "byDominantEvidenceGroup": [
+          {
+            "key": "timeline",
+            "count": 3
+          }
+        ],
+        "byPrimaryBestKpRoleTag": [
+          {
+            "key": "time_expression",
+            "count": 3
+          }
+        ]
+      },
+      "worseSummary": {
+        "count": 3,
+        "hit1RecoveredCount": 0,
+        "hit1LostCount": 0,
+        "avgReciprocalRankGain": -0.1579,
+        "byDataset": [
+          {
+            "key": "test_dataset_granularity_blind_ext_ood_generalization_aligned_100_draft_v1",
+            "count": 3
+          }
+        ],
+        "byQueryScope": [
+          {
+            "key": "eligibility_condition",
+            "count": 2
+          },
+          {
+            "key": "procedure",
+            "count": 1
+          }
+        ],
+        "byPreferredGranularity": [
+          {
+            "key": "KP+OT",
+            "count": 2
+          },
+          {
+            "key": "KP",
+            "count": 1
+          }
+        ],
+        "bySupportPattern": [
+          {
+            "key": "multi_kp",
+            "count": 2
+          },
+          {
+            "key": "single_kp",
+            "count": 1
+          }
+        ],
+        "byThemeFamily": [
+          {
+            "key": "博士研究生招生",
+            "count": 1
+          },
+          {
+            "key": "博士招生简章",
+            "count": 1
+          },
+          {
+            "key": "推免预报名流程",
+            "count": 1
+          }
+        ],
+        "byDominantEvidenceGroup": [
+          {
+            "key": "timeline",
+            "count": 2
+          },
+          {
+            "key": "requirement",
+            "count": 1
+          }
+        ],
+        "byPrimaryBestKpRoleTag": [
+          {
+            "key": "time_expression",
+            "count": 3
+          }
+        ]
+      },
+      "betterCases": [
+        {
+          "caseIndex": 95,
+          "id": "blind_ext_ood_100_draft_v1_0096",
+          "dataset": "test_dataset_granularity_blind_ext_ood_generalization_aligned_100_draft_v1",
+          "query": "2022硕士复试时间安排",
+          "sourceQuery": "如果一位拟录取考生在2022年4月决定放弃录取，按照中山大学人工智能学院的规定，他或她必须在什么时间前联系学院？",
+          "sourceSeedId": "qid_a8cc04198e7b4cda",
+          "sourceDataset": "external_blind_unused_sai_answers_v1",
+          "queryType": "short_keyword",
+          "queryScope": "time_location",
+          "preferredGranularity": "KP",
+          "supportPattern": "single_kp",
+          "themeFamily": "master_reexam",
+          "challengeTags": [
+            "master_reexam",
+            "result_notice",
+            "time_location",
+            "single_kp"
+          ],
+          "expectedOtid": "otid_eae8392d216d48ea",
+          "runtimeFull": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 3,
+            "renderedRank": 3,
+            "renderedReciprocalRank": 0.3333,
+            "displayTop1Margin": 0.0234,
+            "top1": {
+              "otid": "otid_1ef327d38b174afb",
+              "title": "中山大学2022年硕士研究生招生章程及招生学科专业目录",
+              "displayScore": 1.2812,
+              "coarseScore": 1.2812,
+              "bestKpid": "kpid_4f7759de1d154c13",
+              "eventTypes": [
+                "推免通知",
+                "考试安排",
+                "招生章程"
+              ],
+              "structuredTopicIds": [
+                "graduate_admission"
+              ],
+              "structuredIntentIds": [
+                "master_unified_exam",
+                "master_recommend_exemption"
+              ],
+              "degreeLevels": [
+                "硕士",
+                "博士"
+              ],
+              "titleRoles": [
+                "rule_doc"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "publish",
+                "background"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "publish",
+                "background"
+              ],
+              "kpEvidenceGroupCounts": {
+                "timeline": 1
+              },
+              "dominantEvidenceGroup": "timeline",
+              "titleTypeFlags": [
+                "rule"
+              ],
+              "roleTypeFlags": [
+                "constraint"
+              ]
+            },
+            "top3": [
+              {
+                "otid": "otid_1ef327d38b174afb",
+                "title": "中山大学2022年硕士研究生招生章程及招生学科专业目录",
+                "displayScore": 1.2812,
+                "coarseScore": 1.2812,
+                "bestKpid": "kpid_4f7759de1d154c13",
+                "eventTypes": [
+                  "推免通知",
+                  "考试安排",
+                  "招生章程"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam",
+                  "master_recommend_exemption"
+                ],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "rule_doc"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "background"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [
+                  "rule"
+                ],
+                "roleTypeFlags": [
+                  "constraint"
+                ]
+              },
+              {
+                "otid": "otid_f4f08d56e1d84704",
+                "title": "全国2022年硕士研究生报名考试中山大学报考点（代码：4413）公告",
+                "displayScore": 1.2579,
+                "coarseScore": 1.2579,
+                "eventTypes": [
+                  "考试安排",
+                  "报名通知",
+                  "材料提交"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "condition",
+                  "materials",
+                  "reminder",
+                  "schedule",
+                  "publish",
+                  "post_outcome",
+                  "deadline"
+                ],
+                "kpEvidenceGroupCounts": {},
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_eae8392d216d48ea",
+                "title": "中山大学人工智能学院2022年硕士研究生复试结果公示",
+                "displayScore": 1.0474,
+                "coarseScore": 1.0474,
+                "bestKpid": "kpid_c1604e824c76441c",
+                "eventTypes": [
+                  "录取公示",
+                  "复试通知"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "result_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "background"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 2
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [
+                  "outcome"
+                ],
+                "roleTypeFlags": [
+                  "outcome"
+                ]
+              }
+            ]
+          },
+          "compare": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 3,
+            "renderedRank": 4,
+            "renderedReciprocalRank": 0.25,
+            "displayTop1Margin": 0.0271,
+            "top1": {
+              "otid": "otid_1ef327d38b174afb",
+              "title": "中山大学2022年硕士研究生招生章程及招生学科专业目录",
+              "displayScore": 1.3211,
+              "coarseScore": 1.3211,
+              "bestKpid": "kpid_4f7759de1d154c13",
+              "eventTypes": [
+                "推免通知",
+                "考试安排",
+                "招生章程"
+              ],
+              "structuredTopicIds": [
+                "graduate_admission"
+              ],
+              "structuredIntentIds": [
+                "master_unified_exam",
+                "master_recommend_exemption"
+              ],
+              "degreeLevels": [
+                "硕士",
+                "博士"
+              ],
+              "titleRoles": [
+                "rule_doc"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "publish",
+                "background"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "publish",
+                "background"
+              ],
+              "kpEvidenceGroupCounts": {
+                "timeline": 1
+              },
+              "dominantEvidenceGroup": "timeline",
+              "titleTypeFlags": [
+                "rule"
+              ],
+              "roleTypeFlags": [
+                "constraint"
+              ]
+            },
+            "top3": [
+              {
+                "otid": "otid_1ef327d38b174afb",
+                "title": "中山大学2022年硕士研究生招生章程及招生学科专业目录",
+                "displayScore": 1.3211,
+                "coarseScore": 1.3211,
+                "bestKpid": "kpid_4f7759de1d154c13",
+                "eventTypes": [
+                  "推免通知",
+                  "考试安排",
+                  "招生章程"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam",
+                  "master_recommend_exemption"
+                ],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "rule_doc"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "background"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [
+                  "rule"
+                ],
+                "roleTypeFlags": [
+                  "constraint"
+                ]
+              },
+              {
+                "otid": "otid_f4f08d56e1d84704",
+                "title": "全国2022年硕士研究生报名考试中山大学报考点（代码：4413）公告",
+                "displayScore": 1.2941,
+                "coarseScore": 1.2941,
+                "eventTypes": [
+                  "考试安排",
+                  "报名通知",
+                  "材料提交"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "condition",
+                  "materials",
+                  "reminder",
+                  "schedule",
+                  "publish",
+                  "post_outcome",
+                  "deadline"
+                ],
+                "kpEvidenceGroupCounts": {},
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_659cfd8833ee4369",
+                "title": "中山大学人工智能学院关于2022年免试生接收的补充报名通知",
+                "displayScore": 1.0361,
+                "coarseScore": 1.0361,
+                "bestKpid": "kpid_841520b40dc34f1a",
+                "eventTypes": [
+                  "推免通知",
+                  "复试通知",
+                  "报名通知"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "registration_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "schedule",
+                  "publish",
+                  "post_outcome"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "schedule",
+                  "publish",
+                  "post_outcome",
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 2,
+                  "procedure": 1,
+                  "timeline": 2,
+                  "post_outcome": 1
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [
+                  "process"
+                ],
+                "roleTypeFlags": [
+                  "constraint",
+                  "operational"
+                ]
+              }
+            ]
+          },
+          "reciprocalRankGain": 0.0833,
+          "rankGain": 1,
+          "hit1Recovered": false,
+          "hit1Lost": false,
+          "top1Changed": false
+        },
+        {
+          "caseIndex": 76,
+          "id": "blind_ext_ood_100_draft_v1_0077",
+          "dataset": "test_dataset_granularity_blind_ext_ood_generalization_aligned_100_draft_v1",
+          "query": "学院因新增指标拟增补录取多少名博士研究生，另外拟录取考生如需变更报读意愿等信息，应通过哪些具体联系方式与张老师沟通？",
+          "sourceQuery": "根据中山大学人工智能学院2024年7月25日发布的补录公告，学院因新增指标拟增补录取多少名博士研究生？ || 根据中山大学人工智能学院2024年4月12日发布的补录公告，拟录取考生如需变更报读意愿等信息，应通过哪些具体联系方式与张老师沟通？",
+          "sourceSeedId": "qid_fbd4fb83dedc4d1b__qid_5fd10d2975c34af1",
+          "sourceDataset": "external_blind_unused_sai_answers_v1",
+          "queryType": "standard",
+          "queryScope": "fact_detail",
+          "preferredGranularity": "Q+KP",
+          "supportPattern": "multi_kp",
+          "themeFamily": "doctoral",
+          "challengeTags": [
+            "doctoral",
+            "result_notice",
+            "multi_kp",
+            "paired_unused_seed"
+          ],
+          "expectedOtid": "otid_0493c8c8aa734856",
+          "runtimeFull": {
+            "answered": true,
+            "latestTriggered": true,
+            "retrievalRank": 1,
+            "renderedRank": 5,
+            "renderedReciprocalRank": 0.2,
+            "displayTop1Margin": 0.0669,
+            "top1": {
+              "otid": "otid_db511e3324ad43f5",
+              "title": "人工智能学院关于公布2024年硕士研究生增补拟录取名单的通知",
+              "displayScore": 1.7706,
+              "coarseScore": 1.7706,
+              "bestKpid": "kpid_2386b8733e19443c",
+              "eventTypes": [
+                "录取公示",
+                "复试通知",
+                "材料提交"
+              ],
+              "structuredTopicIds": [
+                "graduate_admission"
+              ],
+              "structuredIntentIds": [
+                "master_unified_exam"
+              ],
+              "degreeLevels": [
+                "硕士"
+              ],
+              "titleRoles": [
+                "result_notice"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "publish",
+                "background"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "publish",
+                "background",
+                "email",
+                "reminder"
+              ],
+              "kpEvidenceGroupCounts": {
+                "timeline": 3,
+                "requirement": 1
+              },
+              "dominantEvidenceGroup": "timeline",
+              "titleTypeFlags": [
+                "outcome"
+              ],
+              "roleTypeFlags": [
+                "outcome"
+              ]
+            },
+            "top3": [
+              {
+                "otid": "otid_db511e3324ad43f5",
+                "title": "人工智能学院关于公布2024年硕士研究生增补拟录取名单的通知",
+                "displayScore": 1.7706,
+                "coarseScore": 1.7706,
+                "bestKpid": "kpid_2386b8733e19443c",
+                "eventTypes": [
+                  "录取公示",
+                  "复试通知",
+                  "材料提交"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "result_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "background"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "background",
+                  "email",
+                  "reminder"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 3,
+                  "requirement": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [
+                  "outcome"
+                ],
+                "roleTypeFlags": [
+                  "outcome"
+                ]
+              },
+              {
+                "otid": "otid_eb3d3855deb74340",
+                "title": "人工智能学院关于公示2026年“申请-考核”制博士研究生调剂综合考核结果的通知",
+                "displayScore": 1.7038,
+                "coarseScore": 1.7038,
+                "bestKpid": "kpid_d96cece9e6ec4bbd",
+                "eventTypes": [
+                  "录取公示",
+                  "资格要求",
+                  "招生章程"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_adjustment",
+                  "phd_apply_assessment"
+                ],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "result_notice",
+                  "adjustment_notice"
+                ],
+                "bestKpRoleTags": [
+                  "post_outcome"
+                ],
+                "evidenceTopRoleTags": [
+                  "post_outcome",
+                  "announcement_period",
+                  "email"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "post_outcome": 1,
+                  "requirement": 1,
+                  "timeline": 2
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [
+                  "outcome"
+                ],
+                "roleTypeFlags": [
+                  "operational",
+                  "outcome"
+                ]
+              },
+              {
+                "otid": "otid_beb149b3688b4f4c",
+                "title": "人工智能学院关于公布2025年硕士研究生增补拟录取名单（第三批）的通知",
+                "displayScore": 1.6477,
+                "coarseScore": 1.6477,
+                "bestKpid": "kpid_bcc1e23617d74178",
+                "eventTypes": [
+                  "录取公示",
+                  "复试通知",
+                  "材料提交"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "result_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "background"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "background",
+                  "email"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 3,
+                  "requirement": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [
+                  "outcome"
+                ],
+                "roleTypeFlags": [
+                  "outcome"
+                ]
+              }
+            ]
+          },
+          "compare": {
+            "answered": true,
+            "latestTriggered": true,
+            "retrievalRank": 1,
+            "renderedRank": 6,
+            "renderedReciprocalRank": 0.1667,
+            "displayTop1Margin": 0.1229,
+            "top1": {
+              "otid": "otid_db511e3324ad43f5",
+              "title": "人工智能学院关于公布2024年硕士研究生增补拟录取名单的通知",
+              "displayScore": 1.8182,
+              "coarseScore": 1.8182,
+              "bestKpid": "kpid_2386b8733e19443c",
+              "eventTypes": [
+                "录取公示",
+                "复试通知",
+                "材料提交"
+              ],
+              "structuredTopicIds": [
+                "graduate_admission"
+              ],
+              "structuredIntentIds": [
+                "master_unified_exam"
+              ],
+              "degreeLevels": [
+                "硕士"
+              ],
+              "titleRoles": [
+                "result_notice"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "publish",
+                "background"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "publish",
+                "background",
+                "email",
+                "reminder"
+              ],
+              "kpEvidenceGroupCounts": {
+                "timeline": 3,
+                "requirement": 1
+              },
+              "dominantEvidenceGroup": "timeline",
+              "titleTypeFlags": [
+                "outcome"
+              ],
+              "roleTypeFlags": [
+                "outcome"
+              ]
+            },
+            "top3": [
+              {
+                "otid": "otid_db511e3324ad43f5",
+                "title": "人工智能学院关于公布2024年硕士研究生增补拟录取名单的通知",
+                "displayScore": 1.8182,
+                "coarseScore": 1.8182,
+                "bestKpid": "kpid_2386b8733e19443c",
+                "eventTypes": [
+                  "录取公示",
+                  "复试通知",
+                  "材料提交"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "result_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "background"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "background",
+                  "email",
+                  "reminder"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 3,
+                  "requirement": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [
+                  "outcome"
+                ],
+                "roleTypeFlags": [
+                  "outcome"
+                ]
+              },
+              {
+                "otid": "otid_beb149b3688b4f4c",
+                "title": "人工智能学院关于公布2025年硕士研究生增补拟录取名单（第三批）的通知",
+                "displayScore": 1.6953,
+                "coarseScore": 1.6953,
+                "bestKpid": "kpid_bcc1e23617d74178",
+                "eventTypes": [
+                  "录取公示",
+                  "复试通知",
+                  "材料提交"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "result_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "background"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "background",
+                  "email"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 3,
+                  "requirement": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [
+                  "outcome"
+                ],
+                "roleTypeFlags": [
+                  "outcome"
+                ]
+              },
+              {
+                "otid": "otid_3eaad7074d4a4dc9",
+                "title": "人工智能学院关于公布2025年硕士研究生增补拟录取名单（第一批）的通知",
+                "displayScore": 1.6641,
+                "coarseScore": 1.6641,
+                "bestKpid": "kpid_edf4fed384a84f13",
+                "eventTypes": [
+                  "录取公示",
+                  "复试通知",
+                  "材料提交"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "result_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "background"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [
+                  "outcome"
+                ],
+                "roleTypeFlags": [
+                  "outcome"
+                ]
+              }
+            ]
+          },
+          "reciprocalRankGain": 0.0333,
+          "rankGain": 1,
+          "hit1Recovered": false,
+          "hit1Lost": false,
+          "top1Changed": false
+        },
+        {
+          "caseIndex": 93,
+          "id": "blind_ext_ood_100_draft_v1_0094",
+          "dataset": "test_dataset_granularity_blind_ext_ood_generalization_aligned_100_draft_v1",
+          "query": "人工智能学院2025年复试过程中涉及的所有具体地点在哪里？",
+          "sourceSeedId": "ai_seed_otid_bacada41bba74749_02",
+          "sourceDataset": "blind_ext_ood_generalization_triplet_v1_blind_gap_time_l3b",
+          "queryType": "standard",
+          "queryScope": "time_location",
+          "preferredGranularity": "OT",
+          "supportPattern": "ot_required",
+          "themeFamily": "复试地点分布",
+          "challengeTags": [
+            "地点整合",
+            "跨段依赖",
+            "空间约束",
+            "全文理解"
+          ],
+          "expectedOtid": "otid_bacada41bba74749",
+          "runtimeFull": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 11,
+            "renderedRank": 5,
+            "renderedReciprocalRank": 0.2,
+            "displayTop1Margin": 0.2673,
+            "top1": {
+              "otid": "otid_ed940aabc9c24803",
+              "title": "软件工程学院2025年面向港澳台地区招收研究生招生复试录取实施细则",
+              "displayScore": 1.4403,
+              "coarseScore": 1.4403,
+              "bestKpid": "kpid_97e0cfdd84e345b3",
+              "eventTypes": [
+                "录取公示",
+                "复试通知",
+                "材料提交"
+              ],
+              "structuredTopicIds": [
+                "graduate_admission",
+                "undergraduate_admission"
+              ],
+              "structuredIntentIds": [
+                "master_unified_exam"
+              ],
+              "degreeLevels": [
+                "硕士",
+                "博士"
+              ],
+              "titleRoles": [
+                "rule_doc"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "schedule",
+                "materials",
+                "reminder"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "schedule",
+                "materials",
+                "reminder",
+                "background"
+              ],
+              "kpEvidenceGroupCounts": {
+                "requirement": 1,
+                "procedure": 1,
+                "timeline": 4
+              },
+              "dominantEvidenceGroup": "timeline",
+              "titleTypeFlags": [
+                "rule"
+              ],
+              "roleTypeFlags": [
+                "constraint"
+              ]
+            },
+            "top3": [
+              {
+                "otid": "otid_ed940aabc9c24803",
+                "title": "软件工程学院2025年面向港澳台地区招收研究生招生复试录取实施细则",
+                "displayScore": 1.4403,
+                "coarseScore": 1.4403,
+                "bestKpid": "kpid_97e0cfdd84e345b3",
+                "eventTypes": [
+                  "录取公示",
+                  "复试通知",
+                  "材料提交"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission",
+                  "undergraduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "rule_doc"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "schedule",
+                  "materials",
+                  "reminder"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "schedule",
+                  "materials",
+                  "reminder",
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "procedure": 1,
+                  "timeline": 4
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [
+                  "rule"
+                ],
+                "roleTypeFlags": [
+                  "constraint"
+                ]
+              },
+              {
+                "otid": "otid_6c5b2af52b1d4df5",
+                "title": "人工智能学院关于公布2025年硕士研究生招生复试结果的通知",
+                "displayScore": 1.173,
+                "coarseScore": 1.173,
+                "bestKpid": "kpid_02517d7c32c8474e",
+                "eventTypes": [
+                  "录取公示",
+                  "复试通知",
+                  "材料提交"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "result_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "background",
+                  "post_outcome"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "background",
+                  "post_outcome"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 2,
+                  "post_outcome": 2
+                },
+                "dominantEvidenceGroup": "post_outcome",
+                "titleTypeFlags": [],
+                "roleTypeFlags": [
+                  "outcome"
+                ]
+              },
+              {
+                "otid": "otid_3eaad7074d4a4dc9",
+                "title": "人工智能学院关于公布2025年硕士研究生增补拟录取名单（第一批）的通知",
+                "displayScore": 0.9871,
+                "coarseScore": 0.9871,
+                "bestKpid": "kpid_edf4fed384a84f13",
+                "eventTypes": [
+                  "录取公示",
+                  "复试通知",
+                  "材料提交"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "result_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "background"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [
+                  "outcome"
+                ],
+                "roleTypeFlags": [
+                  "outcome"
+                ]
+              }
+            ]
+          },
+          "compare": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 11,
+            "renderedRank": 6,
+            "renderedReciprocalRank": 0.1667,
+            "displayTop1Margin": 0.2169,
+            "top1": {
+              "otid": "otid_ed940aabc9c24803",
+              "title": "软件工程学院2025年面向港澳台地区招收研究生招生复试录取实施细则",
+              "displayScore": 1.3675,
+              "coarseScore": 1.3675,
+              "bestKpid": "kpid_97e0cfdd84e345b3",
+              "eventTypes": [
+                "录取公示",
+                "复试通知",
+                "材料提交"
+              ],
+              "structuredTopicIds": [
+                "graduate_admission",
+                "undergraduate_admission"
+              ],
+              "structuredIntentIds": [
+                "master_unified_exam"
+              ],
+              "degreeLevels": [
+                "硕士",
+                "博士"
+              ],
+              "titleRoles": [
+                "rule_doc"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "schedule",
+                "materials",
+                "reminder"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "schedule",
+                "materials",
+                "reminder",
+                "background"
+              ],
+              "kpEvidenceGroupCounts": {
+                "requirement": 1,
+                "procedure": 1,
+                "timeline": 4
+              },
+              "dominantEvidenceGroup": "timeline",
+              "titleTypeFlags": [
+                "rule"
+              ],
+              "roleTypeFlags": [
+                "constraint"
+              ]
+            },
+            "top3": [
+              {
+                "otid": "otid_ed940aabc9c24803",
+                "title": "软件工程学院2025年面向港澳台地区招收研究生招生复试录取实施细则",
+                "displayScore": 1.3675,
+                "coarseScore": 1.3675,
+                "bestKpid": "kpid_97e0cfdd84e345b3",
+                "eventTypes": [
+                  "录取公示",
+                  "复试通知",
+                  "材料提交"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission",
+                  "undergraduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "rule_doc"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "schedule",
+                  "materials",
+                  "reminder"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "schedule",
+                  "materials",
+                  "reminder",
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "procedure": 1,
+                  "timeline": 4
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [
+                  "rule"
+                ],
+                "roleTypeFlags": [
+                  "constraint"
+                ]
+              },
+              {
+                "otid": "otid_6c5b2af52b1d4df5",
+                "title": "人工智能学院关于公布2025年硕士研究生招生复试结果的通知",
+                "displayScore": 1.1506,
+                "coarseScore": 1.1506,
+                "bestKpid": "kpid_02517d7c32c8474e",
+                "eventTypes": [
+                  "录取公示",
+                  "复试通知",
+                  "材料提交"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "result_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "background",
+                  "post_outcome"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "background",
+                  "post_outcome"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 2,
+                  "post_outcome": 2
+                },
+                "dominantEvidenceGroup": "post_outcome",
+                "titleTypeFlags": [],
+                "roleTypeFlags": [
+                  "outcome"
+                ]
+              },
+              {
+                "otid": "otid_3eaad7074d4a4dc9",
+                "title": "人工智能学院关于公布2025年硕士研究生增补拟录取名单（第一批）的通知",
+                "displayScore": 0.9647,
+                "coarseScore": 0.9647,
+                "bestKpid": "kpid_edf4fed384a84f13",
+                "eventTypes": [
+                  "录取公示",
+                  "复试通知",
+                  "材料提交"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "result_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "background"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [
+                  "outcome"
+                ],
+                "roleTypeFlags": [
+                  "outcome"
+                ]
+              }
+            ]
+          },
+          "reciprocalRankGain": 0.0333,
+          "rankGain": 1,
+          "hit1Recovered": false,
+          "hit1Lost": false,
+          "top1Changed": false
+        }
+      ],
+      "worseCases": [
+        {
+          "caseIndex": 54,
+          "id": "blind_ext_ood_100_draft_v1_0055",
+          "dataset": "test_dataset_granularity_blind_ext_ood_generalization_aligned_100_draft_v1",
+          "query": "在人工智能学院2022年博士申请中 要要什么条件和材料提交的截止日期都有哪些",
+          "sourceQuery": "在中山大学人工智能学院2022年博士申请中，申请条件和材料提交的截止日期分别是什么？",
+          "sourceSeedId": "ai_seed_otid_5e4e1434da5748eb_02",
+          "sourceDataset": "external_ood_matched_60_sai_answers_v1",
+          "queryType": "situational",
+          "queryScope": "eligibility_condition",
+          "preferredGranularity": "KP+OT",
+          "supportPattern": "multi_kp",
+          "themeFamily": "博士研究生招生",
+          "challengeTags": [
+            "条件与时间整合"
+          ],
+          "expectedOtid": "otid_5e4e1434da5748eb",
+          "runtimeFull": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 1,
+            "renderedRank": 7,
+            "renderedReciprocalRank": 0.1429,
+            "displayTop1Margin": 0.1232,
+            "top1": {
+              "otid": "otid_bc7c8e0e968d4d56",
+              "title": "关于开展2022年广州市“菁英计划”留学项目选派工作的通知",
+              "displayScore": 1.1265,
+              "coarseScore": 0.9825,
+              "bestKpid": "kpid_76f9d5c0262b4632",
+              "eventTypes": [
+                "录取公示",
+                "考试安排",
+                "材料提交"
+              ],
+              "structuredTopicIds": [
+                "student_funding"
+              ],
+              "structuredIntentIds": [],
+              "degreeLevels": [
+                "本科",
+                "硕士",
+                "博士"
+              ],
+              "titleRoles": [
+                "general_notice"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "deadline",
+                "schedule",
+                "materials"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "deadline",
+                "schedule",
+                "materials"
+              ],
+              "kpEvidenceGroupCounts": {
+                "requirement": 2,
+                "procedure": 1,
+                "timeline": 2
+              },
+              "dominantEvidenceGroup": "requirement",
+              "titleTypeFlags": [],
+              "roleTypeFlags": []
+            },
+            "top3": [
+              {
+                "otid": "otid_bc7c8e0e968d4d56",
+                "title": "关于开展2022年广州市“菁英计划”留学项目选派工作的通知",
+                "displayScore": 1.1265,
+                "coarseScore": 0.9825,
+                "bestKpid": "kpid_76f9d5c0262b4632",
+                "eventTypes": [
+                  "录取公示",
+                  "考试安排",
+                  "材料提交"
+                ],
+                "structuredTopicIds": [
+                  "student_funding"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "本科",
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "schedule",
+                  "materials"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "schedule",
+                  "materials"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 2,
+                  "procedure": 1,
+                  "timeline": 2
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_45577d5754a4495d",
+                "title": "关于2022年上半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+                "displayScore": 1.0033,
+                "coarseScore": 0.8593,
+                "bestKpid": "kpid_12ad02770f074377",
+                "eventTypes": [
+                  "考试安排",
+                  "材料提交",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [
+                  "academic_affairs"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "application_stage",
+                  "materials",
+                  "thesis"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "application_stage",
+                  "materials",
+                  "thesis"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "procedure": 1,
+                  "timeline": 1
+                },
+                "dominantEvidenceGroup": "procedure",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_98669718896245fc",
+                "title": "关于2022年下半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+                "displayScore": 0.999,
+                "coarseScore": 0.855,
+                "bestKpid": "kpid_eabc3967a3244f21",
+                "eventTypes": [
+                  "考试安排",
+                  "材料提交",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [
+                  "academic_affairs"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "materials",
+                  "background",
+                  "thesis"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "materials",
+                  "background",
+                  "thesis"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "timeline": 1
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              }
+            ]
+          },
+          "compare": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 1,
+            "renderedRank": 5,
+            "renderedReciprocalRank": 0.2,
+            "displayTop1Margin": 0.035,
+            "top1": {
+              "otid": "otid_bc7c8e0e968d4d56",
+              "title": "关于开展2022年广州市“菁英计划”留学项目选派工作的通知",
+              "displayScore": 0.9585,
+              "coarseScore": 0.8145,
+              "bestKpid": "kpid_76f9d5c0262b4632",
+              "eventTypes": [
+                "录取公示",
+                "考试安排",
+                "材料提交"
+              ],
+              "structuredTopicIds": [
+                "student_funding"
+              ],
+              "structuredIntentIds": [],
+              "degreeLevels": [
+                "本科",
+                "硕士",
+                "博士"
+              ],
+              "titleRoles": [
+                "general_notice"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "deadline",
+                "schedule",
+                "materials"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "deadline",
+                "schedule",
+                "materials"
+              ],
+              "kpEvidenceGroupCounts": {
+                "requirement": 2,
+                "procedure": 1,
+                "timeline": 2
+              },
+              "dominantEvidenceGroup": "requirement",
+              "titleTypeFlags": [],
+              "roleTypeFlags": []
+            },
+            "top3": [
+              {
+                "otid": "otid_bc7c8e0e968d4d56",
+                "title": "关于开展2022年广州市“菁英计划”留学项目选派工作的通知",
+                "displayScore": 0.9585,
+                "coarseScore": 0.8145,
+                "bestKpid": "kpid_76f9d5c0262b4632",
+                "eventTypes": [
+                  "录取公示",
+                  "考试安排",
+                  "材料提交"
+                ],
+                "structuredTopicIds": [
+                  "student_funding"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "本科",
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "schedule",
+                  "materials"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "schedule",
+                  "materials"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 2,
+                  "procedure": 1,
+                  "timeline": 2
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_5f10b726aa1d4728",
+                "title": "中山大学人工智能学院2023年以“申请-考核”制招收博士研究生实施办法",
+                "displayScore": 0.9235,
+                "coarseScore": 0.7795,
+                "bestKpid": "kpid_c67b75b015104827",
+                "eventTypes": [
+                  "推免实施办法",
+                  "考试安排",
+                  "招生章程"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "phd_apply_assessment"
+                ],
+                "degreeLevels": [
+                  "博士"
+                ],
+                "titleRoles": [
+                  "rule_doc"
+                ],
+                "bestKpRoleTags": [
+                  "condition",
+                  "materials",
+                  "background"
+                ],
+                "evidenceTopRoleTags": [
+                  "condition",
+                  "materials",
+                  "background",
+                  "time_expression"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 2,
+                  "timeline": 1
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [
+                  "rule"
+                ],
+                "roleTypeFlags": [
+                  "constraint"
+                ]
+              },
+              {
+                "otid": "otid_81112559b6b240f2",
+                "title": "人工智能学院关于接收2022年推荐免试研究生预报名的通知",
+                "displayScore": 0.9104,
+                "coarseScore": 0.7664,
+                "bestKpid": "kpid_0ce4691f1eb24d8e",
+                "eventTypes": [
+                  "推免通知",
+                  "报名通知",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_recommend_exemption"
+                ],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "registration_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "schedule",
+                  "materials",
+                  "email",
+                  "thesis"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "schedule",
+                  "materials",
+                  "email",
+                  "thesis"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "procedure": 1,
+                  "timeline": 1
+                },
+                "dominantEvidenceGroup": "procedure",
+                "titleTypeFlags": [
+                  "process"
+                ],
+                "roleTypeFlags": [
+                  "constraint",
+                  "operational"
+                ]
+              }
+            ]
+          },
+          "reciprocalRankGain": -0.0571,
+          "rankGain": -2,
+          "hit1Recovered": false,
+          "hit1Lost": false,
+          "top1Changed": false
+        },
+        {
+          "caseIndex": 1,
+          "id": "blind_ext_ood_100_draft_v1_0002",
+          "dataset": "test_dataset_granularity_blind_ext_ood_generalization_aligned_100_draft_v1",
+          "query": "2025年预推免申请材料怎么提交",
+          "sourceQuery": "2025年预推免申请材料怎么提交？",
+          "sourceSeedId": "manual_seed_otid_5d30aea8c4a64cce_02",
+          "sourceDataset": "blind_ext_ood_generalization_manual_direct_fill_reviewed_v1",
+          "queryType": "standard",
+          "queryScope": "procedure",
+          "preferredGranularity": "KP",
+          "supportPattern": "single_kp",
+          "themeFamily": "推免预报名流程",
+          "challengeTags": [
+            "procedure",
+            "single_kp",
+            "standard_query",
+            "pref_kp"
+          ],
+          "expectedOtid": "otid_5d30aea8c4a64cce",
+          "runtimeFull": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 1,
+            "renderedRank": 3,
+            "renderedReciprocalRank": 0.3333,
+            "displayTop1Margin": 0.0377,
+            "top1": {
+              "otid": "otid_3770fb6348d24f6b",
+              "title": "中山大学人工智能学院2025年推荐免试研究生接收办法",
+              "displayScore": 0.8022,
+              "coarseScore": 0.8022,
+              "bestKpid": "kpid_da8917b7e19e4775",
+              "eventTypes": [
+                "推免通知",
+                "录取公示",
+                "材料提交"
+              ],
+              "structuredTopicIds": [
+                "graduate_admission"
+              ],
+              "structuredIntentIds": [
+                "master_unified_exam",
+                "master_recommend_exemption"
+              ],
+              "degreeLevels": [
+                "本科",
+                "硕士",
+                "博士"
+              ],
+              "titleRoles": [
+                "rule_doc"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "materials",
+                "thesis"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "materials",
+                "thesis",
+                "publish",
+                "background"
+              ],
+              "kpEvidenceGroupCounts": {
+                "requirement": 1,
+                "timeline": 2
+              },
+              "dominantEvidenceGroup": "timeline",
+              "titleTypeFlags": [
+                "rule"
+              ],
+              "roleTypeFlags": [
+                "constraint"
+              ]
+            },
+            "top3": [
+              {
+                "otid": "otid_3770fb6348d24f6b",
+                "title": "中山大学人工智能学院2025年推荐免试研究生接收办法",
+                "displayScore": 0.8022,
+                "coarseScore": 0.8022,
+                "bestKpid": "kpid_da8917b7e19e4775",
+                "eventTypes": [
+                  "推免通知",
+                  "录取公示",
+                  "材料提交"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam",
+                  "master_recommend_exemption"
+                ],
+                "degreeLevels": [
+                  "本科",
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "rule_doc"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "materials",
+                  "thesis"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "materials",
+                  "thesis",
+                  "publish",
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "timeline": 2
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [
+                  "rule"
+                ],
+                "roleTypeFlags": [
+                  "constraint"
+                ]
+              },
+              {
+                "otid": "otid_9a72545adb084d1d",
+                "title": "软件工程学院关于开展2025-2026学年本科生校级捐赠助学金（第一批）评选工作的通知",
+                "displayScore": 0.7645,
+                "coarseScore": 0.7645,
+                "bestKpid": "kpid_b3b5c962de074858",
+                "eventTypes": [
+                  "材料提交",
+                  "资格要求",
+                  "非招生通知"
+                ],
+                "structuredTopicIds": [
+                  "student_funding",
+                  "academic_affairs"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "本科"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "materials",
+                  "email"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "materials",
+                  "email"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "timeline": 1
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_5d30aea8c4a64cce",
+                "title": "中山大学人工智能学院2025年接收优秀应届本科毕业生推荐免试攻读研究生预报名通知",
+                "displayScore": 0.7324,
+                "coarseScore": 0.7324,
+                "bestKpid": "kpid_cda97927298147d2",
+                "eventTypes": [
+                  "推免通知",
+                  "考试安排",
+                  "报名通知"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "本科",
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "registration_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "schedule",
+                  "materials",
+                  "email"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "schedule",
+                  "materials",
+                  "email",
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 2,
+                  "procedure": 1,
+                  "timeline": 1
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [
+                  "process"
+                ],
+                "roleTypeFlags": [
+                  "constraint",
+                  "operational"
+                ]
+              }
+            ]
+          },
+          "compare": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 1,
+            "renderedRank": 2,
+            "renderedReciprocalRank": 0.5,
+            "displayTop1Margin": 0.0556,
+            "top1": {
+              "otid": "otid_3770fb6348d24f6b",
+              "title": "中山大学人工智能学院2025年推荐免试研究生接收办法",
+              "displayScore": 0.8346,
+              "coarseScore": 0.8346,
+              "bestKpid": "kpid_da8917b7e19e4775",
+              "eventTypes": [
+                "推免通知",
+                "录取公示",
+                "材料提交"
+              ],
+              "structuredTopicIds": [
+                "graduate_admission"
+              ],
+              "structuredIntentIds": [
+                "master_unified_exam",
+                "master_recommend_exemption"
+              ],
+              "degreeLevels": [
+                "本科",
+                "硕士",
+                "博士"
+              ],
+              "titleRoles": [
+                "rule_doc"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "materials",
+                "thesis"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "materials",
+                "thesis",
+                "publish",
+                "background"
+              ],
+              "kpEvidenceGroupCounts": {
+                "requirement": 1,
+                "timeline": 2
+              },
+              "dominantEvidenceGroup": "timeline",
+              "titleTypeFlags": [
+                "rule"
+              ],
+              "roleTypeFlags": [
+                "constraint"
+              ]
+            },
+            "top3": [
+              {
+                "otid": "otid_3770fb6348d24f6b",
+                "title": "中山大学人工智能学院2025年推荐免试研究生接收办法",
+                "displayScore": 0.8346,
+                "coarseScore": 0.8346,
+                "bestKpid": "kpid_da8917b7e19e4775",
+                "eventTypes": [
+                  "推免通知",
+                  "录取公示",
+                  "材料提交"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam",
+                  "master_recommend_exemption"
+                ],
+                "degreeLevels": [
+                  "本科",
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "rule_doc"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "materials",
+                  "thesis"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "materials",
+                  "thesis",
+                  "publish",
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "timeline": 2
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [
+                  "rule"
+                ],
+                "roleTypeFlags": [
+                  "constraint"
+                ]
+              },
+              {
+                "otid": "otid_5d30aea8c4a64cce",
+                "title": "中山大学人工智能学院2025年接收优秀应届本科毕业生推荐免试攻读研究生预报名通知",
+                "displayScore": 0.7791,
+                "coarseScore": 0.7791,
+                "bestKpid": "kpid_cda97927298147d2",
+                "eventTypes": [
+                  "推免通知",
+                  "考试安排",
+                  "报名通知"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "本科",
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "registration_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "schedule",
+                  "materials",
+                  "email"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "schedule",
+                  "materials",
+                  "email",
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 2,
+                  "procedure": 1,
+                  "timeline": 1
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [
+                  "process"
+                ],
+                "roleTypeFlags": [
+                  "constraint",
+                  "operational"
+                ]
+              },
+              {
+                "otid": "otid_9a72545adb084d1d",
+                "title": "软件工程学院关于开展2025-2026学年本科生校级捐赠助学金（第一批）评选工作的通知",
+                "displayScore": 0.7627,
+                "coarseScore": 0.7627,
+                "bestKpid": "kpid_b3b5c962de074858",
+                "eventTypes": [
+                  "材料提交",
+                  "资格要求",
+                  "非招生通知"
+                ],
+                "structuredTopicIds": [
+                  "student_funding",
+                  "academic_affairs"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "本科"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "materials",
+                  "email"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "materials",
+                  "email"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "timeline": 1
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              }
+            ]
+          },
+          "reciprocalRankGain": -0.1667,
+          "rankGain": -1,
+          "hit1Recovered": false,
+          "hit1Lost": false,
+          "top1Changed": false
+        },
+        {
+          "caseIndex": 46,
+          "id": "blind_ext_ood_100_draft_v1_0047",
+          "dataset": "test_dataset_granularity_blind_ext_ood_generalization_aligned_100_draft_v1",
+          "query": "2022年人工智能学院博士申请考核招生要求中 报名时间、申请资格和材料都有哪些要求",
+          "sourceQuery": "2022年人工智能学院博士申请考核招生简章中，报名时间、申请资格和材料有哪些要求？",
+          "sourceSeedId": "sai_seed_020",
+          "sourceDataset": "external_ood_holdout_30",
+          "queryType": "standard",
+          "queryScope": "eligibility_condition",
+          "preferredGranularity": "KP+OT",
+          "supportPattern": "multi_kp",
+          "themeFamily": "博士招生简章",
+          "challengeTags": [
+            "eligibility_condition",
+            "materials",
+            "time_location",
+            "pref_kp_plus_ot"
+          ],
+          "expectedOtid": "otid_5e4e1434da5748eb",
+          "runtimeFull": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 2,
+            "renderedRank": 4,
+            "renderedReciprocalRank": 0.25,
+            "displayTop1Margin": 0.1811,
+            "top1": {
+              "otid": "otid_dc2fbd2f88f7453b",
+              "title": "中山大学人工智能学院2023年以“申请-考核”制招收博士研究生实施办法",
+              "displayScore": 1.354,
+              "coarseScore": 1.21,
+              "bestKpid": "kpid_64164ade698a4751",
+              "eventTypes": [
+                "推免实施办法",
+                "考试安排",
+                "招生章程"
+              ],
+              "structuredTopicIds": [
+                "graduate_admission"
+              ],
+              "structuredIntentIds": [
+                "phd_apply_assessment"
+              ],
+              "degreeLevels": [
+                "博士"
+              ],
+              "titleRoles": [
+                "rule_doc"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "materials",
+                "background"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "materials",
+                "background"
+              ],
+              "kpEvidenceGroupCounts": {
+                "requirement": 1,
+                "timeline": 2
+              },
+              "dominantEvidenceGroup": "timeline",
+              "titleTypeFlags": [
+                "rule"
+              ],
+              "roleTypeFlags": [
+                "constraint"
+              ]
+            },
+            "top3": [
+              {
+                "otid": "otid_dc2fbd2f88f7453b",
+                "title": "中山大学人工智能学院2023年以“申请-考核”制招收博士研究生实施办法",
+                "displayScore": 1.354,
+                "coarseScore": 1.21,
+                "bestKpid": "kpid_64164ade698a4751",
+                "eventTypes": [
+                  "推免实施办法",
+                  "考试安排",
+                  "招生章程"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "phd_apply_assessment"
+                ],
+                "degreeLevels": [
+                  "博士"
+                ],
+                "titleRoles": [
+                  "rule_doc"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "materials",
+                  "background"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "materials",
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "timeline": 2
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [
+                  "rule"
+                ],
+                "roleTypeFlags": [
+                  "constraint"
+                ]
+              },
+              {
+                "otid": "otid_5f10b726aa1d4728",
+                "title": "中山大学人工智能学院2023年以“申请-考核”制招收博士研究生实施办法",
+                "displayScore": 1.1729,
+                "coarseScore": 1.0289,
+                "bestKpid": "kpid_5b5f80bbf4e249bf",
+                "eventTypes": [
+                  "推免实施办法",
+                  "考试安排",
+                  "招生章程"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "phd_apply_assessment"
+                ],
+                "degreeLevels": [
+                  "博士"
+                ],
+                "titleRoles": [
+                  "rule_doc"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "materials",
+                  "background"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "materials",
+                  "background",
+                  "email",
+                  "publish",
+                  "reminder",
+                  "condition"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 3,
+                  "timeline": 2
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [
+                  "rule"
+                ],
+                "roleTypeFlags": [
+                  "constraint"
+                ]
+              },
+              {
+                "otid": "otid_392eac0b27fa4b09",
+                "title": "中山大学人工智能学院2022年以“申请-考核”制招收博士研究生综合考核通知",
+                "displayScore": 1.1392,
+                "coarseScore": 0.9952,
+                "bestKpid": "kpid_081fa6516435497f",
+                "eventTypes": [
+                  "录取公示",
+                  "考试安排",
+                  "报名通知"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "phd_apply_assessment"
+                ],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "registration_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "materials",
+                  "publish",
+                  "background"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "materials",
+                  "publish",
+                  "background",
+                  "announcement_period"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 2,
+                  "timeline": 3
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [
+                  "process"
+                ],
+                "roleTypeFlags": [
+                  "constraint",
+                  "operational"
+                ]
+              }
+            ]
+          },
+          "compare": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 2,
+            "renderedRank": 2,
+            "renderedReciprocalRank": 0.5,
+            "displayTop1Margin": 0.2218,
+            "top1": {
+              "otid": "otid_dc2fbd2f88f7453b",
+              "title": "中山大学人工智能学院2023年以“申请-考核”制招收博士研究生实施办法",
+              "displayScore": 1.3722,
+              "coarseScore": 1.2282,
+              "bestKpid": "kpid_64164ade698a4751",
+              "eventTypes": [
+                "推免实施办法",
+                "考试安排",
+                "招生章程"
+              ],
+              "structuredTopicIds": [
+                "graduate_admission"
+              ],
+              "structuredIntentIds": [
+                "phd_apply_assessment"
+              ],
+              "degreeLevels": [
+                "博士"
+              ],
+              "titleRoles": [
+                "rule_doc"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "materials",
+                "background"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "materials",
+                "background"
+              ],
+              "kpEvidenceGroupCounts": {
+                "requirement": 1,
+                "timeline": 2
+              },
+              "dominantEvidenceGroup": "timeline",
+              "titleTypeFlags": [
+                "rule"
+              ],
+              "roleTypeFlags": [
+                "constraint"
+              ]
+            },
+            "top3": [
+              {
+                "otid": "otid_dc2fbd2f88f7453b",
+                "title": "中山大学人工智能学院2023年以“申请-考核”制招收博士研究生实施办法",
+                "displayScore": 1.3722,
+                "coarseScore": 1.2282,
+                "bestKpid": "kpid_64164ade698a4751",
+                "eventTypes": [
+                  "推免实施办法",
+                  "考试安排",
+                  "招生章程"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "phd_apply_assessment"
+                ],
+                "degreeLevels": [
+                  "博士"
+                ],
+                "titleRoles": [
+                  "rule_doc"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "materials",
+                  "background"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "materials",
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "timeline": 2
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [
+                  "rule"
+                ],
+                "roleTypeFlags": [
+                  "constraint"
+                ]
+              },
+              {
+                "otid": "otid_5e4e1434da5748eb",
+                "title": "中山大学人工智能学院2022年以“申请-考核”制招收博士研究生招生简章",
+                "displayScore": 1.1505,
+                "coarseScore": 1.0065,
+                "bestKpid": "kpid_79904ecf12d04839",
+                "eventTypes": [
+                  "录取公示",
+                  "考试安排",
+                  "报名通知"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "phd_apply_assessment"
+                ],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "rule_doc"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "condition",
+                  "materials",
+                  "reminder",
+                  "thesis"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "condition",
+                  "materials",
+                  "reminder",
+                  "thesis",
+                  "publish"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "timeline": 2
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [
+                  "rule"
+                ],
+                "roleTypeFlags": [
+                  "constraint"
+                ]
+              },
+              {
+                "otid": "otid_5f10b726aa1d4728",
+                "title": "中山大学人工智能学院2023年以“申请-考核”制招收博士研究生实施办法",
+                "displayScore": 1.1416,
+                "coarseScore": 0.9976,
+                "bestKpid": "kpid_5b5f80bbf4e249bf",
+                "eventTypes": [
+                  "推免实施办法",
+                  "考试安排",
+                  "招生章程"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "phd_apply_assessment"
+                ],
+                "degreeLevels": [
+                  "博士"
+                ],
+                "titleRoles": [
+                  "rule_doc"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "materials",
+                  "background"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "materials",
+                  "background",
+                  "email",
+                  "publish",
+                  "reminder",
+                  "condition"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 3,
+                  "timeline": 2
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [
+                  "rule"
+                ],
+                "roleTypeFlags": [
+                  "constraint"
+                ]
+              }
+            ]
+          },
+          "reciprocalRankGain": -0.25,
+          "rankGain": -2,
+          "hit1Recovered": false,
+          "hit1Lost": false,
+          "top1Changed": false
+        }
+      ]
+    },
+    {
+      "baseLabel": "runtime_full",
+      "compareLabel": "no_lexical_title_type_adjustment",
+      "betterSummary": {
+        "count": 0,
+        "hit1RecoveredCount": 0,
+        "hit1LostCount": 0,
+        "avgReciprocalRankGain": 0,
+        "byDataset": [],
+        "byQueryScope": [],
+        "byPreferredGranularity": [],
+        "bySupportPattern": [],
+        "byThemeFamily": [],
+        "byDominantEvidenceGroup": [],
+        "byPrimaryBestKpRoleTag": []
+      },
+      "worseSummary": {
+        "count": 0,
+        "hit1RecoveredCount": 0,
+        "hit1LostCount": 0,
+        "avgReciprocalRankGain": 0,
+        "byDataset": [],
+        "byQueryScope": [],
+        "byPreferredGranularity": [],
+        "bySupportPattern": [],
+        "byThemeFamily": [],
+        "byDominantEvidenceGroup": [],
+        "byPrimaryBestKpRoleTag": []
+      },
+      "betterCases": [],
+      "worseCases": []
+    }
+  ],
+  "sharedHit1Protection": {
+    "bothProtectedHit1Summary": {
+      "count": 0,
+      "hit1RecoveredCount": 0,
+      "hit1LostCount": 0,
+      "avgReciprocalRankGain": 0,
+      "byDataset": [],
+      "byQueryScope": [],
+      "byPreferredGranularity": [],
+      "bySupportPattern": [],
+      "byThemeFamily": [],
+      "byDominantEvidenceGroup": [],
+      "byPrimaryBestKpRoleTag": []
+    },
+    "structuredOnlyProtectedHit1Summary": {
+      "count": 0,
+      "hit1RecoveredCount": 0,
+      "hit1LostCount": 0,
+      "avgReciprocalRankGain": 0,
+      "byDataset": [],
+      "byQueryScope": [],
+      "byPreferredGranularity": [],
+      "bySupportPattern": [],
+      "byThemeFamily": [],
+      "byDominantEvidenceGroup": [],
+      "byPrimaryBestKpRoleTag": []
+    },
+    "lexicalOnlyProtectedHit1Summary": {
+      "count": 0,
+      "hit1RecoveredCount": 0,
+      "hit1LostCount": 0,
+      "avgReciprocalRankGain": 0,
+      "byDataset": [],
+      "byQueryScope": [],
+      "byPreferredGranularity": [],
+      "bySupportPattern": [],
+      "byThemeFamily": [],
+      "byDominantEvidenceGroup": [],
+      "byPrimaryBestKpRoleTag": []
+    },
+    "bothProtectedHit1Cases": [],
+    "structuredOnlyProtectedHit1Cases": [],
+    "lexicalOnlyProtectedHit1Cases": []
+  }
+}

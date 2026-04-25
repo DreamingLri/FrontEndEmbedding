@@ -77,6 +77,8 @@ export type EvalDatasetConfig = {
 
 export type GranularityDatasetTargetKey =
     | "main_bench_120"
+    | "in_domain_generalization_100"
+    | "blind_ext_ood_100"
     | "in_domain_holdout_50"
     | "ext_ood_blind_60"
     | "matched_ext_ood_60"
@@ -122,15 +124,15 @@ export const FRONTEND_VECTOR_FILE = resolveFrontendVectorFile();
 export const DEFAULT_QUERY_EMBED_BATCH_SIZE = 16;
 export const DEFAULT_GRANULARITY_MAINLINE_TARGET_KEYS = [
     "ladder_main_balanced_150",
-    "ladder_generalization_hard_100",
-    "ladder_structure_stress_80",
+    "in_domain_generalization_100",
+    "blind_ext_ood_100",
 ] as const;
 export const DEFAULT_GRANULARITY_BENCHMARK_TARGET_KEY: GranularityDatasetTargetKey =
     DEFAULT_GRANULARITY_MAINLINE_TARGET_KEYS[0];
 export const DEFAULT_GRANULARITY_DATASET_KEY =
-    "granularity_mainline_bundle";
+    "granularity_mainline_150_100_100";
 export const DEFAULT_GRANULARITY_DATASET_LABEL =
-    "Mainline150+Hard100+Stress80";
+    "MainBalanced150+InDomain100+BlindExtOOD100";
 
 const DEFAULT_GRANULARITY_TARGET_KEY: GranularityDatasetTargetKey =
     DEFAULT_GRANULARITY_BENCHMARK_TARGET_KEY;
@@ -145,21 +147,33 @@ const GRANULARITY_DATASET_TARGETS: Record<
         role: "benchmark",
         primaryPath: CURRENT_EVAL_DATASET_FILES.granularityMain120,
     },
+    in_domain_generalization_100: {
+        key: "in_domain_generalization_100",
+        label: "InDomain100",
+        role: "in_domain_holdout",
+        primaryPath: CURRENT_EVAL_DATASET_FILES.granularityInDomainGeneralization100,
+    },
+    blind_ext_ood_100: {
+        key: "blind_ext_ood_100",
+        label: "BlindExtOOD100",
+        role: "external_ood_holdout",
+        primaryPath: CURRENT_EVAL_DATASET_FILES.granularityBlindExtOod100,
+    },
     in_domain_holdout_50: {
         key: "in_domain_holdout_50",
-        label: "InDomain",
+        label: "InDomainLegacyAlias",
         role: "in_domain_holdout",
         primaryPath: CURRENT_EVAL_DATASET_FILES.granularityInDomainHoldout50,
     },
     ext_ood_blind_60: {
         key: "ext_ood_blind_60",
-        label: "ExtOOD",
+        label: "BlindExtOODLegacyAlias",
         role: "external_ood_holdout",
         primaryPath: CURRENT_EVAL_DATASET_FILES.granularityExtOodBlind60,
     },
     matched_ext_ood_60: {
         key: "matched_ext_ood_60",
-        label: "MatchedExtOOD",
+        label: "ExtOOD",
         role: "external_ood_holdout",
         primaryPath: CURRENT_EVAL_DATASET_FILES.granularityMatchedExtOod60,
     },
@@ -177,15 +191,14 @@ const GRANULARITY_DATASET_TARGETS: Record<
     },
     external_ood_50: {
         key: "external_ood_50",
-        // 兼容旧 key，但当前论文口径下该入口已切到 blind ExtOOD。
+        // 兼容旧 key，但当前主线下该入口回到 matched external 结果。
         label: "ExtOOD",
         role: "external_ood_holdout",
         primaryPath: CURRENT_EVAL_DATASET_FILES.granularityExternalOod50,
     },
     external_ood_holdout_30: {
         key: "external_ood_holdout_30",
-        // 历史兼容入口：external_ood_holdout_30 曾被借用为 matched external 入口。
-        label: "MatchedExtOOD",
+        label: "ExtHard30",
         role: "external_ood_holdout",
         primaryPath: CURRENT_EVAL_DATASET_FILES.granularityExternalOodHoldout30,
     },
@@ -552,6 +565,8 @@ export function listAvailableGranularityDatasetTargets(
     keys: readonly GranularityDatasetTargetKey[] = [
         ...DEFAULT_GRANULARITY_MAINLINE_TARGET_KEYS,
         "main_bench_120",
+        "in_domain_generalization_100",
+        "blind_ext_ood_100",
         "in_domain_holdout_50",
         "ext_ood_blind_60",
         "matched_ext_ood_60",

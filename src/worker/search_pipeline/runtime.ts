@@ -137,6 +137,7 @@ export function executeRetrievalStage(
         kpTopN: preset.retrieval.kpTopN,
         kpTailWeight: preset.retrieval.kpTailWeight,
         lexicalBonusMode: preset.retrieval.lexicalBonusMode,
+        enableLexicalBonusBoost: preset.retrieval.enableLexicalBonusBoost,
         kpRoleRerankMode: preset.retrieval.kpRoleRerankMode,
         kpRoleDocWeight: preset.retrieval.kpRoleDocWeight,
         qConfusionMode: preset.retrieval.qConfusionMode,
@@ -194,6 +195,10 @@ export async function executeSearchPipeline(
     const { searchOutput, retrievalDecision } = retrievalStage;
     const plannerEnabled = preset.display.enableQueryPlanner;
     const plannerQueryPlan = plannerEnabled ? queryContext.queryPlan : undefined;
+    const displayRoleAlignmentQueryPlan =
+        preset.display.enableStructuredQueryPlanDocRoleAdjustments
+            ? queryContext.queryPlan
+            : plannerQueryPlan;
     const isCompressedKeywordQuery = queryIsCompressedKeywordLike(query);
     const compressedQueryFetchDelta = isCompressedKeywordQuery ? 18 : 0;
     const shouldApplyTitleAdjustments =
@@ -254,10 +259,32 @@ export async function executeSearchPipeline(
             );
             results = rerankAnswerDocuments({
                 query,
+                queryIntent: queryContext.queryIntent,
                 documents: directDocuments,
                 queryPlan: plannerQueryPlan,
+                roleAlignmentQueryPlan: displayRoleAlignmentQueryPlan,
                 enablePhaseAnchorBoost: preset.retrieval.enablePhaseAnchorBoost,
                 applyTitleAdjustments: shouldApplyTitleAdjustments,
+                enableTitleIntentConfusionGate:
+                    preset.display.enableTitleIntentConfusionGate,
+                enableStructuredKpRoleEvidenceAdjustments:
+                    preset.display.enableStructuredKpRoleEvidenceAdjustments,
+                enableLexicalTitleIntentAdjustments:
+                    preset.display.enableLexicalTitleIntentAdjustments,
+                enableLexicalTitleTypeAdjustments:
+                    preset.display.enableLexicalTitleTypeAdjustments,
+                enableThemeSpecificTitleAdjustments:
+                    preset.display.enableThemeSpecificTitleAdjustments,
+                enableDoctoralThemeTitleAdjustments:
+                    preset.display.enableDoctoralThemeTitleAdjustments,
+                enableTuimianThemeTitleAdjustments:
+                    preset.display.enableTuimianThemeTitleAdjustments,
+                enableSummerCampThemeTitleAdjustments:
+                    preset.display.enableSummerCampThemeTitleAdjustments,
+                enableTransferThemeTitleAdjustments:
+                    preset.display.enableTransferThemeTitleAdjustments,
+                enableCompressedKeywordTitleAdjustments:
+                    preset.display.enableCompressedKeywordTitleAdjustments,
                 preferLatestWithinTopic:
                     searchOutput.responseDecision?.preferLatestWithinTopic ?? false,
             });

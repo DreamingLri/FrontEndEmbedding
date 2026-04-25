@@ -1,0 +1,581 @@
+{
+  "generatedAt": "2026-04-24T10:22:11.731Z",
+  "inputs": [
+    {
+      "label": "Main",
+      "reviewFile": "D:\\Project\\SuAsk\\SuAsk_Agent\\FrontEnd\\scripts\\results\\granularity_dataset_rationality_review_1777021852067.json"
+    },
+    {
+      "label": "InDomain",
+      "reviewFile": "D:\\Project\\SuAsk\\SuAsk_Agent\\FrontEnd\\scripts\\results\\granularity_dataset_rationality_review_1777023035544.json"
+    },
+    {
+      "label": "BlindExtOOD",
+      "reviewFile": "D:\\Project\\SuAsk\\SuAsk_Agent\\FrontEnd\\scripts\\results\\granularity_dataset_rationality_review_1777021866900.json"
+    }
+  ],
+  "summary": {
+    "total": 27,
+    "byDataset": {
+      "Main": 10,
+      "BlindExtOOD": 10,
+      "InDomain": 7
+    },
+    "byAction": {
+      "verify_expected_boundary": 5,
+      "accept_same_title_duplicate": 3,
+      "replace_or_anchor_query": 13,
+      "manual_review_same_family": 6
+    },
+    "byRecommendation": {
+      "verify_eval_boundary_or_expected_otid": 5,
+      "expand_acceptable_otids_or_replace_case": 10,
+      "add_year_or_replace_case": 8,
+      "manual_review": 3,
+      "keep_as_algorithm_case_after_dataset_review": 1
+    },
+    "byFlag": {
+      "no_explicit_year": 9,
+      "same_family_version_chain": 27,
+      "near_duplicate_title": 20,
+      "metric_or_acceptable_boundary_check": 5,
+      "competing_year_version": 8,
+      "vague_or_context_dependent_query": 2,
+      "under_anchored_short_query": 2
+    }
+  },
+  "cases": [
+    {
+      "dataset": "Main",
+      "reviewPriority": "high",
+      "proposedAction": "verify_expected_boundary",
+      "recommendation": "verify_eval_boundary_or_expected_otid",
+      "query": "外语类保送生面试的整个流程是怎样的 从打印准考证到面试结束",
+      "expectedOtid": "otid_026bbae2756a4096",
+      "expectedTitle": "中山大学关于2026年外语类保送生面试考核安排的通知",
+      "top1Otid": "otid_026bbae2756a4096",
+      "top1Title": "中山大学关于2026年外语类保送生面试考核安排的通知",
+      "finalRank": 1,
+      "entryBucket": "already_top1",
+      "flags": [
+        "no_explicit_year",
+        "same_family_version_chain",
+        "near_duplicate_title",
+        "metric_or_acceptable_boundary_check"
+      ],
+      "titleSimilarity": 1,
+      "rationale": "expected document is year-specific but query has no explicit year; expected and top1 titles are nearly duplicate; audit indicates a possible boundary or metric interpretation issue."
+    },
+    {
+      "dataset": "Main",
+      "reviewPriority": "high",
+      "proposedAction": "verify_expected_boundary",
+      "recommendation": "verify_eval_boundary_or_expected_otid",
+      "query": "2025-2026学年软件工程学院仲明助学金申请 电子版材料提交到哪个邮箱",
+      "expectedOtid": "otid_9a72545adb084d1d",
+      "expectedTitle": "软件工程学院关于开展2025-2026学年本科生校级捐赠助学金（第一批）评选工作的通知",
+      "top1Otid": "otid_9a72545adb084d1d",
+      "top1Title": "软件工程学院关于开展2025-2026学年本科生校级捐赠助学金（第一批）评选工作的通知",
+      "finalRank": 1,
+      "entryBucket": "already_top1",
+      "flags": [
+        "same_family_version_chain",
+        "near_duplicate_title",
+        "metric_or_acceptable_boundary_check"
+      ],
+      "titleSimilarity": 1,
+      "rationale": "expected and top1 titles are nearly duplicate; audit indicates a possible boundary or metric interpretation issue."
+    },
+    {
+      "dataset": "Main",
+      "reviewPriority": "high",
+      "proposedAction": "verify_expected_boundary",
+      "recommendation": "verify_eval_boundary_or_expected_otid",
+      "query": "软件工程学院2025年博士改报志愿的完整政策和要求是什么",
+      "expectedOtid": "otid_b8a98fa84f504d63",
+      "expectedTitle": "中山大学软件工程学院2025年以“申请-考核”制招收博士研究生改报志愿公告",
+      "top1Otid": "otid_b8a98fa84f504d63",
+      "top1Title": "中山大学软件工程学院2025年以“申请-考核”制招收博士研究生改报志愿公告",
+      "finalRank": 1,
+      "entryBucket": "already_top1",
+      "flags": [
+        "same_family_version_chain",
+        "near_duplicate_title",
+        "metric_or_acceptable_boundary_check"
+      ],
+      "titleSimilarity": 1,
+      "rationale": "expected and top1 titles are nearly duplicate; audit indicates a possible boundary or metric interpretation issue."
+    },
+    {
+      "dataset": "BlindExtOOD",
+      "reviewPriority": "high",
+      "proposedAction": "verify_expected_boundary",
+      "recommendation": "verify_eval_boundary_or_expected_otid",
+      "query": "根据5月26日发布的《该学院2025年以“申请-考核”制招收博士研究生招生简章》，综合考核结果（第二批）的公示是基于哪些具体规定和审核流程，另外该学院在2024年12月25日发布的2025年“申请-考核”制博士招生通知中，审核通过的考生名单如何排列？",
+      "expectedOtid": "otid_9a0576424d284199",
+      "expectedTitle": "人工智能学院关于公示2025年“申请-考核”制博士研究生综合考核结果（第二批）的通知",
+      "top1Otid": "otid_9a0576424d284199",
+      "top1Title": "人工智能学院关于公示2025年“申请-考核”制博士研究生综合考核结果（第二批）的通知",
+      "finalRank": 1,
+      "entryBucket": "already_top1",
+      "flags": [
+        "same_family_version_chain",
+        "near_duplicate_title",
+        "metric_or_acceptable_boundary_check"
+      ],
+      "titleSimilarity": 1,
+      "rationale": "expected and top1 titles are nearly duplicate; audit indicates a possible boundary or metric interpretation issue."
+    },
+    {
+      "dataset": "BlindExtOOD",
+      "reviewPriority": "high",
+      "proposedAction": "verify_expected_boundary",
+      "recommendation": "verify_eval_boundary_or_expected_otid",
+      "query": "作为一个应届硕士毕业生 如果我想申请人工智能学院2021年博士 需要满足哪些基本条件 并描述从预报名到录取的整个流程。",
+      "expectedOtid": "otid_1fe8155fa2f64320",
+      "expectedTitle": "中山大学人工智能学院2021年以“申请-考核”制招收博士研究生招生简章",
+      "top1Otid": "otid_1fe8155fa2f64320",
+      "top1Title": "中山大学人工智能学院2021年以“申请-考核”制招收博士研究生招生简章",
+      "finalRank": 1,
+      "entryBucket": "already_top1",
+      "flags": [
+        "same_family_version_chain",
+        "near_duplicate_title",
+        "metric_or_acceptable_boundary_check"
+      ],
+      "titleSimilarity": 1,
+      "rationale": "expected and top1 titles are nearly duplicate; audit indicates a possible boundary or metric interpretation issue."
+    },
+    {
+      "dataset": "Main",
+      "reviewPriority": "high",
+      "proposedAction": "accept_same_title_duplicate",
+      "recommendation": "expand_acceptable_otids_or_replace_case",
+      "query": "中山大学2018同等学力报名考试时间地点例外",
+      "expectedOtid": "otid_21f03d6ed68a427d",
+      "expectedTitle": "关于做好中山大学同等学力申请硕士学位人员2018年全国统一考试报名工作的通知",
+      "top1Otid": "otid_10113240e3a74f20",
+      "top1Title": "关于做好中山大学同等学力申请硕士学位人员2018年全国统一考试报名工作的通知",
+      "finalRank": 4,
+      "entryBucket": "aggregation_drop",
+      "flags": [
+        "same_family_version_chain",
+        "near_duplicate_title"
+      ],
+      "titleSimilarity": 1,
+      "rationale": "expected and top1 titles are nearly duplicate; correct document entered candidate retrieval but lost final aggregation."
+    },
+    {
+      "dataset": "BlindExtOOD",
+      "reviewPriority": "high",
+      "proposedAction": "accept_same_title_duplicate",
+      "recommendation": "expand_acceptable_otids_or_replace_case",
+      "query": "人工智能学院2023年博士申请考核制实施办法中 考核总成绩如何使用 哪些情形不予录取",
+      "expectedOtid": "otid_dc2fbd2f88f7453b",
+      "expectedTitle": "中山大学人工智能学院2023年以“申请-考核”制招收博士研究生实施办法",
+      "top1Otid": "otid_5f10b726aa1d4728",
+      "top1Title": "中山大学人工智能学院2023年以“申请-考核”制招收博士研究生实施办法",
+      "finalRank": 2,
+      "entryBucket": "aggregation_drop",
+      "flags": [
+        "same_family_version_chain",
+        "near_duplicate_title"
+      ],
+      "titleSimilarity": 1,
+      "rationale": "expected and top1 titles are nearly duplicate; correct document entered candidate retrieval but lost final aggregation."
+    },
+    {
+      "dataset": "BlindExtOOD",
+      "reviewPriority": "high",
+      "proposedAction": "accept_same_title_duplicate",
+      "recommendation": "expand_acceptable_otids_or_replace_case",
+      "query": "2021年直博预报名的英语成绩有什么要求",
+      "expectedOtid": "otid_fcf3caca2aa340ca",
+      "expectedTitle": "中山大学人工智能学院关于接收2021年推荐免试研究生预报名申请的通知",
+      "top1Otid": "otid_6e85da455dd34af3",
+      "top1Title": "中山大学人工智能学院关于接收2021年推荐免试研究生预报名申请的通知",
+      "finalRank": 2,
+      "entryBucket": "aggregation_drop",
+      "flags": [
+        "same_family_version_chain",
+        "near_duplicate_title"
+      ],
+      "titleSimilarity": 1,
+      "rationale": "expected and top1 titles are nearly duplicate; correct document entered candidate retrieval but lost final aggregation."
+    },
+    {
+      "dataset": "Main",
+      "reviewPriority": "high",
+      "proposedAction": "replace_or_anchor_query",
+      "recommendation": "add_year_or_replace_case",
+      "query": "通过初审了，中山大学高水平运动队测试哪天在广州校区考？",
+      "expectedOtid": "otid_14ff3c5f13ac4c49",
+      "expectedTitle": "中山大学关于2021年高水平运动队招生测试安排的通知",
+      "top1Otid": "otid_cb15bb6977d54dca",
+      "top1Title": "中山大学关于2022年高水平运动队招生测试安排的通知",
+      "finalRank": 2,
+      "entryBucket": "aggregation_drop",
+      "flags": [
+        "no_explicit_year",
+        "competing_year_version",
+        "same_family_version_chain",
+        "near_duplicate_title"
+      ],
+      "titleSimilarity": 1,
+      "rationale": "expected document is year-specific but query has no explicit year; top1 is another year/version in a competing document chain; expected and top1 titles are nearly duplicate; correct document entered candidate retrieval but lost final aggregation."
+    },
+    {
+      "dataset": "InDomain",
+      "reviewPriority": "high",
+      "proposedAction": "replace_or_anchor_query",
+      "recommendation": "add_year_or_replace_case",
+      "query": "考研中山大学报考点的网上确认时间是哪天到哪天？",
+      "expectedOtid": "otid_63a7acf7429240b8",
+      "expectedTitle": "2025年全国硕士研究生报名考试中山大学报考点（代码：4413）公告",
+      "top1Otid": "otid_849070d708e0472f",
+      "top1Title": "全国2021年硕士研究生报名考试中山大学报考点（代码：4413）公告",
+      "finalRank": 5,
+      "entryBucket": "aggregation_drop",
+      "flags": [
+        "no_explicit_year",
+        "competing_year_version",
+        "same_family_version_chain",
+        "near_duplicate_title"
+      ],
+      "titleSimilarity": 1,
+      "rationale": "expected document is year-specific but query has no explicit year; top1 is another year/version in a competing document chain; expected and top1 titles are nearly duplicate; correct document entered candidate retrieval but lost final aggregation."
+    },
+    {
+      "dataset": "InDomain",
+      "reviewPriority": "high",
+      "proposedAction": "replace_or_anchor_query",
+      "recommendation": "expand_acceptable_otids_or_replace_case",
+      "query": "如果我是2020年6月后通过资格认定的申请人 现在想赶2022年下半年答辩 还得同时满足哪些资格和有效期要求",
+      "expectedOtid": "otid_98669718896245fc",
+      "expectedTitle": "关于2022年下半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+      "top1Otid": "otid_43d49d8e09054fe3",
+      "top1Title": "关于2024年下半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+      "finalRank": 2,
+      "entryBucket": "aggregation_drop",
+      "flags": [
+        "vague_or_context_dependent_query",
+        "same_family_version_chain",
+        "near_duplicate_title"
+      ],
+      "titleSimilarity": 1,
+      "rationale": "expected and top1 titles are nearly duplicate; query contains vague or context-dependent wording; correct document entered candidate retrieval but lost final aggregation."
+    },
+    {
+      "dataset": "InDomain",
+      "reviewPriority": "high",
+      "proposedAction": "replace_or_anchor_query",
+      "recommendation": "expand_acceptable_otids_or_replace_case",
+      "query": "作为一名同等学力申请者，如果我想在2019年下半年完成临床医学博士论文答辩并领取学位证书，应该怎么规划时间？",
+      "expectedOtid": "otid_14f1526dcec041d6",
+      "expectedTitle": "关于2019年下半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+      "top1Otid": "otid_e4227af2d62a4f20",
+      "top1Title": "关于2021年下半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+      "finalRank": 3,
+      "entryBucket": "aggregation_drop",
+      "flags": [
+        "same_family_version_chain",
+        "near_duplicate_title"
+      ],
+      "titleSimilarity": 1,
+      "rationale": "expected and top1 titles are nearly duplicate; correct document entered candidate retrieval but lost final aggregation."
+    },
+    {
+      "dataset": "BlindExtOOD",
+      "reviewPriority": "high",
+      "proposedAction": "replace_or_anchor_query",
+      "recommendation": "expand_acceptable_otids_or_replace_case",
+      "query": "中山大学人工智能学院在2025年9月15日发布的通知中，公布了哪一年的预推免考核名单？",
+      "expectedOtid": "otid_8c93e52cc4314e6c",
+      "expectedTitle": "中山大学人工智能学院关于公布2026年进入预推免考核名单的通知",
+      "top1Otid": "otid_2cf6f4e5e6b648a9",
+      "top1Title": "中山大学人工智能学院关于公布2025年进入预推免考核名单的通知",
+      "finalRank": null,
+      "entryBucket": "unknown",
+      "flags": [
+        "same_family_version_chain",
+        "near_duplicate_title"
+      ],
+      "titleSimilarity": 1,
+      "rationale": "expected and top1 titles are nearly duplicate."
+    },
+    {
+      "dataset": "BlindExtOOD",
+      "reviewPriority": "high",
+      "proposedAction": "replace_or_anchor_query",
+      "recommendation": "expand_acceptable_otids_or_replace_case",
+      "query": "逸仙博士后项目的要要什么条件和待遇支持政策都有哪些",
+      "expectedOtid": "otid_55c5131d829e4a00",
+      "expectedTitle": "中山大学人工智能学院诚邀全球青年英才申请逸仙博士后项目",
+      "top1Otid": "otid_906af0c4c6e541c2",
+      "top1Title": "中山大学人工智能学院诚邀全球青年英才申请2025年逸仙博士后项目",
+      "finalRank": 3,
+      "entryBucket": "aggregation_drop",
+      "flags": [
+        "same_family_version_chain",
+        "near_duplicate_title"
+      ],
+      "titleSimilarity": 1,
+      "rationale": "expected and top1 titles are nearly duplicate; correct document entered candidate retrieval but lost final aggregation."
+    },
+    {
+      "dataset": "Main",
+      "reviewPriority": "high",
+      "proposedAction": "replace_or_anchor_query",
+      "recommendation": "add_year_or_replace_case",
+      "query": "申请答辩 需要提交哪些电子版材料到指定邮箱",
+      "expectedOtid": "otid_5c9fb358e9324bb6",
+      "expectedTitle": "关于2022年下半年同等学力人员申请硕士学位论文答辩的通知",
+      "top1Otid": "otid_3be934ddb5624284",
+      "top1Title": "关于2023年上半年同等学力人员申请硕士学位论文答辩的通知",
+      "finalRank": 3,
+      "entryBucket": "aggregation_drop",
+      "flags": [
+        "no_explicit_year",
+        "competing_year_version",
+        "same_family_version_chain",
+        "near_duplicate_title"
+      ],
+      "titleSimilarity": 0.84,
+      "rationale": "expected document is year-specific but query has no explicit year; top1 is another year/version in a competing document chain; expected and top1 titles are nearly duplicate; correct document entered candidate retrieval but lost final aggregation."
+    },
+    {
+      "dataset": "InDomain",
+      "reviewPriority": "high",
+      "proposedAction": "replace_or_anchor_query",
+      "recommendation": "expand_acceptable_otids_or_replace_case",
+      "query": "2021年研究生寒假注册规定",
+      "expectedOtid": "otid_9616403d7b39495c",
+      "expectedTitle": "关于在校研究生2021年寒假及2020学年春季学期开学注册有关事项的通知",
+      "top1Otid": "otid_9cd645190fe2468b",
+      "top1Title": "关于在校研究生2021学年寒假放假及2021学年春季学期开学注册有关事项的通知",
+      "finalRank": 2,
+      "entryBucket": "aggregation_drop",
+      "flags": [
+        "same_family_version_chain",
+        "near_duplicate_title"
+      ],
+      "titleSimilarity": 0.8333,
+      "rationale": "expected and top1 titles are nearly duplicate; correct document entered candidate retrieval but lost final aggregation."
+    },
+    {
+      "dataset": "Main",
+      "reviewPriority": "high",
+      "proposedAction": "replace_or_anchor_query",
+      "recommendation": "add_year_or_replace_case",
+      "query": "同等学力申请硕士学位论文答辩的整个流程是怎样的 从要要什么条件到最终获得学位",
+      "expectedOtid": "otid_efde91d4cd6b4ecb",
+      "expectedTitle": "关于2020年同等学力人员申请硕士学位论文答辩的通知",
+      "top1Otid": "otid_4a5e9eb0f0fc4cc1",
+      "top1Title": "关于2021年上半年同等学力人员申请硕士学位论文答辩的通知",
+      "finalRank": 8,
+      "entryBucket": "aggregation_drop",
+      "flags": [
+        "no_explicit_year",
+        "competing_year_version",
+        "same_family_version_chain",
+        "near_duplicate_title"
+      ],
+      "titleSimilarity": 0.7917,
+      "rationale": "expected document is year-specific but query has no explicit year; top1 is another year/version in a competing document chain; expected and top1 titles are nearly duplicate; correct document entered candidate retrieval but lost final aggregation."
+    },
+    {
+      "dataset": "Main",
+      "reviewPriority": "high",
+      "proposedAction": "replace_or_anchor_query",
+      "recommendation": "add_year_or_replace_case",
+      "query": "同等学力申请硕士学位论文答辩需要满足要什么条件",
+      "expectedOtid": "otid_efde91d4cd6b4ecb",
+      "expectedTitle": "关于2020年同等学力人员申请硕士学位论文答辩的通知",
+      "top1Otid": "otid_c19ddd94e52346c1",
+      "top1Title": "关于2024年下半年同等学力人员申请硕士学位论文答辩的通知",
+      "finalRank": 12,
+      "entryBucket": "aggregation_drop",
+      "flags": [
+        "no_explicit_year",
+        "competing_year_version",
+        "same_family_version_chain",
+        "near_duplicate_title"
+      ],
+      "titleSimilarity": 0.7917,
+      "rationale": "expected document is year-specific but query has no explicit year; top1 is another year/version in a competing document chain; expected and top1 titles are nearly duplicate; correct document entered candidate retrieval but lost final aggregation."
+    },
+    {
+      "dataset": "Main",
+      "reviewPriority": "high",
+      "proposedAction": "replace_or_anchor_query",
+      "recommendation": "add_year_or_replace_case",
+      "query": "访学资助金额和周期",
+      "expectedOtid": "otid_8f3b2fa91c544f99",
+      "expectedTitle": "关于下达2018年中山大学博士生国外访学与合作研究项目资助计划的通知",
+      "top1Otid": "otid_afd67d4b1e9e427e",
+      "top1Title": "关于启动2022年中山大学博士生国外访学与合作研究项目资助计划的通知",
+      "finalRank": 6,
+      "entryBucket": "early_late",
+      "flags": [
+        "no_explicit_year",
+        "competing_year_version",
+        "under_anchored_short_query",
+        "same_family_version_chain"
+      ],
+      "titleSimilarity": 0.7778,
+      "rationale": "expected document is year-specific but query has no explicit year; top1 is another year/version in a competing document chain; expected and top1 titles are in the same topic family; query is short and lacks anchoring constraints."
+    },
+    {
+      "dataset": "InDomain",
+      "reviewPriority": "high",
+      "proposedAction": "replace_or_anchor_query",
+      "recommendation": "add_year_or_replace_case",
+      "query": "同等学力英语考试大纲",
+      "expectedOtid": "otid_1ab70aa425dd43cd",
+      "expectedTitle": "关于2025年同等学力人员申请硕士学位全国统一考试报名工作的通知",
+      "top1Otid": "otid_84b61db3e2364d2a",
+      "top1Title": "关于做好中山大学同等学力申请硕士学位人员2017年全国统一考试报名工作的通知",
+      "finalRank": 2,
+      "entryBucket": "aggregation_drop",
+      "flags": [
+        "no_explicit_year",
+        "competing_year_version",
+        "under_anchored_short_query",
+        "same_family_version_chain"
+      ],
+      "titleSimilarity": 0.6875,
+      "rationale": "expected document is year-specific but query has no explicit year; top1 is another year/version in a competing document chain; expected and top1 titles are in the same topic family; query is short and lacks anchoring constraints; correct document entered candidate retrieval but lost final aggregation."
+    },
+    {
+      "dataset": "Main",
+      "reviewPriority": "high",
+      "proposedAction": "replace_or_anchor_query",
+      "recommendation": "add_year_or_replace_case",
+      "query": "申请研究生国家奖学金需要满足哪些基本条件？",
+      "expectedOtid": "otid_1a4309ab66454772",
+      "expectedTitle": "研究生院关于做好2024学年研究生国家奖学金评选工作的补充通知",
+      "top1Otid": "otid_7a69402e31a3446d",
+      "top1Title": "研究生院关于做好2022学年研究生各项奖学金评选工作的通知",
+      "finalRank": 3,
+      "entryBucket": "aggregation_drop",
+      "flags": [
+        "no_explicit_year",
+        "competing_year_version",
+        "same_family_version_chain"
+      ],
+      "titleSimilarity": 0.6429,
+      "rationale": "expected document is year-specific but query has no explicit year; top1 is another year/version in a competing document chain; expected and top1 titles are in the same topic family; correct document entered candidate retrieval but lost final aggregation."
+    },
+    {
+      "dataset": "InDomain",
+      "reviewPriority": "high",
+      "proposedAction": "manual_review_same_family",
+      "recommendation": "expand_acceptable_otids_or_replace_case",
+      "query": "一名应届硕士毕业生 想报考2024年博士 报名时需要注意什么",
+      "expectedOtid": "otid_68999cb6f0a3468d",
+      "expectedTitle": "中山大学2024年博士研究生招生章程及招生学科专业目录",
+      "top1Otid": "otid_1c14b6043fd645c8",
+      "top1Title": "中山大学2024年硕士研究生招生章程及招生学科专业目录",
+      "finalRank": 14,
+      "entryBucket": "aggregation_drop",
+      "flags": [
+        "vague_or_context_dependent_query",
+        "same_family_version_chain",
+        "near_duplicate_title"
+      ],
+      "titleSimilarity": 0.8824,
+      "rationale": "expected and top1 titles are nearly duplicate; query contains vague or context-dependent wording; correct document entered candidate retrieval but lost final aggregation."
+    },
+    {
+      "dataset": "InDomain",
+      "reviewPriority": "high",
+      "proposedAction": "manual_review_same_family",
+      "recommendation": "expand_acceptable_otids_or_replace_case",
+      "query": "2023年上半年同等学力申请硕士学位论文答辩的网上申请截止日期是哪天？",
+      "expectedOtid": "otid_3be934ddb5624284",
+      "expectedTitle": "关于2023年上半年同等学力人员申请硕士学位论文答辩的通知",
+      "top1Otid": "otid_c7dc0e8b08b445e6",
+      "top1Title": "关于2023年下半年同等学力人员申请硕士学位论文答辩的通知",
+      "finalRank": 3,
+      "entryBucket": "aggregation_drop",
+      "flags": [
+        "same_family_version_chain",
+        "near_duplicate_title"
+      ],
+      "titleSimilarity": 0.84,
+      "rationale": "expected and top1 titles are nearly duplicate; correct document entered candidate retrieval but lost final aggregation."
+    },
+    {
+      "dataset": "BlindExtOOD",
+      "reviewPriority": "medium",
+      "proposedAction": "manual_review_same_family",
+      "recommendation": "manual_review",
+      "query": "如果一个学生想申请人工智能学院2022年博士项目 他需要经过哪些考核步骤",
+      "expectedOtid": "otid_c5344a7fc3bc439a",
+      "expectedTitle": "中山大学人工智能学院2022年以“申请-考核”制招收博士研究生实施办法",
+      "top1Otid": "otid_392eac0b27fa4b09",
+      "top1Title": "中山大学人工智能学院2022年以“申请-考核”制招收博士研究生综合考核通知",
+      "finalRank": null,
+      "entryBucket": "unknown",
+      "flags": [
+        "same_family_version_chain"
+      ],
+      "titleSimilarity": 0.6667,
+      "rationale": "expected and top1 titles are in the same topic family."
+    },
+    {
+      "dataset": "BlindExtOOD",
+      "reviewPriority": "medium",
+      "proposedAction": "manual_review_same_family",
+      "recommendation": "keep_as_algorithm_case_after_dataset_review",
+      "query": "人工智能学院2021年博士申请考核制招生的要要什么条件和材料要求是什么",
+      "expectedOtid": "otid_1fe8155fa2f64320",
+      "expectedTitle": "中山大学人工智能学院2021年以“申请-考核”制招收博士研究生招生简章",
+      "top1Otid": "otid_06f7620140244798",
+      "top1Title": "中山大学人工智能学院2021年以“申请-考核”制招收博士研究生综合考核通知",
+      "finalRank": 4,
+      "entryBucket": "aggregation_drop",
+      "flags": [
+        "same_family_version_chain"
+      ],
+      "titleSimilarity": 0.6667,
+      "rationale": "expected and top1 titles are in the same topic family; correct document entered candidate retrieval but lost final aggregation."
+    },
+    {
+      "dataset": "BlindExtOOD",
+      "reviewPriority": "medium",
+      "proposedAction": "manual_review_same_family",
+      "recommendation": "manual_review",
+      "query": "我打算报中山大学人工智能学院2021年的博士，综合考核大概什么时候搞？",
+      "expectedOtid": "otid_9911c0374cdd4ce4",
+      "expectedTitle": "中山大学人工智能学院2021年以“申请-考核”制招收博士研究生实施办法",
+      "top1Otid": "otid_06f7620140244798",
+      "top1Title": "中山大学人工智能学院2021年以“申请-考核”制招收博士研究生综合考核通知",
+      "finalRank": null,
+      "entryBucket": "unknown",
+      "flags": [
+        "same_family_version_chain"
+      ],
+      "titleSimilarity": 0.6667,
+      "rationale": "expected and top1 titles are in the same topic family."
+    },
+    {
+      "dataset": "BlindExtOOD",
+      "reviewPriority": "medium",
+      "proposedAction": "manual_review_same_family",
+      "recommendation": "manual_review",
+      "query": "中山大学人工智能学院位于哪里，2023年博士申请的综合考核在什么时间？",
+      "expectedOtid": "otid_dc2fbd2f88f7453b",
+      "expectedTitle": "中山大学人工智能学院2023年以“申请-考核”制招收博士研究生实施办法",
+      "top1Otid": "otid_c495d5e1d55d4213",
+      "top1Title": "中山大学人工智能学院2023年以“申请-考核”制招收博士研究生综合考核结果公示",
+      "finalRank": 5,
+      "entryBucket": "early_late",
+      "flags": [
+        "same_family_version_chain"
+      ],
+      "titleSimilarity": 0.6207,
+      "rationale": "expected and top1 titles are in the same topic family."
+    }
+  ]
+}

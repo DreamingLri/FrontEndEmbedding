@@ -59,6 +59,41 @@ function buildExpandedIntentQuery(query: string): string {
     return `${query} ${expandedTerms.join(" ")}`;
 }
 
+function buildPlannerExpansionWords(
+    queryPlan: ReturnType<typeof buildQueryPlan>,
+    vocabMap: Map<string, number>,
+): string[] {
+    const plannerTerms: string[] = [];
+
+    if (
+        queryPlan.asksCoverageLike ||
+        queryPlan.intentType === "procedure" ||
+        queryPlan.intentType === "system_timeline"
+    ) {
+        plannerTerms.push("流程", "步骤");
+    }
+    if (queryPlan.asksRequirementLike || queryPlan.asksCoverageLike) {
+        plannerTerms.push("条件", "材料", "要求");
+    }
+    if (
+        queryPlan.asksTimeLike ||
+        queryPlan.intentType === "system_timeline" ||
+        queryPlan.asksCoverageLike
+    ) {
+        plannerTerms.push("时间", "截止");
+    }
+    if (
+        queryPlan.asksProcedureLike ||
+        queryPlan.intentType === "procedure"
+    ) {
+        plannerTerms.push("报名", "提交", "确认");
+    }
+
+    return dedupe(
+        plannerTerms.flatMap((term) => fmmTokenize(term, vocabMap)),
+    );
+}
+
 export function buildPipelineTermMaps(
     vocabMap: Map<string, number>,
 ): PipelineTermMaps {
@@ -95,20 +130,25 @@ export function buildSearchPipelineQueryContext(
                   ...parsedQueryIntent,
                   rawQuery: query,
               };
-    const candidateIndices = preset.retrieval.useTopicPartition
-        ? getCandidateIndicesForQuery(queryIntent, topicPartitionIndex)
-        : undefined;
-    const queryWords = preset.retrieval.useQueryExpansion
+    // queryPlan 负责抽取“覆盖型/结果型/时间型”等高层策略信号，
+    // 既影响检索阶段的 boost，也影响文档抓取与展示重排。
+    const queryPlan = buildQueryPlan(query, queryIntent);
+    const baseQueryWords = preset.retrieval.useQueryExpansion
         ? buildExpandedQueryWords(query, vocabMap)
         : Array.from(new Set(fmmTokenize(query, vocabMap)));
+    const plannerExpansionWords =
+        queryPlan.asksCoverageLike || queryPlan.intentType === "procedure"
+            ? buildPlannerExpansionWords(queryPlan, vocabMap)
+            : [];
+    const queryWords = dedupe([...baseQueryWords, ...plannerExpansionWords]);
     const querySparse = getQuerySparse(queryWords, vocabMap);
     const queryYearWordIds = queryIntent.years
         .map(String)
         .map((year) => vocabMap.get(year))
         .filter((item): item is number => item !== undefined);
-    // queryPlan 负责抽取“覆盖型/结果型/时间型”等高层策略信号，
-    // 既影响检索阶段的 boost，也影响文档抓取与展示重排。
-    const queryPlan = buildQueryPlan(query, queryIntent);
+    const candidateIndices = preset.retrieval.useTopicPartition
+        ? getCandidateIndicesForQuery(queryIntent, topicPartitionIndex)
+        : undefined;
 
     return {
         query,

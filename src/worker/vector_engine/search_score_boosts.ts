@@ -605,6 +605,7 @@ export function computeBoostMultiplier(params: {
     otid: string;
     scores: AggregatedDocScores;
     lexicalBonusMap: Map<string, number>;
+    enableLexicalBonusBoost?: boolean;
     yearHitMap: Map<string, boolean>;
     queryYearWordIds?: number[];
     intentContext: QueryIntentContext;
@@ -618,6 +619,7 @@ export function computeBoostMultiplier(params: {
         otid,
         scores,
         lexicalBonusMap,
+        enableLexicalBonusBoost = true,
         yearHitMap,
         queryYearWordIds,
         intentContext,
@@ -631,7 +633,9 @@ export function computeBoostMultiplier(params: {
     const lexicalBonus = lexicalBonusMap.get(otid) || 0;
 
     let boost = 1.0;
-    boost = applyLexicalBonusBoost(boost, lexicalBonus);
+    if (enableLexicalBonusBoost) {
+        boost = applyLexicalBonusBoost(boost, lexicalBonus);
+    }
     boost = applyYearConstraintBoost(
         boost,
         queryYearWordIds,

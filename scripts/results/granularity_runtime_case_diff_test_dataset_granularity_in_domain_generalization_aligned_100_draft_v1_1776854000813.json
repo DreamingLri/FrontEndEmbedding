@@ -1,0 +1,3483 @@
+{
+  "generatedAt": "2026-04-22T10:33:20.812Z",
+  "datasetBundle": "current_mainline",
+  "datasetKey": "test_dataset_granularity_in_domain_generalization_aligned_100_draft_v1",
+  "datasetLabel": "test_dataset_granularity_in_domain_generalization_aligned_100_draft_v1",
+  "datasetGroups": [
+    {
+      "key": "evaluation",
+      "label": "test_dataset_granularity_in_domain_generalization_aligned_100_draft_v1",
+      "role": "adhoc",
+      "size": 100,
+      "sources": [
+        "D:\\Project\\SuAsk\\SuAsk_Agent\\Backend\\test\\test_dataset_granularity\\test_dataset_granularity_in_domain_generalization_aligned_100_draft_v1.json"
+      ]
+    }
+  ],
+  "presetName": "frontend_research_sync_v1",
+  "variants": [
+    {
+      "label": "runtime_full",
+      "note": "Current frontend runtime display chain.",
+      "metricsByDataset": {
+        "test_dataset_granularity_in_domain_generalization_aligned_100_draft_v1": {
+          "total": 100,
+          "answerRate": 100,
+          "hitAt1": 68,
+          "mrr": 0.786
+        }
+      },
+      "combined": {
+        "total": 100,
+        "answerRate": 100,
+        "hitAt1": 68,
+        "mrr": 0.786
+      }
+    },
+    {
+      "label": "no_structured_kp_role_evidence_adjustment",
+      "note": "Disable structured KP-role evidence adjustment only.",
+      "metricsByDataset": {
+        "test_dataset_granularity_in_domain_generalization_aligned_100_draft_v1": {
+          "total": 100,
+          "answerRate": 100,
+          "hitAt1": 69,
+          "mrr": 0.7905
+        }
+      },
+      "combined": {
+        "total": 100,
+        "answerRate": 100,
+        "hitAt1": 69,
+        "mrr": 0.7905
+      }
+    },
+    {
+      "label": "no_lexical_title_type_adjustment",
+      "note": "Disable coarse title-type lexical rules only.",
+      "metricsByDataset": {
+        "test_dataset_granularity_in_domain_generalization_aligned_100_draft_v1": {
+          "total": 100,
+          "answerRate": 100,
+          "hitAt1": 68,
+          "mrr": 0.786
+        }
+      },
+      "combined": {
+        "total": 100,
+        "answerRate": 100,
+        "hitAt1": 68,
+        "mrr": 0.786
+      }
+    }
+  ],
+  "pairwiseDiffs": [
+    {
+      "baseLabel": "runtime_full",
+      "compareLabel": "no_structured_kp_role_evidence_adjustment",
+      "betterSummary": {
+        "count": 2,
+        "hit1RecoveredCount": 0,
+        "hit1LostCount": 0,
+        "avgReciprocalRankGain": 0.1667,
+        "byDataset": [
+          {
+            "key": "test_dataset_granularity_in_domain_generalization_aligned_100_draft_v1",
+            "count": 2
+          }
+        ],
+        "byQueryScope": [
+          {
+            "key": "procedure",
+            "count": 1
+          },
+          {
+            "key": "time_location",
+            "count": 1
+          }
+        ],
+        "byPreferredGranularity": [
+          {
+            "key": "KP+OT",
+            "count": 1
+          },
+          {
+            "key": "OT",
+            "count": 1
+          }
+        ],
+        "bySupportPattern": [
+          {
+            "key": "multi_kp",
+            "count": 1
+          },
+          {
+            "key": "ot_required",
+            "count": 1
+          }
+        ],
+        "byThemeFamily": [
+          {
+            "key": "答辩审核流程",
+            "count": 1
+          },
+          {
+            "key": "同等学力博士答辩",
+            "count": 1
+          }
+        ],
+        "byDominantEvidenceGroup": [
+          {
+            "key": "post_outcome",
+            "count": 1
+          },
+          {
+            "key": "requirement",
+            "count": 1
+          }
+        ],
+        "byPrimaryBestKpRoleTag": [
+          {
+            "key": "time_expression",
+            "count": 2
+          }
+        ]
+      },
+      "worseSummary": {
+        "count": 6,
+        "hit1RecoveredCount": 0,
+        "hit1LostCount": 1,
+        "avgReciprocalRankGain": -0.1308,
+        "byDataset": [
+          {
+            "key": "test_dataset_granularity_in_domain_generalization_aligned_100_draft_v1",
+            "count": 6
+          }
+        ],
+        "byQueryScope": [
+          {
+            "key": "eligibility_condition",
+            "count": 2
+          },
+          {
+            "key": "procedure",
+            "count": 2
+          },
+          {
+            "key": "policy_overview",
+            "count": 1
+          },
+          {
+            "key": "time_location",
+            "count": 1
+          }
+        ],
+        "byPreferredGranularity": [
+          {
+            "key": "KP",
+            "count": 2
+          },
+          {
+            "key": "KP+OT",
+            "count": 2
+          },
+          {
+            "key": "OT",
+            "count": 1
+          },
+          {
+            "key": "Q+KP",
+            "count": 1
+          }
+        ],
+        "bySupportPattern": [
+          {
+            "key": "multi_kp",
+            "count": 3
+          },
+          {
+            "key": "single_kp",
+            "count": 2
+          },
+          {
+            "key": "ot_required",
+            "count": 1
+          }
+        ],
+        "byThemeFamily": [
+          {
+            "key": "在职医师博士外语考试",
+            "count": 2
+          },
+          {
+            "key": "博士招生报名流程",
+            "count": 1
+          },
+          {
+            "key": "调剂资格与申请",
+            "count": 1
+          },
+          {
+            "key": "少干计划费用政策",
+            "count": 1
+          },
+          {
+            "key": "招生政策",
+            "count": 1
+          }
+        ],
+        "byDominantEvidenceGroup": [
+          {
+            "key": "timeline",
+            "count": 4
+          },
+          {
+            "key": "requirement",
+            "count": 2
+          }
+        ],
+        "byPrimaryBestKpRoleTag": [
+          {
+            "key": "time_expression",
+            "count": 6
+          }
+        ]
+      },
+      "betterCases": [
+        {
+          "caseIndex": 11,
+          "id": "in_domain_100_draft_v1_0012",
+          "dataset": "test_dataset_granularity_in_domain_generalization_aligned_100_draft_v1",
+          "query": "2024年同等学力临床医学博士答辩的资格审核和论文评审流程怎么走",
+          "sourceQuery": "2024年同等学力临床医学博士答辩的资格审核和论文评审流程是什么？",
+          "sourceSeedId": "ai_seed_otid_43d49d8e09054fe3_04",
+          "sourceDataset": "in_domain_holdout_50_v1",
+          "queryType": "standard",
+          "queryScope": "procedure",
+          "preferredGranularity": "KP+OT",
+          "supportPattern": "multi_kp",
+          "themeFamily": "答辩审核流程",
+          "challengeTags": [
+            "procedure",
+            "multi_kp",
+            "standard_query",
+            "pref_kp_plus_ot"
+          ],
+          "expectedOtid": "otid_43d49d8e09054fe3",
+          "runtimeFull": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 3,
+            "renderedRank": 2,
+            "renderedReciprocalRank": 0.5,
+            "displayTop1Margin": 0.1647,
+            "top1": {
+              "otid": "otid_88804cb412b84a0f",
+              "title": "关于2024年上半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+              "displayScore": 1.2648,
+              "coarseScore": 1.1568,
+              "bestKpid": "kpid_e502f25ac93640a0",
+              "eventTypes": [
+                "考试安排",
+                "材料提交",
+                "资格要求"
+              ],
+              "structuredTopicIds": [
+                "academic_affairs"
+              ],
+              "structuredIntentIds": [],
+              "degreeLevels": [
+                "博士"
+              ],
+              "titleRoles": [
+                "general_notice"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "condition",
+                "thesis"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "condition",
+                "thesis",
+                "schedule",
+                "materials",
+                "background",
+                "post_outcome",
+                "procedure"
+              ],
+              "kpEvidenceGroupCounts": {
+                "requirement": 4,
+                "timeline": 3,
+                "procedure": 2,
+                "post_outcome": 2
+              },
+              "dominantEvidenceGroup": "requirement",
+              "titleTypeFlags": [],
+              "roleTypeFlags": []
+            },
+            "top3": [
+              {
+                "otid": "otid_88804cb412b84a0f",
+                "title": "关于2024年上半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+                "displayScore": 1.2648,
+                "coarseScore": 1.1568,
+                "bestKpid": "kpid_e502f25ac93640a0",
+                "eventTypes": [
+                  "考试安排",
+                  "材料提交",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [
+                  "academic_affairs"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "condition",
+                  "thesis"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "condition",
+                  "thesis",
+                  "schedule",
+                  "materials",
+                  "background",
+                  "post_outcome",
+                  "procedure"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 4,
+                  "timeline": 3,
+                  "procedure": 2,
+                  "post_outcome": 2
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_43d49d8e09054fe3",
+                "title": "关于2024年下半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+                "displayScore": 1.1001,
+                "coarseScore": 0.9921,
+                "bestKpid": "kpid_cc40b00b6f7b4d75",
+                "eventTypes": [
+                  "考试安排",
+                  "材料提交",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [
+                  "academic_affairs"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "materials",
+                  "background",
+                  "thesis"
+                ],
+                "evidenceTopRoleTags": [
+                  "materials",
+                  "background",
+                  "thesis",
+                  "time_expression",
+                  "application_stage",
+                  "condition",
+                  "procedure",
+                  "post_outcome",
+                  "reminder"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 4,
+                  "procedure": 2,
+                  "timeline": 3,
+                  "post_outcome": 3
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_dcf55ee630fa41da",
+                "title": "关于2023年下半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+                "displayScore": 1.0945,
+                "coarseScore": 0.9865,
+                "bestKpid": "kpid_7fe34ea9f91c4f8e",
+                "eventTypes": [
+                  "考试安排",
+                  "材料提交",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [
+                  "academic_affairs"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "materials",
+                  "background",
+                  "thesis"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "materials",
+                  "background",
+                  "thesis",
+                  "schedule",
+                  "application_stage",
+                  "condition",
+                  "post_outcome"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 2,
+                  "timeline": 2,
+                  "procedure": 1,
+                  "post_outcome": 1
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              }
+            ]
+          },
+          "compare": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 3,
+            "renderedRank": 3,
+            "renderedReciprocalRank": 0.3333,
+            "displayTop1Margin": 0.1151,
+            "top1": {
+              "otid": "otid_88804cb412b84a0f",
+              "title": "关于2024年上半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+              "displayScore": 1.2189,
+              "coarseScore": 1.1109,
+              "bestKpid": "kpid_e502f25ac93640a0",
+              "eventTypes": [
+                "考试安排",
+                "材料提交",
+                "资格要求"
+              ],
+              "structuredTopicIds": [
+                "academic_affairs"
+              ],
+              "structuredIntentIds": [],
+              "degreeLevels": [
+                "博士"
+              ],
+              "titleRoles": [
+                "general_notice"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "condition",
+                "thesis"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "condition",
+                "thesis",
+                "schedule",
+                "materials",
+                "background",
+                "post_outcome",
+                "procedure"
+              ],
+              "kpEvidenceGroupCounts": {
+                "requirement": 4,
+                "timeline": 3,
+                "procedure": 2,
+                "post_outcome": 2
+              },
+              "dominantEvidenceGroup": "requirement",
+              "titleTypeFlags": [],
+              "roleTypeFlags": []
+            },
+            "top3": [
+              {
+                "otid": "otid_88804cb412b84a0f",
+                "title": "关于2024年上半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+                "displayScore": 1.2189,
+                "coarseScore": 1.1109,
+                "bestKpid": "kpid_e502f25ac93640a0",
+                "eventTypes": [
+                  "考试安排",
+                  "材料提交",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [
+                  "academic_affairs"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "condition",
+                  "thesis"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "condition",
+                  "thesis",
+                  "schedule",
+                  "materials",
+                  "background",
+                  "post_outcome",
+                  "procedure"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 4,
+                  "timeline": 3,
+                  "procedure": 2,
+                  "post_outcome": 2
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_dcf55ee630fa41da",
+                "title": "关于2023年下半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+                "displayScore": 1.1037,
+                "coarseScore": 0.9957,
+                "bestKpid": "kpid_7fe34ea9f91c4f8e",
+                "eventTypes": [
+                  "考试安排",
+                  "材料提交",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [
+                  "academic_affairs"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "materials",
+                  "background",
+                  "thesis"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "materials",
+                  "background",
+                  "thesis",
+                  "schedule",
+                  "application_stage",
+                  "condition",
+                  "post_outcome"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 2,
+                  "timeline": 2,
+                  "procedure": 1,
+                  "post_outcome": 1
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_43d49d8e09054fe3",
+                "title": "关于2024年下半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+                "displayScore": 1.059,
+                "coarseScore": 0.951,
+                "bestKpid": "kpid_cc40b00b6f7b4d75",
+                "eventTypes": [
+                  "考试安排",
+                  "材料提交",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [
+                  "academic_affairs"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "materials",
+                  "background",
+                  "thesis"
+                ],
+                "evidenceTopRoleTags": [
+                  "materials",
+                  "background",
+                  "thesis",
+                  "time_expression",
+                  "application_stage",
+                  "condition",
+                  "procedure",
+                  "post_outcome",
+                  "reminder"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 4,
+                  "procedure": 2,
+                  "timeline": 3,
+                  "post_outcome": 3
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              }
+            ]
+          },
+          "reciprocalRankGain": 0.1667,
+          "rankGain": 1,
+          "hit1Recovered": false,
+          "hit1Lost": false,
+          "top1Changed": false
+        },
+        {
+          "caseIndex": 94,
+          "id": "in_domain_100_draft_v1_0095",
+          "dataset": "test_dataset_granularity_in_domain_generalization_aligned_100_draft_v1",
+          "query": "作为一名同等学力申请者，如果我想在2019年下半年完成临床医学博士论文答辩并领取学位证书，应该怎么规划时间？",
+          "sourceSeedId": "ai_seed_otid_14f1526dcec041d6_03",
+          "sourceDataset": "in_domain_generalization_v2_in_fill_05",
+          "queryType": "situational",
+          "queryScope": "time_location",
+          "preferredGranularity": "OT",
+          "supportPattern": "ot_required",
+          "themeFamily": "同等学力博士答辩",
+          "challengeTags": [
+            "时间跨段",
+            "情境化表达",
+            "整篇整合"
+          ],
+          "expectedOtid": "otid_14f1526dcec041d6",
+          "runtimeFull": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 3,
+            "renderedRank": 2,
+            "renderedReciprocalRank": 0.5,
+            "displayTop1Margin": 0.0476,
+            "top1": {
+              "otid": "otid_a8ddddd49d224218",
+              "title": "关于2019年上半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+              "displayScore": 1.0507,
+              "coarseScore": 1.0507,
+              "bestKpid": "kpid_bb876bc76f434065",
+              "eventTypes": [
+                "考试安排",
+                "资格要求"
+              ],
+              "structuredTopicIds": [
+                "academic_affairs"
+              ],
+              "structuredIntentIds": [],
+              "degreeLevels": [
+                "博士"
+              ],
+              "titleRoles": [
+                "general_notice"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "schedule",
+                "application_stage",
+                "condition",
+                "background",
+                "thesis"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "schedule",
+                "application_stage",
+                "condition",
+                "background",
+                "thesis",
+                "materials",
+                "post_outcome",
+                "reminder"
+              ],
+              "kpEvidenceGroupCounts": {
+                "requirement": 3,
+                "procedure": 2,
+                "timeline": 3,
+                "post_outcome": 3
+              },
+              "dominantEvidenceGroup": "post_outcome",
+              "titleTypeFlags": [],
+              "roleTypeFlags": []
+            },
+            "top3": [
+              {
+                "otid": "otid_a8ddddd49d224218",
+                "title": "关于2019年上半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+                "displayScore": 1.0507,
+                "coarseScore": 1.0507,
+                "bestKpid": "kpid_bb876bc76f434065",
+                "eventTypes": [
+                  "考试安排",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [
+                  "academic_affairs"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "schedule",
+                  "application_stage",
+                  "condition",
+                  "background",
+                  "thesis"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "schedule",
+                  "application_stage",
+                  "condition",
+                  "background",
+                  "thesis",
+                  "materials",
+                  "post_outcome",
+                  "reminder"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 3,
+                  "procedure": 2,
+                  "timeline": 3,
+                  "post_outcome": 3
+                },
+                "dominantEvidenceGroup": "post_outcome",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_14f1526dcec041d6",
+                "title": "关于2019年下半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+                "displayScore": 1.003,
+                "coarseScore": 1.003,
+                "bestKpid": "kpid_bf1588b9b4944bd8",
+                "eventTypes": [
+                  "考试安排",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [
+                  "academic_affairs"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "materials",
+                  "background",
+                  "post_outcome"
+                ],
+                "evidenceTopRoleTags": [
+                  "materials",
+                  "background",
+                  "post_outcome",
+                  "thesis",
+                  "time_expression",
+                  "reminder",
+                  "schedule",
+                  "application_stage",
+                  "condition"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 3,
+                  "post_outcome": 3,
+                  "timeline": 2,
+                  "procedure": 1
+                },
+                "dominantEvidenceGroup": "post_outcome",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_e4227af2d62a4f20",
+                "title": "关于2021年下半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+                "displayScore": 0.9983,
+                "coarseScore": 0.9983,
+                "bestKpid": "kpid_a653a55953034d6d",
+                "eventTypes": [
+                  "考试安排",
+                  "材料提交",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [
+                  "academic_affairs"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "schedule",
+                  "application_stage",
+                  "condition",
+                  "publish",
+                  "background",
+                  "thesis"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "schedule",
+                  "application_stage",
+                  "condition",
+                  "publish",
+                  "background",
+                  "thesis",
+                  "reminder",
+                  "post_outcome"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "procedure": 1,
+                  "timeline": 2,
+                  "post_outcome": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              }
+            ]
+          },
+          "compare": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 3,
+            "renderedRank": 3,
+            "renderedReciprocalRank": 0.3333,
+            "displayTop1Margin": 0.0174,
+            "top1": {
+              "otid": "otid_a8ddddd49d224218",
+              "title": "关于2019年上半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+              "displayScore": 1.0507,
+              "coarseScore": 1.0507,
+              "bestKpid": "kpid_bb876bc76f434065",
+              "eventTypes": [
+                "考试安排",
+                "资格要求"
+              ],
+              "structuredTopicIds": [
+                "academic_affairs"
+              ],
+              "structuredIntentIds": [],
+              "degreeLevels": [
+                "博士"
+              ],
+              "titleRoles": [
+                "general_notice"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "schedule",
+                "application_stage",
+                "condition",
+                "background",
+                "thesis"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "schedule",
+                "application_stage",
+                "condition",
+                "background",
+                "thesis",
+                "materials",
+                "post_outcome",
+                "reminder"
+              ],
+              "kpEvidenceGroupCounts": {
+                "requirement": 3,
+                "procedure": 2,
+                "timeline": 3,
+                "post_outcome": 3
+              },
+              "dominantEvidenceGroup": "post_outcome",
+              "titleTypeFlags": [],
+              "roleTypeFlags": []
+            },
+            "top3": [
+              {
+                "otid": "otid_a8ddddd49d224218",
+                "title": "关于2019年上半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+                "displayScore": 1.0507,
+                "coarseScore": 1.0507,
+                "bestKpid": "kpid_bb876bc76f434065",
+                "eventTypes": [
+                  "考试安排",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [
+                  "academic_affairs"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "schedule",
+                  "application_stage",
+                  "condition",
+                  "background",
+                  "thesis"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "schedule",
+                  "application_stage",
+                  "condition",
+                  "background",
+                  "thesis",
+                  "materials",
+                  "post_outcome",
+                  "reminder"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 3,
+                  "procedure": 2,
+                  "timeline": 3,
+                  "post_outcome": 3
+                },
+                "dominantEvidenceGroup": "post_outcome",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_e4227af2d62a4f20",
+                "title": "关于2021年下半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+                "displayScore": 1.0332,
+                "coarseScore": 1.0332,
+                "bestKpid": "kpid_a653a55953034d6d",
+                "eventTypes": [
+                  "考试安排",
+                  "材料提交",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [
+                  "academic_affairs"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "schedule",
+                  "application_stage",
+                  "condition",
+                  "publish",
+                  "background",
+                  "thesis"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "schedule",
+                  "application_stage",
+                  "condition",
+                  "publish",
+                  "background",
+                  "thesis",
+                  "reminder",
+                  "post_outcome"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "procedure": 1,
+                  "timeline": 2,
+                  "post_outcome": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_14f1526dcec041d6",
+                "title": "关于2019年下半年同等学力人员申请临床医学博士专业学位论文答辩的通知",
+                "displayScore": 1.003,
+                "coarseScore": 1.003,
+                "bestKpid": "kpid_bf1588b9b4944bd8",
+                "eventTypes": [
+                  "考试安排",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [
+                  "academic_affairs"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "materials",
+                  "background",
+                  "post_outcome"
+                ],
+                "evidenceTopRoleTags": [
+                  "materials",
+                  "background",
+                  "post_outcome",
+                  "thesis",
+                  "time_expression",
+                  "reminder",
+                  "schedule",
+                  "application_stage",
+                  "condition"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 3,
+                  "post_outcome": 3,
+                  "timeline": 2,
+                  "procedure": 1
+                },
+                "dominantEvidenceGroup": "post_outcome",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              }
+            ]
+          },
+          "reciprocalRankGain": 0.1667,
+          "rankGain": 1,
+          "hit1Recovered": false,
+          "hit1Lost": false,
+          "top1Changed": false
+        }
+      ],
+      "worseCases": [
+        {
+          "caseIndex": 6,
+          "id": "in_domain_100_draft_v1_0007",
+          "dataset": "test_dataset_granularity_in_domain_generalization_aligned_100_draft_v1",
+          "query": "我现在是应届硕士生，准备报2024年博士，但不确定网上报名、材料上传、导师确认和系统填报有没有先后要求，报名阶段最需要注意哪些事？",
+          "sourceQuery": "我是一名应届硕士毕业生，想报考中山大学2024年博士，报名时需要注意什么？",
+          "sourceSeedId": "ai_seed_otid_68999cb6f0a3468d_02",
+          "sourceDataset": "in_domain_holdout_50_v1",
+          "queryType": "situational",
+          "queryScope": "procedure",
+          "preferredGranularity": "KP+OT",
+          "supportPattern": "multi_kp",
+          "themeFamily": "博士招生报名流程",
+          "challengeTags": [
+            "procedure",
+            "multi_kp",
+            "situational_query",
+            "pref_kp_plus_ot"
+          ],
+          "expectedOtid": "otid_68999cb6f0a3468d",
+          "runtimeFull": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 15,
+            "renderedRank": 11,
+            "renderedReciprocalRank": 0.0909,
+            "displayTop1Margin": 0.1624,
+            "top1": {
+              "otid": "otid_a206a52bfb3f46aa",
+              "title": "中山大学2024年博士研究生招生报名公告",
+              "displayScore": 1.1396,
+              "coarseScore": 0.9956,
+              "bestKpid": "kpid_0cff06450fa74790",
+              "eventTypes": [
+                "考试安排",
+                "报名通知",
+                "材料提交"
+              ],
+              "structuredTopicIds": [
+                "graduate_admission",
+                "undergraduate_admission"
+              ],
+              "structuredIntentIds": [
+                "master_unified_exam",
+                "phd_apply_assessment"
+              ],
+              "degreeLevels": [
+                "本科",
+                "硕士",
+                "博士"
+              ],
+              "titleRoles": [
+                "general_notice"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "materials",
+                "procedure",
+                "reminder",
+                "post_outcome"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "materials",
+                "procedure",
+                "reminder",
+                "post_outcome",
+                "deadline",
+                "schedule",
+                "thesis"
+              ],
+              "kpEvidenceGroupCounts": {
+                "requirement": 3,
+                "procedure": 2,
+                "timeline": 3,
+                "post_outcome": 1
+              },
+              "dominantEvidenceGroup": "requirement",
+              "titleTypeFlags": [],
+              "roleTypeFlags": []
+            },
+            "top3": [
+              {
+                "otid": "otid_a206a52bfb3f46aa",
+                "title": "中山大学2024年博士研究生招生报名公告",
+                "displayScore": 1.1396,
+                "coarseScore": 0.9956,
+                "bestKpid": "kpid_0cff06450fa74790",
+                "eventTypes": [
+                  "考试安排",
+                  "报名通知",
+                  "材料提交"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission",
+                  "undergraduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam",
+                  "phd_apply_assessment"
+                ],
+                "degreeLevels": [
+                  "本科",
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "materials",
+                  "procedure",
+                  "reminder",
+                  "post_outcome"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "materials",
+                  "procedure",
+                  "reminder",
+                  "post_outcome",
+                  "deadline",
+                  "schedule",
+                  "thesis"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 3,
+                  "procedure": 2,
+                  "timeline": 3,
+                  "post_outcome": 1
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_b9b1fa013e3d48e9",
+                "title": "2024年全国硕士研究生招生考试中山大学报考点（代码4413） 网上确认公告",
+                "displayScore": 0.9772,
+                "coarseScore": 0.8332,
+                "bestKpid": "kpid_9b63a7c3ea264239",
+                "eventTypes": [
+                  "考试安排",
+                  "报名通知"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "schedule",
+                  "materials",
+                  "procedure"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "schedule",
+                  "materials",
+                  "procedure",
+                  "background",
+                  "post_outcome"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 4,
+                  "procedure": 3,
+                  "timeline": 5,
+                  "post_outcome": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_ee3035722c4b481e",
+                "title": "中山大学2024年面向香港、澳门、台湾地区招收博士、硕士研究生章程及招生学科专业目录",
+                "displayScore": 0.8831,
+                "coarseScore": 0.7391,
+                "bestKpid": "kpid_78fbb957a4ff436b",
+                "eventTypes": [
+                  "录取公示",
+                  "考试安排",
+                  "报名通知"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "rule_doc"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "schedule",
+                  "materials"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "schedule",
+                  "materials"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "procedure": 1,
+                  "timeline": 1
+                },
+                "dominantEvidenceGroup": "procedure",
+                "titleTypeFlags": [
+                  "rule"
+                ],
+                "roleTypeFlags": [
+                  "constraint"
+                ]
+              }
+            ]
+          },
+          "compare": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 15,
+            "renderedRank": 10,
+            "renderedReciprocalRank": 0.1,
+            "displayTop1Margin": 0.1624,
+            "top1": {
+              "otid": "otid_a206a52bfb3f46aa",
+              "title": "中山大学2024年博士研究生招生报名公告",
+              "displayScore": 1.163,
+              "coarseScore": 1.019,
+              "bestKpid": "kpid_0cff06450fa74790",
+              "eventTypes": [
+                "考试安排",
+                "报名通知",
+                "材料提交"
+              ],
+              "structuredTopicIds": [
+                "graduate_admission",
+                "undergraduate_admission"
+              ],
+              "structuredIntentIds": [
+                "master_unified_exam",
+                "phd_apply_assessment"
+              ],
+              "degreeLevels": [
+                "本科",
+                "硕士",
+                "博士"
+              ],
+              "titleRoles": [
+                "general_notice"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "materials",
+                "procedure",
+                "reminder",
+                "post_outcome"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "materials",
+                "procedure",
+                "reminder",
+                "post_outcome",
+                "deadline",
+                "schedule",
+                "thesis"
+              ],
+              "kpEvidenceGroupCounts": {
+                "requirement": 3,
+                "procedure": 2,
+                "timeline": 3,
+                "post_outcome": 1
+              },
+              "dominantEvidenceGroup": "requirement",
+              "titleTypeFlags": [],
+              "roleTypeFlags": []
+            },
+            "top3": [
+              {
+                "otid": "otid_a206a52bfb3f46aa",
+                "title": "中山大学2024年博士研究生招生报名公告",
+                "displayScore": 1.163,
+                "coarseScore": 1.019,
+                "bestKpid": "kpid_0cff06450fa74790",
+                "eventTypes": [
+                  "考试安排",
+                  "报名通知",
+                  "材料提交"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission",
+                  "undergraduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam",
+                  "phd_apply_assessment"
+                ],
+                "degreeLevels": [
+                  "本科",
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "materials",
+                  "procedure",
+                  "reminder",
+                  "post_outcome"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "materials",
+                  "procedure",
+                  "reminder",
+                  "post_outcome",
+                  "deadline",
+                  "schedule",
+                  "thesis"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 3,
+                  "procedure": 2,
+                  "timeline": 3,
+                  "post_outcome": 1
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_b9b1fa013e3d48e9",
+                "title": "2024年全国硕士研究生招生考试中山大学报考点（代码4413） 网上确认公告",
+                "displayScore": 1.0006,
+                "coarseScore": 0.8566,
+                "bestKpid": "kpid_9b63a7c3ea264239",
+                "eventTypes": [
+                  "考试安排",
+                  "报名通知"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "schedule",
+                  "materials",
+                  "procedure"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "schedule",
+                  "materials",
+                  "procedure",
+                  "background",
+                  "post_outcome"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 4,
+                  "procedure": 3,
+                  "timeline": 5,
+                  "post_outcome": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_ee3035722c4b481e",
+                "title": "中山大学2024年面向香港、澳门、台湾地区招收博士、硕士研究生章程及招生学科专业目录",
+                "displayScore": 0.8428,
+                "coarseScore": 0.6988,
+                "bestKpid": "kpid_78fbb957a4ff436b",
+                "eventTypes": [
+                  "录取公示",
+                  "考试安排",
+                  "报名通知"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "rule_doc"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "schedule",
+                  "materials"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "schedule",
+                  "materials"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "procedure": 1,
+                  "timeline": 1
+                },
+                "dominantEvidenceGroup": "procedure",
+                "titleTypeFlags": [
+                  "rule"
+                ],
+                "roleTypeFlags": [
+                  "constraint"
+                ]
+              }
+            ]
+          },
+          "reciprocalRankGain": -0.0091,
+          "rankGain": -1,
+          "hit1Recovered": false,
+          "hit1Lost": false,
+          "top1Changed": false
+        },
+        {
+          "caseIndex": 18,
+          "id": "in_domain_100_draft_v1_0019",
+          "dataset": "test_dataset_granularity_in_domain_generalization_aligned_100_draft_v1",
+          "query": "2024硕士报名条件时间",
+          "sourceQuery": "中山大学2024硕士报名条件时间",
+          "sourceSeedId": "ai_seed_otid_1c14b6043fd645c8_03",
+          "sourceDataset": "in_domain_holdout_50_v1",
+          "queryType": "short_keyword",
+          "queryScope": "procedure",
+          "preferredGranularity": "KP+OT",
+          "supportPattern": "multi_kp",
+          "themeFamily": "招生政策",
+          "challengeTags": [
+            "procedure",
+            "multi_kp",
+            "short_query",
+            "pref_kp_plus_ot"
+          ],
+          "expectedOtid": "otid_1c14b6043fd645c8",
+          "runtimeFull": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 7,
+            "renderedRank": 7,
+            "renderedReciprocalRank": 0.1429,
+            "displayTop1Margin": 0.5172,
+            "top1": {
+              "otid": "otid_84df27f6b6114f27",
+              "title": "关于做好2024年下半年同等学力申请硕士学位人员题库考试报名工作的通知",
+              "displayScore": 1.5181,
+              "coarseScore": 1.4101,
+              "bestKpid": "kpid_b1156b7a045748b0",
+              "eventTypes": [
+                "考试安排",
+                "报名通知",
+                "资格要求"
+              ],
+              "structuredTopicIds": [
+                "academic_affairs"
+              ],
+              "structuredIntentIds": [],
+              "degreeLevels": [
+                "硕士"
+              ],
+              "titleRoles": [
+                "general_notice"
+              ],
+              "bestKpRoleTags": [
+                "time_expression"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "publish",
+                "deadline",
+                "schedule"
+              ],
+              "kpEvidenceGroupCounts": {
+                "timeline": 5,
+                "requirement": 1,
+                "procedure": 3
+              },
+              "dominantEvidenceGroup": "timeline",
+              "titleTypeFlags": [],
+              "roleTypeFlags": []
+            },
+            "top3": [
+              {
+                "otid": "otid_84df27f6b6114f27",
+                "title": "关于做好2024年下半年同等学力申请硕士学位人员题库考试报名工作的通知",
+                "displayScore": 1.5181,
+                "coarseScore": 1.4101,
+                "bestKpid": "kpid_b1156b7a045748b0",
+                "eventTypes": [
+                  "考试安排",
+                  "报名通知",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [
+                  "academic_affairs"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "deadline",
+                  "schedule"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 5,
+                  "requirement": 1,
+                  "procedure": 3
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_529165c30e3a4d41",
+                "title": "关于在职临床医师申请临床医学和口腔医学博士专业学位参加全国医学博士外语统一考试报名工作的通知",
+                "displayScore": 1.0009,
+                "coarseScore": 0.8929,
+                "bestKpid": "kpid_b626dd23a00e49cf",
+                "eventTypes": [
+                  "考试安排",
+                  "报名通知",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "condition"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "condition",
+                  "schedule",
+                  "materials",
+                  "reminder"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 2,
+                  "timeline": 3,
+                  "procedure": 2
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_286da9de105e4455",
+                "title": "关于在职临床医师申请临床医学和口腔医学 博士专业学位全国医学博士外语统一考试报名工作的通知",
+                "displayScore": 0.8914,
+                "coarseScore": 0.7834,
+                "bestKpid": "kpid_918146ce61d248f0",
+                "eventTypes": [
+                  "考试安排",
+                  "报名通知",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "background"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "background",
+                  "schedule",
+                  "materials",
+                  "reminder"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 2,
+                  "timeline": 2,
+                  "procedure": 1
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              }
+            ]
+          },
+          "compare": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 7,
+            "renderedRank": 6,
+            "renderedReciprocalRank": 0.1667,
+            "displayTop1Margin": 0.5234,
+            "top1": {
+              "otid": "otid_84df27f6b6114f27",
+              "title": "关于做好2024年下半年同等学力申请硕士学位人员题库考试报名工作的通知",
+              "displayScore": 1.5087,
+              "coarseScore": 1.4007,
+              "bestKpid": "kpid_b1156b7a045748b0",
+              "eventTypes": [
+                "考试安排",
+                "报名通知",
+                "资格要求"
+              ],
+              "structuredTopicIds": [
+                "academic_affairs"
+              ],
+              "structuredIntentIds": [],
+              "degreeLevels": [
+                "硕士"
+              ],
+              "titleRoles": [
+                "general_notice"
+              ],
+              "bestKpRoleTags": [
+                "time_expression"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "publish",
+                "deadline",
+                "schedule"
+              ],
+              "kpEvidenceGroupCounts": {
+                "timeline": 5,
+                "requirement": 1,
+                "procedure": 3
+              },
+              "dominantEvidenceGroup": "timeline",
+              "titleTypeFlags": [],
+              "roleTypeFlags": []
+            },
+            "top3": [
+              {
+                "otid": "otid_84df27f6b6114f27",
+                "title": "关于做好2024年下半年同等学力申请硕士学位人员题库考试报名工作的通知",
+                "displayScore": 1.5087,
+                "coarseScore": 1.4007,
+                "bestKpid": "kpid_b1156b7a045748b0",
+                "eventTypes": [
+                  "考试安排",
+                  "报名通知",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [
+                  "academic_affairs"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "deadline",
+                  "schedule"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 5,
+                  "requirement": 1,
+                  "procedure": 3
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_529165c30e3a4d41",
+                "title": "关于在职临床医师申请临床医学和口腔医学博士专业学位参加全国医学博士外语统一考试报名工作的通知",
+                "displayScore": 0.9853,
+                "coarseScore": 0.8773,
+                "bestKpid": "kpid_b626dd23a00e49cf",
+                "eventTypes": [
+                  "考试安排",
+                  "报名通知",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "condition"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "condition",
+                  "schedule",
+                  "materials",
+                  "reminder"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 2,
+                  "timeline": 3,
+                  "procedure": 2
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_286da9de105e4455",
+                "title": "关于在职临床医师申请临床医学和口腔医学 博士专业学位全国医学博士外语统一考试报名工作的通知",
+                "displayScore": 0.9005,
+                "coarseScore": 0.7925,
+                "bestKpid": "kpid_918146ce61d248f0",
+                "eventTypes": [
+                  "考试安排",
+                  "报名通知",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "background"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "background",
+                  "schedule",
+                  "materials",
+                  "reminder"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 2,
+                  "timeline": 2,
+                  "procedure": 1
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              }
+            ]
+          },
+          "reciprocalRankGain": -0.0238,
+          "rankGain": -1,
+          "hit1Recovered": false,
+          "hit1Lost": false,
+          "top1Changed": false
+        },
+        {
+          "caseIndex": 96,
+          "id": "in_domain_100_draft_v1_0097",
+          "dataset": "test_dataset_granularity_in_domain_generalization_aligned_100_draft_v1",
+          "query": "2018年考试报名地点",
+          "sourceSeedId": "ai_seed_otid_e4efdd28508c4082_02",
+          "sourceDataset": "in_domain_generalization_v2_in_fill_01",
+          "queryType": "short_keyword",
+          "queryScope": "time_location",
+          "preferredGranularity": "KP",
+          "supportPattern": "single_kp",
+          "themeFamily": "在职医师博士外语考试",
+          "challengeTags": [
+            "location_query",
+            "short_form",
+            "granularity_sensitive"
+          ],
+          "expectedOtid": "otid_e4efdd28508c4082",
+          "runtimeFull": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 5,
+            "renderedRank": 6,
+            "renderedReciprocalRank": 0.1667,
+            "displayTop1Margin": 0.208,
+            "top1": {
+              "otid": "otid_10113240e3a74f20",
+              "title": "关于做好中山大学同等学力申请硕士学位人员2018年全国统一考试报名工作的通知",
+              "displayScore": 1.283,
+              "coarseScore": 1.283,
+              "bestKpid": "kpid_e9fea58deb18405b",
+              "eventTypes": [
+                "考试安排",
+                "报名通知"
+              ],
+              "structuredTopicIds": [
+                "academic_affairs"
+              ],
+              "structuredIntentIds": [],
+              "degreeLevels": [
+                "硕士"
+              ],
+              "titleRoles": [
+                "general_notice"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "deadline",
+                "schedule",
+                "reminder"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "deadline",
+                "schedule",
+                "reminder",
+                "background"
+              ],
+              "kpEvidenceGroupCounts": {
+                "requirement": 1,
+                "procedure": 2,
+                "timeline": 3
+              },
+              "dominantEvidenceGroup": "timeline",
+              "titleTypeFlags": [],
+              "roleTypeFlags": []
+            },
+            "top3": [
+              {
+                "otid": "otid_10113240e3a74f20",
+                "title": "关于做好中山大学同等学力申请硕士学位人员2018年全国统一考试报名工作的通知",
+                "displayScore": 1.283,
+                "coarseScore": 1.283,
+                "bestKpid": "kpid_e9fea58deb18405b",
+                "eventTypes": [
+                  "考试安排",
+                  "报名通知"
+                ],
+                "structuredTopicIds": [
+                  "academic_affairs"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "schedule",
+                  "reminder"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "schedule",
+                  "reminder",
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "procedure": 2,
+                  "timeline": 3
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_21f03d6ed68a427d",
+                "title": "关于做好中山大学同等学力申请硕士学位人员2018年全国统一考试报名工作的通知",
+                "displayScore": 1.075,
+                "coarseScore": 1.075,
+                "bestKpid": "kpid_53db19b9980546f9",
+                "eventTypes": [
+                  "考试安排",
+                  "报名通知"
+                ],
+                "structuredTopicIds": [
+                  "academic_affairs"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "schedule"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "schedule",
+                  "reminder",
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "procedure": 3,
+                  "timeline": 4
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_ba991c25d19d4292",
+                "title": "关于做好2018年下半年同等学力申请硕士学位人员题库考试报名工作的通知",
+                "displayScore": 1.0513,
+                "coarseScore": 1.0513,
+                "bestKpid": "kpid_c1906ca2fcef4d1c",
+                "eventTypes": [
+                  "考试安排",
+                  "报名通知",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [
+                  "academic_affairs"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "materials",
+                  "schedule",
+                  "publish"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 5,
+                  "requirement": 1,
+                  "procedure": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              }
+            ]
+          },
+          "compare": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 5,
+            "renderedRank": 5,
+            "renderedReciprocalRank": 0.2,
+            "displayTop1Margin": 0.208,
+            "top1": {
+              "otid": "otid_10113240e3a74f20",
+              "title": "关于做好中山大学同等学力申请硕士学位人员2018年全国统一考试报名工作的通知",
+              "displayScore": 1.283,
+              "coarseScore": 1.283,
+              "bestKpid": "kpid_e9fea58deb18405b",
+              "eventTypes": [
+                "考试安排",
+                "报名通知"
+              ],
+              "structuredTopicIds": [
+                "academic_affairs"
+              ],
+              "structuredIntentIds": [],
+              "degreeLevels": [
+                "硕士"
+              ],
+              "titleRoles": [
+                "general_notice"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "deadline",
+                "schedule",
+                "reminder"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "deadline",
+                "schedule",
+                "reminder",
+                "background"
+              ],
+              "kpEvidenceGroupCounts": {
+                "requirement": 1,
+                "procedure": 2,
+                "timeline": 3
+              },
+              "dominantEvidenceGroup": "timeline",
+              "titleTypeFlags": [],
+              "roleTypeFlags": []
+            },
+            "top3": [
+              {
+                "otid": "otid_10113240e3a74f20",
+                "title": "关于做好中山大学同等学力申请硕士学位人员2018年全国统一考试报名工作的通知",
+                "displayScore": 1.283,
+                "coarseScore": 1.283,
+                "bestKpid": "kpid_e9fea58deb18405b",
+                "eventTypes": [
+                  "考试安排",
+                  "报名通知"
+                ],
+                "structuredTopicIds": [
+                  "academic_affairs"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "schedule",
+                  "reminder"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "schedule",
+                  "reminder",
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "procedure": 2,
+                  "timeline": 3
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_21f03d6ed68a427d",
+                "title": "关于做好中山大学同等学力申请硕士学位人员2018年全国统一考试报名工作的通知",
+                "displayScore": 1.075,
+                "coarseScore": 1.075,
+                "bestKpid": "kpid_53db19b9980546f9",
+                "eventTypes": [
+                  "考试安排",
+                  "报名通知"
+                ],
+                "structuredTopicIds": [
+                  "academic_affairs"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "schedule"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "schedule",
+                  "reminder",
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "procedure": 3,
+                  "timeline": 4
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_ba991c25d19d4292",
+                "title": "关于做好2018年下半年同等学力申请硕士学位人员题库考试报名工作的通知",
+                "displayScore": 1.0513,
+                "coarseScore": 1.0513,
+                "bestKpid": "kpid_c1906ca2fcef4d1c",
+                "eventTypes": [
+                  "考试安排",
+                  "报名通知",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [
+                  "academic_affairs"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "materials",
+                  "schedule",
+                  "publish"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 5,
+                  "requirement": 1,
+                  "procedure": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              }
+            ]
+          },
+          "reciprocalRankGain": -0.0333,
+          "rankGain": -1,
+          "hit1Recovered": false,
+          "hit1Lost": false,
+          "top1Changed": false
+        },
+        {
+          "caseIndex": 26,
+          "id": "in_domain_100_draft_v1_0027",
+          "dataset": "test_dataset_granularity_in_domain_generalization_aligned_100_draft_v1",
+          "query": "被录取的2024年少干计划学生学费和奖励资助政策是什么",
+          "sourceQuery": "被录取的中山大学2024年少干计划学生学费和奖励资助政策是什么？",
+          "sourceSeedId": "ai_seed_otid_0d274d8aa9684e3e_04",
+          "sourceDataset": "in_domain_holdout_50_v1",
+          "queryType": "standard",
+          "queryScope": "policy_overview",
+          "preferredGranularity": "OT",
+          "supportPattern": "ot_required",
+          "themeFamily": "少干计划费用政策",
+          "challengeTags": [
+            "policy_overview",
+            "ot_required",
+            "standard_query",
+            "pref_ot"
+          ],
+          "expectedOtid": "otid_0d274d8aa9684e3e",
+          "runtimeFull": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 5,
+            "renderedRank": 11,
+            "renderedReciprocalRank": 0.0909,
+            "displayTop1Margin": 0.0499,
+            "top1": {
+              "otid": "otid_eb35af21c08c4706",
+              "title": "研究生院关于2024学年11月研究生奖助金发放安排的通知",
+              "displayScore": 0.802,
+              "coarseScore": 0.802,
+              "bestKpid": "kpid_e5612dd9e5fe4046",
+              "eventTypes": [
+                "录取公示",
+                "资格要求",
+                "非招生通知"
+              ],
+              "structuredTopicIds": [
+                "student_funding"
+              ],
+              "structuredIntentIds": [],
+              "degreeLevels": [
+                "硕士",
+                "博士"
+              ],
+              "titleRoles": [
+                "general_notice"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "background"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "background",
+                "arrival",
+                "publish",
+                "condition"
+              ],
+              "kpEvidenceGroupCounts": {
+                "timeline": 4,
+                "requirement": 1
+              },
+              "dominantEvidenceGroup": "timeline",
+              "titleTypeFlags": [],
+              "roleTypeFlags": []
+            },
+            "top3": [
+              {
+                "otid": "otid_eb35af21c08c4706",
+                "title": "研究生院关于2024学年11月研究生奖助金发放安排的通知",
+                "displayScore": 0.802,
+                "coarseScore": 0.802,
+                "bestKpid": "kpid_e5612dd9e5fe4046",
+                "eventTypes": [
+                  "录取公示",
+                  "资格要求",
+                  "非招生通知"
+                ],
+                "structuredTopicIds": [
+                  "student_funding"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "background"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "background",
+                  "arrival",
+                  "publish",
+                  "condition"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 4,
+                  "requirement": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_54fc4d3ca3a94536",
+                "title": "中山大学人工智能学院2024年硕士研究生复试录取方案",
+                "displayScore": 0.7521,
+                "coarseScore": 0.7521,
+                "bestKpid": "kpid_2efcc9f22a1447ee",
+                "eventTypes": [
+                  "录取公示",
+                  "复试通知",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam",
+                  "master_recommend_exemption"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "rule_doc"
+                ],
+                "bestKpRoleTags": [],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [
+                  "rule"
+                ],
+                "roleTypeFlags": [
+                  "constraint"
+                ]
+              },
+              {
+                "otid": "otid_8b89d42037fa4682",
+                "title": "中山大学2024年“退役大学生士兵”专项硕士研究生招生计划招生公告",
+                "displayScore": 0.7411,
+                "coarseScore": 0.7411,
+                "bestKpid": "kpid_eac247a0ea394d43",
+                "eventTypes": [
+                  "考试安排",
+                  "报名通知",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam",
+                  "master_recommend_exemption",
+                  "master_adjustment"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {},
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              }
+            ]
+          },
+          "compare": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 5,
+            "renderedRank": 7,
+            "renderedReciprocalRank": 0.1429,
+            "displayTop1Margin": 0.0741,
+            "top1": {
+              "otid": "otid_8b89d42037fa4682",
+              "title": "中山大学2024年“退役大学生士兵”专项硕士研究生招生计划招生公告",
+              "displayScore": 0.8363,
+              "coarseScore": 0.8363,
+              "bestKpid": "kpid_eac247a0ea394d43",
+              "eventTypes": [
+                "考试安排",
+                "报名通知",
+                "资格要求"
+              ],
+              "structuredTopicIds": [
+                "graduate_admission"
+              ],
+              "structuredIntentIds": [
+                "master_unified_exam",
+                "master_recommend_exemption",
+                "master_adjustment"
+              ],
+              "degreeLevels": [
+                "硕士"
+              ],
+              "titleRoles": [
+                "general_notice"
+              ],
+              "bestKpRoleTags": [],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "publish",
+                "background"
+              ],
+              "kpEvidenceGroupCounts": {},
+              "titleTypeFlags": [],
+              "roleTypeFlags": []
+            },
+            "top3": [
+              {
+                "otid": "otid_8b89d42037fa4682",
+                "title": "中山大学2024年“退役大学生士兵”专项硕士研究生招生计划招生公告",
+                "displayScore": 0.8363,
+                "coarseScore": 0.8363,
+                "bestKpid": "kpid_eac247a0ea394d43",
+                "eventTypes": [
+                  "考试安排",
+                  "报名通知",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam",
+                  "master_recommend_exemption",
+                  "master_adjustment"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {},
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_54fc4d3ca3a94536",
+                "title": "中山大学人工智能学院2024年硕士研究生复试录取方案",
+                "displayScore": 0.7622,
+                "coarseScore": 0.7622,
+                "bestKpid": "kpid_2efcc9f22a1447ee",
+                "eventTypes": [
+                  "录取公示",
+                  "复试通知",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam",
+                  "master_recommend_exemption"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "rule_doc"
+                ],
+                "bestKpRoleTags": [],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [
+                  "rule"
+                ],
+                "roleTypeFlags": [
+                  "constraint"
+                ]
+              },
+              {
+                "otid": "otid_eb35af21c08c4706",
+                "title": "研究生院关于2024学年11月研究生奖助金发放安排的通知",
+                "displayScore": 0.7404,
+                "coarseScore": 0.7404,
+                "bestKpid": "kpid_e5612dd9e5fe4046",
+                "eventTypes": [
+                  "录取公示",
+                  "资格要求",
+                  "非招生通知"
+                ],
+                "structuredTopicIds": [
+                  "student_funding"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "background"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "background",
+                  "arrival",
+                  "publish",
+                  "condition"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 4,
+                  "requirement": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              }
+            ]
+          },
+          "reciprocalRankGain": -0.052,
+          "rankGain": -4,
+          "hit1Recovered": false,
+          "hit1Lost": false,
+          "top1Changed": true
+        },
+        {
+          "caseIndex": 45,
+          "id": "in_domain_100_draft_v1_0046",
+          "dataset": "test_dataset_granularity_in_domain_generalization_aligned_100_draft_v1",
+          "query": "在职临床医师申请2018年博士专业学位考试必须先通过什么？",
+          "sourceSeedId": "ai_seed_otid_e4efdd28508c4082_01",
+          "sourceDataset": "in_domain_generalization_v2_in_fill_01",
+          "queryType": "standard",
+          "queryScope": "eligibility_condition",
+          "preferredGranularity": "KP",
+          "supportPattern": "single_kp",
+          "themeFamily": "在职医师博士外语考试",
+          "challengeTags": [
+            "fact_retrieval",
+            "condition_query",
+            "granularity_sensitive"
+          ],
+          "expectedOtid": "otid_e4efdd28508c4082",
+          "runtimeFull": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 2,
+            "renderedRank": 3,
+            "renderedReciprocalRank": 0.3333,
+            "displayTop1Margin": 0.0269,
+            "top1": {
+              "otid": "otid_e2bcfb99b4af4c46",
+              "title": "关于2018年在职临床医师以研究生毕业同等学力申请临床医学博士专业学位资格认定的通知",
+              "displayScore": 1.1388,
+              "coarseScore": 1.1388,
+              "bestKpid": "kpid_ba45b5bffbdb46c6",
+              "eventTypes": [
+                "考试安排",
+                "报名通知",
+                "材料提交"
+              ],
+              "structuredTopicIds": [
+                "academic_affairs"
+              ],
+              "structuredIntentIds": [],
+              "degreeLevels": [
+                "硕士",
+                "博士"
+              ],
+              "titleRoles": [
+                "general_notice"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "background"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "background",
+                "post_outcome",
+                "thesis",
+                "materials"
+              ],
+              "kpEvidenceGroupCounts": {
+                "timeline": 2,
+                "post_outcome": 1,
+                "requirement": 1
+              },
+              "dominantEvidenceGroup": "timeline",
+              "titleTypeFlags": [],
+              "roleTypeFlags": []
+            },
+            "top3": [
+              {
+                "otid": "otid_e2bcfb99b4af4c46",
+                "title": "关于2018年在职临床医师以研究生毕业同等学力申请临床医学博士专业学位资格认定的通知",
+                "displayScore": 1.1388,
+                "coarseScore": 1.1388,
+                "bestKpid": "kpid_ba45b5bffbdb46c6",
+                "eventTypes": [
+                  "考试安排",
+                  "报名通知",
+                  "材料提交"
+                ],
+                "structuredTopicIds": [
+                  "academic_affairs"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "background"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "background",
+                  "post_outcome",
+                  "thesis",
+                  "materials"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 2,
+                  "post_outcome": 1,
+                  "requirement": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_f450a6e1ebc84279",
+                "title": "关于在职临床医师申请临床医学和口腔医学 博士专业学位参加全国医学博士外语统一 考试报名工作的通知",
+                "displayScore": 1.1119,
+                "coarseScore": 1.1119,
+                "bestKpid": "kpid_207682781f474e8f",
+                "eventTypes": [
+                  "考试安排",
+                  "报名通知",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "materials"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "materials",
+                  "deadline",
+                  "condition",
+                  "background",
+                  "schedule",
+                  "reminder",
+                  "thesis"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 3,
+                  "timeline": 3,
+                  "procedure": 1
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_e4efdd28508c4082",
+                "title": "研究生院关于报名参加2018年在职临床医师申请临床医学和口腔医学博士专业学位全国外语统一考试的通知",
+                "displayScore": 1.0906,
+                "coarseScore": 1.0906,
+                "bestKpid": "kpid_1b6864f122214443",
+                "eventTypes": [
+                  "考试安排",
+                  "报名通知",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "condition",
+                  "publish",
+                  "background"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "condition",
+                  "publish",
+                  "background",
+                  "materials",
+                  "deadline",
+                  "thesis",
+                  "schedule",
+                  "reminder"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 4,
+                  "timeline": 4,
+                  "procedure": 1
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              }
+            ]
+          },
+          "compare": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 2,
+            "renderedRank": 2,
+            "renderedReciprocalRank": 0.5,
+            "displayTop1Margin": 0.0034,
+            "top1": {
+              "otid": "otid_e2bcfb99b4af4c46",
+              "title": "关于2018年在职临床医师以研究生毕业同等学力申请临床医学博士专业学位资格认定的通知",
+              "displayScore": 1.1388,
+              "coarseScore": 1.1388,
+              "bestKpid": "kpid_ba45b5bffbdb46c6",
+              "eventTypes": [
+                "考试安排",
+                "报名通知",
+                "材料提交"
+              ],
+              "structuredTopicIds": [
+                "academic_affairs"
+              ],
+              "structuredIntentIds": [],
+              "degreeLevels": [
+                "硕士",
+                "博士"
+              ],
+              "titleRoles": [
+                "general_notice"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "background"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "background",
+                "post_outcome",
+                "thesis",
+                "materials"
+              ],
+              "kpEvidenceGroupCounts": {
+                "timeline": 2,
+                "post_outcome": 1,
+                "requirement": 1
+              },
+              "dominantEvidenceGroup": "timeline",
+              "titleTypeFlags": [],
+              "roleTypeFlags": []
+            },
+            "top3": [
+              {
+                "otid": "otid_e2bcfb99b4af4c46",
+                "title": "关于2018年在职临床医师以研究生毕业同等学力申请临床医学博士专业学位资格认定的通知",
+                "displayScore": 1.1388,
+                "coarseScore": 1.1388,
+                "bestKpid": "kpid_ba45b5bffbdb46c6",
+                "eventTypes": [
+                  "考试安排",
+                  "报名通知",
+                  "材料提交"
+                ],
+                "structuredTopicIds": [
+                  "academic_affairs"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "background"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "background",
+                  "post_outcome",
+                  "thesis",
+                  "materials"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 2,
+                  "post_outcome": 1,
+                  "requirement": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_e4efdd28508c4082",
+                "title": "研究生院关于报名参加2018年在职临床医师申请临床医学和口腔医学博士专业学位全国外语统一考试的通知",
+                "displayScore": 1.1354,
+                "coarseScore": 1.1354,
+                "bestKpid": "kpid_1b6864f122214443",
+                "eventTypes": [
+                  "考试安排",
+                  "报名通知",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "condition",
+                  "publish",
+                  "background"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "condition",
+                  "publish",
+                  "background",
+                  "materials",
+                  "deadline",
+                  "thesis",
+                  "schedule",
+                  "reminder"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 4,
+                  "timeline": 4,
+                  "procedure": 1
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_f450a6e1ebc84279",
+                "title": "关于在职临床医师申请临床医学和口腔医学 博士专业学位参加全国医学博士外语统一 考试报名工作的通知",
+                "displayScore": 1.1119,
+                "coarseScore": 1.1119,
+                "bestKpid": "kpid_207682781f474e8f",
+                "eventTypes": [
+                  "考试安排",
+                  "报名通知",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "materials"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "materials",
+                  "deadline",
+                  "condition",
+                  "background",
+                  "schedule",
+                  "reminder",
+                  "thesis"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 3,
+                  "timeline": 3,
+                  "procedure": 1
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              }
+            ]
+          },
+          "reciprocalRankGain": -0.1667,
+          "rankGain": -1,
+          "hit1Recovered": false,
+          "hit1Lost": false,
+          "top1Changed": false
+        },
+        {
+          "caseIndex": 59,
+          "id": "in_domain_100_draft_v1_0060",
+          "dataset": "test_dataset_granularity_in_domain_generalization_aligned_100_draft_v1",
+          "query": "一个非在职考生 想调剂到的南疆高校教师专项 需要满足要什么条件并怎么弄",
+          "sourceQuery": "我是一个非在职考生，想调剂到中山大学的南疆高校教师专项，需要满足什么条件并如何申请？",
+          "sourceSeedId": "ai_seed_otid_e2d751b9441d4178_02",
+          "sourceDataset": "in_domain_holdout_50_v1",
+          "queryType": "situational",
+          "queryScope": "eligibility_condition",
+          "preferredGranularity": "Q+KP",
+          "supportPattern": "multi_kp",
+          "themeFamily": "调剂资格与申请",
+          "challengeTags": [
+            "eligibility_condition",
+            "multi_kp",
+            "situational_query",
+            "pref_q_plus_kp"
+          ],
+          "expectedOtid": "otid_e2d751b9441d4178",
+          "runtimeFull": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 1,
+            "renderedRank": 2,
+            "renderedReciprocalRank": 0.5,
+            "displayTop1Margin": 0.0729,
+            "top1": {
+              "otid": "otid_c7af54f9342e4a1c",
+              "title": "中山大学2025年定向南疆高校教师专项调剂公告（第一批）",
+              "displayScore": 1.4912,
+              "coarseScore": 1.4912,
+              "bestKpid": "kpid_690b30b637ad4617",
+              "eventTypes": [
+                "录取公示",
+                "复试通知",
+                "资格要求"
+              ],
+              "structuredTopicIds": [
+                "graduate_admission"
+              ],
+              "structuredIntentIds": [
+                "master_adjustment",
+                "master_unified_exam"
+              ],
+              "degreeLevels": [
+                "硕士"
+              ],
+              "titleRoles": [
+                "adjustment_notice"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "email",
+                "publish"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "email",
+                "publish"
+              ],
+              "kpEvidenceGroupCounts": {
+                "requirement": 1,
+                "timeline": 1
+              },
+              "dominantEvidenceGroup": "requirement",
+              "titleTypeFlags": [],
+              "roleTypeFlags": [
+                "operational"
+              ]
+            },
+            "top3": [
+              {
+                "otid": "otid_c7af54f9342e4a1c",
+                "title": "中山大学2025年定向南疆高校教师专项调剂公告（第一批）",
+                "displayScore": 1.4912,
+                "coarseScore": 1.4912,
+                "bestKpid": "kpid_690b30b637ad4617",
+                "eventTypes": [
+                  "录取公示",
+                  "复试通知",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_adjustment",
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "adjustment_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "email",
+                  "publish"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "email",
+                  "publish"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "timeline": 1
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [],
+                "roleTypeFlags": [
+                  "operational"
+                ]
+              },
+              {
+                "otid": "otid_e2d751b9441d4178",
+                "title": "中山大学2025年定向南疆高校教师专项调剂公告（第二批）",
+                "displayScore": 1.4183,
+                "coarseScore": 1.4183,
+                "bestKpid": "kpid_b96e883fefe44171",
+                "eventTypes": [
+                  "录取公示",
+                  "复试通知",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_adjustment",
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "adjustment_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 5
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [],
+                "roleTypeFlags": [
+                  "operational"
+                ]
+              },
+              {
+                "otid": "otid_c4214c3cb4464737",
+                "title": "中山大学2026年少数民族高层次骨干人才计划研究生招生公告",
+                "displayScore": 0.9978,
+                "coarseScore": 0.9978,
+                "bestKpid": "kpid_a924fb348b9a4a56",
+                "eventTypes": [
+                  "报名通知",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "publish"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 2
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              }
+            ]
+          },
+          "compare": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 1,
+            "renderedRank": 1,
+            "renderedReciprocalRank": 1,
+            "displayTop1Margin": 0.0055,
+            "top1": {
+              "otid": "otid_e2d751b9441d4178",
+              "title": "中山大学2025年定向南疆高校教师专项调剂公告（第二批）",
+              "displayScore": 1.4407,
+              "coarseScore": 1.4407,
+              "bestKpid": "kpid_b96e883fefe44171",
+              "eventTypes": [
+                "录取公示",
+                "复试通知",
+                "资格要求"
+              ],
+              "structuredTopicIds": [
+                "graduate_admission"
+              ],
+              "structuredIntentIds": [
+                "master_adjustment",
+                "master_unified_exam"
+              ],
+              "degreeLevels": [
+                "硕士"
+              ],
+              "titleRoles": [
+                "adjustment_notice"
+              ],
+              "bestKpRoleTags": [
+                "time_expression"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression"
+              ],
+              "kpEvidenceGroupCounts": {
+                "timeline": 5
+              },
+              "dominantEvidenceGroup": "timeline",
+              "titleTypeFlags": [],
+              "roleTypeFlags": [
+                "operational"
+              ]
+            },
+            "top3": [
+              {
+                "otid": "otid_e2d751b9441d4178",
+                "title": "中山大学2025年定向南疆高校教师专项调剂公告（第二批）",
+                "displayScore": 1.4407,
+                "coarseScore": 1.4407,
+                "bestKpid": "kpid_b96e883fefe44171",
+                "eventTypes": [
+                  "录取公示",
+                  "复试通知",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_adjustment",
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "adjustment_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 5
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [],
+                "roleTypeFlags": [
+                  "operational"
+                ]
+              },
+              {
+                "otid": "otid_c7af54f9342e4a1c",
+                "title": "中山大学2025年定向南疆高校教师专项调剂公告（第一批）",
+                "displayScore": 1.4352,
+                "coarseScore": 1.4352,
+                "bestKpid": "kpid_690b30b637ad4617",
+                "eventTypes": [
+                  "录取公示",
+                  "复试通知",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_adjustment",
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "adjustment_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "email",
+                  "publish"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "email",
+                  "publish"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "timeline": 1
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [],
+                "roleTypeFlags": [
+                  "operational"
+                ]
+              },
+              {
+                "otid": "otid_c4214c3cb4464737",
+                "title": "中山大学2026年少数民族高层次骨干人才计划研究生招生公告",
+                "displayScore": 1.0202,
+                "coarseScore": 1.0202,
+                "bestKpid": "kpid_a924fb348b9a4a56",
+                "eventTypes": [
+                  "报名通知",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "publish"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 2
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              }
+            ]
+          },
+          "reciprocalRankGain": -0.5,
+          "rankGain": -1,
+          "hit1Recovered": false,
+          "hit1Lost": true,
+          "top1Changed": true
+        }
+      ]
+    },
+    {
+      "baseLabel": "runtime_full",
+      "compareLabel": "no_lexical_title_type_adjustment",
+      "betterSummary": {
+        "count": 0,
+        "hit1RecoveredCount": 0,
+        "hit1LostCount": 0,
+        "avgReciprocalRankGain": 0,
+        "byDataset": [],
+        "byQueryScope": [],
+        "byPreferredGranularity": [],
+        "bySupportPattern": [],
+        "byThemeFamily": [],
+        "byDominantEvidenceGroup": [],
+        "byPrimaryBestKpRoleTag": []
+      },
+      "worseSummary": {
+        "count": 0,
+        "hit1RecoveredCount": 0,
+        "hit1LostCount": 0,
+        "avgReciprocalRankGain": 0,
+        "byDataset": [],
+        "byQueryScope": [],
+        "byPreferredGranularity": [],
+        "bySupportPattern": [],
+        "byThemeFamily": [],
+        "byDominantEvidenceGroup": [],
+        "byPrimaryBestKpRoleTag": []
+      },
+      "betterCases": [],
+      "worseCases": []
+    }
+  ],
+  "sharedHit1Protection": {
+    "bothProtectedHit1Summary": {
+      "count": 0,
+      "hit1RecoveredCount": 0,
+      "hit1LostCount": 0,
+      "avgReciprocalRankGain": 0,
+      "byDataset": [],
+      "byQueryScope": [],
+      "byPreferredGranularity": [],
+      "bySupportPattern": [],
+      "byThemeFamily": [],
+      "byDominantEvidenceGroup": [],
+      "byPrimaryBestKpRoleTag": []
+    },
+    "structuredOnlyProtectedHit1Summary": {
+      "count": 0,
+      "hit1RecoveredCount": 0,
+      "hit1LostCount": 0,
+      "avgReciprocalRankGain": 0,
+      "byDataset": [],
+      "byQueryScope": [],
+      "byPreferredGranularity": [],
+      "bySupportPattern": [],
+      "byThemeFamily": [],
+      "byDominantEvidenceGroup": [],
+      "byPrimaryBestKpRoleTag": []
+    },
+    "lexicalOnlyProtectedHit1Summary": {
+      "count": 0,
+      "hit1RecoveredCount": 0,
+      "hit1LostCount": 0,
+      "avgReciprocalRankGain": 0,
+      "byDataset": [],
+      "byQueryScope": [],
+      "byPreferredGranularity": [],
+      "bySupportPattern": [],
+      "byThemeFamily": [],
+      "byDominantEvidenceGroup": [],
+      "byPrimaryBestKpRoleTag": []
+    },
+    "bothProtectedHit1Cases": [],
+    "structuredOnlyProtectedHit1Cases": [],
+    "lexicalOnlyProtectedHit1Cases": []
+  }
+}
