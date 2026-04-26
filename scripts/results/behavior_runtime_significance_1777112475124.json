@@ -1,0 +1,153 @@
+{
+  "generatedAt": "2026-04-25T10:21:15.124Z",
+  "datasetFile": "D:\\Project\\SuAsk\\SuAsk_Agent\\Backend\\test\\test_dataset_answer_quality\\test_dataset_answer_quality_blind_v3_100_frozen_v1.json",
+  "baseLabel": "runtime_full",
+  "variants": [
+    {
+      "label": "runtime_full",
+      "note": "Current runtime preset.",
+      "correctAt1Count": 99,
+      "correctAt1Rate": 0.99,
+      "retrievalHitAt1Count": 98,
+      "retrievalHitAt1Rate": 0.98
+    },
+    {
+      "label": "no_q_confusion",
+      "note": "Disable qConfusion while keeping other runtime modules unchanged.",
+      "correctAt1Count": 96,
+      "correctAt1Rate": 0.96,
+      "retrievalHitAt1Count": 96,
+      "retrievalHitAt1Rate": 0.96
+    },
+    {
+      "label": "no_year_filter",
+      "note": "Disable explicit year filtering while keeping other runtime modules unchanged.",
+      "correctAt1Count": 91,
+      "correctAt1Rate": 0.91,
+      "retrievalHitAt1Count": 89,
+      "retrievalHitAt1Rate": 0.89
+    },
+    {
+      "label": "no_phase_anchor_boost",
+      "note": "Disable document-level phase anchor boost before display ordering.",
+      "correctAt1Count": 99,
+      "correctAt1Rate": 0.99,
+      "retrievalHitAt1Count": 98,
+      "retrievalHitAt1Rate": 0.98
+    },
+    {
+      "label": "no_display_adjustment",
+      "note": "Disable title-intent and coverage adjustments in the display stage.",
+      "correctAt1Count": 98,
+      "correctAt1Rate": 0.98,
+      "retrievalHitAt1Count": 98,
+      "retrievalHitAt1Rate": 0.98
+    }
+  ],
+  "comparisons": [
+    {
+      "compareLabel": "no_q_confusion",
+      "compareNote": "Disable qConfusion while keeping other runtime modules unchanged.",
+      "metric": "correctAt1",
+      "baseOnlyCorrect": 3,
+      "compareOnlyCorrect": 0,
+      "bothCorrect": 96,
+      "bothWrong": 1,
+      "exactTwoSidedPValue": 0.25,
+      "baseRate": 0.99,
+      "compareRate": 0.96,
+      "rateDiff": 0.030000000000000027
+    },
+    {
+      "compareLabel": "no_q_confusion",
+      "compareNote": "Disable qConfusion while keeping other runtime modules unchanged.",
+      "metric": "retrievalHitAt1",
+      "baseOnlyCorrect": 2,
+      "compareOnlyCorrect": 0,
+      "bothCorrect": 96,
+      "bothWrong": 2,
+      "exactTwoSidedPValue": 0.5,
+      "baseRate": 0.98,
+      "compareRate": 0.96,
+      "rateDiff": 0.020000000000000018
+    },
+    {
+      "compareLabel": "no_year_filter",
+      "compareNote": "Disable explicit year filtering while keeping other runtime modules unchanged.",
+      "metric": "correctAt1",
+      "baseOnlyCorrect": 8,
+      "compareOnlyCorrect": 0,
+      "bothCorrect": 91,
+      "bothWrong": 1,
+      "exactTwoSidedPValue": 0.0078125,
+      "baseRate": 0.99,
+      "compareRate": 0.91,
+      "rateDiff": 0.07999999999999996
+    },
+    {
+      "compareLabel": "no_year_filter",
+      "compareNote": "Disable explicit year filtering while keeping other runtime modules unchanged.",
+      "metric": "retrievalHitAt1",
+      "baseOnlyCorrect": 9,
+      "compareOnlyCorrect": 0,
+      "bothCorrect": 89,
+      "bothWrong": 2,
+      "exactTwoSidedPValue": 0.00390625,
+      "baseRate": 0.98,
+      "compareRate": 0.89,
+      "rateDiff": 0.08999999999999997
+    },
+    {
+      "compareLabel": "no_phase_anchor_boost",
+      "compareNote": "Disable document-level phase anchor boost before display ordering.",
+      "metric": "correctAt1",
+      "baseOnlyCorrect": 0,
+      "compareOnlyCorrect": 0,
+      "bothCorrect": 99,
+      "bothWrong": 1,
+      "exactTwoSidedPValue": 1,
+      "baseRate": 0.99,
+      "compareRate": 0.99,
+      "rateDiff": 0
+    },
+    {
+      "compareLabel": "no_phase_anchor_boost",
+      "compareNote": "Disable document-level phase anchor boost before display ordering.",
+      "metric": "retrievalHitAt1",
+      "baseOnlyCorrect": 0,
+      "compareOnlyCorrect": 0,
+      "bothCorrect": 98,
+      "bothWrong": 2,
+      "exactTwoSidedPValue": 1,
+      "baseRate": 0.98,
+      "compareRate": 0.98,
+      "rateDiff": 0
+    },
+    {
+      "compareLabel": "no_display_adjustment",
+      "compareNote": "Disable title-intent and coverage adjustments in the display stage.",
+      "metric": "correctAt1",
+      "baseOnlyCorrect": 2,
+      "compareOnlyCorrect": 1,
+      "bothCorrect": 97,
+      "bothWrong": 0,
+      "exactTwoSidedPValue": 1,
+      "baseRate": 0.99,
+      "compareRate": 0.98,
+      "rateDiff": 0.010000000000000009
+    },
+    {
+      "compareLabel": "no_display_adjustment",
+      "compareNote": "Disable title-intent and coverage adjustments in the display stage.",
+      "metric": "retrievalHitAt1",
+      "baseOnlyCorrect": 0,
+      "compareOnlyCorrect": 0,
+      "bothCorrect": 98,
+      "bothWrong": 2,
+      "exactTwoSidedPValue": 1,
+      "baseRate": 0.98,
+      "compareRate": 0.98,
+      "rateDiff": 0
+    }
+  ]
+}

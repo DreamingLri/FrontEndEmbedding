@@ -269,6 +269,7 @@ const OPTIONAL_DATASET_TARGETS = (
     [
         resolveDatasetTarget("main_bench_120"),
         resolveDatasetTarget("in_domain_holdout_50"),
+        resolveDatasetTarget("ext_ood_blind_60"),
         resolveDatasetTarget("external_ood_50"),
         resolveDatasetTarget("external_ood_holdout_30"),
         resolveDatasetTarget("external_ood_hard_30"),
@@ -1070,27 +1071,41 @@ function buildRrfHybridMaxRanking(
     dense: readonly ScoredMeta[],
     sparse: readonly ScoredMeta[],
 ): RankedDoc[] {
-    const scores = new Map<string, RankedDoc>();
+    const entryScores = new Map<
+        string,
+        { meta: Metadata; totalScore: number }
+    >();
+
     for (const rankedList of [dense, sparse]) {
         rankedList.forEach((item, index) => {
-            const otid = resolveDocumentOtid(item.meta);
             const contribution = 1 / (RRF_K + index + 1);
-            const existing = scores.get(otid);
-            if (!existing) {
-                scores.set(otid, {
-                    otid,
-                    score: contribution,
-                    best_kpid: item.meta.type === "KP" ? item.meta.id : undefined,
-                });
+            const entryId = item.meta.id;
+            const existing = entryScores.get(entryId);
+            if (existing) {
+                existing.totalScore += contribution;
                 return;
             }
-            existing.score += contribution;
-            if (!existing.best_kpid && item.meta.type === "KP") {
-                existing.best_kpid = item.meta.id;
-            }
+            entryScores.set(entryId, {
+                meta: item.meta,
+                totalScore: contribution,
+            });
         });
     }
-    return Array.from(scores.values()).sort((a, b) => b.score - a.score);
+
+    const documentScores = new Map<string, RankedDoc>();
+    entryScores.forEach(({ meta, totalScore }) => {
+        const otid = resolveDocumentOtid(meta);
+        const existing = documentScores.get(otid);
+        if (!existing || totalScore > existing.score) {
+            documentScores.set(otid, {
+                otid,
+                score: totalScore,
+                best_kpid: meta.type === "KP" ? meta.id : undefined,
+            });
+        }
+    });
+
+    return Array.from(documentScores.values()).sort((a, b) => b.score - a.score);
 }
 
 function buildStructuredRanking(
