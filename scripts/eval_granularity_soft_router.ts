@@ -79,8 +79,8 @@ const ACTIVE_DATASETS = [
         label: "MainBench-120",
     },
     {
-        slug: "test_dataset_granularity_in_domain_holdout_50_reviewed",
-        label: "InDomainHoldout-50",
+        slug: "test_dataset_granularity_in_domain_generalization_aligned_100_draft_v7",
+        label: "InDomain-100",
     },
     {
         slug: "test_dataset_granularity_external_ood_holdout_30_reviewed",

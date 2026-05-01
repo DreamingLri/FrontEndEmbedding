@@ -1,27 +1,27 @@
 export const CURRENT_EVAL_DATASET_FILES = {
-    // 当前 granularity 泛化三集主线：
-    // Main v4 / InDomain v7 / BlindExtOOD v4：
-    // 在结构风险基本对齐基础上融入现实用户痛点，降低标题锚点过强导致的分数虚高。
+    // 当前 granularity 正式入口：
+    // Main v7 / InDomain v10 / ExtOOD985 v8
+    // `blind_ext_ood_100` 保留为兼容 key，但底层实体文件已切到当前
+    // ExtOOD985Aligned100；旧 BlindExtOOD v4 已降级为历史材料。
     granularityMain120:
-        "../Backend/test/test_dataset_granularity/test_dataset_granularity_main_generalization_aligned_120_draft_v4.json",
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_main_generalization_aligned_120_draft_v7.json",
     granularityInDomainGeneralization100:
-        "../Backend/test/test_dataset_granularity/test_dataset_granularity_in_domain_generalization_aligned_100_draft_v7.json",
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_in_domain_generalization_aligned_100_draft_v10.json",
     granularityBlindExtOod100:
-        "../Backend/test/test_dataset_granularity/test_dataset_granularity_blind_ext_ood_generalization_aligned_100_draft_v4.json",
-    // Legacy aliases kept for old scripts only. Do not use these names in current mainline reports.
-    granularityInDomainHoldout50:
-        "../Backend/test/test_dataset_granularity/test_dataset_granularity_in_domain_generalization_aligned_100_draft_v7.json",
-    granularityExtOodBlind60:
-        "../Backend/test/test_dataset_granularity/test_dataset_granularity_blind_ext_ood_generalization_aligned_100_draft_v4.json",
-    granularityMatchedExtOod60:
-        "../Backend/test/test_dataset_granularity/test_dataset_granularity_external_matched_ood_60_reviewed_userized_gradient_v3_result_calibrated_harder.json",
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v8.json",
+    granularityExtOod985Aligned100:
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v8.json",
+    // Archived 2026-04-28:
+    // - granularityInDomainHoldout50
+    // - granularityExtOodBlind60
+    // - granularityMatchedExtOod60
+    // - granularityExternalOod50
+    // These retired legacy entry points should not be restored as active
+    // evaluation targets.
     granularityHardOodBlind30:
         "../Backend/test/test_dataset_granularity/test_dataset_granularity_hard_ood_blind_30_draft_v1.json",
     granularityLegacyExternalOodHard30:
         "../Backend/test/test_dataset_granularity/test_dataset_granularity_external_ood_holdout_30_reviewed_userized_v1.json",
-    // 兼容旧 target key：external_ood_50 现在映射到正式 matched ExtOOD。
-    granularityExternalOod50:
-        "../Backend/test/test_dataset_granularity/test_dataset_granularity_external_matched_ood_60_reviewed_userized_gradient_v3_result_calibrated_harder.json",
     // external_ood_holdout_30 回到真实 30 条 hard stress 入口，不再借用为 matched external。
     granularityExternalOodHoldout30:
         "../Backend/test/test_dataset_granularity/test_dataset_granularity_external_ood_holdout_30_reviewed_userized_v1.json",
@@ -69,8 +69,8 @@ export const CURRENT_EVAL_DATASET_FILES = {
         "../Backend/test/test_dataset_answer_reject/test_dataset_answer_reject_v6_80_combined_manifest.json",
     answerQualityCurrent:
         "../Backend/test/test_dataset_answer_quality/test_dataset_answer_quality_blind_v3_100_frozen_v1.json",
-    answerQualityExtOodBlind60:
-        "../Backend/test/test_dataset_answer_quality/test_dataset_answer_quality_ext_ood_blind_60_derived_v1.json",
+    // Archived 2026-04-28:
+    // - answerQualityExtOodBlind60
     answerQualityBlindProvisionalV1:
         "../Backend/test/test_dataset_answer_quality/test_dataset_answer_quality_blind_provisional_v1.json",
     answerQualityBlindV1:

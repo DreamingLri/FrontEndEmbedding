@@ -51,8 +51,8 @@ type IndexPayload = {
 };
 
 const SEARCH_INDEX_CONFIG = {
-    mainDbVersion: 'main_v2_plus',
-    indexCacheVersion: '20260417-main_v2_plus',
+    mainDbVersion: 'main_v2_plus_extood_noai_v1',
+    indexCacheVersion: '20260429-main_v2_plus_extood_noai_v1',
 };
 
 const SEARCH_INDEX_RESOURCE = {

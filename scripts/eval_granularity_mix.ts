@@ -33,6 +33,7 @@ import {
     loadFrontendEvalEngine,
 } from "./frontend_eval_engine.ts";
 import {
+    DEFAULT_MAIN_DB_VERSION,
     resolveBackendArticlesFile,
     resolveBackendKnowledgePointsFile,
 } from "./kb_version_paths.ts";
@@ -319,6 +320,7 @@ type Report = {
     kpTopN: number;
     kpTailWeight: number;
     lexicalBonusMode: LexicalBonusMode;
+    enableLexicalBonusBoost?: boolean;
     onlineKpRoleRerankMode: KPRoleRerankMode;
     onlineKpRoleDocWeight: number;
     kpCandidateRerankMode: KPCandidateRerankMode;
@@ -395,9 +397,17 @@ const KP_AGGREGATION_MODE = (
             ? "sum"
             : "max"
 ) as KPAggregationMode;
+const FRONTEND_RUNTIME_RETRIEVAL_DEFAULTS =
+    FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval;
 const LEXICAL_BONUS_MODE = (
     process.env.SUASK_LEXICAL_BONUS_MODE === "max" ? "max" : "sum"
 ) as LexicalBonusMode;
+const ENABLE_LEXICAL_BONUS_BOOST =
+    process.env.SUASK_ENABLE_LEXICAL_BONUS_BOOST === "1"
+        ? true
+        : process.env.SUASK_ENABLE_LEXICAL_BONUS_BOOST === "0"
+          ? false
+          : FRONTEND_RUNTIME_RETRIEVAL_DEFAULTS.enableLexicalBonusBoost;
 const ONLINE_KP_ROLE_RERANK_MODE = (
     process.env.SUASK_ONLINE_KP_ROLE_RERANK_MODE === "feature"
         ? "feature"
@@ -509,13 +519,16 @@ const Q_CONFUSION_MODE = (
           ? "consensus_no_year"
         : process.env.SUASK_Q_CONFUSION_MODE === "competition"
           ? "competition"
-          : process.env.SUASK_Q_CONFUSION_MODE === "combined"
+        : process.env.SUASK_Q_CONFUSION_MODE === "combined"
             ? "combined"
-            : "off"
+            : FRONTEND_RUNTIME_RETRIEVAL_DEFAULTS.qConfusionMode
 ) as QConfusionMode;
 const Q_CONFUSION_WEIGHT = Number.parseFloat(
     process.env.SUASK_Q_CONFUSION_WEIGHT || "",
 );
+const EFFECTIVE_Q_CONFUSION_WEIGHT = Number.isFinite(Q_CONFUSION_WEIGHT)
+    ? Q_CONFUSION_WEIGHT
+    : FRONTEND_RUNTIME_RETRIEVAL_DEFAULTS.qConfusionWeight;
 const WEIGHT_STEPS = parseWeightSteps(
     process.env.SUASK_WEIGHT_STEPS || "0.2,0.5,0.8",
 );
@@ -1009,8 +1022,9 @@ function formatQConfusionModeSlug(): string {
         return "";
     }
     const weightPart =
-        Number.isFinite(Q_CONFUSION_WEIGHT) && Q_CONFUSION_WEIGHT > 0
-            ? `-w${Q_CONFUSION_WEIGHT.toFixed(2).replace(".", "")}`
+        Number.isFinite(EFFECTIVE_Q_CONFUSION_WEIGHT) &&
+        EFFECTIVE_Q_CONFUSION_WEIGHT > 0
+            ? `-w${EFFECTIVE_Q_CONFUSION_WEIGHT.toFixed(2).replace(".", "")}`
             : "";
     return `_qconf-${Q_CONFUSION_MODE}${weightPart}`;
 }
@@ -2751,6 +2765,7 @@ function collectCaseDetails(
                     : undefined,
             fusionMode: FUSION_MODE,
             lexicalBonusMode: LEXICAL_BONUS_MODE,
+            enableLexicalBonusBoost: ENABLE_LEXICAL_BONUS_BOOST,
             qLexicalMultiplier: Number.isFinite(Q_LEXICAL_MULTIPLIER)
                 ? Q_LEXICAL_MULTIPLIER
                 : undefined,
@@ -2768,8 +2783,8 @@ function collectCaseDetails(
                     : undefined,
             denseScoreOverrides: item.denseScoreOverrides,
             qConfusionMode: Q_CONFUSION_MODE,
-            qConfusionWeight: Number.isFinite(Q_CONFUSION_WEIGHT)
-                ? Q_CONFUSION_WEIGHT
+            qConfusionWeight: Number.isFinite(EFFECTIVE_Q_CONFUSION_WEIGHT)
+                ? EFFECTIVE_Q_CONFUSION_WEIGHT
                 : undefined,
             enableExplicitYearFilter: !MINIMAL_BASELINE_MODE || MINIMAL_ADD_YEAR,
             minimalMode: MINIMAL_BASELINE_MODE,
@@ -3083,6 +3098,7 @@ function evaluateQueryCache(
                     : undefined,
             fusionMode: FUSION_MODE,
             lexicalBonusMode: LEXICAL_BONUS_MODE,
+            enableLexicalBonusBoost: ENABLE_LEXICAL_BONUS_BOOST,
             qLexicalMultiplier: Number.isFinite(Q_LEXICAL_MULTIPLIER)
                 ? Q_LEXICAL_MULTIPLIER
                 : undefined,
@@ -3100,8 +3116,8 @@ function evaluateQueryCache(
                     : undefined,
             denseScoreOverrides: item.denseScoreOverrides,
             qConfusionMode: Q_CONFUSION_MODE,
-            qConfusionWeight: Number.isFinite(Q_CONFUSION_WEIGHT)
-                ? Q_CONFUSION_WEIGHT
+            qConfusionWeight: Number.isFinite(EFFECTIVE_Q_CONFUSION_WEIGHT)
+                ? EFFECTIVE_Q_CONFUSION_WEIGHT
                 : undefined,
             enableExplicitYearFilter: !MINIMAL_BASELINE_MODE || MINIMAL_ADD_YEAR,
             minimalMode: MINIMAL_BASELINE_MODE,
@@ -3653,7 +3669,10 @@ async function main() {
     );
     console.log(`Fusion mode: ${FUSION_MODE}`);
     console.log(
-        `Q confusion mode: ${Q_CONFUSION_MODE}${Number.isFinite(Q_CONFUSION_WEIGHT) ? ` (weight=${Q_CONFUSION_WEIGHT})` : ""}`,
+        `Enable lexical bonus boost: ${ENABLE_LEXICAL_BONUS_BOOST ? "on" : "off"}`,
+    );
+    console.log(
+        `Q confusion mode: ${Q_CONFUSION_MODE}${Number.isFinite(EFFECTIVE_Q_CONFUSION_WEIGHT) ? ` (weight=${EFFECTIVE_Q_CONFUSION_WEIGHT})` : ""}`,
     );
     await loadEngine();
 
@@ -3703,8 +3722,9 @@ async function main() {
         otDenseMode: OT_DENSE_MODE,
         qConfusionMode: Q_CONFUSION_MODE !== "off" ? Q_CONFUSION_MODE : undefined,
         qConfusionWeight:
-            Q_CONFUSION_MODE !== "off" && Number.isFinite(Q_CONFUSION_WEIGHT)
-                ? Q_CONFUSION_WEIGHT
+            Q_CONFUSION_MODE !== "off" &&
+            Number.isFinite(EFFECTIVE_Q_CONFUSION_WEIGHT)
+                ? EFFECTIVE_Q_CONFUSION_WEIGHT
                 : undefined,
         queryStyleMode: QUERY_STYLE_MODE,
         kpStyleMode: KP_STYLE_MODE,
@@ -3755,6 +3775,7 @@ async function main() {
                 ? KP_TAIL_WEIGHT
                 : 0.35,
         lexicalBonusMode: LEXICAL_BONUS_MODE,
+        enableLexicalBonusBoost: ENABLE_LEXICAL_BONUS_BOOST,
         onlineKpRoleRerankMode: ONLINE_KP_ROLE_RERANK_MODE,
         onlineKpRoleDocWeight:
             Number.isFinite(ONLINE_KP_ROLE_DOC_WEIGHT)
@@ -3825,7 +3846,7 @@ async function main() {
         !SKIP_RESULT_REGISTRY_UPDATE &&
         (EXPERIMENT_TRACK === "default" ||
             EXPERIMENT_TRACK === "frontend_runtime") &&
-        ACTIVE_MAIN_DB_VERSION === "main_v2_plus" &&
+        ACTIVE_MAIN_DB_VERSION === DEFAULT_MAIN_DB_VERSION &&
         OT_DENSE_MODE === "original"
     ) {
         updateCurrentResultRegistry({

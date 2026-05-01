@@ -9,23 +9,35 @@ export type NamedDatasetProfile = {
 const DATASET_PROFILE_MAP: Record<string, NamedDatasetProfile> = {
     granularity_domain_generalization_bundle: {
         canonicalName: "granularity_domain_generalization_bundle",
-        alias: "granularity_domain_generalization_120_60_60",
-        displayName: "GranularityMain+InDomain+ExtOOD",
+        alias: "granularity_domain_generalization_120_100_100",
+        displayName: "GranularityMain120+InDomain100+ExtOOD985Aligned100",
     },
     granularity_mainline_bundle: {
         canonicalName: "granularity_mainline_bundle",
         alias: "granularity_mainline_150_100_100",
-        displayName: "GranularityMainline150+InDomain100+BlindExtOOD100",
+        displayName: "GranularityMainline150+InDomain100+ExtOOD985Aligned100",
     },
     granularity_mainline_150_100_100: {
         canonicalName: "granularity_mainline_150_100_100",
         alias: "granularity_mainline_150_100_100",
-        displayName: "GranularityMainline150+InDomain100+BlindExtOOD100",
+        displayName: "GranularityMainline150+InDomain100+ExtOOD985Aligned100",
     },
     main_bench_120: {
         canonicalName:
-            "test_dataset_granularity_main_generalization_aligned_120_draft_v4",
-        alias: "gran_main_generalization_v4",
+            "test_dataset_granularity_main_generalization_aligned_120_draft_v7",
+        alias: "gran_main_generalization_v7",
+        displayName: "Main",
+    },
+    test_dataset_granularity_main_generalization_aligned_120_draft_v7: {
+        canonicalName:
+            "test_dataset_granularity_main_generalization_aligned_120_draft_v7",
+        alias: "gran_main_generalization_v7",
+        displayName: "Main",
+    },
+    test_dataset_granularity_main_generalization_aligned_120_draft_v6: {
+        canonicalName:
+            "test_dataset_granularity_main_generalization_aligned_120_draft_v6",
+        alias: "gran_main_generalization_v6",
         displayName: "Main",
     },
     test_dataset_granularity_main_generalization_aligned_120_draft_v4: {
@@ -48,57 +60,117 @@ const DATASET_PROFILE_MAP: Record<string, NamedDatasetProfile> = {
     },
     in_domain_holdout_50: {
         canonicalName:
-            "test_dataset_granularity_in_domain_generalization_aligned_100_draft_v7",
-        alias: "gran_indomain100_generalization_v7",
-        displayName: "InDomain100",
+            "test_dataset_granularity_in_domain_holdout_50_reviewed_userized_v1",
+        alias: "gran_in_50",
+        displayName: "InDomain50",
     },
     in_domain_generalization_100: {
         canonicalName:
-            "test_dataset_granularity_in_domain_generalization_aligned_100_draft_v7",
-        alias: "gran_indomain100_generalization_v7",
+            "test_dataset_granularity_in_domain_generalization_aligned_100_draft_v10",
+        alias: "gran_indomain_generalization_v10",
+        displayName: "InDomain100",
+    },
+    test_dataset_granularity_in_domain_generalization_aligned_100_draft_v10: {
+        canonicalName:
+            "test_dataset_granularity_in_domain_generalization_aligned_100_draft_v10",
+        alias: "gran_indomain_generalization_v10",
+        displayName: "InDomain100",
+    },
+    test_dataset_granularity_in_domain_generalization_aligned_100_draft_v9: {
+        canonicalName:
+            "test_dataset_granularity_in_domain_generalization_aligned_100_draft_v9",
+        alias: "gran_indomain_generalization_v9",
         displayName: "InDomain100",
     },
     test_dataset_granularity_in_domain_generalization_aligned_100_draft_v7: {
         canonicalName:
             "test_dataset_granularity_in_domain_generalization_aligned_100_draft_v7",
         alias: "gran_indomain_generalization_v7",
-        displayName: "InDomain",
+        displayName: "InDomain100",
     },
     test_dataset_granularity_in_domain_generalization_aligned_100_draft_v6: {
         canonicalName:
             "test_dataset_granularity_in_domain_generalization_aligned_100_draft_v6",
         alias: "gran_indomain_generalization_v6",
-        displayName: "InDomain",
+        displayName: "InDomain100",
     },
     test_dataset_granularity_in_domain_generalization_60_reviewed_userized_v2: {
         canonicalName:
             "test_dataset_granularity_in_domain_generalization_60_reviewed_userized_v2",
         alias: "gran_in_v2",
-        displayName: "InDomain",
+        displayName: "InDomain60",
     },
     test_dataset_granularity_in_domain_generalization_60_reviewed_userized_v1: {
         canonicalName:
             "test_dataset_granularity_in_domain_generalization_60_reviewed_userized_v1",
         alias: "gran_in_v2",
-        displayName: "InDomain",
+        displayName: "InDomain60",
     },
     ext_ood_blind_60: {
         canonicalName:
             "test_dataset_granularity_blind_ext_ood_generalization_aligned_100_draft_v4",
         alias: "gran_blind_extood100_generalization_v4",
-        displayName: "BlindExtOOD100",
+        displayName: "ArchivedBlindExtOOD100",
     },
     blind_ext_ood_100: {
         canonicalName:
-            "test_dataset_granularity_blind_ext_ood_generalization_aligned_100_draft_v4",
-        alias: "gran_blind_extood100_generalization_v4",
-        displayName: "BlindExtOOD100",
+            "test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v8",
+        alias: "gran_extood985_aligned_v8",
+        displayName: "ExtOOD985Aligned100",
+    },
+    extood_985_aligned_100: {
+        canonicalName:
+            "test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v8",
+        alias: "gran_extood985_aligned_v8",
+        displayName: "ExtOOD985Aligned100",
+    },
+    test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v8: {
+        canonicalName:
+            "test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v8",
+        alias: "gran_extood985_aligned_v8",
+        displayName: "ExtOOD985Aligned100",
     },
     test_dataset_granularity_blind_ext_ood_generalization_aligned_100_draft_v4: {
         canonicalName:
             "test_dataset_granularity_blind_ext_ood_generalization_aligned_100_draft_v4",
         alias: "gran_blind_extood_generalization_v4",
-        displayName: "BlindExtOOD",
+        displayName: "ArchivedBlindExtOOD100",
+    },
+    test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v5: {
+        canonicalName:
+            "test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v5",
+        alias: "gran_extood985_aligned_v5",
+        displayName: "ExtOOD985Aligned100",
+    },
+    test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v6: {
+        canonicalName:
+            "test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v6",
+        alias: "gran_extood985_aligned_v6",
+        displayName: "ExtOOD985Aligned100",
+    },
+    test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v7: {
+        canonicalName:
+            "test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v7",
+        alias: "gran_extood985_aligned_v7",
+        displayName: "ExtOOD985Aligned100",
+    },
+    test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v3: {
+        canonicalName:
+            "test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v3",
+        alias: "gran_extood985_aligned_v3",
+        displayName: "ExtOOD985Aligned100",
+    },
+    test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v2: {
+        canonicalName:
+            "test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v2",
+        alias: "gran_extood985_aligned_v2",
+        displayName: "ExtOOD985Aligned100",
+    },
+    test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v1: {
+        canonicalName:
+            "test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v1",
+        alias: "gran_extood985_aligned_v1",
+        displayName: "ExtOOD985Aligned100",
     },
     test_dataset_granularity_blind_ext_ood_generalization_aligned_100_draft_v3: {
         canonicalName:
@@ -110,31 +182,31 @@ const DATASET_PROFILE_MAP: Record<string, NamedDatasetProfile> = {
         canonicalName:
             "test_dataset_granularity_aligned_ext_ood_blind_60_draft_v1",
         alias: "gran_ext_blind60",
-        displayName: "BlindExtOOD",
+        displayName: "BlindExtOOD60",
     },
     matched_ext_ood_60: {
         canonicalName:
             "test_dataset_granularity_external_matched_ood_60_reviewed_userized_v2",
         alias: "gran_ext_v2",
-        displayName: "ExtOOD",
+        displayName: "MatchedExtOOD60",
     },
     external_ood_50: {
         canonicalName:
             "test_dataset_granularity_external_matched_ood_60_reviewed_userized_v2",
         alias: "gran_ext_v2",
-        displayName: "ExtOOD",
+        displayName: "ExternalOOD50",
     },
     test_dataset_granularity_external_matched_ood_60_reviewed_userized_v2: {
         canonicalName:
             "test_dataset_granularity_external_matched_ood_60_reviewed_userized_v2",
         alias: "gran_ext_v2",
-        displayName: "ExtOOD",
+        displayName: "MatchedExtOOD60",
     },
     test_dataset_granularity_external_matched_ood_60_reviewed_userized_v1: {
         canonicalName:
             "test_dataset_granularity_external_matched_ood_60_reviewed_userized_v1",
         alias: "gran_ext_v2",
-        displayName: "ExtOOD",
+        displayName: "MatchedExtOOD60",
     },
     hard_ood_blind_30: {
         canonicalName: "test_dataset_granularity_hard_ood_blind_30_draft_v1",

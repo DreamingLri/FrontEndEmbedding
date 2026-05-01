@@ -41,6 +41,15 @@ export type EvalDatasetCase = {
 };
 
 type RawEvalDatasetCase = Omit<EvalDatasetCase, "dataset">;
+type ArchivedEvalDatasetRedirect = {
+    archived: true;
+    archivedAt: string;
+    reason: string;
+    movedTo: string;
+    replacementTarget?: string;
+    replacementDataset?: string;
+    note?: string;
+};
 
 export type EvalDatasetSource = {
     path: string;
@@ -79,6 +88,7 @@ export type GranularityDatasetTargetKey =
     | "main_bench_120"
     | "in_domain_generalization_100"
     | "blind_ext_ood_100"
+    | "extood_985_aligned_100"
     | "in_domain_holdout_50"
     | "ext_ood_blind_60"
     | "matched_ext_ood_60"
@@ -123,24 +133,32 @@ export const FRONTEND_METADATA_FILE = resolveFrontendMetadataFile();
 export const FRONTEND_VECTOR_FILE = resolveFrontendVectorFile();
 export const DEFAULT_QUERY_EMBED_BATCH_SIZE = 16;
 export const DEFAULT_GRANULARITY_MAINLINE_TARGET_KEYS = [
-    "ladder_main_balanced_150",
+    "main_bench_120",
     "in_domain_generalization_100",
     "blind_ext_ood_100",
 ] as const;
 export const DEFAULT_GRANULARITY_BENCHMARK_TARGET_KEY: GranularityDatasetTargetKey =
     DEFAULT_GRANULARITY_MAINLINE_TARGET_KEYS[0];
 export const DEFAULT_GRANULARITY_DATASET_KEY =
-    "granularity_mainline_150_100_100";
+    "granularity_domain_generalization_bundle";
 export const DEFAULT_GRANULARITY_DATASET_LABEL =
-    "MainBalanced150+InDomain100+BlindExtOOD100";
+    "Main120+InDomain100+ExtOOD985Aligned100";
 
 const DEFAULT_GRANULARITY_TARGET_KEY: GranularityDatasetTargetKey =
     DEFAULT_GRANULARITY_BENCHMARK_TARGET_KEY;
 
-const GRANULARITY_DATASET_TARGETS: Record<
+const ARCHIVED_GRANULARITY_TARGET_KEYS: ReadonlySet<GranularityDatasetTargetKey> =
+    new Set([
+        "in_domain_holdout_50",
+        "ext_ood_blind_60",
+        "matched_ext_ood_60",
+        "external_ood_50",
+    ]);
+
+const GRANULARITY_DATASET_TARGETS: Partial<Record<
     GranularityDatasetTargetKey,
     GranularityDatasetTargetDefinition
-> = {
+>> = {
     main_bench_120: {
         key: "main_bench_120",
         label: "Main",
@@ -155,28 +173,21 @@ const GRANULARITY_DATASET_TARGETS: Record<
     },
     blind_ext_ood_100: {
         key: "blind_ext_ood_100",
-        label: "BlindExtOOD100",
+        label: "ExtOOD985Aligned100",
         role: "external_ood_holdout",
         primaryPath: CURRENT_EVAL_DATASET_FILES.granularityBlindExtOod100,
     },
-    in_domain_holdout_50: {
-        key: "in_domain_holdout_50",
-        label: "InDomainLegacyAlias",
-        role: "in_domain_holdout",
-        primaryPath: CURRENT_EVAL_DATASET_FILES.granularityInDomainHoldout50,
-    },
-    ext_ood_blind_60: {
-        key: "ext_ood_blind_60",
-        label: "BlindExtOODLegacyAlias",
+    extood_985_aligned_100: {
+        key: "extood_985_aligned_100",
+        label: "ExtOOD985Aligned100",
         role: "external_ood_holdout",
-        primaryPath: CURRENT_EVAL_DATASET_FILES.granularityExtOodBlind60,
+        primaryPath: CURRENT_EVAL_DATASET_FILES.granularityExtOod985Aligned100,
     },
-    matched_ext_ood_60: {
-        key: "matched_ext_ood_60",
-        label: "ExtOOD",
-        role: "external_ood_holdout",
-        primaryPath: CURRENT_EVAL_DATASET_FILES.granularityMatchedExtOod60,
-    },
+    // Archived 2026-04-28. Keep the keys in GranularityDatasetTargetKey for
+    // historical parsing only; do not restore these retired entry points.
+    // in_domain_holdout_50: { ... }
+    // ext_ood_blind_60: { ... }
+    // matched_ext_ood_60: { ... }
     hard_ood_blind_30: {
         key: "hard_ood_blind_30",
         label: "HardOOD",
@@ -189,13 +200,8 @@ const GRANULARITY_DATASET_TARGETS: Record<
         role: "legacy_holdout",
         primaryPath: CURRENT_EVAL_DATASET_FILES.granularityLegacyExternalOodHard30,
     },
-    external_ood_50: {
-        key: "external_ood_50",
-        // 兼容旧 key，但当前主线下该入口回到 matched external 结果。
-        label: "ExtOOD",
-        role: "external_ood_holdout",
-        primaryPath: CURRENT_EVAL_DATASET_FILES.granularityExternalOod50,
-    },
+    // Archived 2026-04-28.
+    // external_ood_50: { ... }
     external_ood_holdout_30: {
         key: "external_ood_holdout_30",
         label: "ExtHard30",
@@ -292,9 +298,23 @@ export function loadDataset(
     },
 ): EvalDatasetCase[] {
     const absolutePath = path.resolve(process.cwd(), datasetPath);
-    const raw = JSON.parse(
+    const parsed = JSON.parse(
         fs.readFileSync(absolutePath, "utf-8"),
-    ) as RawEvalDatasetCase[];
+    ) as RawEvalDatasetCase[] | ArchivedEvalDatasetRedirect;
+    if (!Array.isArray(parsed)) {
+        if (parsed && typeof parsed === "object" && parsed.archived) {
+            const replacementHint = parsed.replacementTarget
+                ? ` Use "${parsed.replacementTarget}" instead.`
+                : "";
+            throw new Error(
+                `Dataset file "${datasetPath}" was archived on ${parsed.archivedAt} and moved to "${parsed.movedTo}".${replacementHint}`,
+            );
+        }
+        throw new Error(
+            `Dataset file "${datasetPath}" does not contain an array of evaluation cases.`,
+        );
+    }
+    const raw = parsed;
     const dataset = options?.datasetLabel || path.basename(datasetPath, ".json");
     const queryTypes = options?.queryTypes;
     const filtered = queryTypes?.length
@@ -533,7 +553,19 @@ function resolveExistingDatasetPath(
 export function resolveGranularityDatasetTarget(
     key: GranularityDatasetTargetKey,
 ): ResolvedGranularityDatasetTarget {
+    if (ARCHIVED_GRANULARITY_TARGET_KEYS.has(key)) {
+        const replacementTarget =
+            key === "in_domain_holdout_50"
+                ? "in_domain_generalization_100"
+                : "blind_ext_ood_100";
+        throw new Error(
+            `Dataset target "${key}" has been archived. Use "${replacementTarget}" instead.`,
+        );
+    }
     const definition = GRANULARITY_DATASET_TARGETS[key];
+    if (!definition) {
+        throw new Error(`Unknown dataset target "${key}".`);
+    }
     const resolved = resolveExistingDatasetPath(
         definition.fallbackPath
             ? [definition.primaryPath, definition.fallbackPath]
@@ -567,9 +599,7 @@ export function listAvailableGranularityDatasetTargets(
         "main_bench_120",
         "in_domain_generalization_100",
         "blind_ext_ood_100",
-        "in_domain_holdout_50",
-        "ext_ood_blind_60",
-        "matched_ext_ood_60",
+        "extood_985_aligned_100",
         "hard_ood_blind_30",
         "hard_ood_v2_diag_top30",
         "structure_dev_40",

@@ -305,13 +305,28 @@ function toNullableRank(rank: number): number | null {
 function resolveBlindOodDatasetTargetKey():
     | GranularityDatasetTargetKey
     | undefined {
+    const archivedBundleNames = new Set([
+        "blind_ext_ood_60",
+        "ext_ood_blind_60",
+        "blind_extood_60",
+        "blindextood60",
+    ]);
+    if (archivedBundleNames.has(DATASET_BUNDLE)) {
+        throw new Error(
+            `Dataset bundle "${DATASET_BUNDLE}" has been archived. Use "blind_ext_ood_100" instead.`,
+        );
+    }
+
     const bundleToTargetKey: Partial<
         Record<string, GranularityDatasetTargetKey>
     > = {
-        blind_ext_ood_60: "ext_ood_blind_60",
-        ext_ood_blind_60: "ext_ood_blind_60",
-        blind_extood_60: "ext_ood_blind_60",
-        blindextood60: "ext_ood_blind_60",
+        blind_ext_ood_100: "blind_ext_ood_100",
+        blindextood100: "blind_ext_ood_100",
+        blind_extood_100: "blind_ext_ood_100",
+        extood_985_aligned_100: "extood_985_aligned_100",
+        extood985_aligned_100: "extood_985_aligned_100",
+        blind_ext_ood_985_100: "extood_985_aligned_100",
+        blindextood985: "extood_985_aligned_100",
         hard_ood_blind_30: "hard_ood_blind_30",
         blind_hard_ood_30: "hard_ood_blind_30",
         blind_hardood_30: "hard_ood_blind_30",
@@ -976,9 +991,12 @@ function buildGuardSummary(params: {
 }): GuardSummary {
     const { overallByDataset, sliceReports } = params;
     const alerts: GuardAlert[] = [];
-    const main = overallByDataset.main_bench_120;
-    const inDomain = overallByDataset.in_domain_holdout_50;
-    const extOOD = overallByDataset.matched_ext_ood_60;
+    const main =
+        overallByDataset.main_bench_120 ||
+        overallByDataset.ladder_main_balanced_150;
+    const inDomain = overallByDataset.in_domain_generalization_100;
+    const extOOD = overallByDataset.blind_ext_ood_100;
+    const mainDatasetKeys = new Set(["main_bench_120", "ladder_main_balanced_150"]);
 
     if (main && inDomain && extOOD) {
         const maxOtherLift = Math.max(
@@ -1028,7 +1046,7 @@ function buildGuardSummary(params: {
     }
 
     sliceReports
-        .filter((report) => report.dataset === "main_bench_120")
+        .filter((report) => mainDatasetKeys.has(report.dataset))
         .forEach((report) => {
             report.buckets
                 .filter(

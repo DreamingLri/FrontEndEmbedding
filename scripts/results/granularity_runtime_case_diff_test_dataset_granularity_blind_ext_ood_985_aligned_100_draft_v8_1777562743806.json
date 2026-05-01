@@ -1,0 +1,1794 @@
+{
+  "generatedAt": "2026-04-30T15:25:43.805Z",
+  "datasetBundle": "extood_985_aligned_100",
+  "datasetKey": "test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v8",
+  "datasetLabel": "ExtOOD985Aligned100",
+  "datasetGroups": [
+    {
+      "key": "extood_985_aligned_100",
+      "label": "ExtOOD985Aligned100",
+      "role": "external_ood_holdout",
+      "size": 100,
+      "sources": [
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v8.json"
+      ]
+    }
+  ],
+  "presetName": "frontend_research_sync_v1",
+  "variants": [
+    {
+      "label": "runtime_full",
+      "note": "Current frontend runtime display chain.",
+      "metricsByDataset": {
+        "test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v8": {
+          "total": 100,
+          "answerRate": 97,
+          "hitAt1": 61,
+          "mrr": 0.6621
+        }
+      },
+      "combined": {
+        "total": 100,
+        "answerRate": 97,
+        "hitAt1": 61,
+        "mrr": 0.6621
+      }
+    },
+    {
+      "label": "no_structured_kp_role_evidence_adjustment",
+      "note": "Disable structured KP-role evidence adjustment only.",
+      "metricsByDataset": {
+        "test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v8": {
+          "total": 100,
+          "answerRate": 97,
+          "hitAt1": 61,
+          "mrr": 0.6644
+        }
+      },
+      "combined": {
+        "total": 100,
+        "answerRate": 97,
+        "hitAt1": 61,
+        "mrr": 0.6644
+      }
+    },
+    {
+      "label": "no_lexical_title_type_adjustment",
+      "note": "Disable coarse title-type lexical rules only.",
+      "metricsByDataset": {
+        "test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v8": {
+          "total": 100,
+          "answerRate": 97,
+          "hitAt1": 61,
+          "mrr": 0.6621
+        }
+      },
+      "combined": {
+        "total": 100,
+        "answerRate": 97,
+        "hitAt1": 61,
+        "mrr": 0.6621
+      }
+    }
+  ],
+  "pairwiseDiffs": [
+    {
+      "baseLabel": "runtime_full",
+      "compareLabel": "no_structured_kp_role_evidence_adjustment",
+      "betterSummary": {
+        "count": 1,
+        "hit1RecoveredCount": 0,
+        "hit1LostCount": 0,
+        "avgReciprocalRankGain": 0.0091,
+        "byDataset": [
+          {
+            "key": "test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v8",
+            "count": 1
+          }
+        ],
+        "byQueryScope": [
+          {
+            "key": "procedure",
+            "count": 1
+          }
+        ],
+        "byPreferredGranularity": [
+          {
+            "key": "KP+OT",
+            "count": 1
+          }
+        ],
+        "bySupportPattern": [
+          {
+            "key": "ot_required",
+            "count": 1
+          }
+        ],
+        "byThemeFamily": [
+          {
+            "key": "招生安排流程",
+            "count": 1
+          }
+        ],
+        "byDominantEvidenceGroup": [
+          {
+            "key": "requirement",
+            "count": 1
+          }
+        ],
+        "byPrimaryBestKpRoleTag": [
+          {
+            "key": "time_expression",
+            "count": 1
+          }
+        ]
+      },
+      "worseSummary": {
+        "count": 3,
+        "hit1RecoveredCount": 0,
+        "hit1LostCount": 0,
+        "avgReciprocalRankGain": -0.0802,
+        "byDataset": [
+          {
+            "key": "test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v8",
+            "count": 3
+          }
+        ],
+        "byQueryScope": [
+          {
+            "key": "procedure",
+            "count": 2
+          },
+          {
+            "key": "policy_overview",
+            "count": 1
+          }
+        ],
+        "byPreferredGranularity": [
+          {
+            "key": "OT",
+            "count": 2
+          },
+          {
+            "key": "KP+OT",
+            "count": 1
+          }
+        ],
+        "bySupportPattern": [
+          {
+            "key": "ot_required",
+            "count": 3
+          }
+        ],
+        "byThemeFamily": [
+          {
+            "key": "开题流程",
+            "count": 1
+          },
+          {
+            "key": "推免规则",
+            "count": 1
+          },
+          {
+            "key": "推免流程",
+            "count": 1
+          }
+        ],
+        "byDominantEvidenceGroup": [
+          {
+            "key": "timeline",
+            "count": 2
+          },
+          {
+            "key": "unknown",
+            "count": 1
+          }
+        ],
+        "byPrimaryBestKpRoleTag": [
+          {
+            "key": "time_expression",
+            "count": 2
+          },
+          {
+            "key": "background",
+            "count": 1
+          }
+        ]
+      },
+      "betterCases": [
+        {
+          "caseIndex": 80,
+          "id": "blind_ext_ood_985_100_draft_v8_0081",
+          "dataset": "test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v8",
+          "query": "如果我在准备2026年招生安排，整体要按什么流程走",
+          "sourceQuery": "天津大学智能与计算学部2026年工程博士招生办法",
+          "sourceSeedId": "ext985_075__overview__procedure__situational",
+          "sourceDataset": "extood_985_multischool_generation_v1",
+          "queryType": "situational",
+          "queryScope": "procedure",
+          "preferredGranularity": "KP+OT",
+          "supportPattern": "ot_required",
+          "themeFamily": "招生安排流程",
+          "challengeTags": [
+            "研究生招生",
+            "procedure",
+            "ot_required",
+            "situational",
+            "P1_balance",
+            "天津大学"
+          ],
+          "expectedOtid": "otid_58fa6a7cde204d82",
+          "runtimeFull": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 12,
+            "renderedRank": 10,
+            "renderedReciprocalRank": 0.1,
+            "displayTop1Margin": 0.0729,
+            "top1": {
+              "otid": "otid_7479616835454c16",
+              "title": "中山大学2026年硕士研究生招生章程及招生学科专业目录",
+              "displayScore": 0.9331,
+              "coarseScore": 0.9331,
+              "bestKpid": "kpid_daa4bb62894f432c",
+              "eventTypes": [
+                "推免通知",
+                "考试安排",
+                "招生章程"
+              ],
+              "structuredTopicIds": [
+                "graduate_admission",
+                "academic_affairs"
+              ],
+              "structuredIntentIds": [
+                "master_unified_exam",
+                "master_recommend_exemption"
+              ],
+              "degreeLevels": [
+                "硕士",
+                "博士"
+              ],
+              "titleRoles": [
+                "rule_doc"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "schedule"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "schedule",
+                "materials",
+                "publish",
+                "post_outcome",
+                "deadline"
+              ],
+              "kpEvidenceGroupCounts": {
+                "procedure": 1,
+                "timeline": 2,
+                "requirement": 2,
+                "post_outcome": 1
+              },
+              "dominantEvidenceGroup": "requirement",
+              "titleTypeFlags": [
+                "rule"
+              ],
+              "roleTypeFlags": [
+                "constraint"
+              ]
+            },
+            "top3": [
+              {
+                "otid": "otid_7479616835454c16",
+                "title": "中山大学2026年硕士研究生招生章程及招生学科专业目录",
+                "displayScore": 0.9331,
+                "coarseScore": 0.9331,
+                "bestKpid": "kpid_daa4bb62894f432c",
+                "eventTypes": [
+                  "推免通知",
+                  "考试安排",
+                  "招生章程"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission",
+                  "academic_affairs"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam",
+                  "master_recommend_exemption"
+                ],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "rule_doc"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "schedule"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "schedule",
+                  "materials",
+                  "publish",
+                  "post_outcome",
+                  "deadline"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "procedure": 1,
+                  "timeline": 2,
+                  "requirement": 2,
+                  "post_outcome": 1
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [
+                  "rule"
+                ],
+                "roleTypeFlags": [
+                  "constraint"
+                ]
+              },
+              {
+                "otid": "otid_026bbae2756a4096",
+                "title": "中山大学关于2026年外语类保送生面试考核安排的通知",
+                "displayScore": 0.8602,
+                "coarseScore": 0.8602,
+                "bestKpid": "kpid_1a828f571bab42ab",
+                "eventTypes": [
+                  "考试安排",
+                  "报名通知",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [
+                  "undergraduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "ug_recommend_admission"
+                ],
+                "degreeLevels": [
+                  "本科"
+                ],
+                "titleRoles": [
+                  "registration_notice",
+                  "stage_list"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "materials"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "materials",
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "timeline": 1
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [
+                  "process"
+                ],
+                "roleTypeFlags": [
+                  "constraint",
+                  "operational"
+                ]
+              },
+              {
+                "otid": "otid_8f77ee9e86c84c7d",
+                "title": "2026年全国硕士研究生招生考试中山大学报考点（代码4413）网上确认公告",
+                "displayScore": 0.8381,
+                "coarseScore": 0.8381,
+                "bestKpid": "kpid_e1a5dc451c774c80",
+                "eventTypes": [
+                  "考试安排",
+                  "报名通知"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "background"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "background",
+                  "materials",
+                  "procedure",
+                  "email",
+                  "reminder",
+                  "deadline",
+                  "schedule"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 3,
+                  "requirement": 3,
+                  "procedure": 2
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              }
+            ]
+          },
+          "compare": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 12,
+            "renderedRank": 11,
+            "renderedReciprocalRank": 0.0909,
+            "displayTop1Margin": 0.0901,
+            "top1": {
+              "otid": "otid_7479616835454c16",
+              "title": "中山大学2026年硕士研究生招生章程及招生学科专业目录",
+              "displayScore": 0.9619,
+              "coarseScore": 0.9619,
+              "bestKpid": "kpid_daa4bb62894f432c",
+              "eventTypes": [
+                "推免通知",
+                "考试安排",
+                "招生章程"
+              ],
+              "structuredTopicIds": [
+                "graduate_admission",
+                "academic_affairs"
+              ],
+              "structuredIntentIds": [
+                "master_unified_exam",
+                "master_recommend_exemption"
+              ],
+              "degreeLevels": [
+                "硕士",
+                "博士"
+              ],
+              "titleRoles": [
+                "rule_doc"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "schedule"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "schedule",
+                "materials",
+                "publish",
+                "post_outcome",
+                "deadline"
+              ],
+              "kpEvidenceGroupCounts": {
+                "procedure": 1,
+                "timeline": 2,
+                "requirement": 2,
+                "post_outcome": 1
+              },
+              "dominantEvidenceGroup": "requirement",
+              "titleTypeFlags": [
+                "rule"
+              ],
+              "roleTypeFlags": [
+                "constraint"
+              ]
+            },
+            "top3": [
+              {
+                "otid": "otid_7479616835454c16",
+                "title": "中山大学2026年硕士研究生招生章程及招生学科专业目录",
+                "displayScore": 0.9619,
+                "coarseScore": 0.9619,
+                "bestKpid": "kpid_daa4bb62894f432c",
+                "eventTypes": [
+                  "推免通知",
+                  "考试安排",
+                  "招生章程"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission",
+                  "academic_affairs"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam",
+                  "master_recommend_exemption"
+                ],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "rule_doc"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "schedule"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "schedule",
+                  "materials",
+                  "publish",
+                  "post_outcome",
+                  "deadline"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "procedure": 1,
+                  "timeline": 2,
+                  "requirement": 2,
+                  "post_outcome": 1
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [
+                  "rule"
+                ],
+                "roleTypeFlags": [
+                  "constraint"
+                ]
+              },
+              {
+                "otid": "otid_8f77ee9e86c84c7d",
+                "title": "2026年全国硕士研究生招生考试中山大学报考点（代码4413）网上确认公告",
+                "displayScore": 0.8718,
+                "coarseScore": 0.8718,
+                "bestKpid": "kpid_e1a5dc451c774c80",
+                "eventTypes": [
+                  "考试安排",
+                  "报名通知"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "background"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "background",
+                  "materials",
+                  "procedure",
+                  "email",
+                  "reminder",
+                  "deadline",
+                  "schedule"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 3,
+                  "requirement": 3,
+                  "procedure": 2
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_dc54d3033b3c4944",
+                "title": "中山大学2026年招收海外高校优秀中国籍本科毕业生直接攻读博士学位网上报名通知",
+                "displayScore": 0.8699,
+                "coarseScore": 0.8699,
+                "bestKpid": "kpid_45243b6a883441ea",
+                "eventTypes": [
+                  "报名通知",
+                  "资格要求",
+                  "招生章程"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam",
+                  "phd_general_exam"
+                ],
+                "degreeLevels": [
+                  "本科",
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "registration_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "materials",
+                  "reminder"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "materials",
+                  "reminder",
+                  "background",
+                  "post_outcome"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "timeline": 2,
+                  "post_outcome": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [
+                  "process"
+                ],
+                "roleTypeFlags": [
+                  "constraint",
+                  "operational"
+                ]
+              }
+            ]
+          },
+          "reciprocalRankGain": 0.0091,
+          "rankGain": 1,
+          "hit1Recovered": false,
+          "hit1Lost": false,
+          "top1Changed": false
+        }
+      ],
+      "worseCases": [
+        {
+          "caseIndex": 13,
+          "id": "blind_ext_ood_985_100_draft_v8_0014",
+          "dataset": "test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v8",
+          "query": "如果我在准备2023年开题，整体要按什么流程走",
+          "sourceQuery": "计算机科学与技术学院关于做好2023级博士研究生论文开题工作的通知",
+          "sourceSeedId": "ext985_024__overview__procedure__situational",
+          "sourceDataset": "extood_985_multischool_generation_v1",
+          "queryType": "situational",
+          "queryScope": "procedure",
+          "preferredGranularity": "KP+OT",
+          "supportPattern": "ot_required",
+          "themeFamily": "开题流程",
+          "challengeTags": [
+            "学籍与培养环节",
+            "procedure",
+            "ot_required",
+            "situational",
+            "P0_core",
+            "华中科技大学"
+          ],
+          "expectedOtid": "otid_8e5b86b76b024230",
+          "runtimeFull": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 13,
+            "renderedRank": 17,
+            "renderedReciprocalRank": 0.0588,
+            "displayTop1Margin": 0.016,
+            "top1": {
+              "otid": "otid_9e15810343ea44ca",
+              "title": "学在软工丨“以学生成长为中心”，软件工程学院2023年“笃行沙龙”第一期留学深造经验分享会顺利举行",
+              "displayScore": 0.8134,
+              "coarseScore": 0.8134,
+              "bestKpid": "kpid_9ef174ea41214630",
+              "eventTypes": [
+                "材料提交"
+              ],
+              "structuredTopicIds": [],
+              "structuredIntentIds": [],
+              "degreeLevels": [
+                "本科",
+                "硕士",
+                "博士"
+              ],
+              "titleRoles": [
+                "general_notice"
+              ],
+              "bestKpRoleTags": [
+                "background"
+              ],
+              "evidenceTopRoleTags": [
+                "background"
+              ],
+              "kpEvidenceGroupCounts": {},
+              "titleTypeFlags": [],
+              "roleTypeFlags": []
+            },
+            "top3": [
+              {
+                "otid": "otid_9e15810343ea44ca",
+                "title": "学在软工丨“以学生成长为中心”，软件工程学院2023年“笃行沙龙”第一期留学深造经验分享会顺利举行",
+                "displayScore": 0.8134,
+                "coarseScore": 0.8134,
+                "bestKpid": "kpid_9ef174ea41214630",
+                "eventTypes": [
+                  "材料提交"
+                ],
+                "structuredTopicIds": [],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "本科",
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "background"
+                ],
+                "evidenceTopRoleTags": [
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {},
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_467c753a650543da",
+                "title": "中山大学2023年面向香港、澳门、台湾地区招收博士、硕士研究生章程及招生学科专业目录",
+                "displayScore": 0.7974,
+                "coarseScore": 0.7974,
+                "bestKpid": "kpid_487cd34570de430e",
+                "eventTypes": [
+                  "录取公示",
+                  "考试安排",
+                  "报名通知"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "phd_general_exam"
+                ],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "rule_doc"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "schedule",
+                  "materials"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "schedule",
+                  "materials",
+                  "reminder",
+                  "thesis"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 2,
+                  "procedure": 1,
+                  "timeline": 2
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [
+                  "rule"
+                ],
+                "roleTypeFlags": [
+                  "constraint"
+                ]
+              },
+              {
+                "otid": "otid_aa024784667d4f5a",
+                "title": "2023年全国硕士研究生招生考试中山大学报考点（代码4413）网上确认公告",
+                "displayScore": 0.7556,
+                "coarseScore": 0.7556,
+                "bestKpid": "kpid_13aa965b4422479e",
+                "eventTypes": [
+                  "考试安排",
+                  "报名通知"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "schedule",
+                  "materials",
+                  "procedure"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "schedule",
+                  "materials",
+                  "procedure",
+                  "background",
+                  "reminder"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 3,
+                  "procedure": 2,
+                  "timeline": 4
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              }
+            ]
+          },
+          "compare": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 13,
+            "renderedRank": 11,
+            "renderedReciprocalRank": 0.0909,
+            "displayTop1Margin": 0.029,
+            "top1": {
+              "otid": "otid_9e15810343ea44ca",
+              "title": "学在软工丨“以学生成长为中心”，软件工程学院2023年“笃行沙龙”第一期留学深造经验分享会顺利举行",
+              "displayScore": 0.8134,
+              "coarseScore": 0.8134,
+              "bestKpid": "kpid_9ef174ea41214630",
+              "eventTypes": [
+                "材料提交"
+              ],
+              "structuredTopicIds": [],
+              "structuredIntentIds": [],
+              "degreeLevels": [
+                "本科",
+                "硕士",
+                "博士"
+              ],
+              "titleRoles": [
+                "general_notice"
+              ],
+              "bestKpRoleTags": [
+                "background"
+              ],
+              "evidenceTopRoleTags": [
+                "background"
+              ],
+              "kpEvidenceGroupCounts": {},
+              "titleTypeFlags": [],
+              "roleTypeFlags": []
+            },
+            "top3": [
+              {
+                "otid": "otid_9e15810343ea44ca",
+                "title": "学在软工丨“以学生成长为中心”，软件工程学院2023年“笃行沙龙”第一期留学深造经验分享会顺利举行",
+                "displayScore": 0.8134,
+                "coarseScore": 0.8134,
+                "bestKpid": "kpid_9ef174ea41214630",
+                "eventTypes": [
+                  "材料提交"
+                ],
+                "structuredTopicIds": [],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "本科",
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "background"
+                ],
+                "evidenceTopRoleTags": [
+                  "background"
+                ],
+                "kpEvidenceGroupCounts": {},
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_aa024784667d4f5a",
+                "title": "2023年全国硕士研究生招生考试中山大学报考点（代码4413）网上确认公告",
+                "displayScore": 0.7844,
+                "coarseScore": 0.7844,
+                "bestKpid": "kpid_13aa965b4422479e",
+                "eventTypes": [
+                  "考试安排",
+                  "报名通知"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam"
+                ],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "schedule",
+                  "materials",
+                  "procedure"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "schedule",
+                  "materials",
+                  "procedure",
+                  "background",
+                  "reminder"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 3,
+                  "procedure": 2,
+                  "timeline": 4
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_e35172c520884818",
+                "title": "计算机学院关于开展2023年研究生硕博连读工作的通知",
+                "displayScore": 0.7482,
+                "coarseScore": 0.7482,
+                "eventTypes": [
+                  "考试安排",
+                  "材料提交",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [
+                  "academic_affairs",
+                  "print_shop_services"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "deadline",
+                  "materials",
+                  "background",
+                  "schedule"
+                ],
+                "kpEvidenceGroupCounts": {},
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              }
+            ]
+          },
+          "reciprocalRankGain": -0.0321,
+          "rankGain": -6,
+          "hit1Recovered": false,
+          "hit1Lost": false,
+          "top1Changed": false
+        },
+        {
+          "caseIndex": 0,
+          "id": "blind_ext_ood_985_100_draft_v8_0001",
+          "dataset": "test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v8",
+          "query": "如果我先想了解2022年推免，整体规则和重点是什么",
+          "sourceQuery": "计算机学院（210）2022年接收推荐免试研究生复试工作细则",
+          "sourceSeedId": "ext985_004__overview__policy_overview__situational",
+          "sourceDataset": "extood_985_multischool_generation_v1",
+          "queryType": "situational",
+          "queryScope": "policy_overview",
+          "preferredGranularity": "OT",
+          "supportPattern": "ot_required",
+          "themeFamily": "推免规则",
+          "challengeTags": [
+            "推免或夏令营",
+            "policy_overview",
+            "ot_required",
+            "situational",
+            "P0_core",
+            "华中科技大学"
+          ],
+          "expectedOtid": "otid_3d8ce81a5934454e",
+          "runtimeFull": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 9,
+            "renderedRank": 8,
+            "renderedReciprocalRank": 0.125,
+            "displayTop1Margin": 0.2031,
+            "top1": {
+              "otid": "otid_07571807121c4472",
+              "title": "中山大学2022年接收推荐免试研究生办法",
+              "displayScore": 0.8495,
+              "coarseScore": 0.8495,
+              "bestKpid": "kpid_39e1bab04f5444ed",
+              "eventTypes": [
+                "推免通知",
+                "报名通知",
+                "资格要求"
+              ],
+              "structuredTopicIds": [
+                "graduate_admission"
+              ],
+              "structuredIntentIds": [
+                "master_unified_exam",
+                "master_recommend_exemption"
+              ],
+              "degreeLevels": [
+                "本科",
+                "硕士",
+                "博士"
+              ],
+              "titleRoles": [
+                "general_notice"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "publish"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "publish"
+              ],
+              "kpEvidenceGroupCounts": {
+                "timeline": 1
+              },
+              "dominantEvidenceGroup": "timeline",
+              "titleTypeFlags": [],
+              "roleTypeFlags": []
+            },
+            "top3": [
+              {
+                "otid": "otid_07571807121c4472",
+                "title": "中山大学2022年接收推荐免试研究生办法",
+                "displayScore": 0.8495,
+                "coarseScore": 0.8495,
+                "bestKpid": "kpid_39e1bab04f5444ed",
+                "eventTypes": [
+                  "推免通知",
+                  "报名通知",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam",
+                  "master_recommend_exemption"
+                ],
+                "degreeLevels": [
+                  "本科",
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "publish"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "publish"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_3136476b7f6841cc",
+                "title": "关于延期举行2022年同等学力人员申请硕士学位全国统考的通知",
+                "displayScore": 0.6464,
+                "coarseScore": 0.6464,
+                "bestKpid": "kpid_a0cdf459ab4a46c5",
+                "eventTypes": [
+                  "考试安排"
+                ],
+                "structuredTopicIds": [],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "background",
+                  "reminder"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "background",
+                  "reminder"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_8dcb848e9edd4fd2",
+                "title": "研究生院关于做好2022学年博士研究生奖助金评审工作的通知",
+                "displayScore": 0.6133,
+                "coarseScore": 0.6133,
+                "bestKpid": "kpid_54ffe21c4f7c4c35",
+                "eventTypes": [
+                  "资格要求",
+                  "非招生通知"
+                ],
+                "structuredTopicIds": [
+                  "student_funding",
+                  "graduate_admission",
+                  "undergraduate_admission"
+                ],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [],
+                "evidenceTopRoleTags": [
+                  "background",
+                  "time_expression",
+                  "deadline",
+                  "publish"
+                ],
+                "kpEvidenceGroupCounts": {},
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              }
+            ]
+          },
+          "compare": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 9,
+            "renderedRank": 6,
+            "renderedReciprocalRank": 0.1667,
+            "displayTop1Margin": 0.2339,
+            "top1": {
+              "otid": "otid_07571807121c4472",
+              "title": "中山大学2022年接收推荐免试研究生办法",
+              "displayScore": 0.9167,
+              "coarseScore": 0.9167,
+              "bestKpid": "kpid_39e1bab04f5444ed",
+              "eventTypes": [
+                "推免通知",
+                "报名通知",
+                "资格要求"
+              ],
+              "structuredTopicIds": [
+                "graduate_admission"
+              ],
+              "structuredIntentIds": [
+                "master_unified_exam",
+                "master_recommend_exemption"
+              ],
+              "degreeLevels": [
+                "本科",
+                "硕士",
+                "博士"
+              ],
+              "titleRoles": [
+                "general_notice"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "publish"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "publish"
+              ],
+              "kpEvidenceGroupCounts": {
+                "timeline": 1
+              },
+              "dominantEvidenceGroup": "timeline",
+              "titleTypeFlags": [],
+              "roleTypeFlags": []
+            },
+            "top3": [
+              {
+                "otid": "otid_07571807121c4472",
+                "title": "中山大学2022年接收推荐免试研究生办法",
+                "displayScore": 0.9167,
+                "coarseScore": 0.9167,
+                "bestKpid": "kpid_39e1bab04f5444ed",
+                "eventTypes": [
+                  "推免通知",
+                  "报名通知",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam",
+                  "master_recommend_exemption"
+                ],
+                "degreeLevels": [
+                  "本科",
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "publish"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "publish"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_3136476b7f6841cc",
+                "title": "关于延期举行2022年同等学力人员申请硕士学位全国统考的通知",
+                "displayScore": 0.6828,
+                "coarseScore": 0.6828,
+                "bestKpid": "kpid_a0cdf459ab4a46c5",
+                "eventTypes": [
+                  "考试安排"
+                ],
+                "structuredTopicIds": [],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "background",
+                  "reminder"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "background",
+                  "reminder"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_5cf6359f7bc54615",
+                "title": "关于调整2022年同等学力人员申请硕士学位全国统考考试时间的通知",
+                "displayScore": 0.6466,
+                "coarseScore": 0.6466,
+                "bestKpid": "kpid_b0451f220f424a8f",
+                "eventTypes": [
+                  "考试安排",
+                  "报名通知"
+                ],
+                "structuredTopicIds": [],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "reminder"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "publish",
+                  "reminder"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 1
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              }
+            ]
+          },
+          "reciprocalRankGain": -0.0417,
+          "rankGain": -2,
+          "hit1Recovered": false,
+          "hit1Lost": false,
+          "top1Changed": false
+        },
+        {
+          "caseIndex": 3,
+          "id": "blind_ext_ood_985_100_draft_v8_0004",
+          "dataset": "test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v8",
+          "query": "2022年华中科技大学推免整体怎么安排",
+          "sourceQuery": "计算机学院（210）2022年接收推荐免试研究生复试工作细则",
+          "sourceSeedId": "ext985_004__overview__procedure__standard",
+          "sourceDataset": "extood_985_multischool_generation_v1",
+          "queryType": "standard",
+          "queryScope": "procedure",
+          "preferredGranularity": "OT",
+          "supportPattern": "ot_required",
+          "themeFamily": "推免流程",
+          "challengeTags": [
+            "推免或夏令营",
+            "procedure",
+            "ot_required",
+            "standard",
+            "P0_core",
+            "华中科技大学"
+          ],
+          "expectedOtid": "otid_3d8ce81a5934454e",
+          "runtimeFull": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 3,
+            "renderedRank": 3,
+            "renderedReciprocalRank": 0.3333,
+            "displayTop1Margin": 0.0561,
+            "top1": {
+              "otid": "otid_10644c71240a4a58",
+              "title": "笃行沙龙（第九期）| 学长学姐分享会：升学深造",
+              "displayScore": 0.5616,
+              "coarseScore": 0.5616,
+              "bestKpid": "kpid_c28253b810924d93",
+              "eventTypes": [
+                "录取公示",
+                "复试通知",
+                "考试安排"
+              ],
+              "structuredTopicIds": [
+                "graduate_admission"
+              ],
+              "structuredIntentIds": [
+                "master_unified_exam",
+                "summer_camp",
+                "pre_recommend",
+                "master_recommend_exemption"
+              ],
+              "degreeLevels": [
+                "硕士",
+                "博士"
+              ],
+              "titleRoles": [
+                "general_notice"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "materials"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "materials"
+              ],
+              "kpEvidenceGroupCounts": {
+                "requirement": 1,
+                "timeline": 2
+              },
+              "dominantEvidenceGroup": "timeline",
+              "titleTypeFlags": [],
+              "roleTypeFlags": []
+            },
+            "top3": [
+              {
+                "otid": "otid_10644c71240a4a58",
+                "title": "笃行沙龙（第九期）| 学长学姐分享会：升学深造",
+                "displayScore": 0.5616,
+                "coarseScore": 0.5616,
+                "bestKpid": "kpid_c28253b810924d93",
+                "eventTypes": [
+                  "录取公示",
+                  "复试通知",
+                  "考试安排"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam",
+                  "summer_camp",
+                  "pre_recommend",
+                  "master_recommend_exemption"
+                ],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "materials"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "materials"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "timeline": 2
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_3136476b7f6841cc",
+                "title": "关于延期举行2022年同等学力人员申请硕士学位全国统考的通知",
+                "displayScore": 0.5056,
+                "coarseScore": 0.5056,
+                "bestKpid": "kpid_a0cdf459ab4a46c5",
+                "eventTypes": [
+                  "考试安排"
+                ],
+                "structuredTopicIds": [],
+                "structuredIntentIds": [],
+                "degreeLevels": [
+                  "硕士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "background",
+                  "reminder"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "background",
+                  "reminder",
+                  "publish"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "timeline": 2
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_3d8ce81a5934454e",
+                "title": "计算机学院（210）2022年接收推荐免试研究生复试工作细则",
+                "displayScore": 0.4999,
+                "coarseScore": 0.4999,
+                "bestKpid": "kpid_34fc8fe91f774d49",
+                "eventTypes": [
+                  "推免通知",
+                  "复试通知",
+                  "考试安排"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam",
+                  "summer_camp",
+                  "master_recommend_exemption"
+                ],
+                "degreeLevels": [
+                  "本科",
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [],
+                "evidenceTopRoleTags": [
+                  "deadline",
+                  "condition",
+                  "time_expression",
+                  "materials",
+                  "reminder"
+                ],
+                "kpEvidenceGroupCounts": {},
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              }
+            ]
+          },
+          "compare": {
+            "answered": true,
+            "latestTriggered": false,
+            "retrievalRank": 3,
+            "renderedRank": 2,
+            "renderedReciprocalRank": 0.5,
+            "displayTop1Margin": 0.0169,
+            "top1": {
+              "otid": "otid_10644c71240a4a58",
+              "title": "笃行沙龙（第九期）| 学长学姐分享会：升学深造",
+              "displayScore": 0.5616,
+              "coarseScore": 0.5616,
+              "bestKpid": "kpid_c28253b810924d93",
+              "eventTypes": [
+                "录取公示",
+                "复试通知",
+                "考试安排"
+              ],
+              "structuredTopicIds": [
+                "graduate_admission"
+              ],
+              "structuredIntentIds": [
+                "master_unified_exam",
+                "summer_camp",
+                "pre_recommend",
+                "master_recommend_exemption"
+              ],
+              "degreeLevels": [
+                "硕士",
+                "博士"
+              ],
+              "titleRoles": [
+                "general_notice"
+              ],
+              "bestKpRoleTags": [
+                "time_expression",
+                "materials"
+              ],
+              "evidenceTopRoleTags": [
+                "time_expression",
+                "materials"
+              ],
+              "kpEvidenceGroupCounts": {
+                "requirement": 1,
+                "timeline": 2
+              },
+              "dominantEvidenceGroup": "timeline",
+              "titleTypeFlags": [],
+              "roleTypeFlags": []
+            },
+            "top3": [
+              {
+                "otid": "otid_10644c71240a4a58",
+                "title": "笃行沙龙（第九期）| 学长学姐分享会：升学深造",
+                "displayScore": 0.5616,
+                "coarseScore": 0.5616,
+                "bestKpid": "kpid_c28253b810924d93",
+                "eventTypes": [
+                  "录取公示",
+                  "复试通知",
+                  "考试安排"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam",
+                  "summer_camp",
+                  "pre_recommend",
+                  "master_recommend_exemption"
+                ],
+                "degreeLevels": [
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "time_expression",
+                  "materials"
+                ],
+                "evidenceTopRoleTags": [
+                  "time_expression",
+                  "materials"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "timeline": 2
+                },
+                "dominantEvidenceGroup": "timeline",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_3d8ce81a5934454e",
+                "title": "计算机学院（210）2022年接收推荐免试研究生复试工作细则",
+                "displayScore": 0.5447,
+                "coarseScore": 0.5447,
+                "bestKpid": "kpid_34fc8fe91f774d49",
+                "eventTypes": [
+                  "推免通知",
+                  "复试通知",
+                  "考试安排"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam",
+                  "summer_camp",
+                  "master_recommend_exemption"
+                ],
+                "degreeLevels": [
+                  "本科",
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [],
+                "evidenceTopRoleTags": [
+                  "deadline",
+                  "condition",
+                  "time_expression",
+                  "materials",
+                  "reminder"
+                ],
+                "kpEvidenceGroupCounts": {},
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              },
+              {
+                "otid": "otid_07571807121c4472",
+                "title": "中山大学2022年接收推荐免试研究生办法",
+                "displayScore": 0.5441,
+                "coarseScore": 0.5441,
+                "bestKpid": "kpid_a1af65b2277644e4",
+                "eventTypes": [
+                  "推免通知",
+                  "报名通知",
+                  "资格要求"
+                ],
+                "structuredTopicIds": [
+                  "graduate_admission"
+                ],
+                "structuredIntentIds": [
+                  "master_unified_exam",
+                  "master_recommend_exemption"
+                ],
+                "degreeLevels": [
+                  "本科",
+                  "硕士",
+                  "博士"
+                ],
+                "titleRoles": [
+                  "general_notice"
+                ],
+                "bestKpRoleTags": [
+                  "materials",
+                  "background",
+                  "thesis"
+                ],
+                "evidenceTopRoleTags": [
+                  "materials",
+                  "background",
+                  "thesis",
+                  "time_expression",
+                  "publish"
+                ],
+                "kpEvidenceGroupCounts": {
+                  "requirement": 1,
+                  "timeline": 1
+                },
+                "dominantEvidenceGroup": "requirement",
+                "titleTypeFlags": [],
+                "roleTypeFlags": []
+              }
+            ]
+          },
+          "reciprocalRankGain": -0.1667,
+          "rankGain": -1,
+          "hit1Recovered": false,
+          "hit1Lost": false,
+          "top1Changed": false
+        }
+      ]
+    },
+    {
+      "baseLabel": "runtime_full",
+      "compareLabel": "no_lexical_title_type_adjustment",
+      "betterSummary": {
+        "count": 0,
+        "hit1RecoveredCount": 0,
+        "hit1LostCount": 0,
+        "avgReciprocalRankGain": 0,
+        "byDataset": [],
+        "byQueryScope": [],
+        "byPreferredGranularity": [],
+        "bySupportPattern": [],
+        "byThemeFamily": [],
+        "byDominantEvidenceGroup": [],
+        "byPrimaryBestKpRoleTag": []
+      },
+      "worseSummary": {
+        "count": 0,
+        "hit1RecoveredCount": 0,
+        "hit1LostCount": 0,
+        "avgReciprocalRankGain": 0,
+        "byDataset": [],
+        "byQueryScope": [],
+        "byPreferredGranularity": [],
+        "bySupportPattern": [],
+        "byThemeFamily": [],
+        "byDominantEvidenceGroup": [],
+        "byPrimaryBestKpRoleTag": []
+      },
+      "betterCases": [],
+      "worseCases": []
+    }
+  ],
+  "sharedHit1Protection": {
+    "bothProtectedHit1Summary": {
+      "count": 0,
+      "hit1RecoveredCount": 0,
+      "hit1LostCount": 0,
+      "avgReciprocalRankGain": 0,
+      "byDataset": [],
+      "byQueryScope": [],
+      "byPreferredGranularity": [],
+      "bySupportPattern": [],
+      "byThemeFamily": [],
+      "byDominantEvidenceGroup": [],
+      "byPrimaryBestKpRoleTag": []
+    },
+    "structuredOnlyProtectedHit1Summary": {
+      "count": 0,
+      "hit1RecoveredCount": 0,
+      "hit1LostCount": 0,
+      "avgReciprocalRankGain": 0,
+      "byDataset": [],
+      "byQueryScope": [],
+      "byPreferredGranularity": [],
+      "bySupportPattern": [],
+      "byThemeFamily": [],
+      "byDominantEvidenceGroup": [],
+      "byPrimaryBestKpRoleTag": []
+    },
+    "lexicalOnlyProtectedHit1Summary": {
+      "count": 0,
+      "hit1RecoveredCount": 0,
+      "hit1LostCount": 0,
+      "avgReciprocalRankGain": 0,
+      "byDataset": [],
+      "byQueryScope": [],
+      "byPreferredGranularity": [],
+      "bySupportPattern": [],
+      "byThemeFamily": [],
+      "byDominantEvidenceGroup": [],
+      "byPrimaryBestKpRoleTag": []
+    },
+    "bothProtectedHit1Cases": [],
+    "structuredOnlyProtectedHit1Cases": [],
+    "lexicalOnlyProtectedHit1Cases": []
+  }
+}

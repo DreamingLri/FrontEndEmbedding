@@ -45,7 +45,6 @@ import {
     resolveEvalDatasetConfig,
     type EvalDatasetCase,
     type EvalDatasetConfig,
-    type EvalDatasetGroup,
 } from "./eval_shared.ts";
 import {
     embedQueries as embedFrontendQueries,
@@ -145,7 +144,7 @@ type NormalizedOtidEvalTarget = {
 const CURRENT_TIMESTAMP = Date.now() / 1000;
 const RESULTS_DIR = path.resolve(process.cwd(), "./scripts/results");
 const DATASET_BUNDLE = (
-    process.env.SUASK_GRANULARITY_RUNTIME_ABLATION_BUNDLE || "retrieval_matched_v1"
+    process.env.SUASK_GRANULARITY_RUNTIME_ABLATION_BUNDLE || "current_mainline"
 )
     .trim()
     .toLowerCase();
@@ -720,51 +719,9 @@ function safePercent(numerator: number, denominator: number): number {
 
 function resolveDatasetConfigForAblation(): EvalDatasetConfig {
     if (DATASET_BUNDLE === "retrieval_matched_v1") {
-        const groups: EvalDatasetGroup[] = [
-            {
-                key: "main_bench_120",
-                label: "Main",
-                role: "benchmark",
-                sources: [
-                    {
-                        path: "../Backend/test/test_dataset_granularity/test_dataset_granularity_main_benchmark_v2_reviewed_userized_v1.json",
-                        datasetLabel: "main_bench_120",
-                    },
-                ],
-            },
-            {
-                key: "in_domain_holdout_50",
-                label: "InDomain",
-                role: "in_domain_holdout",
-                sources: [
-                    {
-                        path: "../Backend/test/test_dataset_granularity/test_dataset_granularity_in_domain_generalization_60_reviewed_userized_retrieval_matched_v1.json",
-                        datasetLabel: "in_domain_holdout_50",
-                    },
-                ],
-            },
-            {
-                key: "matched_ext_ood_60",
-                label: "ExtOOD",
-                role: "external_ood_holdout",
-                sources: [
-                    {
-                        path: "../Backend/test/test_dataset_granularity/test_dataset_granularity_external_matched_ood_60_reviewed_userized_retrieval_matched_v1.json",
-                        datasetLabel: "matched_ext_ood_60",
-                    },
-                ],
-            },
-        ];
-        return {
-            datasetVersion: "granularity",
-            datasetMode: "named_group",
-            datasetKey: "granularity_retrieval_matched_v1_bundle",
-            datasetLabel: "Main+InDomain+ExtOOD(retrieval_matched_v1)",
-            groups,
-            tuneSources: groups.flatMap((group) => group.sources),
-            holdoutSources: [],
-            allSources: groups.flatMap((group) => group.sources),
-        };
+        throw new Error(
+            'Dataset bundle "retrieval_matched_v1" has been archived together with the retired OOD-60 line.',
+        );
     }
 
     return resolveEvalDatasetConfig({

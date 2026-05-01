@@ -47,7 +47,6 @@ import {
     resolveEvalDatasetConfig,
     type EvalDatasetCase,
     type EvalDatasetConfig,
-    type EvalDatasetGroup,
 } from "./eval_shared.ts";
 import {
     embedQueries as embedFrontendQueries,
@@ -347,13 +346,28 @@ function getNumericField(
 function resolveBlindOodDatasetTargetKey():
     | GranularityDatasetTargetKey
     | undefined {
+    const archivedBundleNames = new Set([
+        "blind_ext_ood_60",
+        "ext_ood_blind_60",
+        "blind_extood_60",
+        "blindextood60",
+    ]);
+    if (archivedBundleNames.has(DATASET_BUNDLE)) {
+        throw new Error(
+            `Dataset bundle "${DATASET_BUNDLE}" has been archived. Use "blind_ext_ood_100" instead.`,
+        );
+    }
+
     const bundleToTargetKey: Partial<
         Record<string, GranularityDatasetTargetKey>
     > = {
-        blind_ext_ood_60: "ext_ood_blind_60",
-        ext_ood_blind_60: "ext_ood_blind_60",
-        blind_extood_60: "ext_ood_blind_60",
-        blindextood60: "ext_ood_blind_60",
+        blind_ext_ood_100: "blind_ext_ood_100",
+        blindextood100: "blind_ext_ood_100",
+        blind_extood_100: "blind_ext_ood_100",
+        extood_985_aligned_100: "extood_985_aligned_100",
+        extood985_aligned_100: "extood_985_aligned_100",
+        blind_ext_ood_985_100: "extood_985_aligned_100",
+        blindextood985: "extood_985_aligned_100",
         hard_ood_blind_30: "hard_ood_blind_30",
         blind_hard_ood_30: "hard_ood_blind_30",
         blind_hardood_30: "hard_ood_blind_30",
@@ -373,51 +387,9 @@ function resolveDatasetConfigForCaseDiff(): EvalDatasetConfig {
     }
 
     if (DATASET_BUNDLE === "retrieval_matched_v1") {
-        const groups: EvalDatasetGroup[] = [
-            {
-                key: "main_bench_120",
-                label: "Main",
-                role: "benchmark",
-                sources: [
-                    {
-                        path: "../Backend/test/test_dataset_granularity/test_dataset_granularity_main_benchmark_v2_reviewed_userized_v1.json",
-                        datasetLabel: "main_bench_120",
-                    },
-                ],
-            },
-            {
-                key: "in_domain_holdout_50",
-                label: "InDomain",
-                role: "in_domain_holdout",
-                sources: [
-                    {
-                        path: "../Backend/test/test_dataset_granularity/test_dataset_granularity_in_domain_generalization_60_reviewed_userized_retrieval_matched_v1.json",
-                        datasetLabel: "in_domain_holdout_50",
-                    },
-                ],
-            },
-            {
-                key: "matched_ext_ood_60",
-                label: "ExtOOD",
-                role: "external_ood_holdout",
-                sources: [
-                    {
-                        path: "../Backend/test/test_dataset_granularity/test_dataset_granularity_external_matched_ood_60_reviewed_userized_retrieval_matched_v1.json",
-                        datasetLabel: "matched_ext_ood_60",
-                    },
-                ],
-            },
-        ];
-        return {
-            datasetVersion: "granularity",
-            datasetMode: "named_group",
-            datasetKey: "granularity_retrieval_matched_v1_bundle",
-            datasetLabel: "Main+InDomain+ExtOOD(retrieval_matched_v1)",
-            groups,
-            tuneSources: groups.flatMap((group) => group.sources),
-            holdoutSources: [],
-            allSources: groups.flatMap((group) => group.sources),
-        };
+        throw new Error(
+            'Dataset bundle "retrieval_matched_v1" has been archived together with the retired OOD-60 line.',
+        );
     }
 
     const blindTargetKey = resolveBlindOodDatasetTargetKey();

@@ -268,9 +268,9 @@ const AVAILABLE_DATASET_TARGETS = (
 const OPTIONAL_DATASET_TARGETS = (
     [
         resolveDatasetTarget("main_bench_120"),
-        resolveDatasetTarget("in_domain_holdout_50"),
-        resolveDatasetTarget("ext_ood_blind_60"),
-        resolveDatasetTarget("external_ood_50"),
+        resolveDatasetTarget("in_domain_generalization_100"),
+        resolveDatasetTarget("blind_ext_ood_100"),
+        resolveDatasetTarget("extood_985_aligned_100"),
         resolveDatasetTarget("external_ood_holdout_30"),
         resolveDatasetTarget("external_ood_hard_30"),
         resolveDatasetTarget("hard_ood_v2_diag_top30"),

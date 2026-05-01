@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 
-export const DEFAULT_MAIN_DB_VERSION = "main_v2_plus";
+export const DEFAULT_MAIN_DB_VERSION = "main_v2_plus_extood_noai_v1";
 export const MAIN_DB_VERSION =
     process.env.SUASK_MAIN_DB_VERSION || DEFAULT_MAIN_DB_VERSION;
 

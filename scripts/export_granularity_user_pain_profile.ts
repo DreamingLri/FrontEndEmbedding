@@ -48,11 +48,11 @@ const DEFAULT_DATASETS: DatasetSpec[] = [
     },
     {
         label: "InDomain",
-        file: CURRENT_EVAL_DATASET_FILES.granularityInDomainHoldout50,
+        file: CURRENT_EVAL_DATASET_FILES.granularityInDomainGeneralization100,
     },
     {
         label: "BlindExtOOD",
-        file: CURRENT_EVAL_DATASET_FILES.granularityExtOodBlind60,
+        file: CURRENT_EVAL_DATASET_FILES.granularityBlindExtOod100,
     },
 ];
 
