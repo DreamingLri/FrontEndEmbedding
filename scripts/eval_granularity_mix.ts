@@ -16,7 +16,10 @@ import {
     type QConfusionMode,
 } from "../src/worker/vector_engine.ts";
 import { fmmTokenize } from "../src/worker/fmm_tokenize.ts";
-import { FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET } from "../src/worker/search_pipeline.ts";
+import {
+    FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET,
+    resolvePipelinePresetByName,
+} from "../src/worker/search_pipeline.ts";
 import {
     ACTIVE_MAIN_DB_VERSION,
     DEFAULT_QUERY_EMBED_BATCH_SIZE,
@@ -46,7 +49,11 @@ import { updateCurrentResultRegistry } from "./result_registry.ts";
 type DatasetCase = EvalDatasetCase;
 type GranularityType = "Q" | "KP" | "OT";
 type KPCandidateRerankMode = "none" | "heuristic" | "feature_heuristic";
-type DocPostRerankMode = "none" | "kp_heuristic_delta" | "time_anchor";
+type DocPostRerankMode =
+    | "none"
+    | "kp_heuristic_delta"
+    | "time_anchor"
+    | "title_family_anchor";
 type WeightConfig = {
     Q: number;
     KP: number;
@@ -397,8 +404,11 @@ const KP_AGGREGATION_MODE = (
             ? "sum"
             : "max"
 ) as KPAggregationMode;
-const FRONTEND_RUNTIME_RETRIEVAL_DEFAULTS =
-    FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval;
+const PIPELINE_PRESET_NAME =
+    process.env.SUASK_PIPELINE_PRESET ||
+    FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.name;
+const EVAL_PRESET = resolvePipelinePresetByName(PIPELINE_PRESET_NAME);
+const FRONTEND_RUNTIME_RETRIEVAL_DEFAULTS = EVAL_PRESET.retrieval;
 const LEXICAL_BONUS_MODE = (
     process.env.SUASK_LEXICAL_BONUS_MODE === "max" ? "max" : "sum"
 ) as LexicalBonusMode;
@@ -428,6 +438,8 @@ const DOC_POST_RERANK_MODE = (
         ? "kp_heuristic_delta"
         : process.env.SUASK_DOC_POST_RERANK_MODE === "time_anchor"
           ? "time_anchor"
+        : process.env.SUASK_DOC_POST_RERANK_MODE === "title_family_anchor"
+          ? "title_family_anchor"
         : "none"
 ) as DocPostRerankMode;
 const DOC_POST_RERANK_WEIGHT = Number.parseFloat(
@@ -2367,9 +2379,18 @@ function computeSupportCoverageState(
 function rerankMatchesForDocumentMetrics(
     item: QueryCacheItem,
     matches: readonly EvalSearchMatch[],
+    activeTypes: readonly GranularityType[],
 ): EvalSearchMatch[] {
     const shouldApplyMinimalPhaseAnchor =
         MINIMAL_BASELINE_MODE && MINIMAL_ADD_PHASE;
+    const enableTitleFamilyAnchor =
+        DOC_POST_RERANK_MODE === "title_family_anchor" &&
+        activeTypes.includes("Q") &&
+        activeTypes.includes("KP") &&
+        activeTypes.includes("OT");
+    const replacePhaseAnchorWithTitleFamilyAnchor =
+        enableTitleFamilyAnchor &&
+        isAnchoredShortScheduleQueryForEval(item);
     if (MINIMAL_BASELINE_MODE && !shouldApplyMinimalPhaseAnchor) {
         return [...matches];
     }
@@ -2386,7 +2407,10 @@ function rerankMatchesForDocumentMetrics(
         .map((match) => {
             let delta = 0;
 
-            if (shouldApplyMinimalPhaseAnchor) {
+            if (
+                shouldApplyMinimalPhaseAnchor &&
+                !replacePhaseAnchorWithTitleFamilyAnchor
+            ) {
                 delta += computePhaseAnchorDocDelta(item, match);
             }
             if (DOC_POST_RERANK_MODE === "kp_heuristic_delta") {
@@ -2400,7 +2424,9 @@ function rerankMatchesForDocumentMetrics(
                           )
                         : 0;
             } else if (DOC_POST_RERANK_MODE === "time_anchor") {
-                delta = computeTimeAnchorDocDelta(item, match);
+                delta += computeTimeAnchorDocDelta(item, match);
+            } else if (enableTitleFamilyAnchor) {
+                delta += computeTitleFamilyAnchorDocDelta(item, match);
             }
 
             return {
@@ -2449,6 +2475,152 @@ function computeTimeAnchorDocDelta(
     }
 
     return delta;
+}
+
+function isAnchoredShortScheduleQueryForEval(item: QueryCacheItem): boolean {
+    const sourceQuery = item.testCase.query || item.referenceQueryText || item.effectiveQueryText;
+    const normalized = sourceQuery.replace(/\s+/g, "");
+    if (
+        normalized.length > 18 ||
+        /[，。；！？,.!?]/.test(sourceQuery) ||
+        item.queryIntent.years.length === 0
+    ) {
+        return false;
+    }
+
+    if (
+        !/时间安排|时间节点|日程安排|截止时间|截止日期|什么时候|何时|哪天|几月几日|时间|日期|安排|截止/.test(
+            normalized,
+        )
+    ) {
+        return false;
+    }
+
+    if (!/导师/.test(normalized)) {
+        return false;
+    }
+
+    // Queries with explicit half-year or semester anchors should remain driven
+    // by time alignment instead of generic title-family matching.
+    if (/上半年|下半年|春季|秋季|第一学期|第二学期/.test(normalized)) {
+        return false;
+    }
+
+    const residual = normalized
+        .replace(/20\d{2}/g, "")
+        .replace(
+            /时间安排|时间节点|日程安排|截止时间|截止日期|什么时候|何时|哪天|几月几日|时间|日期|安排|截止/g,
+            "",
+        )
+        .replace(/[0-9]/g, "");
+
+    return residual.length >= 3;
+}
+
+function extractTitleFamilyAnchorTokens(item: QueryCacheItem): string[] {
+    const stopwords = new Set([
+        "时间",
+        "安排",
+        "时间安排",
+        "时间节点",
+        "日程安排",
+        "截止",
+        "截止时间",
+        "截止日期",
+        "日期",
+        "时候",
+        "什么时候",
+        "何时",
+        "哪天",
+        "几月几日",
+        "同等学力",
+        "临床医学",
+        "口腔医学",
+        "博士",
+        "硕士",
+        "学位",
+        "申请学位",
+        "论文",
+        "答辩",
+        "通知",
+        "材料",
+        "材料清单",
+    ]);
+    const genericFamilyFragmentPattern =
+        /同等学力|临床医学|口腔医学|博士专业学位|硕士专业学位|专业学位|申请博士学位|申请硕士学位|申请学位|博士|硕士|学位|论文|答辩|通知|材料|清单|人员|申请人|事项/g;
+
+    return Array.from(
+        new Set(
+            item.queryWords.filter((word) => {
+                const normalized = word.trim();
+                const residual = normalized
+                    .replace(genericFamilyFragmentPattern, "")
+                    .replace(/\d+/g, "");
+                return (
+                    normalized.length >= 2 &&
+                    !/^\d+$/.test(normalized) &&
+                    !/^20\d{2}$/.test(normalized) &&
+                    !stopwords.has(normalized) &&
+                    residual.length > 0
+                );
+            }),
+        ),
+    );
+}
+
+function computeTitleFamilyAnchorDocDelta(
+    item: QueryCacheItem,
+    match: EvalSearchMatch,
+): number {
+    if (!isAnchoredShortScheduleQueryForEval(item)) {
+        return 0;
+    }
+
+    const articleAnchor = articleTimeAnchorMap.get(match.otid);
+    if (!articleAnchor) {
+        return 0;
+    }
+
+    const anchorTokens = extractTitleFamilyAnchorTokens(item);
+    if (anchorTokens.length === 0) {
+        return 0;
+    }
+
+    const normalizedTitle = articleAnchor.title.replace(/\s+/g, "");
+    const matchedAnchorCount = anchorTokens.filter((token) =>
+        normalizedTitle.includes(token),
+    ).length;
+    const matchRatio = matchedAnchorCount / anchorTokens.length;
+    const queryMentionsRegistration = /报名|报考/.test(item.effectiveQueryText);
+
+    let delta = 0;
+    if (matchRatio >= 1) {
+        delta += 1.0;
+    } else if (matchRatio >= 0.5) {
+        delta += 0.45;
+    } else {
+        delta -= 0.9;
+    }
+
+    if (
+        !queryMentionsRegistration &&
+        /报名|报考/.test(normalizedTitle)
+    ) {
+        delta -= 0.35;
+    }
+
+    if (/导师/.test(item.effectiveQueryText) && !/导师/.test(normalizedTitle)) {
+        delta -= 0.4;
+    }
+
+    if (
+        /导师|申请/.test(normalizedTitle) &&
+        /公示|名单/.test(normalizedTitle)
+    ) {
+        delta += 0.2;
+    }
+
+    return Math.max(-1.5, Math.min(1.5, delta));
 }
 
 function computePhaseAnchorDocDelta(
@@ -2523,6 +2695,14 @@ function formatDocPostRerankSlug(): string {
                 ? DOC_POST_RERANK_WEIGHT
                 : 0.35;
         return `timeanchor-w${safeWeight.toFixed(2).replace(".", "")}`;
+    }
+
+    if (DOC_POST_RERANK_MODE === "title_family_anchor") {
+        const safeWeight =
+            Number.isFinite(DOC_POST_RERANK_WEIGHT) && DOC_POST_RERANK_WEIGHT >= 0
+                ? DOC_POST_RERANK_WEIGHT
+                : 0.35;
+        return `titlefamily-w${safeWeight.toFixed(2).replace(".", "")}`;
     }
 
     return "none";
@@ -2737,6 +2917,9 @@ function collectCaseDetails(
         Number.isFinite(BAD_CASE_TOP_MATCHES) && BAD_CASE_TOP_MATCHES > 0
             ? BAD_CASE_TOP_MATCHES
             : 5;
+    const activeTypes = Array.from(
+        new Set(filteredMetadata.map((item) => item.type)),
+    ) as GranularityType[];
 
     const details = queryCache.map((item) => {
         const otidEvalTarget = resolveOtidEvalTarget(item.testCase);
@@ -2744,8 +2927,10 @@ function collectCaseDetails(
         const result = searchAndRank({
             queryVector: item.queryVector,
             querySparse: item.querySparse,
+            queryWords: item.queryWords,
             queryYearWordIds: item.queryYearWordIds,
             queryIntent: item.queryIntent,
+            rawQueryText: item.effectiveQueryText,
             queryScopeHint: item.testCase.query_scope,
             metadata: filteredMetadata as Metadata[],
             vectorMatrix,
@@ -2786,16 +2971,25 @@ function collectCaseDetails(
             qConfusionWeight: Number.isFinite(EFFECTIVE_Q_CONFUSION_WEIGHT)
                 ? EFFECTIVE_Q_CONFUSION_WEIGHT
                 : undefined,
+            conditionalKpDownweight:
+                EVAL_PRESET.retrieval.conditionalKpDownweight,
+            conditionalOtDownweight:
+                EVAL_PRESET.retrieval.conditionalOtDownweight,
             enableExplicitYearFilter: !MINIMAL_BASELINE_MODE || MINIMAL_ADD_YEAR,
             minimalMode: MINIMAL_BASELINE_MODE,
         });
         const docRerankedMatches = rerankMatchesForDocumentMetrics(
             item,
             result.matches,
+            activeTypes,
         );
         const weakDocRerankedMatches =
             docRerankedMatches.length === 0 && result.weakMatches.length > 0
-                ? rerankMatchesForDocumentMetrics(item, result.weakMatches)
+                ? rerankMatchesForDocumentMetrics(
+                      item,
+                      result.weakMatches,
+                      activeTypes,
+                  )
                 : [];
         const exportDocMatches =
             docRerankedMatches.length > 0
@@ -2997,6 +3191,9 @@ function evaluateQueryCache(
     if (!vectorMatrix) {
         throw new Error("Vector matrix not initialized");
     }
+    const activeTypes = Array.from(
+        new Set(filteredMetadata.map((item) => item.type)),
+    ) as GranularityType[];
 
     const metricsSeed: Record<
         string,
@@ -3077,8 +3274,10 @@ function evaluateQueryCache(
         const result = searchAndRank({
             queryVector: item.queryVector,
             querySparse: item.querySparse,
+            queryWords: item.queryWords,
             queryYearWordIds: item.queryYearWordIds,
             queryIntent: item.queryIntent,
+            rawQueryText: item.effectiveQueryText,
             queryScopeHint: item.testCase.query_scope,
             metadata: filteredMetadata as Metadata[],
             vectorMatrix,
@@ -3119,12 +3318,17 @@ function evaluateQueryCache(
             qConfusionWeight: Number.isFinite(EFFECTIVE_Q_CONFUSION_WEIGHT)
                 ? EFFECTIVE_Q_CONFUSION_WEIGHT
                 : undefined,
+            conditionalKpDownweight:
+                EVAL_PRESET.retrieval.conditionalKpDownweight,
+            conditionalOtDownweight:
+                EVAL_PRESET.retrieval.conditionalOtDownweight,
             enableExplicitYearFilter: !MINIMAL_BASELINE_MODE || MINIMAL_ADD_YEAR,
             minimalMode: MINIMAL_BASELINE_MODE,
         });
         const docRerankedMatches = rerankMatchesForDocumentMetrics(
             item,
             result.matches,
+            activeTypes,
         );
         const otidCoverageState =
             otidEvalTarget.mode === "required_otid_groups"
@@ -3707,7 +3911,7 @@ async function main() {
         experimentTrack: EXPERIMENT_TRACK !== "default" ? EXPERIMENT_TRACK : undefined,
         pipelinePresetName:
             EXPERIMENT_TRACK === "frontend_runtime"
-                ? FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.name
+                ? EVAL_PRESET.name
                 : undefined,
         minimalBaselineMode: MINIMAL_BASELINE_MODE || undefined,
         minimalAddYear: MINIMAL_ADD_YEAR || undefined,
@@ -3861,7 +4065,7 @@ async function main() {
                 : usesFrozenDatasetBundle
                   ? `当前结果已切换到主线三冻结集口径 ${DATASET_CONFIG.datasetLabel} 导出。`
                 : EXPERIMENT_TRACK === "frontend_runtime"
-                  ? `当前结果已对齐前端 runtime preset ${FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.name}，基于单冻结集入口 ${DATASET_CONFIG.datasetLabel} 导出。`
+                  ? `当前结果已对齐前端 runtime preset ${EVAL_PRESET.name}，基于单冻结集入口 ${DATASET_CONFIG.datasetLabel} 导出。`
                   : `当前结果基于单冻结集入口 ${DATASET_CONFIG.datasetLabel} 导出，不再默认按 tune/holdout 切分。`,
         });
     } else {

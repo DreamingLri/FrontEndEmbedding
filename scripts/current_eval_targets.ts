@@ -1,6 +1,6 @@
 export const CURRENT_EVAL_DATASET_FILES = {
     // 当前 granularity 正式入口：
-    // Main v7 / InDomain v10 / ExtOOD985 v8
+    // Main v7 / InDomain v10 / ExtOOD985 v9
     // `blind_ext_ood_100` 保留为兼容 key，但底层实体文件已切到当前
     // ExtOOD985Aligned100；旧 BlindExtOOD v4 已降级为历史材料。
     granularityMain120:
@@ -8,9 +8,9 @@ export const CURRENT_EVAL_DATASET_FILES = {
     granularityInDomainGeneralization100:
         "../Backend/test/test_dataset_granularity/test_dataset_granularity_in_domain_generalization_aligned_100_draft_v10.json",
     granularityBlindExtOod100:
-        "../Backend/test/test_dataset_granularity/test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v8.json",
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v9.json",
     granularityExtOod985Aligned100:
-        "../Backend/test/test_dataset_granularity/test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v8.json",
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v9.json",
     // Archived 2026-04-28:
     // - granularityInDomainHoldout50
     // - granularityExtOodBlind60

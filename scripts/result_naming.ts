@@ -114,20 +114,20 @@ const DATASET_PROFILE_MAP: Record<string, NamedDatasetProfile> = {
     },
     blind_ext_ood_100: {
         canonicalName:
-            "test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v8",
-        alias: "gran_extood985_aligned_v8",
+            "test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v9",
+        alias: "gran_extood985_aligned_v9",
         displayName: "ExtOOD985Aligned100",
     },
     extood_985_aligned_100: {
         canonicalName:
-            "test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v8",
-        alias: "gran_extood985_aligned_v8",
+            "test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v9",
+        alias: "gran_extood985_aligned_v9",
         displayName: "ExtOOD985Aligned100",
     },
-    test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v8: {
+    test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v9: {
         canonicalName:
-            "test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v8",
-        alias: "gran_extood985_aligned_v8",
+            "test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v9",
+        alias: "gran_extood985_aligned_v9",
         displayName: "ExtOOD985Aligned100",
     },
     test_dataset_granularity_blind_ext_ood_generalization_aligned_100_draft_v4: {

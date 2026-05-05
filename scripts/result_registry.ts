@@ -80,6 +80,8 @@ const SLOT_BY_DATASET_NAME: Partial<Record<string, CurrentResultSlot>> = {
         "granularity_in_domain_generalization_100_current",
     test_dataset_granularity_in_domain_generalization_aligned_100_draft_v6:
         "granularity_in_domain_generalization_100_current",
+    test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v9:
+        "granularity_blind_ext_ood_100_current",
     test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v8:
         "granularity_blind_ext_ood_100_current",
     test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v7:
@@ -110,6 +112,7 @@ const SLOT_BY_DATASET_NAME: Partial<Record<string, CurrentResultSlot>> = {
         "granularity_in_domain_generalization_100_current",
     gran_indomain_generalization_v9:
         "granularity_in_domain_generalization_100_current",
+    gran_extood985_aligned_v9: "granularity_blind_ext_ood_100_current",
     gran_extood985_aligned_v8: "granularity_blind_ext_ood_100_current",
     gran_extood985_aligned_v7: "granularity_blind_ext_ood_100_current",
     gran_extood985_aligned_v6: "granularity_blind_ext_ood_100_current",

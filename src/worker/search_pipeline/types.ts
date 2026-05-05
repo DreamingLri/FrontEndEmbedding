@@ -1,5 +1,7 @@
 import type {
     BM25Stats,
+    ConditionalKpDownweightConfig,
+    ConditionalOtDownweightConfig,
     KPAggregationMode,
     KPRoleRerankMode,
     LexicalBonusMode,
@@ -36,6 +38,8 @@ export type PipelinePreset = {
         kpRoleDocWeight: number;
         qConfusionMode: QConfusionMode;
         qConfusionWeight: number;
+        conditionalKpDownweight?: ConditionalKpDownweightConfig;
+        conditionalOtDownweight?: ConditionalOtDownweightConfig;
         useQueryExpansion: boolean;
         useTopicPartition: boolean;
         enableExplicitYearFilter: boolean;

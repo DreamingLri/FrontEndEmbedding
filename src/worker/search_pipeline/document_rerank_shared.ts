@@ -36,13 +36,13 @@ const TITLE_RULE_DOC_PATTERN =
 const TITLE_PROCESS_NOTICE_PATTERN =
     /(活动报名通知|报名通知|预报名|综合考核通知|复试通知|考核通知|考核安排|申请通知|报名安排)/;
 const TITLE_OUTCOME_PATTERN =
-    /(结果公示|录取结果|拟录取|公示|名单|递补|增补|入营通知)/;
+    /(结果公示|录取结果|拟录取|公示|名单|递补|增补|入营通知|复试成绩|综合考核成绩|考核成绩|评审成绩|审核结果|资格审核结果|成绩公示)/;
 const TITLE_PREAPPLY_PATTERN = /预报名/;
 const TITLE_TRANSFER_PATTERN = /调剂/;
 const TITLE_CANDIDATE_LIST_PATTERN =
     /进入综合考核考生名单|综合考核考生名单|进入综合考核名单/;
 const TITLE_REVIEW_RESULT_PATTERN =
-    /(复试结果|综合考核结果|结果公示|拟录取|录取结果|公示|名单)/;
+    /(复试结果|综合考核结果|结果公示|拟录取|录取结果|公示|名单|复试成绩|综合考核成绩|考核成绩|评审成绩|审核结果|资格审核结果|成绩公示)/;
 const TITLE_SUMMER_CAMP_PATTERN = /夏令营/;
 const TITLE_TUIMIAN_PATTERN = /推免|推荐免试/;
 const TITLE_DOCTORAL_PATTERN = /博士/;
@@ -267,7 +267,7 @@ function resolveDocumentRecencyKey(
 export function extractInstitutionEntities(text: string): string[] {
     const normalized = normalizePatternText(text);
     const matches = normalized.match(
-        /[\u4e00-\u9fa5A-Za-z0-9]{2,24}(?:学院|实验室|医院|研究院|研究中心|中心|系|部)/g,
+        /[\u4e00-\u9fa5A-Za-z0-9]{2,24}(?:大学|学院|实验室|医院|研究院|研究中心|中心|系|部)/g,
     );
     return dedupeStrings(matches || []);
 }

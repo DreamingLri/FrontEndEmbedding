@@ -1,0 +1,2105 @@
+{
+  "generatedAt": "2026-05-01T08:27:10.685Z",
+  "datasetBundle": "current_mainline",
+  "datasetKey": "granularity_domain_generalization_bundle",
+  "datasetLabel": "Main120+InDomain100+ExtOOD985Aligned100",
+  "datasetGroups": [
+    {
+      "key": "main_bench_120",
+      "label": "Main",
+      "role": "benchmark",
+      "size": 120,
+      "sources": [
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_main_generalization_aligned_120_draft_v7.json"
+      ]
+    },
+    {
+      "key": "in_domain_generalization_100",
+      "label": "InDomain100",
+      "role": "in_domain_holdout",
+      "size": 100,
+      "sources": [
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_in_domain_generalization_aligned_100_draft_v10.json"
+      ]
+    },
+    {
+      "key": "blind_ext_ood_100",
+      "label": "ExtOOD985Aligned100",
+      "role": "external_ood_holdout",
+      "size": 100,
+      "sources": [
+        "../Backend/test/test_dataset_granularity/test_dataset_granularity_blind_ext_ood_985_aligned_100_draft_v8.json"
+      ]
+    }
+  ],
+  "presetName": "frontend_research_sync_v1",
+  "variants": [
+    {
+      "label": "runtime_full",
+      "note": "Current frontend runtime display chain.",
+      "flags": {
+        "enablePhaseAnchorBoost": false,
+        "enableTitleIntentAdjustments": true,
+        "enableTitleIntentConfusionGate": true,
+        "enableStructuredQueryPlanDocRoleAdjustments": true,
+        "enableStructuredKpRoleEvidenceAdjustments": true,
+        "enableLexicalTitleIntentAdjustments": true,
+        "enableLexicalTitleTypeAdjustments": false,
+        "enableThemeSpecificTitleAdjustments": false,
+        "enableDoctoralThemeTitleAdjustments": false,
+        "enableTuimianThemeTitleAdjustments": false,
+        "enableSummerCampThemeTitleAdjustments": false,
+        "enableTransferThemeTitleAdjustments": false,
+        "enableCompressedKeywordTitleAdjustments": false,
+        "enableCoverageAdjustments": true,
+        "enableLatestVersionRerank": true
+      },
+      "metricsByDataset": {
+        "main_bench_120": {
+          "retrieval": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 70.83,
+            "hitAt3": 86.67,
+            "hitAt5": 90,
+            "mrr": 0.7954,
+            "latestTriggeredRate": 0.83
+          },
+          "rendered": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 71.67,
+            "hitAt3": 86.67,
+            "hitAt5": 90.83,
+            "mrr": 0.8018,
+            "latestTriggeredRate": 0.83
+          },
+          "displayLiftHitAt1": 0.84,
+          "displayLiftMRR": 0.0064
+        },
+        "in_domain_generalization_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 85,
+            "hitAt5": 91,
+            "mrr": 0.7742,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 86,
+            "hitAt5": 89,
+            "mrr": 0.7777,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0.0035
+        },
+        "blind_ext_ood_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 71,
+            "mrr": 0.6779,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 73,
+            "mrr": 0.6834,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0.0055
+        }
+      },
+      "combined": {
+        "retrieval": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.19,
+          "hitAt3": 81.25,
+          "hitAt5": 84.38,
+          "mrr": 0.7521,
+          "latestTriggeredRate": 0.94
+        },
+        "rendered": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.5,
+          "hitAt3": 81.56,
+          "hitAt5": 84.69,
+          "mrr": 0.7573,
+          "latestTriggeredRate": 0.94
+        },
+        "displayLiftHitAt1": 0.31,
+        "displayLiftMRR": 0.0052
+      }
+    },
+    {
+      "label": "no_title_intent_confusion_gate",
+      "note": "Disable ambiguity-aware display downscaling and keep full title-intent rescue.",
+      "flags": {
+        "enablePhaseAnchorBoost": false,
+        "enableTitleIntentAdjustments": true,
+        "enableTitleIntentConfusionGate": false,
+        "enableStructuredQueryPlanDocRoleAdjustments": true,
+        "enableStructuredKpRoleEvidenceAdjustments": true,
+        "enableLexicalTitleIntentAdjustments": true,
+        "enableLexicalTitleTypeAdjustments": false,
+        "enableThemeSpecificTitleAdjustments": false,
+        "enableDoctoralThemeTitleAdjustments": false,
+        "enableTuimianThemeTitleAdjustments": false,
+        "enableSummerCampThemeTitleAdjustments": false,
+        "enableTransferThemeTitleAdjustments": false,
+        "enableCompressedKeywordTitleAdjustments": false,
+        "enableCoverageAdjustments": true,
+        "enableLatestVersionRerank": true
+      },
+      "metricsByDataset": {
+        "main_bench_120": {
+          "retrieval": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 70.83,
+            "hitAt3": 86.67,
+            "hitAt5": 90,
+            "mrr": 0.7954,
+            "latestTriggeredRate": 0.83
+          },
+          "rendered": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 71.67,
+            "hitAt3": 87.5,
+            "hitAt5": 90,
+            "mrr": 0.8022,
+            "latestTriggeredRate": 0.83
+          },
+          "displayLiftHitAt1": 0.84,
+          "displayLiftMRR": 0.0068
+        },
+        "in_domain_generalization_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 85,
+            "hitAt5": 91,
+            "mrr": 0.7742,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 66,
+            "hitAt3": 86,
+            "hitAt5": 89,
+            "mrr": 0.7727,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": -1,
+          "displayLiftMRR": -0.0015
+        },
+        "blind_ext_ood_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 71,
+            "mrr": 0.6779,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 72,
+            "hitAt5": 74,
+            "mrr": 0.6832,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0.0053
+        }
+      },
+      "combined": {
+        "retrieval": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.19,
+          "hitAt3": 81.25,
+          "hitAt5": 84.38,
+          "mrr": 0.7521,
+          "latestTriggeredRate": 0.94
+        },
+        "rendered": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.19,
+          "hitAt3": 82.19,
+          "hitAt5": 84.69,
+          "mrr": 0.7558,
+          "latestTriggeredRate": 0.94
+        },
+        "displayLiftHitAt1": 0,
+        "displayLiftMRR": 0.0037
+      }
+    },
+    {
+      "label": "no_phase_anchor_boost",
+      "note": "Disable phase-anchor document boost only.",
+      "flags": {
+        "enablePhaseAnchorBoost": false,
+        "enableTitleIntentAdjustments": true,
+        "enableLexicalTitleIntentAdjustments": true,
+        "enableLexicalTitleTypeAdjustments": false,
+        "enableThemeSpecificTitleAdjustments": false,
+        "enableDoctoralThemeTitleAdjustments": false,
+        "enableTuimianThemeTitleAdjustments": false,
+        "enableSummerCampThemeTitleAdjustments": false,
+        "enableTransferThemeTitleAdjustments": false,
+        "enableCompressedKeywordTitleAdjustments": false,
+        "enableCoverageAdjustments": true,
+        "enableLatestVersionRerank": true
+      },
+      "metricsByDataset": {
+        "main_bench_120": {
+          "retrieval": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 70.83,
+            "hitAt3": 86.67,
+            "hitAt5": 90,
+            "mrr": 0.7954,
+            "latestTriggeredRate": 0.83
+          },
+          "rendered": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 71.67,
+            "hitAt3": 86.67,
+            "hitAt5": 90.83,
+            "mrr": 0.8018,
+            "latestTriggeredRate": 0.83
+          },
+          "displayLiftHitAt1": 0.84,
+          "displayLiftMRR": 0.0064
+        },
+        "in_domain_generalization_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 85,
+            "hitAt5": 91,
+            "mrr": 0.7742,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 86,
+            "hitAt5": 89,
+            "mrr": 0.7777,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0.0035
+        },
+        "blind_ext_ood_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 71,
+            "mrr": 0.6779,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 73,
+            "mrr": 0.6834,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0.0055
+        }
+      },
+      "combined": {
+        "retrieval": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.19,
+          "hitAt3": 81.25,
+          "hitAt5": 84.38,
+          "mrr": 0.7521,
+          "latestTriggeredRate": 0.94
+        },
+        "rendered": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.5,
+          "hitAt3": 81.56,
+          "hitAt5": 84.69,
+          "mrr": 0.7573,
+          "latestTriggeredRate": 0.94
+        },
+        "displayLiftHitAt1": 0.31,
+        "displayLiftMRR": 0.0052
+      }
+    },
+    {
+      "label": "no_latest_version_rerank",
+      "note": "Keep other display rules, but force latest-version preference off.",
+      "flags": {
+        "enablePhaseAnchorBoost": false,
+        "enableTitleIntentAdjustments": true,
+        "enableLexicalTitleIntentAdjustments": true,
+        "enableLexicalTitleTypeAdjustments": false,
+        "enableThemeSpecificTitleAdjustments": false,
+        "enableDoctoralThemeTitleAdjustments": false,
+        "enableTuimianThemeTitleAdjustments": false,
+        "enableSummerCampThemeTitleAdjustments": false,
+        "enableTransferThemeTitleAdjustments": false,
+        "enableCompressedKeywordTitleAdjustments": false,
+        "enableCoverageAdjustments": true,
+        "enableLatestVersionRerank": false
+      },
+      "metricsByDataset": {
+        "main_bench_120": {
+          "retrieval": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 70.83,
+            "hitAt3": 86.67,
+            "hitAt5": 90,
+            "mrr": 0.7954,
+            "latestTriggeredRate": 0.83
+          },
+          "rendered": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 71.67,
+            "hitAt3": 86.67,
+            "hitAt5": 90.83,
+            "mrr": 0.8018,
+            "latestTriggeredRate": 0.83
+          },
+          "displayLiftHitAt1": 0.84,
+          "displayLiftMRR": 0.0064
+        },
+        "in_domain_generalization_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 85,
+            "hitAt5": 91,
+            "mrr": 0.7742,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 86,
+            "hitAt5": 89,
+            "mrr": 0.7777,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0.0035
+        },
+        "blind_ext_ood_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 71,
+            "mrr": 0.6779,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 73,
+            "mrr": 0.6834,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0.0055
+        }
+      },
+      "combined": {
+        "retrieval": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.19,
+          "hitAt3": 81.25,
+          "hitAt5": 84.38,
+          "mrr": 0.7521,
+          "latestTriggeredRate": 0.94
+        },
+        "rendered": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.5,
+          "hitAt3": 81.56,
+          "hitAt5": 84.69,
+          "mrr": 0.7573,
+          "latestTriggeredRate": 0.94
+        },
+        "displayLiftHitAt1": 0.31,
+        "displayLiftMRR": 0.0052
+      }
+    },
+    {
+      "label": "no_title_intent_adjustment",
+      "note": "Disable title-intent and query-plan role adjustment, keep coverage and latest-version.",
+      "flags": {
+        "enablePhaseAnchorBoost": false,
+        "enableTitleIntentAdjustments": false,
+        "enableLexicalTitleIntentAdjustments": false,
+        "enableLexicalTitleTypeAdjustments": false,
+        "enableThemeSpecificTitleAdjustments": false,
+        "enableDoctoralThemeTitleAdjustments": false,
+        "enableTuimianThemeTitleAdjustments": false,
+        "enableSummerCampThemeTitleAdjustments": false,
+        "enableTransferThemeTitleAdjustments": false,
+        "enableAiSchoolEntityTitleAdjustments": false,
+        "enableCompressedKeywordTitleAdjustments": false,
+        "enableCoverageAdjustments": true,
+        "enableLatestVersionRerank": true
+      },
+      "metricsByDataset": {
+        "main_bench_120": {
+          "retrieval": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 70.83,
+            "hitAt3": 86.67,
+            "hitAt5": 90,
+            "mrr": 0.7954,
+            "latestTriggeredRate": 0.83
+          },
+          "rendered": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 70.83,
+            "hitAt3": 85.83,
+            "hitAt5": 89.17,
+            "mrr": 0.793,
+            "latestTriggeredRate": 0.83
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": -0.0024
+        },
+        "in_domain_generalization_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 85,
+            "hitAt5": 91,
+            "mrr": 0.7742,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 85,
+            "hitAt5": 91,
+            "mrr": 0.7739,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": -0.0003
+        },
+        "blind_ext_ood_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 71,
+            "mrr": 0.6779,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 71,
+            "mrr": 0.6768,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": -0.0011
+        }
+      },
+      "combined": {
+        "retrieval": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.19,
+          "hitAt3": 81.25,
+          "hitAt5": 84.38,
+          "mrr": 0.7521,
+          "latestTriggeredRate": 0.94
+        },
+        "rendered": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.19,
+          "hitAt3": 80.94,
+          "hitAt5": 84.06,
+          "mrr": 0.7507,
+          "latestTriggeredRate": 0.94
+        },
+        "displayLiftHitAt1": 0,
+        "displayLiftMRR": -0.0014
+      }
+    },
+    {
+      "label": "no_structured_kp_role_evidence_adjustment",
+      "note": "Disable structured KP-role evidence adjustment only.",
+      "flags": {
+        "enablePhaseAnchorBoost": false,
+        "enableTitleIntentAdjustments": true,
+        "enableStructuredQueryPlanDocRoleAdjustments": true,
+        "enableStructuredKpRoleEvidenceAdjustments": false,
+        "enableLexicalTitleIntentAdjustments": true,
+        "enableLexicalTitleTypeAdjustments": false,
+        "enableThemeSpecificTitleAdjustments": false,
+        "enableDoctoralThemeTitleAdjustments": false,
+        "enableTuimianThemeTitleAdjustments": false,
+        "enableSummerCampThemeTitleAdjustments": false,
+        "enableTransferThemeTitleAdjustments": false,
+        "enableCompressedKeywordTitleAdjustments": false,
+        "enableCoverageAdjustments": true,
+        "enableLatestVersionRerank": true
+      },
+      "metricsByDataset": {
+        "main_bench_120": {
+          "retrieval": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 70.83,
+            "hitAt3": 86.67,
+            "hitAt5": 90,
+            "mrr": 0.7954,
+            "latestTriggeredRate": 0.83
+          },
+          "rendered": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 70.83,
+            "hitAt3": 87.5,
+            "hitAt5": 90,
+            "mrr": 0.7969,
+            "latestTriggeredRate": 0.83
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0.0015
+        },
+        "in_domain_generalization_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 85,
+            "hitAt5": 91,
+            "mrr": 0.7742,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 87,
+            "hitAt5": 90,
+            "mrr": 0.7796,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0.0054
+        },
+        "blind_ext_ood_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 71,
+            "mrr": 0.6779,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 64,
+            "hitAt3": 71,
+            "hitAt5": 73,
+            "mrr": 0.6884,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 1,
+          "displayLiftMRR": 0.0105
+        }
+      },
+      "combined": {
+        "retrieval": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.19,
+          "hitAt3": 81.25,
+          "hitAt5": 84.38,
+          "mrr": 0.7521,
+          "latestTriggeredRate": 0.94
+        },
+        "rendered": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.5,
+          "hitAt3": 82.19,
+          "hitAt5": 84.69,
+          "mrr": 0.7576,
+          "latestTriggeredRate": 0.94
+        },
+        "displayLiftHitAt1": 0.31,
+        "displayLiftMRR": 0.0055
+      }
+    },
+    {
+      "label": "no_lexical_title_intent_adjustment",
+      "note": "Disable lexical title-intent rules while keeping structured title signals.",
+      "flags": {
+        "enablePhaseAnchorBoost": false,
+        "enableTitleIntentAdjustments": true,
+        "enableStructuredQueryPlanDocRoleAdjustments": true,
+        "enableLexicalTitleIntentAdjustments": false,
+        "enableLexicalTitleTypeAdjustments": false,
+        "enableThemeSpecificTitleAdjustments": false,
+        "enableDoctoralThemeTitleAdjustments": false,
+        "enableTuimianThemeTitleAdjustments": false,
+        "enableSummerCampThemeTitleAdjustments": false,
+        "enableTransferThemeTitleAdjustments": false,
+        "enableCompressedKeywordTitleAdjustments": false,
+        "enableCoverageAdjustments": true,
+        "enableLatestVersionRerank": true
+      },
+      "metricsByDataset": {
+        "main_bench_120": {
+          "retrieval": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 70.83,
+            "hitAt3": 86.67,
+            "hitAt5": 90,
+            "mrr": 0.7954,
+            "latestTriggeredRate": 0.83
+          },
+          "rendered": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 71.67,
+            "hitAt3": 86.67,
+            "hitAt5": 90.83,
+            "mrr": 0.8018,
+            "latestTriggeredRate": 0.83
+          },
+          "displayLiftHitAt1": 0.84,
+          "displayLiftMRR": 0.0064
+        },
+        "in_domain_generalization_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 85,
+            "hitAt5": 91,
+            "mrr": 0.7742,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 86,
+            "hitAt5": 89,
+            "mrr": 0.7778,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0.0036
+        },
+        "blind_ext_ood_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 71,
+            "mrr": 0.6779,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 73,
+            "mrr": 0.6834,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0.0055
+        }
+      },
+      "combined": {
+        "retrieval": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.19,
+          "hitAt3": 81.25,
+          "hitAt5": 84.38,
+          "mrr": 0.7521,
+          "latestTriggeredRate": 0.94
+        },
+        "rendered": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.5,
+          "hitAt3": 81.56,
+          "hitAt5": 84.69,
+          "mrr": 0.7573,
+          "latestTriggeredRate": 0.94
+        },
+        "displayLiftHitAt1": 0.31,
+        "displayLiftMRR": 0.0052
+      }
+    },
+    {
+      "label": "no_structured_query_plan_doc_role_adjustment",
+      "note": "Disable structured query-plan doc-role alignment only.",
+      "flags": {
+        "enablePhaseAnchorBoost": false,
+        "enableTitleIntentAdjustments": true,
+        "enableStructuredQueryPlanDocRoleAdjustments": false,
+        "enableLexicalTitleIntentAdjustments": true,
+        "enableLexicalTitleTypeAdjustments": false,
+        "enableThemeSpecificTitleAdjustments": false,
+        "enableDoctoralThemeTitleAdjustments": false,
+        "enableTuimianThemeTitleAdjustments": false,
+        "enableSummerCampThemeTitleAdjustments": false,
+        "enableTransferThemeTitleAdjustments": false,
+        "enableCompressedKeywordTitleAdjustments": false,
+        "enableCoverageAdjustments": true,
+        "enableLatestVersionRerank": true
+      },
+      "metricsByDataset": {
+        "main_bench_120": {
+          "retrieval": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 70.83,
+            "hitAt3": 86.67,
+            "hitAt5": 90,
+            "mrr": 0.7954,
+            "latestTriggeredRate": 0.83
+          },
+          "rendered": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 71.67,
+            "hitAt3": 86.67,
+            "hitAt5": 90.83,
+            "mrr": 0.8,
+            "latestTriggeredRate": 0.83
+          },
+          "displayLiftHitAt1": 0.84,
+          "displayLiftMRR": 0.0046
+        },
+        "in_domain_generalization_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 85,
+            "hitAt5": 91,
+            "mrr": 0.7742,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 85,
+            "hitAt5": 89,
+            "mrr": 0.775,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0.0008
+        },
+        "blind_ext_ood_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 71,
+            "mrr": 0.6779,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 73,
+            "mrr": 0.6834,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0.0055
+        }
+      },
+      "combined": {
+        "retrieval": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.19,
+          "hitAt3": 81.25,
+          "hitAt5": 84.38,
+          "mrr": 0.7521,
+          "latestTriggeredRate": 0.94
+        },
+        "rendered": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.5,
+          "hitAt3": 81.25,
+          "hitAt5": 84.69,
+          "mrr": 0.7558,
+          "latestTriggeredRate": 0.94
+        },
+        "displayLiftHitAt1": 0.31,
+        "displayLiftMRR": 0.0037
+      }
+    },
+    {
+      "label": "no_lexical_title_type_adjustment",
+      "note": "Disable coarse title-type lexical rules only.",
+      "flags": {
+        "enablePhaseAnchorBoost": false,
+        "enableTitleIntentAdjustments": true,
+        "enableLexicalTitleIntentAdjustments": true,
+        "enableLexicalTitleTypeAdjustments": false,
+        "enableThemeSpecificTitleAdjustments": false,
+        "enableDoctoralThemeTitleAdjustments": false,
+        "enableTuimianThemeTitleAdjustments": false,
+        "enableSummerCampThemeTitleAdjustments": false,
+        "enableTransferThemeTitleAdjustments": false,
+        "enableCompressedKeywordTitleAdjustments": false,
+        "enableCoverageAdjustments": true,
+        "enableLatestVersionRerank": true
+      },
+      "metricsByDataset": {
+        "main_bench_120": {
+          "retrieval": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 70.83,
+            "hitAt3": 86.67,
+            "hitAt5": 90,
+            "mrr": 0.7954,
+            "latestTriggeredRate": 0.83
+          },
+          "rendered": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 71.67,
+            "hitAt3": 86.67,
+            "hitAt5": 90.83,
+            "mrr": 0.8018,
+            "latestTriggeredRate": 0.83
+          },
+          "displayLiftHitAt1": 0.84,
+          "displayLiftMRR": 0.0064
+        },
+        "in_domain_generalization_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 85,
+            "hitAt5": 91,
+            "mrr": 0.7742,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 86,
+            "hitAt5": 89,
+            "mrr": 0.7777,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0.0035
+        },
+        "blind_ext_ood_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 71,
+            "mrr": 0.6779,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 73,
+            "mrr": 0.6834,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0.0055
+        }
+      },
+      "combined": {
+        "retrieval": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.19,
+          "hitAt3": 81.25,
+          "hitAt5": 84.38,
+          "mrr": 0.7521,
+          "latestTriggeredRate": 0.94
+        },
+        "rendered": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.5,
+          "hitAt3": 81.56,
+          "hitAt5": 84.69,
+          "mrr": 0.7573,
+          "latestTriggeredRate": 0.94
+        },
+        "displayLiftHitAt1": 0.31,
+        "displayLiftMRR": 0.0052
+      }
+    },
+    {
+      "label": "no_lexical_scenario_title_adjustment",
+      "note": "Disable scenario-specific lexical title rules only.",
+      "flags": {
+        "enablePhaseAnchorBoost": false,
+        "enableTitleIntentAdjustments": true,
+        "enableLexicalTitleIntentAdjustments": true,
+        "enableLexicalTitleTypeAdjustments": false,
+        "enableLexicalScenarioAdjustments": false,
+        "enableThemeSpecificTitleAdjustments": false,
+        "enableDoctoralThemeTitleAdjustments": false,
+        "enableTuimianThemeTitleAdjustments": false,
+        "enableSummerCampThemeTitleAdjustments": false,
+        "enableTransferThemeTitleAdjustments": false,
+        "enableCompressedKeywordTitleAdjustments": false,
+        "enableCoverageAdjustments": true,
+        "enableLatestVersionRerank": true
+      },
+      "metricsByDataset": {
+        "main_bench_120": {
+          "retrieval": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 70.83,
+            "hitAt3": 86.67,
+            "hitAt5": 90,
+            "mrr": 0.7954,
+            "latestTriggeredRate": 0.83
+          },
+          "rendered": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 71.67,
+            "hitAt3": 86.67,
+            "hitAt5": 90.83,
+            "mrr": 0.8018,
+            "latestTriggeredRate": 0.83
+          },
+          "displayLiftHitAt1": 0.84,
+          "displayLiftMRR": 0.0064
+        },
+        "in_domain_generalization_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 85,
+            "hitAt5": 91,
+            "mrr": 0.7742,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 86,
+            "hitAt5": 89,
+            "mrr": 0.7778,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0.0036
+        },
+        "blind_ext_ood_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 71,
+            "mrr": 0.6779,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 73,
+            "mrr": 0.6834,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0.0055
+        }
+      },
+      "combined": {
+        "retrieval": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.19,
+          "hitAt3": 81.25,
+          "hitAt5": 84.38,
+          "mrr": 0.7521,
+          "latestTriggeredRate": 0.94
+        },
+        "rendered": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.5,
+          "hitAt3": 81.56,
+          "hitAt5": 84.69,
+          "mrr": 0.7573,
+          "latestTriggeredRate": 0.94
+        },
+        "displayLiftHitAt1": 0.31,
+        "displayLiftMRR": 0.0052
+      }
+    },
+    {
+      "label": "no_theme_specific_title_adjustment",
+      "note": "Disable theme-specific title adjustments only.",
+      "flags": {
+        "enablePhaseAnchorBoost": false,
+        "enableTitleIntentAdjustments": true,
+        "enableLexicalTitleIntentAdjustments": true,
+        "enableLexicalTitleTypeAdjustments": false,
+        "enableThemeSpecificTitleAdjustments": false,
+        "enableDoctoralThemeTitleAdjustments": false,
+        "enableTuimianThemeTitleAdjustments": false,
+        "enableSummerCampThemeTitleAdjustments": false,
+        "enableTransferThemeTitleAdjustments": false,
+        "enableCompressedKeywordTitleAdjustments": false,
+        "enableCoverageAdjustments": true,
+        "enableLatestVersionRerank": true
+      },
+      "metricsByDataset": {
+        "main_bench_120": {
+          "retrieval": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 70.83,
+            "hitAt3": 86.67,
+            "hitAt5": 90,
+            "mrr": 0.7954,
+            "latestTriggeredRate": 0.83
+          },
+          "rendered": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 71.67,
+            "hitAt3": 86.67,
+            "hitAt5": 90.83,
+            "mrr": 0.8018,
+            "latestTriggeredRate": 0.83
+          },
+          "displayLiftHitAt1": 0.84,
+          "displayLiftMRR": 0.0064
+        },
+        "in_domain_generalization_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 85,
+            "hitAt5": 91,
+            "mrr": 0.7742,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 86,
+            "hitAt5": 89,
+            "mrr": 0.7777,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0.0035
+        },
+        "blind_ext_ood_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 71,
+            "mrr": 0.6779,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 73,
+            "mrr": 0.6834,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0.0055
+        }
+      },
+      "combined": {
+        "retrieval": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.19,
+          "hitAt3": 81.25,
+          "hitAt5": 84.38,
+          "mrr": 0.7521,
+          "latestTriggeredRate": 0.94
+        },
+        "rendered": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.5,
+          "hitAt3": 81.56,
+          "hitAt5": 84.69,
+          "mrr": 0.7573,
+          "latestTriggeredRate": 0.94
+        },
+        "displayLiftHitAt1": 0.31,
+        "displayLiftMRR": 0.0052
+      }
+    },
+    {
+      "label": "no_ai_school_entity_title_adjustment",
+      "note": "Disable AI-school entity title adjustment only.",
+      "flags": {
+        "enablePhaseAnchorBoost": false,
+        "enableTitleIntentAdjustments": true,
+        "enableLexicalTitleIntentAdjustments": true,
+        "enableLexicalTitleTypeAdjustments": false,
+        "enableThemeSpecificTitleAdjustments": false,
+        "enableDoctoralThemeTitleAdjustments": false,
+        "enableTuimianThemeTitleAdjustments": false,
+        "enableSummerCampThemeTitleAdjustments": false,
+        "enableTransferThemeTitleAdjustments": false,
+        "enableAiSchoolEntityTitleAdjustments": false,
+        "enableCompressedKeywordTitleAdjustments": false,
+        "enableCoverageAdjustments": true,
+        "enableLatestVersionRerank": true
+      },
+      "metricsByDataset": {
+        "main_bench_120": {
+          "retrieval": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 70.83,
+            "hitAt3": 86.67,
+            "hitAt5": 90,
+            "mrr": 0.7954,
+            "latestTriggeredRate": 0.83
+          },
+          "rendered": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 71.67,
+            "hitAt3": 86.67,
+            "hitAt5": 90.83,
+            "mrr": 0.8018,
+            "latestTriggeredRate": 0.83
+          },
+          "displayLiftHitAt1": 0.84,
+          "displayLiftMRR": 0.0064
+        },
+        "in_domain_generalization_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 85,
+            "hitAt5": 91,
+            "mrr": 0.7742,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 86,
+            "hitAt5": 89,
+            "mrr": 0.7777,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0.0035
+        },
+        "blind_ext_ood_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 71,
+            "mrr": 0.6779,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 73,
+            "mrr": 0.6834,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0.0055
+        }
+      },
+      "combined": {
+        "retrieval": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.19,
+          "hitAt3": 81.25,
+          "hitAt5": 84.38,
+          "mrr": 0.7521,
+          "latestTriggeredRate": 0.94
+        },
+        "rendered": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.5,
+          "hitAt3": 81.56,
+          "hitAt5": 84.69,
+          "mrr": 0.7573,
+          "latestTriggeredRate": 0.94
+        },
+        "displayLiftHitAt1": 0.31,
+        "displayLiftMRR": 0.0052
+      }
+    },
+    {
+      "label": "no_doctoral_theme_title_adjustment",
+      "note": "Disable doctoral residual title fallback only.",
+      "flags": {
+        "enablePhaseAnchorBoost": false,
+        "enableTitleIntentAdjustments": true,
+        "enableLexicalTitleIntentAdjustments": true,
+        "enableLexicalTitleTypeAdjustments": false,
+        "enableThemeSpecificTitleAdjustments": false,
+        "enableDoctoralThemeTitleAdjustments": false,
+        "enableTuimianThemeTitleAdjustments": false,
+        "enableSummerCampThemeTitleAdjustments": false,
+        "enableTransferThemeTitleAdjustments": false,
+        "enableCompressedKeywordTitleAdjustments": false,
+        "enableCoverageAdjustments": true,
+        "enableLatestVersionRerank": true
+      },
+      "metricsByDataset": {
+        "main_bench_120": {
+          "retrieval": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 70.83,
+            "hitAt3": 86.67,
+            "hitAt5": 90,
+            "mrr": 0.7954,
+            "latestTriggeredRate": 0.83
+          },
+          "rendered": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 71.67,
+            "hitAt3": 86.67,
+            "hitAt5": 90.83,
+            "mrr": 0.8018,
+            "latestTriggeredRate": 0.83
+          },
+          "displayLiftHitAt1": 0.84,
+          "displayLiftMRR": 0.0064
+        },
+        "in_domain_generalization_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 85,
+            "hitAt5": 91,
+            "mrr": 0.7742,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 86,
+            "hitAt5": 89,
+            "mrr": 0.7777,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0.0035
+        },
+        "blind_ext_ood_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 71,
+            "mrr": 0.6779,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 73,
+            "mrr": 0.6834,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0.0055
+        }
+      },
+      "combined": {
+        "retrieval": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.19,
+          "hitAt3": 81.25,
+          "hitAt5": 84.38,
+          "mrr": 0.7521,
+          "latestTriggeredRate": 0.94
+        },
+        "rendered": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.5,
+          "hitAt3": 81.56,
+          "hitAt5": 84.69,
+          "mrr": 0.7573,
+          "latestTriggeredRate": 0.94
+        },
+        "displayLiftHitAt1": 0.31,
+        "displayLiftMRR": 0.0052
+      }
+    },
+    {
+      "label": "no_tuimian_theme_title_adjustment",
+      "note": "Disable tuimian residual title fallback only.",
+      "flags": {
+        "enablePhaseAnchorBoost": false,
+        "enableTitleIntentAdjustments": true,
+        "enableLexicalTitleIntentAdjustments": true,
+        "enableLexicalTitleTypeAdjustments": false,
+        "enableThemeSpecificTitleAdjustments": false,
+        "enableDoctoralThemeTitleAdjustments": false,
+        "enableTuimianThemeTitleAdjustments": false,
+        "enableSummerCampThemeTitleAdjustments": false,
+        "enableTransferThemeTitleAdjustments": false,
+        "enableCompressedKeywordTitleAdjustments": false,
+        "enableCoverageAdjustments": true,
+        "enableLatestVersionRerank": true
+      },
+      "metricsByDataset": {
+        "main_bench_120": {
+          "retrieval": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 70.83,
+            "hitAt3": 86.67,
+            "hitAt5": 90,
+            "mrr": 0.7954,
+            "latestTriggeredRate": 0.83
+          },
+          "rendered": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 71.67,
+            "hitAt3": 86.67,
+            "hitAt5": 90.83,
+            "mrr": 0.8018,
+            "latestTriggeredRate": 0.83
+          },
+          "displayLiftHitAt1": 0.84,
+          "displayLiftMRR": 0.0064
+        },
+        "in_domain_generalization_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 85,
+            "hitAt5": 91,
+            "mrr": 0.7742,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 86,
+            "hitAt5": 89,
+            "mrr": 0.7777,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0.0035
+        },
+        "blind_ext_ood_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 71,
+            "mrr": 0.6779,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 73,
+            "mrr": 0.6834,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0.0055
+        }
+      },
+      "combined": {
+        "retrieval": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.19,
+          "hitAt3": 81.25,
+          "hitAt5": 84.38,
+          "mrr": 0.7521,
+          "latestTriggeredRate": 0.94
+        },
+        "rendered": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.5,
+          "hitAt3": 81.56,
+          "hitAt5": 84.69,
+          "mrr": 0.7573,
+          "latestTriggeredRate": 0.94
+        },
+        "displayLiftHitAt1": 0.31,
+        "displayLiftMRR": 0.0052
+      }
+    },
+    {
+      "label": "no_summer_camp_theme_title_adjustment",
+      "note": "Disable summer-camp residual title fallback only.",
+      "flags": {
+        "enablePhaseAnchorBoost": false,
+        "enableTitleIntentAdjustments": true,
+        "enableLexicalTitleIntentAdjustments": true,
+        "enableLexicalTitleTypeAdjustments": false,
+        "enableThemeSpecificTitleAdjustments": false,
+        "enableDoctoralThemeTitleAdjustments": false,
+        "enableTuimianThemeTitleAdjustments": false,
+        "enableSummerCampThemeTitleAdjustments": false,
+        "enableTransferThemeTitleAdjustments": false,
+        "enableCompressedKeywordTitleAdjustments": false,
+        "enableCoverageAdjustments": true,
+        "enableLatestVersionRerank": true
+      },
+      "metricsByDataset": {
+        "main_bench_120": {
+          "retrieval": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 70.83,
+            "hitAt3": 86.67,
+            "hitAt5": 90,
+            "mrr": 0.7954,
+            "latestTriggeredRate": 0.83
+          },
+          "rendered": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 71.67,
+            "hitAt3": 86.67,
+            "hitAt5": 90.83,
+            "mrr": 0.8018,
+            "latestTriggeredRate": 0.83
+          },
+          "displayLiftHitAt1": 0.84,
+          "displayLiftMRR": 0.0064
+        },
+        "in_domain_generalization_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 85,
+            "hitAt5": 91,
+            "mrr": 0.7742,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 86,
+            "hitAt5": 89,
+            "mrr": 0.7777,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0.0035
+        },
+        "blind_ext_ood_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 71,
+            "mrr": 0.6779,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 73,
+            "mrr": 0.6834,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0.0055
+        }
+      },
+      "combined": {
+        "retrieval": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.19,
+          "hitAt3": 81.25,
+          "hitAt5": 84.38,
+          "mrr": 0.7521,
+          "latestTriggeredRate": 0.94
+        },
+        "rendered": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.5,
+          "hitAt3": 81.56,
+          "hitAt5": 84.69,
+          "mrr": 0.7573,
+          "latestTriggeredRate": 0.94
+        },
+        "displayLiftHitAt1": 0.31,
+        "displayLiftMRR": 0.0052
+      }
+    },
+    {
+      "label": "no_transfer_theme_title_adjustment",
+      "note": "Disable transfer residual title fallback only.",
+      "flags": {
+        "enablePhaseAnchorBoost": false,
+        "enableTitleIntentAdjustments": true,
+        "enableLexicalTitleIntentAdjustments": true,
+        "enableLexicalTitleTypeAdjustments": false,
+        "enableThemeSpecificTitleAdjustments": false,
+        "enableDoctoralThemeTitleAdjustments": false,
+        "enableTuimianThemeTitleAdjustments": false,
+        "enableSummerCampThemeTitleAdjustments": false,
+        "enableTransferThemeTitleAdjustments": false,
+        "enableCompressedKeywordTitleAdjustments": false,
+        "enableCoverageAdjustments": true,
+        "enableLatestVersionRerank": true
+      },
+      "metricsByDataset": {
+        "main_bench_120": {
+          "retrieval": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 70.83,
+            "hitAt3": 86.67,
+            "hitAt5": 90,
+            "mrr": 0.7954,
+            "latestTriggeredRate": 0.83
+          },
+          "rendered": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 71.67,
+            "hitAt3": 86.67,
+            "hitAt5": 90.83,
+            "mrr": 0.8018,
+            "latestTriggeredRate": 0.83
+          },
+          "displayLiftHitAt1": 0.84,
+          "displayLiftMRR": 0.0064
+        },
+        "in_domain_generalization_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 85,
+            "hitAt5": 91,
+            "mrr": 0.7742,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 86,
+            "hitAt5": 89,
+            "mrr": 0.7777,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0.0035
+        },
+        "blind_ext_ood_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 71,
+            "mrr": 0.6779,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 73,
+            "mrr": 0.6834,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0.0055
+        }
+      },
+      "combined": {
+        "retrieval": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.19,
+          "hitAt3": 81.25,
+          "hitAt5": 84.38,
+          "mrr": 0.7521,
+          "latestTriggeredRate": 0.94
+        },
+        "rendered": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.5,
+          "hitAt3": 81.56,
+          "hitAt5": 84.69,
+          "mrr": 0.7573,
+          "latestTriggeredRate": 0.94
+        },
+        "displayLiftHitAt1": 0.31,
+        "displayLiftMRR": 0.0052
+      }
+    },
+    {
+      "label": "no_compressed_keyword_title_adjustment",
+      "note": "Disable compressed-keyword title specialization only.",
+      "flags": {
+        "enablePhaseAnchorBoost": false,
+        "enableTitleIntentAdjustments": true,
+        "enableLexicalTitleIntentAdjustments": true,
+        "enableLexicalTitleTypeAdjustments": false,
+        "enableThemeSpecificTitleAdjustments": false,
+        "enableDoctoralThemeTitleAdjustments": false,
+        "enableTuimianThemeTitleAdjustments": false,
+        "enableSummerCampThemeTitleAdjustments": false,
+        "enableTransferThemeTitleAdjustments": false,
+        "enableCompressedKeywordTitleAdjustments": false,
+        "enableCoverageAdjustments": true,
+        "enableLatestVersionRerank": true
+      },
+      "metricsByDataset": {
+        "main_bench_120": {
+          "retrieval": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 70.83,
+            "hitAt3": 86.67,
+            "hitAt5": 90,
+            "mrr": 0.7954,
+            "latestTriggeredRate": 0.83
+          },
+          "rendered": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 71.67,
+            "hitAt3": 86.67,
+            "hitAt5": 90.83,
+            "mrr": 0.8018,
+            "latestTriggeredRate": 0.83
+          },
+          "displayLiftHitAt1": 0.84,
+          "displayLiftMRR": 0.0064
+        },
+        "in_domain_generalization_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 85,
+            "hitAt5": 91,
+            "mrr": 0.7742,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 86,
+            "hitAt5": 89,
+            "mrr": 0.7777,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0.0035
+        },
+        "blind_ext_ood_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 71,
+            "mrr": 0.6779,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 73,
+            "mrr": 0.6834,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0.0055
+        }
+      },
+      "combined": {
+        "retrieval": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.19,
+          "hitAt3": 81.25,
+          "hitAt5": 84.38,
+          "mrr": 0.7521,
+          "latestTriggeredRate": 0.94
+        },
+        "rendered": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.5,
+          "hitAt3": 81.56,
+          "hitAt5": 84.69,
+          "mrr": 0.7573,
+          "latestTriggeredRate": 0.94
+        },
+        "displayLiftHitAt1": 0.31,
+        "displayLiftMRR": 0.0052
+      }
+    },
+    {
+      "label": "no_specialized_title_adjustment",
+      "note": "Disable theme-specific and compressed-keyword title specialization together.",
+      "flags": {
+        "enablePhaseAnchorBoost": false,
+        "enableTitleIntentAdjustments": true,
+        "enableLexicalTitleIntentAdjustments": true,
+        "enableLexicalTitleTypeAdjustments": false,
+        "enableThemeSpecificTitleAdjustments": false,
+        "enableDoctoralThemeTitleAdjustments": false,
+        "enableTuimianThemeTitleAdjustments": false,
+        "enableSummerCampThemeTitleAdjustments": false,
+        "enableTransferThemeTitleAdjustments": false,
+        "enableAiSchoolEntityTitleAdjustments": false,
+        "enableCompressedKeywordTitleAdjustments": false,
+        "enableCoverageAdjustments": true,
+        "enableLatestVersionRerank": true
+      },
+      "metricsByDataset": {
+        "main_bench_120": {
+          "retrieval": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 70.83,
+            "hitAt3": 86.67,
+            "hitAt5": 90,
+            "mrr": 0.7954,
+            "latestTriggeredRate": 0.83
+          },
+          "rendered": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 71.67,
+            "hitAt3": 86.67,
+            "hitAt5": 90.83,
+            "mrr": 0.8018,
+            "latestTriggeredRate": 0.83
+          },
+          "displayLiftHitAt1": 0.84,
+          "displayLiftMRR": 0.0064
+        },
+        "in_domain_generalization_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 85,
+            "hitAt5": 91,
+            "mrr": 0.7742,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 86,
+            "hitAt5": 89,
+            "mrr": 0.7777,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0.0035
+        },
+        "blind_ext_ood_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 71,
+            "mrr": 0.6779,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 73,
+            "mrr": 0.6834,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0.0055
+        }
+      },
+      "combined": {
+        "retrieval": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.19,
+          "hitAt3": 81.25,
+          "hitAt5": 84.38,
+          "mrr": 0.7521,
+          "latestTriggeredRate": 0.94
+        },
+        "rendered": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.5,
+          "hitAt3": 81.56,
+          "hitAt5": 84.69,
+          "mrr": 0.7573,
+          "latestTriggeredRate": 0.94
+        },
+        "displayLiftHitAt1": 0.31,
+        "displayLiftMRR": 0.0052
+      }
+    },
+    {
+      "label": "all_display_rules_off",
+      "note": "Disable phase, title-intent, coverage, and latest-version display rerank.",
+      "flags": {
+        "enablePhaseAnchorBoost": false,
+        "enableTitleIntentAdjustments": false,
+        "enableLexicalTitleIntentAdjustments": false,
+        "enableLexicalTitleTypeAdjustments": false,
+        "enableThemeSpecificTitleAdjustments": false,
+        "enableDoctoralThemeTitleAdjustments": false,
+        "enableTuimianThemeTitleAdjustments": false,
+        "enableSummerCampThemeTitleAdjustments": false,
+        "enableTransferThemeTitleAdjustments": false,
+        "enableAiSchoolEntityTitleAdjustments": false,
+        "enableCompressedKeywordTitleAdjustments": false,
+        "enableCoverageAdjustments": false,
+        "enableLatestVersionRerank": false
+      },
+      "metricsByDataset": {
+        "main_bench_120": {
+          "retrieval": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 70.83,
+            "hitAt3": 86.67,
+            "hitAt5": 90,
+            "mrr": 0.7954,
+            "latestTriggeredRate": 0.83
+          },
+          "rendered": {
+            "total": 120,
+            "answerRate": 99.17,
+            "hitAt1": 70.83,
+            "hitAt3": 86.67,
+            "hitAt5": 90,
+            "mrr": 0.7954,
+            "latestTriggeredRate": 0.83
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": 0
+        },
+        "in_domain_generalization_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 85,
+            "hitAt5": 91,
+            "mrr": 0.7742,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 99,
+            "hitAt1": 67,
+            "hitAt3": 85,
+            "hitAt5": 91,
+            "mrr": 0.7738,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": -0.0004
+        },
+        "blind_ext_ood_100": {
+          "retrieval": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 71,
+            "mrr": 0.6779,
+            "latestTriggeredRate": 1
+          },
+          "rendered": {
+            "total": 100,
+            "answerRate": 100,
+            "hitAt1": 63,
+            "hitAt3": 71,
+            "hitAt5": 71,
+            "mrr": 0.6766,
+            "latestTriggeredRate": 1
+          },
+          "displayLiftHitAt1": 0,
+          "displayLiftMRR": -0.0013
+        }
+      },
+      "combined": {
+        "retrieval": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.19,
+          "hitAt3": 81.25,
+          "hitAt5": 84.38,
+          "mrr": 0.7521,
+          "latestTriggeredRate": 0.94
+        },
+        "rendered": {
+          "total": 320,
+          "answerRate": 99.38,
+          "hitAt1": 67.19,
+          "hitAt3": 81.25,
+          "hitAt5": 84.38,
+          "mrr": 0.7515,
+          "latestTriggeredRate": 0.94
+        },
+        "displayLiftHitAt1": 0,
+        "displayLiftMRR": -0.0006
+      }
+    }
+  ]
+}

@@ -4,10 +4,12 @@ import {
     mergeAggregatedDocMetadata,
     type AggregatedDocScores,
 } from "../aggregated_doc_scores.ts";
-import type { QueryPlan } from "../query_planner.ts";
+import { buildQueryPlan, type QueryPlan } from "../query_planner.ts";
 import {
     BM25_B,
     BM25_K1,
+    type ConditionalKpDownweightConfig,
+    type ConditionalOtDownweightConfig,
     DEFAULT_KP_ROLE_CANDIDATE_LIMIT,
     DEFAULT_KP_ROLE_DOC_WEIGHT,
     DEFAULT_Q_CONFUSION_WEIGHT,
@@ -19,6 +21,7 @@ import {
     RRF_K,
     RRF_RANK_LIMIT,
     computeKpEvidenceGroupCounts,
+    parseQueryIntent,
     withQueryTokenCount,
     dedupe,
     dotProduct,
@@ -64,12 +67,305 @@ export {
     extractRetrievalSignals,
 } from "./search_decision.ts";
 
+function normalizeQueryText(query: string): string {
+    return query.replace(/\s+/g, "");
+}
+
+function extractInstitutionEntitiesFromQuery(query: string): string[] {
+    const normalized = normalizeQueryText(query);
+    const matches = normalized.match(
+        /[\u4e00-\u9fa5A-Za-z0-9]{2,24}(?:大学|学院|实验室|医院|研究院|研究中心|中心|系|部)/g,
+    );
+    return dedupe(matches || []);
+}
+
+function isShortKeywordLikeQuery(params: {
+    rawQuery: string;
+    queryWords: string[];
+    config: ConditionalKpDownweightConfig;
+}): boolean {
+    const { rawQuery, queryWords, config } = params;
+    const normalized = normalizeQueryText(rawQuery);
+    if (/[，。；！？,.!?]/.test(rawQuery)) {
+        return false;
+    }
+
+    return (
+        normalized.length <= config.shortQueryMaxLength &&
+        (queryWords.length === 0 ||
+            queryWords.length <= config.shortTokenCountMax)
+    );
+}
+
+function looksLikeBroadOtOverviewQuery(params: {
+    rawQuery: string;
+    queryPlan?: QueryPlan;
+    queryScopeHint?: string;
+}): boolean {
+    const { rawQuery, queryPlan, queryScopeHint } = params;
+    if (
+        queryScopeHint === "procedure" ||
+        queryScopeHint === "policy_overview"
+    ) {
+        return true;
+    }
+
+    if (
+        queryPlan?.intentType === "procedure" ||
+        queryPlan?.intentType === "policy_overview" ||
+        queryPlan?.intentType === "system_timeline"
+    ) {
+        return true;
+    }
+
+    const normalized = normalizeQueryText(rawQuery);
+    return /流程|步骤|环节|程序|过程|整体政策|总体要求|关键要求|时间安排|时间节点|培养环节|培养流程/.test(
+        normalized,
+    );
+}
+
+function resolveConditionalKpDownweightState(params: {
+    config?: ConditionalKpDownweightConfig;
+    rawQueryText?: string;
+    queryIntent?: ParsedQueryIntent;
+    queryWords: string[];
+    queryScopeHint?: string;
+    queryPlan?: QueryPlan;
+}): {
+    isActive: boolean;
+    kpWeightMultiplier: number;
+    kpDocSignalMultiplier: number;
+} {
+    const {
+        config,
+        rawQueryText,
+        queryIntent,
+        queryWords,
+        queryScopeHint,
+        queryPlan,
+    } = params;
+    const guardQueryText = rawQueryText || queryIntent?.rawQuery;
+    if (!config?.enabled || !guardQueryText) {
+        return {
+            isActive: false,
+            kpWeightMultiplier: 1,
+            kpDocSignalMultiplier: 1,
+        };
+    }
+
+    const guardQueryIntent =
+        rawQueryText && rawQueryText !== queryIntent?.rawQuery
+            ? parseQueryIntent(rawQueryText)
+            : queryIntent;
+    const effectiveQueryPlan =
+        queryPlan ||
+        (guardQueryIntent
+            ? buildQueryPlan(guardQueryIntent.rawQuery, guardQueryIntent)
+            : undefined);
+    if (!guardQueryIntent || !effectiveQueryPlan) {
+        return {
+            isActive: false,
+            kpWeightMultiplier: 1,
+            kpDocSignalMultiplier: 1,
+        };
+    }
+    const hasInstitutionEntity =
+        extractInstitutionEntitiesFromQuery(guardQueryIntent.rawQuery).length > 0;
+    const hasExplicitYear = guardQueryIntent.years.length > 0;
+    const shortKeywordLike = isShortKeywordLikeQuery({
+        rawQuery: guardQueryIntent.rawQuery,
+        queryWords,
+        config,
+    });
+    const weakAnchorQuery =
+        !guardQueryIntent.signals.hasStrongDetailAnchor &&
+        !guardQueryIntent.signals.hasExplicitTopicOrIntent &&
+        guardQueryIntent.signals.queryLength <= Math.max(
+            config.shortQueryMaxLength + 6,
+            20,
+        );
+    const shortKeywordHighConfusion =
+        shortKeywordLike &&
+        !hasExplicitYear &&
+        !guardQueryIntent.signals.hasStrongDetailAnchor &&
+        (!hasInstitutionEntity ||
+            !guardQueryIntent.signals.hasExplicitTopicOrIntent);
+    const broadOtOverview = looksLikeBroadOtOverviewQuery({
+        rawQuery: guardQueryIntent.rawQuery,
+        queryPlan: effectiveQueryPlan,
+        queryScopeHint,
+    });
+    const isActive =
+        ((broadOtOverview &&
+            (!hasInstitutionEntity || !hasExplicitYear) &&
+            (shortKeywordLike || weakAnchorQuery)) ||
+            shortKeywordHighConfusion);
+
+    return {
+        isActive,
+        kpWeightMultiplier:
+            isActive && Number.isFinite(config.kpWeightMultiplier)
+                ? Math.max(0, Math.min(1, config.kpWeightMultiplier))
+                : 1,
+        kpDocSignalMultiplier:
+            isActive && Number.isFinite(config.kpDocSignalMultiplier)
+                ? Math.max(0, Math.min(1, config.kpDocSignalMultiplier))
+                : 1,
+    };
+}
+
+function applyConditionalKpDownweightToWeights(
+    weights: typeof DEFAULT_WEIGHTS,
+    state: {
+        isActive: boolean;
+        kpWeightMultiplier: number;
+    },
+): typeof DEFAULT_WEIGHTS {
+    if (!state.isActive || weights.KP <= 0 || weights.OT <= 0) {
+        return weights;
+    }
+
+    const adjustedKpWeight = weights.KP * state.kpWeightMultiplier;
+    const redistributedKpWeight = weights.KP - adjustedKpWeight;
+
+    return {
+        Q: weights.Q,
+        KP: adjustedKpWeight,
+        OT: weights.OT + redistributedKpWeight,
+    };
+}
+
+function resolveConditionalOtDownweightState(params: {
+    config?: ConditionalOtDownweightConfig;
+    rawQueryText?: string;
+    queryIntent?: ParsedQueryIntent;
+    queryWords: string[];
+    queryScopeHint?: string;
+    queryPlan?: QueryPlan;
+}): {
+    isActive: boolean;
+    otWeightMultiplier: number;
+} {
+    const {
+        config,
+        rawQueryText,
+        queryIntent,
+        queryWords,
+        queryScopeHint,
+        queryPlan,
+    } = params;
+    const guardQueryText = rawQueryText || queryIntent?.rawQuery;
+    if (!config?.enabled || !guardQueryText) {
+        return {
+            isActive: false,
+            otWeightMultiplier: 1,
+        };
+    }
+
+    const guardQueryIntent =
+        rawQueryText && rawQueryText !== queryIntent?.rawQuery
+            ? parseQueryIntent(rawQueryText)
+            : queryIntent;
+    const effectiveQueryPlan =
+        queryPlan ||
+        (guardQueryIntent
+            ? buildQueryPlan(guardQueryIntent.rawQuery, guardQueryIntent)
+            : undefined);
+    if (!guardQueryIntent || !effectiveQueryPlan) {
+        return {
+            isActive: false,
+            otWeightMultiplier: 1,
+        };
+    }
+
+    const queryLength = guardQueryIntent.signals.queryLength;
+    const shortKeywordLike =
+        queryLength <= 16 &&
+        (queryWords.length === 0 || queryWords.length <= 4);
+    const notBroadOtOverview = !looksLikeBroadOtOverviewQuery({
+        rawQuery: guardQueryIntent.rawQuery,
+        queryPlan: effectiveQueryPlan,
+        queryScopeHint,
+    });
+    const detailLikeIntent =
+        effectiveQueryPlan.intentType === "requirement" ||
+        effectiveQueryPlan.intentType === "fact_detail" ||
+        effectiveQueryPlan.intentType === "time_location" ||
+        effectiveQueryPlan.intentType === "outcome";
+    const hasInstitutionEntity =
+        extractInstitutionEntitiesFromQuery(guardQueryIntent.rawQuery).length > 0;
+    const hasStrongPrecisionAnchor =
+        guardQueryIntent.signals.hasStrongDetailAnchor ||
+        guardQueryIntent.signals.hasExplicitYear ||
+        guardQueryIntent.signals.hasExplicitTopicOrIntent ||
+        guardQueryIntent.signals.hasEntryLikeAnchor;
+    const ambiguousShortKeyword =
+        shortKeywordLike &&
+        !guardQueryIntent.signals.hasExplicitYear &&
+        !guardQueryIntent.signals.hasStrongDetailAnchor &&
+        !guardQueryIntent.signals.hasExplicitTopicOrIntent &&
+        !hasInstitutionEntity;
+    const isActive =
+        ambiguousShortKeyword ||
+        (notBroadOtOverview &&
+            !shortKeywordLike &&
+            !effectiveQueryPlan.asksCoverageLike &&
+            detailLikeIntent &&
+            hasStrongPrecisionAnchor &&
+            queryLength <= config.detailQueryMaxLength);
+
+    return {
+        isActive,
+        otWeightMultiplier:
+            isActive
+                ? Math.max(
+                      0,
+                      Math.min(
+                          1,
+                          config.otWeightMultiplier,
+                      ),
+                  )
+                : 1,
+    };
+}
+
+function applyConditionalOtDownweightToWeights(
+    weights: typeof DEFAULT_WEIGHTS,
+    state: {
+        isActive: boolean;
+        otWeightMultiplier: number;
+    },
+): typeof DEFAULT_WEIGHTS {
+    if (
+        !state.isActive ||
+        weights.Q <= 0 ||
+        weights.KP <= 0 ||
+        weights.OT <= 0
+    ) {
+        return weights;
+    }
+
+    const adjustedOtWeight = weights.OT * state.otWeightMultiplier;
+    const redistributedOtWeight = weights.OT - adjustedOtWeight;
+    const nonOtWeightTotal = weights.Q + weights.KP;
+    if (nonOtWeightTotal <= 0) {
+        return weights;
+    }
+
+    return {
+        Q: weights.Q + redistributedOtWeight * (weights.Q / nonOtWeightTotal),
+        KP: weights.KP + redistributedOtWeight * (weights.KP / nonOtWeightTotal),
+        OT: adjustedOtWeight,
+    };
+}
+
 export function searchAndRank(params: {
     queryVector: Float32Array;
     querySparse?: Record<number, number>;
     queryWords?: string[];
     queryYearWordIds?: number[];
     queryIntent?: ParsedQueryIntent;
+    rawQueryText?: string;
     queryScopeHint?: string;
     metadata: Metadata[];
     vectorMatrix: Int8Array | Float32Array;
@@ -97,6 +393,8 @@ export function searchAndRank(params: {
     otDenseScoreOverrides?: ReadonlyMap<string, number>;
     qConfusionMode?: QConfusionMode;
     qConfusionWeight?: number;
+    conditionalKpDownweight?: ConditionalKpDownweightConfig;
+    conditionalOtDownweight?: ConditionalOtDownweightConfig;
     enableExplicitYearFilter?: boolean;
     queryPlan?: QueryPlan;
     enableQueryPlanner?: boolean;
@@ -114,6 +412,7 @@ export function searchAndRank(params: {
         weights = DEFAULT_WEIGHTS,
         queryYearWordIds,
         queryIntent,
+        rawQueryText,
         queryScopeHint,
         candidateIndices,
         scopeSpecificityWordIdToTerm,
@@ -135,6 +434,8 @@ export function searchAndRank(params: {
         otDenseScoreOverrides,
         qConfusionMode = "off",
         qConfusionWeight = DEFAULT_Q_CONFUSION_WEIGHT,
+        conditionalKpDownweight,
+        conditionalOtDownweight,
         enableExplicitYearFilter,
         queryPlan,
         enableQueryPlanner = false,
@@ -363,6 +664,30 @@ export function searchAndRank(params: {
                 ? "off"
                 : "consensus"
             : qConfusionMode;
+    const conditionalKpDownweightState = resolveConditionalKpDownweightState({
+        config: conditionalKpDownweight,
+        rawQueryText,
+        queryIntent,
+        queryWords,
+        queryScopeHint,
+        queryPlan,
+    });
+    const weightsAfterKpDownweight = applyConditionalKpDownweightToWeights(
+        weights,
+        conditionalKpDownweightState,
+    );
+    const conditionalOtDownweightState = resolveConditionalOtDownweightState({
+        config: conditionalOtDownweight,
+        rawQueryText,
+        queryIntent,
+        queryWords,
+        queryScopeHint,
+        queryPlan,
+    });
+    const effectiveWeights = applyConditionalOtDownweightToWeights(
+        weightsAfterKpDownweight,
+        conditionalOtDownweightState,
+    );
     const qCompetitionPenaltyMap =
         effectiveQConfusionMode === "competition" ||
         effectiveQConfusionMode === "combined"
@@ -408,7 +733,7 @@ export function searchAndRank(params: {
             rawQuery: queryIntent?.rawQuery || "",
             queryScopeHint,
         });
-        const decisionScore = computeBaseScore(scores, weights, {
+        const decisionScore = computeBaseScore(scores, effectiveWeights, {
             kpAggregationMode,
             kpTopN,
             kpTailWeight,
@@ -416,7 +741,7 @@ export function searchAndRank(params: {
             qConfusionMode: "off",
             qConfusionWeight,
         });
-        const outputScore = computeBaseScore(scores, weights, {
+        const outputScore = computeBaseScore(scores, effectiveWeights, {
             kpAggregationMode,
             kpTopN,
             kpTailWeight,
@@ -442,7 +767,12 @@ export function searchAndRank(params: {
                   queryPlan: enableQueryPlanner ? queryPlan : undefined,
               });
         const baseDocScoreDelta =
-            kpRoleSelection.docScoreDelta * kpRoleDocWeight;
+            kpRoleSelection.docScoreDelta *
+            kpRoleDocWeight *
+            conditionalKpDownweightState.kpDocSignalMultiplier;
+        const effectiveMultiEvidenceConsensusScore =
+            multiEvidenceConsensusScore *
+            conditionalKpDownweightState.kpDocSignalMultiplier;
         const bestKpRoleTags =
             kpRoleSelection.orderedCandidates.find(
                 (candidate) => candidate.kpid === kpRoleSelection.bestKpid,
@@ -476,14 +806,14 @@ export function searchAndRank(params: {
             score:
                 decisionScore * boost +
                 baseDocScoreDelta +
-                multiEvidenceConsensusScore,
+                effectiveMultiEvidenceConsensusScore,
         });
         outputRanking.push({
             ...rankingItem,
             score:
                 outputScore * boost +
                 baseDocScoreDelta +
-                multiEvidenceConsensusScore,
+                effectiveMultiEvidenceConsensusScore,
         });
     }
 

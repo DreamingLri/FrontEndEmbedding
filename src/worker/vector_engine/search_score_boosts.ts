@@ -134,19 +134,26 @@ function applyTopicCoverageBoost(
         return boost;
     }
 
+    const shortStructuredTopicOnlyQuery =
+        intentContext.rawQuery.length <= 12 &&
+        intentContext.topicIds.length > 0 &&
+        intentContext.intentIds.length === 0 &&
+        intentContext.degreeLevels.length === 0 &&
+        intentContext.eventTypes.length === 0;
+
     const docTopicIds = dedupe(getCoverageComparableTopicIds(scores));
     if (docTopicIds.length > 0) {
         if (hasAnyOverlap(intentContext.topicIds, docTopicIds)) {
-            return boost * 1.08;
+            return boost * (shortStructuredTopicOnlyQuery ? 1.14 : 1.08);
         }
-        return boost * 0.9;
+        return boost * (shortStructuredTopicOnlyQuery ? 0.68 : 0.9);
     }
 
     if (
         scores.weak_topic_ids &&
         hasAnyOverlap(intentContext.topicIds, scores.weak_topic_ids)
     ) {
-        return boost * 1.02;
+        return boost * (shortStructuredTopicOnlyQuery ? 1.06 : 1.02);
     }
 
     const hasStructuredFallbackEvidence =

@@ -1,5 +1,24 @@
 import type { PipelinePreset } from "./types.ts";
 
+const DISABLED_CONDITIONAL_KP_DOWNWEIGHT = {
+    enabled: false,
+    shortQueryMaxLength: 16,
+    shortTokenCountMax: 4,
+    kpWeightMultiplier: 0.3,
+    kpDocSignalMultiplier: 0.35,
+} as const;
+
+const EXTOOD_CONDITIONAL_KP_DOWNWEIGHT = {
+    ...DISABLED_CONDITIONAL_KP_DOWNWEIGHT,
+    enabled: true,
+} as const;
+
+const DETAIL_QUERY_CONDITIONAL_OT_DOWNWEIGHT = {
+    enabled: true,
+    detailQueryMaxLength: 28,
+    otWeightMultiplier: 0.45,
+} as const;
+
 const DEFAULT_DISPLAY_CONFIG: PipelinePreset["display"] = {
     rejectThreshold: 0.4,
     rerankBlendAlpha: 0.15,
@@ -39,6 +58,7 @@ export const PAPER_FROZEN_MAIN_PIPELINE_PRESET: PipelinePreset = {
         kpRoleDocWeight: 0.35,
         qConfusionMode: "off",
         qConfusionWeight: 0.2,
+        conditionalKpDownweight: DISABLED_CONDITIONAL_KP_DOWNWEIGHT,
         useQueryExpansion: true,
         useTopicPartition: true,
         enableExplicitYearFilter: true,
@@ -68,6 +88,7 @@ export const PRODUCT_CANONICAL_FULL_PIPELINE_PRESET: PipelinePreset = {
         kpRoleDocWeight: 0.35,
         qConfusionMode: "off",
         qConfusionWeight: 0.2,
+        conditionalKpDownweight: DISABLED_CONDITIONAL_KP_DOWNWEIGHT,
         useQueryExpansion: true,
         useTopicPartition: true,
         enableExplicitYearFilter: true,
@@ -117,6 +138,7 @@ export const MINIMAL_BASELINE_PIPELINE_PRESET: PipelinePreset = {
         kpRoleDocWeight: 0,
         qConfusionMode: "off",
         qConfusionWeight: 0.2,
+        conditionalKpDownweight: DISABLED_CONDITIONAL_KP_DOWNWEIGHT,
         useQueryExpansion: false,
         useTopicPartition: false,
         enableExplicitYearFilter: false,
@@ -140,6 +162,8 @@ export const FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET: PipelinePreset = {
         // Keep phase cues in retrieval/query planning, but do not let the
         // display-stage phase-anchor boost override the mainline dataset order.
         enablePhaseAnchorBoost: false,
+        conditionalKpDownweight: DISABLED_CONDITIONAL_KP_DOWNWEIGHT,
+        conditionalOtDownweight: undefined,
     },
     display: {
         ...DEFAULT_DISPLAY_CONFIG,
@@ -166,6 +190,27 @@ export const FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET: PipelinePreset = {
     },
 };
 
+export const FRONTEND_RESEARCH_SYNC_EXTOOD_KP_GUARD_PIPELINE_PRESET: PipelinePreset =
+    {
+        name: "frontend_research_sync_extood_kp_guard_v1",
+        retrieval: {
+            ...FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval,
+            conditionalKpDownweight: EXTOOD_CONDITIONAL_KP_DOWNWEIGHT,
+        },
+        display: { ...FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.display },
+    };
+
+export const FRONTEND_RESEARCH_SYNC_QKPOT_GUARD_PIPELINE_PRESET: PipelinePreset =
+    {
+        name: "frontend_research_sync_qkpot_guard_v1",
+        retrieval: {
+            ...FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.retrieval,
+            conditionalKpDownweight: EXTOOD_CONDITIONAL_KP_DOWNWEIGHT,
+            conditionalOtDownweight: DETAIL_QUERY_CONDITIONAL_OT_DOWNWEIGHT,
+        },
+        display: { ...FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET.display },
+    };
+
 export const FRONTEND_RESEARCH_SYNC_QUERY_PLANNER_PIPELINE_PRESET: PipelinePreset =
     {
         name: "frontend_research_sync_query_planner_v1",
@@ -183,6 +228,10 @@ export const PIPELINE_PRESET_REGISTRY = {
     product_tail_top3_w020_v1: PRODUCT_TAIL_TOP3_W020_PIPELINE_PRESET,
     minimal_q_kp_ot_v1: MINIMAL_BASELINE_PIPELINE_PRESET,
     frontend_research_sync_v1: FRONTEND_RESEARCH_SYNC_PIPELINE_PRESET,
+    frontend_research_sync_extood_kp_guard_v1:
+        FRONTEND_RESEARCH_SYNC_EXTOOD_KP_GUARD_PIPELINE_PRESET,
+    frontend_research_sync_qkpot_guard_v1:
+        FRONTEND_RESEARCH_SYNC_QKPOT_GUARD_PIPELINE_PRESET,
     frontend_research_sync_query_planner_v1:
         FRONTEND_RESEARCH_SYNC_QUERY_PLANNER_PIPELINE_PRESET,
 } as const;
@@ -198,6 +247,12 @@ export function clonePipelinePreset(preset: PipelinePreset): PipelinePreset {
         retrieval: {
             ...preset.retrieval,
             weights: { ...preset.retrieval.weights },
+            conditionalKpDownweight: preset.retrieval.conditionalKpDownweight
+                ? { ...preset.retrieval.conditionalKpDownweight }
+                : undefined,
+            conditionalOtDownweight: preset.retrieval.conditionalOtDownweight
+                ? { ...preset.retrieval.conditionalOtDownweight }
+                : undefined,
         },
         display: { ...preset.display },
     };

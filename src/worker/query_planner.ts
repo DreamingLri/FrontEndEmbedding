@@ -46,7 +46,7 @@ const RULE_DOC_PATTERN =
 const REGISTRATION_NOTICE_PATTERN =
     /(活动报名通知|报名通知|预报名|综合考核通知|复试通知|考核通知|考核安排|申请通知|报名安排|网上报名|报名系统)/;
 const RESULT_NOTICE_PATTERN =
-    /(结果公示|录取结果|拟录取|公示|名单|递补|增补|入营通知|复试结果|综合考核结果)/;
+    /(结果公示|录取结果|拟录取|公示|名单|递补|增补|入营通知|复试结果|综合考核结果|复试成绩|综合考核成绩|考核成绩|评审成绩|审核结果|资格审核结果|成绩公示)/;
 const LIST_NOTICE_PATTERN =
     /(考生名单|入围名单|入营名单|进入.*名单|通过.*名单|资格审核名单)/;
 const STAGE_LIST_PATTERN =
@@ -199,7 +199,9 @@ export function buildQueryPlan(
 ): QueryPlan {
     const normalizedQuery = normalizePatternText(query);
     const asksOutcomeLike =
-        /结果|公示|名单|拟录取|递补|增补|录取结果|入营/.test(normalizedQuery);
+        /结果|公示|名单|拟录取|递补|增补|录取结果|入营|复试成绩|综合考核成绩|考核成绩|评审成绩|审核结果|资格审核结果/.test(
+            normalizedQuery,
+        );
     const asksProcedureLike =
         /流程|步骤|环节|程序|过程|考核步骤|需要经过|怎么申请|如何申请|怎么报名|如何报名/.test(
             normalizedQuery,

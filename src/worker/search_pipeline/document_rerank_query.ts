@@ -62,7 +62,9 @@ export type DocumentRerankQuerySignals = {
 };
 
 function queryAsksOutcomeLikeTitle(query: string): boolean {
-    return /结果|公示|名单|拟录取|递补|增补|录取结果|入营/.test(query);
+    return /结果|公示|名单|拟录取|递补|增补|录取结果|入营|复试成绩|综合考核成绩|考核成绩|评审成绩|审核结果|资格审核结果/.test(
+        query,
+    );
 }
 
 function queryAsksProcedureLikeTitle(query: string): boolean {

@@ -152,6 +152,18 @@ export type KPAggregationMode = "max" | "max_plus_topn" | "mean" | "sum";
 export type LexicalBonusMode = "sum" | "max";
 export type KPRoleRerankMode = "off" | "feature";
 export type FusionMode = "default" | "max_q_vs_kpot";
+export type ConditionalKpDownweightConfig = {
+    enabled: boolean;
+    shortQueryMaxLength: number;
+    shortTokenCountMax: number;
+    kpWeightMultiplier: number;
+    kpDocSignalMultiplier: number;
+};
+export type ConditionalOtDownweightConfig = {
+    enabled: boolean;
+    detailQueryMaxLength: number;
+    otWeightMultiplier: number;
+};
 export type QConfusionMode =
     | "off"
     | "consensus"

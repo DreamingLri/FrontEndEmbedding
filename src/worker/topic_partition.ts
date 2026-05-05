@@ -4,6 +4,7 @@ import { resolveMetadataTopicIds } from "./vector_engine.ts";
 export type TopicPartitionIndex = {
     topicCandidateIndex: Map<string, number[]>;
     unlabeledCandidateIndices: number[];
+    metadataIntentIds: string[][];
     metadataCount: number;
     candidateIndicesCache: Map<string, number[] | null>;
     candidateVisitMarks: Uint32Array;
@@ -14,6 +15,7 @@ export function createEmptyTopicPartitionIndex(): TopicPartitionIndex {
     return {
         topicCandidateIndex: new Map<string, number[]>(),
         unlabeledCandidateIndices: [],
+        metadataIntentIds: [],
         metadataCount: 0,
         candidateIndicesCache: new Map<string, number[] | null>(),
         candidateVisitMarks: new Uint32Array(0),
@@ -26,6 +28,7 @@ export function buildTopicPartitionIndex(
 ): TopicPartitionIndex {
     const topicCandidateIndex = new Map<string, number[]>();
     const unlabeledCandidateIndices: number[] = [];
+    const metadataIntentIds = metadata.map((meta) => meta.intent_ids || []);
 
     metadata.forEach((meta, index) => {
         const topicIds = resolveMetadataTopicIds(meta);
@@ -47,6 +50,7 @@ export function buildTopicPartitionIndex(
     return {
         topicCandidateIndex,
         unlabeledCandidateIndices,
+        metadataIntentIds,
         metadataCount: metadata.length,
         candidateIndicesCache: new Map<string, number[] | null>(),
         candidateVisitMarks: new Uint32Array(metadata.length),
@@ -54,8 +58,22 @@ export function buildTopicPartitionIndex(
     };
 }
 
-function normalizeTopicKey(topicIds: readonly string[]): string {
-    return Array.from(new Set(topicIds)).sort().join("|");
+function normalizePartitionKey(params: {
+    topicIds: readonly string[];
+    intentIds: readonly string[];
+}): string {
+    const normalizedTopics = Array.from(new Set(params.topicIds)).sort().join("|");
+    const normalizedIntents = Array.from(new Set(params.intentIds))
+        .sort()
+        .join("|");
+    return `${normalizedTopics}::${normalizedIntents}`;
+}
+
+function hasIntentOverlap(
+    queryIntentIds: readonly string[],
+    docIntentIds: readonly string[],
+): boolean {
+    return queryIntentIds.some((intentId) => docIntentIds.includes(intentId));
 }
 
 function nextCandidateVisitGeneration(
@@ -73,17 +91,20 @@ function nextCandidateVisitGeneration(
 }
 
 export function getCandidateIndicesForQuery(
-    queryIntent: Pick<ParsedQueryIntent, "topicIds">,
+    queryIntent: Pick<ParsedQueryIntent, "topicIds" | "intentIds">,
     partitionIndex: TopicPartitionIndex,
 ): number[] | undefined {
     if (queryIntent.topicIds.length === 0) return undefined;
 
-    const topicKey = normalizeTopicKey(queryIntent.topicIds);
-    if (!topicKey) {
+    const partitionKey = normalizePartitionKey({
+        topicIds: queryIntent.topicIds,
+        intentIds: queryIntent.intentIds,
+    });
+    if (!partitionKey) {
         return undefined;
     }
 
-    const cachedCandidates = partitionIndex.candidateIndicesCache.get(topicKey);
+    const cachedCandidates = partitionIndex.candidateIndicesCache.get(partitionKey);
     if (cachedCandidates !== undefined) {
         return cachedCandidates || undefined;
     }
@@ -97,10 +118,18 @@ export function getCandidateIndicesForQuery(
         candidateIndices.push(index);
     });
 
-    topicKey.split("|").forEach((topicId) => {
+    queryIntent.topicIds.forEach((topicId) => {
         const bucket = partitionIndex.topicCandidateIndex.get(topicId);
         if (!bucket) return;
         bucket.forEach((index) => {
+            const docIntentIds = partitionIndex.metadataIntentIds[index] || [];
+            if (
+                queryIntent.intentIds.length > 0 &&
+                docIntentIds.length > 0 &&
+                !hasIntentOverlap(queryIntent.intentIds, docIntentIds)
+            ) {
+                return;
+            }
             if (visitMarks[index] === visitGeneration) {
                 return;
             }
@@ -113,10 +142,10 @@ export function getCandidateIndicesForQuery(
         candidateIndices.length === 0 ||
         candidateIndices.length >= partitionIndex.metadataCount
     ) {
-        partitionIndex.candidateIndicesCache.set(topicKey, null);
+        partitionIndex.candidateIndicesCache.set(partitionKey, null);
         return undefined;
     }
 
-    partitionIndex.candidateIndicesCache.set(topicKey, candidateIndices);
+    partitionIndex.candidateIndicesCache.set(partitionKey, candidateIndices);
     return candidateIndices;
 }
